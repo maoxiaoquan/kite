@@ -1,0 +1,17 @@
+{
+  "name": "lemon",
+  "version": "1.0.0",
+  "description": "blog cms",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --progress --color --config  build/webpack.dev.js"
+  },
+  "author": "xiaoquan",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "webpack": "^3.6.0"
+  }
+}
