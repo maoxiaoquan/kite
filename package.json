@@ -5,13 +5,25 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack --progress --color --config  build/webpack.dev.js"
+    "dev": "node build/dev-server.js",
+    "build": "webpack  --config  build/webpack.prod.js"
   },
   "author": "xiaoquan",
   "license": "ISC",
   "dependencies": {
+    "html-webpack-plugin": "^2.30.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-router": "^4.2.0",
     "webpack": "^3.6.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-react-transform": "^3.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "react-transform-hmr": "^1.0.4",
+    "webpack-dev-server": "^2.9.1"
   }
 }
