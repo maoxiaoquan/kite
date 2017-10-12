@@ -2,7 +2,8 @@ const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-/* 此配置是生产模式下的极质打包模式 */
+process.env.NODE_ENV = 'production'//设置为生产环境
+/* 此配置是生产环境下的极质打包模式 */
 
 module.exports = {
   entry: path.resolve(__dirname, '../src/app.js'),

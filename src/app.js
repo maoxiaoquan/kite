@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom'
+import ReactDOM from 'react-dom'
 
-const Demo extends Component{
+class Demo extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -18,3 +18,7 @@ const Demo extends Component{
 }
 
 
+ReactDOM.render(
+  <Demo />,
+  document.getElementById('app')
+);

@@ -28,7 +28,8 @@ module.exports = {
       filename: path.resolve(__dirname, '../dist/index.html'), // 输出文件【注意：这里的根路径是module.exports.output.path】
       showErrors: true,
       inject: 'body',
-    })
+    }),
+    new webpack.HotModuleReplacementPlugin()//热模块替换插件
   ],
   resolve: {
     extensions: ['.js', '.json', '.scss']
