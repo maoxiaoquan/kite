@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
+import './app.scss'
 
 class Demo extends Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class Demo extends Component {
 
   render() {
     return (
-      <div>111111111111</div>
+      <div className="app">11111455555555666555551111111</div>
     )
   }
 }
