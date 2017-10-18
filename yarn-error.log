@@ -1,5 +1,5 @@
 Arguments: 
-  D:\install_backage\nvm\node\node.exe D:\install_backage\nvm\node\node_modules\yarn\bin\yarn.js
+  D:\install_backage\nvm\node\node.exe D:\install_backage\nvm\node\node_modules\yarn\bin\yarn.js add express --dev
 
 PATH: 
   D:\install_backage\cmder\cmder\bin;D:\install_backage\cmder\cmder\vendor\conemu-maximus5\ConEmu\Scripts;D:\install_backage\cmder\cmder\vendor\conemu-maximus5;D:\install_backage\cmder\cmder\vendor\conemu-maximus5\ConEmu;D:\install_backage\ImageMagick\ImageMagick-7.0.1-Q16;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;D:\install_backage\nvm\nvm;D:\install_backage\nvm\node;D:\install_backage\git\Git\cmd;D:\install_backage\tortoisegit\bin;D:\install_backage\nvm\nvm;D:\install_backage\nvm\node;D:\install_backage\vscode\Microsoft VS Code\bin;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;C:\Users\Administrator\AppData\Local\atom\bin;D:\install_backage\git\Git\usr\bin;D:\install_backage\git\Git\usr\share\vim\vim74;D:\install_backage\cmder\cmder\
@@ -50,8 +50,10 @@ npm manifest:
       "react-hot-loader": "^3.1.1",
       "react-transform-hmr": "^1.0.4",
       "sass-loader": "^6.0.6",
+      "scss-loader": "0.0.1",
       "style-loader": "^0.19.0",
       "url-loader": "^0.6.2",
+      "webpack-dev-middleware": "^1.12.0",
       "webpack-dev-server": "^2.9.1"
     }
   }
@@ -4032,4 +4034,4 @@ Lockfile:
       window-size "0.1.0"
 
 Trace: 
-  Error: ENOENT: no such file or directory, open 'E:\web\React\Lemon\node_modules\postcss-loader\node_modules\ansi-styles\index.js'
+  Error: ENOENT: no such file or directory, open 'E:\web\React\Lemon\node_modules\http-proxy-middleware\node_modules\is-extglob\index.js'

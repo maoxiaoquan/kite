@@ -1,25 +1,23 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
-import './app.scss'
-
-class Demo extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      showloading: false,
-      removeloading: false,
-    }
-  }
-
-  render() {
-    return (
-      <div className="app">11111455555555666555551111111</div>
-    )
-  }
-}
-
+import Demo from './Demo'
 
 ReactDOM.render(
   <Demo />,
   document.getElementById('app')
 );
+
+
+if (module.hot) {  
+  module.hot.accept();
+}
+
+if (module.hot) {
+  var hotEmitter = require("webpack/hot/emitter");
+  hotEmitter.on("webpackHotUpdate", function (currentHash) {
+    document.querySelectorAll('link[href][rel=stylesheet]').forEach((link) => {
+      const nextStyleHref = link.href.replace(/(\?\d+)?$/, `?${Date.now()}`)
+      link.href = nextStyleHref
+    })
+  })
+}

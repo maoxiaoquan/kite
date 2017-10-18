@@ -14,46 +14,62 @@ module.exports = {
     app: path.resolve(__dirname, "../src/app.js")
   },
   output: {
-    path: path.resolve(__dirname, "../dist"),
-    filename: '[name].js', //编译后的文件名字
-    chunkFilename: '[name].[chunkhash:5].min.js',
+    path: path.resolve(__dirname, "../dist/"),
+    publicPath: '/', //编译好的文件，在服务器的路径,域名会自动添加到前面 
+    filename: 'static/js/[name].js', //编译后的文件名字
+    chunkFilename: 'static/js/[name].[chunkhash:5].min.js',
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.(js|jsx)$/,//一个匹配loaders所处理的文件的拓展名的正则表达式，这里用来匹配js和jsx文件（必须）
         exclude: /node_modules/,//屏蔽不需要处理的文件（文件夹）（可选）
-        loader: 'babel-loader',//loader的名称（必须）
+        use: ['react-hot-loader', 'babel-loader'],//loader的名称（必须）
         include: [APP_PATH]
       },
       {
         test: /\.css$/,
         exclude: /^node_modules$/,
-        loader: ExtractTextPlugin.extract('style-loader', ['css-loader', 'autoprefixer-loader']),
+        use: ExtractTextPlugin.extract(
+          {
+            fallback: 'style-loader',
+            use: ['css-loader', 'autoprefixer-loader']
+          }
+        ),
         include: [APP_PATH]
       },
       {
         test: /\.less$/,
         exclude: /^node_modules$/,
-        loader: ExtractTextPlugin.extract('style-loader', ['css-loader', 'autoprefixer-loader', 'less-loader']),
+        use: ExtractTextPlugin.extract(
+          {
+            fallback: 'style-loader',
+            use: ['css-loader', 'autoprefixer-loader', 'less-loader']
+          }
+        ),
         include: [APP_PATH]
       },
       {
         test: /\.scss$/,
         exclude: /^node_modules$/,
-        loader: ExtractTextPlugin.extract('style-loader', ['css-loader', 'autoprefixer-loader', 'sass-loader']),
+        use: ExtractTextPlugin.extract(
+          {
+            fallback: 'style-loader',
+            use: ['css-loader', 'autoprefixer-loader', 'sass-loader']
+          }
+        ),
         include: [APP_PATH]
       },
       {
         test: /\.(eot|woff|svg|ttf|woff2|gif|appcache)(\?|$)/,
         exclude: /^node_modules$/,
-        loader: 'file-loader?name=[name].[ext]',
+        use: 'file-loader?name=[name].[ext]',
         include: [APP_PATH]
       },
       {
         test: /\.(png|jpg)$/,
         exclude: /^node_modules$/,
-        loader: 'url-loader?limit=8192&name=images/[hash:8].[name].[ext]',
+        use: 'url-loader?limit=8192&name=images/[hash:8].[name].[ext]',
         //注意后面那个limit的参数，当你图片大小小于这个限制的时候，会自动启用base64编码图片
         include: [APP_PATH]
       }
@@ -66,7 +82,7 @@ module.exports = {
       showErrors: true,
       inject: 'body',
     }),
-    new ExtractTextPlugin("[name].[hash].css"),
+    new ExtractTextPlugin("static/css/[name].[hash].css"),
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.less', '.scss', '.css'] //后缀名自动补全
