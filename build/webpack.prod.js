@@ -2,12 +2,14 @@ const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin'); //css单独打包
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
-
-const APP_PATH = path.resolve(__dirname, "../src")
+const progressbarWebpack = require('progress-bar-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const APP_PATH = path.resolve(__dirname, "../src");
 
 process.env.NODE_ENV = 'production'//设置为生产环境
 /* 此配置是生产环境下的极质打包模式 */
+
+console.log('极质打包进行中......')
 
 module.exports = {
   entry: {
@@ -15,28 +17,34 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, "../dist/"),
-    publicPath: '/', //编译好的文件，在服务器的路径,域名会自动添加到前面 
-    filename: 'static/js/[name].js', //编译后的文件名字
-    chunkFilename: 'static/js/[name].[chunkhash:5].min.js',
+    publicPath: '/', //编译好的文件，在服务器的路径,域名会自动添加到前面
+    filename: 'static/js/[name].[chunkhash:8].bundle.js', //编译后的文件名字
+    chunkFilename: 'static/js/[name]-[id].[chunkhash:8].bundle.js',
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,//一个匹配loaders所处理的文件的拓展名的正则表达式，这里用来匹配js和jsx文件（必须）
+        test: /\.js$/,//一个匹配loaders所处理的文件的拓展名的正则表达式，这里用来匹配js和jsx文件（必须）
         exclude: /node_modules/,//屏蔽不需要处理的文件（文件夹）（可选）
-        use: ['react-hot-loader', 'babel-loader'],//loader的名称（必须）
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['env', 'stage-0', 'react'],
+            plugins: [
+              ['import', { "libraryName": "antd", "style": "css" }]
+            ]
+          }
+        },//loader的名称（必须）
         include: [APP_PATH]
       },
       {
         test: /\.css$/,
-        exclude: /^node_modules$/,
         use: ExtractTextPlugin.extract(
           {
             fallback: 'style-loader',
             use: ['css-loader', 'autoprefixer-loader']
           }
         ),
-        include: [APP_PATH]
       },
       {
         test: /\.less$/,
@@ -77,12 +85,34 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '../index.html'), // 源模板文件
+      template: path.resolve(__dirname, '../public/index.html'), // 源模板文件
       filename: path.resolve(__dirname, '../dist/index.html'), // 输出文件【注意：这里的根路径是module.exports.output.path】
       showErrors: true,
       inject: 'body',
     }),
     new ExtractTextPlugin("static/css/[name].[hash].css"),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: function (module) {
+        if (module.resource && (/^.*\.(css|scss|less)$/).test(module.resource)) {
+          return false;
+        }
+        return module.context && module.context.indexOf("node_modules") !== -1;
+      }
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common',
+      minChunks: Infinity
+    }),
+    new CleanWebpackPlugin(
+      ['dist/static/css/*.css', 'dist/static/js/*.js'],　 //匹配删除的文件
+      {
+        root: path.resolve(__dirname, '../'),
+        verbose: true,        　　　　　　　　　　//开启在控制台输出信息
+        dry: false        　　　　　　　　　　//启用删除文件
+      }
+    ),
+    new progressbarWebpack(),
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.less', '.scss', '.css'] //后缀名自动补全

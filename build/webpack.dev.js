@@ -20,7 +20,7 @@ module.exports = {
     path: path.resolve(__dirname, "../dist/"),
     publicPath: '/', //编译好的文件，在服务器的路径,域名会自动添加到前面
     filename: 'static/js/[name].js', //编译后的文件名字
-    chunkFilename: 'static/js/[name].[chunkhash:5].min.js',
+    chunkFilename: 'static/js/[name]-[id].[chunkhash:8].bundle.js',
   },
   module: {
     rules: [
@@ -40,14 +40,12 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        exclude: /^node_modules$/,
         use: ['css-hot-loader'].concat(ExtractTextPlugin.extract(
           {
             fallback: 'style-loader',
             use: ['css-loader', 'autoprefixer-loader']
           }
         )),
-        include: [APP_PATH]
       },
       {
         test: /\.less$/,
@@ -88,7 +86,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '../index.html'), // 源模板文件
+      template: path.resolve(__dirname, '../public/index.html'), // 源模板文件
       filename: path.resolve(__dirname, '../dist/index.html'), // 输出文件【注意：这里的根路径是module.exports.output.path】
       showErrors: true,
       inject: 'body',
