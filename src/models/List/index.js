@@ -10,6 +10,7 @@ import Bundle from '../../Bundle';
 import ListView from 'bundle-loader?lazy&name=app-[name]!../../views/List/list.js';
 
 export const List = () => {
+  
   if (!window.rootCombineReducer.list) {
     window.rootCombineReducer.list = require('./reducers').default
     const nextReducer = combineReducers(window.rootCombineReducer)
@@ -32,5 +33,4 @@ if (module.hot) {
     window.store.replaceReducer(nextReducer)
   })
 }
-
 

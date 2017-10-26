@@ -3,7 +3,6 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin'); //css单独打包
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const OpenBrowserWebpackPlugin = require('open-browser-webpack-plugin');
-
 const APP_PATH = path.resolve(__dirname, "../src")
 
 /* 此配置是开发模式下的调试配置 */
@@ -12,7 +11,8 @@ module.exports = {
   devtool: 'cheap-module-eval-source-map',
   entry: {
     app: [
-      'webpack-hot-middleware/client',
+      'eventsource-polyfill',
+      'webpack-hot-middleware/client?reload=true',
       path.resolve(__dirname, "../src/app.js")
     ],
   },
@@ -30,7 +30,6 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env', 'stage-0', 'react'],
             plugins: [
               ['import', { "libraryName": "antd", "style": "css" }]
             ]
@@ -104,10 +103,17 @@ module.exports = {
       name: 'common',
       minChunks: Infinity
     }),
+    /* new BrowserSyncPlugin({
+      host: 'localhost',
+      port: '8080',
+      notify: false
+    }, {
+      reload: false
+    }), */
     new webpack.HotModuleReplacementPlugin(),//热模块替换插件
     new ExtractTextPlugin("static/css/style.css"),
     new webpack.NoEmitOnErrorsPlugin(),
-    new OpenBrowserWebpackPlugin({ url: 'http://localhost:8080' })
+     new OpenBrowserWebpackPlugin({ url: 'http://localhost:8080' })
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.less', '.scss', '.css'] //后缀名自动补全

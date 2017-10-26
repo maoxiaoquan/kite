@@ -8,7 +8,6 @@ const path = require('path');
 const app = express();
 const compiler = webpack(config);
 
-
 app.use('/', require('connect-history-api-fallback')()); // Add  
 app.use('/', express.static('../dist'));
 

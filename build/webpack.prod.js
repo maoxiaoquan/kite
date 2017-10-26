@@ -104,6 +104,11 @@ module.exports = {
       name: 'common',
       minChunks: Infinity
     }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    }),
     new CleanWebpackPlugin(
       ['dist/static/css/*.css', 'dist/static/js/*.js'],　 //匹配删除的文件
       {

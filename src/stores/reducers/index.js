@@ -1,10 +1,12 @@
 const initState = {
-  title:{},
+  list_index: [
+    1, 2, 4, 6666, 6
+  ],
+  data: {},
 }
-
-function title(state = initState, action) {
+function reducers(state = initState, action) {
   switch (action.type) {
-    case 'TITLE':
+    case 'GET_INDEX_DATA':
       return {
         ...state,
         data: action.data,
@@ -13,5 +15,4 @@ function title(state = initState, action) {
       return state
   }
 }
-
-export default title
+export default reducers
