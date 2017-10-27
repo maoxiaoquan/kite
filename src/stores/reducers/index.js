@@ -1,18 +1,12 @@
-const initState = {
-  list_index: [
-    1, 2, 4, 6666, 6
-  ],
-  data: {},
-}
-function reducers(state = initState, action) {
-  switch (action.type) {
-    case 'GET_INDEX_DATA':
-      return {
-        ...state,
-        data: action.data,
-      }
-    default:
-      return state
-  }
-}
-export default reducers
+import { combineReducers } from 'redux';
+import title from './title';
+import loading from './loading';
+
+const rootCombineReducer = window.rootCombineReducer = {
+  title,
+  loading,
+};
+
+const rootReducer = combineReducers(rootCombineReducer);
+
+export default rootReducer;

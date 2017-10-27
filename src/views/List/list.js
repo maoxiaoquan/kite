@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import './list.scss'
+import './list.scss';
 
 class List extends Component {
-  constructor(props, context) {
-    super(props, context)
+  constructor(props) {
+    super(props);
+    this.state = {
+      one: '刷新',
+    };
   }
+  click() {
+    console.log(this.props);
+  }
+
   render() {
-    const { list } = this.props
-    /*   { list = [] } = list */
+    const { list } = this.props;
     return (
       <div className="list">
         {
@@ -18,15 +24,15 @@ class List extends Component {
           ))
         }
         <div>
-          688111166
+          99{this.state.one}
         </div>
       </div>
-    )
+    );
   }
 }
 
 export default connect(({ list }) => {
   return {
-    list: list
-  }
+    list,
+  };
 })(List);

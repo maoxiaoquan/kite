@@ -1,18 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import './index.scss'
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import './index.scss';
+
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
-
 class Index extends React.Component {
-  constructor(props, context) {
-    super(props, context)
+  constructor(props) {
+    super(props);
+    this.state = {
+      one: '刷啊11111111',
+    };
   }
   render() {
-    const {index={}} = this.props,
-    {list_index=[]} = index
+    const { title } = this.props;
     return (
       <Layout>
         <Header className="header">
@@ -62,24 +64,30 @@ class Index extends React.Component {
               <Breadcrumb.Item>List</Breadcrumb.Item>
               <Breadcrumb.Item>App</Breadcrumb.Item>
             </Breadcrumb>
-            <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280 }}>
-              Content你
-              {
-                list_index.map((item,key)=>(
-                  <div key={key}>{item}</div>
-                ))
-              }
+            <Content
+              style={{
+                background: '#fff', padding: 24, margin: 0, minHeight: 280,
+              }}
+              className="demo"
+            >
+              Content5666
+              <div>
+                {this.state.one}
+              </div>
+              <div>
+                {title.title}
+              </div>
             </Content>
           </Layout>
         </Layout>
       </Layout>
-    )
+    );
   }
 }
 
 
-export default connect(({ index }) => {
+export default connect(({ title }) => {
   return {
-    index: index
-  }
+    title,
+  };
 })(Index);
