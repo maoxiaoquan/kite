@@ -1,37 +1,55 @@
+const browserSync = require('browser-sync');
+const historyApiFallback = require('connect-history-api-fallback');
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
+const config = require('./webpack.dev');
+
 process.env.NODE_ENV = 'development'; // 设置为开发环境
 
-const webpack = require('webpack');
-const express = require('express');
-const config = require('./webpack.dev.js');
-const proxyMiddleware = require('http-proxy-middleware');
-const path = require('path');
+const bundler = webpack(config);
 
-const app = express();
-const compiler = webpack(config);
-
-app.use('/', require('connect-history-api-fallback')());
-// Add
-app.use('/', express.static('../dist'));
-
-app.use(require('webpack-dev-middleware')(compiler, {
-  publicPath: config.output.publicPath,
-  historyApiFallback: true,
-  inline: true,
-  progress: true,
-  hot: true,
-  stats: {
-    colors: true,
+// Run Browsersync and use middleware for Hot Module Replacement
+browserSync({
+  port: 8888,
+  ui: {
+    port: 8889,
   },
-}));
+  server: {
+    baseDir: '../src',
 
-// 代理服务器
-/* app.use('/shopro', proxyMiddleware({
-    target: 'http://cangdu.org',
-    changeOrigin: true,
-})) */
+    middleware: [
+      historyApiFallback(),
 
-app.use(require('webpack-hot-middleware')(compiler));
+      webpackDevMiddleware(bundler, {
+        // Dev middleware can't access config, so we provide publicPath
+        publicPath: config.output.publicPath,
 
-app.listen(8080, () => {
-  console.log('http://localhost:8080');
+        // These settings suppress noisy webpack output so only errors are displayed to the console.
+        noInfo: false,
+        quiet: false,
+        stats: {
+          assets: false,
+          colors: true,
+          version: false,
+          hash: false,
+          timings: false,
+          chunks: false,
+          chunkModules: false,
+        },
+
+        // for other settings see
+        // http://webpack.github.io/docs/webpack-dev-middleware.html
+      }),
+
+      // bundler should be the same as above
+      webpackHotMiddleware(bundler),
+    ],
+  },
+
+  // no need to watch '*.js' here, webpack will take care of it for us,
+  // including full page reloads if HMR won't work
+  files: [
+    '../src/*.html',
+  ],
 });
