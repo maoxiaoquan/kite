@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import './list.scss';
+import './about.scss';
 
 class List extends Component {
   constructor(props) {
@@ -18,11 +18,11 @@ class List extends Component {
     const { list } = this.props;
     return (
       <div className="list">
-        {
+        {/*  {
           list.list.map((item, key) => (
             <div className="list-li" key={key}>{item}</div>
           ))
-        }
+        } */}
         <div>
           99{this.state.one}
         </div>
@@ -31,8 +31,9 @@ class List extends Component {
   }
 }
 
-export default connect(({ list }) => {
+export default connect((state) => {
+  console.log('state', state);
   return {
-    list,
+    state,
   };
 })(List);

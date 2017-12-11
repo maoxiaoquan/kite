@@ -5,8 +5,9 @@ import {
   Switch,
 } from 'react-router-dom';
 
-import Index from '../views/Index/index';
-import List from '../models/List/index';
+import Index from '../containers/Index/view';
+import List from '../containers/List';
+import About from '../containers/About';
 
 class App extends React.Component {
   render() {
@@ -16,6 +17,7 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/" component={Index} />
             <Route path="/list" component={List} />
+            <Route path="/about" component={About} />
           </Switch>
         </div>
       </Router>

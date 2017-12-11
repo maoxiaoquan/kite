@@ -9,13 +9,13 @@ import Bundle from '../../Bundle';
 // //这里只是给this.props.child传一个方法，最后在Bundle的render里面调用
 
 export default (props) => {
-  if (!window.rootCombineReducer.list) {
-    window.rootCombineReducer.list = require('./reducers/index').default;
+  if (!window.rootCombineReducer.about) {
+    window.rootCombineReducer.about = require('./reducers/index').default;
     const nextReducer = combineReducers(window.rootCombineReducer);
     window.store.replaceReducer(nextReducer);
   }
   return (
-    <Bundle load={require('bundle-loader?lazy&name=app-[name]!../../views/List/list.js')}>
+    <Bundle load={require('bundle-loader?lazy&name=app-[name]!./view/about.js')}>
       {Component => <Component {...props} />}
     </Bundle>
   );

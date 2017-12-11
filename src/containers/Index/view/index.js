@@ -10,7 +10,7 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      one: '刷啊11111111',
+      one: '刷啊111111118888',
     };
   }
   render() {
@@ -75,7 +75,7 @@ class Index extends React.Component {
                 {this.state.one}
               </div>
               <div>
-                {title.title}
+                222
               </div>
             </Content>
           </Layout>
@@ -86,8 +86,9 @@ class Index extends React.Component {
 }
 
 
-export default connect(({ title }) => {
+export default connect((state) => {
+  console.log('state', state);
   return {
-    title,
+    state,
   };
 })(Index);
