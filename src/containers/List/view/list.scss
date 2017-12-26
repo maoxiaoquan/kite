@@ -1,7 +1,13 @@
-.list{
+.list {
   height: 100px;
   background: #e0e0ee;
-  .list-li{
+  .list-li {
     color: red;
+  }
+  .img-bg {
+    width: 120px;
+    height: 100px;
+    display: block;
+    background: url('../../../assets/img/bg2.jpg');
   }
 }

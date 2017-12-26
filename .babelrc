@@ -1,13 +1,29 @@
 {
   "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": [
+            "last 2 versions",
+            "safari >= 7"
+          ]
+        }
+      }
+    ],
+    [
+      "es2015",
+      {
+        "modules": false
+      }
+    ],
     "react",
-    "es2015",
-    "stage-0"
+    "stage-0",
+    "stage-1",
+    "stage-2",
+    "stage-3"
   ],
   "plugins": [
-    "transform-decorators-legacy",
-    "transform-class-properties",
-    "react-hot-loader/babel",
     [
       "transform-runtime",
       {
@@ -16,6 +32,8 @@
         "regenerator": true,
         "moduleName": "babel-runtime"
       }
-    ]
+    ],
+    "react-hot-loader/babel",
+    "transform-decorators-legacy"
   ]
 }

@@ -3,6 +3,7 @@ const historyApiFallback = require('connect-history-api-fallback');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
+const proxy = require('http-proxy-middleware');
 const config = require('./webpack.dev');
 
 process.env.NODE_ENV = 'development'; // 设置为开发环境
@@ -28,6 +29,7 @@ browserSync({
         // These settings suppress noisy webpack output so only errors are displayed to the console.
         noInfo: false,
         quiet: false,
+        hot: true,
         stats: {
           assets: false,
           colors: true,
@@ -41,6 +43,12 @@ browserSync({
         // for other settings see
         // http://webpack.github.io/docs/webpack-dev-middleware.html
       }),
+      proxy(
+        {
+          target: 'https://cnodejs.org/',
+          changeOrigin: true
+        }
+      ),
 
       // bundler should be the same as above
       webpackHotMiddleware(bundler),

@@ -2,7 +2,6 @@ const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin'); // css单独打包
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const OpenBrowserWebpackPlugin = require('open-browser-webpack-plugin');
 
 const APP_PATH = path.resolve(__dirname, '../src');
 
@@ -12,9 +11,9 @@ module.exports = {
   devtool: 'cheap-module-eval-source-map',
   entry: {
     app: [
-      'react-hot-loader/patch',
       'webpack-hot-middleware/client?reload=true',
       'webpack/hot/only-dev-server',
+      'react-hot-loader/patch',
       'babel-polyfill',
       path.resolve(__dirname, '../src/app.js'),
     ],
@@ -30,14 +29,16 @@ module.exports = {
       {
         test: /\.js$/, // 一个匹配loaders所处理的文件的拓展名的正则表达式，这里用来匹配js和jsx文件（必须）
         exclude: /node_modules/, // 屏蔽不需要处理的文件（文件夹）（可选）
-        use: {
-          loader: 'babel-loader',
-          options: {
-            plugins: [
-              ['import', { libraryName: 'antd', style: 'css' }],
-            ],
-          },
-        }, // loader的名称（必须）
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              plugins: [
+                ['import', { libraryName: 'antd', style: 'css' }],
+              ],
+            },
+          }, // loader的名称（必须）
+        ],
         include: [APP_PATH],
       },
       {
@@ -74,7 +75,7 @@ module.exports = {
       {
         test: /\.(png|jpg)$/,
         exclude: /^node_modules$/,
-        use: 'url-loader?limit=8192&name=images/[hash:8].[name].[ext]',
+        use: 'url-loader?limit=8192&name=static/img/[hash:8].[name].[ext]',
         // 注意后面那个limit的参数，当你图片大小小于这个限制的时候，会自动启用base64编码图片
         include: [APP_PATH],
       },
@@ -96,6 +97,7 @@ module.exports = {
         return module.context && module.context.indexOf('node_modules') !== -1;
       },
     }),
+    new webpack.HotModuleReplacementPlugin(), // 热模块替换插件
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common',
       minChunks: Infinity,
@@ -107,10 +109,8 @@ module.exports = {
     }, {
       reload: false
     }), */
-    new webpack.HotModuleReplacementPlugin(), // 热模块替换插件
     new ExtractTextPlugin('static/css/style.css'),
     new webpack.NoEmitOnErrorsPlugin(),
-    /*  new OpenBrowserWebpackPlugin({ url: 'http://localhost:8080' }), */
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.less', '.scss', '.css'], // 后缀名自动补全

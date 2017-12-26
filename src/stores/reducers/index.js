@@ -1,12 +1,10 @@
-import { combineReducers } from 'redux';
 import title from './title';
 import loading from './loading';
 
-const rootCombineReducer = window.rootCombineReducer = {
+const rootReducer = {
   title,
   loading,
 };
 
-const rootReducer = combineReducers(rootCombineReducer);
-
 export default rootReducer;
+

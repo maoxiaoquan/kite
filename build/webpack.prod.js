@@ -72,7 +72,7 @@ module.exports = {
       {
         test: /\.(png|jpg)$/,
         exclude: /^node_modules$/,
-        use: 'url-loader?limit=8192&name=images/[hash:8].[name].[ext]',
+        use: 'url-loader?limit=8192&name=static/img/[hash:8].[name].[ext]',
         // 注意后面那个limit的参数，当你图片大小小于这个限制的时候，会自动启用base64编码图片
         include: [APP_PATH],
       },

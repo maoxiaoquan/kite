@@ -1,19 +1,29 @@
 /* eslint-disable react/no-render-return-value */
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { routerReducer } from 'react-router-redux/lib/reducer';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 import { AppContainer } from 'react-hot-loader';
+import rootReducer from './stores/reducers';
 
 import './app.scss';
-import App from './routers/router';/* router 文件 */
-import configureStore from './stores/index';
+import App from './routers/router';
+/* router 文件 */
 
-/* eslint-disable no-multi-assign */
-const store = window.store = configureStore();
+const middlewares = [thunk];
+
+const store = createStore(
+  combineReducers({ routing: routerReducer, ...rootReducer }),
+  composeWithDevTools(applyMiddleware(...middlewares)),
+);
+
 
 const render = Component =>
   ReactDOM.render(
-    <AppContainer >
+    <AppContainer>
       <Provider store={store}>
         <Component />
       </Provider>

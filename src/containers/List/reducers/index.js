@@ -1,6 +1,6 @@
 const initState = {
   list: [
-    1, 6, 8, 88, 6999,
+    1, 6, 8, 5, 2,
   ],
   data: {},
 };
@@ -16,3 +16,4 @@ function reducers(state = initState, action) {
   }
 }
 export default reducers;
+
