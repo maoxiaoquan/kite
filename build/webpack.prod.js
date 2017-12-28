@@ -2,8 +2,9 @@ const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin'); // css单独打包
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ProgressbarWebpack = require('progress-bar-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ProgressbarWebpack = require('progress-bar-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const APP_PATH = path.resolve(__dirname, '../src');
 
@@ -12,15 +13,27 @@ process.env.NODE_ENV = 'production'; // 设置为生产环境
 
 console.log('极质打包进行中......');
 
+const assetsPath = function (_path) {
+  return path.posix.join('static', _path)
+}
+
 module.exports = {
   entry: {
-    app: path.resolve(__dirname, '../src/app.js'),
+    // 文件入口配置
+    index: path.resolve(__dirname, '../src/app.js'),
+    vendor: [
+      'react',
+      'react-dom',
+      'react-router',
+      'react-redux',
+      'redux'
+    ]
   },
   output: {
     path: path.resolve(__dirname, '../dist/'),
-    publicPath: '/', // 编译好的文件，在服务器的路径,域名会自动添加到前面
-    filename: 'static/js/[name].[chunkhash:8].bundle.js', // 编译后的文件名字
-    chunkFilename: 'static/js/[name]-[id].[chunkhash:8].bundle.js',
+    publicPath: '/', // 编译好的文件，在服务器的路径,域名会自动添加到前面  
+    filename: assetsPath('js/[name].[chunkhash].js'),
+    chunkFilename: assetsPath('js/[id].[chunkhash].js')
   },
   module: {
     rules: [
@@ -32,27 +45,27 @@ module.exports = {
           options: {
             presets: ['env', 'stage-0', 'react'],
             plugins: [
-              ['import', { libraryName: 'antd', style: 'css' }],
-            ],
-          },
+              ['import', { libraryName: 'antd', style: 'css' }]
+            ]
+          }
         }, // loader的名称（必须）
-        include: [APP_PATH],
+        include: [APP_PATH]
       },
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: ['css-loader', 'autoprefixer-loader'],
-        }),
+        })
       },
       {
         test: /\.less$/,
         exclude: /^node_modules$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: ['css-loader', 'autoprefixer-loader', 'less-loader'],
+          use: ['css-loader', 'autoprefixer-loader', 'less-loader']
         }),
-        include: [APP_PATH],
+        include: [APP_PATH]
       },
       {
         test: /\.scss$/,
@@ -61,22 +74,22 @@ module.exports = {
           fallback: 'style-loader',
           use: ['css-loader', 'autoprefixer-loader', 'sass-loader'],
         }),
-        include: [APP_PATH],
+        include: [APP_PATH]
       },
       {
         test: /\.(eot|woff|svg|ttf|woff2|gif|appcache)(\?|$)/,
         exclude: /^node_modules$/,
         use: 'file-loader?name=[name].[ext]',
-        include: [APP_PATH],
+        include: [APP_PATH]
       },
       {
         test: /\.(png|jpg)$/,
         exclude: /^node_modules$/,
         use: 'url-loader?limit=8192&name=static/img/[hash:8].[name].[ext]',
         // 注意后面那个limit的参数，当你图片大小小于这个限制的时候，会自动启用base64编码图片
-        include: [APP_PATH],
-      },
-    ],
+        include: [APP_PATH]
+      }
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -84,38 +97,66 @@ module.exports = {
       filename: path.resolve(__dirname, '../dist/index.html'), // 输出文件【注意：这里的根路径是module.exports.output.path】
       showErrors: true,
       inject: 'body',
+      hash: true,
+      // 这样每次客户端页面就会根据这个hash来判断页面是否有必要刷新
+      // 在项目后续过程中，经常需要做些改动更新什么的，一但有改动，客户端页面就会自动更
+      minify: {
+        // 压缩HTML文件
+        removeComments: true,
+        // 移除HTML中的注释
+        collapseWhitespace: true
+        // 删除空白符与换行符
+      }
     }),
     new ExtractTextPlugin('static/css/[name].[hash].css'),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks(module) {
-        if (module.resource && (/^.*\.(css|scss|less)$/).test(module.resource)) {
-          return false;
-        }
-        return module.context && module.context.indexOf('node_modules') !== -1;
-      },
+        // any required modules inside node_modules are extracted to vendor
+        return (
+          module.resource &&
+          /\.js$/.test(module.resource) &&
+          module.resource.indexOf(
+            path.join(__dirname, '../node_modules')
+          ) === 0
+        )
+      }
     }),
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'common',
-      minChunks: Infinity,
+      name: 'manifest',
+      minChunks: Infinity
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
+    // This instance extracts shared chunks from code splitted chunks and bundles them
+    // in a separate chunk, similar to the vendor chunk
+    // see: https://webpack.js.org/plugins/commons-chunk-plugin/#extra-async-commons-chunk
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'app',
+      async: 'vendor-async',
+      children: true,
+      minChunks: 3
+    }),
+    new UglifyJsPlugin({
+      uglifyOptions: {
+        compress: {
+          warnings: false,
+          drop_console: true
+        }
       },
+      sourceMap: false,
+      parallel: true
     }),
     new CleanWebpackPlugin(
       ['dist/static/css/*.css', 'dist/static/js/*.js'], // 匹配删除的文件
       {
         root: path.resolve(__dirname, '../'),
         verbose: true, // 开启在控制台输出信息
-        dry: false, // 启用删除文件
-      } // 此处逗号eslint检查加了，无法打包0.0
+        dry: false // 启用删除文件
+      }
     ),
-    new ProgressbarWebpack(),
+    new ProgressbarWebpack()
   ],
   resolve: {
-    extensions: ['.js', '.jsx', '.less', '.scss', '.css'], // 后缀名自动补全
-  },
+    extensions: ['.js', '.jsx', '.less', '.scss', '.css'] // 后缀名自动补全
+  }
 };
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Layout, Menu, Breadcrumb, Icon, Button } from 'antd';
+import { Button } from 'antd';
 import axios from 'axios';
 
 import './list.scss';
@@ -9,7 +9,7 @@ class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      one: '刷85新',
+      one: '刷5558新'
     };
   }
 
@@ -50,6 +50,6 @@ class List extends Component {
 export default connect((title) => {
   console.log('title', title.title.title);
   return {
-    title,
+    title
   };
 })(List);

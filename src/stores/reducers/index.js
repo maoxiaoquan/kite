@@ -3,7 +3,7 @@ import loading from './loading';
 
 const rootReducer = {
   title,
-  loading,
+  loading
 };
 
 export default rootReducer;
