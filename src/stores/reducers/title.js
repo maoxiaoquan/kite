@@ -1,5 +1,5 @@
 const initState = {
-  title: '255666',
+  title: '255666'
 };
 
 function title(state = initState, action) {

@@ -14,7 +14,7 @@ const bundler = webpack(config);
 browserSync({
   port: 8888,
   ui: {
-    port: 8889,
+    port: 8889
   },
   server: {
     baseDir: '../src',
@@ -50,11 +50,11 @@ browserSync({
         changeOrigin: true
       })
     ]
-  }
+  },
 
   // no need to watch '*.js' here, webpack will take care of it for us,
   // including full page reloads if HMR won't work
   files: [
-    '../src/*.html',
-  ],
+    '../src/*.html'
+  ]
 });

@@ -1,15 +1,15 @@
 const initState = {
   list: [
-    1, 6, 8, 5, 2,
+    1, 6, 8, 5, 2
   ],
-  data: {},
+  data: {}
 };
 function reducers(state = initState, action) {
   switch (action.type) {
     case 'GET_LIST_DATA':
       return {
         ...state,
-        data: action.data,
+        data: action.data
       };
     default:
       return state;

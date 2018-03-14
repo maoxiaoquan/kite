@@ -144,7 +144,8 @@ b {
 }
 
 html {
-  background: #ffffff;
+  height: 100%;
+  overflow: inherit;
 }
 
 del,
@@ -173,6 +174,8 @@ body {
 body {
   color: #333;
   font-size: 16px;
+  height: 100%;
+  background: #e9ecf3 !important;
 }
 
 a {
@@ -217,4 +220,12 @@ a:focus {
   clear: both;
   height: 0;
   visibility: hidden;
+}
+
+.admin-main-content {
+  padding-top: 75px;
+}
+
+.admin-main-content-view {
+  .admin-content-wrapper {}
 }

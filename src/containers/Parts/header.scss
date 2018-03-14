@@ -1,0 +1,73 @@
+#admin-header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  .admin-header-view {
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    background: #fff;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    #logo {
+      overflow: hidden;
+      padding-left: 40px;
+      float: left;
+      height: 75px;
+      line-height: 75px;
+      text-decoration: none;
+      white-space: nowrap;
+      img {
+        height: 32px;
+        margin-right: 16px;
+        vertical-align: middle;
+      }
+      img+img {
+        height: 16px;
+        position: relative;
+        top: 1px;
+      }
+    }
+    #search-box {
+      border-left: 1px solid #ebedf0;
+      float: left;
+      height: 22px;
+      line-height: 22px;
+      padding-left: 16px;
+      margin: 27px auto 0;
+      input {
+        font-size: 14px;
+        margin-top: -5px;
+        width: 200px;
+        border: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        background: transparent;
+      }
+    }
+    #nav {
+      border: 0;
+      float: right;
+      font-size: 14px;
+      &.ant-menu-horizontal {
+        >.ant-menu-item {
+          height: 75px;
+          line-height: 75px;
+          min-width: 72px;
+          border-top: 2px solid transparent;
+        }
+        >.ant-menu-submenu {
+          height: 75px;
+          line-height: 75px;
+          min-width: 72px;
+          border-top: 2px solid transparent;
+        }
+      }
+      >.ant-menu-item {
+        text-align: center;
+      }
+    }
+  }
+}
