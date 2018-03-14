@@ -14,7 +14,7 @@ process.env.NODE_ENV = 'production'; // 设置为生产环境
 console.log('极质打包进行中......');
 
 const assetsPath = function (_path) {
-  return path.posix.join('asset', _path)
+  return path.posix.join('static', _path)
 }
 
 module.exports = {
@@ -30,7 +30,7 @@ module.exports = {
     ]
   },
   output: {
-    path: path.resolve(__dirname, '../static/'),
+    path: path.resolve(__dirname, '../dist/'),
     publicPath: '/', // 编译好的文件，在服务器的路径,域名会自动添加到前面  
     filename: assetsPath('js/[name].[chunkhash].js'),
     chunkFilename: assetsPath('js/[id].[chunkhash].js')
@@ -85,7 +85,7 @@ module.exports = {
       {
         test: /\.(png|jpg)$/,
         exclude: /^node_modules$/,
-        use: 'url-loader?limit=8192&name=asset/img/[hash:8].[name].[ext]',
+        use: 'url-loader?limit=8192&name=static/img/[hash:8].[name].[ext]',
         // 注意后面那个limit的参数，当你图片大小小于这个限制的时候，会自动启用base64编码图片
         include: [APP_PATH]
       }
@@ -94,7 +94,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../public/index.html'), // 源模板文件
-      filename: path.resolve(__dirname, '../static/asset/index.html'), // 输出文件【注意：这里的根路径是module.exports.output.path】
+      filename: path.resolve(__dirname, '../dist/index.html'), // 输出文件【注意：这里的根路径是module.exports.output.path】
       showErrors: true,
       inject: 'body',
       hash: true,
@@ -108,7 +108,7 @@ module.exports = {
         // 删除空白符与换行符
       }
     }),
-    new ExtractTextPlugin('asset/css/[name].[hash].css'),
+    new ExtractTextPlugin('static/css/[name].[hash].css'),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks(module) {
@@ -146,7 +146,7 @@ module.exports = {
       parallel: true
     }),
     new CleanWebpackPlugin(
-      ['static/asset/css/*.css', 'dist/asset/js/*.js'], // 匹配删除的文件
+      ['dist/static/css/*.css', 'dist/static/js/*.js'], // 匹配删除的文件
       {
         root: path.resolve(__dirname, '../'),
         verbose: true, // 开启在控制台输出信息

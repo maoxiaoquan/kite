@@ -4,7 +4,8 @@ import {
   Route,
   Switch,
   Link,
-  Redirect
+  Redirect,
+  HashRouter
 } from 'react-router-dom'
 import { Menu, Icon, Row, Col } from 'antd'
 
@@ -62,17 +63,20 @@ const Main = ({ match }) => (
   </div>
 )
 
+
 const RouteConfig = () => (
-  <Router>
+  <HashRouter>
     <div>
       <Header />
       <div className="admin-main-content">
+        <Route exact path="/" render={() => (
+          <Redirect to="/main/index" />
+        )} />
         <Route component={Main} path="/main" />
         <Route component={Index} path="/Index" />
-        <Redirect to="/main/index" />
       </div>
     </div>
-  </Router>
+  </HashRouter>
 )
 
 export default RouteConfig

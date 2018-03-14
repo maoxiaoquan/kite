@@ -16,9 +16,15 @@ app.use(koaLogger());
 
 app.use(bodyParser());
 
-app.use(koaStatic(path.join(__dirname, '../public/')));
+// 配置静态资源加载中间件
+app.use(koaStatic(
+  path.join(__dirname, '../static')
+))
 
-app.use(views(path.join(__dirname, '../theme'), { extension: 'ejs' }));
+// 配置服务端模板渲染引擎中间件
+app.use(views(path.join(__dirname, '../views'), {
+  extension: 'ejs'
+}))
 
 // 加载路由中间件
 app.use(routers.routes()).use(routers.allowedMethods());
