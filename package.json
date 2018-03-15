@@ -8,7 +8,7 @@
     "dev": "node build/dev-server.js",
     "build": "webpack  --config  build/webpack.prod.js -p",
     "server-dev": "nodemon ./server/app.js",
-    "server": "pm2 start ./server/app.js --name fatecms"
+    "server": "pm2 start pm2.json"
   },
   "author": "xiaoquan",
   "license": "ISC",
