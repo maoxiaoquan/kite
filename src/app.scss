@@ -214,6 +214,15 @@ a:focus {
 
 /*btn start*/
 
+#app {
+  width: 100%;
+  height: 100%;
+  .app-view {
+    width: 100%;
+    height: 100%;
+  }
+}
+
 .clearfix:after {
   content: '.';
   display: block;
