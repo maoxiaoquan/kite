@@ -1,20 +1,17 @@
 {
   "apps": {
     "name": "fatecms",
-    "cwd": " ./",
     "script": "./server/app.js",
-    "exec_interpreter": "bash",
     "min_uptime": "60s",
     "max_restarts": 30,
-    "exec_mode": "cluster_mode",
+    "exec_mode": "fork_mode",
     "error_file": "./pm2log/err.log",
     "out_file": "./pm2log/out.log",
     "pid_file": "./pm2log/test.pid",
     "watch": false,
     "ignore_watch": [
       "node_modules",
-      "logs",
-      "public"
+      "logs"
     ]
   }
 }
