@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node build/dev-server.js",
     "build": "webpack  --config  build/webpack.prod.js -p",
-    "server-dev": "nodemon ./server/app.js"
+    "server-dev": "nodemon ./server/app.js",
+    "server": "pm2 start ./server/app.js --name fatecms"
   },
   "author": "xiaoquan",
   "license": "ISC",
