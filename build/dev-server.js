@@ -5,6 +5,7 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const proxy = require('http-proxy-middleware');
 const config = require('./webpack.dev');
+const cfg = require('../config')
 
 process.env.NODE_ENV = 'development'; // 设置为开发环境
 
@@ -12,7 +13,7 @@ const bundler = webpack(config);
 
 // Run Browsersync and use middleware for Hot Module Replacement
 browserSync({
-  port: 8081,
+  port: cfg.dev_port,
   ui: {
     port: 8089
   },
@@ -46,7 +47,7 @@ browserSync({
       // bundler should be the same as above
       webpackHotMiddleware(bundler),
       proxy({
-        target: 'https://cnodejs.org/',
+        target: `http://localhost:${cfg.produce_port}/`,
         changeOrigin: true
       })
     ]

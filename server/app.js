@@ -30,5 +30,5 @@ app.use(views(path.join(__dirname, '../views'), {
 app.use(routers.routes()).use(routers.allowedMethods());
 
 // 监听启动端口
-app.listen(config.port);
-console.log(`the server is start at port ${config.port}`)
+app.listen(config.produce_port);
+console.log(`the server is start at port ${config.produce_port}`)
