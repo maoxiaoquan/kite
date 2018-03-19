@@ -5,5 +5,6 @@ module.exports = {
   database: 'fatecms', // 使用哪个数据库
   username: 'root', // 用户名
   password: 'root', // 口令
+  sql_type: 'mysql', // 数据库类型
   host: 'localhost' // 主机名
 }

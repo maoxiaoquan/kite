@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node build/dev-server.js",
     "build": "webpack  --config  build/webpack.prod.js -p",
+    "db-create": "node ./server/utils/db_create.js",
     "server-dev": "nodemon ./server/app.js",
     "server": "pm2 start pm2.json"
   },
@@ -29,6 +30,7 @@
     "koa-static": "^4.0.1",
     "koa-views": "^6.1.1",
     "mysql": "^2.15.0",
+    "mysql2": "^1.5.3",
     "pm2": "^2.7.2",
     "prop-types": "^15.6.0",
     "qs": "^6.5.1",
