@@ -18,7 +18,17 @@ module.exports = {
   async sign_up(ctx) {
     console.log('res', ctx.request.body)
     db.User.create({
-      name: ctx.request.body.nickname,
+      account: ctx.request.body.nickname,
+      password: ctx.request.body.password,
+      email: ctx.request.body.email
+    }).then(function (p) {
+      console.log('created.' + JSON.stringify(p));
+    }).catch(function (err) {
+      console.log('failed: ' + err);
+    });
+
+    db.userInfo.create({
+      account: ctx.request.body.nickname,
       password: ctx.request.body.password,
       email: ctx.request.body.email
     }).then(function (p) {

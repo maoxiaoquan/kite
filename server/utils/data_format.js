@@ -4,7 +4,6 @@
  * @param  {obejct} ctx 上下文对象
  * @param  {number} status 状态码，必填
  * @param  {date} date 返回的数据
- * @param  {obejct} ctx 上下文对象
  */
 module.exports = (ctx, date, status) => {
   let sts = status || 200
