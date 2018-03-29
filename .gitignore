@@ -1,6 +1,6 @@
 # dependencies
 /node_modules
-
+/.vscode
 # misc
 .DS_Store
 npm-debug.log*
