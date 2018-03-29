@@ -21,7 +21,8 @@ import Aside from '../containers/Parts/Aside'
 
 // 异步加载
 /*eslint-disable*/
-import Sign from 'bundle-loader?lazy!../containers/Sign/view/Sign' //登录组件
+import SignIn from 'bundle-loader?lazy!../containers/Sign/view/SignIn' //登录组件
+import SignUp from 'bundle-loader?lazy!../containers/Sign/view/SignUp' //登录组件
 import List from 'bundle-loader?lazy!../containers/List/view/list' // 表单组件
 import About from 'bundle-loader?lazy!../containers/About/view/about' // 评论组件
 /* eslint-enable */
@@ -36,14 +37,14 @@ const createComponent = component => props => (
 
 const Main = ({ match }) => (
   <div className="admin-main-content-view">
-    <Row>
+    <Row gutter={24}>
       <Col
-        lg={{ span: 5 }}   /*3 ≥992px 响应式栅格  */
-        md={{ span: 6 }}   /*4 ≥768px 响应式栅格  */
-        sm={{ span: 24 }}  /*5 ≥576px 响应式栅格  */
-        xl={{ span: 5 }}   /*2 ≥1200px 响应式栅格 */
-        xs={{ span: 24 }}  /*6 <576px 响应式栅格  */
-        xxl={{ span: 4 }}  /*1 ≥1600px 响应式栅格 */
+        lg={{ span: 5 }}  /*3 ≥992px 响应式栅格 */
+        md={{ span: 6 }}  /*4 ≥768px 响应式栅格 */
+        sm={{ span: 24 }}  /*5 ≥576px 响应式栅格 */
+        xl={{ span: 4 }}  /*2 ≥1200px 响应式栅格 */
+        xs={{ span: 24 }}  /*6 <576px 响应式栅格 */
+        xxl={{ span: 3 }} /*1 ≥1600px 响应式栅格 */
       >
         <Aside />
       </Col>
@@ -51,12 +52,11 @@ const Main = ({ match }) => (
         lg={{ span: 19 }}  /* 3 */
         md={{ span: 18 }}  /* 4 */
         sm={{ span: 0 }}  /* 5 */
-        xl={{ span: 19 }}  /* 2 */
+        xl={{ span: 20 }}  /* 2 */
         xs={{ span: 0 }}  /* 6 */
-        xxl={{ span: 20 }} /* 1 */
+        xxl={{ span: 21 }} /* 1 */
       >
         <div className="admin-content-wrapper">
-          <p>{match.url}</p>
           <Route component={Index} path={`${match.url}/main`} />
         </div>
       </Col>
@@ -68,6 +68,32 @@ const Admin = ({ match }) => (
   <div>
     <Header />
     <div className="admin-main-content">
+      <div className="block-header">
+        <Row>
+          <Col
+            lg={{ span: 12 }}  /*3 ≥992px 响应式栅格 */
+            md={{ span: 12 }}  /*4 ≥768px 响应式栅格 */
+            sm={{ span: 24 }}  /*5 ≥576px 响应式栅格 */
+            xl={{ span: 12 }}  /*2 ≥1200px 响应式栅格 */
+            xs={{ span: 24 }}  /*6 <576px 响应式栅格 */
+            xxl={{ span: 12 }} /*1 ≥1600px 响应式栅格 */
+          >
+            <h2>Horizontal Menu Dashboad
+                <small>Welcome to Oreo</small>
+            </h2>
+          </Col>
+          <Col
+            lg={{ span: 12 }}  /* 3 */
+            md={{ span: 12 }}  /* 4 */
+            sm={{ span: 0 }}  /* 5 */
+            xl={{ span: 12 }}  /* 2 */
+            xs={{ span: 0 }}  /* 6 */
+            xxl={{ span: 12 }} /* 1 */
+          >
+          </Col>
+        </Row>
+      </div>
+
       <Route component={Main} path={`${match.url}/index`} />
       <Route component={Index} path={`${match.url}/ma`} />
     </div>
@@ -80,9 +106,10 @@ class RouteConfig extends Component {
       <HashRouter>
         <div className="app-view">
           <Route component={Admin} path="/master" />
-          <Route component={createComponent(Sign)} exact path="/sign" />
+          <Route component={createComponent(SignIn)} exact path="/sign_in" />
+          <Route component={createComponent(SignUp)} exact path="/sign_up" />
           <Route exact path="/" render={() => (
-            <Redirect to="/master/index" />
+            <Redirect to="/master/index/main" />
           )} />
         </div>
       </HashRouter>

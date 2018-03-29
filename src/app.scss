@@ -175,7 +175,14 @@ body {
   color: #333;
   font-size: 16px;
   height: 100%;
-  background: #e9ecf3 !important;
+  background-color: #f4f6f9 !important;
+  font-family: Montserrat, "Helvetica Neue", Arial, sans-serif !important;
+}
+
+@font-face {
+  font-family: Montserrat;
+  src: url('./assets/font/Montserrat-Regular.ttf');
+  /* IE9+,可以是具体的实际链接 */
 }
 
 a {
@@ -190,8 +197,8 @@ a:focus {
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
   background-color: #e0e0e0;
 }
 
@@ -232,9 +239,111 @@ a:focus {
 }
 
 .admin-main-content {
-  padding-top: 75px;
+  margin-top: 101px;
+  -moz-transition: .5s;
+  -o-transition: .5s;
+  -webkit-transition: .5s;
+  transition: .5s;
+  z-index: 9;
+  position: relative;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  border-radius: 3px;
+  padding-left: 25px;
+  padding-right: 25px;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    background-color: #8c99e0;
+  }
+  .block-header {
+    padding: 15px;
+    h2 {
+      margin: 0 !important;
+      font-size: 20px;
+      color: #ffffff;
+      small {
+        display: block;
+        margin-top: 8px;
+        color: #616161;
+        font-size: 13px;
+        color: #ffffff;
+      }
+    }
+  }
 }
 
 .admin-main-content-view {
   .admin-content-wrapper {}
+}
+
+.box-card {
+  background: #fff;
+  margin-bottom: 30px;
+  transition: .5s;
+  border: 0;
+  border-radius: .1875rem;
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  box-shadow: none;
+  .box-card-header {
+    color: #424242;
+    padding: 20px;
+    position: relative;
+    box-shadow: none;
+    h2 {
+      font-size: 15px;
+      color: #757575;
+      position: relative;
+      &::before {
+        position: absolute;
+        width: 2px;
+        height: 18px;
+        left: -20px;
+        top: 0;
+        background: #6572b8;
+        content: '';
+      }
+      strong {
+        color: #6572b8;
+      }
+    }
+    .header-dropdown {
+      position: absolute;
+      top: 20px;
+      right: 15px;
+      list-style: none;
+      li {
+        display: inline-block;
+        a {
+          padding: 5px 10px;
+          i {
+            font-size: 18px;
+            color: #9e9e9e;
+            -moz-transition: all 0.5s;
+            -o-transition: all 0.5s;
+            -webkit-transition: all 0.5s;
+            transition: all 0.5s;
+          }
+        }
+      }
+    }
+  }
+  .box-card-body {
+    font-size: 14px;
+    color: #424242;
+    padding: 20px;
+    font-weight: 400;
+  }
 }

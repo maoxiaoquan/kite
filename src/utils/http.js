@@ -2,10 +2,15 @@ import axios from 'axios'
 import qs from 'qs'
 // import store from '../store'
 // const CSRFToken = getCSRFToken() /sdf www.xilongx.com/sdf
+let token
+if (localStorage.box_tokens) {
+  token = localStorage.box_tokens
+}
 const http = axios.create({
   baseURL: '/',
   headers: {
-    'x-requested-with': 'XMLHttpRequest'
+    'x-requested-with': 'XMLHttpRequest',
+    'x-access-token': token
   }
 })
 http.interceptors.request.use(function (config) {

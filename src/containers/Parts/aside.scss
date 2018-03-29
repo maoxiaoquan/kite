@@ -1,21 +1,26 @@
 .admin-aside {
-  width: 260px;
   background: #fff;
-  margin: 20px;
-  border-radius: 6px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  padding-bottom: 20px;
-  overflow: hidden;
   .ant-menu {
     border-right: none;
   }
   .admin-aside-view {
+    padding-bottom: 50px;
     .title-h2 {
       height: 50px;
       padding: 25px 15px 10px;
       color: #5C9ACF;
       font-size: 13px;
       font-weight: 600;
+    }
+  }
+  .ant-menu-item {
+    >span {
+      font-size: 14px;
+    }
+  }
+  .ant-menu-submenu-inline {
+    .ant-menu-submenu-title {
+      font-size: 14px;
     }
   }
 }

@@ -14,13 +14,6 @@ class List extends Component {
   }
 
   componentWillMount() {
-    axios.get('/api/v1/topics')
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   }
 
   click() {

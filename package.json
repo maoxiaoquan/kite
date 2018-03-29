@@ -19,6 +19,7 @@
     "bundle-loader": "^0.5.5",
     "busboy": "^0.2.14",
     "ejs": "^2.5.7",
+    "jsonwebtoken": "^8.2.0",
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
     "koa-convert": "^1.2.0",

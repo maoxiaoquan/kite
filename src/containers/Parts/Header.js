@@ -24,13 +24,7 @@ class Header extends Component {
   }
 
   componentWillMount() {
-    axios.get('/api/v1/topics')
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  
   }
 
   handleClick = (e) => {
@@ -48,70 +42,83 @@ class Header extends Component {
     const { title } = this.props;
     console.log('title', title)
     return (
-      <div className="admin-header" id="admin-header">
+      <div className="admin-header"
+        id="admin-header"
+      >
         <div className="admin-header-view clearfix">
           <Row>
             <Col
-              lg={{ span: 5 }}  /*3 ≥992px 响应式栅格 */
-              md={{ span: 6 }}  /*4 ≥768px 响应式栅格 */
+              lg={{ span: 12 }}  /*3 ≥992px 响应式栅格 */
+              md={{ span: 12 }}  /*4 ≥768px 响应式栅格 */
               sm={{ span: 24 }}  /*5 ≥576px 响应式栅格 */
-              xl={{ span: 5 }}  /*2 ≥1200px 响应式栅格 */
+              xl={{ span: 12 }}  /*2 ≥1200px 响应式栅格 */
               xs={{ span: 24 }}  /*6 <576px 响应式栅格 */
-              xxl={{ span: 4 }} /*1 ≥1600px 响应式栅格 */
+              xxl={{ span: 12 }} /*1 ≥1600px 响应式栅格 */
             >
-              <a id="logo" href="/">
-                <img src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" alt="logo" />
-                <img src="https://gw.alipayobjects.com/zos/rmsportal/DkKNubTaaVsKURhcVGkh.svg" alt="Ant Design" />
-              </a>
-            </Col>
-            <Col
-              lg={{ span: 19 }}  /* 3 */
-              md={{ span: 18 }}  /* 4 */
-              sm={{ span: 0 }}  /* 5 */
-              xl={{ span: 19 }}  /* 2 */
-              xs={{ span: 0 }}  /* 6 */
-              xxl={{ span: 20 }} /* 1 */
-            >
-              <div id="search-box">
-                <i className="anticon anticon-search"></i>
-                <input type="text" />
+
+              <div className="navbar-header clearfix">
+                <a className="navbar-brand" >
+                  <img alt=""
+                    src={require('../../assets/img/logo.svg')} />
+                  <span className="m-l-10">ADMIN</span>
+                </a>
+                <ul className="navbar-list">
+                  <li className="navbar-list-item">
+                    <Link to="/"><Icon type="home" /></Link>
+                  </li>
+                  <li className="navbar-list-item">
+                    <Link to="/"><Icon type="calendar" /></Link>
+                  </li>
+                  <li className="navbar-list-item">
+                    <Link to="/sign_in"><Icon type="shop" /></Link>
+                  </li>
+                  <li className="navbar-list-item">
+                    <Link to="/sign_up"><Icon type="api" /></Link>
+                  </li>
+                </ul>
+                <div className="input-group">
+                  <input className="form-control" placeholder="Search..." type="text" />
+                  <span className="input-group-addon">
+                    <i className="anticon anticon-search"></i>
+                  </span>
+                </div>
               </div>
 
-              <Menu
-                id="nav"
-                mode="horizontal"
-                onClick={this.handleClick}
-                selectedKeys={[this.state.current]}
-              >
-                <Menu.Item key="index">
-                  <Link to="/main">
-                    <Icon type="mail" />主页
-                  </Link>
-                </Menu.Item>
-                <Menu.Item disabled
-                  key="app"
-                >
-                  <Icon type="appstore" />Navigation Two
-              </Menu.Item>
-                <SubMenu title={<span><Icon type="setting" />Navigation Three - Submenu</span>}>
-                  <MenuItemGroup title="Item 1">
-                    <Menu.Item key="setting:1">Option 1</Menu.Item>
-                    <Menu.Item key="setting:2">Option 2</Menu.Item>
-                  </MenuItemGroup>
-                  <MenuItemGroup title="Item 2">
-                    <Menu.Item key="setting:3">Option 3</Menu.Item>
-                    <Menu.Item key="setting:4">Option 4</Menu.Item>
-                  </MenuItemGroup>
-                </SubMenu>
-                <Menu.Item key="alipay">
-                  <a href="https://ant.design"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >66</a>
-                </Menu.Item>
-              </Menu>
+
+            </Col>
+            <Col
+              lg={{ span: 12 }}  /* 3 */
+              md={{ span: 12 }}  /* 4 */
+              sm={{ span: 0 }}  /* 5 */
+              xl={{ span: 12 }}  /* 2 */
+              xs={{ span: 0 }}  /* 6 */
+              xxl={{ span: 12 }} /* 1 */
+            >
+              <ul className="navbar-icon">
+                <li className="navbar-icon-item">
+                  <Link to="/"><Icon type="reload" /></Link>
+                </li>
+                <li className="navbar-icon-item">
+                  <Link to="/"><Icon type="poweroff" /></Link>
+                </li>
+                <li className="navbar-icon-item">
+                  <Link to="/"><Icon type="setting" /></Link>
+                </li>
+              </ul>
             </Col>
           </Row>
+        </div>
+
+        <div className="menu-container">
+          <div className="menu">
+            <ul className="pullDown clearfix">
+              <li className="menu-dropdown-icon"><a href="index.html">统计</a> </li>
+              <li className="menu-dropdown-icon"><a href="dashboard-rtl.html">数据</a></li>
+              <li className="menu-dropdown-icon"><a href="index2.html">网站配置</a></li>
+              <li className="menu-dropdown-icon"><a href="blog-dashboard.html">Blog Dashboard</a></li>
+              <li className="menu-dropdown-icon"><a href="ec-dashboard.html">Ecommerce Dashboard</a></li>
+            </ul>
+          </div>
         </div>
 
       </div>

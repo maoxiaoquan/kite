@@ -7,7 +7,7 @@ class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      one: '刷新',
+      one: '刷新'
     };
   }
   click() {

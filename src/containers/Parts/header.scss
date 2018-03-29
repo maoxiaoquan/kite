@@ -1,72 +1,132 @@
 #admin-header {
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  font-family: "Montserrat", sans-serif;
   .admin-header-view {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 11;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 20px;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.15);
+    height: 60px;
+    background: #8c99e0;
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
-    background: #fff;
-    position: relative;
     z-index: 10;
     width: 100%;
-    #logo {
-      overflow: hidden;
-      padding-left: 40px;
-      float: left;
-      height: 75px;
-      line-height: 75px;
-      text-decoration: none;
-      white-space: nowrap;
-      img {
-        height: 32px;
-        margin-right: 16px;
-        vertical-align: middle;
+    padding: 0 5px;
+    .navbar-header {
+      .navbar-brand {
+        display: block;
+        float: left;
+        padding-top: 15px;
+        margin-left: 15px;
+        >img {
+          width: 30px;
+          display: inline-block;
+          vertical-align: middle;
+        }
+        >span {
+          display: inline-block;
+          vertical-align: middle;
+          color: #ffffff;
+          margin-left: 15px;
+          font-size: 16px;
+        }
       }
-      img+img {
-        height: 16px;
-        position: relative;
-        top: 1px;
+      .navbar-list {
+        display: block;
+        float: left;
+        margin-left: 15px;
+        .navbar-list-item {
+          display: inline-block;
+          a {
+            display: block;
+            padding: 0 15px;
+            line-height: 60px;
+            font-size: 18px;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            i {
+              color: #fff;
+            }
+          }
+        }
+      }
+      .input-group {
+        display: block;
+        float: left;
+        margin-left: 10px;
+        padding-top: 9px;
+        .form-control {
+          background-color: transparent;
+          border: 1px solid #E3E3E3;
+          border-radius: 30px;
+          line-height: normal;
+          padding: 10px 18px 10px 18px;
+          font-size: 14px;
+          color: #fff;
+          border-right: 0 none;
+          border-bottom-right-radius: 0;
+          border-top-right-radius: 0;
+        }
+        .input-group-addon {
+          border: 1px solid #E3E3E3;
+          border-radius: 30px;
+          padding: 12px 18px 11px 0;
+          border-left: 0;
+          border-bottom-left-radius: 0;
+          border-top-left-radius: 0;
+          i {
+            width: 17px;
+            font-size: 16px;
+            text-rendering: auto;
+            color: #fff;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+          }
+        }
       }
     }
-    #search-box {
-      border-left: 1px solid #ebedf0;
-      float: left;
-      height: 22px;
-      line-height: 22px;
-      padding-left: 16px;
-      margin: 27px auto 0;
-      input {
-        font-size: 14px;
-        margin-top: -5px;
-        width: 200px;
-        border: 0;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-        background: transparent;
-      }
-    }
-    #nav {
-      border: 0;
+    .navbar-icon {
       float: right;
-      font-size: 14px;
-      &.ant-menu-horizontal {
-        >.ant-menu-item {
-          height: 75px;
-          line-height: 75px;
-          min-width: 72px;
-          border-top: 2px solid transparent;
-        }
-        >.ant-menu-submenu {
-          height: 75px;
-          line-height: 75px;
-          min-width: 72px;
-          border-top: 2px solid transparent;
+      margin-right: 15px;
+      .navbar-icon-item {
+        display: inline-block;
+        a {
+          display: block;
+          padding: 0 15px;
+          line-height: 60px;
+          font-size: 18px;
+          text-rendering: auto;
+          -webkit-font-smoothing: antialiased;
+          i {
+            color: #fff;
+          }
         }
       }
-      >.ant-menu-item {
-        text-align: center;
+    }
+  }
+  .menu-container {
+    width: 100%;
+    margin: 0 auto;
+    background: #263238;
+    position: fixed;
+    top: 60px;
+    z-index: 10;
+    .menu {
+      .pullDown {
+        .menu-dropdown-icon {
+          float: left;
+          a {
+            text-decoration: none;
+            padding: 10px 15px;
+            display: block;
+            color: #bbb;
+            font-size: 14px;
+          }
+        }
       }
     }
   }

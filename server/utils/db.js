@@ -26,7 +26,7 @@ sequelize
   })
 
 
-const User = sequelize.define('user', {
+const ad_user = sequelize.define('ad_user', {
   id: { // 自增ID
     type: Seq.INTEGER(10),
     primaryKey: true, // 定义主键
@@ -78,7 +78,7 @@ const userInfo = sequelize.define('userInfo', {
   });
 
 module.exports = {
-  User,
+  ad_user,
   userInfo
 }
 
