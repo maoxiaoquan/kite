@@ -1,21 +1,21 @@
 import axios from 'axios'
 import qs from 'qs'
+import alerts from './alert'
 // import store from '../store'
 // const CSRFToken = getCSRFToken() /sdf www.xilongx.com/sdf
-let token
-if (localStorage.box_tokens) {
-  token = localStorage.box_tokens
-}
+
 const http = axios.create({
   baseURL: '/',
   headers: {
-    'x-requested-with': 'XMLHttpRequest',
-    'x-access-token': token
+    'x-requested-with': 'XMLHttpRequest'
   }
 })
 http.interceptors.request.use(function (config) {
   if (config.method === 'post') {
     const data = config.data || {}
+    if (localStorage.box_tokens) {
+      config.headers['x-access-token'] = localStorage.box_tokens
+    }
     config.data = qs.stringify(data)
   }
   return config
@@ -23,11 +23,19 @@ http.interceptors.request.use(function (config) {
 
 http.interceptors.response.use(function (response) {
   const data = response.data
+
+  if (data.state !== 1) {
+    alerts.message_warning(data.message)
+    location.replace('#/sign_in');
+    return false
+  }
+  
   console.log('接口:', response.config.url, data)
+
   return data
 }, function (error) {
   console.log(error)
-  alert('服务器正忙，请稍后重试!')
+  alerts.message_warning('服务器正忙，请稍后重试!')
   return Promise.reject(new Error('服务器正忙!'))
 })
 

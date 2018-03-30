@@ -1,23 +1,19 @@
 import http from '../../../utils/http'
-
-
+import { message } from 'antd';
+import axios from 'axios'
 export const sign_in = (data, func) => {
-  return () => {
-    http.post('/api/user/sign_in', data).then((res) => {
-      console.log('res', res)
-      if (res.state) {
-        console.log('res.token', res.token)
-        localStorage.box_tokens = res.token;
-      }
+  return (dispatch) => {
+    axios.post('/api/user/sign_in', data).then((res) => {
+      console.log('res6666',res)
       if (func)
-        func(res)
+      func(res.data)
     })
   }
 }
 
 export const sign_up = (data, func) => {
   return () => {
-    http.post('/api/user/sign_up', data).then((res) => {
+    axios.post('/api/user/sign_up', data).then((res) => {
       console.log('res', res)
       if (func)
         func(res)

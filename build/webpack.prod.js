@@ -146,7 +146,7 @@ module.exports = {
       parallel: true
     }),
     new CleanWebpackPlugin(
-      ['static/asset/css/*.css', 'dist/asset/js/*.js'], // 匹配删除的文件
+      ['static/asset/css/*.css', 'static/asset/js/*.js'], // 匹配删除的文件
       {
         root: path.resolve(__dirname, '../'),
         verbose: true, // 开启在控制台输出信息

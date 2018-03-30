@@ -27,8 +27,8 @@ class Tokens {
     }
   }
   setToken(name, time, data) {
-    var jwtSecret = name;
-    var token = jwt.sign(data, jwtSecret, {
+    let jwtSecret = name;
+    let token = jwt.sign(data, jwtSecret, {
       expiresIn: time
     })
     return token;

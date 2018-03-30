@@ -23,7 +23,7 @@ class sign {
           var datas = { account: req_data.account }
           var token = tokens.setToken('cxh', 300, datas)
           de.format_login(ctx,
-            true,
+            1,
             '登录成功',
             token,
             {
@@ -32,13 +32,13 @@ class sign {
           )
         } else {
           de.format_login(ctx,
-            false,
+            2,
             '密码错误'
           )
         }
       } else {
         de.format_login(ctx,
-          false,
+          2,
           '用户不存在'
         )
       }

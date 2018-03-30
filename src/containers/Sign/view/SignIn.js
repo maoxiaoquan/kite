@@ -8,18 +8,31 @@ import {
   Link
 } from 'react-router-dom';
 
+import alert from '../../../utils/alert'
+
 import { sign_in } from '../actions/index'
 
 import './signin.scss';
 const FormItem = Form.Item;
 
 class NormalLoginForm extends React.Component {
+
+  
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        this.props.dispatch(sign_in(values))
+        this.props.dispatch(sign_in(values, (res) => {
+          console.log('666',res)
+          if (res.state === 1) {
+            console.log('res.token', res.token)
+            localStorage.box_tokens = res.token;
+            this.props.history.push('/')
+          } else {
+            alert.message_error(res.message)
+          }
+        }))
       }
     });
   }

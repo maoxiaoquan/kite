@@ -6,7 +6,7 @@ class Format {
   /**
    * 登录信息数据的返回，附带token
    * @param  {obejct} ctx 上下文对象
-   * @param  {Booleans} statu 状态，必填,判断数据是否返回正确 true or false
+   * @param  {Booleans} statu 状态，必填,判断数据是否返回正确 1正常、2错误、3未登录、4登录超时
    * @param  {String} message 信息，必填,返回的弹窗信息
    * @param  {String} token token
    * @param  {obejct} date 返回的数据
