@@ -4,7 +4,6 @@ import axios from 'axios'
 export const sign_in = (data, func) => {
   return (dispatch) => {
     axios.post('/api/user/sign_in', data).then((res) => {
-      console.log('res6666',res)
       if (func)
       func(res.data)
     })
