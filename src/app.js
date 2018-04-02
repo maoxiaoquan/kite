@@ -13,7 +13,7 @@ import './app.scss';
 import App from './routers/router';
 /* router 文件 */
 
-const middlewares = [thunk];
+const middlewares = [thunk]
 
 const store = createStore(
   combineReducers({ routing: routerReducer, ...rootReducer }),

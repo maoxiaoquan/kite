@@ -1,10 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title><%= title %></title>
-    <script src="/js/box.js"></script>
-</head>
+<% include header.ejs %>
+
 <body>
-    <div id="app">6888888866</div>
+<!--header start-->
+<nav class="header navbar-fixed-top">
+    <div class="header-content container clearfix">
+        <a href="" class="logn-img fl-left">
+            <img src="/default/img/logo.svg" alt="">
+        </a>
+        <ul class="nav-list  fl-left">
+            <li><a href=""><i class="iconfont icon-zhuye"></i>首页</a></li>
+            <li><a href="">活动</a></li>
+            <li><a href="">实验室</a></li>
+        </ul>
+        <div class="search-view  fl-left">
+            <input class="box-input box-search" placeholder="搜索" type="text">
+            <i class="iconfont icon-search box-search-btn"></i>
+        </div>
+        <div class="nav-right fl-right">
+            <div class="clearfix">
+                <a class="sign-in" href="">登录</a>
+                <a class="sign-up"  href="">注册</a>
+                <a target="_blank" class="create-article" href=""><i class="iconfont icon-37"></i>写文章</a>
+            </div>
+        </div>
+    </div>
+</nav>
+<!--header end-->
+<div id="app" class="box-container ">6888888866</div>
 </body>
-</html>
+
+<% include footer.ejs %>

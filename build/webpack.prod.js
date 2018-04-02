@@ -55,7 +55,7 @@ module.exports = {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: ['css-loader', 'autoprefixer-loader'],
+          use: ['css-loader', 'autoprefixer-loader']
         })
       },
       {
@@ -72,14 +72,14 @@ module.exports = {
         exclude: /^node_modules$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: ['css-loader', 'autoprefixer-loader', 'sass-loader'],
+          use: ['css-loader', 'autoprefixer-loader', 'sass-loader']
         }),
         include: [APP_PATH]
       },
       {
         test: /\.(eot|woff|svg|ttf|woff2|gif|appcache)(\?|$)/,
         exclude: /^node_modules$/,
-        use: 'file-loader?name=[name].[ext]',
+        use: 'file-loader?name=asset/fonts/[name].[ext]',
         include: [APP_PATH]
       },
       {

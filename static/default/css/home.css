@@ -1,0 +1,107 @@
+/* header start*/
+
+.header {
+    min-height: 60px;
+    margin-bottom: 20px;
+    border: 1px solid #f0f0f0;
+    background-color: #fff;
+}
+
+.navbar-fixed-top {
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+}
+
+.header .header-content .logn-img {
+    padding-top: 15px;
+    margin-right: 15px;
+}
+
+.header .header-content .logn-img img {
+    width: 30px;
+    display: block;
+}
+
+.header .header-content .nav-list > li {
+    display: inline-block;
+}
+
+.header .header-content .nav-list > li a {
+    display: block;
+    line-height: 60px;
+    padding: 0 15px;
+    color: #333;
+}
+
+.header .header-content .nav-list > li a:hover {
+    background-color: #f5f5f5;
+}
+
+.header .header-content .nav-list > li a i {
+    padding-right: 5px;
+}
+
+.header .header-content .search-view {
+    position: relative;
+    padding-top: 11px;
+    padding-left: 15px;
+}
+
+.header .header-content .search-view .box-input {
+    padding: 0 40px 0 20px;
+    width: 160px;
+    height: 38px;
+    font-size: 14px;
+    border: 1px solid #eee;
+    border-radius: 40px;
+    background: #eee;
+    transition: width .5s;
+    -moz-transition: width .5s;
+    -webkit-transition: width .5s;
+    -o-transition: width .5s;
+    transition-delay: .1s;
+    -moz-transition-delay: .1s;
+    -webkit-transition-delay: .1s;
+    -o-transition-delay: .1s;
+}
+
+.header .header-content .search-view .box-search-btn {
+    position: absolute;
+    top: 20px;
+    right: 13px;
+}
+
+.header .header-content .nav-right .sign-in {
+    line-height: 60px;
+    padding: 0 20px;
+    color: #333333;
+    float: left;
+}
+
+.header .header-content .nav-right .sign-up {
+    padding: 5px 15px;
+    margin-top: 13px;
+    border-radius: 3px;
+    border: 1px solid rgba(236, 97, 73, .7);
+    float: left;
+    color: #ea6f5a;
+}
+
+.header .header-content .nav-right .create-article {
+    float: left;
+    padding: 5px 15px;
+    margin-top: 13px;
+    border-radius: 3px;
+    background-color: #ea6f5a;
+    border: 1px solid rgba(236, 97, 73, .7);
+    margin-left: 15px;
+    color: #fff;
+}
+
+.header .header-content .nav-right .create-article i {
+    padding-right: 10px;
+}
+
+/*header end*/
