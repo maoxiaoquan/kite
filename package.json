@@ -9,7 +9,8 @@
     "build": "webpack  --config  build/webpack.prod.js -p",
     "db-create": "node ./server/utils/db_create.js",
     "server-dev": "nodemon ./server/app.js",
-    "server": "pm2 start pm2.json"
+    "server": "pm2 start pm2.json",
+    "scss": "node-sass --watch static/default/css/home.scss static/default/css/home.css"
   },
   "author": "xiaoquan",
   "license": "ISC",
