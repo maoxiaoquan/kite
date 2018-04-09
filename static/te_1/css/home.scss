@@ -59,6 +59,16 @@
   text-align: center;
 }
 
+.home.black-theme .navbar {
+  background-color: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 11;
+  padding: 20px 0 0;
+}
+
 .black-theme .navbar {
   background-color: #ffffff;
   position: fixed;
@@ -120,7 +130,20 @@
   &.layout-header {
     margin-top: 0;
     padding: 120px 0 50px 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #000;
     position: relative;
+    &:before {
+      content: '';
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.4);
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+    }
     .item {
       .content {
         position: relative;
