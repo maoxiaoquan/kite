@@ -1,0 +1,50 @@
+<!--header.ejs start-->
+<% include parts/header.ejs %>
+<!--header.ejs start-->
+
+<body class="black-theme">
+
+<!--header_view.ejs start-->
+<% include parts/header_view.ejs %>
+<!--header_view.ejs end-->
+
+
+<!--home-lay layout-content start-->
+<section class="sign-up-lay layout-content">
+
+</section>
+<!--home-lay layout-content start-->
+
+
+<!--footer_view.ejs start-->
+<% include parts/footer_view.ejs %>
+<!--footer_view.ejs end-->
+
+<!--<script>
+
+  var navbar = document.getElementById('layout-navbar')
+
+  function getScrollTop () {
+    var scrollTop = 0;
+    if (document.documentElement && document.documentElement.scrollTop) {
+      scrollTop = document.documentElement.scrollTop;
+    }
+    else if (document.body) {
+      scrollTop = document.body.scrollTop;
+    }
+    return scrollTop;
+  }
+
+  window.onscroll = function () {
+    var st = getScrollTop()
+    if (st > 50) {
+      navbar.classList.add("navbar-fixed-top");
+    } else {
+      navbar.classList.remove("navbar-fixed-top");
+    }
+  }
+
+</script>-->
+</body>
+
+<% include parts/footer.ejs %>
