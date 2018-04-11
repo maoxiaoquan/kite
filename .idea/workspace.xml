@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1b2ee72d-a0f4-472c-bf0b-b3294e1356d0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/server/routers/home.js" afterPath="$PROJECT_DIR$/server/routers/home.js" />
-      <change beforePath="$PROJECT_DIR$/static/default/css/home.css" afterPath="$PROJECT_DIR$/static/default/css/home.css" />
-      <change beforePath="$PROJECT_DIR$/static/default/css/home.scss" afterPath="$PROJECT_DIR$/static/default/css/home.scss" />
-      <change beforePath="$PROJECT_DIR$/static/default/css/layout.css" afterPath="$PROJECT_DIR$/static/default/css/layout.css" />
-      <change beforePath="$PROJECT_DIR$/views/default/index.ejs" afterPath="$PROJECT_DIR$/views/default/index.ejs" />
-      <change beforePath="$PROJECT_DIR$/views/default/parts/header.ejs" afterPath="$PROJECT_DIR$/views/default/parts/header.ejs" />
-    </list>
+    <list default="true" id="1b2ee72d-a0f4-472c-bf0b-b3294e1356d0" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -22,46 +14,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.ejs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/default/index.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1974">
-              <caret line="100" column="49" lean-forward="true" selection-start-line="100" selection-start-column="49" selection-end-line="100" selection-end-column="49" />
-              <folding>
-                <element signature="e#655#716#0#HTML" expanded="true" />
-                <element signature="e#1692#1775#0#HTML" expanded="true" />
-                <element signature="e#2047#2130#0#HTML" expanded="true" />
-                <element signature="e#2402#2485#0#HTML" expanded="true" />
-                <element signature="e#2755#2838#0#HTML" expanded="true" />
-                <element signature="e#5004#5111#0#HTML" expanded="true" />
-                <element signature="e#6701#6781#0#HTML" expanded="true" />
-                <element signature="e#8371#8429#0#HTML" expanded="true" />
-                <element signature="e#10018#10098#0#HTML" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="article.ejs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/default/article.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="17" column="35" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="195" selection-end-column="30" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sign_in.ejs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/default/sign_in.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="441">
-              <caret line="21" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="49" selection-end-column="30" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="sign_up.ejs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/default/sign_up.ejs">
           <provider selected="true" editor-type-id="text-editor">
@@ -77,6 +29,36 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="273">
               <caret line="13" column="23" lean-forward="true" selection-start-line="13" selection-start-column="23" selection-end-line="13" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="api.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/routers/api.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="336">
+              <caret line="16" column="23" lean-forward="true" selection-start-line="16" selection-start-column="23" selection-end-line="16" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/routers/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="231">
+              <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="admin.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/routers/admin.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -358,12 +340,12 @@
       <workItem from="1522976801443" duration="126000" />
       <workItem from="1523266351579" duration="1932000" />
       <workItem from="1523268694128" duration="1312000" />
-      <workItem from="1523322525229" duration="20809000" />
+      <workItem from="1523322525229" duration="21518000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="55965000" />
+    <option name="totallyTimeSpent" value="56674000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -616,24 +598,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/routers/admin.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/controllers/admin.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/routers/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -655,13 +623,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="189">
           <caret line="9" column="1" lean-forward="true" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/routers/api.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="16" column="23" lean-forward="true" selection-start-line="16" selection-start-column="23" selection-end-line="16" selection-end-column="23" />
         </state>
       </provider>
     </entry>
@@ -809,6 +770,30 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="42">
           <caret line="2" column="34" lean-forward="false" selection-start-line="2" selection-start-column="34" selection-end-line="2" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/routers/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/routers/admin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/routers/api.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="16" column="23" lean-forward="true" selection-start-line="16" selection-start-column="23" selection-end-line="16" selection-end-column="23" />
           <folding />
         </state>
       </provider>
