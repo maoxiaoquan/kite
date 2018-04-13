@@ -1,30 +1,53 @@
 <!--header start-->
-<nav class="header navbar" id="layout-navbar">
+
+<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
             <a class="navbar-brand" href="http://cosy.iwpzt.com" title="Cosy主题演示站"
-               style="background-image: url('/default/img/logo.svg');">Cosy主题演示站</a>
-            <a class="navbar-brand mobile-navbar-brand hidden-md hidden-lg" href="http://cosy.iwpzt.com"
+               style="background-image: url('/default/img/logo.svg');"></a>
+            <!--<a class="navbar-brand mobile-navbar-brand hidden-md hidden-lg" href="http://cosy.iwpzt.com"
                title="Cosy主题演示站"
-               style="background-image: url('http://cosy.iwpzt.com/wp-content/themes/2018010916203677/static/images/logo-mobile.png');">Cosy主题演示站</a>
+               style="background-image: url('http://cosy.iwpzt.com/wp-content/themes/2018010916203677/static/images/logo-mobile.png');"></a>-->
         </div>
-
-        <div class="navbar-right">
-            <button class="btn-search"><i class="iconfont icon-search"></i></button>
-        </div>
-
-        <div class="navbar-collapse hidden-xs hidden-sm">
-            <ul class="navbar-nav">
-                <li><a href="/">首页</a></li>
-                <li><a href="/article">专题</a></li>
-                <li><a href="">实验室</a></li>
-                <li><a href="">文章列表</a></li>
-                <li><a href="">一图</a></li>
-                <li><a href="">短片</a></li>
-                <li><a href="">关于</a></li>
-                <li><a href="">留言板</a></li>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">主页</a></li>
+                <li><a href="/article_list">文章列表</a></li>
+                <li><a href="#contact">实验室</a></li>
             </ul>
-        </div>
+            <div class="search navbar-left">
+                <form target="_blank" action="/search" accept-charset="UTF-8" method="get">
+                    <input name="utf8" type="hidden" value="✓">
+                    <input type="text" name="q" id="q" value="" autocomplete="off" placeholder="搜索" class="search-input">
+                    <a class="search-btn" href="javascript:void(null)"><i class="iconfont icon-search"></i></a>
+                </form>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/">主页</a></li>
+                        <li><a href="/articles">文章列表</a></li>
+                        <li><a href="#66">实验室</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li class="dropdown-header">Nav header</li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
+                </li>
+                <li><a href="/sign_in">登录</a></li>
+                <li class="active"><a href="/sign_up">注册</a></li>
+                <li><a href="/writer">写文章</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
     </div>
 </nav>
+
 <!--header end-->

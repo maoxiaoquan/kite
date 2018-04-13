@@ -1,0 +1,50 @@
+<!--header.ejs start-->
+<% include parts/header.ejs %>
+<!--header.ejs end-->
+
+<body class="black-theme">
+
+<!--header_view.ejs start-->
+<% include parts/header_view.ejs %>
+<!--header_view.ejs end-->
+
+
+<!--article-list-lay layout-content start-->
+<section class="article-list-lay layout-content">
+    <h2>article-list-lay</h2>
+</section>
+<!--article-list-lay layout-content end-->
+
+
+<!--footer_view.ejs start-->
+<% include parts/footer_view.ejs %>
+<!--footer_view.ejs end-->
+
+<!--<script>
+
+  var navbar = document.getElementById('layout-navbar')
+
+  function getScrollTop () {
+    var scrollTop = 0;
+    if (document.documentElement && document.documentElement.scrollTop) {
+      scrollTop = document.documentElement.scrollTop;
+    }
+    else if (document.body) {
+      scrollTop = document.body.scrollTop;
+    }
+    return scrollTop;
+  }
+
+  window.onscroll = function () {
+    var st = getScrollTop()
+    if (st > 50) {
+      navbar.classList.add("navbar-fixed-top");
+    } else {
+      navbar.classList.remove("navbar-fixed-top");
+    }
+  }
+
+</script>-->
+</body>
+
+<% include parts/footer.ejs %>

@@ -31,6 +31,7 @@
     "koa-session-minimal": "^3.0.4",
     "koa-static": "^4.0.1",
     "koa-views": "^6.1.1",
+    "marked": "^0.3.19",
     "mysql": "^2.15.0",
     "mysql2": "^1.5.3",
     "pm2": "^2.7.2",

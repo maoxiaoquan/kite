@@ -1,5 +1,5 @@
 const de = require('../utils/data_example')
-const db = require('../utils/db')
+const db = require('../db/db')
 const tokens = require('../utils/tokens')
 
 class Users {

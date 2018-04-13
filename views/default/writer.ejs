@@ -1,25 +1,63 @@
 <!--header.ejs start-->
 <% include parts/header.ejs %>
-<!--header.ejs start-->
-
+<!--header.ejs end-->
+<script src="/default/js/marked.min.js"></script>
 <body class="black-theme">
 
-<!--header_view.ejs start-->
-<% include parts/header_view.ejs %>
-<!--header_view.ejs end-->
 
-
-<!--home-lay layout-content start-->
+<!--writer-lay layout-content start-->
 <section class="writer-lay layout-content">
 
+    <!--writer-header start-->
+    <div class="writer-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12 col-sm-7 col-md-7">
+                    <input class="writer-input-title" type="text" placeholder="请输入文章标题">
+                </div>
+                <div class="col-xs-12 col-sm-5 col-md-5">
+                    <div class="pull-right">
+                        <ul class="writer-right clearfix">
+                            <li><a class="btn add-cover-img" href="javascript:;">添加封面图片</a></li>
+                            <li><a class="btn save-draft" href="javascript:;"><i class="iconfont icon-iconset0238"></i></a>
+                            </li>
+                            <li><a class="btn post-article" href="javascript:;">发布文章</a></li>
+                            <li class="return-home"><a class="btn" href="/"><i class="iconfont icon-zhuye"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--writer-header end-->
+
+    <!--writer-content start-->
+    <div class="writer-content">
+        <div class="writer-box">
+            <ul class="writer-box-title">
+                <li><i class="iconfont icon-tupian"></i></li>
+                <li><i class="iconfont icon-chexiaofanhuichehuishangyibu"></i></li>
+                <li><i class="iconfont icon-zhongzhi"></i></li>
+            </ul>
+            <textarea class="write-textarea" name="" id="" cols="30" rows="10"></textarea>
+        </div>
+        <div class="content-preview">
+            <div id="mark-text"></div>
+        </div>
+    </div>
+    <!--writer-content end-->
+
+
 </section>
-<!--home-lay layout-content start-->
+<!--writer-lay layout-content end-->
 
 
-<!--footer_view.ejs start-->
-<% include parts/footer_view.ejs %>
-<!--footer_view.ejs end-->
-
+<script>
+  window.onload = function () {
+    document.getElementById('mark-text').innerHTML =
+      marked('# Marked in the browser\n\nRendered by **marked**.');
+  }
+</script>
 <!--<script>
 
   var navbar = document.getElementById('layout-navbar')

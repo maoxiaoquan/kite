@@ -1,24 +1,53 @@
 <!--header.ejs start-->
 <% include parts/header.ejs %>
-<!--header.ejs start-->
+<!--header.ejs end-->
 
 <body class="black-theme">
 
-<!--header_view.ejs start-->
-<% include parts/header_view.ejs %>
-<!--header_view.ejs end-->
-
-
 <!--home-lay layout-content start-->
-<section class="sign-in-lay layout-content">
+<section class="sign-lay layout-content">
+    <div class="sign-view card">
+        <div class="title">
+            <a class="active" href="/sign_in">登录</a>
+            <b>·</b>
+            <a href="/sign_up">注册</a>
+        </div>
+        <div class="js-sign-in-container">
+            <form id="new_session" action="/sessions" accept-charset="UTF-8" method="post">
+                <!-- 正常登录登录名输入框 -->
+                <div class="input-prepend restyle js-normal">
+                    <input placeholder="手机号或邮箱" type="text" id="session_email_or_mobile_number">
+                    <i class="iconfont icon-account"></i>
+                </div>
 
+                <!-- 海外登录登录名输入框 -->
+
+                <div class="input-prepend">
+                    <input placeholder="密码" type="password" id="session_password">
+                    <i class="iconfont icon-mima"></i>
+                </div>
+                <div class="remember-btn">
+                    <input type="checkbox" value="true" checked="checked" id="session_remember_me"><span>记住我</span>
+                </div>
+                <button class="sign-in-button" id="sign-in-form-submit-btn" type="button">
+                    登录
+                </button>
+            </form>
+            <!-- 更多登录方式 -->
+            <div class="more-sign">
+                <h6>社交帐号登录</h6>
+                <ul>
+                    <li><a class="weibo"><i class="iconfont icon-xinlang"></i></a></li>
+                    <li><a class="weixin" target="_blank" href=""><i class="iconfont icon-iconfontweixin"></i></a></li>
+                    <li><a class="qq" target="_blank" href=""><i class="iconfont icon-qq"></i></a></li>
+                </ul>
+
+                <div class="weibo-geetest-captcha"></div>
+            </div>
+        </div>
+    </div>
 </section>
-<!--home-lay layout-content start-->
-
-
-<!--footer_view.ejs start-->
-<% include parts/footer_view.ejs %>
-<!--footer_view.ejs end-->
+<!--home-lay layout-content end-->
 
 <!--<script>
 
