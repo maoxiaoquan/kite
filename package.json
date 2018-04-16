@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node build/dev-server.js",
     "build": "webpack  --config  build/webpack.prod.js -p",
-    "db-create": "node ./server/utils/db_create.js",
+    "db-create": "node ./server/db/db_create.js",
     "server-dev": "nodemon ./server/app.js",
     "server": "pm2 start pm2.json",
     "scss": "node-sass --watch static/default/css/home.scss static/default/css/home.css"

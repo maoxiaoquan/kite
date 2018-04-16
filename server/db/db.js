@@ -1,6 +1,6 @@
 const Seq = require('sequelize')
 const config = require('../../config')
-
+/*表字段*/
 const sequelize = new Seq(
   config.database, // 数据库名
   config.username,   // 用户名
@@ -22,7 +22,9 @@ sequelize.authenticate().then(() => {
   console.log('链接失败' + error)
 })
 
-const ad_user = sequelize.define('ad_user', require('./db_type/ad_user'), { /*后台用户表*/
+const db_ad_user = require('./db_type/ad_user')
+const ad_user = sequelize.define(db_ad_user.AD_USER, db_ad_user.TABLE, {
+  /*后台用户表*/
   timestamps: false
 })
 
