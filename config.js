@@ -6,5 +6,11 @@ module.exports = {
   username: 'root', // 用户名
   password: 'root', // 口令
   sql_type: 'mysql', // 数据库类型
-  host: 'localhost' // 主机名
+  host: 'localhost', // 主机名
+  //邮件配置
+  email: {
+    service: 'QQ',
+    user: '你的邮箱',
+    pass: '你的密码'
+  }
 }
