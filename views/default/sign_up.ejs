@@ -5,7 +5,6 @@
 <body class="black-theme">
 
 
-
 <!--home-lay layout-content start-->
 <section class="sign-lay layout-content">
     <div class="sign-view card">
@@ -15,25 +14,29 @@
             <a class="active" href="/sign_up">注册</a>
         </div>
         <div class="js-sign-in-container">
-            <form id="new_session" action="/sessions" accept-charset="UTF-8" method="post">
+            <form id="sign-up" action="/sign_up" accept-charset="UTF-8" method="post">
                 <!-- 正常登录登录名输入框 -->
                 <div class="input-prepend restyle js-normal">
-                    <input placeholder="你的昵称" type="text" id="session_email_or_mobile_number">
+                    <input placeholder="你的昵称" type="text" class="nickname" name="nickname">
                     <i class="iconfont icon-account"></i>
                 </div>
 
-                <!-- 海外登录登录名输入框 -->
-
                 <div class="input-prepend">
-                    <input placeholder="手机号或邮箱" type="text" id="session_email_or_mobile_number">
+                    <input placeholder="邮箱(暂时只支持邮箱，后续开放手机)" type="text" class="account" name="account">
                     <i class="iconfont icon-phone"></i>
                 </div>
 
                 <div class="input-prepend">
-                    <input placeholder="密码" type="password" id="session_password">
+                    <input placeholder="密码" type="password" class="password" name="password">
                     <i class="iconfont icon-mima"></i>
                 </div>
-                <button class="sign-in-button" type="button">
+
+                <div class="input-prepend">
+                    <input placeholder="重复密码" type="double_password" class="double_password" name="double_password">
+                    <i class="iconfont icon-mima"></i>
+                </div>
+
+                <button class="sign-up-button" type="button">
                     注册
                 </button>
             </form>
@@ -53,6 +56,33 @@
 </section>
 <!--home-lay layout-content end-->
 
+
+<script>
+  window.onload = function () {
+
+    var sign_up_from = document.getElementById('sign-up')
+
+    sign_up_from.getElementsByClassName('sign-up-button')[0].onclick = function () {
+
+      var data = {
+        nickname: sign_up_from.getElementsByClassName('nickname')[0].value,
+        account: sign_up_from.getElementsByClassName('account')[0].value,
+        password: sign_up_from.getElementsByClassName('password')[0].value,
+        double_password: sign_up_from.getElementsByClassName('double_password')[0].value
+      }
+      axios.post('/sign_up', data).then(function (res) {
+        console.log(res.data)
+        if (res.data.state === 1) {
+          alert(res.data.message)
+          window.location.href = '/sign_in'
+        } else {
+          alert(res.data.message)
+        }
+      })
+    }
+
+  }
+</script>
 
 <!--<script>
 

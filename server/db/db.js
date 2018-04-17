@@ -22,7 +22,13 @@ sequelize.authenticate().then(() => {
   console.log('链接失败' + error)
 })
 
-const db_ad_user = require('./db_type/ad_user')
+const db_user = require('./db_type/db_user')
+const user = sequelize.define(db_user.USER, db_user.TABLE, {
+  /*用户表*/
+  timestamps: false
+})
+
+const db_ad_user = require('./db_type/db_ad_user')
 const ad_user = sequelize.define(db_ad_user.AD_USER, db_ad_user.TABLE, {
   /*后台用户表*/
   timestamps: false
@@ -45,6 +51,7 @@ const userInfo = sequelize.define('userInfo', {
 })
 
 module.exports = {
+  user,
   ad_user,
   userInfo
 }

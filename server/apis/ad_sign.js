@@ -2,7 +2,7 @@ const de = require('../utils/data_example')
 const db = require('../db/db')
 const tokens = require('../utils/tokens')
 
-class sign {
+class ad_sign {
   constructor() {
     // super()
   }
@@ -10,7 +10,7 @@ class sign {
      * 登录操作
      * @param  {obejct} ctx 上下文对象
      */
-  async sign_in(ctx) {
+  async ad_sign_in(ctx) {
     let req_data = ctx.request.body
     await db.ad_user.findOne({
       where: {
@@ -19,9 +19,9 @@ class sign {
     }).then(function (db_data) {
       if (db_data) {
         console.log(req_data.account, '------------', db_data.password)
-        if (req_data.password == db_data.password) {
-          var datas = { account: req_data.account }
-          var token = tokens.setToken('cxh', 300, datas)
+        if (req_data.password === db_data.password) {
+          let datas = { account: req_data.account }
+          let token = tokens.setToken('cxh', 300, datas)
           de.format_login(ctx,
             1,
             '登录成功',
@@ -54,7 +54,7 @@ class sign {
    * 注册操作
    * @param   {obejct} ctx 上下文对象
    */
-  async sign_up(ctx) {
+  async ad_sign_up(ctx) {
     console.log('res', ctx.request.body)
 
     await db.ad_user.create({
@@ -72,4 +72,4 @@ class sign {
 }
 
 
-module.exports = new sign()
+module.exports = new ad_sign()
