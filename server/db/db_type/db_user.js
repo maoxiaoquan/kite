@@ -1,17 +1,17 @@
 const Seq = require('sequelize')
 module.exports = {
-  USER: 'user', /*表名*/
+  NAME: 'user', /*表名*/
   TABLE: {
     /*表结构*/
     id: { // 自增ID
-      type: Seq.INTEGER(10),
+      type: Seq.BIGINT(20),
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增
       comment: 'id 主键，自增',
       field: 'id'
     },
     user_id: { // u_id
-      type: Seq.STRING(36),
+      type: Seq.BIGINT(20),
       comment: 'user_id',
       field: 'user_id',
       defaultValue: Seq.UUIDV1()

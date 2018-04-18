@@ -12,15 +12,21 @@ class sign_in {
 
   async get_sign_in (ctx) {
     const title = 'sign_in'
-    await ctx.render('default/sign_in', {
-      title,
-      status: 1,
-      meaasge: '',
-      data: {
-        account: '',
-        password: ''
-      }
-    })
+
+    if (ctx.session.islogin) {
+      ctx.redirect('/')
+    } else {
+      await ctx.render('default/sign_in', {
+        title,
+        status: 1,
+        meaasge: '',
+        data: {
+          account: '',
+          password: ''
+        }
+      })
+    }
+
   }
 
   async post_sign_in (ctx) {
@@ -52,17 +58,26 @@ class sign_in {
     if (checkEmail(formData.account)) { /*邮箱登录*/
 
       try {
-        let email = await db.user.findOne({
+        let sql_data_email = await db.user.findOne({
           where: {
             email: formData.account
           }
         })
-        if (email) {
+        if (sql_data_email) {
 
-          console.log('email', email.dataValues.password)
+          console.log('sql_data_email', sql_data_email)
 
-          if (formData.password === email.dataValues.password) {
+          console.log('sql_data', sql_data_email.dataValues.password)
+
+          if (formData.password === sql_data_email.dataValues.password) {
+
+            let session = ctx.session
+            session.islogin = true
+            session.nickname = sql_data_email.dataValues.nickname
+            session.user_id = sql_data_email.dataValues.user_id
+
             ctx.redirect('/')
+
           } else {
             await ctx.render('default/sign_in', {
               title: title,

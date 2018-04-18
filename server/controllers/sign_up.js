@@ -1,6 +1,7 @@
 const db = require('../db/db')
 const {checkEmail, checkPhoneNum} = require('../utils/validators')
 const moment = require('moment')
+const sendMail = require('../utils/send_email')
 
 function err_mess (message) {
   this.message = message
@@ -15,13 +16,19 @@ class sign_up {
   }
 
   async get_sign_up (ctx) { // get 页面
+
     const title = 'sign_up'
-    await ctx.render('default/sign_up', {
-      title: title,
-      status: 1,
-      message: '',
-      data: {}
-    })
+
+    if (ctx.session.islogin) {
+      ctx.redirect('/')
+    } else {
+      await ctx.render('default/sign_up', {
+        title: title,
+        status: 1,
+        message: '',
+        data: {}
+      })
+    }
   }
 
   async post_sign_up (ctx) { // post 数据
@@ -75,6 +82,8 @@ class sign_up {
             reg_time: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
             last_sign_time: ''
           }).then(function (data) {
+
+            sendMail('838115837@qq.com', `${req_data.nickname},注册成功，跳往登录页`, 'Hi Amor,这是一封测试邮件')
             console.log('created.' + JSON.stringify(data))
             ctx.body = {
               state: 1,

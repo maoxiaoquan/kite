@@ -9,7 +9,7 @@
 <section class="writer-lay layout-content">
 
     <!--writer-header start-->
-    <div class="writer-header">
+    <div class="writer-header" id="writer-header">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xs-12 col-sm-7 col-md-7">
@@ -18,6 +18,14 @@
                 <div class="col-xs-12 col-sm-5 col-md-5">
                     <div class="pull-right">
                         <ul class="writer-right clearfix">
+                            <li>
+                                <select class="article-type" name="" id="">
+                                    <option value="">请选择文章分类</option>
+                                    <option value="前端">前端</option>
+                                    <option value="HTML5">HTML5</option>
+                                    <option value="js">js</option>
+                                </select>
+                            </li>
                             <li><a class="btn add-cover-img" href="javascript:;">添加封面图片</a></li>
                             <li><a class="btn save-draft" href="javascript:;"><i class="iconfont icon-iconset0238"></i></a>
                             </li>
@@ -54,9 +62,25 @@
 
 <script>
   window.onload = function () {
+
+    var writer_header = document.getElementById('writer-header')
+
+    writer_header.getElementsByClassName('post-article')[0].onclick = function () {
+
+      var data = {
+        title: writer_header.getElementsByClassName('writer-input-title')[0].value,
+        content: document.getElementsByClassName('write-textarea')[0].value,
+        type: document.getElementsByClassName('article-type')[0].value,
+      }
+      axios.post('/writer', data).then(function (res) {
+        console.log(res.data)
+      })
+    }
+
     document.getElementById('mark-text').innerHTML =
-      marked('# Marked in the browser\n\nRendered by **marked**.');
+      marked('# Marked in the browser\n\nRendered by **marked**.')
   }
+
 </script>
 <!--<script>
 

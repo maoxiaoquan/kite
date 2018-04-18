@@ -1,16 +1,19 @@
 module.exports = {
   dev_port: 8060,// 前台开发端口
   produce_port: 8061,// server端口
-  mysql_port: 3306, // 端口号，MySQL默认3306
-  database: 'fatecms', // 使用哪个数据库
-  username: 'root', // 用户名
-  password: 'root', // 口令
-  sql_type: 'mysql', // 数据库类型
-  host: 'localhost', // 主机名
+  database: {
+    /*database set*/
+    DATABASE: 'fatecms', // 使用哪个数据库
+    USERNAME: 'root', // 用户名
+    PASSWORD: 'root', // 口令
+    SQL_TYPE: 'mysql', // 数据库类型
+    HOST: 'localhost', // 主机名
+    MYSQL_PORT: 3306 // 端口号，MySQL默认3306
+  },
   //邮件配置
   email: {
-    service: 'QQ',
-    user: '你的邮箱',
-    pass: '你的密码'
+    service: '163',
+    user: 'mxq1102@163.com',
+    pass: 'quan13173560961'
   }
 }

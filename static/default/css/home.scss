@@ -479,7 +479,7 @@
     width: 280px;
     overflow: auto;
     border-right: 1px solid #f0f0f0;
-    .menu{
+    .menu {
       li {
         line-height: 20px;
         a {
@@ -491,7 +491,7 @@
     }
   }
   .article-list {
-    .main-top{
+    .main-top {
       margin-top: 30px;
       margin-bottom: 35px;
       .avatar-collection {
@@ -544,8 +544,8 @@
       }
     }
     .list-container {
-      >ul {
-        >li {
+      > ul {
+        > li {
           border-bottom: 1px solid rgba(178, 186, 194, 0.15);
         }
       }
@@ -739,6 +739,10 @@
             font-size: 20px;
           }
 
+        }
+        .article-type {
+          height: 35px;
+          vertical-align: top;
         }
         .btn {
           margin-top: 6px;

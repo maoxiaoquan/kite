@@ -25,14 +25,16 @@
             <div class="search navbar-left">
                 <form target="_blank" action="/search" accept-charset="UTF-8" method="get">
                     <input name="utf8" type="hidden" value="✓">
-                    <input type="text" name="q" id="q" value="" autocomplete="off" placeholder="搜索" class="search-input">
+                    <input type="text" name="q" id="q" value="" autocomplete="off" placeholder="搜索"
+                           class="search-input">
                     <a class="search-btn" href="javascript:void(null)"><i class="iconfont icon-search"></i></a>
                 </form>
             </div>
             <ul class="nav navbar-nav navbar-right">
+                <% if(user_info.islogin){ %>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Dropdown <span class="caret"></span></a>
+                       aria-expanded="false"><%= user_info.account %> <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="/">主页</a></li>
                         <li><a href="/articles">文章列表</a></li>
@@ -42,9 +44,11 @@
                         <li><a href="#">Separated link</a></li>
                     </ul>
                 </li>
+                <li><a href="/writer">写文章</a></li>
+                <% }else { %>
                 <li><a href="/sign_in">登录</a></li>
                 <li class="active"><a href="/sign_up">注册</a></li>
-                <li><a href="/writer">写文章</a></li>
+                <% } %>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

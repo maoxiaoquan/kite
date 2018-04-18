@@ -1,5 +1,5 @@
 class Format {
-  constructor() {
+  constructor () {
     // super()
   }
 
@@ -13,7 +13,7 @@ class Format {
    * @param  {number} status 状态码，必填
    */
 
-  async format_login(ctx, state, message, token, date, status) {
+  async format_login (ctx, state, message, token, date, status) {
     let sts = status || 200
     ctx.response.status = sts
     ctx.body = {
@@ -33,7 +33,7 @@ class Format {
    * @param  {number} status 状态码，必填
    */
 
-  async format_data(ctx, state, message, date, status) {
+  async format_data (ctx, state, message, date, status) {
     let sts = status || 200
     ctx.response.status = sts
     ctx.body = {
@@ -42,7 +42,22 @@ class Format {
       date
     }
   }
-}
 
+  async render (ctx, {title, view_url, status, message, data}) {
+    let d = data || []
+    await ctx.render(view_url, {
+      title,
+      status,
+      message,
+      data: d,
+      user_info: {
+        islogin: ctx.session.islogin,
+        account: ctx.session.nickname,
+        user_id: ctx.session.user_id
+      }
+    })
+  }
+
+}
 
 module.exports = new Format()

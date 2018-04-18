@@ -1,4 +1,6 @@
 const router = require('koa-router')()
+const {Check_Session, ajaxCheck_Session} = require('../utils/check_session')
+
 const index = require('../controllers/index')// 主页
 const sign_in = require('../controllers/sign_in')// 登录
 const sign_up = require('../controllers/sign_up')// 注册
@@ -15,7 +17,10 @@ router.get('sign_up', sign_up.get_sign_up) // 注册
 router.post('sign_up', sign_up.post_sign_up) // 注册数据 post
 
 router.get('article', article) // 文章内容页
-router.get('writer', writer) // 编写文章
+
+router.get('writer', Check_Session, writer.get_writer) // 编写文章
+router.post('writer', ajaxCheck_Session, writer.post_writer) // 编写文章
+
 router.get('article_list', article_list) // 文章列表
 
 module.exports = router

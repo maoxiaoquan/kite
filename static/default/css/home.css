@@ -578,6 +578,9 @@
       padding: 0 15px; }
     .writer-lay.layout-content .writer-header .writer-right li.return-home i {
       font-size: 20px; }
+    .writer-lay.layout-content .writer-header .writer-right li .article-type {
+      height: 35px;
+      vertical-align: top; }
     .writer-lay.layout-content .writer-header .writer-right li .btn {
       margin-top: 6px; }
     .writer-lay.layout-content .writer-header .writer-right li .save-draft {

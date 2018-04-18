@@ -2,13 +2,13 @@ const Seq = require('sequelize')
 const config = require('../../config')
 /*表字段*/
 const sequelize = new Seq(
-  config.database, // 数据库名
-  config.username,   // 用户名
-  config.password,   // 用户密码
+  config.database.DATABASE, // 数据库名
+  config.database.USERNAME,   // 用户名
+  config.database.PASSWORD,   // 用户密码
   {
-    'dialect': config.sql_type,  // 数据库使用mysql
-    'host': config.host, // 数据库服务器ip
-    'port': config.mysql_port,        // 数据库服务器端口
+    'dialect': config.database.SQL_TYPE,  // 数据库使用mysql
+    'host': config.database.HOST, // 数据库服务器ip
+    'port': config.database.MYSQL_PORT,        // 数据库服务器端口
     'define': {
       // 字段以下划线（_）来分割（默认是驼峰命名风格）
       'underscored': true
@@ -23,13 +23,19 @@ sequelize.authenticate().then(() => {
 })
 
 const db_user = require('./db_type/db_user')
-const user = sequelize.define(db_user.USER, db_user.TABLE, {
+const user = sequelize.define(db_user.NAME, db_user.TABLE, {
   /*用户表*/
   timestamps: false
 })
 
+const db_article = require('./db_type/db_article')
+const article = sequelize.define(db_article.NAME, db_article.TABLE, {
+  /*文章表*/
+  timestamps: false
+})
+
 const db_ad_user = require('./db_type/db_ad_user')
-const ad_user = sequelize.define(db_ad_user.AD_USER, db_ad_user.TABLE, {
+const ad_user = sequelize.define(db_ad_user.NAME, db_ad_user.TABLE, {
   /*后台用户表*/
   timestamps: false
 })
@@ -52,6 +58,7 @@ const userInfo = sequelize.define('userInfo', {
 
 module.exports = {
   user,
+  article,
   ad_user,
   userInfo
 }
