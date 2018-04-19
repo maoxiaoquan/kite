@@ -205,7 +205,7 @@
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  padding: 1.167rem 2rem;
+  padding: 1.167rem 0;
   min-height: 5.75rem; }
   .content-box .info-box {
     display: -webkit-box;

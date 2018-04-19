@@ -74,32 +74,32 @@
             <section class="home-lay layout-content">
 
                 <div class="filter-menu text-center">
-                    <button class="active">最新</button>
-                    <button data-cid="945">一图</button>
-                    <button data-cid="21">商业</button>
-                    <button data-cid="943">短片</button>
-                    <button data-cid="1">智能</button>
+                    <button class="active">文章</button>
+                    <button data-cid="945">说说</button>
+                    <button data-cid="945">视频</button>
+                    <button data-cid="945">公告</button>
                 </div>
 
                 <ul class="article-list">
+                    <% data.article_list.forEach(function (item, key) { %>
                     <li>
                         <article class="content-box">
                             <div class="info-box">
                                 <div class="info-row title-row">
-                                    <a href="/article" class="title">手摸手，带你用vue撸后台 系列三(实战篇)</a>
+                                    <a href="/article/<%= item.dataValues.aid %>" class="title"><%= item.dataValues.title %></a>
                                 </div>
                                 <div class="info-row meta-row">
                                     <ul class="meta-list">
                                         <li class="item category">
-                                            <span class="category-title frontend">前端</span>
+                                            <span class="category-title frontend"><%= item.dataValues.type %></span>
                                         </li>
                                         <li class="item username clickable">
                                             <div class="user-popover-box">
-                                                <a href="">花裤衩</a>
+                                                <a href=""><%= item.dataValues.author %></a>
                                             </div>
                                         </li>
                                         <li class="item">10月前</li>
-                                        <li class="item">25781 次阅读</li>
+                                        <li class="item"><%= item.dataValues.read_count %> 次阅读</li>
                                     </ul>
                                 </div>
                             </div>
@@ -108,137 +108,7 @@
                             </div>
                         </article>
                     </li>
-
-                    <li>
-                        <article class="content-box">
-                            <div class="info-box">
-                                <div class="info-row title-row">
-                                    <a href="/article" class="title">手摸手，带你用vue撸后台 系列三(实战篇)</a>
-                                </div>
-                                <div class="info-row meta-row">
-                                    <ul class="meta-list">
-                                        <li class="item category">
-                                            <span class="category-title frontend">前端</span>
-                                        </li>
-                                        <li class="item username clickable">
-                                            <div class="user-popover-box">
-                                                <a href="">花裤衩</a>
-                                            </div>
-                                        </li>
-                                        <li class="item">10月前</li>
-                                        <li class="item">25781 次阅读</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="lazy thumb thumb loaded"
-                                 style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
-                            </div>
-                        </article>
-                    </li>
-                    <li>
-                        <article class="content-box">
-                            <div class="info-box">
-                                <div class="info-row title-row">
-                                    <a href="/article" class="title">手摸手，带你用vue撸后台 系列三(实战篇)</a>
-                                </div>
-                                <div class="info-row meta-row">
-                                    <ul class="meta-list">
-                                        <li class="item category">
-                                            <span class="category-title frontend">前端</span>
-                                        </li>
-                                        <li class="item username clickable">
-                                            <div class="user-popover-box">
-                                                <a href="">花裤衩</a>
-                                            </div>
-                                        </li>
-                                        <li class="item">10月前</li>
-                                        <li class="item">25781 次阅读</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="lazy thumb thumb loaded"
-                                 style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
-                            </div>
-                        </article>
-                    </li>
-                    <li>
-                        <article class="content-box">
-                            <div class="info-box">
-                                <div class="info-row title-row">
-                                    <a href="/article" class="title">手摸手，带你用vue撸后台 系列三(实战篇)</a>
-                                </div>
-                                <div class="info-row meta-row">
-                                    <ul class="meta-list">
-                                        <li class="item category">
-                                            <span class="category-title frontend">前端</span>
-                                        </li>
-                                        <li class="item username clickable">
-                                            <div class="user-popover-box">
-                                                <a href="">花裤衩</a>
-                                            </div>
-                                        </li>
-                                        <li class="item">10月前</li>
-                                        <li class="item">25781 次阅读</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="lazy thumb thumb loaded"
-                                 style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
-                            </div>
-                        </article>
-                    </li>
-                    <li>
-                        <article class="content-box">
-                            <div class="info-box">
-                                <div class="info-row title-row">
-                                    <a href="/article" class="title">手摸手，带你用vue撸后台 系列三(实战篇)</a>
-                                </div>
-                                <div class="info-row meta-row">
-                                    <ul class="meta-list">
-                                        <li class="item category">
-                                            <span class="category-title frontend">前端</span>
-                                        </li>
-                                        <li class="item username clickable">
-                                            <div class="user-popover-box">
-                                                <a href="">花裤衩</a>
-                                            </div>
-                                        </li>
-                                        <li class="item">10月前</li>
-                                        <li class="item">25781 次阅读</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="lazy thumb thumb loaded"
-                                 style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
-                            </div>
-                        </article>
-                    </li>
-                    <li>
-                        <article class="content-box">
-                            <div class="info-box">
-                                <div class="info-row title-row">
-                                    <a href="/article" class="title">手摸手，带你用vue撸后台 系列三(实战篇)</a>
-                                </div>
-                                <div class="info-row meta-row">
-                                    <ul class="meta-list">
-                                        <li class="item category">
-                                            <span class="category-title frontend">前端</span>
-                                        </li>
-                                        <li class="item username clickable">
-                                            <div class="user-popover-box">
-                                                <a href="">花裤衩</a>
-                                            </div>
-                                        </li>
-                                        <li class="item">10月前</li>
-                                        <li class="item">25781 次阅读</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="lazy thumb thumb loaded"
-                                 style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
-                            </div>
-                        </article>
-                    </li>
+                    <% }) %>
                 </ul>
 
 

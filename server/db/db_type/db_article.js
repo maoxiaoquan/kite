@@ -1,24 +1,18 @@
 const Seq = require('sequelize')
-const shortid = require('shortid');
+const shortid = require('shortid')
 module.exports = {
   NAME: 'article', /*表名*/
   TABLE: {
     /*表结构*/
-    id: { // 自增ID
-      type: Seq.BIGINT(20),
-      autoIncrement: true, // 自动递增
-      comment: 'id 主键，自增',
-      field: 'id'
-    },
     aid: { // 文章id
-      type: Seq.BIGINT(20),
+      type: Seq.STRING(20),
       primaryKey: true, // 定义主键
       comment: '文章id',
       field: 'aid',
-      defaultValue:shortid.generate
+      defaultValue: shortid.generate
     },
     user_id: { // 作者id
-      type: Seq.BIGINT(20),
+      type: Seq.STRING(20),
       comment: '作者id',
       field: 'user_id'
     },
@@ -60,12 +54,14 @@ module.exports = {
     read_count: { // 阅读数
       type: Seq.BIGINT(20),
       comment: '阅读数',
-      field: 'read_count'
+      field: 'read_count',
+      defaultValue: 0
     },
     comment_count: { // 评论数
       type: Seq.BIGINT(20),
       comment: '评论数',
-      field: 'comment_count'
+      field: 'comment_count',
+      defaultValue: 0
     }
   }
 }

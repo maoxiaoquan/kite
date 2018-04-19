@@ -11,7 +11,7 @@ module.exports = {
       field: 'id'
     },
     user_id: { // u_id
-      type: Seq.BIGINT(20),
+      type: Seq.STRING(20),
       comment: 'user_id',
       field: 'user_id',
       defaultValue: Seq.UUIDV1()

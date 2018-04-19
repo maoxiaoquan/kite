@@ -74,6 +74,11 @@
       }
       axios.post('/writer', data).then(function (res) {
         console.log(res.data)
+        if (res.data.status === 1) {
+          alert(res.data.message)
+        } else {
+          alert(res.data.message)
+        }
       })
     }
 
