@@ -12,7 +12,7 @@ module.exports = {
       defaultValue: shortid.generate
     },
     user_id: { // 作者id
-      type: Seq.STRING(20),
+      type: Seq.STRING(50),
       comment: '作者id',
       field: 'user_id'
     },
@@ -46,10 +46,15 @@ module.exports = {
       comment: '状态(0:草稿;1:审核中;2:审核通过;3:回收站)',
       field: 'status'
     },
-    type: { // 类型
+    type: { // 类型 （1文章 2说说 3视频 4公告 ）
       type: Seq.STRING(20),
-      comment: '类型',
+      comment: '类型 （1:文章; 2:说说 ;3:视频;4: 公告 ）',
       field: 'type'
+    },
+    category: { // 类别
+      type: Seq.STRING(20),
+      comment: '类别',
+      field: 'category'
     },
     read_count: { // 阅读数
       type: Seq.BIGINT(20),

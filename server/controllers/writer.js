@@ -24,7 +24,7 @@ class writer {
 
   async post_writer (ctx) {
     let formData = ctx.request.body
-
+    console.log('formData', formData)
     try {
 
       if (!formData.title) {
@@ -56,7 +56,8 @@ class writer {
         title: formData.title,
         excerpt: formData.content,
         status: 1,
-        type: formData.type
+        type: formData.type,
+        category: formData.category
       }).then(function (data) {
         ctx.body = {
           status: 1,

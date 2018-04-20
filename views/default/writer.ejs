@@ -20,6 +20,15 @@
                         <ul class="writer-right clearfix">
                             <li>
                                 <select class="article-type" name="" id="">
+                                    <option value="">请选择类型</option>
+                                    <option value="1">文章</option>
+                                    <option value="2">说说</option>
+                                    <option value="3">视频</option>
+                                    <option value="4">公告</option>
+                                </select>
+                            </li>
+                            <li>
+                                <select class="article-category" name="" id="">
                                     <option value="">请选择文章分类</option>
                                     <option value="前端">前端</option>
                                     <option value="HTML5">HTML5</option>
@@ -71,6 +80,7 @@
         title: writer_header.getElementsByClassName('writer-input-title')[0].value,
         content: document.getElementsByClassName('write-textarea')[0].value,
         type: document.getElementsByClassName('article-type')[0].value,
+        category: document.getElementsByClassName('article-category')[0].value,
       }
       axios.post('/writer', data).then(function (res) {
         console.log(res.data)

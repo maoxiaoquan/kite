@@ -11,10 +11,15 @@ module.exports = {
       field: 'id'
     },
     user_id: { // u_id
-      type: Seq.STRING(20),
+      type: Seq.STRING(50),
       comment: 'user_id',
       field: 'user_id',
       defaultValue: Seq.UUIDV1()
+    },
+    avatar: { // 头像
+      type: Seq.STRING(100),
+      comment: '头像',
+      field: 'avatar'
     },
     nickname: { // 昵称
       type: Seq.STRING(16),
