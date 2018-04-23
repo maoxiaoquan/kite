@@ -508,7 +508,7 @@
         color: #969696; }
     .sign-lay.layout-content .sign-view .email-view .send-email-input {
       padding-right: 92px; }
-    .sign-lay.layout-content .sign-view .email-view .send-email-code {
+    .sign-lay.layout-content .sign-view .email-view .btn-send-email-code {
       position: absolute;
       right: 0;
       font-size: 12px;

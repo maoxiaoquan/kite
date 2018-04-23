@@ -31,6 +31,61 @@ class sign_up {
     }
   }
 
+  async post_sign_up_code (ctx) {
+
+    let req_data = {
+      account: ctx.request.body.account
+    }
+
+    if (checkEmail(req_data.account)) { /*邮箱注册*/
+
+      try {
+        let email = await db.user.findOne({
+          where: {
+            email: req_data.account
+          }
+        })
+        if (!email) {
+
+
+
+          sendMail('838115837@qq.com', '验证码成功发送', '666666666')
+
+          ctx.body = {
+            state: 1,
+            message: '验证码已发送到邮箱'
+          }
+        } else {
+          ctx.body = {
+            state: 2,
+            message: '邮箱已存在'
+          }
+        }
+
+      } catch (err) {
+        ctx.body = {
+          state: 2,
+          type: 'ERROR_IN_SAVE_DATA',
+          message: err
+        }
+      }
+
+    } else if (checkPhoneNum(req_data.account)) {  /* 手机号码注册*/
+
+      ctx.body = {
+        state: 2,
+        message: '暂时未开放手机号码注册'
+      }
+
+    } else {        /* 非手机号码非邮箱*/
+      ctx.body = {
+        state: 2,
+        message: '请输入正确的手机号码或者邮箱'
+      }
+    }
+
+  }
+
   async post_sign_up (ctx) { // post 数据
     let req_data = {
       nickname: ctx.request.body.nickname,
@@ -82,9 +137,8 @@ class sign_up {
             reg_time: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
             last_sign_time: ''
           }).then(function (data) {
-
-            sendMail('838115837@qq.com', `${req_data.nickname},注册成功，跳往登录页`, 'Hi Amor,这是一封测试邮件')
             console.log('created.' + JSON.stringify(data))
+            sendMail('838115837@qq.com', `${req_data.nickname}，您好，注册成功`, `<h2>${req_data.nickname}</h2><p>账户已注册成功</p>`)
             ctx.body = {
               state: 1,
               message: '注册成功，跳往登录页'

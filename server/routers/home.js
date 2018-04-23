@@ -15,6 +15,7 @@ router.post('sign_in', sign_in.post_sign_in) // 登录数据 post
 
 router.get('sign_up', sign_up.get_sign_up) // 注册
 router.post('sign_up', sign_up.post_sign_up) // 注册数据 post
+router.post('sign_up_code', sign_up.post_sign_up_code) // 注册数据 post
 
 router.get('article/:aid', article.get_article) // 文章内容页
 

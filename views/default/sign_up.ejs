@@ -24,11 +24,11 @@
                 <div class="input-prepend email-view">
                     <input placeholder="邮箱(暂时只支持邮箱，后续开放手机)" type="text" class="send-email-input account" name="account">
                     <i class="iconfont icon-phone"></i>
-                    <button class="send-email-code btn" type="button">发送验证码</button>
+                    <button class="btn-send-email-code btn" type="button">发送验证码</button>
                 </div>
 
                 <div class="input-prepend email-view-code">
-                    <input placeholder="请输入验证码" type="text" class="send-email-code account" name="account">
+                    <input placeholder="请输入验证码" type="text" class="send-email-code code" name="account">
                     <i class="iconfont icon-yanzhengma"></i>
                 </div>
 
@@ -90,11 +90,26 @@
         document.getElementsByClassName('email-view-code')[0].style.display = 'none'
     }
 
+    sign_up_from.getElementsByClassName('btn-send-email-code')[0].onclick = function () {
+      var data = {
+        account: sign_up_from.getElementsByClassName('account')[0].value,
+      }
+      axios.post('/sign_up_code', data).then(function (res) {
+        console.log(res.data)
+        if (res.data.state === 1) {
+          alert(res.data.message)
+        } else {
+          alert(res.data.message)
+        }
+      })
+    }
+
     sign_up_from.getElementsByClassName('sign-up-button')[0].onclick = function () {
 
       var data = {
         nickname: sign_up_from.getElementsByClassName('nickname')[0].value,
         account: sign_up_from.getElementsByClassName('account')[0].value,
+        code: sign_up_from.getElementsByClassName('code')[0].value,
         password: sign_up_from.getElementsByClassName('password')[0].value,
         double_password: sign_up_from.getElementsByClassName('double_password')[0].value
       }
