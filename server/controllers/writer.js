@@ -17,7 +17,7 @@ class writer {
     await de.render(ctx, {
       title: title,
       view_url: 'default/writer',
-      status: 1,
+      state: 'success',
       message: 'writer'
     })
   }
@@ -41,7 +41,7 @@ class writer {
 
     } catch (err) {
       ctx.body = {
-        state: 2,
+        state:'error',
         message: err.message
       }
       return false
@@ -60,20 +60,20 @@ class writer {
         category: formData.category
       }).then(function (data) {
         ctx.body = {
-          status: 1,
+          state: 'success',
           message: '文章创建成功'
         }
 
       }).catch(function (err) {
         ctx.body = {
-          status: 2,
+          state: 'error',
           message: err
         }
       })
 
     } catch (err) {
       ctx.body = {
-        status: 2,
+        state: 'error',
         message: err.message
       }
     }

@@ -5,7 +5,7 @@ module.exports = async (ctx) => {
   await de.render(ctx, {
     title: title,
     view_url: 'default/article_list',
-    status: 1,
+    state: 'success',
     message: 'article'
   })
 }

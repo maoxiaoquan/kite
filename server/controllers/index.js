@@ -3,7 +3,9 @@ const de = require('../utils/data_example')
 
 class index {
   constructor () {
-
+    this.state = {
+      title: '333'
+    }
   }
 
   async get_index (ctx) {
@@ -23,7 +25,7 @@ class index {
     await de.render(ctx, {
       title: title,
       view_url: 'default/index',
-      status: 1,
+      state: 'success',
       message: 'home',
       data: {
         count: sql_article_list.count,

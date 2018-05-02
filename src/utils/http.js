@@ -24,7 +24,7 @@ http.interceptors.request.use(function (config) {
 http.interceptors.response.use(function (response) {
   const data = response.data
 
-  if (data.state !== 1) {
+  if (!data.is_login) {
     alerts.message_warning(data.message)
     location.replace('#/sign_in');
     return false

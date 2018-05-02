@@ -24,7 +24,7 @@ class sign_up {
     } else {
       await ctx.render('default/sign_up', {
         title: title,
-        status: 1,
+        state: 'success',
         message: '',
         data: {}
       })
@@ -52,19 +52,19 @@ class sign_up {
           sendMail('838115837@qq.com', '验证码成功发送', '666666666')
 
           ctx.body = {
-            state: 1,
+            state: 'success',
             message: '验证码已发送到邮箱'
           }
         } else {
           ctx.body = {
-            state: 2,
+            state: 'error',
             message: '邮箱已存在'
           }
         }
 
       } catch (err) {
         ctx.body = {
-          state: 2,
+          state: 'error',
           type: 'ERROR_IN_SAVE_DATA',
           message: err
         }
@@ -73,13 +73,13 @@ class sign_up {
     } else if (checkPhoneNum(req_data.account)) {  /* 手机号码注册*/
 
       ctx.body = {
-        state: 2,
+        state: 'error',
         message: '暂时未开放手机号码注册'
       }
 
     } else {        /* 非手机号码非邮箱*/
       ctx.body = {
-        state: 2,
+        state: 'error',
         message: '请输入正确的手机号码或者邮箱'
       }
     }
@@ -140,27 +140,27 @@ class sign_up {
             console.log('created.' + JSON.stringify(data))
             sendMail('838115837@qq.com', `${req_data.nickname}，您好，注册成功`, `<h2>${req_data.nickname}</h2><p>账户已注册成功</p>`)
             ctx.body = {
-              state: 1,
+              state: 'success',
               message: '注册成功，跳往登录页'
             }
           }).catch(function (err) {
             console.log('err.' + err)
             ctx.body = {
-              state: 2,
+              state: 'error',
               message: err
             }
           })
 
         } else {
           ctx.body = {
-            state: 2,
+            state: 'error',
             message: '邮箱已存在'
           }
         }
 
       } catch (err) {
         ctx.body = {
-          state: 2,
+          state: 'error',
           type: 'ERROR_IN_SAVE_DATA',
           message: err
         }
@@ -169,13 +169,13 @@ class sign_up {
     } else if (checkPhoneNum(req_data.account)) {  /* 手机号码注册*/
 
       ctx.body = {
-        state: 2,
+        state: 'error',
         message: '暂时未开放手机号码注册'
       }
 
     } else {        /* 非手机号码非邮箱*/
       ctx.body = {
-        state: 2,
+        state: 'error',
         message: '请输入正确的手机号码或者邮箱'
       }
     }

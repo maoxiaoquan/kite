@@ -13,43 +13,40 @@ class Format {
    * @param  {number} status 状态码，必填
    */
 
-  async format_login (ctx, state, message, token, date, status) {
-    let sts = status || 200
-    ctx.response.status = sts
+  async format_login (ctx, {state, message, token, date}, is_login = true) {
     ctx.body = {
       state,
       message,
       token,
-      date
+      date,
+      is_login
     }
   }
 
   /**
    * 常用数据的返回,不附带token
-   * @param  {obejct} ctx 上下文对象
+   * @param  {obejct} ctx 上下文对象,必填
    * @param  {number} status 状态，必填,判断数据是否返回正确 1正常、2错误、3未登录、4登录超时
    * @param  {String} message 信息，必填,返回的弹窗信息
    * @param  {obejct} date 返回的数据
    * @param  {number} status 状态码，必填
    */
 
-  async format_data (ctx, state, message, date, status) {
-    let sts = status || 200
-    ctx.response.status = sts
+  async format_data (ctx, {state, message, date = {}}, is_login = true) {
     ctx.body = {
       state,
       message,
-      date
+      date,
+      is_login
     }
   }
 
-  async render (ctx, {title, view_url, status, message, data}) {
-    let d = data || []
+  async render (ctx, {title, view_url, state, message, data = {}}) {
     await ctx.render(view_url, {
       title,
-      status,
+      state,
       message,
-      data: d,
+      data,
       user_info: {
         islogin: ctx.session.islogin,
         account: ctx.session.nickname,

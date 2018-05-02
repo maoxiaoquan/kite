@@ -8,10 +8,13 @@ function err_mess (message) {
 
 class sign_in {
   constructor () {
+    this.state = {
+      title: 'none'
+    }
   }
 
   async get_sign_in (ctx) {
-    const title = 'sign_in'
+    const title = '5'
 
     if (ctx.session.islogin) {
       ctx.redirect('/')
@@ -45,7 +48,7 @@ class sign_in {
     } catch (err) {
       await ctx.render('default/sign_in', {
         title: title,
-        status: 2,
+        state: 'error',
         message: err.message,
         data: {
           account: formData.account,
@@ -81,7 +84,7 @@ class sign_in {
           } else {
             await ctx.render('default/sign_in', {
               title: title,
-              status: 2,
+              state: 'error',
               message: '密码错误',
               data: {
                 account: formData.account,
@@ -94,7 +97,7 @@ class sign_in {
 
           await ctx.render('default/sign_in', {
             title: title,
-            status: 2,
+            state: 'error',
             message: '账户不存在',
             data: {
               account: formData.account,
@@ -107,7 +110,7 @@ class sign_in {
 
         await ctx.render('default/sign_in', {
           title: title,
-          status: 2,
+          state: 'error',
           message: err,
           data: {
             account: formData.account,
@@ -120,7 +123,7 @@ class sign_in {
 
       await ctx.render('default/sign_in', {
         title: title,
-        status: 2,
+        state: 'error',
         message: '暂时未开放手机号码登录',
         data: {
           account: formData.account,
@@ -131,7 +134,7 @@ class sign_in {
     } else {        /* 非手机号码非邮箱*/
       await ctx.render('default/sign_in', {
         title: title,
-        status: 2,
+        state: 'error',
         message: '请输入正确的手机号码或者邮箱',
         data: {
           account: formData.account,

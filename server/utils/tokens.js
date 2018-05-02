@@ -1,12 +1,13 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken')
 const de = require('./data_example')
 
 class Tokens {
-  constructor() { }
-  async testToken(ctx, next) {
+  constructor () { }
+
+  async testToken (ctx, next) {
 
     let req = ctx.request.body
-    let token = req.token || ctx.query.token || ctx.headers['x-access-token'];
+    let token = req.token || ctx.query.token || ctx.headers['x-access-token']
 
     console.log('jwt', jwt)
 
@@ -15,23 +16,31 @@ class Tokens {
       jwt.verify(token, 'cxh', function (err, decoded) {
         if (err) {
           // 解析失败直接返回失败警告
-          de.format_data(ctx, 2, 'token错误')
+          de.format_data(ctx, {
+            state: 'error',
+            message: '登录已超时'
+          }, false)
         } else {
           //解析成功加入请求信息，继续调用后面方法
-          ctx.request.userInfo = decoded;
+          ctx.request.userInfo = decoded
           next()
         }
       })
     } else {
-      de.format_data(ctx, 3, '请登录')
+      de.format_data(ctx, {
+        state: 'error',
+        message: '请登录'
+      }, false)
     }
   }
-  setToken(name, time, data) {
-    let jwtSecret = name;
+
+  setToken (name, time, data) {
+    let jwtSecret = name
     let token = jwt.sign(data, jwtSecret, {
       expiresIn: time
     })
-    return token;
+    return token
   }
 }
+
 module.exports = new Tokens()

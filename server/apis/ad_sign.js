@@ -3,14 +3,15 @@ const db = require('../db/db')
 const tokens = require('../utils/tokens')
 
 class ad_sign {
-  constructor() {
+  constructor () {
     // super()
   }
+
   /**
-     * 登录操作
-     * @param  {obejct} ctx 上下文对象
-     */
-  async ad_sign_in(ctx) {
+   * 登录操作
+   * @param  {obejct} ctx 上下文对象
+   */
+  async ad_sign_in (ctx) {
     let req_data = ctx.request.body
     await db.ad_user.findOne({
       where: {
@@ -20,33 +21,35 @@ class ad_sign {
       if (db_data) {
         console.log(req_data.account, '------------', db_data.password)
         if (req_data.password === db_data.password) {
-          let datas = { account: req_data.account }
+          let datas = {account: req_data.account}
           let token = tokens.setToken('cxh', 300, datas)
-          de.format_login(ctx,
-            1,
-            '登录成功',
-            token,
-            {
-              title: '登录成功已成功，token已返回'
-            }
-          )
+
+          de.format_login(ctx, {
+            state: 'success',
+            message: '登录成功',
+            token
+          })
+
         } else {
-          de.format_login(ctx,
-            2,
-            '密码错误'
-          )
+
+          de.format_login(ctx, {
+            state: 'error',
+            message: '密码错误'
+          }, false)
+
         }
       } else {
-        de.format_login(ctx,
-          2,
-          '用户不存在'
-        )
+
+        de.format_login(ctx, {
+          state: 'error',
+          message: '用户不存在'
+        }, false)
+
       }
 
-
     }).catch(function (err) {
-      console.log('failed: ' + err);
-    });
+      console.log('failed: ' + err)
+    })
 
   }
 
@@ -54,7 +57,7 @@ class ad_sign {
    * 注册操作
    * @param   {obejct} ctx 上下文对象
    */
-  async ad_sign_up(ctx) {
+  async ad_sign_up (ctx) {
     console.log('res', ctx.request.body)
 
     await db.ad_user.create({
@@ -62,14 +65,16 @@ class ad_sign {
       password: ctx.request.body.password,
       email: ctx.request.body.email
     }).then(function (p) {
-      console.log('created.' + JSON.stringify(p));
-      de.format_data(ctx, 1, '注册成功')
+      console.log('created.' + JSON.stringify(p))
+      de.format_data(ctx, {
+        state: 'success',
+        message: '注册成功'
+      }, false)
     }).catch(function (err) {
-      console.log('failed: ' + err);
-    });
+      console.log('failed: ' + err)
+    })
   }
 
 }
-
 
 module.exports = new ad_sign()

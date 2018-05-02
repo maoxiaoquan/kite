@@ -115,7 +115,7 @@
       }
       axios.post('/sign_up', data).then(function (res) {
         console.log(res.data)
-        if (res.data.state === 1) {
+        if (res.data.state === 'success') {
           alert(res.data.message)
           window.location.href = '/sign_in'
         } else {

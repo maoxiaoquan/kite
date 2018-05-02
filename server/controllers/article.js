@@ -21,7 +21,7 @@ class article {
     await de.render(ctx, {
       title: title,
       view_url: 'default/article',
-      status: 1,
+      state: 'success',
       message: 'article',
       data: {
         article: sql_article.dataValues

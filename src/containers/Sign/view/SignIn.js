@@ -25,7 +25,7 @@ class NormalLoginForm extends React.Component {
         console.log('Received values of form: ', values);
         this.props.dispatch(sign_in(values, (res) => {
           console.log('666',res)
-          if (res.state === 1) {
+          if (res.state === 'success') {
             console.log('res.token', res.token)
             localStorage.box_tokens = res.token;
             this.props.history.push('/')

@@ -16,7 +16,7 @@ class ad_users {
     await db.ad_user.findAll()
       .then(function (p) {
         console.log('created.' + JSON.stringify(p))
-        de.format_data(ctx, 3, '请登录')
+        de.format_data(ctx, 'error', '请登录')
       }).catch(function (err) {
         console.log('failed: ' + err)
       })
