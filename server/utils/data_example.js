@@ -26,10 +26,10 @@ class Format {
   /**
    * 常用数据的返回,不附带token
    * @param  {obejct} ctx 上下文对象,必填
-   * @param  {number} status 状态，必填,判断数据是否返回正确 1正常、2错误、3未登录、4登录超时
+   * @param  {number} status 状态，必填,判断数据是否返回正确 success正常、error错误
    * @param  {String} message 信息，必填,返回的弹窗信息
    * @param  {obejct} date 返回的数据
-   * @param  {number} status 状态码，必填
+   * @param  {Booleans} is_login  是否登录
    */
 
   async format_data (ctx, {state, message, date = {}}, is_login = true) {

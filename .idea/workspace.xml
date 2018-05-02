@@ -2,23 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1b2ee72d-a0f4-472c-bf0b-b3294e1356d0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/server/apis/ad_sign.js" afterPath="$PROJECT_DIR$/server/apis/ad_sign.js" />
-      <change beforePath="$PROJECT_DIR$/server/apis/ad_users.js" afterPath="$PROJECT_DIR$/server/apis/ad_users.js" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/article.js" afterPath="$PROJECT_DIR$/server/controllers/article.js" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/article_list.js" afterPath="$PROJECT_DIR$/server/controllers/article_list.js" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/index.js" afterPath="$PROJECT_DIR$/server/controllers/index.js" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/sign_in.js" afterPath="$PROJECT_DIR$/server/controllers/sign_in.js" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/sign_up.js" afterPath="$PROJECT_DIR$/server/controllers/sign_up.js" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/writer.js" afterPath="$PROJECT_DIR$/server/controllers/writer.js" />
-      <change beforePath="$PROJECT_DIR$/server/utils/check_session.js" afterPath="$PROJECT_DIR$/server/utils/check_session.js" />
       <change beforePath="$PROJECT_DIR$/server/utils/data_example.js" afterPath="$PROJECT_DIR$/server/utils/data_example.js" />
-      <change beforePath="$PROJECT_DIR$/server/utils/tokens.js" afterPath="$PROJECT_DIR$/server/utils/tokens.js" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Sign/view/SignIn.js" afterPath="$PROJECT_DIR$/src/containers/Sign/view/SignIn.js" />
-      <change beforePath="$PROJECT_DIR$/src/utils/http.js" afterPath="$PROJECT_DIR$/src/utils/http.js" />
-      <change beforePath="$PROJECT_DIR$/views/default/sign_in.ejs" afterPath="$PROJECT_DIR$/views/default/sign_in.ejs" />
-      <change beforePath="$PROJECT_DIR$/views/default/sign_up.ejs" afterPath="$PROJECT_DIR$/views/default/sign_up.ejs" />
-      <change beforePath="$PROJECT_DIR$/views/default/writer.ejs" afterPath="$PROJECT_DIR$/views/default/writer.ejs" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -32,16 +16,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="sign_up.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/controllers/sign_up.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="142" column="31" lean-forward="false" selection-start-line="142" selection-start-column="31" selection-end-line="142" selection-end-column="31" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="SignUp.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/containers/Sign/view/SignUp.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -77,19 +51,43 @@
       <file leaf-file-name="sign_in.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/controllers/sign_in.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-252">
+            <state relative-caret-position="252">
               <caret line="12" column="5" lean-forward="true" selection-start-line="10" selection-start-column="4" selection-end-line="12" selection-end-column="5" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/controllers/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="273">
               <caret line="13" column="21" lean-forward="true" selection-start-line="13" selection-start-column="21" selection-end-line="13" selection-end-column="21" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SignIn.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/containers/Sign/view/SignIn.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="231">
+              <caret line="26" column="32" lean-forward="true" selection-start-line="26" selection-start-column="32" selection-end-line="26" selection-end-column="32" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/containers/Sign/actions/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="420">
+              <caret line="20" column="1" lean-forward="true" selection-start-line="20" selection-start-column="1" selection-end-line="20" selection-end-column="1" />
+              <folding>
+                <element signature="e#0#38#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -104,11 +102,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="data_example.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="data_example.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server/utils/data_example.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="576">
-              <caret line="46" column="11" lean-forward="false" selection-start-line="46" selection-start-column="6" selection-end-line="46" selection-end-column="11" />
+            <state relative-caret-position="651">
+              <caret line="31" column="22" lean-forward="true" selection-start-line="31" selection-start-column="22" selection-end-line="31" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -119,16 +117,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="336">
               <caret line="16" column="26" lean-forward="true" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="set_basic.ejs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/default/set_basic.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -216,12 +204,12 @@
         <option value="$PROJECT_DIR$/server/utils/check_session.js" />
         <option value="$PROJECT_DIR$/views/default/writer.ejs" />
         <option value="$PROJECT_DIR$/views/default/sign_up.ejs" />
-        <option value="$PROJECT_DIR$/server/utils/data_example.js" />
         <option value="$PROJECT_DIR$/server/controllers/sign_up.js" />
         <option value="$PROJECT_DIR$/views/default/sign_in.ejs" />
         <option value="$PROJECT_DIR$/server/utils/tokens.js" />
         <option value="$PROJECT_DIR$/server/controllers/sign_in.js" />
         <option value="$PROJECT_DIR$/server/controllers/index.js" />
+        <option value="$PROJECT_DIR$/server/utils/data_example.js" />
       </list>
     </option>
   </component>
@@ -540,12 +528,12 @@
       <workItem from="1524534678658" duration="2070000" />
       <workItem from="1524618528656" duration="3768000" />
       <workItem from="1524740974140" duration="121000" />
-      <workItem from="1525254695168" duration="6083000" />
+      <workItem from="1525254695168" duration="7146000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="197030000" />
+    <option name="totallyTimeSpent" value="198093000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -758,31 +746,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Sign/actions/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="20" column="1" lean-forward="true" selection-start-line="20" selection-start-column="1" selection-end-line="20" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#38#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/utils/http.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="399">
           <caret line="21" column="2" lean-forward="true" selection-start-line="21" selection-start-column="2" selection-end-line="21" selection-end-column="2" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Sign/view/SignIn.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="546">
-          <caret line="26" column="32" lean-forward="true" selection-start-line="26" selection-start-column="32" selection-end-line="26" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -924,14 +892,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/utils/data_example.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="576">
-          <caret line="46" column="11" lean-forward="false" selection-start-line="46" selection-start-column="6" selection-end-line="46" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/utils/tokens.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="504">
@@ -948,17 +908,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/default/sign_up.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1626">
-          <caret line="117" column="43" lean-forward="true" selection-start-line="117" selection-start-column="43" selection-end-line="117" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/controllers/sign_in.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-252">
+        <state relative-caret-position="252">
           <caret line="12" column="5" lean-forward="true" selection-start-line="10" selection-start-column="4" selection-end-line="12" selection-end-column="5" />
           <folding />
         </state>
@@ -968,6 +920,42 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="273">
           <caret line="13" column="21" lean-forward="true" selection-start-line="13" selection-start-column="21" selection-end-line="13" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Sign/view/SignIn.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="26" column="32" lean-forward="true" selection-start-line="26" selection-start-column="32" selection-end-line="26" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Sign/actions/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="20" column="1" lean-forward="true" selection-start-line="20" selection-start-column="1" selection-end-line="20" selection-end-column="1" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/default/sign_up.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1626">
+          <caret line="117" column="43" lean-forward="true" selection-start-line="117" selection-start-column="43" selection-end-line="117" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/utils/data_example.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="651">
+          <caret line="31" column="22" lean-forward="true" selection-start-line="31" selection-start-column="22" selection-end-line="31" selection-end-column="22" />
           <folding />
         </state>
       </provider>
