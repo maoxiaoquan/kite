@@ -2,7 +2,7 @@ const db = require('../db/db')
 const de = require('../utils/data_example')
 
 class index {
-  constructor () {
+  constructor (state) {
     this.state = {
       title: '333'
     }

@@ -1,6 +1,8 @@
 module.exports = {
   dev_port: 8060,// 前台开发端口
   produce_port: 8061,// server端口
+  // 密码盐
+  encrypt_key: 'fate',
   database: {
     /*database set*/
     DATABASE: 'fatecms', // 使用哪个数据库

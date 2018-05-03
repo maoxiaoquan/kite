@@ -28,6 +28,12 @@ const user = sequelize.define(db_user.NAME, db_user.TABLE, {
   timestamps: false
 })
 
+const db_user_verify_code = require('./db_type/db_user_verify_code')
+const user_verify_code = sequelize.define(db_user_verify_code.NAME, db_user_verify_code.TABLE, {
+  /*用户注册验证码*/
+  timestamps: false
+})
+
 const db_article = require('./db_type/db_article')
 const article = sequelize.define(db_article.NAME, db_article.TABLE, {
   /*文章表*/
@@ -58,6 +64,7 @@ const userInfo = sequelize.define('userInfo', {
 
 module.exports = {
   user,
+  user_verify_code,
   article,
   ad_user,
   userInfo

@@ -2,6 +2,8 @@ const db = require('../db/db')
 const {checkEmail, checkPhoneNum} = require('../utils/validators')
 const moment = require('moment')
 const sendMail = require('../utils/send_email')
+const {random_number, tools} = require('../utils')
+const config = require('../../config')
 
 function err_mess (message) {
   this.message = message
@@ -33,10 +35,7 @@ class sign_up {
 
   async post_sign_up_code (ctx) {
 
-    let req_data = {
-      account: ctx.request.body.account
-    }
-
+    let req_data = ctx.request.body
     if (checkEmail(req_data.account)) { /*邮箱注册*/
 
       try {
@@ -47,14 +46,26 @@ class sign_up {
         })
         if (!email) {
 
+          let random = random_number(true, 5, 8)
+          await db.user_verify_code.create({
+            phone: '',
+            email: req_data.account,
+            verify_code: random,
+            expire_time: moment().utc().zone(+8).format('YYYY-MM-DD HH:mm:ss')
+          }).then(function (data) {
+            sendMail('838115837@qq.com', '验证码成功发送', random)
+            ctx.body = {
+              state: 'success',
+              message: '验证码已发送到邮箱'
+            }
+          }).catch(function (err) {
+            console.log('err.' + err)
+            ctx.body = {
+              state: 'error',
+              message: err
+            }
+          })
 
-
-          sendMail('838115837@qq.com', '验证码成功发送', '666666666')
-
-          ctx.body = {
-            state: 'success',
-            message: '验证码已发送到邮箱'
-          }
         } else {
           ctx.body = {
             state: 'error',
@@ -87,12 +98,7 @@ class sign_up {
   }
 
   async post_sign_up (ctx) { // post 数据
-    let req_data = {
-      nickname: ctx.request.body.nickname,
-      account: ctx.request.body.account,
-      password: ctx.request.body.password,
-      double_password: ctx.request.body.double_password
-    }
+    let req_data = ctx.request.body
 
     try {
       if (!req_data.nickname) {
@@ -108,9 +114,14 @@ class sign_up {
       if (req_data.password !== req_data.double_password) {
         throw  new err_mess('两次输入密码不一致')
       }
+
+      if (!req_data.code) {
+        throw  new err_mess('验证码不存在')
+      }
+
     } catch (err) {
       ctx.body = {
-        status: 2,
+        state: 'error',
         message: err.message,
         data: {}
       }
@@ -127,14 +138,22 @@ class sign_up {
         })
         if (!email) {
 
+          let email_code = await db.user_verify_code.findOne({
+            where: {
+              email: req_data.account
+            }
+          })
+
+          console.log('email_code', email_code)
+
           await db.user.create({
             nickname: req_data.nickname,
-            password: req_data.password,
+            password: tools.encrypt(req_data.password, config.encrypt_key),
             email: req_data.account,
             sex: '未知',
             reg_ip: ctx.request.ip,
             last_sign_ip: '',
-            reg_time: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
+            reg_time: moment().utc().zone(+8).format('YYYY-MM-DD HH:mm:ss'),
             last_sign_time: ''
           }).then(function (data) {
             console.log('created.' + JSON.stringify(data))

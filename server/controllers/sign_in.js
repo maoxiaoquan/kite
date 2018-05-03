@@ -1,5 +1,6 @@
 const db = require('../db/db')
 const {checkEmail, checkPhoneNum} = require('../utils/validators')
+const {tools} = require('../utils')
 
 function err_mess (message) {
   this.message = message
@@ -7,21 +8,21 @@ function err_mess (message) {
 }
 
 class sign_in {
-  constructor () {
+  constructor (state) {
     this.state = {
       title: 'none'
     }
   }
 
-  async get_sign_in (ctx) {
-    const title = '5'
+  async get_sign_in (ctx) {  /*router to sign_in.ejs*/
+    const title = 'sign_in'
 
     if (ctx.session.islogin) {
       ctx.redirect('/')
     } else {
       await ctx.render('default/sign_in', {
         title,
-        status: 1,
+        state: 'success',
         meaasge: '',
         data: {
           account: '',
@@ -68,11 +69,7 @@ class sign_in {
         })
         if (sql_data_email) {
 
-          console.log('sql_data_email', sql_data_email)
-
-          console.log('sql_data', sql_data_email.dataValues.password)
-
-          if (formData.password === sql_data_email.dataValues.password) {
+          if (tools.encrypt(formData.password) === sql_data_email.dataValues.password) {
 
             let session = ctx.session
             session.islogin = true

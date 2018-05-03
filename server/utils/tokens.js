@@ -9,8 +9,6 @@ class Tokens {
     let req = ctx.request.body
     let token = req.token || ctx.query.token || ctx.headers['x-access-token']
 
-    console.log('jwt', jwt)
-
     if (token) {
       //存在token，解析token
       jwt.verify(token, 'cxh', function (err, decoded) {
