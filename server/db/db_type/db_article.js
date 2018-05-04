@@ -22,7 +22,7 @@ module.exports = {
       field: 'author'
     },
     create_date: { // 创建时间
-      type: Seq.DATE,
+      type: Seq.BIGINT(50),
       comment: '创建时间',
       field: 'create_date'
     },

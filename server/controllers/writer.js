@@ -51,7 +51,7 @@ class writer {
       await db.article.create({
         user_id: ctx.session.user_id,
         author: ctx.session.nickname,
-        create_date: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
+        create_date:moment().utc().zone(+8).format('X'),
         content: formData.content,
         title: formData.title,
         excerpt: formData.content,

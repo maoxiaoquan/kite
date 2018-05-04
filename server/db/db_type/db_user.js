@@ -53,16 +53,16 @@ module.exports = {
     },
     last_sign_ip: { // 最后登录ip
       type: Seq.STRING(16),
-      comment: '最后登录时间',
+      comment: '最后登录ip',
       field: 'last_sign_ip'
     },
     reg_time: { // 注册时间
-      type: Seq.DATE,
+      type: Seq.BIGINT(50),
       comment: '注册时间',
-      field: 'reg_time',
+      field: 'reg_time'
     },
     last_sign_time: { // 最后登录时间
-      type: Seq.DATE,
+      type: Seq.BIGINT(50),
       comment: '最后登录时间',
       field: 'last_sign_time'
     }

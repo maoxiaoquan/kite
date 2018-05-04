@@ -26,7 +26,7 @@ module.exports = {
       field: 'verify_code'
     },
     expire_time: { // 验证码过期时间
-      type: Seq.DATE,
+      type: Seq.BIGINT(50),
       comment: '过期时间',
       field: 'expire_time'
     }

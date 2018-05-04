@@ -51,7 +51,7 @@ class sign_up {
             phone: '',
             email: req_data.account,
             verify_code: random,
-            expire_time: moment().utc().zone(+8).format('YYYY-MM-DD HH:mm:ss')
+            expire_time: moment().utc().zone(+8).format('X')
           }).then(function (data) {
             sendMail('838115837@qq.com', '验证码成功发送', random)
             ctx.body = {
@@ -153,7 +153,7 @@ class sign_up {
             sex: '未知',
             reg_ip: ctx.request.ip,
             last_sign_ip: '',
-            reg_time: moment().utc().zone(+8).format('YYYY-MM-DD HH:mm:ss'),
+            reg_time: moment().utc().zone(+8).format('X'),
             last_sign_time: ''
           }).then(function (data) {
             console.log('created.' + JSON.stringify(data))

@@ -1,6 +1,7 @@
 const db = require('../db/db')
 const {checkEmail, checkPhoneNum} = require('../utils/validators')
 const {tools} = require('../utils')
+const config = require('../../config')
 
 function err_mess (message) {
   this.message = message
@@ -69,7 +70,7 @@ class sign_in {
         })
         if (sql_data_email) {
 
-          if (tools.encrypt(formData.password) === sql_data_email.dataValues.password) {
+          if (tools.encrypt(formData.password, config.encrypt_key) === sql_data_email.dataValues.password) {
 
             let session = ctx.session
             session.islogin = true
