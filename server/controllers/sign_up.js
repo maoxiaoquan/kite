@@ -5,6 +5,8 @@ const sendMail = require('../utils/send_email')
 const {random_number, tools} = require('../utils')
 const config = require('../../config')
 
+const {query_user_verify_code} = require('../sql_server/query')
+
 function err_mess (message) {
   this.message = message
   this.name = 'UserException'
@@ -59,7 +61,6 @@ class sign_up {
               message: '验证码已发送到邮箱'
             }
           }).catch(function (err) {
-            console.log('err.' + err)
             ctx.body = {
               state: 'error',
               message: err
@@ -102,7 +103,6 @@ class sign_up {
 
     try {
       if (!req_data.nickname) {
-        console.log('req_data', req_data)
         throw  new err_mess('昵称不存在')
       }
       if (!req_data.account) {
@@ -137,33 +137,72 @@ class sign_up {
           }
         })
         if (!email) {
-
-          let email_code = await db.user_verify_code.findOne({
-            where: {
-              email: req_data.account
+          
+          await query_user_verify_code(req_data.account).then((data) => {
+            if (data.length > 0) {
+              ctx.body = {
+                state: 'error',
+                message: '请发送验证码2',
+                data: {}
+              }
+              return false
+            } else {
+              ctx.body = {
+                state: 'error',
+                message: '请发送验证码3',
+                data: {}
+              }
+              return false
             }
           })
 
-          console.log('email_code', email_code)
+          /*if (data.length > 0) {
+            let time_num = moment().utc().utcOffset(+8).format('X')
+            if (req_data.code === data[0].verify_code) {
+              if ((Number(time_num) - Number(data[0].expire_time)) > (30 * 60 * 60 * 1000)) {
+                ctx.body = {
+                  state: 'error',
+                  message: '验证码超时，请再次获取',
+                  data: {}
+                }
+              }
 
-          await db.user.create({
+            } else {
+
+              ctx.body = {
+                state: 'error',
+                message: '验证码错误',
+                data: {}
+              }
+            }
+
+          } else {
+            ctx.body = {
+              state: 'error',
+              message: '请发送验证码',
+              data: {}
+            }
+          }
+*/
+          return false
+
+          db.user.create({
             nickname: req_data.nickname,
             password: tools.encrypt(req_data.password, config.encrypt_key),
             email: req_data.account,
             sex: '未知',
             reg_ip: ctx.request.ip,
             last_sign_ip: '',
-            reg_time: moment().utc().zone(+8).format('X'),
+            reg_time: moment().utc().utcOffset(+8).format('X'),
             last_sign_time: ''
           }).then(function (data) {
-            console.log('created.' + JSON.stringify(data))
+            console.log('data6666666666', ctx)
             sendMail('838115837@qq.com', `${req_data.nickname}，您好，注册成功`, `<h2>${req_data.nickname}</h2><p>账户已注册成功</p>`)
             ctx.body = {
               state: 'success',
               message: '注册成功，跳往登录页'
             }
           }).catch(function (err) {
-            console.log('err.' + err)
             ctx.body = {
               state: 'error',
               message: err

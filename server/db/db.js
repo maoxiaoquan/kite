@@ -63,6 +63,7 @@ const userInfo = sequelize.define('userInfo', {
 })
 
 module.exports = {
+  sequelize,
   user,
   user_verify_code,
   article,
