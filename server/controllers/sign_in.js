@@ -2,6 +2,7 @@ const db = require('../db/db')
 const {checkEmail, checkPhoneNum} = require('../utils/validators')
 const {tools} = require('../utils')
 const config = require('../../config')
+const {render} = require('../utils/res_data')
 
 function err_mess (message) {
   this.message = message
@@ -31,7 +32,21 @@ class sign_in {
         }
       })
     }
+  }
 
+  async esc_sign_in (ctx) {
+
+    const title = 'sign_in'
+
+    ctx.session = null
+
+    render(ctx, 'default/sign_in',
+      {
+        title,
+        view_url: 'default/sign_in',
+        state: 'success'
+      }
+    )
   }
 
   async post_sign_in (ctx) {

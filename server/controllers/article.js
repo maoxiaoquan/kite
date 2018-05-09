@@ -1,5 +1,5 @@
 const db = require('../db/db')
-const de = require('../utils/data_example')
+const de = require('../utils/res_data')
 
 class article {
 

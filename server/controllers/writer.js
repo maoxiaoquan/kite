@@ -1,4 +1,4 @@
-const de = require('../utils/data_example')
+const de = require('../utils/res_data')
 const db = require('../db/db')
 const moment = require('moment')
 

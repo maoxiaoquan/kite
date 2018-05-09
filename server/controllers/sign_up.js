@@ -1,7 +1,7 @@
 const db = require('../db/db')
 const {checkEmail, checkPhoneNum} = require('../utils/validators')
 const moment = require('moment')
-const sendMail = require('../utils/send_email')
+const {sendMail, send_verify_cod_mail} = require('../utils/send_email')
 const {random_number, tools} = require('../utils')
 const config = require('../../config')
 
@@ -38,7 +38,7 @@ class sign_up {
   async post_sign_up_code (ctx) {
 
     let req_data = ctx.request.body
-    if (checkEmail(req_data.account)) { /*邮箱注册*/
+    if (checkEmail(req_data.account)) { /*邮箱注册验证码*/
 
       try {
         let email = await db.user.findOne({
@@ -53,14 +53,9 @@ class sign_up {
             phone: '',
             email: req_data.account,
             verify_code: random,
-            expire_time: moment().utc().zone(+8).format('X')
+            expire_time: moment().utc().utcOffset(+8).format('X')
           }).then(function (data) {
-            sendMail(req_data.account, '注册验证码',
-              `
-               <h1>${random}</h1>
-               <p>您好，这是您此次注册的验证码，有效期为30分钟</p>
-              `
-            )
+            send_verify_cod_mail(req_data.account, '注册验证码', random)
             ctx.body = {
               state: 'success',
               message: '验证码已发送到邮箱'
@@ -105,7 +100,7 @@ class sign_up {
 
   async post_sign_up (ctx) { // post 数据
     let req_data = ctx.request.body
-    
+
     try {
       if (!req_data.nickname) {
         throw  new err_mess('昵称不存在')
@@ -165,7 +160,7 @@ class sign_up {
                 let time_num = moment().utc().utcOffset(+8).format('X')
                 if (req_data.code === data[0].verify_code) {
 
-                  if ((Number(time_num) - Number(data[0].expire_time)) > (30 * 60 * 60 * 1000)) {
+                  if ((Number(time_num) - Number(data[0].expire_time)) > (30 * 60)) {
                     throw  new err_mess('验证码已过时，请再次发送')
                   }
 
@@ -180,14 +175,13 @@ class sign_up {
 
             await  db.user.create({
               /*注册写入数据库操作*/
+              avatar: 'http://oq33egsog.bkt.clouddn.com/avatar1.jpg',
               nickname: req_data.nickname,
               password: tools.encrypt(req_data.password, config.encrypt_key),
               email: req_data.account,
               sex: '未知',
               reg_ip: ctx.request.ip,
-              last_sign_ip: '',
-              reg_time: moment().utc().utcOffset(+8).format('X'),
-              last_sign_time: ''
+              reg_time: moment().utc().utcOffset(+8).format('X')
             }).then(function (data) {
               sendMail(req_data.account, `${req_data.nickname}，您好，注册成功`, `<h2>${req_data.nickname}</h2><p>账户已注册成功</p>`)
               ctx.body = {

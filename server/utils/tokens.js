@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const de = require('./data_example')
+const res_data = require('./res_data')
 
 class Tokens {
   constructor () { }
@@ -14,7 +14,7 @@ class Tokens {
       jwt.verify(token, 'cxh', function (err, decoded) {
         if (err) {
           // 解析失败直接返回失败警告
-          de.format_data(ctx, {
+          res_data.format_data(ctx, {
             state: 'error',
             message: '登录已超时'
           }, false)
@@ -25,7 +25,7 @@ class Tokens {
         }
       })
     } else {
-      de.format_data(ctx, {
+      res_data.format_data(ctx, {
         state: 'error',
         message: '请登录'
       }, false)

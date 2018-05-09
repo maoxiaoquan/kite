@@ -11,6 +11,7 @@ const article_list = require('../controllers/article_list')// 编写文章
 router.get('/', index.get_index) // 主页
 
 router.get('sign_in', sign_in.get_sign_in) // 登录
+router.get('esc_sign_in', sign_in.esc_sign_in) // 退出登录
 router.post('sign_in', sign_in.post_sign_in) // 登录数据 post
 
 router.get('sign_up', sign_up.get_sign_up) // 注册

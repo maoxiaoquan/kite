@@ -1,3 +1,9 @@
+
+.box-container {
+  padding-top: 100px;
+  padding-bottom: 50px;
+}
+
 .navbar {
   &.navbar-default {
     background: #ffffff;
@@ -377,7 +383,6 @@
     }
   }
   .lay-main {
-    padding-right: 30px;
     .article-view {
       .article-title {
         margin-bottom: 40px;
@@ -398,33 +403,6 @@
           text-align: left;
           margin-bottom: 0;
         }
-      }
-    }
-  }
-  .lay-sidebar {
-    .searchform {
-      position: relative;
-      input[type="text"] {
-        border: 1px solid #eee;
-        padding: 10px;
-        font-size: 12px;
-        width: 100%;
-      }
-      input[type="submit"] {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        top: 0;
-        border: 0;
-        border-radius: 0;
-        padding: 0 20px;
-        color: #FFF;
-        background-color: #212226;
-        -webkit-transition: all .3s ease;
-        -moz-transition: all .3s ease;
-        -ms-transition: all .3s ease;
-        -o-transition: all .3s ease;
-        transition: all .3s ease;
       }
     }
   }

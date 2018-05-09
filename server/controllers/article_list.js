@@ -1,4 +1,4 @@
-const de = require('../utils/data_example')
+const de = require('../utils/res_data')
 
 module.exports = async (ctx) => {
   const title = 'article_list'

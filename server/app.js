@@ -59,7 +59,3 @@ app.use(routers.routes()).use(routers.allowedMethods())
 // 监听启动端口
 app.listen(config.produce_port)
 console.log(`the server is start at port ${config.produce_port}`)
-
-/**
- * @status 所有此字段 1 代表请求成功  2 表示失败  3表示未登录
- */

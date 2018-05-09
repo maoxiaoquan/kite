@@ -1,3 +1,7 @@
+.box-container {
+  padding-top: 100px;
+  padding-bottom: 50px; }
+
 .navbar.navbar-default {
   background: #ffffff;
   border-color: #f0f0f0; }
@@ -160,7 +164,7 @@
   .home-lay.layout-content .filter-menu {
     margin-bottom: 30px; }
     .home-lay.layout-content .filter-menu > button {
-      background: transparent none repeat scroll 0 0;
+      background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
       border: 0 none;
       letter-spacing: 2px;
       margin: 0 2px;
@@ -297,47 +301,23 @@
       font-size: 12px; }
       .article-lay.layout-content .breadcrumbs span.sep i {
         font-size: 13px; }
-  .article-lay.layout-content .lay-main {
-    padding-right: 30px; }
-    .article-lay.layout-content .lay-main .article-view .article-title {
-      margin-bottom: 40px; }
-      .article-lay.layout-content .lay-main .article-view .article-title > h1 {
-        text-align: left;
-        max-width: 100%;
-        margin-top: 30px;
-        margin-bottom: 20px;
-        position: static;
-        color: #48494d;
-        font-size: 26px; }
-      .article-lay.layout-content .lay-main .article-view .article-title .article-time {
-        position: relative;
-        bottom: auto;
-        left: auto;
-        right: auto;
-        text-align: left;
-        margin-bottom: 0; }
-  .article-lay.layout-content .lay-sidebar .searchform {
-    position: relative; }
-    .article-lay.layout-content .lay-sidebar .searchform input[type="text"] {
-      border: 1px solid #eee;
-      padding: 10px;
-      font-size: 12px;
-      width: 100%; }
-    .article-lay.layout-content .lay-sidebar .searchform input[type="submit"] {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      top: 0;
-      border: 0;
-      border-radius: 0;
-      padding: 0 20px;
-      color: #FFF;
-      background-color: #212226;
-      -webkit-transition: all .3s ease;
-      -moz-transition: all .3s ease;
-      -ms-transition: all .3s ease;
-      -o-transition: all .3s ease;
-      transition: all .3s ease; }
+  .article-lay.layout-content .lay-main .article-view .article-title {
+    margin-bottom: 40px; }
+    .article-lay.layout-content .lay-main .article-view .article-title > h1 {
+      text-align: left;
+      max-width: 100%;
+      margin-top: 30px;
+      margin-bottom: 20px;
+      position: static;
+      color: #48494d;
+      font-size: 26px; }
+    .article-lay.layout-content .lay-main .article-view .article-title .article-time {
+      position: relative;
+      bottom: auto;
+      left: auto;
+      right: auto;
+      text-align: left;
+      margin-bottom: 0; }
 
 .widget {
   padding: 25px 0;
