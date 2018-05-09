@@ -55,7 +55,12 @@ class sign_up {
             verify_code: random,
             expire_time: moment().utc().zone(+8).format('X')
           }).then(function (data) {
-            sendMail('838115837@qq.com', '验证码成功发送', random)
+            sendMail(req_data.account, '注册验证码',
+              `
+               <h1>${random}</h1>
+               <p>您好，这是您此次注册的验证码，有效期为30分钟</p>
+              `
+            )
             ctx.body = {
               state: 'success',
               message: '验证码已发送到邮箱'
@@ -100,7 +105,7 @@ class sign_up {
 
   async post_sign_up (ctx) { // post 数据
     let req_data = ctx.request.body
-
+    
     try {
       if (!req_data.nickname) {
         throw  new err_mess('昵称不存在')
@@ -131,88 +136,83 @@ class sign_up {
     if (checkEmail(req_data.account)) { /*邮箱注册*/
 
       try {
+
+        let nickname_date = await db.user.findOne({
+          where: {
+            nickname: req_data.nickname
+          }
+        })
+
+        if (nickname_date) {
+          ctx.body = {
+            state: 'error',
+            message: '用户昵称已存在，请重新输入'
+          }
+          return false
+        }
+
         let email = await db.user.findOne({
           where: {
             email: req_data.account
           }
         })
-        if (!email) {
-          
-          await query_user_verify_code(req_data.account).then((data) => {
-            if (data.length > 0) {
-              ctx.body = {
-                state: 'error',
-                message: '请发送验证码2',
-                data: {}
-              }
-              return false
-            } else {
-              ctx.body = {
-                state: 'error',
-                message: '请发送验证码3',
-                data: {}
-              }
-              return false
-            }
-          })
 
-          /*if (data.length > 0) {
-            let time_num = moment().utc().utcOffset(+8).format('X')
-            if (req_data.code === data[0].verify_code) {
-              if ((Number(time_num) - Number(data[0].expire_time)) > (30 * 60 * 60 * 1000)) {
-                ctx.body = {
-                  state: 'error',
-                  message: '验证码超时，请再次获取',
-                  data: {}
+        try {
+          if (!email) {
+
+            await query_user_verify_code(req_data.account).then((data) => {  /*注册验证码验证*/
+              if (data.length > 0) {
+                let time_num = moment().utc().utcOffset(+8).format('X')
+                if (req_data.code === data[0].verify_code) {
+
+                  if ((Number(time_num) - Number(data[0].expire_time)) > (30 * 60 * 60 * 1000)) {
+                    throw  new err_mess('验证码已过时，请再次发送')
+                  }
+
+                } else {
+                  throw  new err_mess('验证码错误')
                 }
+
+              } else {
+                throw  new err_mess('请发送验证码')
               }
+            })
 
-            } else {
-
+            await  db.user.create({
+              /*注册写入数据库操作*/
+              nickname: req_data.nickname,
+              password: tools.encrypt(req_data.password, config.encrypt_key),
+              email: req_data.account,
+              sex: '未知',
+              reg_ip: ctx.request.ip,
+              last_sign_ip: '',
+              reg_time: moment().utc().utcOffset(+8).format('X'),
+              last_sign_time: ''
+            }).then(function (data) {
+              sendMail(req_data.account, `${req_data.nickname}，您好，注册成功`, `<h2>${req_data.nickname}</h2><p>账户已注册成功</p>`)
+              ctx.body = {
+                state: 'success',
+                message: '注册成功，跳往登录页'
+              }
+            }).catch(function (err) {
               ctx.body = {
                 state: 'error',
-                message: '验证码错误',
-                data: {}
+                message: err
               }
-            }
+            })
 
           } else {
             ctx.body = {
               state: 'error',
-              message: '请发送验证码',
-              data: {}
+              message: '邮箱已存在'
             }
           }
-*/
-          return false
 
-          db.user.create({
-            nickname: req_data.nickname,
-            password: tools.encrypt(req_data.password, config.encrypt_key),
-            email: req_data.account,
-            sex: '未知',
-            reg_ip: ctx.request.ip,
-            last_sign_ip: '',
-            reg_time: moment().utc().utcOffset(+8).format('X'),
-            last_sign_time: ''
-          }).then(function (data) {
-            console.log('data6666666666', ctx)
-            sendMail('838115837@qq.com', `${req_data.nickname}，您好，注册成功`, `<h2>${req_data.nickname}</h2><p>账户已注册成功</p>`)
-            ctx.body = {
-              state: 'success',
-              message: '注册成功，跳往登录页'
-            }
-          }).catch(function (err) {
-            ctx.body = {
-              state: 'error',
-              message: err
-            }
-          })
-
-        } else {
+        } catch (err) {
           ctx.body = {
             state: 'error',
-            message: '邮箱已存在'
+            type: 'ERROR_IN_SAVE_DATA',
+            message: err.message
           }
         }
 
