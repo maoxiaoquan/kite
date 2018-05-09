@@ -2,23 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1b2ee72d-a0f4-472c-bf0b-b3294e1356d0" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/server/apis/ad_sign.js" afterPath="$PROJECT_DIR$/server/apis/ad_sign.js" />
-      <change beforePath="$PROJECT_DIR$/server/apis/ad_users.js" afterPath="$PROJECT_DIR$/server/apis/ad_users.js" />
-      <change beforePath="$PROJECT_DIR$/server/app.js" afterPath="$PROJECT_DIR$/server/app.js" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/article.js" afterPath="$PROJECT_DIR$/server/controllers/article.js" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/article_list.js" afterPath="$PROJECT_DIR$/server/controllers/article_list.js" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/index.js" afterPath="$PROJECT_DIR$/server/controllers/index.js" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/sign_in.js" afterPath="$PROJECT_DIR$/server/controllers/sign_in.js" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/sign_up.js" afterPath="$PROJECT_DIR$/server/controllers/sign_up.js" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/writer.js" afterPath="$PROJECT_DIR$/server/controllers/writer.js" />
-      <change beforePath="$PROJECT_DIR$/server/routers/home.js" afterPath="$PROJECT_DIR$/server/routers/home.js" />
-      <change beforePath="$PROJECT_DIR$/server/utils/data_example.js" afterPath="$PROJECT_DIR$/server/utils/res_data.js" />
-      <change beforePath="$PROJECT_DIR$/server/utils/send_email.js" afterPath="$PROJECT_DIR$/server/utils/send_email.js" />
-      <change beforePath="$PROJECT_DIR$/server/utils/tokens.js" afterPath="$PROJECT_DIR$/server/utils/tokens.js" />
-      <change beforePath="$PROJECT_DIR$/static/default/css/home.css" afterPath="$PROJECT_DIR$/static/default/css/home.css" />
-      <change beforePath="$PROJECT_DIR$/static/default/css/home.scss" afterPath="$PROJECT_DIR$/static/default/css/home.scss" />
-      <change beforePath="$PROJECT_DIR$/views/default/article.ejs" afterPath="$PROJECT_DIR$/views/default/article.ejs" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -62,7 +47,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="layout1.css" pinned="false" current-in-tab="true">
+      <file leaf-file-name="layout1.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/default/css/layout1.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="828">
@@ -77,6 +62,16 @@
                 <element signature="e#126968#127158#2" expanded="true" />
                 <element signature="e#127215#127405#2" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="147">
+              <caret line="7" column="6" lean-forward="true" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -96,16 +91,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="609">
               <caret line="29" column="36" lean-forward="true" selection-start-line="29" selection-start-column="36" selection-end-line="29" selection-end-column="36" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="res_data.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/utils/res_data.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
-              <caret line="52" column="28" lean-forward="false" selection-start-line="52" selection-start-column="28" selection-end-line="52" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -185,7 +170,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/server/routers/api.js" />
         <option value="$PROJECT_DIR$/static/default/js/box.js" />
         <option value="$PROJECT_DIR$/server/utils/validators,.js" />
         <option value="$PROJECT_DIR$/server/utils/validators.js" />
@@ -236,6 +220,7 @@
         <option value="$PROJECT_DIR$/static/default/css/home.scss" />
         <option value="$PROJECT_DIR$/static/default/css/layout.css" />
         <option value="$PROJECT_DIR$/static/default/css/layout1.css" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -537,12 +522,12 @@
       <workItem from="1525673703073" duration="3554000" />
       <workItem from="1525743019162" duration="4706000" />
       <workItem from="1525770692860" duration="10357000" />
-      <workItem from="1525828911598" duration="16647000" />
+      <workItem from="1525828911598" duration="17251000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="251205000" />
+    <option name="totallyTimeSpent" value="251809000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -581,13 +566,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/server/apis/ad_index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/apis/ad_sign.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="609">
@@ -991,6 +969,14 @@
             <element signature="e#126968#127158#2" expanded="true" />
             <element signature="e#127215#127405#2" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="7" column="6" lean-forward="true" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
+          <folding />
         </state>
       </provider>
     </entry>

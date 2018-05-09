@@ -6,6 +6,7 @@
 npm-debug.log*
 /.
 /.idea
+.idea
 yarn.lock
 yarn.error.log
 yarn-error.log
