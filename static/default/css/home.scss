@@ -1,3 +1,4 @@
+@import "custom";
 
 .box-container {
   padding-top: 100px;
@@ -5,55 +6,20 @@
 }
 
 .navbar {
-  &.navbar-default {
-    background: #ffffff;
-    border-color: #f0f0f0;
+  .avatar-img {
+    width: 38px;
+    height: 38px;
+    display: inline-block;
+    border-radius: 80px;
   }
-  .navbar-brand {
-    width: 50px;
-    margin: 7px 50px 0 0;
-  }
-  .search {
-    padding-left: 15px;
-    form {
-      position: relative;
-      top: 14px;
-    }
-    .search-input {
-      padding: 0 40px 0 20px;
-      width: 160px;
-      height: 38px;
-      font-size: 14px;
-      border: 1px solid #eee;
-      border-radius: 40px;
-      background: #eee;
-      transition: width .5s;
-      -moz-transition: width .5s;
-      -webkit-transition: width .5s;
-      -o-transition: width .5s;
-      transition-delay: .1s;
-      -moz-transition-delay: .1s;
-      -webkit-transition-delay: .1s;
-      -o-transition-delay: .1s;
-    }
-    .search-btn {
-      position: absolute;
-      top: 11px;
-      right: 5px;
-      width: 30px;
-      height: 30px !important;
-      line-height: normal !important;
-      padding: 0 !important;
-      color: #969696 !important;
-      text-align: center;
+  .btn-outline-warning {
+    color: $btn-color-warning;
+    &:hover {
+      color: $color-white;
     }
   }
-  .navbar-nav {
-    > li {
-      > a {
-        line-height: 35px;
-      }
-    }
+  .sign-btn {
+    color: rgba(0, 0, 0, 0.5);
   }
 }
 
@@ -625,10 +591,10 @@
         bottom: 10px;
       }
     }
-    .email-view-code{
+    .email-view-code {
       text-align: left;
       display: none;
-      .send-email-code{
+      .send-email-code {
         width: 170px;
       }
     }
@@ -765,7 +731,7 @@
     display: -ms-flexbox;
     display: flex;
     position: absolute;
-    top: 5.334rem;
+    top: 64px;
     left: 0;
     right: 0;
     bottom: 0;

@@ -1,5 +1,48 @@
 <!--header start-->
 
+<nav class="navbar navbar-expand-lg navbar-white bg-white fixed-top navbar-bootom-border">
+    <div class="container">
+        <a class="navbar-brand" href="#">FateCMS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07"
+                aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExample07">
+            <ul class="navbar-nav mr-lg-3">
+                <li class="nav-item active"><a class="nav-link" href="/">主页 <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="/article_list">文章列表</a></li>
+                <li class="nav-item"><a class="nav-link disabled" href="#">实验室</a></li>
+            </ul>
+            <form class="form-inline mr-auto">
+                <input class="form-control" type="text" placeholder="搜索" aria-label="Search">
+            </form>
+            <ul class="navbar-nav nav-masthead">
+                <% if(user_info.islogin){ %>
+                <li class="nav-item dropdown">
+                    <a class=" dropdown-toggle  mr-lg-3" href="https://example.com" id="dropdown07"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img class="avatar-img" src="<%=user_info.avatar%>" alt="">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown07">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a class="btn btn-outline-warning" href="/writer">写文章</a></li>
+                <% }else { %>
+                <li class="nav-item"><a class="btn mr-lg-3 sign-btn" href="/sign_in">登录</a></li>
+                <li class="nav-item"><a class="btn btn-outline-warning" href="/sign_up">注册</a></li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!--
+
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -12,9 +55,9 @@
             </button>
             <a class="navbar-brand" href="http://cosy.iwpzt.com" title="Cosy主题演示站"
                style="background-image: url('/default/img/logo.svg');"></a>
-            <!--<a class="navbar-brand mobile-navbar-brand hidden-md hidden-lg" href="http://cosy.iwpzt.com"
+            &lt;!&ndash;<a class="navbar-brand mobile-navbar-brand hidden-md hidden-lg" href="http://cosy.iwpzt.com"
                title="Cosy主题演示站"
-               style="background-image: url('http://cosy.iwpzt.com/wp-content/themes/2018010916203677/static/images/logo-mobile.png');"></a>-->
+               style="background-image: url('http://cosy.iwpzt.com/wp-content/themes/2018010916203677/static/images/logo-mobile.png');"></a>&ndash;&gt;
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -50,8 +93,10 @@
                 <li class="active"><a href="/sign_up">注册</a></li>
                 <% } %>
             </ul>
-        </div><!--/.nav-collapse -->
+        </div>&lt;!&ndash;/.nav-collapse &ndash;&gt;
     </div>
 </nav>
+-->
+
 
 <!--header end-->

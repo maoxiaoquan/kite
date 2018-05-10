@@ -255,3 +255,8 @@ caption {
     box-shadow: 0 1px 3px rgba(26,26,26,.1);
     box-sizing: border-box;
 }
+
+.navbar-bootom-border{
+    border: 1px solid transparent;
+    border-color: #f0f0f0;
+}

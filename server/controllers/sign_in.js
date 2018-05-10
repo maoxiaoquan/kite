@@ -12,7 +12,7 @@ function err_mess (message) {
 class sign_in {
   constructor (state) {
     this.state = {
-      title: 'none'
+      title: 'none',
     }
   }
 
@@ -28,8 +28,8 @@ class sign_in {
         meaasge: '',
         data: {
           account: '',
-          password: ''
-        }
+          password: '',
+        },
       })
     }
   }
@@ -44,8 +44,8 @@ class sign_in {
       {
         title,
         view_url: 'default/sign_in',
-        state: 'success'
-      }
+        state: 'success',
+      },
     )
   }
 
@@ -69,8 +69,8 @@ class sign_in {
         message: err.message,
         data: {
           account: formData.account,
-          password: formData.password
-        }
+          password: formData.password,
+        },
       })
       return false
     }
@@ -80,18 +80,20 @@ class sign_in {
       try {
         let sql_data_email = await db.user.findOne({
           where: {
-            email: formData.account
-          }
+            email: formData.account,
+          },
         })
         if (sql_data_email) {
 
-          if (tools.encrypt(formData.password, config.encrypt_key) === sql_data_email.dataValues.password) {
+          if (tools.encrypt(formData.password, config.encrypt_key) ===
+            sql_data_email.dataValues.password) {
 
             let session = ctx.session
             session.islogin = true
             session.nickname = sql_data_email.dataValues.nickname
             session.user_id = sql_data_email.dataValues.user_id
-
+            session.avatar = sql_data_email.dataValues.avatar
+            
             ctx.redirect('/')
 
           } else {
@@ -101,8 +103,8 @@ class sign_in {
               message: '密码错误',
               data: {
                 account: formData.account,
-                password: formData.password
-              }
+                password: formData.password,
+              },
             })
           }
 
@@ -114,8 +116,8 @@ class sign_in {
             message: '账户不存在',
             data: {
               account: formData.account,
-              password: formData.password
-            }
+              password: formData.password,
+            },
           })
         }
 
@@ -127,8 +129,8 @@ class sign_in {
           message: err,
           data: {
             account: formData.account,
-            password: formData.password
-          }
+            password: formData.password,
+          },
         })
       }
 
@@ -140,8 +142,8 @@ class sign_in {
         message: '暂时未开放手机号码登录',
         data: {
           account: formData.account,
-          password: formData.password
-        }
+          password: formData.password,
+        },
       })
 
     } else {        /* 非手机号码非邮箱*/
@@ -151,8 +153,8 @@ class sign_in {
         message: '请输入正确的手机号码或者邮箱',
         data: {
           account: formData.account,
-          password: formData.password
-        }
+          password: formData.password,
+        },
       })
     }
 

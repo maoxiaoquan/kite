@@ -10,7 +10,7 @@
     "db-create": "node ./server/db/db_create.js",
     "server-dev": "nodemon ./server/app.js",
     "server": "pm2 start pm2.json",
-    "scss": "node-sass --watch static/default/css/home.scss static/default/css/home.css"
+    "scss": "node-sass -w -r ./static/default/css -o ./static/default/css"
   },
   "author": "xiaoquan",
   "license": "ISC",
