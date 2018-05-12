@@ -11,10 +11,10 @@ module.exports = {
       field: 'aid',
       defaultValue: shortid.generate
     },
-    user_id: { // 作者id
-      type: Seq.STRING(50),
+    uid: { // 作者id
+      type: Seq.BIGINT(20),
       comment: '作者id',
-      field: 'user_id'
+      field: 'uid'
     },
     author: { // 作者
       type: Seq.STRING(20),

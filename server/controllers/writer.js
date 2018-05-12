@@ -49,7 +49,7 @@ class writer {
 
     try {
       await db.article.create({
-        user_id: ctx.session.user_id,
+        uid: ctx.session.uid,
         author: ctx.session.nickname,
         create_date:moment().utc().utcOffset(+8).format('X'),
         content: formData.content,

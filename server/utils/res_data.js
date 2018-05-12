@@ -49,8 +49,8 @@ class Format {
       data,
       user_info: {
         islogin: ctx.session.islogin,
-        account: ctx.session.nickname,
-        user_id: ctx.session.user_id,
+        nickname: ctx.session.nickname,
+        user_id: ctx.session.uid,
         avatar: ctx.session.avatar
       }
     })

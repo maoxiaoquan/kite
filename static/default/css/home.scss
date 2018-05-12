@@ -7,10 +7,11 @@
 
 .navbar {
   .avatar-img {
-    width: 38px;
-    height: 38px;
+    width: 30px;
+    height: 30px;
     display: inline-block;
-    border-radius: 80px;
+    border-radius: 60px;
+    border: 1px solid #ddd;
   }
   .btn-outline-warning {
     color: $btn-color-warning;
@@ -154,17 +155,24 @@
 /*home-lay layout-type start*/
 .home-lay {
   &.layout-type {
-    .box-content {
+    .layout-type-item {
       width: 100%;
       display: block;
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
-      padding: 20px 0;
+      height: 36px;
+      line-height: 36px;
       margin-top: 20px;
       color: #fff;
       text-align: center;
       border-radius: 3px;
+    }
+    .layout-type-more{
+      height: 36px;
+      line-height: 36px;
+      display: inline-block;
+      margin-top: 20px;
     }
   }
 }
@@ -236,7 +244,7 @@
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  padding: 1.167rem 0;
+  padding: 0.8rem 0;
   min-height: 5.75rem;
   .info-box {
     display: -webkit-box;
@@ -270,7 +278,7 @@
       margin-bottom: 10px;
     }
     .meta-row {
-      font-size: 1rem;
+      font-size: .5rem;
       color: #8f969c;
       .meta-list {
         display: -webkit-box;
@@ -287,6 +295,7 @@
             display: inline-block;
             margin-right: 1.2rem;
             padding: .38rem 0;
+            font-size: 12px;
             min-width: 4.5rem;
             text-align: center;
             line-height: 1;
@@ -306,8 +315,8 @@
     -webkit-box-flex: 0;
     -ms-flex: 0 0 auto;
     flex: 0 0 auto;
-    width: 8.9rem;
-    height: 5.75rem;
+    width: 7.5rem;
+    height: 4.5rem;
     margin-left: 2rem;
     background-color: #fff;
     border-radius: 2px;

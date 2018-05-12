@@ -41,7 +41,7 @@ class Index extends React.Component {
     };
   }
   componentWillMount() {
-    console.log(this.props.dispatch(sign_in()))
+    // console.log(this.props.dispatch(sign_in()))
     // this.props.dispath(sign_in())
   }
 

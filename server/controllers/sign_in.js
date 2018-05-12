@@ -12,7 +12,7 @@ function err_mess (message) {
 class sign_in {
   constructor (state) {
     this.state = {
-      title: 'none',
+      title: 'none'
     }
   }
 
@@ -28,25 +28,15 @@ class sign_in {
         meaasge: '',
         data: {
           account: '',
-          password: '',
-        },
+          password: ''
+        }
       })
     }
   }
 
   async esc_sign_in (ctx) {
-
-    const title = 'sign_in'
-
     ctx.session = null
-
-    render(ctx, 'default/sign_in',
-      {
-        title,
-        view_url: 'default/sign_in',
-        state: 'success',
-      },
-    )
+    ctx.redirect('/sign_in')
   }
 
   async post_sign_in (ctx) {
@@ -69,8 +59,8 @@ class sign_in {
         message: err.message,
         data: {
           account: formData.account,
-          password: formData.password,
-        },
+          password: formData.password
+        }
       })
       return false
     }
@@ -80,8 +70,8 @@ class sign_in {
       try {
         let sql_data_email = await db.user.findOne({
           where: {
-            email: formData.account,
-          },
+            email: formData.account
+          }
         })
         if (sql_data_email) {
 
@@ -91,9 +81,9 @@ class sign_in {
             let session = ctx.session
             session.islogin = true
             session.nickname = sql_data_email.dataValues.nickname
-            session.user_id = sql_data_email.dataValues.user_id
+            session.uid = sql_data_email.dataValues.uid
             session.avatar = sql_data_email.dataValues.avatar
-            
+
             ctx.redirect('/')
 
           } else {
@@ -103,8 +93,8 @@ class sign_in {
               message: '密码错误',
               data: {
                 account: formData.account,
-                password: formData.password,
-              },
+                password: formData.password
+              }
             })
           }
 
