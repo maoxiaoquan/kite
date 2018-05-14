@@ -11,6 +11,12 @@ const db_cr = async () => {
   /*-----------------admin------------------*/
   await db_create.ad_user.sync({ force: true, alter: true }).then(() => { console.log('ad_user 表创建完成') }) //ad_user 生成
   await db_create.ad_role.sync({ force: true, alter: true }).then(() => { console.log('ad_role 表创建完成') }) //ad_role 生成
+
+  await db_create.ad_user_role.sync({ force: true, alter: true }).then(() => { console.log('ad_user_role 表创建完成') }) //ad_user_role 生成
+  await db_create.ad_authority.sync({ force: true, alter: true }).then(() => { console.log('ad_authority 表创建完成') }) //ad_authority 生成
+  await db_create.ad_role_authority.sync({ force: true, alter: true }).then(() => { console.log('ad_role_authority 表创建完成') }) //ad_role_authority 生成
+
+
   await console.log('所有数据表创建完成')
   await process.exit()
 }

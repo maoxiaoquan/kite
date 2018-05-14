@@ -32,9 +32,9 @@ module.exports = {
       field:'phone'
     },
     email: { // 邮箱
-      type: Seq.STRING(16),
-      comment: '主键，自增',
-      field:'email'
+      type: Seq.STRING(36),
+      comment: '邮箱',
+      field: 'email'
     },
     reg_ip: { // 注册IP
       type: Seq.STRING(16),
