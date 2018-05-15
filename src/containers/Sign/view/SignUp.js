@@ -1,55 +1,64 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd'
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Link
-} from 'react-router-dom';
+} from 'react-router-dom'
 
 import { sign_up } from '../actions/index'
 
-import './signup.scss';
-const FormItem = Form.Item;
+import './signup.scss'
+import alert from '../../../utils/alert'
 
+const FormItem = Form.Item
 
 class RegistrationForm extends React.Component {
   state = {
     confirmDirty: false,
     autoCompleteResult: []
-  };
+  }
   handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-        this.props.dispatch(sign_up(values))
+        console.log('Received values of form: ', values)
+        this.props.dispatch(sign_up(values, (res) => {
+          if (res.state === 'success') {
+            alert.message_error(res.message)
+            this.props.history.push('/sign_in')
+          } else {
+            alert.message_error(res.message)
+          }
+        }))
       }
-    });
+    })
   }
   handleConfirmBlur = (e) => {
-    const value = e.target.value;
-    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+    const value = e.target.value
+    this.setState({confirmDirty: this.state.confirmDirty || !!value})
   }
   compareToFirstPassword = (rule, value, callback) => {
-    const form = this.props.form;
+    const form = this.props.form
     if (value && value !== form.getFieldValue('password')) {
-      callback('两次输入的密码不一致！');
+      callback('两次输入的密码不一致！')
     } else {
-      callback();
+      callback()
     }
   }
   validateToNextPassword = (rule, value, callback) => {
-    const form = this.props.form;
+    const form = this.props.form
     if (value && this.state.confirmDirty) {
-      form.validateFields(['confirm'], { force: true });
+      form.validateFields(['confirm'], {force: true})
     }
-    callback();
+    callback()
   }
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    const { autoCompleteResult } = this.state;
+
+  render () {
+    const {getFieldDecorator} = this.props.form
+    const {autoCompleteResult} = this.state
 
     return (
       <div id="admin-sign-up">
@@ -66,14 +75,14 @@ class RegistrationForm extends React.Component {
           <h3 className="title">注册</h3>
 
           <Form className="from-view"
-            onSubmit={this.handleSubmit}
+                onSubmit={this.handleSubmit}
           >
 
             <FormItem>
               {getFieldDecorator('account', {
-                rules: [{ required: true, message: '请输入账户！', whitespace: true }]
+                rules: [{required: true, message: '请输入账户！', whitespace: true}]
               })(
-                <Input placeholder="账户" />
+                <Input placeholder="账户"/>
               )}
             </FormItem>
 
@@ -86,7 +95,7 @@ class RegistrationForm extends React.Component {
                 }]
               })(
                 <Input placeholder="密码"
-                  type="password"
+                       type="password"
                 />
               )}
             </FormItem>
@@ -100,8 +109,8 @@ class RegistrationForm extends React.Component {
                 }]
               })(
                 <Input onBlur={this.handleConfirmBlur}
-                  placeholder="重复密码"
-                  type="password"
+                       placeholder="重复密码"
+                       type="password"
                 />
               )}
             </FormItem>
@@ -114,7 +123,7 @@ class RegistrationForm extends React.Component {
                   required: true, message: '请输入您的电子邮件！'
                 }]
               })(
-                <Input placeholder="邮箱" />
+                <Input placeholder="邮箱"/>
               )}
             </FormItem>
 
@@ -138,16 +147,15 @@ class RegistrationForm extends React.Component {
         </div>
       </div>
 
-
-    );
+    )
   }
 }
 
-const SignUp = Form.create()(RegistrationForm);
+const SignUp = Form.create()(RegistrationForm)
 
 export default connect((title) => {
-  console.log('title', title.title.title);
+  console.log('title', title.title.title)
   return {
     title
-  };
-})(SignUp);
+  }
+})(SignUp)

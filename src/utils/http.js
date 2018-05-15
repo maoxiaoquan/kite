@@ -24,6 +24,11 @@ http.interceptors.request.use(function (config) {
 http.interceptors.response.use(function (response) {
   const data = response.data
 
+  console.log(response.config.url, data)
+  if (response.config.direct) { // 直接返回 data，不进行后续处理
+    return data
+  }
+
   if (!data.is_login) {
     alerts.message_warning(data.message)
     location.replace('#/sign_in');

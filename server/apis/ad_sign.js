@@ -1,6 +1,14 @@
-const de = require('../utils/res_data')
+const {format_login, format_data} = require('../utils/res_data')
 const db = require('../db/db')
 const tokens = require('../utils/tokens')
+const {checkUserName, checkPwd, checkEmail} = require('../utils/validators')
+const {tools: {encrypt}} = require('../utils')
+const config = require('../../config')
+
+function err_mess (message) {
+  this.message = message
+  this.name = 'UserException'
+}
 
 class ad_sign {
   constructor () {
@@ -13,26 +21,58 @@ class ad_sign {
    */
   async ad_sign_in (ctx) {
     let req_data = ctx.request.body
+
+    try {
+      if (!req_data.account) {
+        throw  new err_mess('请输入账户!')
+      }
+
+      if (!checkUserName(req_data.account)) {
+        throw  new err_mess('5-12个英文字符!')
+      }
+
+      if (!req_data.password) {
+        throw  new err_mess('请输入密码!')
+      }
+
+    } catch (err) {
+
+      format_login(ctx, {
+        state: 'error',
+        message: err.message
+      }, false)
+      return false
+    }
+
     await db.ad_user.findOne({
       where: {
         account: req_data.account
       }
     }).then(function (db_data) {
       if (db_data) {
-        console.log(req_data.account, '------------', db_data.password)
-        if (req_data.password === db_data.password) {
-          let datas = {account: req_data.account}
-          let token = tokens.setToken('cxh', 300, datas)
 
-          de.format_login(ctx, {
-            state: 'success',
-            message: '登录成功',
-            token
-          })
+        if (encrypt(req_data.password,config.encrypt_key) === db_data.password) {
+
+          if (db_data.enable) {
+            let datas = {account: req_data.account}
+            let token = tokens.setToken('cxh', 3000, datas)
+
+            format_login(ctx, {
+              state: 'success',
+              message: '登录成功',
+              token
+            })
+
+          } else {
+            format_login(ctx, {
+              state: 'error',
+              message: '您已被限制登录'
+            }, false)
+          }
 
         } else {
 
-          de.format_login(ctx, {
+          format_login(ctx, {
             state: 'error',
             message: '密码错误'
           }, false)
@@ -40,7 +80,7 @@ class ad_sign {
         }
       } else {
 
-        de.format_login(ctx, {
+        format_login(ctx, {
           state: 'error',
           message: '用户不存在'
         }, false)
@@ -58,15 +98,44 @@ class ad_sign {
    * @param   {obejct} ctx 上下文对象
    */
   async ad_sign_up (ctx) {
-    console.log('res', ctx.request.body)
+    const req_data = ctx.request.body
+
+    try {
+      if (!req_data.account) {
+        throw  new err_mess('请输入账户!')
+      }
+      if (!checkUserName(req_data.account)) {
+        throw  new err_mess('账户须5-12个英文字符!')
+      }
+
+      if (!req_data.password) {
+        throw  new err_mess('请输入密码!')
+      }
+
+      if (!checkPwd(req_data.password)) {
+        throw  new err_mess('密码输入有误!')
+      }
+
+      if (!checkEmail(req_data.email)) {
+        throw  new err_mess('邮箱输入有误!')
+      }
+
+    } catch (err) {
+      format_data(ctx, {
+        state: 'error',
+        message: err.message
+      }, false)
+      return false
+    }
 
     await db.ad_user.create({
-      account: ctx.request.body.account,
-      password: ctx.request.body.password,
-      email: ctx.request.body.email
+      account: req_data.account,
+      password: encrypt(req_data.password,config.encrypt_key),
+      email: req_data.email,
+      enable: true
     }).then(function (p) {
       console.log('created.' + JSON.stringify(p))
-      de.format_data(ctx, {
+      format_data(ctx, {
         state: 'success',
         message: '注册成功'
       }, false)

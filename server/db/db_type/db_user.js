@@ -59,6 +59,11 @@ module.exports = {
       type: Seq.BIGINT(50),
       comment: '最后登录时间',
       field: 'last_sign_time'
+    },
+    enable: { // 是否可以登录
+      type: Seq.BOOLEAN,
+      comment: '是否可以登录',
+      field: 'enable'
     }
   }
 }
