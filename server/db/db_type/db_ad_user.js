@@ -36,7 +36,22 @@ module.exports = {
       comment: '邮箱',
       field: 'email'
     },
+    reg_time: { // 注册时间
+      type: Seq.BIGINT(50),
+      comment: '注册时间',
+      field: 'reg_time'
+    },
+    last_sign_time: { // 最后登录时间
+      type: Seq.BIGINT(50),
+      comment: '最后登录时间',
+      field: 'last_sign_time'
+    },
     reg_ip: { // 注册IP
+      type: Seq.STRING(16),
+      comment: '注册IP',
+      field: 'reg_ip'
+    },
+    last_sign_ip: { // 最后登陆IP
       type: Seq.STRING(16),
       comment: '注册IP',
       field: 'reg_ip'

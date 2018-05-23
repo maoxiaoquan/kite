@@ -1,10 +1,12 @@
-import title from './title';
-import loading from './loading';
+import title from './title'
+import loading from './loading'
+import admin_user from '../../containers/adminUser/reducer/AdminUserReducer'
 
 const rootReducer = {
   title,
-  loading
-};
+  loading,
+  admin_user
+}
 
-export default rootReducer;
+export default rootReducer
 

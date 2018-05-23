@@ -4,7 +4,7 @@ const res_data = require('./res_data')
 class Tokens {
   constructor () { }
 
-  async testToken (ctx, next) {
+  async verifyToken (ctx, next) {
 
     let req = ctx.request.body
     let token = req.token || ctx.query.token || ctx.headers['x-access-token']

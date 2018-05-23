@@ -4,6 +4,7 @@ const tokens = require('../utils/tokens')
 const {checkUserName, checkPwd, checkEmail} = require('../utils/validators')
 const {tools: {encrypt}} = require('../utils')
 const config = require('../../config')
+const moment = require('moment')
 
 function err_mess (message) {
   this.message = message
@@ -51,7 +52,7 @@ class ad_sign {
     }).then(function (db_data) {
       if (db_data) {
 
-        if (encrypt(req_data.password,config.encrypt_key) === db_data.password) {
+        if (encrypt(req_data.password, config.encrypt_key) === db_data.password) {
 
           if (db_data.enable) {
             let datas = {account: req_data.account}
@@ -104,6 +105,9 @@ class ad_sign {
       if (!req_data.account) {
         throw  new err_mess('请输入账户!')
       }
+      if (!req_data.nickname) {
+        throw  new err_mess('请输入昵称!')
+      }
       if (!checkUserName(req_data.account)) {
         throw  new err_mess('账户须5-12个英文字符!')
       }
@@ -128,10 +132,28 @@ class ad_sign {
       return false
     }
 
+    let ad_user_findOne = await db.ad_user.findOne({
+      where: {
+        account: req_data.account
+      }
+    })
+
+    if (ad_user_findOne) {
+      format_data(ctx, {
+        state: 'error',
+        message: '账户已存在'
+      }, false)
+      return false
+    }
+
     await db.ad_user.create({
       account: req_data.account,
-      password: encrypt(req_data.password,config.encrypt_key),
+      nickname: req_data.nickname,
+      password: encrypt(req_data.password, config.encrypt_key),
       email: req_data.email,
+      phone: req_data.phone,
+      reg_time: moment().utc().utcOffset(+8).format('X'),
+      reg_ip: ctx.request.ip,
       enable: true
     }).then(function (p) {
       console.log('created.' + JSON.stringify(p))
@@ -141,6 +163,10 @@ class ad_sign {
       }, false)
     }).catch(function (err) {
       console.log('failed: ' + err)
+      format_data(ctx, {
+        state: 'error',
+        message: '注册失败'
+      }, false)
     })
   }
 

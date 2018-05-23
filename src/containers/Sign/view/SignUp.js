@@ -13,6 +13,7 @@ import { sign_up } from '../actions/index'
 import './signup.scss'
 import alert from '../../../utils/alert'
 
+const Option = Select.Option
 const FormItem = Form.Item
 
 class RegistrationForm extends React.Component {
@@ -27,7 +28,7 @@ class RegistrationForm extends React.Component {
         console.log('Received values of form: ', values)
         this.props.dispatch(sign_up(values, (res) => {
           if (res.state === 'success') {
-            alert.message_error(res.message)
+            alert.message_success(res.message)
             this.props.history.push('/sign_in')
           } else {
             alert.message_error(res.message)
@@ -60,6 +61,15 @@ class RegistrationForm extends React.Component {
     const {getFieldDecorator} = this.props.form
     const {autoCompleteResult} = this.state
 
+    const prefixSelector = getFieldDecorator('prefix', {
+      initialValue: '86'
+    })(
+      <Select style={{width: 70}}>
+        <Option value="86">+86</Option>
+        <Option value="87">+87</Option>
+      </Select>
+    )
+
     return (
       <div id="admin-sign-up">
         <div className="admin-sign-up-view">
@@ -74,8 +84,9 @@ class RegistrationForm extends React.Component {
 
           <h3 className="title">注册</h3>
 
-          <Form className="from-view"
-                onSubmit={this.handleSubmit}
+          <Form
+            className="from-view"
+            onSubmit={this.handleSubmit}
           >
 
             <FormItem>
@@ -83,6 +94,14 @@ class RegistrationForm extends React.Component {
                 rules: [{required: true, message: '请输入账户！', whitespace: true}]
               })(
                 <Input placeholder="账户"/>
+              )}
+            </FormItem>
+
+            <FormItem>
+              {getFieldDecorator('nickname', {
+                rules: [{required: true, message: '请输入昵称！', whitespace: true}]
+              })(
+                <Input placeholder="昵称"/>
               )}
             </FormItem>
 
@@ -124,6 +143,15 @@ class RegistrationForm extends React.Component {
                 }]
               })(
                 <Input placeholder="邮箱"/>
+              )}
+            </FormItem>
+
+            <FormItem
+            >
+              {getFieldDecorator('phone', {
+                rules: [{required: true, message: '请输入你的手机号码！'}],
+              })(
+                <Input addonBefore={prefixSelector} style={{width: '100%'}}/>
               )}
             </FormItem>
 

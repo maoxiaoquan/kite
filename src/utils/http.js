@@ -24,20 +24,24 @@ http.interceptors.request.use(function (config) {
 http.interceptors.response.use(function (response) {
   const data = response.data
 
-  console.log(response.config.url, data)
+  console.log('接口:', response.config.url, data)
   if (response.config.direct) { // 直接返回 data，不进行后续处理
     return data
   }
 
   if (!data.is_login) {
     alerts.message_warning(data.message)
-    location.replace('#/sign_in');
+    location.replace('#/sign_in')
     return false
   }
-  
-  console.log('接口:', response.config.url, data)
 
-  return data
+  if (data.state === 'error') {
+    alerts.message_warning(data.message)
+    return Promise.reject(new Error(data.message))
+  } else {
+    return data.data
+  }
+
 }, function (error) {
   console.log(error)
   alerts.message_warning('服务器正忙，请稍后重试!')

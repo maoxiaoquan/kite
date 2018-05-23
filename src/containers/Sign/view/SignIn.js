@@ -1,40 +1,41 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd'
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Link
-} from 'react-router-dom';
+} from 'react-router-dom'
 
 import alert from '../../../utils/alert'
 
 import { sign_in } from '../actions/index'
 
-import './signin.scss';
-const FormItem = Form.Item;
+import './signin.scss'
+
+const FormItem = Form.Item
 
 class NormalLoginForm extends React.Component {
 
-  
   handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.dispatch(sign_in(values, (res) => {
           if (res.state === 'success') {
-            localStorage.box_tokens = res.token;
+            localStorage.box_tokens = res.token
             this.props.history.push('/')
           } else {
             alert.message_error(res.message)
           }
         }))
       }
-    });
+    })
   }
-  render() {
-    const { getFieldDecorator } = this.props.form;
+
+  render () {
+    const {getFieldDecorator} = this.props.form
     return (
       <div id="admin-sign-in">
         <div className="admin-sign-in-view">
@@ -50,24 +51,24 @@ class NormalLoginForm extends React.Component {
           <h3 className="title">登录</h3>
 
           <Form className="from-view"
-            onSubmit={this.handleSubmit}
+                onSubmit={this.handleSubmit}
           >
             <FormItem>
               {getFieldDecorator('account', {
-                rules: [{ required: true, message: '请输入你的账户！' }]
+                rules: [{required: true, message: '请输入你的账户！'}]
               })(
                 <Input placeholder="账户"
-                  prefix={<Icon type="user" />}
+                       prefix={<Icon type="user"/>}
                 />
               )}
             </FormItem>
             <FormItem>
               {getFieldDecorator('password', {
-                rules: [{ required: true, message: '请输入密码！' }]
+                rules: [{required: true, message: '请输入密码！'}]
               })(
                 <Input placeholder="密码"
-                  prefix={<Icon type="lock" />}
-                  type="password"
+                       prefix={<Icon type="lock"/>}
+                       type="password"
                 />
               )}
             </FormItem>
@@ -79,11 +80,11 @@ class NormalLoginForm extends React.Component {
                 <Checkbox><span className="font-co1">记住密码，</span></Checkbox>
               )}
               <a className="login-form-forgot"
-                href=""
+                 href=""
               >找回密码</a>
               <Button className="sign-in-btn"
-                htmlType="submit"
-                type="primary"
+                      htmlType="submit"
+                      type="primary"
               >
                 登录
               </Button>
@@ -93,15 +94,15 @@ class NormalLoginForm extends React.Component {
           </Form>
         </div>
       </div>
-    );
+    )
   }
 }
 
-const SignIn = Form.create()(NormalLoginForm);
+const SignIn = Form.create()(NormalLoginForm)
 
 export default connect((title) => {
-  console.log('title', title.title.title);
+  console.log('title', title.title.title)
   return {
     title
-  };
-})(SignIn);
+  }
+})(SignIn)

@@ -28,15 +28,15 @@ class Format {
    * @param  {object} ctx 上下文对象,必填
    * @param  {number} state 状态，必填,判断数据是否返回正确 success正常、error错误
    * @param  {String} message 信息，必填,返回的弹窗信息
-   * @param  {object} date 返回的数据
+   * @param  {object} data 返回的数据
    * @param  {Boolean} is_login  是否登录
    */
 
-  async format_data (ctx, {state, message, date = {}}, is_login = true) {
+  async format_data (ctx, {state, message, data = {}}, is_login = true) {
     ctx.body = {
       state,
       message,
-      date,
+      data,
       is_login
     }
   }

@@ -25,7 +25,9 @@ import SignIn from 'bundle-loader?lazy!../containers/Sign/view/SignIn' //登录�
 import SignUp from 'bundle-loader?lazy!../containers/Sign/view/SignUp' //登录组件
 import List from 'bundle-loader?lazy!../containers/List/view/list' // 表单组件
 import About from 'bundle-loader?lazy!../containers/About/view/about' // 评论组件
-/* eslint-enable */
+/*ADMIN*/
+import adminUser from 'bundle-loader?lazy!../containers/adminUser/view/AdminUser'
+import adminRole from 'bundle-loader?lazy!../containers/adminRole/view/AdminRole'
 
 // components load their module for initial visit
 // //这里只是给this.props.child传一个方法，最后在Bundle的render里面调用
@@ -57,7 +59,9 @@ const Main = ({ match }) => (
         xxl={{ span: 21 }} /* 1 */
       >
         <div className="admin-content-wrapper">
-          <Route component={Index} path={`${match.url}/main`} />
+          <Route component={Index} exact path={`${match.url}/main`} />
+          <Route component={createComponent(adminUser)} exact path={`${match.url}/adminUser`} />
+          <Route component={createComponent(adminRole)} exact path={`${match.url}/adminRole`} />
         </div>
       </Col>
     </Row>
