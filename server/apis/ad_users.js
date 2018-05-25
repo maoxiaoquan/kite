@@ -11,7 +11,7 @@ class ad_users {
    * 获取用户操作
    * @param   {obejct} ctx 上下文对象
    */
-  async ad_get_users (ctx) {
+  async get_admin_user_list (ctx) {
     const res_data = ctx.query
     let page = res_data.page || 1
     let pageSize = res_data.pageSize || 10

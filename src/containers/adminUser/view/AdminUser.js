@@ -4,7 +4,7 @@ import { Layout, Menu, Breadcrumb, Divider, Icon, Table, Button } from 'antd'
 import { Link } from 'react-router-dom'
 
 import './AdminUser.scss'
-import { get_admin_user } from '../actions/AdminUserAction'
+import { get_admin_user_list } from '../actions/AdminUserAction'
 import admin_user from '../reducer/AdminUserReducer'
 
 const {SubMenu} = Menu
@@ -61,7 +61,7 @@ class AdminUser extends React.Component {
           key: 'reg_ip'
         },
         {
-          title: '最后登陆op',
+          title: '最后登陆ip',
           dataIndex: 'last_sign_ip',
           key: 'last_sign_ip'
         },
@@ -89,26 +89,32 @@ class AdminUser extends React.Component {
   }
 
   componentDidMount () {
-    this.props.dispatch(get_admin_user({}, (res) => {
-      let pagination = {...this.state.pagination}
-      pagination.total = res.count
-      this.setState({
-        pagination
-      })
-    }))
+    this.fetch_admin_user_list()
   }
 
-  handleTableChange (pages, filters, sorter) {
+  handleTableChange = async (pages) => {
+    let pagination = {}
+    pagination.current = pages.current
+    await this.setState({
+      pagination: {
+        current: pages.current
+      }
+    })
+    this.fetch_admin_user_list(pages)
+  }
+
+  fetch_admin_user_list = () => {
     const that = this
     this.setState({loading: true})
-    this.props.dispatch(get_admin_user({params: {page: pages.current, pageSize: 10}}, (res) => {
-     let pagination = {...that.state.pagination}
-       pagination.total = res.count
-       pagination.current = pages.current
-       that.setState({
-         loading: false,
-         pagination
-       })
+    const {pagination: {current}} = this.state
+    this.props.dispatch(get_admin_user_list({params: {page: current}}, (res) => {
+      let pagination = {...that.state.pagination}
+      pagination.total = res.count
+      pagination.current = current
+      that.setState({
+        loading: false,
+        pagination
+      })
     }))
   }
 

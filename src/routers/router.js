@@ -28,6 +28,7 @@ import About from 'bundle-loader?lazy!../containers/About/view/about' // 评论�
 /*ADMIN*/
 import adminUser from 'bundle-loader?lazy!../containers/adminUser/view/AdminUser'
 import adminRole from 'bundle-loader?lazy!../containers/adminRole/view/AdminRole'
+import adminAuthority from 'bundle-loader?lazy!../containers/adminAuthority/view/AdminAuthority'
 
 // components load their module for initial visit
 // //这里只是给this.props.child传一个方法，最后在Bundle的render里面调用
@@ -62,6 +63,7 @@ const Main = ({ match }) => (
           <Route component={Index} exact path={`${match.url}/main`} />
           <Route component={createComponent(adminUser)} exact path={`${match.url}/adminUser`} />
           <Route component={createComponent(adminRole)} exact path={`${match.url}/adminRole`} />
+          <Route component={createComponent(adminAuthority)} exact path={`${match.url}/adminAuthority`} />
         </div>
       </Col>
     </Row>

@@ -15,6 +15,11 @@ module.exports = {
       type: Seq.STRING(100),
       comment: '账户',
       field: 'role_name'
+    },
+    role_description: { // 角色描述
+      type: Seq.STRING(100),
+      comment: '角色描述',
+      field: 'role_description'
     }
   }
 }

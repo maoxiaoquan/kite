@@ -73,7 +73,7 @@ class Aside extends Component {
               <MenuItemGroup key="g1" title="权限管理">
                 <Menu.Item key="3"> <Link to="/master/index/adminUser">管理员管理</Link></Menu.Item>
                 <Menu.Item key="4"><Link to="/master/index/adminRole">角色管理</Link></Menu.Item>
-                <Menu.Item key="5">权限菜单</Menu.Item>
+                <Menu.Item key="5"><Link to="/master/index/adminAuthority">权限菜单</Link></Menu.Item>
               </MenuItemGroup>
               <MenuItemGroup key="g2" title="CMS系统">
                 <Menu.Item key="6">数据备份</Menu.Item>

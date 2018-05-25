@@ -9,10 +9,17 @@ router.post('/sign_in', ad_sign.ad_sign_in)
 //api 注册 POST
 router.post('/sign_up', ad_sign.ad_sign_up)
 
-//获取当前用户信息
-router.get('/get_user', ad_users.ad_get_users)
+//获取当前用户列表
+router.get('/get_admin_user_list', ad_users.get_admin_user_list)
+
 //创建角色
-router.post('/create_role', tokens.verifyToken, role_authority.create_role)
+router.post('/create_admin_role', role_authority.create_admin_role)
+//获取角色列表
+router.get('/get_admin_role_list', role_authority.get_admin_role_list)
+
+//创建权限
+router.post('/create_admin_authority', role_authority.create_admin_authority)
+
 
 //router.use('/user', tokens.testToken())
 //api 获取用户 POST

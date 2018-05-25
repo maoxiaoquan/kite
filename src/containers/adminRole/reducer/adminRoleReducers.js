@@ -1,11 +1,11 @@
 const initState = {
-  admin_user_list: [],
+  admin_role_list: [],
   count: ''
 }
 
 function reducer (state = initState, action) {
   switch (action.type) {
-    case 'GET_ADMIN_USER_LIST':
+    case 'GET_ADMIN_ROLE_LIST':
       return {
         ...state,
         ...action.data
