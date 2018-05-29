@@ -1,20 +1,14 @@
 const initState = {
-  admin_role_list: [],
-  count: '',
-  authority_form: {}
+  admin_authority_list: [],
+  count: ''
 }
 
 function reducer (state = initState, action) {
   switch (action.type) {
-    case 'GET_ADMIN_ROLE_LIST':
+    case 'GET_ADMIN_AUTHORITY_LIST':
       return {
         ...state,
-        ...action.data
-      }
-    case 'SER_AUTHORITY_FORM':
-      return {
-        ...state,
-        authority_form: action.data
+        admin_authority_list: action.data
       }
     default:
       return state

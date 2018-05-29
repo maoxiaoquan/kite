@@ -15,7 +15,7 @@
   "author": "xiaoquan",
   "license": "ISC",
   "dependencies": {
-    "antd": "^2.13.6",
+    "antd": "^2.13.14",
     "axios": "^0.17.1",
     "bundle-loader": "^0.5.5",
     "busboy": "^0.2.14",
@@ -40,7 +40,7 @@
     "pm2": "^2.7.2",
     "prop-types": "^15.6.0",
     "qs": "^6.5.1",
-    "react": "^16.0.0",
+    "react": "^16.4.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",

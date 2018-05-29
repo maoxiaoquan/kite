@@ -79,7 +79,6 @@ class role_authority {
   static async create_admin_authority (ctx) {
 
     const req_data = ctx.request.body
-
     let find_authority_name = await ad_authority.findOne({
       where: {
         authority_name: req_data.authority_name
@@ -91,6 +90,7 @@ class role_authority {
         state: 'error',
         message: '权限名已存在'
       })
+      return false
     }
 
     let find_authority_url = await ad_authority.findOne({
@@ -104,6 +104,7 @@ class role_authority {
         state: 'error',
         message: '权限路径已存在'
       })
+      return false
     }
 
     await ad_authority.create({
@@ -111,6 +112,7 @@ class role_authority {
       authority_type: req_data.authority_type,
       authority_parent_id: req_data.authority_parent_id,
       authority_url: req_data.authority_url,
+      authority_sort: req_data.authority_sort,
       authority_description: req_data.authority_description
     }).then(function (p) {
       console.log('created.' + JSON.stringify(p))
@@ -125,6 +127,23 @@ class role_authority {
         message: '权限创建出错'
       })
     })
+
+  }
+
+  /**
+   * 获取权限列表
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async get_admin_authority_list (ctx) {
+
+    let ad_authority_findAll = await ad_authority.findAll()
+
+    format_data(ctx, {
+      state: 'success',
+      message: '返回成功',
+      data: ad_authority_findAll
+    })
+
   }
 
 }

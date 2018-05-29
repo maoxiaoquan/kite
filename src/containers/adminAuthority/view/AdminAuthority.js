@@ -1,11 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Form, Icon, Input, Button, Checkbox, Select, Table, Modal, InputNumber } from 'antd'
+import { Form, Icon, Input, Button, Checkbox, Select, Table, Modal, InputNumber, Tree } from 'antd'
 import { Link } from 'react-router-dom'
 import alert from '../../../utils/alert'
 import './AdminAuthority.scss'
-import { create_admin_role, get_admin_role_list } from '../action/AdminAuthorityAction'
+import { create_admin_authority, get_admin_authority_list } from '../action/AdminAuthorityAction'
 
+const TreeNode = Tree.TreeNode
 const FormItem = Form.Item
 const Option = Select.Option
 
@@ -13,72 +14,29 @@ class AdminAuthority extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      columns: [
-        {
-          title: '角色id',
-          dataIndex: 'role_id',
-          key: 'role_id'
-        },
-        {
-          title: '角色名字',
-          dataIndex: 'role_name',
-          key: 'role_name'
-        },
-        {
-          title: '角色描述',
-          dataIndex: 'role_description',
-          key: 'role_description'
-        },
-        {
-          title: 'Action',
-          key: 'action',
-          render: (text, record) => {
-            return (
-              <div>
-                <a href="javascript:;">Action 一 {record.name}</a>
-                <a href="javascript:;">Delete</a>
-                <a className="ant-dropdown-link" href="javascript:;">More actions <Icon type="down"/></a>
-              </div>
-            )
-          }
-        }],
-      pagination: {},
-      loading: false,
       visible: false,
-      authority_type_select: 1
+      authority_type_select: 1,
+      authority_parent_id: 0,
+      authority_parent_title: ''
     }
   }
 
   componentDidMount () {
-    this.fetch_admin_role_list()
+    this.fetch_admin_authority_list()
   }
 
-  showModal = () => {
+  showModal = (parent_id, authority_parent_title = '') => {
     this.props.form.resetFields()
     this.setState({
-      visible: true
+      visible: true,
+      authority_parent_id: parent_id,
+      authority_parent_title
     })
     /*this.props.form.setFieldsValue({
-      authority_name: '666',
-      authority_type: '基础菜单',
-      authority_url: '666',
-      authority_sort: 8,
-      authority_description: '666'
+      authority_parent_title: '11'
     })*/
   }
-  handleOk = () => {
-    let params = {
-      role_name: this.state.role_name,
-      role_description: this.state.role_description
-    }
-    this.setState({
-      visible: false
-    })
-    this.props.dispatch(create_admin_role(params, () => {
-      alert.message_success('角色创建成功')
-      this.fetch_admin_role_list()
-    }))
-  }
+
   handleCancel = () => {
     this.setState({
       visible: false
@@ -91,31 +49,8 @@ class AdminAuthority extends React.Component {
     })
   }
 
-  handleTableChange = async (pages) => {
-    let pagination = {}
-    pagination.current = pages.current
-    await this.setState({
-      pagination: {
-        current: pages.current
-      }
-    })
-
-    this.fetch_admin_role_list()
-  }
-
-  fetch_admin_role_list = () => {
-    const that = this
-    this.setState({loading: true})
-    const {pagination: {current}} = this.state
-    this.props.dispatch(get_admin_role_list({params: {page: current}}, (res) => {
-      let pagination = {...that.state.pagination}
-      pagination.total = res.count
-      pagination.current = current
-      that.setState({
-        loading: false,
-        pagination
-      })
-    }))
+  fetch_admin_authority_list = () => {
+    this.props.dispatch(get_admin_authority_list())
   }
 
   handleReset = () => {
@@ -125,18 +60,71 @@ class AdminAuthority extends React.Component {
   handleSubmit = async (e) => {
     e.preventDefault()
     this.props.form.validateFields(async (err, values) => {
-      await  this.props.dispatch({type: 'SER_AUTHORITY_FORM', data: values})
-      console.log('authority_form', this.props.admin_authority.authority_form)
       if (!err) {
+        await this.fetch_admin_authority_create(values)
         console.log('Received values of form: ', values)
       }
     })
   }
 
+  fetch_admin_authority_create = async (values) => {
+    await this.props.dispatch(create_admin_authority({
+      authority_name: values.authority_name,
+      authority_type: values.authority_type,
+      authority_parent_id: this.state.authority_parent_id,
+      authority_url: values.authority_url,
+      authority_sort: values.authority_sort,
+      authority_description: values.authority_description
+    }, () => {
+      this.setState({
+        visible: false
+      })
+      this.fetch_admin_authority_list()
+      alert.message_success('权限创建成功')
+    }))
+  }
+
+  onSelect = (selectedKeys, info) => {
+    console.log('selected', selectedKeys, info)
+  }
+  onCheck = (checkedKeys, info) => {
+    console.log('onCheck', checkedKeys, info)
+  }
+
   render () {
     const {admin_authority} = this.props
     const {getFieldDecorator} = this.props.form
-    const {loading, authority_type_select} = this.state
+    const {authority_type_select, authority_parent_title} = this.state
+
+    console.log('admin_authority', admin_authority)
+    const customLabel = (data) => {
+      return (
+        <div className="box-tree-title clearfix">
+          <div className="pull-left">
+            <span className="title">{data.authority_name} </span>
+          </div>
+          <div className="pull-right">
+            <Icon type="plus-circle-o" onClick={() => this.showModal(data.authority_id, data.authority_name)}/>
+            <Icon type="edit"/>
+            <Icon type="delete"/>
+          </div>
+        </div>
+      )
+    }
+
+    const TreeNodeTree = (data) => {
+      return (
+        data.length > 0 ? (
+          data.map((item) => {
+            return (
+              <TreeNode title={customLabel(item)} key={item.authority_id}>
+                {TreeNodeTree(item.children)}
+              </TreeNode>
+            )
+          })
+        ) : null
+      )
+    }
 
     const formItemLayout = {
       labelCol: {
@@ -175,16 +163,29 @@ class AdminAuthority extends React.Component {
         </div>
         <div className="box-card-body">
           <div className="admin-authority">
-            <Button className="admin-authority-create-btn" icon="plus" onClick={this.showModal}
+            <Button className="admin-authority-create-btn" icon="plus"
+                    onClick={() => this.showModal(0)}
                     type="primary">创建权限</Button>
             <Modal
               footer={null}
               onCancel={this.handleCancel}
-              onOk={this.handleOk}
               title="创建权限"
               visible={this.state.visible}
             >
+
               <Form className="login-form" onSubmit={this.handleSubmit}>
+
+                {
+                  authority_parent_title ? (
+                    <FormItem
+                      {...formItemLayout}
+                      label="父权限名称"
+                    >
+                      <Input disabled={true} type="text" value={this.state.authority_parent_title}/>
+                    </FormItem>
+                  ) : ''
+                }
+
                 <FormItem
                   {...formItemLayout}
                   hasFeedback
@@ -277,15 +278,19 @@ class AdminAuthority extends React.Component {
 
             </Modal>
 
-
-            <Table
-              columns={this.state.columns}
-              dataSource={admin_authority.admin_role_list}
-              loading={loading}
-              onChange={this.handleTableChange.bind(this)}
-              pagination={this.state.pagination}
-              rowKey="role_id"
-            />
+            <Tree
+              defaultExpandedKeys={['0-0-0', '0-0-1']}
+            >
+              {
+                admin_authority.admin_authority_list.map((item) => {
+                  return (
+                    <TreeNode title={customLabel(item)} key={item.authority_id}>
+                      {TreeNodeTree(item.children)}
+                    </TreeNode>
+                  )
+                })
+              }
+            </Tree>
           </div>
         </div>
       </div>
