@@ -60,6 +60,11 @@ module.exports = {
       type: Seq.BOOLEAN,
       comment: '是否可以登录',
       field: 'enable'
+    },
+    description: { // 角色描述
+      type: Seq.STRING(100),
+      comment: '角色描述',
+      field: 'description'
     }
   }
 }

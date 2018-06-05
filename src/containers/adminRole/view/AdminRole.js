@@ -1,11 +1,22 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Icon, Table, Button, Modal } from 'antd'
+import { Icon, Table, Button, Modal, Form, Input, Checkbox, Select, InputNumber, Tree } from 'antd'
 import { Link } from 'react-router-dom'
 import alert from '../../../utils/alert'
 import './AdminRole.scss'
-import { create_admin_role, get_admin_role_list } from '../actions/adminRoleAction'
-import admin_user from '../reducer/adminRoleReducers'
+import { get_admin_authority_list } from '../../adminAuthority/action/AdminAuthorityAction'
+import {
+  create_admin_role,
+  get_admin_role_list,
+  edit_admin_role,
+  set_admin_role_authority
+} from '../actions/adminRoleAction'
+
+const TreeNode = Tree.TreeNode
+const FormItem = Form.Item
+const Option = Select.Option
+const confirm = Modal.confirm
+const {TextArea} = Input
 
 class AdminRole extends React.Component {
   constructor (props) {
@@ -28,52 +39,81 @@ class AdminRole extends React.Component {
           key: 'role_description'
         },
         {
-          title: 'Action',
+          title: '操作',
           key: 'action',
           render: (text, record) => {
             return (
-              <div>
-                <a href="javascript:;">Action 一 {record.name}</a>
-                <a href="javascript:;">Delete</a>
-                <a className="ant-dropdown-link" href="javascript:;">More actions <Icon type="down"/></a>
+              <div className="table-right-btn">
+                <Button type="primary" size="small" onClick={async () => {
+                  this.edit_role(record)
+                  await this.props.dispatch({type: 'SET_CURRENT_ROLE_INFO', data: record})
+                }}>修改</Button>
+                <Button className="box-btn-red" size="small" onClick={async () => {
+                  await this.props.dispatch({type: 'SET_CURRENT_ROLE_INFO', data: record})
+                }}>删除</Button>
+                <Button className="box-btn-orange" size="small" onClick={async () => {
+                  this.setState({
+                    visible_set_authority_modal: true
+                  })
+                  await this.props.dispatch({type: 'SET_CURRENT_ROLE_INFO', data: record})
+                }}
+                >设置权限</Button>
               </div>
             )
           }
         }],
       pagination: {},
       loading: false,
-      visible: false,
+      visible_create_role_modal: false,
+      visible_set_authority_modal: false,
       role_name: '',
-      role_description: ''
+      role_description: '',
+      is_create: true,
+      role_authority_list: ['HyJQVFQg7', 'HJKe-Cmem'],
     }
   }
 
   componentDidMount () {
+    /*获取后台角色分页列表*/
     this.fetch_admin_role_list()
+    /*获取后台权限所有*/
+    this.props.dispatch(get_admin_authority_list())
   }
 
   showModal = () => {
     this.setState({
-      visible: true
+      visible_create_role_modal: true,
+      is_create: true
+    })
+    this.init_role_from()
+  }
+
+  init_role_from = () => { /*初始化角色表单*/
+    this.setState({
+      role_name: '',
+      role_description: ''
     })
   }
-  handleOk = () => {
-    let params = {
-      role_name: this.state.role_name,
-      role_description: this.state.role_description
-    }
+
+  edit_role = (val) => {/*修改角色*/
     this.setState({
-      visible: false
+      visible_create_role_modal: true,
+      is_create: false,
+      role_name: val.role_name,
+      role_description: val.role_description
     })
-    this.props.dispatch(create_admin_role(params, () => {
-      alert.message_success('角色创建成功')
-      this.fetch_admin_role_list()
-    }))
+  }
+
+  handleOk = () => { /*判断是修改还是创建*/
+    if (this.state.is_create) {
+      this.fetch_admin_create_role()
+    } else {
+      this.fetch_admin_edit_role()
+    }
   }
   handleCancel = (e) => {
-    console.log(e)
     this.setState({
-      visible: false
+      visible_create_role_modal: false
     })
   }
 
@@ -85,11 +125,44 @@ class AdminRole extends React.Component {
         current: pages.current
       }
     })
-
     this.fetch_admin_role_list()
   }
 
-  fetch_admin_role_list = () => {
+  fetch_admin_edit_role = () => { /*修改角色*/
+    this.props.dispatch(edit_admin_role({
+      role_id: this.props.admin_role.current_role_info.role_id,
+      role_name: this.state.role_name,
+      role_description: this.state.role_description
+    }, () => {
+      alert.message_success('修改角色成功')
+      this.fetch_admin_role_list()
+      this.setState({
+        visible_create_role_modal: false
+      })
+    }))
+  }
+  fetch_admin_create_role = () => { /*创建角色*/
+    let params = {
+      role_name: this.state.role_name,
+      role_description: this.state.role_description
+    }
+    this.props.dispatch(create_admin_role(params, () => {
+      alert.message_success('角色创建成功')
+      this.fetch_admin_role_list()
+      this.setState({
+        visible_create_role_modal: false
+      })
+    }))
+  }
+
+  fetch_set_admin_role_authority = () => {
+    const {role_authority_list} = this.state
+    this.prop.dispatch(set_admin_role_authority({role_authority_list}, () => {
+
+    }))
+  }
+
+  fetch_admin_role_list = () => { /*获取角色分页列表*/
     const that = this
     this.setState({loading: true})
     const {pagination: {current}} = this.state
@@ -104,16 +177,50 @@ class AdminRole extends React.Component {
     }))
   }
 
-  getRoleName = (event) => {
-    this.setState({role_name: event.target.value})
+  onCheck = (checkedKeys) => {
+    console.log('onCheck', checkedKeys)
+    this.setState({role_authority_list: checkedKeys})
   }
-  getRoleDescription = (event) => {
-    this.setState({role_description: event.target.value})
+
+  renderTreeNodes = (data) => {
+    return data.map((item) => {
+      if (item.children.length > 0) {
+        return (
+          <TreeNode title={item.authority_name} key={item.authority_id} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        )
+      }
+      return <TreeNode title={item.authority_name} key={item.authority_id}/>
+    })
   }
 
   render () {
-    const {admin_role} = this.props
-    const {loading, role_name, role_description} = this.state
+    const {admin_role, admin_authority} = this.props
+    const {loading, role_name, role_description, is_create} = this.state
+
+    const formItemLayout = {
+      labelCol: {
+        xs: {span: 24},
+        sm: {span: 4}
+      },
+      wrapperCol: {
+        xs: {span: 24},
+        sm: {span: 20}
+      }
+    }
+    const tailFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+          offset: 0
+        },
+        sm: {
+          span: 16,
+          offset: 4
+        }
+      }
+    }
     return (
       <div className="box-card">
         <div className="box-card-header">
@@ -130,22 +237,71 @@ class AdminRole extends React.Component {
           <div className="admin-role">
             <Button className="admin-role-create-btn" icon="plus" onClick={this.showModal} type="primary">创建角色</Button>
             <Modal
+              footer={null}
               onCancel={this.handleCancel}
-              onOk={this.handleOk}
               title="创建角色"
-              visible={this.state.visible}
+              visible={this.state.visible_create_role_modal}
             >
-              <div className="form-group">
-                <label className="mr-bm-10" htmlFor="">角色名：</label>
-                <input className="input-view" onChange={this.getRoleName} type="text" value={role_name}/>
-              </div>
-              <div className="form-group">
-                <label className="mr-bm-10" htmlFor="">角色描述：</label>
-                <input className="input-view" onChange={this.getRoleDescription} type="text" value={role_description}/>
+              <FormItem
+                {...formItemLayout}
+                label="角色名"
+              >
+                <Input className="input-view"
+                       onChange={(e) => {this.setState({role_name: e.target.value})}}
+                       placeholder="请填写角色名" value={role_name}/>
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="角色描述"
+              >
+                <TextArea autosize={{minRows: 2, maxRows: 6}}
+                          onChange={(e) => {this.setState({role_description: e.target.value})}}
+                          placeholder="请填写角色描述"
+                          value={role_description}/>
+              </FormItem>
+
+              <FormItem
+                {...tailFormItemLayout}
+              >
+                <Button
+                  className="register-btn"
+                  htmlType="submit"
+                  type="primary"
+                  onClick={this.handleOk}
+                >
+                  {
+                    is_create ? '创建' : '更新'
+                  }
+                </Button>
+              </FormItem>
+            </Modal>
+
+
+            <Modal
+              footer={null}
+              onCancel={() => {
+                this.setState({
+                  visible_set_authority_modal: false
+                })
+              }}
+              title="设置权限"
+              visible={this.state.visible_set_authority_modal}
+            >
+              <Tree
+                showLine
+                checkable
+                onCheck={this.onCheck}
+                checkedKeys={this.state.role_authority_list}
+              >
+                {this.renderTreeNodes(admin_authority.admin_authority_list)}
+              </Tree>
+              <div className="admin-role-foot">
+                <Button type="primary" icon="save">确定</Button>
+                <Button>取消</Button>
               </div>
             </Modal>
-            {/*<p>{this.props.match.url}</p>
-          <p>{this.props.match.params.id}</p>*/}
+
             <Table
               columns={this.state.columns}
               dataSource={admin_role.admin_role_list}
@@ -161,9 +317,10 @@ class AdminRole extends React.Component {
   }
 }
 
-export default connect(({admin_role}) => {
+export default connect(({admin_role, admin_authority}) => {
   return {
-    admin_role
+    admin_role,
+    admin_authority
   }
 })(AdminRole)
 

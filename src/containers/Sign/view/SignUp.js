@@ -59,7 +59,6 @@ class RegistrationForm extends React.Component {
 
   render () {
     const {getFieldDecorator} = this.props.form
-    const {autoCompleteResult} = this.state
 
     const prefixSelector = getFieldDecorator('prefix', {
       initialValue: '86'
@@ -182,7 +181,6 @@ class RegistrationForm extends React.Component {
 const SignUp = Form.create()(RegistrationForm)
 
 export default connect((title) => {
-  console.log('title', title.title.title)
   return {
     title
   }

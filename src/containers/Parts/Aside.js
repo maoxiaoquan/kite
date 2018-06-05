@@ -37,12 +37,11 @@ class Aside extends Component {
 
   render () {
     const {title} = this.props
-    console.log('title', title)
     return (
       <div className="admin-aside box-card" id="admin-aside">
         <div className="box-card-header">
           <h2><strong>VACUO</strong> 主列表</h2>
-          <ul className="header-dropdown">
+          {/*<ul className="header-dropdown">
             <li className="dropdown">
               <a className="dropdown-toggle" href="javascript:void(0);">
                 <Icon type="ellipsis"/>
@@ -53,13 +52,12 @@ class Aside extends Component {
                 <Icon type="close"/>
               </a>
             </li>
-          </ul>
+          </ul>*/}
         </div>
 
         <div className="admin-aside-view clearfix">
 
           <Menu
-            defaultSelectedKeys={['g1']}
             mode="inline"
             onClick={this.handleClick}
           >
@@ -69,18 +67,14 @@ class Aside extends Component {
                 <span>主页</span>
               </Link>
             </Menu.Item>
-            <SubMenu key="sub1" title={<span><Icon type="setting"/><span>系统管理</span></span>}>
-              <MenuItemGroup key="g1" title="权限管理">
-                <Menu.Item key="3"> <Link to="/master/index/adminUser">管理员管理</Link></Menu.Item>
-                <Menu.Item key="4"><Link to="/master/index/adminRole">角色管理</Link></Menu.Item>
-                <Menu.Item key="5"><Link to="/master/index/adminAuthority">权限菜单</Link></Menu.Item>
-              </MenuItemGroup>
-              <MenuItemGroup key="g2" title="CMS系统">
-                <Menu.Item key="6">数据备份</Menu.Item>
-                <Menu.Item key="7">系统日志</Menu.Item>
-              </MenuItemGroup>
+            <SubMenu key="2" title={<span><Icon type="setting"/><span>系统管理</span></span>}>
+              <Menu.Item key="3"> <Link to="/master/index/adminUser">管理员管理</Link></Menu.Item>
+              <Menu.Item key="4"><Link to="/master/index/adminRole">角色管理</Link></Menu.Item>
+              <Menu.Item key="5"><Link to="/master/index/adminAuthority">权限菜单</Link></Menu.Item>
+              <Menu.Item key="6">数据备份</Menu.Item>
+              <Menu.Item key="7">系统日志</Menu.Item>
             </SubMenu>
-            <SubMenu key="sub4" title={<span><Icon type="setting"/><span>Navigation Three</span></span>}>
+            <SubMenu key="12" title={<span><Icon type="setting"/><span>Navigation Three</span></span>}>
               <Menu.Item key="8">Option 9</Menu.Item>
               <Menu.Item key="9">Option 10</Menu.Item>
               <Menu.Item key="10">Option 11</Menu.Item>
@@ -96,7 +90,6 @@ class Aside extends Component {
 }
 
 export default connect((title) => {
-  console.log('title', title.title.title)
   return {
     title
   }

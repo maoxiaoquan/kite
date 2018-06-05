@@ -40,7 +40,6 @@ class Header extends Component {
 
   render() {
     const { title } = this.props;
-    console.log('title', title)
     return (
       <div className="admin-header"
         id="admin-header"
@@ -127,7 +126,6 @@ class Header extends Component {
 }
 
 export default connect((title) => {
-  console.log('title', title.title.title);
   return {
     title
   };

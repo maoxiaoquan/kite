@@ -1,6 +1,9 @@
 const initState = {
   admin_user_list: [],
-  count: ''
+  count: '',
+  current_user_info: {},
+  admin_role_all: [],
+  admin_user_role_all: []
 }
 
 function reducer (state = initState, action) {
@@ -9,6 +12,21 @@ function reducer (state = initState, action) {
       return {
         ...state,
         ...action.data
+      }
+    case 'SET_ADMIN_CURRENT_USER_INFO':
+      return {
+        ...state,
+        current_user_info: action.data
+      }
+    case 'SET_ADMIN_ROlE_ALL':
+      return {
+        ...state,
+        admin_role_all: action.data
+      }
+    case 'SET_ADMIN_USER_ROlE_ALL':
+      return {
+        ...state,
+        admin_user_role_all: action.data
       }
     default:
       return state

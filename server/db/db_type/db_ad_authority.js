@@ -1,14 +1,20 @@
 const Seq = require('sequelize')
-
+const shortid = require('shortid')
 module.exports = {
   NAME: 'ad_authority', /*表名*/
   TABLE: {
     /*表结构*/
-    authority_id: { // 权限ID
+    a_id: { //ID
       type: Seq.INTEGER(10),
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增
-      comment: '权限ID 主键，自增',
+      comment: 'a_id',
+      field:'a_id'
+    },
+    authority_id: { // 权限ID
+      type: Seq.STRING(20),
+      comment: '权限ID',
+      defaultValue: shortid.generate,
       field: 'authority_id'
     },
     authority_name: { // 权限名字
@@ -22,7 +28,7 @@ module.exports = {
       field: 'authority_type'
     },
     authority_parent_id: { // 权限父ID
-      type: Seq.INTEGER(10),
+      type: Seq.STRING(20),
       comment: '权限父ID',
       field: 'authority_parent_id'
     },

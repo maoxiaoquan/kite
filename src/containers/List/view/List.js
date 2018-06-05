@@ -22,7 +22,6 @@ class List extends Component {
 
   render() {
     const { title } = this.props;
-    console.log('title', title)
     return (
       <div className="list">
         <div>
@@ -41,7 +40,6 @@ class List extends Component {
 }
 
 export default connect((title) => {
-  console.log('title', title.title.title);
   return {
     title
   };

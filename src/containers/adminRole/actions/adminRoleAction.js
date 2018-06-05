@@ -18,3 +18,21 @@ export const get_admin_role_list = (data, func) => {
     })
   }
 }
+
+export const edit_admin_role = (data, func) => {
+  return (dispatch) => {
+    http.post('/api/edit_admin_role', data).then((res) => {
+      if (func)
+        func(res)
+    })
+  }
+}
+
+export const set_admin_role_authority = (data, func) => {
+  return (dispatch) => {
+    http.post('/api/set_admin_role_authority', data).then((res) => {
+      if (func)
+        func(res)
+    })
+  }
+}

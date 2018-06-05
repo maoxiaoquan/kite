@@ -75,7 +75,6 @@ class Index extends React.Component {
 
 
 export default connect((title) => {
-  console.log('title', title.title.title);
   return {
     title
   };

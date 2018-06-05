@@ -3,12 +3,18 @@ import { connect } from 'react-redux'
 import { Form, Icon, Input, Button, Checkbox, Select, Table, Modal, InputNumber, Tree } from 'antd'
 import { Link } from 'react-router-dom'
 import alert from '../../../utils/alert'
+import { isEmpty } from '../../../utils/tools'
 import './AdminAuthority.scss'
-import { create_admin_authority, get_admin_authority_list } from '../action/AdminAuthorityAction'
+import {
+  create_admin_authority,
+  get_admin_authority_list,
+  delete_admin_authority
+} from '../action/AdminAuthorityAction'
 
 const TreeNode = Tree.TreeNode
 const FormItem = Form.Item
 const Option = Select.Option
+const confirm = Modal.confirm
 
 class AdminAuthority extends React.Component {
   constructor (props) {
@@ -16,7 +22,7 @@ class AdminAuthority extends React.Component {
     this.state = {
       visible: false,
       authority_type_select: 1,
-      authority_parent_id: 0,
+      authority_parent_id: '',
       authority_parent_title: ''
     }
   }
@@ -25,16 +31,32 @@ class AdminAuthority extends React.Component {
     this.fetch_admin_authority_list()
   }
 
-  showModal = (parent_id, authority_parent_title = '') => {
+  showModal = async (value) => {
+    console.log('value', value)
     this.props.form.resetFields()
     this.setState({
       visible: true,
-      authority_parent_id: parent_id,
-      authority_parent_title
+      authority_parent_id: value ? value.authority_id : '',
+      authority_parent_title: value ? value.authority_name : ''
     })
     /*this.props.form.setFieldsValue({
       authority_parent_title: '11'
     })*/
+    if (!value) {
+      this.props.form.setFields({
+        authority_sort: {
+          value: await this.props.admin_authority.admin_authority_list.length
+        }
+      })
+
+    } else {
+      this.props.form.setFields({
+        authority_sort: {
+          value: value.children.length
+        }
+      })
+    }
+
   }
 
   handleCancel = () => {
@@ -47,10 +69,6 @@ class AdminAuthority extends React.Component {
     this.setState({
       authority_type_select: value
     })
-  }
-
-  fetch_admin_authority_list = () => {
-    this.props.dispatch(get_admin_authority_list())
   }
 
   handleReset = () => {
@@ -67,7 +85,28 @@ class AdminAuthority extends React.Component {
     })
   }
 
+  handle_delete_authority = (data) => {
+    const that = this
+    confirm({
+      title: '你确认要删除当前权限吗',
+      content: `${data.authority_name}，删除权限后，所有与之关联的角色将失去此权限！`,
+      okText: 'YES',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk () {
+        that.fetch_admin_authority_delete(data)
+      },
+      onCancel () {
+      }
+    })
+  }
+
+  fetch_admin_authority_list = () => {
+    this.props.dispatch(get_admin_authority_list())
+  }
+
   fetch_admin_authority_create = async (values) => {
+
     await this.props.dispatch(create_admin_authority({
       authority_name: values.authority_name,
       authority_type: values.authority_type,
@@ -84,11 +123,31 @@ class AdminAuthority extends React.Component {
     }))
   }
 
-  onSelect = (selectedKeys, info) => {
-    console.log('selected', selectedKeys, info)
+  fetch_admin_authority_delete = async (data) => {
+    let id_arr = await this.traversal_delete(data)
+    await this.props.dispatch(delete_admin_authority({authority_id_arr: id_arr}, () => {
+      this.fetch_admin_authority_list()
+      alert.message_success('删除成功')
+    }))
   }
-  onCheck = (checkedKeys, info) => {
-    console.log('onCheck', checkedKeys, info)
+
+  traversal_delete = (val) => {
+    let _arr = []
+
+    function id_arr (data) {
+      for (let i in data) {
+        _arr.push(data[i].authority_id)
+        if (!isEmpty(data[i].children)) {
+          id_arr(data[i].children)
+        }
+      }
+    }
+
+    _arr.push(val.authority_id)
+    if (!isEmpty(val.children)) {
+      id_arr(val.children)
+    }
+    return _arr
   }
 
   render () {
@@ -96,7 +155,6 @@ class AdminAuthority extends React.Component {
     const {getFieldDecorator} = this.props.form
     const {authority_type_select, authority_parent_title} = this.state
 
-    console.log('admin_authority', admin_authority)
     const customLabel = (data) => {
       return (
         <div className="box-tree-title clearfix">
@@ -104,9 +162,9 @@ class AdminAuthority extends React.Component {
             <span className="title">{data.authority_name} </span>
           </div>
           <div className="pull-right">
-            <Icon type="plus-circle-o" onClick={() => this.showModal(data.authority_id, data.authority_name)}/>
+            <Icon type="plus-circle-o" onClick={() => this.showModal(data)}/>
             <Icon type="edit"/>
-            <Icon type="delete"/>
+            <Icon type="delete" onClick={() => this.handle_delete_authority(data)}/>
           </div>
         </div>
       )
@@ -164,7 +222,7 @@ class AdminAuthority extends React.Component {
         <div className="box-card-body">
           <div className="admin-authority">
             <Button className="admin-authority-create-btn" icon="plus"
-                    onClick={() => this.showModal(0)}
+                    onClick={() => this.showModal()}
                     type="primary">创建权限</Button>
             <Modal
               footer={null}
@@ -216,7 +274,7 @@ class AdminAuthority extends React.Component {
                 </FormItem>
 
                 {
-                  Number(authority_type_select) === 1 ? (
+                  Number(authority_type_select) === 2 ? (
                       <FormItem
                         {...formItemLayout}
                         hasFeedback
@@ -249,8 +307,8 @@ class AdminAuthority extends React.Component {
                   {...formItemLayout}
                   label="排序"
                 >
-                  {getFieldDecorator('authority_sort', {initialValue: 3})(
-                    <InputNumber max={10} min={1}/>
+                  {getFieldDecorator('authority_sort')(
+                    <InputNumber/>
                   )}
                 </FormItem>
                 <FormItem
@@ -279,7 +337,7 @@ class AdminAuthority extends React.Component {
             </Modal>
 
             <Tree
-              defaultExpandedKeys={['0-0-0', '0-0-1']}
+              showLine
             >
               {
                 admin_authority.admin_authority_list.map((item) => {

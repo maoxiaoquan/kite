@@ -17,7 +17,7 @@ module.exports = {
       field: 'role_id'
     },
     authority_id: { //权限ID
-      type: Seq.INTEGER(10),
+      type: Seq.STRING(20),
       comment: '权限ID',
       field: 'authority_id'
     },

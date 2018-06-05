@@ -1,6 +1,7 @@
 const initState = {
   admin_role_list: [],
-  count: ''
+  count: '',
+  current_role_info: {}
 }
 
 function reducer (state = initState, action) {
@@ -9,6 +10,11 @@ function reducer (state = initState, action) {
       return {
         ...state,
         ...action.data
+      }
+    case 'SET_CURRENT_ROLE_INFO':
+      return {
+        ...state,
+        current_role_info: action.data
       }
     default:
       return state

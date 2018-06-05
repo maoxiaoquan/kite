@@ -364,8 +364,7 @@ a:focus {
   }
 }
 
-
-.mr-bm-10{
+.mr-bm-10 {
   margin-bottom: 10px;
 }
 
@@ -376,6 +375,33 @@ a:focus {
 .pull-left {
   float: left !important;
 }
-.box-tree-title{
+
+.box-tree-title {
   width: 100%;
 }
+
+.admin-content-wrapper {
+  .box-card-body {
+    min-height: 700px;
+  }
+}
+
+.ant-btn {
+  &.box-btn-primary {
+    color: #fff;
+    background-color: #108ee9;
+    border-color: #108ee9;
+  }
+
+  &.box-btn-orange {
+    color: #fff;
+    background-color: #fa8c16;
+    border-color: #fa8c16;
+  }
+  &.box-btn-red {
+    color: #fff;
+    background-color: #f5222d;
+    border-color: #f5222d;
+  }
+}
+
