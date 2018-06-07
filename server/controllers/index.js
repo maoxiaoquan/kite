@@ -1,14 +1,14 @@
 const db = require('../db/db')
-const {render} = require('../utils/res_data')
+const { render } = require('../utils/res_data')
 
 class index {
-  constructor (state) {
+  constructor(state) {
     this.state = {
       title: '333'
     }
   }
 
-  async get_index (ctx) {
+  async get_index(ctx) {
 
     let page = 1
     let pageSize = 10

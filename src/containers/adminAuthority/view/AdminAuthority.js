@@ -8,40 +8,40 @@ import './AdminAuthority.scss'
 import {
   create_admin_authority,
   get_admin_authority_list,
-  delete_admin_authority
+  delete_admin_authority,
+  update_admin_authority
 } from '../action/AdminAuthorityAction'
 
+import { delete_admin_role_authority } from '../../adminRole/actions/adminRoleAction';
 const TreeNode = Tree.TreeNode
 const FormItem = Form.Item
 const Option = Select.Option
 const confirm = Modal.confirm
 
 class AdminAuthority extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       visible: false,
       authority_type_select: 1,
       authority_parent_id: '',
-      authority_parent_title: ''
+      authority_parent_name: '',
+      is_create: true,
+      menu_text: ['', '基础菜单', '操作和功能']
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.fetch_admin_authority_list()
   }
 
-  showModal = async (value) => {
-    console.log('value', value)
+  showCreateModal = async (value) => {
     this.props.form.resetFields()
     this.setState({
       visible: true,
       authority_parent_id: value ? value.authority_id : '',
-      authority_parent_title: value ? value.authority_name : ''
+      authority_parent_name: value ? value.authority_name : ''
     })
-    /*this.props.form.setFieldsValue({
-      authority_parent_title: '11'
-    })*/
     if (!value) {
       this.props.form.setFields({
         authority_sort: {
@@ -56,7 +56,22 @@ class AdminAuthority extends React.Component {
         }
       })
     }
+  }
 
+  showEditModal = (value) => {
+    this.setState({
+      visible: true,
+      authority_parent_id: value ? value.authority_parent_id : '',
+      authority_parent_name: value ? value.authority_parent_name : '',
+      authority_type_select: value.authority_type
+    })
+    this.props.form.setFieldsValue({
+      authority_name: value.authority_name,
+      authority_type: this.state.menu_text[value.authority_type],
+      authority_url: value.authority_url,
+      authority_sort: value.authority_sort,
+      authority_description: value.authority_description
+    })
   }
 
   handleCancel = () => {
@@ -79,8 +94,11 @@ class AdminAuthority extends React.Component {
     e.preventDefault()
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
-        await this.fetch_admin_authority_create(values)
-        console.log('Received values of form: ', values)
+        if (this.state.is_create) {
+          await this.fetch_admin_authority_create(values)
+        } else {
+          await this.fetch_admin_authority_update(values)
+        }
       }
     })
   }
@@ -93,10 +111,10 @@ class AdminAuthority extends React.Component {
       okText: 'YES',
       okType: 'danger',
       cancelText: 'No',
-      onOk () {
+      onOk() {
         that.fetch_admin_authority_delete(data)
       },
-      onCancel () {
+      onCancel() {
       }
     })
   }
@@ -105,12 +123,12 @@ class AdminAuthority extends React.Component {
     this.props.dispatch(get_admin_authority_list())
   }
 
-  fetch_admin_authority_create = async (values) => {
-
+  fetch_admin_authority_create = async (values) => {  /* 创建权限 */
     await this.props.dispatch(create_admin_authority({
       authority_name: values.authority_name,
       authority_type: values.authority_type,
       authority_parent_id: this.state.authority_parent_id,
+      authority_parent_name: this.state.authority_parent_name,
       authority_url: values.authority_url,
       authority_sort: values.authority_sort,
       authority_description: values.authority_description
@@ -123,18 +141,37 @@ class AdminAuthority extends React.Component {
     }))
   }
 
+  fetch_admin_authority_update = async (values) => { /* 更新权限 */
+    await this.props.dispatch(update_admin_authority({
+      authority_id: this.props.admin_authority.current_authority_info.authority_id,
+      authority_name: values.authority_name,
+      authority_type: values.authority_type,
+      authority_url: values.authority_url,
+      authority_sort: values.authority_sort,
+      authority_description: values.authority_description
+    }, () => {
+      this.setState({
+        visible: false
+      })
+      this.fetch_admin_authority_list()
+      alert.message_success('权限更新成功')
+    }))
+  }
+
   fetch_admin_authority_delete = async (data) => {
     let id_arr = await this.traversal_delete(data)
-    await this.props.dispatch(delete_admin_authority({authority_id_arr: id_arr}, () => {
-      this.fetch_admin_authority_list()
-      alert.message_success('删除成功')
+    this.props.dispatch(delete_admin_authority({ authority_id_arr: id_arr }, () => {
+      this.props.dispatch(delete_admin_role_authority({ authority_id_arr: id_arr }, () => {
+        this.fetch_admin_authority_list()
+        alert.message_success('删除成功')
+      }))
     }))
   }
 
   traversal_delete = (val) => {
     let _arr = []
 
-    function id_arr (data) {
+    function id_arr(data) {
       for (let i in data) {
         _arr.push(data[i].authority_id)
         if (!isEmpty(data[i].children)) {
@@ -150,10 +187,10 @@ class AdminAuthority extends React.Component {
     return _arr
   }
 
-  render () {
-    const {admin_authority} = this.props
-    const {getFieldDecorator} = this.props.form
-    const {authority_type_select, authority_parent_title} = this.state
+  render() {
+    const { admin_authority } = this.props
+    const { getFieldDecorator } = this.props.form
+    const { authority_type_select, authority_parent_name } = this.state
 
     const customLabel = (data) => {
       return (
@@ -162,9 +199,25 @@ class AdminAuthority extends React.Component {
             <span className="title">{data.authority_name} </span>
           </div>
           <div className="pull-right">
-            <Icon type="plus-circle-o" onClick={() => this.showModal(data)}/>
-            <Icon type="edit"/>
-            <Icon type="delete" onClick={() => this.handle_delete_authority(data)}/>
+            <Icon
+              onClick={() => {
+                this.showCreateModal(data)
+                this.setState({
+                  is_create: true
+                })
+              }}
+              type="plus-circle-o"
+            />
+            <Icon
+              onClick={() => {
+                this.showEditModal(data)
+                this.setState({
+                  is_create: false
+                })
+                this.props.dispatch({ type: 'SET_CURRENT_AUTHORITY_INFO', data: data })
+              }}
+              type="edit" />
+            <Icon onClick={() => this.handle_delete_authority(data)} type="delete" />
           </div>
         </div>
       )
@@ -175,7 +228,7 @@ class AdminAuthority extends React.Component {
         data.length > 0 ? (
           data.map((item) => {
             return (
-              <TreeNode title={customLabel(item)} key={item.authority_id}>
+              <TreeNode key={item.authority_id} title={customLabel(item)}>
                 {TreeNodeTree(item.children)}
               </TreeNode>
             )
@@ -186,12 +239,12 @@ class AdminAuthority extends React.Component {
 
     const formItemLayout = {
       labelCol: {
-        xs: {span: 24},
-        sm: {span: 5}
+        xs: { span: 24 },
+        sm: { span: 5 }
       },
       wrapperCol: {
-        xs: {span: 24},
-        sm: {span: 19}
+        xs: { span: 24 },
+        sm: { span: 19 }
       }
     }
     const tailFormItemLayout = {
@@ -214,7 +267,7 @@ class AdminAuthority extends React.Component {
           <ul className="header-dropdown">
             <li className="dropdown">
               <a className="dropdown-toggle" href="javascript:void(0);">
-                <Icon type="ellipsis"/>
+                <Icon type="ellipsis" />
               </a>
             </li>
           </ul>
@@ -222,24 +275,24 @@ class AdminAuthority extends React.Component {
         <div className="box-card-body">
           <div className="admin-authority">
             <Button className="admin-authority-create-btn" icon="plus"
-                    onClick={() => this.showModal()}
-                    type="primary">创建权限</Button>
+              onClick={() => this.showCreateModal()}
+              type="primary">创建权限</Button>
             <Modal
               footer={null}
               onCancel={this.handleCancel}
-              title="创建权限"
+              title="权限"
               visible={this.state.visible}
             >
 
               <Form className="login-form" onSubmit={this.handleSubmit}>
 
                 {
-                  authority_parent_title ? (
+                  authority_parent_name ? (
                     <FormItem
                       {...formItemLayout}
                       label="父权限名称"
                     >
-                      <Input disabled={true} type="text" value={this.state.authority_parent_title}/>
+                      <Input disabled={true} type="text" value={this.state.authority_parent_name} />
                     </FormItem>
                   ) : ''
                 }
@@ -250,9 +303,9 @@ class AdminAuthority extends React.Component {
                   label="权限名称"
                 >
                   {getFieldDecorator('authority_name', {
-                    rules: [{required: true, message: '请输入权限名称'}]
+                    rules: [{ required: true, message: '请输入权限名称' }]
                   })(
-                    <Input type="text"/>
+                    <Input type="text" />
                   )}
                 </FormItem>
 
@@ -263,7 +316,7 @@ class AdminAuthority extends React.Component {
                 >
                   {getFieldDecorator('authority_type', {
                     rules: [
-                      {required: true, message: '请选择权限类型！'}
+                      { required: true, message: '请选择权限类型！' }
                     ]
                   })(
                     <Select onChange={this.authority_type_Change} placeholder="请选择权限类型！">
@@ -275,18 +328,18 @@ class AdminAuthority extends React.Component {
 
                 {
                   Number(authority_type_select) === 2 ? (
-                      <FormItem
-                        {...formItemLayout}
-                        hasFeedback
-                        label="权限路径"
-                      >
-                        {getFieldDecorator('authority_url', {
-                          rules: [{required: true, message: '请输入权限路径'}]
-                        })(
-                          <Input addonBefore="/api/" placeholder="请输入权限路径" type="text"/>
-                        )}
-                      </FormItem>
-                    )
+                    <FormItem
+                      {...formItemLayout}
+                      hasFeedback
+                      label="权限路径"
+                    >
+                      {getFieldDecorator('authority_url', {
+                        rules: [{ required: true, message: '请输入权限路径' }]
+                      })(
+                        <Input addonBefore="/api" placeholder="请输入权限路径" type="text" />
+                      )}
+                    </FormItem>
+                  )
                     : (
                       <FormItem
                         {...formItemLayout}
@@ -294,9 +347,9 @@ class AdminAuthority extends React.Component {
                         label="权限路径"
                       >
                         {getFieldDecorator('authority_url', {
-                          rules: [{required: true, message: '请输入权限路径'}]
+                          rules: [{ required: true, message: '请输入权限路径' }]
                         })(
-                          <Input placeholder="请输入权限路径" type="text"/>
+                          <Input placeholder="请输入权限路径" type="text" />
                         )}
                       </FormItem>
                     )
@@ -308,7 +361,7 @@ class AdminAuthority extends React.Component {
                   label="排序"
                 >
                   {getFieldDecorator('authority_sort')(
-                    <InputNumber/>
+                    <InputNumber />
                   )}
                 </FormItem>
                 <FormItem
@@ -317,18 +370,20 @@ class AdminAuthority extends React.Component {
                   label="权限描述"
                 >
                   {getFieldDecorator('authority_description', {
-                    rules: [{required: true, message: '请输入权限描述'}]
+                    rules: [{ required: true, message: '请输入权限描述' }]
                   })(
-                    <Input placeholder="请输入权限描述" type="text"/>
+                    <Input placeholder="请输入权限描述" type="text" />
                   )}
                 </FormItem>
                 <FormItem
                   {...tailFormItemLayout}
                 >
-                  <Button type="primary" htmlType="submit" className="login-form-button">
-                    提交
+                  <Button className="login-form-button" htmlType="submit" type="primary">
+                    {
+                      this.state.is_create ? '提交' : '修改'
+                    }
                   </Button>
-                  <Button onClick={this.handleReset} style={{marginLeft: 8}}>
+                  <Button onClick={this.handleReset} style={{ marginLeft: 8 }}>
                     重置
                   </Button>
                 </FormItem>
@@ -342,7 +397,7 @@ class AdminAuthority extends React.Component {
               {
                 admin_authority.admin_authority_list.map((item) => {
                   return (
-                    <TreeNode title={customLabel(item)} key={item.authority_id}>
+                    <TreeNode key={item.authority_id} title={customLabel(item)}>
                       {TreeNodeTree(item.children)}
                     </TreeNode>
                   )
@@ -358,7 +413,7 @@ class AdminAuthority extends React.Component {
 
 const AdminAuthorityForm = Form.create()(AdminAuthority)
 
-export default connect(({admin_authority}) => {
+export default connect(({ admin_authority }) => {
   return {
     admin_authority
   }

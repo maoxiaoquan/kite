@@ -36,3 +36,33 @@ export const set_admin_role_authority = (data, func) => {
     })
   }
 }
+
+
+export const get_admin_role_authority = (data, func) => {
+  return (dispatch) => {
+    http.get('/api/get_admin_role_authority', data).then((res) => {
+      if (func)
+        func(res)
+    })
+  }
+}
+
+/* 删除角色 */
+export const delete_admin_role = (data, func) => {
+  return (dispatch) => {
+    http.post('/api/delete_admin_role', data).then((res) => {
+      if (func)
+        func(res)
+    })
+  }
+}
+
+/* 删除角色权限关联 */
+export const delete_admin_role_authority = (data, func) => {
+  return (dispatch) => {
+    http.post('/api/delete_admin_role_authority', data).then((res) => {
+      if (func)
+        func(res)
+    })
+  }
+}

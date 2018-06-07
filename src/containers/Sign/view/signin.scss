@@ -5,11 +5,12 @@
   height: 100%;
   position: relative;
   .admin-sign-in-view {
-    width: 350px;
+    width: 420px;
     position: absolute;
     top: 50%;
     left: 50%;
     overflow: auto;
+    border-radius: 10px;
     -webkit-box-shadow: 0 0 30px #ccc;
     box-shadow: 0 0 30px #ccc;
     background-color: rgba(34, 44, 54, .9);

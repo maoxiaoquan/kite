@@ -1,32 +1,33 @@
-const {format_data} = require('../utils/res_data')
-const {ad_role, ad_authority, ad_user_role, ad_role_authority} = require('../db/db')
+const { format_data } = require('../utils/res_data')
+const { ad_role, ad_authority, ad_user_role, ad_role_authority } = require('../db/db')
 const tokens = require('../utils/tokens')
 
-function err_mess (message) {
+function err_mess(message) {
   this.message = message
   this.name = 'UserException'
 }
 
 class role_authority {
-  constructor () {
+  constructor() {
     // super()
   }
 
   /**
+   * -----------------------------------角色操作--------------------------------
    * 创建角色
    * @param   {obejct} ctx 上下文对象
    */
-  static async create_admin_role (ctx) {
+  static async create_admin_role(ctx) {
 
     const req_data = ctx.request.body
 
     try {
       if (!req_data.role_name) {
-        throw  new err_mess('请输入角色名!')
+        throw new err_mess('请输入角色名!')
       }
 
       if (!req_data.role_description) {
-        throw  new err_mess('请输入角色介绍!')
+        throw new err_mess('请输入角色介绍!')
       }
 
     } catch (err) {
@@ -73,7 +74,7 @@ class role_authority {
    * 修改角色
    * @param   {obejct} ctx 上下文对象
    */
-  static async edit_admin_role (ctx) {
+  static async edit_admin_role(ctx) {
     const req_data = ctx.request.body
 
     console.log('req_data', req_data)
@@ -82,29 +83,54 @@ class role_authority {
       role_name: req_data.role_name,
       role_description: req_data.role_description
     }, {
-      where: {
-        role_id: req_data.role_id//查询条件
-      }
-    }).then(function (p) {
-      console.log('update.' + JSON.stringify(p))
-      format_data(ctx, {
-        state: 'success',
-        message: '修改角色成功'
+        where: {
+          role_id: req_data.role_id//查询条件
+        }
+      }).then(function (p) {
+        console.log('update.' + JSON.stringify(p))
+        format_data(ctx, {
+          state: 'success',
+          message: '修改角色成功'
+        })
+      }).catch(function (err) {
+        console.log('failed: ' + err)
+        format_data(ctx, {
+          state: 'error',
+          message: '修改角色失败'
+        })
       })
-    }).catch(function (err) {
-      console.log('failed: ' + err)
-      format_data(ctx, {
-        state: 'error',
-        message: '修改角色失败'
+  }
+
+
+  /**
+   * 删除角色
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async delete_admin_role(ctx) {
+
+    const req_data = ctx.request.body
+    await ad_role.destroy({ 'where': { 'role_id': req_data.role_id } })
+      .then(function (p) {
+        console.log('created.' + JSON.stringify(p))
+        format_data(ctx, {
+          state: 'success',
+          message: '删除角色成功'
+        })
+      }).catch(function (err) {
+        console.log('failed: ' + err)
+        format_data(ctx, {
+          state: 'error',
+          message: '删除角色失败'
+        })
       })
-    })
+
   }
 
   /**
    * 获取角色列表
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_admin_role_list (ctx) {
+  static async get_admin_role_list(ctx) {
     const res_data = ctx.query
     let page = res_data.page || 1
     let pageSize = res_data.pageSize || 10
@@ -130,7 +156,7 @@ class role_authority {
    * 获取全部角色
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_admin_role_all (ctx) {
+  static async get_admin_role_all(ctx) {
     let ad_role_findAll = await ad_role.findAll()
     format_data(ctx, {
       state: 'success',
@@ -139,11 +165,14 @@ class role_authority {
     })
   }
 
+
+
   /**
+   * -----------------------------------权限操作--------------------------------
    * 创建权限
    * @param   {obejct} ctx 上下文对象
    */
-  static async create_admin_authority (ctx) {
+  static async create_admin_authority(ctx) {
 
     const req_data = ctx.request.body
     let find_authority_name = await ad_authority.findOne({
@@ -178,6 +207,7 @@ class role_authority {
       authority_name: req_data.authority_name,
       authority_type: req_data.authority_type,
       authority_parent_id: req_data.authority_parent_id,
+      authority_parent_name: req_data.authority_parent_name,
       authority_url: req_data.authority_url,
       authority_sort: req_data.authority_sort,
       authority_description: req_data.authority_description
@@ -201,7 +231,7 @@ class role_authority {
    * 获取权限列表
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_admin_authority_list (ctx) {
+  static async get_admin_authority_list(ctx) {
 
     let ad_authority_findAll = await ad_authority.findAll()
 
@@ -213,14 +243,47 @@ class role_authority {
 
   }
 
+
+
+  /**
+   * 修改权限
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async update_admin_authority(ctx) {
+    const req_data = ctx.request.body
+    await ad_authority.update({
+      authority_name: req_data.authority_name,
+      authority_type: req_data.authority_type,
+      authority_url: req_data.authority_url,
+      authority_sort: req_data.authority_sort,
+      authority_description: req_data.authority_description
+    }, {
+        where: {
+          authority_id: req_data.authority_id//查询条件
+        }
+      }).then(function (p) {
+        console.log('update.' + JSON.stringify(p))
+        format_data(ctx, {
+          state: 'success',
+          message: '更新权限成功'
+        })
+      }).catch(function (err) {
+        console.log('failed: ' + err)
+        format_data(ctx, {
+          state: 'error',
+          message: '更新权限失败'
+        })
+      })
+  }
+
   /**
    * 删除权限列表
    * @param   {obejct} ctx 上下文对象
    */
-  static async delete_admin_authority (ctx) {
+  static async delete_admin_authority(ctx) {
 
     const req_data = ctx.request.body
-    let ad_authority_destroy = await ad_authority.destroy({'where': {'authority_id': {in: req_data.authority_id_arr}}})
+    let ad_authority_destroy = await ad_authority.destroy({ 'where': { 'authority_id': { in: req_data.authority_id_arr } } })
 
     format_data(ctx, {
       state: 'success',
@@ -230,10 +293,11 @@ class role_authority {
   }
 
   /**
+   * -----------------------------------角色权限操作--------------------------------
    * 获取用户角色列表
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_admin_user_role_all (ctx) {
+  static async get_admin_user_role_all(ctx) {
 
     let ad_user_role_findAll = await ad_user_role.findAll()
 
@@ -249,7 +313,7 @@ class role_authority {
    * 创建用户角色关联
    * @param   {obejct} ctx 上下文对象
    */
-  static async create_admin_user_role (ctx) {
+  static async create_admin_user_role(ctx) {
 
     const req_data = ctx.request.body
 
@@ -264,22 +328,22 @@ class role_authority {
       await ad_user_role.update({
         role_id: req_data.role_id
       }, {
-        where: {
-          uid: req_data.uid//查询条件
-        }
-      }).then(function (p) {
-        console.log('created.' + JSON.stringify(p))
-        format_data(ctx, {
-          state: 'success',
-          message: '更新角色成功'
+          where: {
+            uid: req_data.uid//查询条件
+          }
+        }).then(function (p) {
+          console.log('created.' + JSON.stringify(p))
+          format_data(ctx, {
+            state: 'success',
+            message: '更新角色成功'
+          })
+        }).catch(function (err) {
+          console.log('failed: ' + err)
+          format_data(ctx, {
+            state: 'error',
+            message: '更新角色失败'
+          })
         })
-      }).catch(function (err) {
-        console.log('failed: ' + err)
-        format_data(ctx, {
-          state: 'error',
-          message: '更新角色失败'
-        })
-      })
 
     } else {
       await ad_user_role.create({
@@ -302,10 +366,10 @@ class role_authority {
   }
 
   /**
-   * 删除权限列表
+   * 删除用户角色 传uid则是根绝uid删除当前角色用户关联 ，传role_id则是删除当前角色所有用户关联
    * @param   {obejct} ctx 上下文对象
    */
-  static async delete_admin_user_role (ctx) {
+  static async delete_admin_user_role(ctx) {
 
     const req_data = ctx.request.body
 
@@ -317,7 +381,7 @@ class role_authority {
         }
       })
       if (find_role) {
-        let ad_user_role_destroy = await ad_user_role.destroy({'where': {uid: req_data.uid}})
+        let ad_user_role_destroy = await ad_user_role.destroy({ 'where': { uid: req_data.uid } })
         format_data(ctx, {
           state: 'success',
           message: '删除当前用户角色关联成功',
@@ -339,7 +403,7 @@ class role_authority {
         }
       })
       if (find_role) {
-        let ad_role_user_destroy = await ad_user_role.destroy({'where': {role_id: req_data.role_id}})
+        let ad_role_user_destroy = await ad_user_role.destroy({ 'where': { role_id: req_data.role_id } })
         format_data(ctx, {
           state: 'success',
           message: '删除当前角色用户关联成功',
@@ -367,19 +431,23 @@ class role_authority {
    * @param   {obejct} ctx 上下文对象
    */
 
-  static async get_admin_role_authority (ctx) {
-    const req_data = ctx.request.body
-
+  static async get_admin_role_authority(ctx) {
+    const res_data = ctx.query
+    let authority_id_arr = []
     let ad_role_authority_findAll = await ad_role_authority.findAll({
       where: {
-        role_id: req_data.role_id
+        role_id: res_data.role_id
       }
+    })
+
+    ad_role_authority_findAll.map(item => {
+      authority_id_arr.push(item.authority_id)
     })
 
     format_data(ctx, {
       state: 'success',
       message: '获取当前角色所有权限成功',
-      data: ad_role_authority_findAll
+      data: authority_id_arr
     })
   }
 
@@ -388,20 +456,69 @@ class role_authority {
    * @param   {obejct} ctx 上下文对象
    */
 
-  static async set_admin_role_authority (ctx) {
+  static async set_admin_role_authority(ctx) {
     const req_data = ctx.request.body
 
     /*先delele后创建*/
-    await ad_role_authority.destroy({'where': {role_id: req_data.role_id}})
-    req_data.role_authority_list.map(async item => {
-      await ad_role_authority.create({role_id: req_data.role_id, authority_id: item, authority_toggle: true})
-    })
+    await ad_role_authority.destroy({ 'where': { role_id: req_data.role_id } })
+
+    for (let i in req_data.role_authority_list) {
+      await ad_role_authority.create({ role_id: req_data.role_id, authority_id: req_data.role_authority_list[i], authority_toggle: true })
+    }
 
     format_data(ctx, {
       state: 'success',
       message: '修改成功',
       data: ''
     })
+  }
+
+  /**
+   * 删除角色权限关联 传role_id则是根绝role_id删除当前角色权限关联 ，传authority_id则是删除当前权限所有角色关联
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async delete_admin_role_authority(ctx) {
+
+    const req_data = ctx.request.body
+
+    if (req_data.role_id) { // 根据用户role_id删除角色权限关联
+
+      let find_role_authority = await ad_role_authority.findOne({
+        where: {
+          role_id: req_data.role_id
+        }
+      })
+      if (find_role_authority) {
+        let ad_role_authority_destroy = await ad_role_authority.destroy({ 'where': { role_id: req_data.role_id } })
+        format_data(ctx, {
+          state: 'success',
+          message: '删除当前角色权限关联成功',
+          data: ad_role_authority_destroy
+        })
+      } else {
+        format_data(ctx, {
+          state: 'success',
+          message: '当前角色无任何权限',
+          data: ''
+        })
+      }
+
+    } else if (req_data.authority_id_arr) { // 根据权限authority_id删除权限角色关联
+
+      let ad_authority_role_destroy = await ad_role_authority.destroy({ 'where': { 'authority_id': { in: req_data.authority_id_arr } } })
+      format_data(ctx, {
+        state: 'success',
+        message: '删除当前权限角色关联成功',
+        data: ad_authority_role_destroy
+      })
+
+    } else {
+      format_data(ctx, {
+        state: 'success',
+        message: '当前权限无任何角色,当前角色无任何权限关联',
+        data: ''
+      })
+    }
   }
 
 }

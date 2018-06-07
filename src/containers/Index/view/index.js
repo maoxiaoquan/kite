@@ -66,7 +66,7 @@ class Index extends React.Component {
         </div>
         <div className="box-card-body">
           <p>{this.props.match.url}</p>
-          <Table dataSource={dataSource} columns={columns} />
+          <Table columns={columns} dataSource={dataSource}  />
         </div>
       </div>
     );

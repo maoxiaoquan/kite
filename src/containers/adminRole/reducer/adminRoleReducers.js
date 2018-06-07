@@ -1,10 +1,11 @@
 const initState = {
   admin_role_list: [],
+  role_authority_list_all: [],
   count: '',
   current_role_info: {}
 }
 
-function reducer (state = initState, action) {
+function reducer(state = initState, action) {
   switch (action.type) {
     case 'GET_ADMIN_ROLE_LIST':
       return {
@@ -15,6 +16,12 @@ function reducer (state = initState, action) {
       return {
         ...state,
         current_role_info: action.data
+      }
+    case 'SET_ROLE_AUTHORITY_LIST_ALL':
+      console.log('action.data', action.data)
+      return {
+        ...state,
+        role_authority_list_all: action.data
       }
     default:
       return state

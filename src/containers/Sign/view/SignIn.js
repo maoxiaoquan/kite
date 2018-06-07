@@ -34,8 +34,8 @@ class NormalLoginForm extends React.Component {
     })
   }
 
-  render () {
-    const {getFieldDecorator} = this.props.form
+  render() {
+    const { getFieldDecorator } = this.props.form
     return (
       <div id="admin-sign-in">
         <div className="admin-sign-in-view">
@@ -51,24 +51,24 @@ class NormalLoginForm extends React.Component {
           <h3 className="title">登录</h3>
 
           <Form className="from-view"
-                onSubmit={this.handleSubmit}
+            onSubmit={this.handleSubmit}
           >
             <FormItem>
               {getFieldDecorator('account', {
-                rules: [{required: true, message: '请输入你的账户！'}]
+                rules: [{ required: true, message: '请输入你的账户！' }]
               })(
                 <Input placeholder="账户"
-                       prefix={<Icon type="user"/>}
+                  prefix={<Icon type="user" />}
                 />
               )}
             </FormItem>
             <FormItem>
               {getFieldDecorator('password', {
-                rules: [{required: true, message: '请输入密码！'}]
+                rules: [{ required: true, message: '请输入密码！' }]
               })(
                 <Input placeholder="密码"
-                       prefix={<Icon type="lock"/>}
-                       type="password"
+                  prefix={<Icon type="lock" />}
+                  type="password"
                 />
               )}
             </FormItem>
@@ -80,11 +80,11 @@ class NormalLoginForm extends React.Component {
                 <Checkbox><span className="font-co1">记住密码，</span></Checkbox>
               )}
               <a className="login-form-forgot"
-                 href=""
+                href=""
               >找回密码</a>
               <Button className="sign-in-btn"
-                      htmlType="submit"
-                      type="primary"
+                htmlType="submit"
+                type="primary"
               >
                 登录
               </Button>

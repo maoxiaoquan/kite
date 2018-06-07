@@ -9,7 +9,7 @@ export const create_admin_authority = (data, callback) => {
   }
 }
 
-function filterArray (result, pid) {
+function filterArray(result, pid) {
   let _array = []
   for (let i in result) {
     if (result[i].authority_parent_id === pid) {
@@ -25,7 +25,7 @@ export const get_admin_authority_list = (data, callback) => {
     http.get('/api/get_admin_authority_list', data).then((res) => {
       if (callback)
         callback(filterArray(res, ''))
-      return dispatch({type: 'GET_ADMIN_AUTHORITY_LIST', data: filterArray(res, '')})
+      return dispatch({ type: 'GET_ADMIN_AUTHORITY_LIST', data: res })
     })
   }
 }
@@ -38,4 +38,15 @@ export const delete_admin_authority = (data, callback) => {
     })
   }
 }
+
+
+export const update_admin_authority = (data, callback) => {
+  return (dispatch) => {
+    http.post('/api/update_admin_authority', data).then((res) => {
+      if (callback)
+        callback(res)
+    })
+  }
+}
+
 

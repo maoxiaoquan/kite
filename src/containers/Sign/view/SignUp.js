@@ -39,7 +39,7 @@ class RegistrationForm extends React.Component {
   }
   handleConfirmBlur = (e) => {
     const value = e.target.value
-    this.setState({confirmDirty: this.state.confirmDirty || !!value})
+    this.setState({ confirmDirty: this.state.confirmDirty || !!value })
   }
   compareToFirstPassword = (rule, value, callback) => {
     const form = this.props.form
@@ -52,18 +52,18 @@ class RegistrationForm extends React.Component {
   validateToNextPassword = (rule, value, callback) => {
     const form = this.props.form
     if (value && this.state.confirmDirty) {
-      form.validateFields(['confirm'], {force: true})
+      form.validateFields(['confirm'], { force: true })
     }
     callback()
   }
 
-  render () {
-    const {getFieldDecorator} = this.props.form
+  render() {
+    const { getFieldDecorator } = this.props.form
 
     const prefixSelector = getFieldDecorator('prefix', {
       initialValue: '86'
     })(
-      <Select style={{width: 70}}>
+      <Select style={{ width: 70 }}>
         <Option value="86">+86</Option>
         <Option value="87">+87</Option>
       </Select>
@@ -90,17 +90,17 @@ class RegistrationForm extends React.Component {
 
             <FormItem>
               {getFieldDecorator('account', {
-                rules: [{required: true, message: '请输入账户！', whitespace: true}]
+                rules: [{ required: true, message: '请输入账户！', whitespace: true }]
               })(
-                <Input placeholder="账户"/>
+                <Input placeholder="账户" />
               )}
             </FormItem>
 
             <FormItem>
               {getFieldDecorator('nickname', {
-                rules: [{required: true, message: '请输入昵称！', whitespace: true}]
+                rules: [{ required: true, message: '请输入昵称！', whitespace: true }]
               })(
-                <Input placeholder="昵称"/>
+                <Input placeholder="昵称" />
               )}
             </FormItem>
 
@@ -113,7 +113,7 @@ class RegistrationForm extends React.Component {
                 }]
               })(
                 <Input placeholder="密码"
-                       type="password"
+                  type="password"
                 />
               )}
             </FormItem>
@@ -127,8 +127,8 @@ class RegistrationForm extends React.Component {
                 }]
               })(
                 <Input onBlur={this.handleConfirmBlur}
-                       placeholder="重复密码"
-                       type="password"
+                  placeholder="重复密码"
+                  type="password"
                 />
               )}
             </FormItem>
@@ -141,16 +141,15 @@ class RegistrationForm extends React.Component {
                   required: true, message: '请输入您的电子邮件！'
                 }]
               })(
-                <Input placeholder="邮箱"/>
+                <Input placeholder="邮箱" />
               )}
             </FormItem>
 
-            <FormItem
-            >
+            <FormItem>
               {getFieldDecorator('phone', {
-                rules: [{required: true, message: '请输入你的手机号码！'}],
+                rules: [{ required: true, message: '请输入你的手机号码！' }]
               })(
-                <Input addonBefore={prefixSelector} style={{width: '100%'}}/>
+                <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
               )}
             </FormItem>
 

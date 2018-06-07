@@ -1,43 +1,39 @@
-const {format_login, format_data} = require('../utils/res_data')
+const { format_login, format_data } = require('../utils/res_data')
 const db = require('../db/db')
 const tokens = require('../utils/tokens')
-const {checkUserName, checkPwd, checkEmail} = require('../utils/validators')
-const {tools: {encrypt}} = require('../utils')
+const { checkUserName, checkPwd, checkEmail } = require('../utils/validators')
+const { tools: { encrypt } } = require('../utils')
 const config = require('../../config')
 const moment = require('moment')
+const { ad_user_role } = require('../db/db')
 
-function err_mess (message) {
+function err_mess(message) {
   this.message = message
   this.name = 'UserException'
 }
 
 class ad_users {
-  constructor () {
+  constructor() {
     // super()
   }
-
   /**
    * 登录操作
    * @param  {obejct} ctx 上下文对象
    */
-  static async ad_sign_in (ctx) {
+  static async ad_sign_in(ctx) {
     let req_data = ctx.request.body
 
     try {
       if (!req_data.account) {
-        throw  new err_mess('请输入账户!')
+        throw new err_mess('请输入账户!')
       }
-
       if (!checkUserName(req_data.account)) {
-        throw  new err_mess('5-12个英文字符!')
+        throw new err_mess('5-12个英文字符!')
       }
-
       if (!req_data.password) {
-        throw  new err_mess('请输入密码!')
+        throw new err_mess('请输入密码!')
       }
-
     } catch (err) {
-
       format_login(ctx, {
         state: 'error',
         message: err.message
@@ -45,51 +41,32 @@ class ad_users {
       return false
     }
 
-    await db.ad_user.findOne({
-      where: {
-        account: req_data.account
+    let ad_user_findOne = await db.ad_user.findOne({ where: { account: req_data.account } })
+    try {
+      if (!ad_user_findOne) {
+        throw new err_mess('用户不存在!')
       }
-    }).then(function (db_data) {
-      if (db_data) {
-
-        if (encrypt(req_data.password, config.encrypt_key) === db_data.password) {
-
-          if (db_data.enable) {
-            let datas = {account: req_data.account}
-            let token = tokens.setToken('cxh', 3000, datas)
-
-            format_login(ctx, {
-              state: 'success',
-              message: '登录成功',
-              token
-            })
-
-          } else {
-            format_login(ctx, {
-              state: 'error',
-              message: '您已被限制登录'
-            }, false)
-          }
-
-        } else {
-
-          format_login(ctx, {
-            state: 'error',
-            message: '密码错误'
-          }, false)
-
-        }
-      } else {
-
-        format_login(ctx, {
-          state: 'error',
-          message: '用户不存在'
-        }, false)
-
+      if (!(encrypt(req_data.password, config.encrypt_key) === ad_user_findOne.password)) {
+        throw new err_mess('密码错误!')
       }
+      if (!ad_user_findOne.enable) {
+        throw new err_mess('您已被限制登录!')
+      }
+    } catch (err) {
+      format_login(ctx, {
+        state: 'error',
+        message: err.message
+      }, false)
+      return false
+    }
 
-    }).catch(function (err) {
-      console.log('failed: ' + err)
+    let find_user_role = await ad_user_role.findOne({ where: { uid: ad_user_findOne.uid } })
+    let datas = { account: req_data.account, role_id: find_user_role ? find_user_role.role_id : '' }
+    let token = tokens.setToken('cxh', 3000, datas)
+    format_login(ctx, {
+      state: 'success',
+      message: '登录成功',
+      token
     })
 
   }
@@ -98,32 +75,28 @@ class ad_users {
    * 注册操作
    * @param   {obejct} ctx 上下文对象
    */
-  static async create_admin_user (ctx) {
+  static async create_admin_user(ctx) {
     const req_data = ctx.request.body
 
     try {
       if (!req_data.account) {
-        throw  new err_mess('请输入账户!')
+        throw new err_mess('请输入账户!')
       }
       if (!req_data.nickname) {
-        throw  new err_mess('请输入昵称!')
+        throw new err_mess('请输入昵称!')
       }
       if (!checkUserName(req_data.account)) {
-        throw  new err_mess('账户须5-12个英文字符!')
+        throw new err_mess('账户须5-12个英文字符!')
       }
-
       if (!req_data.password) {
-        throw  new err_mess('请输入密码!')
+        throw new err_mess('请输入密码!')
       }
-
       if (!checkPwd(req_data.password)) {
-        throw  new err_mess('密码输入有误!')
+        throw new err_mess('密码输入有误!')
       }
-
       if (!checkEmail(req_data.email)) {
-        throw  new err_mess('邮箱输入有误!')
+        throw new err_mess('邮箱输入有误!')
       }
-
     } catch (err) {
       format_data(ctx, {
         state: 'error',
@@ -145,7 +118,6 @@ class ad_users {
       }, false)
       return false
     }
-    console.log('req_data', req_data)
 
     await db.ad_user.create({
       account: req_data.account,
@@ -175,7 +147,7 @@ class ad_users {
    * 更新管理员用户
    * @param   {obejct} ctx 上下文对象
    */
-  static async edit_admin_user (ctx) {
+  static async edit_admin_user(ctx) {
     const req_data = ctx.request.body
 
     await db.ad_user.update({
@@ -186,29 +158,29 @@ class ad_users {
       phone: req_data.phone,
       enable: req_data.enable || false
     }, {
-      where: {
-        uid: req_data.uid//查询条件
-      }
-    }).then(function (p) {
-      console.log('created.' + JSON.stringify(p))
-      format_data(ctx, {
-        state: 'success',
-        message: '更新成功'
+        where: {
+          uid: req_data.uid//查询条件
+        }
+      }).then(function (p) {
+        console.log('created.' + JSON.stringify(p))
+        format_data(ctx, {
+          state: 'success',
+          message: '更新成功'
+        })
+      }).catch(function (err) {
+        console.log('failed: ' + err)
+        format_data(ctx, {
+          state: 'error',
+          message: '更新失败'
+        })
       })
-    }).catch(function (err) {
-      console.log('failed: ' + err)
-      format_data(ctx, {
-        state: 'error',
-        message: '更新失败'
-      })
-    })
   }
 
   /**
    * 获取用户列表操作
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_admin_user_list (ctx) {
+  static async get_admin_user_list(ctx) {
     const res_data = ctx.query
     let page = res_data.page || 1
     let pageSize = res_data.pageSize || 10
@@ -235,10 +207,10 @@ class ad_users {
    * 删除用户
    * @param   {obejct} ctx 上下文对象
    */
-  static async delete_admin_user (ctx) {
+  static async delete_admin_user(ctx) {
 
     const req_data = ctx.request.body
-    await db.ad_user.destroy({'where': {'uid': req_data.uid}})
+    await db.ad_user.destroy({ 'where': { 'uid': req_data.uid } })
       .then(function (p) {
         console.log('created.' + JSON.stringify(p))
         format_data(ctx, {

@@ -11,11 +11,11 @@ const http = axios.create({
   }
 })
 http.interceptors.request.use(function (config) {
+  if (localStorage.box_tokens) {
+    config.headers['x-access-token'] = localStorage.box_tokens
+  }
   if (config.method === 'post') {
     const data = config.data || {}
-    if (localStorage.box_tokens) {
-      config.headers['x-access-token'] = localStorage.box_tokens
-    }
     config.data = qs.stringify(data)
   }
   return config
