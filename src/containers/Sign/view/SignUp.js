@@ -27,12 +27,8 @@ class RegistrationForm extends React.Component {
       if (!err) {
         console.log('Received values of form: ', values)
         this.props.dispatch(sign_up(values, (res) => {
-          if (res.state === 'success') {
-            alert.message_success(res.message)
-            this.props.history.push('/sign_in')
-          } else {
-            alert.message_error(res.message)
-          }
+          alert.message_success(res.message)
+          this.props.history.push('/sign_in')
         }))
       }
     })

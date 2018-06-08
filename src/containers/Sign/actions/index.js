@@ -12,7 +12,7 @@ export const sign_in = (data, func) => {
 
 export const sign_up = (data, func) => {
   return () => {
-    axios.post('/api/sign_up', data).then((res) => {
+    http.post('/api/sign_up', data).then((res) => {
       console.log('res', res)
       if (func)
         func(res.data)

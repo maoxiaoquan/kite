@@ -1,10 +1,18 @@
 const { format_login, format_data } = require('../utils/res_data')
-const db = require('../db/db')
 const tokens = require('../utils/tokens')
 const { checkUserName, checkPwd, checkEmail } = require('../utils/validators')
 const { tools: { encrypt } } = require('../utils')
 const config = require('../../config')
-const moment = require('moment')
+const { sequelize } = require('../db/db')
+const {
+  page_find_admin_user_model,
+  delete_admin_user_model,
+  update_admin_user_model,
+  create_admin_user_model,
+  findone_admin_user_model,
+  findone_admin_user_role_model,
+  delete_admin_user_role_model
+} = require('../models')
 const { ad_user_role } = require('../db/db')
 
 function err_mess(message) {
@@ -12,7 +20,7 @@ function err_mess(message) {
   this.name = 'UserException'
 }
 
-class ad_users {
+class Ad_users {
   constructor() {
     // super()
   }
@@ -21,37 +29,29 @@ class ad_users {
    * @param  {obejct} ctx 上下文对象
    */
   static async ad_sign_in(ctx) {
-    let req_data = ctx.request.body
-
+    let { account, password, uid } = ctx.request.body
+    let ad_user_findOne = {}
     try {
-      if (!req_data.account) {
+      if (!account) {
         throw new err_mess('请输入账户!')
       }
-      if (!checkUserName(req_data.account)) {
+      if (!checkUserName(account)) {
         throw new err_mess('5-12个英文字符!')
       }
-      if (!req_data.password) {
+      if (!password) {
         throw new err_mess('请输入密码!')
       }
-    } catch (err) {
-      format_login(ctx, {
-        state: 'error',
-        message: err.message
-      }, false)
-      return false
-    }
-
-    let ad_user_findOne = await db.ad_user.findOne({ where: { account: req_data.account } })
-    try {
+      ad_user_findOne = await findone_admin_user_model({ account })
       if (!ad_user_findOne) {
         throw new err_mess('用户不存在!')
       }
-      if (!(encrypt(req_data.password, config.encrypt_key) === ad_user_findOne.password)) {
+      if (!(encrypt(password, config.encrypt_key) === ad_user_findOne.password)) {
         throw new err_mess('密码错误!')
       }
       if (!ad_user_findOne.enable) {
         throw new err_mess('您已被限制登录!')
       }
+
     } catch (err) {
       format_login(ctx, {
         state: 'error',
@@ -61,7 +61,7 @@ class ad_users {
     }
 
     let find_user_role = await ad_user_role.findOne({ where: { uid: ad_user_findOne.uid } })
-    let datas = { account: req_data.account, role_id: find_user_role ? find_user_role.role_id : '' }
+    let datas = { account, role_id: find_user_role ? find_user_role.role_id : '' }
     let token = tokens.setToken('cxh', 3000, datas)
     format_login(ctx, {
       state: 'success',
@@ -97,45 +97,26 @@ class ad_users {
       if (!checkEmail(req_data.email)) {
         throw new err_mess('邮箱输入有误!')
       }
+      let ad_user_findOne = await findone_admin_user_model({ account: req_data.account })
+
+      if (ad_user_findOne) {
+        throw new err_mess('账户已存在!')
+      }
+
     } catch (err) {
       format_data(ctx, {
         state: 'error',
         message: err.message
-      }, false)
+      })
       return false
     }
 
-    let ad_user_findOne = await db.ad_user.findOne({
-      where: {
-        account: req_data.account
-      }
-    })
-
-    if (ad_user_findOne) {
-      format_data(ctx, {
-        state: 'error',
-        message: '账户已存在'
-      }, false)
-      return false
-    }
-
-    await db.ad_user.create({
-      account: req_data.account,
-      nickname: req_data.nickname,
-      password: encrypt(req_data.password, config.encrypt_key),
-      email: req_data.email,
-      phone: req_data.phone,
-      reg_time: moment().utc().utcOffset(+8).format('X'),
-      reg_ip: ctx.request.ip,
-      enable: req_data.enable || false
-    }).then(function (p) {
-      console.log('created.' + JSON.stringify(p))
+    await create_admin_user_model({ ...req_data, ip: ctx.request.ip }).then(function (p) {
       format_data(ctx, {
         state: 'success',
         message: '注册成功'
       })
     }).catch(function (err) {
-      console.log('failed: ' + err)
       format_data(ctx, {
         state: 'error',
         message: '注册失败'
@@ -148,32 +129,18 @@ class ad_users {
    * @param   {obejct} ctx 上下文对象
    */
   static async edit_admin_user(ctx) {
-    const req_data = ctx.request.body
-
-    await db.ad_user.update({
-      account: req_data.account,
-      nickname: req_data.nickname,
-      password: encrypt(req_data.password, config.encrypt_key),
-      email: req_data.email,
-      phone: req_data.phone,
-      enable: req_data.enable || false
-    }, {
-        where: {
-          uid: req_data.uid//查询条件
-        }
-      }).then(function (p) {
-        console.log('created.' + JSON.stringify(p))
-        format_data(ctx, {
-          state: 'success',
-          message: '更新成功'
-        })
-      }).catch(function (err) {
-        console.log('failed: ' + err)
-        format_data(ctx, {
-          state: 'error',
-          message: '更新失败'
-        })
+    const res_data = ctx.request.body
+    await update_admin_user_model(res_data).then(function (p) {
+      format_data(ctx, {
+        state: 'success',
+        message: '更新成功'
       })
+    }).catch(function (err) {
+      format_data(ctx, {
+        state: 'error',
+        message: '更新失败'
+      })
+    })
   }
 
   /**
@@ -181,23 +148,14 @@ class ad_users {
    * @param   {obejct} ctx 上下文对象
    */
   static async get_admin_user_list(ctx) {
-    const res_data = ctx.query
-    let page = res_data.page || 1
-    let pageSize = res_data.pageSize || 10
-
-    let ad_user_findAndCountAll = await db.ad_user.findAndCountAll({
-      attributes: ['uid', 'account', 'nickname', 'email', 'phone', 'reg_time', 'last_sign_time', 'reg_ip', 'enable'],
-      where: '',//为空，获取全部，也可以自己添加条件
-      offset: (page - 1) * Number(pageSize),//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-      limit: Number(pageSize)//每页限制返回的数据条数
-    })
-
+    const { page, pageSize } = ctx.query
+    let { count, rows } = await page_find_admin_user_model(page, pageSize)
     format_data(ctx, {
       state: 'success',
       message: '返回成功',
       data: {
-        count: ad_user_findAndCountAll.count,
-        admin_user_list: ad_user_findAndCountAll.rows
+        count: count,
+        admin_user_list: rows
       }
     })
 
@@ -206,27 +164,54 @@ class ad_users {
   /**
    * 删除用户
    * @param   {obejct} ctx 上下文对象
+   * 删除用户先判断管理员角色表中是否有关联，
+   * 无关联则直接管理员删除，有关联则开启事务同时删除管理员角色关联表中关联
+   * 管理员对角色是一多一的关系
    */
   static async delete_admin_user(ctx) {
 
-    const req_data = ctx.request.body
-    await db.ad_user.destroy({ 'where': { 'uid': req_data.uid } })
-      .then(function (p) {
-        console.log('created.' + JSON.stringify(p))
+    const { uid } = ctx.request.body
+
+    let find_admin_user_role = await findone_admin_user_role_model({ uid })
+
+    if (!find_admin_user_role) { /* 无关联 */
+      await delete_admin_user_model({ uid })
+        .then(function (p) {
+          format_data(ctx, {
+            state: 'success',
+            message: '删除管理员用户成功'
+          })
+        }).catch(function (err) {
+          format_data(ctx, {
+            state: 'error',
+            message: '删除管理员用户失败'
+          })
+        })
+    } else {   /* 有关联 */
+      // 创建事务
+      await sequelize.transaction(function (transaction) {
+        // 在事务中执行操作
+        return delete_admin_user_model({ uid }, { transaction })
+          .then(function (delete_admin_user) {
+            return delete_admin_user_role_model({ uid }, { transaction })
+          });
+
+      }).then(function (results) {
         format_data(ctx, {
           state: 'success',
-          message: '删除管理员用户成功'
+          message: '删除管理员用户成功,同时删除管理员角色关联'
         })
       }).catch(function (err) {
-        console.log('failed: ' + err)
         format_data(ctx, {
           state: 'error',
-          message: '删除管理员用户失败'
+          message: '删除管理员用户失败,同时回滚所有操作'
         })
-      })
+      });
+
+    }
 
   }
 
 }
 
-module.exports = ad_users
+module.exports = Ad_users

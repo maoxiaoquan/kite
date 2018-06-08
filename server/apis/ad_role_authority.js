@@ -1,6 +1,20 @@
 const { format_data } = require('../utils/res_data')
-const { ad_role, ad_authority, ad_user_role, ad_role_authority } = require('../db/db')
-const tokens = require('../utils/tokens')
+const {
+  sequelize,
+  ad_authority,
+  ad_user_role, ad_role_authority } = require('../db/db')
+const {
+  findone_admin_role_model,
+  create_admin_role_model,
+  update_admin_role_model,
+  delete_admin_role_model,
+  page_find_admin_role_model,
+  findAll_admin_role_model,
+  findone_admin_authority_model,
+  delete_admin_authority_model,
+  find_admin_role_authority_model,
+  delete_admin_role_authority_model
+} = require('../models')
 
 function err_mess(message) {
   this.message = message
@@ -18,20 +32,19 @@ class role_authority {
    * @param   {obejct} ctx 上下文对象
    */
   static async create_admin_role(ctx) {
-
-    const req_data = ctx.request.body
-
+    const { role_name, role_description } = ctx.request.body
     try {
-      if (!req_data.role_name) {
+      if (!role_name) {
         throw new err_mess('请输入角色名!')
       }
-
-      if (!req_data.role_description) {
+      if (!role_description) {
         throw new err_mess('请输入角色介绍!')
       }
-
+      let find_role = await findone_admin_role_model({ role_name })
+      if (find_role) {
+        throw new err_mess('角色已存在!')
+      }
     } catch (err) {
-
       format_data(ctx, {
         state: 'error',
         message: err.message
@@ -39,35 +52,18 @@ class role_authority {
       return false
     }
 
-    let find_role = await ad_role.findOne({
-      where: {
-        role_name: req_data.role_name
-      }
-    })
-
-    if (find_role) {
-      format_data(ctx, {
-        state: 'error',
-        message: '角色已存在'
+    await create_admin_role_model({ role_name, role_description }).
+      then(function (p) {
+        format_data(ctx, {
+          state: 'success',
+          message: '角色创建成功'
+        })
+      }).catch(function (err) {
+        format_data(ctx, {
+          state: 'error',
+          message: '角色创建出错'
+        })
       })
-    }
-
-    await ad_role.create({
-      role_name: req_data.role_name,
-      role_description: req_data.role_description
-    }).then(function (p) {
-      console.log('created.' + JSON.stringify(p))
-      format_data(ctx, {
-        state: 'success',
-        message: '角色创建成功'
-      })
-    }).catch(function (err) {
-      console.log('failed: ' + err)
-      format_data(ctx, {
-        state: 'error',
-        message: '角色创建出错'
-      })
-    })
   }
 
   /**
@@ -76,24 +72,13 @@ class role_authority {
    */
   static async edit_admin_role(ctx) {
     const req_data = ctx.request.body
-
-    console.log('req_data', req_data)
-
-    await ad_role.update({
-      role_name: req_data.role_name,
-      role_description: req_data.role_description
-    }, {
-        where: {
-          role_id: req_data.role_id//查询条件
-        }
-      }).then(function (p) {
-        console.log('update.' + JSON.stringify(p))
+    await update_admin_role_model({ ...req_data })
+      .then(function (p) {
         format_data(ctx, {
           state: 'success',
           message: '修改角色成功'
         })
       }).catch(function (err) {
-        console.log('failed: ' + err)
         format_data(ctx, {
           state: 'error',
           message: '修改角色失败'
@@ -101,23 +86,20 @@ class role_authority {
       })
   }
 
-
   /**
    * 删除角色
    * @param   {obejct} ctx 上下文对象
    */
   static async delete_admin_role(ctx) {
 
-    const req_data = ctx.request.body
-    await ad_role.destroy({ 'where': { 'role_id': req_data.role_id } })
+    const { role_id } = ctx.request.body
+    await delete_admin_role_model({ role_id })
       .then(function (p) {
-        console.log('created.' + JSON.stringify(p))
         format_data(ctx, {
           state: 'success',
           message: '删除角色成功'
         })
       }).catch(function (err) {
-        console.log('failed: ' + err)
         format_data(ctx, {
           state: 'error',
           message: '删除角色失败'
@@ -131,23 +113,14 @@ class role_authority {
    * @param   {obejct} ctx 上下文对象
    */
   static async get_admin_role_list(ctx) {
-    const res_data = ctx.query
-    let page = res_data.page || 1
-    let pageSize = res_data.pageSize || 10
-
-    let ad_role_findAndCountAll = await ad_role.findAndCountAll({
-      attributes: ['role_id', 'role_name', 'role_description'],
-      where: '',//为空，获取全部，也可以自己添加条件
-      offset: (page - 1) * Number(pageSize),//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-      limit: Number(pageSize)//每页限制返回的数据条数
-    })
-
+    const { page, pageSize } = ctx.query
+    let { count, rows } = await page_find_admin_role_model(page, pageSize)
     format_data(ctx, {
       state: 'success',
       message: '返回成功',
       data: {
-        count: ad_role_findAndCountAll.count,
-        admin_role_list: ad_role_findAndCountAll.rows
+        count: count,
+        admin_role_list: rows
       }
     })
   }
@@ -157,15 +130,13 @@ class role_authority {
    * @param   {obejct} ctx 上下文对象
    */
   static async get_admin_role_all(ctx) {
-    let ad_role_findAll = await ad_role.findAll()
+    let ad_role_findAll = await findAll_admin_role_model()
     format_data(ctx, {
       state: 'success',
       message: '返回成功',
       data: ad_role_findAll
     })
   }
-
-
 
   /**
    * -----------------------------------权限操作--------------------------------
@@ -175,43 +146,25 @@ class role_authority {
   static async create_admin_authority(ctx) {
 
     const req_data = ctx.request.body
-    let find_authority_name = await ad_authority.findOne({
-      where: {
-        authority_name: req_data.authority_name
-      }
-    })
 
-    if (find_authority_name) {
+    try {
+      let find_authority_name = await findone_admin_authority_model({ authority_name: req_data.authority_name })
+      if (find_authority_name) {
+        throw new err_mess('权限名已存在!')
+      }
+      let find_authority_url = await findone_admin_authority_model({ authority_url: req_data.authority_url })
+      if (find_authority_url) {
+        throw new err_mess('权限路径已存在!')
+      }
+    } catch (err) {
       format_data(ctx, {
         state: 'error',
-        message: '权限名已存在'
+        message: err.message
       })
       return false
     }
 
-    let find_authority_url = await ad_authority.findOne({
-      where: {
-        authority_url: req_data.authority_url
-      }
-    })
-
-    if (find_authority_url) {
-      format_data(ctx, {
-        state: 'error',
-        message: '权限路径已存在'
-      })
-      return false
-    }
-
-    await ad_authority.create({
-      authority_name: req_data.authority_name,
-      authority_type: req_data.authority_type,
-      authority_parent_id: req_data.authority_parent_id,
-      authority_parent_name: req_data.authority_parent_name,
-      authority_url: req_data.authority_url,
-      authority_sort: req_data.authority_sort,
-      authority_description: req_data.authority_description
-    }).then(function (p) {
+    await ad_authority.create({ ...req_data }).then(function (p) {
       console.log('created.' + JSON.stringify(p))
       format_data(ctx, {
         state: 'success',
@@ -282,14 +235,41 @@ class role_authority {
    */
   static async delete_admin_authority(ctx) {
 
-    const req_data = ctx.request.body
-    let ad_authority_destroy = await ad_authority.destroy({ 'where': { 'authority_id': { in: req_data.authority_id_arr } } })
+    const { authority_id_arr } = ctx.request.body
+    /*  let ad_authority_destroy = await ad_authority.destroy({ 'where': { 'authority_id': { in: req_data.authority_id_arr } } }) */
 
-    format_data(ctx, {
-      state: 'success',
-      message: '删除成功',
-      data: ad_authority_destroy
-    })
+    let find_admin_role_authority = await find_admin_role_authority_model(authority_id_arr)
+
+    console.log('find_admin_role_authority', find_admin_role_authority)
+
+    if (find_admin_role_authority) {/* 如果存在则走事务删除所有与之关联的角色权限表的关联 */
+      // 创建事务
+      await sequelize.transaction(function (transaction) {
+        // 在事务中执行操作
+        return delete_admin_authority_model(authority_id_arr, { transaction }) /* 先删除权限表权限 */
+          .then(function (delete_admin_authority) {
+            return delete_admin_role_authority_model(authority_id_arr, { transaction })/* 再删除权限角色表权限角色关联 */
+          });
+
+      }).then(function (results) {
+        format_data(ctx, {
+          state: 'success',
+          message: '删除权限树,同时删除权限角色关联'
+        })
+      }).catch(function (err) {
+        format_data(ctx, {
+          state: 'error',
+          message: '删除权限树成功,同时回滚所有操作'
+        })
+      });
+
+    } else {
+      await delete_admin_authority_model(authority_id_arr)
+      format_data(ctx, {
+        state: 'success',
+        message: '删除权限树成功'
+      })
+    }
   }
 
   /**
@@ -474,7 +454,7 @@ class role_authority {
   }
 
   /**
-   * 删除角色权限关联 传role_id则是根绝role_id删除当前角色权限关联 ，传authority_id则是删除当前权限所有角色关联
+   * 删除角色权限关联 传role_id则是根据role_id删除当前角色权限关联 ，传authority_id则是删除当前权限所有角色关联
    * @param   {obejct} ctx 上下文对象
    */
   static async delete_admin_role_authority(ctx) {

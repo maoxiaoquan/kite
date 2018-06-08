@@ -158,13 +158,11 @@ class AdminAuthority extends React.Component {
     }))
   }
 
-  fetch_admin_authority_delete = async (data) => {
+  fetch_admin_authority_delete = async (data) => { /* 删除权限 */
     let id_arr = await this.traversal_delete(data)
     this.props.dispatch(delete_admin_authority({ authority_id_arr: id_arr }, () => {
-      this.props.dispatch(delete_admin_role_authority({ authority_id_arr: id_arr }, () => {
-        this.fetch_admin_authority_list()
-        alert.message_success('删除成功')
-      }))
+      this.fetch_admin_authority_list()
+      alert.message_success('删除成功')
     }))
   }
 

@@ -31,7 +31,7 @@ const FormItem = Form.Item
 const confirm = Modal.confirm
 
 class AdminUser extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       columns: [
@@ -60,7 +60,7 @@ class AdminUser extends React.Component {
                 {/* <Tag color="orange">超级管理员</Tag>*/}
                 {this.current_user_role(record) ? (
                   <Tag color="orange">{this.current_user_role(record).role_name}</Tag>) : (
-                  <Tag color="#666">无</Tag>)}
+                    <Tag color="#666">无</Tag>)}
               </div>
             )
           }
@@ -103,7 +103,7 @@ class AdminUser extends React.Component {
             return (
               <div className="table-is-login">
                 {
-                  value ? (<Icon type="check-circle"/>) : (<Icon type="close-circle"/>)
+                  value ? (<Icon type="check-circle" />) : (<Icon type="close-circle" />)
                 }
               </div>
             )
@@ -115,14 +115,22 @@ class AdminUser extends React.Component {
           render: (text, record) => {
             return (
               <div className="table-right-btn">
-                <Button type="primary" size="small" onClick={() => {this.editUser(record)}}>修改</Button>
-                <Button className="box-btn-red" size="small" onClick={() => {this.deleteUser(record)}}>删除</Button>
-                <Button className="box-btn-orange" size="small" onClick={async () => {
-                  await  this.props.dispatch({type: 'SET_ADMIN_CURRENT_USER_INFO', data: record})
-                  this.setState({
-                    modal_visible_authority: true
-                  })
-                }}>设置角色</Button>
+                <Button onClick={() => { this.editUser(record) }} size="small"
+                  type="primary"
+                >修改</Button>
+                <Button className="box-btn-red"
+                  onClick={() => {
+                    this.deleteUser(record)
+                  }}
+                  size="small"
+                >删除</Button>
+                <Button className="box-btn-orange"
+                  onClick={async () => {
+                    await this.props.dispatch({ type: 'SET_ADMIN_CURRENT_USER_INFO', data: record })
+                    this.setState({
+                      modal_visible_authority: true
+                    })
+                  }} size="small">设置角色</Button>
               </div>
             )
           }
@@ -137,11 +145,11 @@ class AdminUser extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.initAdminUserPage()
   }
 
-  initAdminUserPage () {/*初始化获取所有列表*/
+  initAdminUserPage() {/*初始化获取所有列表*/
     this.fetch_admin_user_list()
     /*管理员用户列表*/
     this.props.dispatch(get_admin_role_all())
@@ -155,7 +163,7 @@ class AdminUser extends React.Component {
       modal_visible_register: true,
       is_create: false
     })
-    this.props.dispatch({type: 'SET_ADMIN_CURRENT_USER_INFO', data: data})
+    this.props.dispatch({ type: 'SET_ADMIN_CURRENT_USER_INFO', data: data })
     this.props.form.setFieldsValue({
       account: data.account,
       nickname: data.nickname,
@@ -168,7 +176,7 @@ class AdminUser extends React.Component {
   }
 
   deleteUser = (value) => {
-    this.props.dispatch({type: 'SET_ADMIN_CURRENT_USER_INFO', data: value})
+    this.props.dispatch({ type: 'SET_ADMIN_CURRENT_USER_INFO', data: value })
     confirm({
       title: '确认要删除此用户吗？',
       content: '此操作不可逆转',
@@ -176,20 +184,18 @@ class AdminUser extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_admin_user_delete({uid: this.props.admin_user.current_user_info.uid})
+        this.fetch_admin_user_delete({ uid: this.props.admin_user.current_user_info.uid })
         /*删除管理员用户*/
-        this.props.dispatch(delete_admin_user_role({uid: this.props.admin_user.current_user_info.uid}))
-        /*删除用户与角色关联*/
       },
-      onCancel () {
+      onCancel() {
         console.log('Cancel')
       }
     })
   }
 
   current_user_role = (value) => {  /*获取当前管理员用户的角色*/
-    const {admin_user} = this.props
-    const {current_user_info, admin_user_role_all, admin_role_all} = admin_user
+    const { admin_user } = this.props
+    const { current_user_info, admin_user_role_all, admin_role_all } = admin_user
 
     let curr_info = value || current_user_info
 
@@ -234,7 +240,7 @@ class AdminUser extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    const {is_create} = this.state
+    const { is_create } = this.state
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values)
@@ -249,7 +255,7 @@ class AdminUser extends React.Component {
 
   handleConfirmBlur = (e) => {
     const value = e.target.value
-    this.setState({confirmDirty: this.state.confirmDirty || !!value})
+    this.setState({ confirmDirty: this.state.confirmDirty || !!value })
   }
   compareToFirstPassword = (rule, value, callback) => {
     const form = this.props.form
@@ -286,27 +292,23 @@ class AdminUser extends React.Component {
   validateToNextPassword = (rule, value, callback) => {
     const form = this.props.form
     if (value && this.state.confirmDirty) {
-      form.validateFields(['confirm'], {force: true})
+      form.validateFields(['confirm'], { force: true })
     }
     callback()
   }
 
   fetch_admin_user_create = (values) => {  /*创建管理员用户*/
     this.props.dispatch(create_admin_user(values, (res) => {
-      if (res.state === 'success') {
-        alert.message_success(res.message)
-        this.fetch_admin_user_list()
-        this.setState({
-          modal_visible_register: false
-        })
-      } else {
-        alert.message_error(res.message)
-      }
+      alert.message_success('创建成功')
+      this.fetch_admin_user_list()
+      this.setState({
+        modal_visible_register: false
+      })
     }))
   }
 
   fetch_admin_user_edit = (values) => { /*修改管理员用户账户*/
-    this.props.dispatch(edit_admin_user({uid: this.props.admin_user.current_user_info.uid, ...values}, (res) => {
+    this.props.dispatch(edit_admin_user({ uid: this.props.admin_user.current_user_info.uid, ...values }, (res) => {
       alert.message_success('修改用户成功')
       this.fetch_admin_user_list()
       this.setState({
@@ -324,10 +326,10 @@ class AdminUser extends React.Component {
 
   fetch_admin_user_list = () => {  /*获取管理员用户带分页的列表*/
     const that = this
-    this.setState({loading: true})
-    const {pagination: {current}} = this.state
-    this.props.dispatch(get_admin_user_list({params: {page: current}}, (res) => {
-      let pagination = {...that.state.pagination}
+    this.setState({ loading: true })
+    const { pagination: { current } } = this.state
+    this.props.dispatch(get_admin_user_list({ params: { page: current } }, (res) => {
+      let pagination = { ...that.state.pagination }
       pagination.total = res.count
       pagination.current = current
       that.setState({
@@ -337,15 +339,15 @@ class AdminUser extends React.Component {
     }))
   }
 
-  render () {
-    const {admin_user} = this.props
-    const {loading, is_create} = this.state
-    const {getFieldDecorator} = this.props.form
+  render() {
+    const { admin_user } = this.props
+    const { loading, is_create } = this.state
+    const { getFieldDecorator } = this.props.form
 
     const prefixSelector = getFieldDecorator('prefix', {
       initialValue: '86'
     })(
-      <Select style={{width: 70}}>
+      <Select style={{ width: 70 }}>
         <Option value="86">+86</Option>
         <Option value="87">+87</Option>
       </Select>
@@ -353,12 +355,12 @@ class AdminUser extends React.Component {
 
     const formItemLayout = {
       labelCol: {
-        xs: {span: 24},
-        sm: {span: 5}
+        xs: { span: 24 },
+        sm: { span: 5 }
       },
       wrapperCol: {
-        xs: {span: 24},
-        sm: {span: 19}
+        xs: { span: 24 },
+        sm: { span: 19 }
       }
     }
     const tailFormItemLayout = {
@@ -381,7 +383,7 @@ class AdminUser extends React.Component {
           <ul className="header-dropdown">
             <li className="dropdown">
               <a className="dropdown-toggle" href="javascript:void(0);">
-                <Icon type="ellipsis"/>
+                <Icon type="ellipsis" />
               </a>
             </li>
           </ul>
@@ -416,9 +418,9 @@ class AdminUser extends React.Component {
                   label="账户"
                 >
                   {getFieldDecorator('account', {
-                    rules: [{required: true, message: '请输入账户！', whitespace: true}]
+                    rules: [{ required: true, message: '请输入账户！', whitespace: true }]
                   })(
-                    <Input placeholder="账户"/>
+                    <Input placeholder="账户" />
                   )}
                 </FormItem>
 
@@ -427,9 +429,9 @@ class AdminUser extends React.Component {
                   label="昵称"
                 >
                   {getFieldDecorator('nickname', {
-                    rules: [{required: true, message: '请输入昵称！', whitespace: true}]
+                    rules: [{ required: true, message: '请输入昵称！', whitespace: true }]
                   })(
-                    <Input placeholder="昵称"/>
+                    <Input placeholder="昵称" />
                   )}
                 </FormItem>
 
@@ -445,7 +447,7 @@ class AdminUser extends React.Component {
                     }]
                   })(
                     <Input placeholder="密码"
-                           type="password"
+                      type="password"
                     />
                   )}
                 </FormItem>
@@ -462,8 +464,8 @@ class AdminUser extends React.Component {
                     }]
                   })(
                     <Input onBlur={this.handleConfirmBlur}
-                           placeholder="重复密码"
-                           type="password"
+                      placeholder="重复密码"
+                      type="password"
                     />
                   )}
                 </FormItem>
@@ -479,7 +481,7 @@ class AdminUser extends React.Component {
                       required: true, message: '请输入您的电子邮件！'
                     }]
                   })(
-                    <Input placeholder="邮箱"/>
+                    <Input placeholder="邮箱" />
                   )}
                 </FormItem>
 
@@ -488,9 +490,9 @@ class AdminUser extends React.Component {
                   label="手机号码"
                 >
                   {getFieldDecorator('phone', {
-                    rules: [{required: true, message: '请输入你的手机号码！'}]
+                    rules: [{ required: true, message: '请输入你的手机号码！' }]
                   })(
-                    <Input addonBefore={prefixSelector} style={{width: '100%'}}/>
+                    <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
                   )}
                 </FormItem>
 
@@ -498,8 +500,8 @@ class AdminUser extends React.Component {
                   {...formItemLayout}
                   label="是否有效"
                 >
-                  {getFieldDecorator('enable', {valuePropName: 'checked'})(
-                    <Switch/>
+                  {getFieldDecorator('enable', { valuePropName: 'checked' })(
+                    <Switch />
                   )}
                 </FormItem>
 
@@ -534,13 +536,13 @@ class AdminUser extends React.Component {
                 {...formItemLayout}
                 label="管理员账户"
               >
-                <Input disabled={true} type="text" value={admin_user.current_user_info.account}/>
+                <Input disabled={true} type="text" value={admin_user.current_user_info.account} />
               </FormItem>
               <FormItem
                 {...formItemLayout}
                 label="角色类型"
               >
-                <Select placeholder="请设置权限" style={{width: 150}} onChange={this.selectRole}>
+                <Select placeholder="请设置权限" style={{ width: 150 }} onChange={this.selectRole}>
                   {
                     admin_user.admin_role_all.map(item => <Option key={item.role_id}>{item.role_name}</Option>)
                   }
@@ -576,7 +578,7 @@ class AdminUser extends React.Component {
 
 const AdminUserForm = Form.create()(AdminUser)
 
-export default connect(({admin_user}) => {
+export default connect(({ admin_user }) => {
   return {
     admin_user
   }

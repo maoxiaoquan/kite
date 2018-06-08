@@ -7,8 +7,7 @@ class Tokens {
   static async verifyToken(ctx, next) {
 
     let req = ctx.request.body
-     let token = req.token || ctx.query.token || ctx.headers['x-access-token']
-
+    let token = req.token || ctx.query.token || ctx.headers['x-access-token']
 
     if (token) {
       //存在token，解析token
