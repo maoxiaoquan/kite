@@ -1,4 +1,4 @@
-const db = require('../db/db')
+const db = require('../models')
 const { render } = require('../utils/res_data')
 
 class index {

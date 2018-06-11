@@ -1,6 +1,5 @@
 const { format_login, format_data } = require('../utils/res_data')
-const db = require('../db/db')
-const { ad_role, ad_authority, ad_user_role, ad_role_authority } = require('../db/db')
+const { ad_role, ad_authority, ad_user_role, ad_role_authority } = require('../models')
 
 function err_mess(message) {
   this.message = message
@@ -12,8 +11,6 @@ class VerifyAuthority {
   static async check(ctx, next) {
     const { url, userInfo = {} } = ctx.request
     const { role_id } = userInfo
-    console.log('role_id', role_id)
-    console.log('url', url.split('/')[url.split('/').length - 1])
     if (role_id) {/* 判断当前登录用户是否有角色，否则无任何权限 */
       try {
 

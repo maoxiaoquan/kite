@@ -59,6 +59,7 @@ class Aside extends Component {
 
           <Menu
             mode="inline"
+            defaultOpenKeys={['12','2']}
             onClick={this.handleClick}
           >
             <Menu.Item key="1">
@@ -67,18 +68,18 @@ class Aside extends Component {
                 <span>主页</span>
               </Link>
             </Menu.Item>
+            <SubMenu key="12" title={<span><Icon type="setting"/><span>网站管理</span></span>}>
+              <Menu.Item key="8">用户管理</Menu.Item>
+              <Menu.Item key="9">文章管理</Menu.Item>
+              <Menu.Item key="10">分类管理</Menu.Item>
+              <Menu.Item key="11">标签管理</Menu.Item>
+            </SubMenu>
             <SubMenu key="2" title={<span><Icon type="setting"/><span>系统管理</span></span>}>
               <Menu.Item key="3"> <Link to="/master/index/adminUser">管理员管理</Link></Menu.Item>
               <Menu.Item key="4"><Link to="/master/index/adminRole">角色管理</Link></Menu.Item>
               <Menu.Item key="5"><Link to="/master/index/adminAuthority">权限菜单</Link></Menu.Item>
               <Menu.Item key="6">数据备份</Menu.Item>
               <Menu.Item key="7">系统日志</Menu.Item>
-            </SubMenu>
-            <SubMenu key="12" title={<span><Icon type="setting"/><span>Navigation Three</span></span>}>
-              <Menu.Item key="8">Option 9</Menu.Item>
-              <Menu.Item key="9">Option 10</Menu.Item>
-              <Menu.Item key="10">Option 11</Menu.Item>
-              <Menu.Item key="11">Option 12</Menu.Item>
             </SubMenu>
           </Menu>
 

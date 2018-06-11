@@ -1,11 +1,11 @@
-const db = require('../db/db')
+const db = require('../models')
 const {checkEmail, checkPhoneNum} = require('../utils/validators')
 const moment = require('moment')
 const {sendMail, send_verify_cod_mail} = require('../utils/send_email')
 const {random_number, tools} = require('../utils')
 const config = require('../../config')
 
-const {query_user_verify_code} = require('../sql_server/query')
+const {query_user_verify_code} = require('../sql/query')
 
 function err_mess (message) {
   this.message = message

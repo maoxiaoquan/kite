@@ -149,12 +149,12 @@ class AdminUser extends React.Component {
     this.initAdminUserPage()
   }
 
-  initAdminUserPage() {/*初始化获取所有列表*/
-    this.fetch_admin_user_list()
+  async initAdminUserPage() {/*初始化获取所有列表*/
+    await this.fetch_admin_user_list()
     /*管理员用户列表*/
-    this.props.dispatch(get_admin_role_all())
+    await this.props.dispatch(get_admin_role_all())
     /*所有角色列表*/
-    this.props.dispatch(get_admin_user_role_all())
+    await this.props.dispatch(get_admin_user_role_all())
     /*所有管理员用户与角色关联列表*/
   }
 
@@ -341,6 +341,7 @@ class AdminUser extends React.Component {
 
   render() {
     const { admin_user } = this.props
+    const { admin_role_all = [] } = admin_user
     const { loading, is_create } = this.state
     const { getFieldDecorator } = this.props.form
 
@@ -544,7 +545,7 @@ class AdminUser extends React.Component {
               >
                 <Select placeholder="请设置权限" style={{ width: 150 }} onChange={this.selectRole}>
                   {
-                    admin_user.admin_role_all.map(item => <Option key={item.role_id}>{item.role_name}</Option>)
+                    admin_role_all.map(item => <Option key={item.role_id}>{item.role_name}</Option>)
                   }
                 </Select>
               </FormItem>

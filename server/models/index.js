@@ -1,55 +1,68 @@
-const {
-  page_find_admin_user_model,
-  delete_admin_user_model,
-  update_admin_user_model,
-  create_admin_user_model,
-  findone_admin_user_model
-} = require('./admin_user')
-const {
-  findone_admin_role_model,
-  create_admin_role_model,
-  update_admin_role_model,
-  delete_admin_role_model,
-  page_find_admin_role_model,
-  findAll_admin_role_model
-} = require('./admin_role')
+const Seq = require('sequelize')
+const config = require('../../config')
+/*表字段*/
+const sequelize = new Seq(
+  config.database.DATABASE, // 数据库名
+  config.database.USERNAME,   // 用户名
+  config.database.PASSWORD,   // 用户密码
+  {
+    'dialect': config.database.SQL_TYPE,  // 数据库使用mysql
+    'host': config.database.HOST, // 数据库服务器ip
+    'port': config.database.MYSQL_PORT,        // 数据库服务器端口
+    'define': {
+      // 字段以下划线（_）来分割（默认是驼峰命名风格）
+      'underscored': true
+    }
+  },
+)
 
-const {
-  findone_admin_authority_model,
-  delete_admin_authority_model
-} = require('./admin_authority')
+const SEQ_PARAMETER = {
+  timestamps: false,
+  freezeTableName: true
+}
 
-const {
-  findone_admin_user_role_model,
-  delete_admin_user_role_model
-} = require('./admin_user_role')
+sequelize.authenticate().then(() => {
+  console.log('链接成功')
+}).catch((error) => {
+  console.log('链接失败' + error)
+})
 
-const {
-  find_admin_role_authority_model,
-  delete_admin_role_authority_model
-} = require('./admin_role_authority')
+/*----------------------------------前台表---------------------------------------*/
+
+/*前台用户表*/
+const user = sequelize.define(require('./models_type/db_user').NAME, require('./models_type/db_user').TABLE, SEQ_PARAMETER)
+
+/*前台用户注册验证码*/
+const user_verify_code = sequelize.define(require('./models_type/db_user_verify_code').NAME, require('./models_type/db_user_verify_code').TABLE, SEQ_PARAMETER)
+
+/*前台文章表*/
+const article = sequelize.define(require('./models_type/db_article').NAME, require('./models_type/db_article').TABLE, SEQ_PARAMETER)
+
+/*----------------------------------后台表---------------------------------------*/
+/*后台用管理员表*/
+const ad_user = sequelize.define(require('./models_type/db_ad_user').NAME, require('./models_type/db_ad_user').TABLE, SEQ_PARAMETER)
+
+/*后台角色表*/
+const ad_role = sequelize.define(require('./models_type/db_ad_role').NAME, require('./models_type/db_ad_role').TABLE, SEQ_PARAMETER)
+
+/*用户与角色关系表*/
+const ad_user_role = sequelize.define(require('./models_type/db_ad_user_role').NAME, require('./models_type/db_ad_user_role').TABLE, SEQ_PARAMETER)
+
+/*权限表*/
+const ad_authority = sequelize.define(require('./models_type/db_ad_authority').NAME, require('./models_type/db_ad_authority').TABLE, SEQ_PARAMETER)
+
+/*角色与权限关系表*/
+const ad_role_authority = sequelize.define(require('./models_type/db_ad_role_authority').NAME, require('./models_type/db_ad_role_authority').TABLE, SEQ_PARAMETER)
 
 module.exports = {
-  /* admin_user */
-  page_find_admin_user_model,     /* 分页查询后台管理员列表 */
-  delete_admin_user_model,        /* 根据单个字段删除后台用户 */
-  update_admin_user_model,        /* 更新后台用户 */
-  create_admin_user_model,        /* 创建后台用户 */
-  findone_admin_user_model,       /* 根据单个字段查询单个用户 */
-  /* admin_role */
-  findone_admin_role_model,       /* 根据单个字段查询单个角色  */
-  create_admin_role_model,        /* 创建后台角色  */
-  update_admin_role_model,        /* 更新后台角色  */
-  delete_admin_role_model,        /* 删除后台角色  */
-  page_find_admin_role_model,     /* 分页查询后台角色列表 */
-  findAll_admin_role_model,       /* 查询所有后台角色列表 */
-  /*  admin_authority*/
-  findone_admin_authority_model,  /* 根据单个字段查询单个权限 */
-  delete_admin_authority_model,   /* 删除后台权限  */
-  /*  admin_user_role*/
-  findone_admin_user_role_model,  /* 根据单个字段查询用户角色表 */
-  delete_admin_user_role_model,    /* 根据单个字段删除用户角色表 */
-  /* role_authority */
-  find_admin_role_authority_model, /* 根据单个字段或多个字段查询后台角色权限表关联 */
-  delete_admin_role_authority_model /* 根据多个authority_id_arr数组删除角色权限表的权限角色关联 */
+  sequelize,
+  user,
+  user_verify_code,
+  article,
+  ad_user,
+  ad_role,
+  ad_user_role,
+  ad_authority,
+  ad_role_authority
 }
+

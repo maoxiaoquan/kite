@@ -40,9 +40,6 @@ router.post('/edit_admin_role', tokens.verifyToken, role_authority.edit_admin_ro
 router.post('/create_admin_user_role', tokens.verifyToken, role_authority.create_admin_user_role)
 //获取所有用户角色关联表
 router.get('/get_admin_user_role_all', tokens.verifyToken, role_authority.get_admin_user_role_all)
-//删除用户角色关联
-router.post('/delete_admin_user_role', tokens.verifyToken, role_authority.delete_admin_user_role)
-
 /**
  * 后台权限
  */
@@ -64,8 +61,6 @@ router.post('/delete_admin_authority', tokens.verifyToken, role_authority.delete
 router.get('/get_admin_role_authority', tokens.verifyToken, role_authority.get_admin_role_authority)
 //设置权限
 router.post('/set_admin_role_authority', tokens.verifyToken, role_authority.set_admin_role_authority)
-//删除权限
-router.post('/delete_admin_role_authority', tokens.verifyToken, role_authority.delete_admin_role_authority)
 //router.use('/user', tokens.testToken())
 //api 获取用户 POST
 //console.log('router',router)

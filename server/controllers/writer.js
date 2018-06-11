@@ -1,5 +1,5 @@
 const de = require('../utils/res_data')
-const db = require('../db/db')
+const db = require('../models')
 const moment = require('moment')
 
 function err_mess (message) {

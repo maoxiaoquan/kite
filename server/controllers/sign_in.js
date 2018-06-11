@@ -1,4 +1,4 @@
-const db = require('../db/db')
+const db = require('../models')
 const {checkEmail, checkPhoneNum} = require('../utils/validators')
 const {tools} = require('../utils')
 const config = require('../../config')
@@ -107,7 +107,7 @@ class sign_in {
             data: {
               account: formData.account,
               password: formData.password,
-            },
+            }
           })
         }
 
@@ -119,8 +119,8 @@ class sign_in {
           message: err,
           data: {
             account: formData.account,
-            password: formData.password,
-          },
+            password: formData.password
+          }
         })
       }
 
@@ -132,8 +132,8 @@ class sign_in {
         message: '暂时未开放手机号码登录',
         data: {
           account: formData.account,
-          password: formData.password,
-        },
+          password: formData.password
+        }
       })
 
     } else {        /* 非手机号码非邮箱*/
@@ -143,8 +143,8 @@ class sign_in {
         message: '请输入正确的手机号码或者邮箱',
         data: {
           account: formData.account,
-          password: formData.password,
-        },
+          password: formData.password
+        }
       })
     }
 

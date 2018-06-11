@@ -15,5 +15,15 @@ module.exports = {
     oldPsd += decipher.update(data, 'hex', 'utf8')
     oldPsd += decipher.final('utf8')
     return oldPsd
+  },
+
+  isEmpty: (obj) => {
+    var key
+    for (key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        return false
+      }
+    }
+    return true
   }
 }

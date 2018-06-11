@@ -1,4 +1,4 @@
-const {sequelize} = require('../db/db')
+const {sequelize} = require('../models')
 
 module.exports = {
 

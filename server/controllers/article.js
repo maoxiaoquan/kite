@@ -1,4 +1,4 @@
-const db = require('../db/db')
+const db = require('../models')
 const de = require('../utils/res_data')
 
 class article {

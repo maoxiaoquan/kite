@@ -147,12 +147,11 @@ class AdminRole extends React.Component {
       okText: '是',
       okType: 'danger',
       cancelText: '否',
-      onOk: () => {
-        this.props.dispatch(delete_admin_user_role({ role_id: current_role_info.role_id })) /* 删除用户角色表所有角色用户 */
-        this.props.dispatch(delete_admin_role({ role_id: current_role_info.role_id }))
-        this.props.dispatch(delete_admin_role_authority({ role_id: current_role_info.role_id }))
-        /*获取后台角色分页列表*/
-        this.fetch_admin_role_list()
+      onOk: async () => {
+        await this.props.dispatch(delete_admin_role({ role_id: current_role_info.role_id }, res => {
+          /*获取后台角色分页列表*/
+          this.fetch_admin_role_list()
+        }))
       },
       onCancel() {
         console.log('Cancel');
