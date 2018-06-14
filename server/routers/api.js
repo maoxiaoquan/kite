@@ -1,8 +1,15 @@
 const router = require('koa-router')()
 const ad_users = require('../apis/ad_users')// user
+const users = require('../apis/users')// user
 const role_authority = require('../apis/ad_role_authority')// user
 const tokens = require('../utils/tokens')
 const verify_authority = require('../utils/verify_authority')
+
+/* 前台用户 */
+//获取用户列表
+router.get('/get_user_list', tokens.verifyToken, users.get_user_list)
+//更新用户
+router.post('/edit_user', tokens.verifyToken, users.edit_user)
 /**
  * 管理员用户
  */
@@ -10,7 +17,7 @@ const verify_authority = require('../utils/verify_authority')
 //登录
 router.post('/sign_in', ad_users.ad_sign_in)
 //创建用户
-router.post('/create_admin_user', tokens.verifyToken, ad_users.create_admin_user)
+router.post('/create_admin_user', /* tokens.verifyToken,  */ad_users.create_admin_user)
 //更新用户
 router.post('/edit_admin_user', tokens.verifyToken, ad_users.edit_admin_user)
 //删除用户

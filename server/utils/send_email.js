@@ -45,7 +45,7 @@ const sendMail = function (recipient, subject, html) {
   })
 }
 
-const send_verify_cod_mail = function (recipient, subject, code) {
+const send_verify_code_mail = function (recipient, subject, code) {
 
   smtpTransport.sendMail({
 
@@ -72,14 +72,14 @@ const send_verify_cod_mail = function (recipient, subject, code) {
                 ">
                     <a style="height: 40px;width: 100px;background: url() no-repeat 0 0;background-size: contain;" target="_blank" href="" class="home-link">
                     </a>
-                    <div class="header__slogan" style="font-size: 14px;color: #007fff;line-height: 40px;height: 40px;">一个让你每天都开心的社区</div>
+                    <div class="header__slogan" style="font-size: 14px;color: #007fff;line-height: 40px;height: 40px;">每天都开心</div>
                 </div>
                 <div class="content" style="
                     line-height: 25px;
                     padding: 40px 60px;
                 ">
                     <div style="font-weight:bold">HI:${recipient}</div>
-                        <div>这是你此次注册的验证码，有效期为30分钟，请在30分钟内输入</div>
+                        <div>这是此次注册的验证码，有效期为30分钟，请在30分钟内输入</div>
                     <div>
                         <h2 style="color:#333">${code} </h2>
                     </div>
@@ -102,7 +102,7 @@ const send_verify_cod_mail = function (recipient, subject, code) {
           text-align: center;
           font-size: 12px;
           line-height: 20px;"
-        >希望您来到这里可以得到你想要的知道的</p>
+        >希望您来到这里可以得到你想要</p>
         `
 
   }, function (error, response) {
@@ -115,5 +115,5 @@ const send_verify_cod_mail = function (recipient, subject, code) {
 
 module.exports = {
   sendMail,
-  send_verify_cod_mail
+  send_verify_code_mail
 }

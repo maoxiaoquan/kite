@@ -38,6 +38,10 @@ const user_verify_code = sequelize.define(require('./models_type/db_user_verify_
 /*前台文章表*/
 const article = sequelize.define(require('./models_type/db_article').NAME, require('./models_type/db_article').TABLE, SEQ_PARAMETER)
 
+
+/*前台文章表*/
+const article_category = sequelize.define(require('./models_type/db_article_category').NAME, require('./models_type/db_article_category').TABLE, SEQ_PARAMETER)
+
 /*----------------------------------后台表---------------------------------------*/
 /*后台用管理员表*/
 const ad_user = sequelize.define(require('./models_type/db_ad_user').NAME, require('./models_type/db_ad_user').TABLE, SEQ_PARAMETER)
@@ -59,6 +63,7 @@ module.exports = {
   user,
   user_verify_code,
   article,
+  article_category,
   ad_user,
   ad_role,
   ad_user_role,

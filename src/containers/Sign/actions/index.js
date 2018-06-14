@@ -12,7 +12,7 @@ export const sign_in = (data, func) => {
 
 export const sign_up = (data, func) => {
   return () => {
-    http.post('/api/sign_up', data).then((res) => {
+    http.post('/api/create_admin_user', data).then((res) => {
       console.log('res', res)
       if (func)
         func(res.data)

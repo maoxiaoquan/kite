@@ -1,7 +1,7 @@
 const db = require('../models')
 const {checkEmail, checkPhoneNum} = require('../utils/validators')
 const moment = require('moment')
-const {sendMail, send_verify_cod_mail} = require('../utils/send_email')
+const {sendMail, send_verify_code_mail} = require('../utils/send_email')
 const {random_number, tools} = require('../utils')
 const config = require('../../config')
 
@@ -55,7 +55,7 @@ class sign_up {
             verify_code: random,
             expire_time: moment().utc().utcOffset(+8).format('X')
           }).then(function (data) {
-            send_verify_cod_mail(req_data.account, '注册验证码', random)
+            send_verify_code_mail(req_data.account, '注册验证码', random)
             ctx.body = {
               state: 'success',
               message: '验证码已发送到邮箱'

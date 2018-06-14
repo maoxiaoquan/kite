@@ -10,6 +10,7 @@ const http = axios.create({
     'x-requested-with': 'XMLHttpRequest'
   }
 })
+
 http.interceptors.request.use(function (config) {
   if (localStorage.box_tokens) {
     config.headers['x-access-token'] = localStorage.box_tokens
