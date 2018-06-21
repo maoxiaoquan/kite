@@ -15,7 +15,7 @@ const SubMenu = Menu.SubMenu
 const MenuItemGroup = Menu.ItemGroup
 
 class Aside extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       one: '刷5558新',
@@ -23,7 +23,7 @@ class Aside extends Component {
     }
   }
 
-  componentWillMount () {
+  componentWillMount() {
 
   }
 
@@ -31,12 +31,12 @@ class Aside extends Component {
     console.log('click ', e)
   }
 
-  click () {
+  click() {
     console.log(this.props)
   }
 
-  render () {
-    const {title} = this.props
+  render() {
+    const { title } = this.props
     return (
       <div className="admin-aside box-card" id="admin-aside">
         <div className="box-card-header">
@@ -59,22 +59,23 @@ class Aside extends Component {
 
           <Menu
             mode="inline"
-            defaultOpenKeys={['12','2']}
+            defaultOpenKeys={['12', '2']}
             onClick={this.handleClick}
           >
             <Menu.Item key="1">
               <Link to="/master/index/main">
-                <Icon type="pie-chart"/>
+                <Icon type="pie-chart" />
                 <span>主页</span>
               </Link>
             </Menu.Item>
-            <SubMenu key="12" title={<span><Icon type="setting"/><span>网站管理</span></span>}>
-              <Menu.Item key="8"> <Link to="/master/index/User">用户管理</Link></Menu.Item>
-              <Menu.Item key="9">文章管理</Menu.Item>
+            <SubMenu key="12" title={<span><Icon type="setting" /><span>网站管理</span></span>}>
+              <Menu.Item key="8"><Link to="/master/index/user">用户管理</Link></Menu.Item>
+              <Menu.Item key="9"><Link to="/master/index/article">文章管理</Link></Menu.Item>
               <Menu.Item key="10">分类管理</Menu.Item>
               <Menu.Item key="11">标签管理</Menu.Item>
+              <Menu.Item key="15">留言管理</Menu.Item>
             </SubMenu>
-            <SubMenu key="2" title={<span><Icon type="setting"/><span>系统管理</span></span>}>
+            <SubMenu key="2" title={<span><Icon type="setting" /><span>系统管理</span></span>}>
               <Menu.Item key="3"> <Link to="/master/index/adminUser">管理员管理</Link></Menu.Item>
               <Menu.Item key="4"><Link to="/master/index/adminRole">角色管理</Link></Menu.Item>
               <Menu.Item key="5"><Link to="/master/index/adminAuthority">权限菜单</Link></Menu.Item>

@@ -40,34 +40,34 @@ const article = sequelize.define(require('./models_type/db_article').NAME, requi
 
 
 /*前台文章表*/
-const article_category = sequelize.define(require('./models_type/db_article_category').NAME, require('./models_type/db_article_category').TABLE, SEQ_PARAMETER)
+const category = sequelize.define(require('./models_type/db_category').NAME, require('./models_type/db_category').TABLE, SEQ_PARAMETER)
 
 /*----------------------------------后台表---------------------------------------*/
 /*后台用管理员表*/
-const ad_user = sequelize.define(require('./models_type/db_ad_user').NAME, require('./models_type/db_ad_user').TABLE, SEQ_PARAMETER)
+const admin_user = sequelize.define(require('./models_type/db_admin_user').NAME, require('./models_type/db_admin_user').TABLE, SEQ_PARAMETER)
 
 /*后台角色表*/
-const ad_role = sequelize.define(require('./models_type/db_ad_role').NAME, require('./models_type/db_ad_role').TABLE, SEQ_PARAMETER)
+const admin_role = sequelize.define(require('./models_type/db_admin_role').NAME, require('./models_type/db_admin_role').TABLE, SEQ_PARAMETER)
 
 /*用户与角色关系表*/
-const ad_user_role = sequelize.define(require('./models_type/db_ad_user_role').NAME, require('./models_type/db_ad_user_role').TABLE, SEQ_PARAMETER)
+const admin_user_role = sequelize.define(require('./models_type/db_admin_user_role').NAME, require('./models_type/db_admin_user_role').TABLE, SEQ_PARAMETER)
 
 /*权限表*/
-const ad_authority = sequelize.define(require('./models_type/db_ad_authority').NAME, require('./models_type/db_ad_authority').TABLE, SEQ_PARAMETER)
+const admin_authority = sequelize.define(require('./models_type/db_admin_authority').NAME, require('./models_type/db_admin_authority').TABLE, SEQ_PARAMETER)
 
 /*角色与权限关系表*/
-const ad_role_authority = sequelize.define(require('./models_type/db_ad_role_authority').NAME, require('./models_type/db_ad_role_authority').TABLE, SEQ_PARAMETER)
+const admin_role_authority = sequelize.define(require('./models_type/db_admin_role_authority').NAME, require('./models_type/db_admin_role_authority').TABLE, SEQ_PARAMETER)
 
 module.exports = {
   sequelize,
   user,
   user_verify_code,
   article,
-  article_category,
-  ad_user,
-  ad_role,
-  ad_user_role,
-  ad_authority,
-  ad_role_authority
+  category,
+  admin_user,
+  admin_role,
+  admin_user_role,
+  admin_authority,
+  admin_role_authority
 }
 

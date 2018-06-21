@@ -106,7 +106,7 @@ class sign_in {
             message: '账户不存在',
             data: {
               account: formData.account,
-              password: formData.password,
+              password: formData.password
             }
           })
         }

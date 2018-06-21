@@ -12,7 +12,7 @@ module.exports = {
       defaultValue: shortid.generate
     },
     uid: { // 作者id
-      type: Seq.BIGINT(20),
+      type: Seq.STRING(20),
       comment: '作者id',
       field: 'uid'
     },
@@ -20,11 +20,6 @@ module.exports = {
       type: Seq.STRING(20),
       comment: '作者',
       field: 'author'
-    },
-    create_date: { // 创建时间
-      type: Seq.BIGINT(50),
-      comment: '创建时间',
-      field: 'create_date'
     },
     content: { // 内容
       type: Seq.TEXT('long'),
@@ -51,21 +46,25 @@ module.exports = {
       comment: '类型 （1:文章; 2:说说 ;3:视频;4: 公告 ）',
       field: 'type'
     },
-    category: { // 类别
+    source: {// 来源 （1原创 2转载）
       type: Seq.STRING(20),
-      comment: '类别',
-      field: 'category'
+      comment: '来源 （1原创 2转载）',
+      field: 'source'
+    },
+    create_date: { // 创建时间
+      type: Seq.BIGINT(50),
+      comment: '创建时间',
+      field: 'create_date'
+    },
+    cover_img: {
+      type: Seq.STRING(20),
+      comment: '封面图片',
+      field: 'cover_img'
     },
     read_count: { // 阅读数
       type: Seq.BIGINT(20),
       comment: '阅读数',
       field: 'read_count',
-      defaultValue: 0
-    },
-    comment_count: { // 评论数
-      type: Seq.BIGINT(20),
-      comment: '评论数',
-      field: 'comment_count',
       defaultValue: 0
     }
   }

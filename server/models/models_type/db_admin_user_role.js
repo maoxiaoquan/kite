@@ -1,7 +1,7 @@
 const Seq = require('sequelize')
 
 module.exports = {
-  NAME: 'ad_user_role', /*表名*/
+  NAME: 'admin_user_role', /*表名*/
   TABLE: {
     /*表结构*/
     connection_id: { // 关系ID
@@ -12,13 +12,13 @@ module.exports = {
       field:'connection_id'
     },
     uid: { // 角色ID
-      type: Seq.INTEGER(10),
+      type: Seq.STRING(20),
       comment: '角色ID',
       field: 'uid'
     },
-    role_id: { // 权限父ID
+    role_id: { // 角色ID
       type: Seq.INTEGER(10),
-      comment: '权限父ID',
+      comment: '角色ID',
       field: 'role_id'
     }
   }

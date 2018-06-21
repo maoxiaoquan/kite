@@ -27,6 +27,7 @@ import List from 'bundle-loader?lazy!../containers/List/view/list' // 表单组�
 import About from 'bundle-loader?lazy!../containers/About/view/about' // 评论组件
 /* HOME */
 import User from 'bundle-loader?lazy!../containers/User/view/User'  /* 前台用户 */
+import Article from 'bundle-loader?lazy!../containers/Article/view/Article'  /* 文章列表 */
 /* ADMIN */
 import adminUser from 'bundle-loader?lazy!../containers/adminUser/view/AdminUser' /* 后台管理员 */
 import adminRole from 'bundle-loader?lazy!../containers/adminRole/view/AdminRole'  /* 后台角色 */
@@ -63,7 +64,8 @@ const Main = ({ match }) => (
       >
         <div className="admin-content-wrapper">
           <Route component={Index} exact path={`${match.url}/main`} />
-          <Route component={createComponent(User)} exact path={`${match.url}/User`} />
+          <Route component={createComponent(User)} exact path={`${match.url}/user`} />
+          <Route component={createComponent(Article)} exact path={`${match.url}/article`} />
           <Route component={createComponent(adminUser)} exact path={`${match.url}/adminUser`} />
           <Route component={createComponent(adminRole)} exact path={`${match.url}/adminRole`} />
           <Route component={createComponent(adminAuthority)} exact path={`${match.url}/adminAuthority`} />

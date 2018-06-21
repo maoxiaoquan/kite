@@ -3,7 +3,7 @@ const tokens = require('../utils/tokens')
 const { checkUserName, checkPwd, checkEmail } = require('../utils/validators')
 const { tools: { encrypt } } = require('../utils')
 const config = require('../../config')
-const { sequelize, ad_user, ad_user_role } = require('../models')
+const { sequelize, admin_user, admin_user_role } = require('../models')
 const moment = require('moment')
 
 function err_mess(message) {
@@ -11,7 +11,7 @@ function err_mess(message) {
   this.name = 'UserException'
 }
 
-class Ad_users {
+class Admin_users {
   constructor() {
     // super()
   }
@@ -19,9 +19,9 @@ class Ad_users {
    * 登录操作
    * @param  {obejct} ctx 上下文对象
    */
-  static async ad_sign_in(ctx) {
+  static async admin_sign_in(ctx) {
     let { account, password, uid } = ctx.request.body
-    let ad_user_findOne = {}
+    let admin_user_findOne = {}
     try {
       if (!account) {
         throw new err_mess('请输入账户!')
@@ -32,14 +32,14 @@ class Ad_users {
       if (!password) {
         throw new err_mess('请输入密码!')
       }
-      ad_user_findOne = await ad_user.findOne({ where: { account } })
-      if (!ad_user_findOne) {
+      admin_user_findOne = await admin_user.findOne({ where: { account } })
+      if (!admin_user_findOne) {
         throw new err_mess('用户不存在!')
       }
-      if (!(encrypt(password, config.encrypt_key) === ad_user_findOne.password)) {
+      if (!(encrypt(password, config.encrypt_key) === admin_user_findOne.password)) {
         throw new err_mess('密码错误!')
       }
-      if (!ad_user_findOne.enable) {
+      if (!admin_user_findOne.enable) {
         throw new err_mess('您已被限制登录!')
       }
 
@@ -51,7 +51,7 @@ class Ad_users {
       return false
     }
 
-    let find_user_role = await ad_user_role.findOne({ where: { uid: ad_user_findOne.uid } })
+    let find_user_role = await admin_user_role.findOne({ where: { uid: admin_user_findOne.uid } })
     let datas = { account, role_id: find_user_role ? find_user_role.role_id : '' }
     let token = tokens.setToken('cxh', 3000, datas)
     format_login(ctx, {
@@ -88,9 +88,9 @@ class Ad_users {
       if (!checkEmail(req_data.email)) {
         throw new err_mess('邮箱输入有误!')
       }
-      let ad_user_findOne = await await ad_user.findOne({ where: { account: req_data.account } })
+      let admin_user_findOne = await await admin_user.findOne({ where: { account: req_data.account } })
 
-      if (ad_user_findOne) {
+      if (admin_user_findOne) {
         throw new err_mess('账户已存在!')
       }
 
@@ -102,7 +102,7 @@ class Ad_users {
       return false
     }
 
-    await ad_user.create({
+    await admin_user.create({
       account: req_data.account,
       nickname: req_data.nickname,
       password: encrypt(req_data.password, config.encrypt_key),
@@ -131,7 +131,7 @@ class Ad_users {
    */
   static async edit_admin_user(ctx) {
     const res_data = ctx.request.body
-    await ad_user.update({
+    await admin_user.update({
       account: res_data.account,
       nickname: res_data.nickname,
       password: encrypt(res_data.password, config.encrypt_key),
@@ -162,7 +162,7 @@ class Ad_users {
    */
   static async get_admin_user_list(ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
-    let { count, rows } = await ad_user.findAndCountAll({
+    let { count, rows } = await admin_user.findAndCountAll({
       attributes: ['uid', 'account', 'nickname', 'email', 'phone', 'reg_time', 'last_sign_time', 'reg_ip', 'enable'],
       where: '',//为空，获取全部，也可以自己添加条件
       offset: (page - 1) * Number(pageSize),//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
@@ -190,10 +190,10 @@ class Ad_users {
 
     const { uid } = ctx.request.body
 
-    let find_admin_user_role = await ad_user_role.findOne({ where: { uid } })
+    let find_admin_user_role = await admin_user_role.findOne({ where: { uid } })
 
     if (!find_admin_user_role) { /* 无关联 */
-      await ad_user.destroy({ 'where': { uid } })
+      await admin_user.destroy({ 'where': { uid } })
         .then(function (p) {
           format_data(ctx, {
             state: 'success',
@@ -209,9 +209,9 @@ class Ad_users {
       // 创建事务
       await sequelize.transaction(function (transaction) {
         // 在事务中执行操作
-        return ad_user.destroy({ 'where': { uid } }, { transaction })
+        return admin_user.destroy({ 'where': { uid } }, { transaction })
           .then(function (delete_admin_user) {
-            return ad_user_role.destroy({ where: { uid } }, { ...transaction })
+            return admin_user_role.destroy({ where: { uid } }, { ...transaction })
           });
 
       }).then(function (results) {
@@ -232,4 +232,4 @@ class Ad_users {
 
 }
 
-module.exports = Ad_users
+module.exports = Admin_users

@@ -1,7 +1,8 @@
 const router = require('koa-router')()
-const ad_users = require('../apis/ad_users')// user
-const users = require('../apis/users')// user
-const role_authority = require('../apis/ad_role_authority')// user
+const admin_users = require('../apis/admin_users')// admin_users
+const users = require('../apis/users')// users
+const articles = require('../apis/articles')// users
+const role_authority = require('../apis/admin_role_authority')// role_authority
 const tokens = require('../utils/tokens')
 const verify_authority = require('../utils/verify_authority')
 
@@ -10,20 +11,31 @@ const verify_authority = require('../utils/verify_authority')
 router.get('/get_user_list', tokens.verifyToken, users.get_user_list)
 //更新用户
 router.post('/edit_user', tokens.verifyToken, users.edit_user)
+//删除用户
+router.post('/delete_user', tokens.verifyToken, users.delete_user)
+
+/* 文章管理 */
+router.get('/get_article_list', tokens.verifyToken, articles.get_article_list)
+//更新用户
+router.post('/edit_article', tokens.verifyToken, articles.edit_article)
+//删除用户
+router.post('/delete_article', tokens.verifyToken, articles.delete_article)
+
+
 /**
  * 管理员用户
  */
 
 //登录
-router.post('/sign_in', ad_users.ad_sign_in)
+router.post('/sign_in', admin_users.admin_sign_in)
 //创建用户
-router.post('/create_admin_user', /* tokens.verifyToken,  */ad_users.create_admin_user)
+router.post('/create_admin_user', /* tokens.verifyToken,  */admin_users.create_admin_user)
 //更新用户
-router.post('/edit_admin_user', tokens.verifyToken, ad_users.edit_admin_user)
+router.post('/edit_admin_user', tokens.verifyToken, admin_users.edit_admin_user)
 //删除用户
-router.post('/delete_admin_user', tokens.verifyToken, verify_authority.check, ad_users.delete_admin_user)
+router.post('/delete_admin_user', tokens.verifyToken, /* verify_authority.check, */ admin_users.delete_admin_user)
 //获取用户列表
-router.get('/get_admin_user_list', tokens.verifyToken, ad_users.get_admin_user_list)
+router.get('/get_admin_user_list', tokens.verifyToken, admin_users.get_admin_user_list)
 
 /**
  * 后台角色

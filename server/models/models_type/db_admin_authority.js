@@ -1,7 +1,7 @@
 const Seq = require('sequelize')
 const shortid = require('shortid')
 module.exports = {
-  NAME: 'ad_authority', /*表名*/
+  NAME: 'admin_authority', /*表名*/
   TABLE: {
     /*表结构*/
     a_id: { //ID

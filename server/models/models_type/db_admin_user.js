@@ -1,14 +1,14 @@
 const Seq = require('sequelize')
-
+const shortid = require('shortid')
 module.exports = {
-  NAME: 'ad_user', /*表名*/
+  NAME: 'admin_user', /*表名*/
   TABLE: {
     /*表结构*/
-    uid: { // 自增ID
-      type: Seq.INTEGER(10),
+    uid: { // 权限ID
+      type: Seq.STRING(20),
       primaryKey: true, // 定义主键
-      autoIncrement: true, // 自动递增
-      comment: 'id 主键，自增',
+      comment: 'uid',
+      defaultValue: shortid.generate,
       field: 'uid'
     },
     account: { // 账户
