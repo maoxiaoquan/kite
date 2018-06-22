@@ -72,7 +72,7 @@ class Aside extends Component {
               <Menu.Item key="8"><Link to="/master/index/user">用户管理</Link></Menu.Item>
               <Menu.Item key="9"><Link to="/master/index/article">文章管理</Link></Menu.Item>
               <Menu.Item key="10">分类管理</Menu.Item>
-              <Menu.Item key="11">标签管理</Menu.Item>
+              <Menu.Item key="11">专题管理</Menu.Item>
               <Menu.Item key="15">留言管理</Menu.Item>
             </SubMenu>
             <SubMenu key="2" title={<span><Icon type="setting" /><span>系统管理</span></span>}>

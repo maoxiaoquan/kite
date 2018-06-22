@@ -17,9 +17,9 @@ module.exports = {
       field: 'aid'
     },
     uid: { // 评论用户ID
-      type: Seq.STRING(20),
+      type: Seq.INTEGER(10),
       comment: 'uid',
-      field: 'uid'
+      field:'uid'
     },
     nickname: { // 评论用户nickname
       type: Seq.STRING(20),

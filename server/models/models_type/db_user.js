@@ -5,11 +5,10 @@ module.exports = {
   TABLE: {
     /*表结构*/
     uid: { // 权限ID
-      type: Seq.STRING(20),
+      type: Seq.INTEGER(10),
       primaryKey: true, // 定义主键
       comment: 'uid',
-      defaultValue: shortid.generate,
-      field: 'uid'
+      field:'uid'
     },
     avatar: { // 头像
       type: Seq.STRING(100),

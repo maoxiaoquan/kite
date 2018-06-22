@@ -1,25 +1,25 @@
 const db = require('../models')
-const {checkEmail, checkPhoneNum} = require('../utils/validators')
+const { checkEmail, checkPhoneNum } = require('../utils/validators')
 const moment = require('moment')
-const {sendMail, send_verify_code_mail} = require('../utils/send_email')
-const {random_number, tools} = require('../utils')
+const { sendMail, send_verify_code_mail } = require('../utils/send_email')
+const { random_number, tools } = require('../utils')
 const config = require('../../config')
 
-const {query_user_verify_code} = require('../sql/query')
+const { query_user_verify_code } = require('../sql/query')
 
-function err_mess (message) {
+function err_mess(message) {
   this.message = message
   this.name = 'UserException'
 }
 
 class sign_up {
-  constructor () {
+  constructor() {
     this.sign_up_state = {
       title: 'sign_up'
     }
   }
 
-  async get_sign_up (ctx) { // get 页面
+  async get_sign_up(ctx) { // get 页面
 
     const title = 'sign_up'
 
@@ -35,7 +35,7 @@ class sign_up {
     }
   }
 
-  async post_sign_up_code (ctx) {
+  async post_sign_up_code(ctx) {
 
     let req_data = ctx.request.body
     if (checkEmail(req_data.account)) { /*邮箱注册验证码*/
@@ -98,25 +98,25 @@ class sign_up {
 
   }
 
-  async post_sign_up (ctx) { // post 数据
+  async post_sign_up(ctx) { // post 数据
     let req_data = ctx.request.body
 
     try {
       if (!req_data.nickname) {
-        throw  new err_mess('昵称不存在')
+        throw new err_mess('昵称不存在')
       }
       if (!req_data.account) {
-        throw  new err_mess('账户不存在')
+        throw new err_mess('账户不存在')
       }
       if (!req_data.password) {
-        throw  new err_mess('密码不存在')
+        throw new err_mess('密码不存在')
       }
       if (req_data.password !== req_data.double_password) {
-        throw  new err_mess('两次输入密码不一致')
+        throw new err_mess('两次输入密码不一致')
       }
 
       if (!req_data.code) {
-        throw  new err_mess('验证码不存在')
+        throw new err_mess('验证码不存在')
       }
 
     } catch (err) {
@@ -161,20 +161,21 @@ class sign_up {
                 if (req_data.code === data[0].verify_code) {
 
                   if ((Number(time_num) - Number(data[0].expire_time)) > (30 * 60)) {
-                    throw  new err_mess('验证码已过时，请再次发送')
+                    throw new err_mess('验证码已过时，请再次发送')
                   }
 
                 } else {
-                  throw  new err_mess('验证码错误')
+                  throw new err_mess('验证码错误')
                 }
 
               } else {
-                throw  new err_mess('请发送验证码')
+                throw new err_mess('请发送验证码')
               }
             })
-
-            await  db.user.create({
+            let user_count = await db.user.count()
+            await db.user.create({
               /*注册写入数据库操作*/
+              uid: Number(user_count) + 10000,
               avatar: 'http://oq33egsog.bkt.clouddn.com/avatar1.jpg',
               nickname: req_data.nickname,
               password: tools.encrypt(req_data.password, config.encrypt_key),

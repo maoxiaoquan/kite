@@ -9,7 +9,7 @@ module.exports = {
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增
       comment: 'id 主键，自增',
-      field:'role_id'
+      field: 'role_id'
     },
     role_name: { // 角色名字
       type: Seq.STRING(100),
@@ -20,6 +20,16 @@ module.exports = {
       type: Seq.STRING(100),
       comment: '角色描述',
       field: 'role_description'
+    },
+    role_icon: { // 专题图标
+      type: Seq.STRING(20),
+      comment: '专题图标',
+      field: 'topics_icon'
+    },
+    role_icon_type: { // 专题图标类型
+      type: Seq.INTEGER(20),
+      comment: '专题图标类型',
+      field: 'topics_icon_type'
     }
   }
 }

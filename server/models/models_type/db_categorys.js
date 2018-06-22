@@ -1,13 +1,13 @@
 const Seq = require('sequelize')
 const shortid = require('shortid')
 module.exports = {
-  NAME: 'article_category', /*表名*/
+  NAME: 'categorys', /*表名*/
   TABLE: {
     /*表结构*/
     category_id: { // 分类ID
       type: Seq.STRING(20),
       primaryKey: true, // 定义主键
-      comment: 'uid',
+      comment: 'category_id',
       defaultValue: shortid.generate,
       field: 'category_id'
     },

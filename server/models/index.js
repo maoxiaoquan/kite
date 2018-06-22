@@ -40,7 +40,7 @@ const article = sequelize.define(require('./models_type/db_article').NAME, requi
 
 
 /*前台文章表*/
-const category = sequelize.define(require('./models_type/db_category').NAME, require('./models_type/db_category').TABLE, SEQ_PARAMETER)
+const category = sequelize.define(require('./models_type/db_categorys').NAME, require('./models_type/db_categorys').TABLE, SEQ_PARAMETER)
 
 /*----------------------------------后台表---------------------------------------*/
 /*后台用管理员表*/

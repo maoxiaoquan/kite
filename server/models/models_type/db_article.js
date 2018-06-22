@@ -12,8 +12,8 @@ module.exports = {
       defaultValue: shortid.generate
     },
     uid: { // 作者id
-      type: Seq.STRING(20),
-      comment: '作者id',
+      type: Seq.INTEGER(10),
+      comment: 'uid',
       field: 'uid'
     },
     author: { // 作者
@@ -66,6 +66,16 @@ module.exports = {
       comment: '阅读数',
       field: 'read_count',
       defaultValue: 0
+    },
+    category_name: { /* 文章所属的分类 一个*/
+      type: Seq.STRING(20),
+      comment: '文章所属的分类',
+      field: 'article_category'
+    },
+    topic_names: { /* 文章所属的专题  可以多个*/
+      type: Seq.STRING(100),
+      comment: '文章所属的专题',
+      field: 'article_topics'
     }
   }
 }
