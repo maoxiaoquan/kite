@@ -21,11 +21,6 @@ module.exports = {
       comment: '作者',
       field: 'author'
     },
-    content: { // 内容
-      type: Seq.TEXT('long'),
-      comment: '内容',
-      field: 'content'
-    },
     title: { // 标题
       type: Seq.TEXT,
       comment: '标题',
@@ -36,6 +31,16 @@ module.exports = {
       comment: '摘记',
       field: 'excerpt'
     },
+    content: { // 内容
+      type: Seq.TEXT('long'),
+      comment: '内容',
+      field: 'content'
+    },
+    source: {// 来源 （1原创 2转载）
+      type: Seq.STRING(20),
+      comment: '来源 （1原创 2转载）',
+      field: 'source'
+    },
     status: { // 状态
       type: Seq.INTEGER(5),
       comment: '状态(0:草稿;1:审核中;2:审核通过;3:回收站)',
@@ -45,11 +50,6 @@ module.exports = {
       type: Seq.STRING(20),
       comment: '类型 （1:文章; 2:说说 ;3:视频;4: 公告 ）',
       field: 'type'
-    },
-    source: {// 来源 （1原创 2转载）
-      type: Seq.STRING(20),
-      comment: '来源 （1原创 2转载）',
-      field: 'source'
     },
     create_date: { // 创建时间
       type: Seq.BIGINT(50),
@@ -67,15 +67,15 @@ module.exports = {
       field: 'read_count',
       defaultValue: 0
     },
-    category_name: { /* 文章所属的分类 一个*/
-      type: Seq.STRING(20),
+    user_topic_id: { /* 文章所属的用户专栏id 一个*/
+      type: Seq.INTEGER(10),
       comment: '文章所属的分类',
-      field: 'article_category'
+      field: 'user_topic_id'
     },
-    topic_names: { /* 文章所属的专题  可以多个*/
+    tag_ids: { /* 文章所属的标签名字  可以多个*/
       type: Seq.STRING(100),
-      comment: '文章所属的专题',
-      field: 'article_topics'
+      comment: '文章所属的标签id',
+      field: 'tag_ids'
     }
   }
 }

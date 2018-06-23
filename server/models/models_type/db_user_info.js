@@ -10,20 +10,25 @@ module.exports = {
       comment: 'uid',
       field: 'uid'
     },
-    role_names: {
+    role_ids: {
       type: Seq.STRING(100),
       comment: '用户的角色',
-      field: 'user_roles'
+      field: 'role_ids'
     },
-    topics: {
+    tag_ids: {
       type: Seq.STRING(100),
-      comment: '用户关注的专题',
-      field: 'user_topics'
+      comment: '用户关注的标签',
+      field: 'tag_ids'
+    },
+    topic_ids: {
+      type: Seq.STRING(100),
+      comment: '用户订阅的专栏',
+      field: 'topic_ids'
     },
     user_attention: {
       type: Seq.STRING(100),
       comment: '用户关注的用户',
-      field: 'user_joins'
+      field: 'user_attention'
     }
   }
 }

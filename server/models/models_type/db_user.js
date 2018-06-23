@@ -4,7 +4,7 @@ module.exports = {
   NAME: 'user', /*表名*/
   TABLE: {
     /*表结构*/
-    uid: { // 权限ID
+    uid: { // 用户ID
       type: Seq.INTEGER(10),
       primaryKey: true, // 定义主键
       comment: 'uid',

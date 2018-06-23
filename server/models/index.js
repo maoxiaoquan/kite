@@ -31,39 +31,31 @@ sequelize.authenticate().then(() => {
 
 /*前台用户表*/
 const user = sequelize.define(require('./models_type/db_user').NAME, require('./models_type/db_user').TABLE, SEQ_PARAMETER)
-
 /*前台用户注册验证码*/
-const user_verify_code = sequelize.define(require('./models_type/db_user_verify_code').NAME, require('./models_type/db_user_verify_code').TABLE, SEQ_PARAMETER)
-
+const verify_code = sequelize.define(require('./models_type/db_verify_code').NAME, require('./models_type/db_verify_code').TABLE, SEQ_PARAMETER)
 /*前台文章表*/
 const article = sequelize.define(require('./models_type/db_article').NAME, require('./models_type/db_article').TABLE, SEQ_PARAMETER)
-
-
 /*前台文章表*/
-const category = sequelize.define(require('./models_type/db_categorys').NAME, require('./models_type/db_categorys').TABLE, SEQ_PARAMETER)
+const user_article_categorys = sequelize.define(require('./models_type/db_user_article_topic').NAME, require('./models_type/db_user_article_topic').TABLE, SEQ_PARAMETER)
 
 /*----------------------------------后台表---------------------------------------*/
 /*后台用管理员表*/
 const admin_user = sequelize.define(require('./models_type/db_admin_user').NAME, require('./models_type/db_admin_user').TABLE, SEQ_PARAMETER)
-
 /*后台角色表*/
 const admin_role = sequelize.define(require('./models_type/db_admin_role').NAME, require('./models_type/db_admin_role').TABLE, SEQ_PARAMETER)
-
 /*用户与角色关系表*/
 const admin_user_role = sequelize.define(require('./models_type/db_admin_user_role').NAME, require('./models_type/db_admin_user_role').TABLE, SEQ_PARAMETER)
-
 /*权限表*/
 const admin_authority = sequelize.define(require('./models_type/db_admin_authority').NAME, require('./models_type/db_admin_authority').TABLE, SEQ_PARAMETER)
-
 /*角色与权限关系表*/
 const admin_role_authority = sequelize.define(require('./models_type/db_admin_role_authority').NAME, require('./models_type/db_admin_role_authority').TABLE, SEQ_PARAMETER)
 
 module.exports = {
   sequelize,
   user,
-  user_verify_code,
+  verify_code,
   article,
-  category,
+  user_article_categorys,
   admin_user,
   admin_role,
   admin_user_role,
