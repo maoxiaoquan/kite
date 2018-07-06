@@ -22,7 +22,6 @@ import {
   get_admin_role_all,
   create_admin_user_role,
   get_admin_user_role_all,
-  delete_admin_user_role
 } from '../actions/AdminUserAction'
 import alert from '../../../utils/alert'
 
@@ -184,7 +183,7 @@ class AdminUser extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_admin_user_delete({ uid: this.props.admin_user.current_user_info.uid })
+        this.fetch_admin_user_delete({ uid: this.props.state_admin_user.current_user_info.uid })
         /*删除管理员用户*/
       },
       onCancel() {
@@ -194,8 +193,8 @@ class AdminUser extends React.Component {
   }
 
   current_user_role = (value) => {  /*获取当前管理员用户的角色*/
-    const { admin_user } = this.props
-    const { current_user_info, admin_user_role_all, admin_role_all } = admin_user
+    const { state_admin_user } = this.props
+    const { current_user_info, admin_user_role_all, admin_role_all } = state_admin_user
 
     let curr_info = value || current_user_info
 
@@ -276,7 +275,7 @@ class AdminUser extends React.Component {
       this.props.dispatch(create_admin_user_role({
         /*创建管理员用户角色*/
         role_id: this.state.role_id,
-        uid: this.props.admin_user.current_user_info.uid
+        uid: this.props.state_admin_user.current_user_info.uid
       }, () => {
         this.setState({
           modal_visible_authority: false
@@ -308,7 +307,7 @@ class AdminUser extends React.Component {
   }
 
   fetch_admin_user_edit = (values) => { /*修改管理员用户账户*/
-    this.props.dispatch(edit_admin_user({ uid: this.props.admin_user.current_user_info.uid, ...values }, (res) => {
+    this.props.dispatch(edit_admin_user({ uid: this.props.state_admin_user.current_user_info.uid, ...values }, (res) => {
       alert.message_success('修改用户成功')
       this.fetch_admin_user_list()
       this.setState({
@@ -340,8 +339,8 @@ class AdminUser extends React.Component {
   }
 
   render() {
-    const { admin_user } = this.props
-    const { admin_role_all = [] } = admin_user
+    const { state_admin_user } = this.props
+    const { admin_role_all = [] } = state_admin_user
     const { loading, is_create } = this.state
     const { getFieldDecorator } = this.props.form
 
@@ -537,7 +536,7 @@ class AdminUser extends React.Component {
                 {...formItemLayout}
                 label="管理员账户"
               >
-                <Input disabled={true} type="text" value={admin_user.current_user_info.account} />
+                <Input disabled={true} type="text" value={state_admin_user.current_user_info.account} />
               </FormItem>
               <FormItem
                 {...formItemLayout}
@@ -564,7 +563,7 @@ class AdminUser extends React.Component {
 
             <Table
               columns={this.state.columns}
-              dataSource={admin_user.admin_user_list}
+              dataSource={state_admin_user.admin_user_list}
               loading={loading}
               onChange={this.TablePageChange.bind(this)}
               pagination={this.state.pagination}
@@ -579,9 +578,9 @@ class AdminUser extends React.Component {
 
 const AdminUserForm = Form.create()(AdminUser)
 
-export default connect(({ admin_user }) => {
+export default connect(({ state_admin_user }) => {
   return {
-    admin_user
+    state_admin_user
   }
 })(AdminUserForm)
 

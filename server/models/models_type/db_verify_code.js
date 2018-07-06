@@ -1,6 +1,6 @@
 const Seq = require('sequelize')
 module.exports = {
-  NAME: 'user_verify_code', /*表名*/
+  NAME: 'verify_code', /*表名*/
   TABLE: {
     /*表结构*/
     id: { // 自增ID

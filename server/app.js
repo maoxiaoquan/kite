@@ -6,7 +6,6 @@ const views = require('koa-views')
 const koaStatic = require('koa-static')
 const bodyParser = require('koa-bodyparser')
 const koaLogger = require('koa-logger')
-
 const config = require('../config')
 const routers = require('./routers/index')
 

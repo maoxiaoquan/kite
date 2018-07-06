@@ -39,7 +39,7 @@ class sign_up {
 
     let req_data = ctx.request.body
     if (checkEmail(req_data.account)) { /*邮箱注册验证码*/
-
+      
       try {
         let email = await db.user.findOne({
           where: {
@@ -47,14 +47,16 @@ class sign_up {
           }
         })
         if (!email) {
-
+       
           let random = random_number(true, 5, 8)
-          await db.user_verify_code.create({
+
+          await db.verify_code.create({
             phone: '',
             email: req_data.account,
             verify_code: random,
             expire_time: moment().utc().utcOffset(+8).format('X')
           }).then(function (data) {
+          
             send_verify_code_mail(req_data.account, '注册验证码', random)
             ctx.body = {
               state: 'success',

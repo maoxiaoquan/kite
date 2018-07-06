@@ -100,8 +100,8 @@ class NormalLoginForm extends React.Component {
 
 const SignIn = Form.create()(NormalLoginForm)
 
-export default connect((title) => {
+export default connect((state_title) => {
   return {
-    title
+    state_title
   }
 })(SignIn)

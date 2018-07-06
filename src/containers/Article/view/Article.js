@@ -121,7 +121,7 @@ class Article extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_article_delete({ aid: this.props.article.current_info.aid })
+        this.fetch_article_delete({ aid: this.props.state_article.current_info.aid })
         /*删除管理员用户*/
       },
       onCancel() {
@@ -173,7 +173,7 @@ class Article extends React.Component {
   }
 
   fetch_user_edit = (values) => { /*修改管理员用户账户*/
-    this.props.dispatch(edit_user({ uid: this.props.article.current_info.uid, ...values }, (res) => {
+    this.props.dispatch(edit_user({ uid: this.props.state_article.current_info.uid, ...values }, (res) => {
       alert.message_success('修改用户成功')
       this.fetch_article_list()
       this.setState({
@@ -184,7 +184,7 @@ class Article extends React.Component {
 
   render() {
     const { loading } = this.state
-    const { article = {} } = this.props
+    const { state_article = {} } = this.props
     const { getFieldDecorator } = this.props.form
 
     const prefixSelector = getFieldDecorator('prefix', {
@@ -320,7 +320,7 @@ class Article extends React.Component {
 
             <Table
               columns={this.state.columns}
-              dataSource={article.list}
+              dataSource={state_article.list}
               loading={loading}
               onChange={this.TablePageChange.bind(this)}
               pagination={this.state.pagination}
@@ -335,9 +335,9 @@ class Article extends React.Component {
 
 const ArticleForm = Form.create()(Article)
 
-export default connect(({ article }) => {
+export default connect(({ state_article }) => {
   return {
-    article
+    state_article
   }
 })(ArticleForm)
 

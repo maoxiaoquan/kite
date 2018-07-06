@@ -46,7 +46,7 @@ class Index extends React.Component {
   }
 
   render() {
-    const { title } = this.props;
+    const { state_title } = this.props;
     return (
       <div className="box-card">
         <div className="box-card-header">
@@ -74,8 +74,8 @@ class Index extends React.Component {
 }
 
 
-export default connect((title) => {
+export default connect((state_title) => {
   return {
-    title
+    state_title
   };
 })(Index);

@@ -67,15 +67,15 @@ module.exports = {
       field: 'read_count',
       defaultValue: 0
     },
-    user_topic_id: { /* 文章所属的用户专栏id 一个*/
-      type: Seq.INTEGER(10),
+    article_topic_ids: { /* 文章所属的用户专栏id 多个*/
+      type:  Seq.STRING(100),
       comment: '文章所属的分类',
-      field: 'user_topic_id'
+      field: 'article_topic_ids'
     },
-    tag_ids: { /* 文章所属的标签名字  可以多个*/
+    article_tag_ids: { /* 文章所属的标签名字  可以多个*/
       type: Seq.STRING(100),
       comment: '文章所属的标签id',
-      field: 'tag_ids'
+      field: 'article_tag_ids'
     }
   }
 }

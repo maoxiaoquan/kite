@@ -8,109 +8,77 @@
 <% include parts/header_view.ejs %>
 <!--header_view.ejs end-->
 
+
 <div class="container box-container">
-    <div class="row">
+
+    <div class="side-menu">
+        <!--home-lay layout-type start-->
+
+        <section class="side-menu-view ">
+
+            <div class="board">
+                <a class="board-content" href="">
+                    最新文章
+                </a>
+                <a class="board-content" href="">
+                    最热文章
+                </a>
+                <a class="board-content" href="">
+                    最新说说
+                </a>
+            </div>
+
+
+            <div class="layout-type">
+                <% data.article_tag.forEach(function (item, key) { %>
+                <a class="layout-type-item" href="">
+                    <i class="iconfont icon-favorite"></i>
+                    <%= item.article_tag_name %>
+                </a>
+                <% }) %>
+
+                <a class="layout-type-item"  href="/subscribe" target="_blank">
+                    查看更多标签
+                </a>
+            </div>
+        </section>
+        <!--home-lay layout-type end-->
+    </div>
+
+    <div class="row" style="margin-left: 190px">
         <div class="col-xs-12 col-sm-8 col-md-8">
 
             <!--home-lay layout-header start-->
-            <section class="home-lay layout-header">
-                <a href="/"
-                   target="_blank">
-                    <div class="content"
-                         style="background-image: url('/default/img/h1-slide-2.jpg');">
-                        <div class="title">
-                            <h2>文章样式3: 全球最大一颗钻石卖掉，售价 5300 万美元</h2>
-                            <div class="date hidden-xs">
-                                <span class="u-categories">商业</span>
-                                <span class="u-time">2017-09-29</span>
-                                <span class="u-comment"><i class="iconfont icon-good"></i> 18</span>
-                                <span class="u-like"><i class="iconfont icon-favorites"></i> 17</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </section>
-            <!--home-lay layout-header end-->
-
-            <!--home-lay layout-type start-->
-            <section class="home-lay layout-type">
-
-                <div class="row">
-                    <div class="col-grid col-xs-12 col-sm-2 col-md-2">
-                        <a class="layout-type-item"
-                           style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg');"
-                           href="">
-                            HTML5
+            <section class="home-lay layout-header box-swiper">
+                <div class="box-swiper-view">
+                    <div class="box-swiper-item box-swiper-item-current">
+                        <a href="/" target="_blank" class="content">
+                            <img src="/default/img/66666.jpg" alt="">
                         </a>
                     </div>
-                    <div class="col-grid col-xs-12 col-sm-3 col-md-3">
-                        <a class="layout-type-item"
-                           style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg');"
-                           href="">
-                            HTML5
-                        </a>
-                    </div>
-                    <div class="col-grid col-xs-12 col-sm-2 col-md-2">
-                        <a class="layout-type-item"
-                           style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg');"
-                           href="">
-                            HTML5
-                        </a>
-                    </div>
-                    <div class="col-grid col-xs-12 col-sm-2 col-md-2">
-                        <a class="layout-type-item"
-                           style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg');"
-                           href="">
-                            HTML5
-                        </a>
-                    </div>
-                    <div class="col-grid col-xs-12 col-sm-3 col-md-3">
-                        <a class="layout-type-item"
-                           style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg');"
-                           href="">
-                            HTML5
-                        </a>
-                    </div>
-                    <div class="col-grid col-xs-12 col-sm-3 col-md-3">
-                        <a class="layout-type-item"
-                           style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg');"
-                           href="">
-                            HTML5
-                        </a>
-                    </div>
-                    <div class="col-grid col-xs-12 col-sm-2 col-md-2">
-                        <a class="layout-type-item"
-                           style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg');"
-                           href="">
-                            HTML5
-                        </a>
-                    </div>
-                    <div class="col-grid col-xs-12 col-sm-3 col-md-3">
-                        <a class="layout-type-item"
-                           style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg');"
-                           href="">
-                            HTML5
-                        </a>
-                    </div>
-                    <div class="col-grid col-xs-12 col-sm-4 col-md-4">
-                        <a class="layout-type-more" href="">
-                            更多热门专题 <i class="iconfont icon-more"></i>
+                    <div class="box-swiper-item">
+                        <a href="/" target="_blank" class="content">
+                            <img src="/default/img/h1-slide-2.jpg" alt="">
                         </a>
                     </div>
                 </div>
-
+                <div class="box-swiper-pagination">
+                    <span class="box-swiper-pagination-bullet box-swiper-pagination-bullet-current"></span>
+                    <span class="box-swiper-pagination-bullet"></span>
+                </div>
             </section>
-            <!--home-lay layout-type end-->
+            <!--home-lay layout-header end-->
+
 
             <!--home-lay layout-content start-->
             <section class="home-lay layout-content">
 
-               <!-- <div class="filter-menu text-center">
-                    <button class="active">文章</button>
-                    <button data-cid="945">说说</button>
-                    <button data-cid="945">视频</button>
-                    <button data-cid="945">公告</button>
-                </div>-->
+                <!-- <div class="filter-menu text-center">
+                     <button class="active">文章</button>
+                     <button data-cid="945">说说</button>
+                     <button data-cid="945">视频</button>
+                     <button data-cid="945">公告</button>
+                 </div>-->
 
                 <ul class="article-list">
                     <% data.article_list.forEach(function (item, key) { %>
@@ -118,20 +86,24 @@
                         <article class="content-box">
                             <div class="info-box">
                                 <div class="info-row title-row">
-                                    <a href="/article/<%= item.dataValues.aid %>" class="title"><%= item.dataValues.title %></a>
+                                    <a href="/article/<%= item.aid %>"
+                                       class="title"><%= item.title %></a>
+                                </div>
+                                <div class="content-text">
+                                    <%= item.content %>
                                 </div>
                                 <div class="info-row meta-row">
                                     <ul class="meta-list">
                                         <li class="item category">
-                                            <span class="category-title frontend"><%= item.dataValues.category %></span>
+                                            <span class="category-title frontend"><%= item.category %></span>
                                         </li>
                                         <li class="item username clickable">
                                             <div class="user-popover-box">
-                                                <a href=""><%= item.dataValues.author %></a>
+                                                <a href=""><%= item.author %></a>
                                             </div>
                                         </li>
                                         <li class="item">10月前</li>
-                                        <li class="item"><%= item.dataValues.read_count %> 次阅读</li>
+                                        <li class="item"><%= item.read_count %> 次阅读</li>
                                     </ul>
                                 </div>
                             </div>
@@ -149,8 +121,7 @@
                     <a class="page-numbers" href="http://cosy.codenote.io/page/2">2</a>
                     <span class="page-numbers dots">…</span>
                     <a class="page-numbers" href="http://cosy.codenote.io/page/15">15</a>
-                    <a class="next page-numbers" href="http://cosy.codenote.io/page/2">
-                        <i class="fa fa fa-angle-right"></i>
+                    <a class="next page-numbers" href="http://cosy.codenote.io/page/2">2
                     </a>
                 </div>
             </section>

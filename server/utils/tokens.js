@@ -2,9 +2,9 @@ const jwt = require('jsonwebtoken')
 const res_data = require('./res_data')
 
 class Tokens {
-  constructor() { }
+  constructor () { }
 
-  static async verifyToken(ctx, next) {
+  static async verifyToken (ctx, next) {
 
     let req = ctx.request.body
     let token = req.token || ctx.query.token || ctx.headers['x-access-token']
@@ -31,7 +31,7 @@ class Tokens {
 
   }
 
-  static setToken(name, time, data) {
+  static setToken (name, time, data) {
     let jwtSecret = name
     let token = jwt.sign(data, jwtSecret, {
       expiresIn: time

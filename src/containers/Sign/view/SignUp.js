@@ -175,8 +175,8 @@ class RegistrationForm extends React.Component {
 
 const SignUp = Form.create()(RegistrationForm)
 
-export default connect((title) => {
+export default connect((state_title) => {
   return {
-    title
+    state_title
   }
 })(SignUp)

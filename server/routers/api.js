@@ -1,10 +1,17 @@
 const router = require('koa-router')()
-const admin_users = require('../apis/admin_users')// admin_users
-const users = require('../apis/users')// users
-const articles = require('../apis/articles')// users
-const role_authority = require('../apis/admin_role_authority')// role_authority
-const tokens = require('../utils/tokens')
-const verify_authority = require('../utils/verify_authority')
+const admin_users = require('../apis/admin_users')// 后台用户
+const users = require('../apis/users')// 前台用户
+const user_tag = require('../apis/user_tag')// 前台用户标签
+const articles = require('../apis/articles')//文章
+const article_tag = require('../apis/article_tag')// 文章标签
+const picture = require('../apis/picture')// 图片管理
+const upload = require('../apis/upload')// 上传
+const role_authority = require('../apis/admin_role_authority')// 后台角色权限
+const tokens = require('../utils/tokens') //登录tokens
+const verify_authority = require('../utils/verify_authority') //权限验证
+
+/*工具类*/
+const util_upload = require('../utils/upload')
 
 /* 前台用户 */
 //获取用户列表
@@ -21,6 +28,38 @@ router.post('/edit_article', tokens.verifyToken, articles.edit_article)
 //删除用户
 router.post('/delete_article', tokens.verifyToken, articles.delete_article)
 
+/*文章标签管理*/
+router.get('/get_article_tag_list', tokens.verifyToken, article_tag.get_article_tag_list)
+/*文章创建标签*/
+router.post('/create_article_tag', tokens.verifyToken, article_tag.create_article_tag)
+/*文章更新标签*/
+router.post('/update_article_tag', tokens.verifyToken, article_tag.update_article_tag)
+/*文章删除标签*/
+router.post('/delete_article_tag', tokens.verifyToken, article_tag.delete_article_tag)
+
+/*用户标签管理*/
+router.get('/get_user_tag_list', tokens.verifyToken, user_tag.get_user_tag_list)
+/*用户创建标签*/
+router.post('/create_user_tag', tokens.verifyToken, user_tag.create_user_tag)
+/*用户更新标签*/
+router.post('/update_user_tag', tokens.verifyToken, user_tag.update_user_tag)
+/*用户删除标签*/
+router.post('/delete_user_tag', tokens.verifyToken, user_tag.delete_user_tag)
+
+/*图片管理*/
+router.get('/get_picture_list', tokens.verifyToken, picture.get_picture_list)
+/*图片创建*/
+router.post('/create_picture', tokens.verifyToken, picture.create_picture)
+/*图片更新*/
+router.post('/update_picture', tokens.verifyToken, picture.update_picture)
+/*图片删除*/
+router.post('/delete_picture', tokens.verifyToken, picture.delete_picture)
+
+/**
+ * 上传
+ */
+
+router.post('/upload_picture', tokens.verifyToken, util_upload.single('file'), upload.upload_picture)
 
 /**
  * 管理员用户

@@ -124,7 +124,7 @@ class User extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_user_delete({ uid: this.props.user.current_user_info.uid })
+        this.fetch_user_delete({ uid: this.props.state_user.current_user_info.uid })
         /*删除管理员用户*/
       },
       onCancel() {
@@ -176,7 +176,7 @@ class User extends React.Component {
   }
 
   fetch_user_edit = (values) => { /*修改管理员用户账户*/
-    this.props.dispatch(edit_user({ uid: this.props.user.current_user_info.uid, ...values }, (res) => {
+    this.props.dispatch(edit_user({ uid: this.props.state_user.current_user_info.uid, ...values }, (res) => {
       alert.message_success('修改用户成功')
       this.fetch_user_list()
       this.setState({
@@ -187,7 +187,7 @@ class User extends React.Component {
 
   render() {
     const { loading } = this.state
-    const { user = {} } = this.props
+    const { state_user = {} } = this.props
     const { getFieldDecorator } = this.props.form
 
     const prefixSelector = getFieldDecorator('prefix', {
@@ -323,7 +323,7 @@ class User extends React.Component {
 
             <Table
               columns={this.state.columns}
-              dataSource={user.user_list}
+              dataSource={state_user.user_list}
               loading={loading}
               onChange={this.TablePageChange.bind(this)}
               pagination={this.state.pagination}
@@ -338,9 +338,9 @@ class User extends React.Component {
 
 const UserForm = Form.create()(User)
 
-export default connect(({ user }) => {
+export default connect(({ state_user }) => {
   return {
-    user
+    state_user
   }
 })(UserForm)
 

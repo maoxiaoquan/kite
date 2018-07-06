@@ -1,0 +1,224 @@
+<!--header.ejs start-->
+<% include parts/header.ejs %>
+<!--header.ejs end-->
+
+<body class="black-theme">
+
+<!--header_view.ejs start-->
+<% include parts/header_view.ejs %>
+<!--header_view.ejs end-->
+
+
+<!--article-list-lay layout-content start-->
+<section class="user-lay layout-content">
+    <div class="container  box-container">
+        <div class="row">
+
+            <div class="col-xs-12 col-sm-8 col-md-8 main">
+
+                <div class="main-top">
+
+                    <a class="avatar" href="/user/<%= user_info.uid %>">
+                        <img src="<%= user_info.avatar %>" alt="240">
+                    </a>
+
+                    <div class="title">
+                        <a class="name" href="/user/<%= user_info.uid %>"><%= user_info.nickname %></a>
+                    </div>
+
+                    <div class="info">
+                        <ul>
+                            <li>
+                                <div class="meta-block">
+                                    <a href="/users/78d3e1ab9924/following">
+                                        <p>10</p>关注<i class="iconfont ic-arrow"></i>
+                                    </a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="meta-block">
+                                    <a href="/users/78d3e1ab9924/followers">
+                                        <p>1</p>粉丝<i class="iconfont ic-arrow"></i>
+                                    </a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="meta-block">
+                                    <a href="/user/78d3e1ab9924">
+                                        <p>1</p>文章<i class="iconfont ic-arrow"></i>
+                                    </a>
+                                </div>
+                            </li>
+                            <li><div class="meta-block"><p>1</p><div>字数</div></div></li>
+                            <li><div class="meta-block"><p>0</p><div>收获喜欢</div></div></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <ul class="trigger-menu">
+                    <li class="<% if (data.router_name == '/') { %>active<% } %>">
+                        <a href="/user/<%= user_info.uid %>">
+                            <i class="iconfont ic-articles"></i> 文章</a>
+                    </li>
+                    <li class="<% if (data.router_name == 'topic') { %>active<% } %>">
+                        <a href="/user/<%= user_info.uid %>/topic">
+                            <i class="iconfont ic-feed"></i> 专题</a>
+                    </li>
+                    <li class="">
+                        <a href="/user/<%= user_info.uid %>?order_by=commented_at">
+                            <i class="iconfont ic-latestcomments"></i> 动态</a>
+                    </li>
+                    <li class="">
+                        <a href="/user/<%= user_info.uid %>?order_by=top">
+                            <i class="iconfont ic-hot"></i> 最新评论</a>
+                    </li>
+                </ul>
+
+                <% if (data.router_name == '/') { %>
+                <div id="list-container">
+                    <!-- 文章列表模块 -->
+                    <ul class="note-list">
+                        <% data.article_list.forEach(function (item, key) { %>
+                        <li class="">
+                            <article class="content-box article-list">
+                                <div class="info-box">
+                                    <div class="info-row title-row">
+                                        <a href="/article" class="title">手摸手，带你用vue撸后台 系列三(实战篇)</a>
+                                    </div>
+                                    <div class="content-text">
+                                        想想看，你的生活中有没有这样的时候： 明明没有干什么却总是觉得没时间
+                                        ，倒在床上冥思苦想一天的收获，
+                                        除了身体的疲惫和精神的萧条，似乎什么也没剩下。更多时候，你除了倒在床上，自己..
+                                    </div>
+                                    <div class="info-row meta-row">
+                                        <ul class="meta-list">
+                                            <li class="item category">
+                                                <span class="category-title frontend">前端</span>
+                                            </li>
+                                            <li class="item username clickable">
+                                                <div class="user-popover-box">
+                                                    <a href="">花裤衩</a>
+                                                </div>
+                                            </li>
+                                            <li class="item">10月前</li>
+                                            <li class="item">25781 次阅读</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="lazy thumb thumb loaded"
+                                     style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
+                                </div>
+                            </article>
+                        </li>
+                        <% }) %>
+                    </ul>
+
+                </div>
+                <% }else if(data.router_name == 'topic'){ %>
+
+                <div>topic</div>
+
+                <% }else { %>
+
+                <div>其他</div>
+
+                <% } %>
+
+            </div>
+
+            <div class="col-xs-12 col-sm-4 col-md-4 aside">
+                <ul class="list user-dynamic">
+                    <li class="badge-icon">
+                        <a target="_blank" href="/mobile/club">
+                            <img width="20" heigth="20"
+                                 src="//upload.jianshu.io/user_badge/22d8d123-271c-4d80-9c59-6990844a9e37"
+                                 alt="22d8d123 271c 4d80 9c59 6990844a9e37"> 简书会员
+                        </a></li>
+                </ul>
+                <div class="title">个人介绍</div>
+                <div class="description">
+                    <div class="js-intro">这里筑梦师,是一名正在努力学习的iOS开发工程师,目前致力于全栈方向的学习,希望可以和大家一起交流技术,共同进步.<br>
+                        <br>本人全栈自学笔记地址:<br><a
+                                href="https://github.com/DreamerWinston/Full-Stack-Developer-Note" rel="nofollow"
+                                target="_blank">https://github.com/DreamerWinston/Full-Stack-Developer-Note</a><br>
+                        <br>本人文章均为个人学习经历经验总结.如有引用会注明.<br>
+                        <br>交流技术,提建议,请积极私信我哦~<br>
+                        <br>本人公众号:FullStackTips<br>这里↓↓↓↓↓↓是我个人二维码,欢迎加我~
+                    </div>
+                </div>
+                <ul class="list user-dynamic">
+                    <li>
+                        <a href="/users/78d3e1ab9924/subscriptions">
+                            <i class="iconfont ic-collection"></i> <span>我关注的专题/文集/连载</span>
+                        </a></li>
+                    <li>
+                        <a href="/users/78d3e1ab9924/liked_notes">
+                            <i class="iconfont ic-like"></i> <span>我喜欢的文章</span>
+                        </a></li>
+                </ul>
+                <div>
+                    <div>
+                        <div class="title">
+                            我创建的专题
+                        </div>
+                        <a href="/collections/new" target="_blank" class="function-btn new-collection-btn"><i
+                                    class="iconfont ic-follow"></i><span>新建专题</span></a>
+                        <ul class="list">
+                            <li><a href="/c/6dd573b3679d" target="_blank" class="avatar-collection"><img
+                                            src="//upload.jianshu.io/collections/images/1635625/ae63ef8d.bg2.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96"></a>
+                                <a href="/c/6dd573b3679d" target="_blank" class="name">da's'da</a></li>
+                            <li><!----> <!----></li>
+                        </ul> <!----></div> <!---->
+                    <div>
+                        <div class="title">
+                            我的文集
+                        </div>
+                        <ul class="list">
+                            <li><a href="/nb/9815191" target="_blank"><i class="iconfont ic-search-notebook"></i></a> <a
+                                        href="/nb/9815191" target="_blank" class="name">
+                                    日记本
+                                    <!----></a></li>
+                            <li><!----> <!----></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!--article-list-lay layout-content end-->
+
+
+<!--footer_view.ejs start-->
+<% include parts/footer_view.ejs %>
+<!--footer_view.ejs end-->
+
+<!--<script>
+
+var navbar = document.getElementById('layout-navbar')
+
+function getScrollTop () {
+  var scrollTop = 0;
+  if (document.documentElement && document.documentElement.scrollTop) {
+    scrollTop = document.documentElement.scrollTop;
+  }
+  else if (document.body) {
+    scrollTop = document.body.scrollTop;
+  }
+  return scrollTop;
+}
+
+window.onscroll = function () {
+  var st = getScrollTop()
+  if (st > 50) {
+    navbar.classList.add("navbar-fixed-top");
+  } else {
+    navbar.classList.remove("navbar-fixed-top");
+  }
+}
+
+</script>-->
+</body>
+
+<% include parts/footer.ejs %>
