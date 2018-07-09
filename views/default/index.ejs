@@ -16,36 +16,39 @@
 
         <section class="side-menu-view ">
 
-            <div class="board">
-                <a class="board-content" href="">
-                    最新文章
-                </a>
-                <a class="board-content" href="">
-                    最热文章
-                </a>
-                <a class="board-content" href="">
-                    最新说说
-                </a>
-            </div>
+            <div class="recommend-collection">
 
+                <div class="board">
+                    <a class="board-content" href="">
+                        热门
+                    </a>
+                </div>
 
-            <div class="layout-type">
                 <% data.article_tag.forEach(function (item, key) { %>
-                <a class="layout-type-item" href="">
-                    <i class="iconfont icon-favorite"></i>
-                    <%= item.article_tag_name %>
+                <a class="collection clearfix" href="">
+                    <i class="collection-img"
+                       style="background-image:url('//upload.jianshu.io/collections/images/283250/%E6%BC%AB%E7%94%BB%E4%B8%93%E9%A2%98.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/64/h/64')">
+
+                    </i>
+                    <span class="collection-name"><%= item.article_tag_name %></span>
                 </a>
                 <% }) %>
 
-                <a class="layout-type-item"  href="/subscribe" target="_blank">
-                    查看更多标签
+                <a class="collection" href="/subscribe" target="_blank">
+                    <i class="collection-img"
+                       style="background-image:url('//upload.jianshu.io/collections/images/283250/%E6%BC%AB%E7%94%BB%E4%B8%93%E9%A2%98.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/64/h/64')">
+
+                    </i>
+                    <span class="collection-name">
+                    更多...
+                    </span>
                 </a>
             </div>
         </section>
         <!--home-lay layout-type end-->
     </div>
 
-    <div class="row" style="margin-left: 190px">
+    <div class="row" style="margin-left: 117px">
         <div class="col-xs-12 col-sm-8 col-md-8">
 
             <!--home-lay layout-header start-->
@@ -83,15 +86,15 @@
                 <ul class="article-list">
                     <% data.article_list.forEach(function (item, key) { %>
                     <li>
-                        <article class="content-box">
+                        <article class="content-box content-box-index">
                             <div class="info-box">
                                 <div class="info-row title-row">
                                     <a href="/article/<%= item.aid %>"
                                        class="title"><%= item.title %></a>
                                 </div>
-                                <div class="content-text">
+                                <!-- <div class="content-text">
                                     <%= item.content %>
-                                </div>
+                                </div>-->
                                 <div class="info-row meta-row">
                                     <ul class="meta-list">
                                         <li class="item category">
