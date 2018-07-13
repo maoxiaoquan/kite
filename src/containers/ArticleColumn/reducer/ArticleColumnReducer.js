@@ -1,20 +1,20 @@
 const initState = {
-  user_list: [],
+  list: [],
   count: '',
-  current_user_info: {}
+  current_info: {}
 }
 
 function reducer(state = initState, action) {
   switch (action.type) {
-    case 'GET_USER_LIST':
+    case 'GET_ARTICLE_COLUMN_LIST':
       return {
         ...state,
         ...action.data
       }
-    case 'SET_CURRENT_USER_INFO':
+    case 'SET_ARTICLE_COLUMN_INFO':
       return {
         ...state,
-        current_user_info: action.data
+        current_info: action.data
       }
     default:
       return state

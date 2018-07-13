@@ -51,6 +51,11 @@ module.exports = {
       type: Seq.STRING(100),
       comment: '权限描述',
       field: 'authority_description'
+    },
+    create_date: { // 创建时间
+      type: Seq.BIGINT(50),
+      comment: '创建时间',
+      field: 'create_date'
     }
   }
 }

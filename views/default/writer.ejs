@@ -10,48 +10,23 @@
 
     <!--writer-header start-->
     <div class="writer-header" id="writer-header">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-12 col-sm-7 col-md-7">
-                    <input class="writer-input-title" type="text" placeholder="请输入文章标题">
-                </div>
-                <div class="col-xs-12 col-sm-5 col-md-5">
-                    <div class="pull-right">
-                        <ul class="writer-right clearfix">
-                            <li>
-                                <select class="article-type" name="" id="">
-                                    <option value="">请选择类型</option>
-                                    <option value="1">文章</option>
-                                    <option value="2">说说</option>
-                                    <option value="3">视频</option>
-                                    <option value="4">公告</option>
-                                </select>
-                            </li>
-                            <li>
-                                <select class="article-category" name="" id="">
-                                    <option value="">请选择文章分类</option>
-                                    <option value="前端">前端</option>
-                                    <option value="HTML5">HTML5</option>
-                                    <option value="js">js</option>
-                                </select>
-                            </li>
-                            <li><a class="btn add-cover-img" href="javascript:;">添加封面图片</a></li>
-                            <li><a class="btn save-draft" href="javascript:;"><i class="iconfont icon-iconset0238"></i></a>
-                            </li>
-                            <li><a class="btn post-article" href="javascript:;">发布文章</a></li>
-                            <li class="return-home"><a class="btn" href="/"><i class="iconfont icon-zhuye"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+
+        <div class="writer-header-view clearfix">
+            <ul class="writer-right">
+                <li><a class="btn btn-primary" href="javascript:;" id="save-article-draft">保存为草稿</a></li>
+                <li><a class="btn btn-primary" href="javascript:;" id="issue-article-model">发布文章</a></li>
+                <li><a class="btn btn-outline-primary" href="/"><i class="iconfont icon-zhuye"></i></a></li>
+            </ul>
         </div>
+
     </div>
     <!--writer-header end-->
 
     <!--writer-content start-->
     <div class="writer-content">
         <div class="writer-box">
-            <ul class="writer-box-title">
+            <input class="writer-input" style="display: block" type="text" placeholder="请输入文章标题">
+            <ul class="writer-nav">
                 <li><i class="iconfont icon-tupian"></i></li>
                 <li><i class="iconfont icon-chexiaofanhuichehuishangyibu"></i></li>
                 <li><i class="iconfont icon-zhongzhi"></i></li>
@@ -64,6 +39,73 @@
     </div>
     <!--writer-content end-->
 
+    <div id="writer-submit" style="display: none">
+        <div class="writer-submit-view">
+            <div class="column-warp">
+                <p class="common-title">个人专题</p>
+                <div class="common-select-box column-box js-column-box">
+                    <span class="common-select-name" id="column_name">职场生活</span>
+                    <i class="imv2-arrow1_d"></i>
+                    <ul class="common-select-ul" id="column_ul_list" style="display: none;">
+                        <li class="">请选择需要投递的栏目</li>
+                        <li data-columnid="2" class="modal-li-item active">职场生活</li>
+                        <li data-columnid="123" class="modal-li-item">幽默段子</li>
+                        <li data-columnid="124" class="modal-li-item">其它</li>
+                        <li data-columnid="125" class="modal-li-item">资讯</li>
+                    </ul>
+                </div>
+                <span class="common-error-tip"></span>
+            </div>
+
+            <div class="tag-warp">
+                <p class="common-title">文章标签<span><em id="chosen_tag_num">0</em>/3</span></p>
+                <div class="search-box clearfix">
+                    <div class="clearfix js-chosen-tags">
+                        <span class="tag-item" data-tag="17">JavaScript</span>
+                        <span class="tag-item" data-tag="17">JavaScript</span>
+                        <span class="tag-item" data-tag="17">JavaScript</span>
+                    </div>
+                    <input class="l" placeholder="选择下列热门标签或输入关键词检索标签" id="search_input">
+                </div>
+                <span class="common-error-tip"></span>
+                <p class="search-result hide js-search-result">相关“<span class="js-search-text"></span>”的搜索 <span
+                            class="js-search-num"></span> 个</p>
+                <div class="nano tag-list js-tag-nano has-scrollbar" style="height: 160px;">
+                    <div class="nano-content clearfix js-tag-list" tabindex="0" style="margin-right: -8px;">
+                        <span class="tag-item" data-tag="17">JavaScript</span>
+                        <span class="tag-item" data-tag="13">Node.js</span>
+                        <span class="tag-item" data-tag="52">Vue.js</span>
+                        <span class="tag-item" data-tag="50">React.JS</span>
+                        <span class="tag-item" data-tag="14">Html5</span>
+                        <span class="tag-item" data-tag="7">Maya</span>
+                        <span class="tag-item" data-tag="9">Premiere</span>
+                        <span class="tag-item" data-tag="40">ZBrush</span>
+                        <span class="tag-item" data-tag="43">产品更新</span>
+                        <span class="tag-item" data-tag="49">产品</span>
+                        <span class="tag-item" data-tag="46">职场生活</span>
+                        <span class="tag-item" data-tag="75">资讯</span>
+                        <span class="tag-item" data-tag="48">征文</span>
+                        <span class="tag-item" data-tag="67">面试</span>
+                        <span class="tag-item" data-tag="74">幽默段子</span>
+                        <span class="tag-item" data-tag="76">架构</span>
+                        <span class="tag-item" data-tag="77">安全</span>
+                        <span class="tag-item" data-tag="78">活动</span>
+                        <span class="tag-item" data-tag="54">Ruby</span>
+                    </div>
+                    <div class="nano-pane" style="display: none;">
+                        <div class="nano-slider" style="height: 71px; transform: translate(0px, 0px);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer clearfix">
+            <button type="button" class="btn btn-light" id="save-draft">保存并取消</button>
+            <button type="button" class="btn btn-primary" id="save_article">确定发布</button>
+            <div class="captcha-verify-box js-verify-box hide"></div>
+            <span class="js-submit-tip"></span>
+        </div>
+    </div>
+
 
 </section>
 <!--writer-lay layout-content end-->
@@ -72,28 +114,58 @@
 <script>
   window.onload = function () {
 
-    var writer_header = document.getElementById('writer-header')
+    !function (window) {
 
-    writer_header.getElementsByClassName('post-article')[0].onclick = function () {
+      /* get page height */
+      var sHeight = document.documentElement.scrollHeight
+      /* get page width */
+      var sWidth = document.documentElement.scrollWidth
+      /* 可视区域宽高 */
+      var cHeight = document.documentElement.clientHeight
 
-      var data = {
-        title: writer_header.getElementsByClassName('writer-input-title')[0].value,
-        content: document.getElementsByClassName('write-textarea')[0].value,
-        type: document.getElementsByClassName('article-type')[0].value,
-        category: document.getElementsByClassName('article-category')[0].value,
+      /* mask create element */
+      var fata_mask = document.createElement('div')
+      /* box_modal create element */
+      var fata_modal = document.createElement('div')
+
+      function open_modal () {
+        fata_mask.id = 'mask';
+        fata_mask.style.height = sHeight + 'px'
+        fata_mask.style.width = sWidth + 'px'
+        document.body.appendChild(fata_mask)
+
+        fata_modal.id = 'box-modal';
+        fata_modal.classList.add("box-layer")
+        fata_modal.innerHTML = document.getElementById('writer-submit').innerHTML
+        document.body.appendChild(fata_modal)
+
+        /* get box modal width height */
+        var dHeight = fata_modal.offsetHeight
+        var dWidth = fata_modal.offsetWidth
+        fata_modal.style.top = (cHeight - dHeight) / 2 + 'px'
+        fata_modal.style.left = (sWidth - dWidth) / 2 + 'px'
       }
-      axios.post('/writer', data).then(function (res) {
-        console.log(res.data)
-        if (res.data.state === 'success') {
-          alert(res.data.message)
-        } else {
-          alert(res.data.message)
+
+      function close_model () {
+        document.body.removeChild(fata_mask)
+        document.body.removeChild(fata_modal)
+      }
+
+      var openBtn = document.getElementById('issue-article-model')
+      openBtn.addEventListener('click', open_modal)
+
+      document.addEventListener('click', function (event) {
+        var target = event.target;
+        if (target.id == "save-draft") {
+          close_model()
         }
       })
-    }
 
-    document.getElementById('mark-text').innerHTML =
-      marked('# Marked in the browser\n\nRendered by **marked**.')
+      document.getElementById('mark-text').innerHTML =
+        marked('# Marked in the browser\n\nRendered by **marked**.')
+
+    }(window)
+
   }
 
 </script>

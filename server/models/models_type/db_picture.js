@@ -26,6 +26,11 @@ module.exports = {
       comment: '图片的类型',
       field: 'picture_type'
     },
+    create_date: { // 创建时间
+      type: Seq.BIGINT(50),
+      comment: '创建时间',
+      field: 'create_date'
+    },
     enable: { // 是否可以显示
       type: Seq.BOOLEAN,
       comment: '是否可以显示',

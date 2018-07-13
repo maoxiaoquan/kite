@@ -1,40 +1,45 @@
 const Seq = require('sequelize')
 const shortid = require('shortid')
 module.exports = {
-  NAME: 'article_topic', /*表名*/
+  NAME: 'user_article_topic', /*表名*/
   TABLE: {
     /*表结构*/
-    article_topic_id: { // 专题ID
+    user_article_topic_id: { // 专题ID
       type: Seq.INTEGER(10),
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增
       comment: '专题ID',
-      field:'article_topic_id'
+      field:'user_article_topic_id'
     },
-    article_topic_name: { // 专题名字
+    user_article_topic_name: { // 专题名字
       type: Seq.STRING(20),
       comment: '专题名字',
-      field: 'article_opic_name'
+      field: 'user_article_topic_name'
     },
-    article_topic_description: { // 专题描述
+    user_article_topic_description: { // 专题描述
       type: Seq.STRING(100),
       comment: '专题描述',
-      field: 'article_topic_description'
+      field: 'user_article_topic_description'
     },
-    article_topic_subscribe: { // 专题订阅数量
+    user_article_topic_subscribe: { // 专题订阅数量
       type: Seq.INTEGER(10),
       comment: '专题订阅数量',
-      field: 'article_topic_subscribe'
+      field: 'user_article_topic_subscribe'
     },
-    article_topic_icon: { // 专题图标
+    user_article_topic_icon: { // 专题图标
       type: Seq.STRING(20),
       comment: '专题图标',
-      field: 'article_topic_icon'
+      field: 'user_article_topic_icon'
     },
-    article_topic_icon_type: { // 专题图标类型 1是图片 2是字体图标
+    user_article_topic_icon_type: { // 专题图标类型 1是图片 2是字体图标
       type: Seq.INTEGER(20),
       comment: '标签图标类型',
-      field: 'article_topic_icon_type'
+      field: 'user_article_topic_icon_type'
+    },
+    create_date: { // 创建时间
+      type: Seq.BIGINT(50),
+      comment: '创建时间',
+      field: 'create_date'
     },
     uid: { // 专题ID
       type: Seq.INTEGER(10),

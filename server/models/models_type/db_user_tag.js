@@ -30,6 +30,11 @@ module.exports = {
       type: Seq.INTEGER(20),
       comment: '用户标签图标类型',
       field: 'user_tag_icon_type'
+    },
+    create_date: { // 创建时间
+      type: Seq.BIGINT(50),
+      comment: '创建时间',
+      field: 'create_date'
     }
   }
 }

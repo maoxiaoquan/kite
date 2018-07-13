@@ -83,6 +83,24 @@ class Article_Tag {
   }
 
   /**
+   * 获取所有标签操作
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async get_article_tag_all (ctx) {
+    let article_tag_all = await article_tag.findAll({
+      attributes: ['article_tag_id', 'article_tag_name', 'article_tag_us_name', 'article_tag_icon', 'article_tag_icon_type', 'article_tag_description', 'enable'],
+      where: {enable: 1}//为空，获取全部，也可以自己添加条件
+    })
+    format_data(ctx, {
+      state: 'success',
+      message: '返回成功',
+      data: {
+        article_tag_all: article_tag_all
+      }
+    })
+  }
+
+  /**
    * 更新标签
    * @param   {obejct} ctx 上下文对象
    */

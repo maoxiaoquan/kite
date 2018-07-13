@@ -4,6 +4,7 @@ const users = require('../apis/users')// 前台用户
 const user_tag = require('../apis/user_tag')// 前台用户标签
 const articles = require('../apis/articles')//文章
 const article_tag = require('../apis/article_tag')// 文章标签
+const article_column = require('../apis/article_column')// 文章专栏 （专栏为官方）
 const picture = require('../apis/picture')// 图片管理
 const upload = require('../apis/upload')// 上传
 const role_authority = require('../apis/admin_role_authority')// 后台角色权限
@@ -29,6 +30,9 @@ router.post('/edit_article', tokens.verifyToken, articles.edit_article)
 router.post('/delete_article', tokens.verifyToken, articles.delete_article)
 
 /*文章标签管理*/
+/*获取所有标签*/
+router.get('/get_article_tag_all', tokens.verifyToken, article_tag.get_article_tag_all)
+/*根据分页获取标签*/
 router.get('/get_article_tag_list', tokens.verifyToken, article_tag.get_article_tag_list)
 /*文章创建标签*/
 router.post('/create_article_tag', tokens.verifyToken, article_tag.create_article_tag)
@@ -37,7 +41,20 @@ router.post('/update_article_tag', tokens.verifyToken, article_tag.update_articl
 /*文章删除标签*/
 router.post('/delete_article_tag', tokens.verifyToken, article_tag.delete_article_tag)
 
+/*文章专栏管理 （专栏为官方）*/
+router.get('/get_article_column_list', tokens.verifyToken, article_column.get_article_column_list)
+/*文章创建专栏*/
+router.post('/create_article_column', tokens.verifyToken, article_column.create_article_column)
+/*文章更新专栏*/
+router.post('/update_article_column', tokens.verifyToken, article_column.update_article_column)
+/*文章删除专栏*/
+router.post('/delete_article_column', tokens.verifyToken, article_column.delete_article_column)
+
+/*文章专题管理 （专题为个人）*/
+
+
 /*用户标签管理*/
+/*根据分页获取标签*/
 router.get('/get_user_tag_list', tokens.verifyToken, user_tag.get_user_tag_list)
 /*用户创建标签*/
 router.post('/create_user_tag', tokens.verifyToken, user_tag.create_user_tag)

@@ -22,12 +22,12 @@ class index {
       limit: pageSize//每页限制返回的数据条数
     })
 
-    let article_tag = await models.article_tag.findAll({
-      attributes: ['article_tag_id', 'article_tag_name', 'article_tag_us_name', 'article_tag_icon', 'article_tag_icon_type'],
+    let article_column = await models.article_column.findAll({
+      attributes: ['article_column_id', 'article_column_name', 'article_column_icon', 'article_column_icon_type'],
       where: {enable: 1},//为空，获取全部，也可以自己添加条件
       limit: 10
     })
-    console.log('article_tag', article_tag)
+    console.log('article_tag', article_column)
     await render(ctx, {
       title: title,
       view_url: 'default/index',
@@ -36,7 +36,7 @@ class index {
       data: {
         count: count,
         article_list: rows,
-        article_tag: article_tag
+        article_column: article_column
       }
     })
   }

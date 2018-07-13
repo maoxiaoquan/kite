@@ -27,6 +27,7 @@ import SignUp from 'bundle-loader?lazy!../containers/Sign/view/SignUp' //登录�
 import User from 'bundle-loader?lazy!../containers/User/view/User'  /* 前台用户 */
 import Article from 'bundle-loader?lazy!../containers/Article/view/Article'  /* 文章列表 */
 import ArticleTag from 'bundle-loader?lazy!../containers/ArticleTag/view/ArticleTag'  /* 文章标签 */
+import ArticleColumn from 'bundle-loader?lazy!../containers/ArticleColumn/view/ArticleColumn'  /* 文章标签 */
 import UserTag from 'bundle-loader?lazy!../containers/UserTag/view/UserTag'  /* 用户标签 */
 import Picture from 'bundle-loader?lazy!../containers/Picture/view/Picture'  /* 图片管理 */
 /* ADMIN */
@@ -68,6 +69,7 @@ const Main = ({ match }) => (
           <Route component={createComponent(User)} exact path={`${match.url}/user`} />
           <Route component={createComponent(Article)} exact path={`${match.url}/article`} />
           <Route component={createComponent(ArticleTag)} exact path={`${match.url}/article_tag`} />
+          <Route component={createComponent(ArticleColumn)} exact path={`${match.url}/article_column`} />
           <Route component={createComponent(UserTag)} exact path={`${match.url}/user_tag`} />
           <Route component={createComponent(Picture)} exact path={`${match.url}/picture`} />
           <Route component={createComponent(adminUser)} exact path={`${match.url}/adminUser`} />

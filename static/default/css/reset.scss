@@ -106,7 +106,6 @@ iframe {
 a,
 a:link,
 a:visited {
-  color: #48494d;
   text-decoration: none;
   -webkit-transition: all .3s ease;
   -moz-transition: all .3s ease;
@@ -249,11 +248,49 @@ caption {
   background-color: #f9f9f9 !important;
 }
 
+.btn-green {
+  background: #31DB7A;
+  color: #ffffff;
+}
+
 .card {
   margin-bottom: 10px;
   background: #fff;
   overflow: hidden;
   border-radius: 2px;
   box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
+  box-sizing: border-box;
+}
+
+/* modal*/
+
+#mask {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.box-layer {
+  position: fixed;
+  _position: absolute;
+  pointer-events: auto;
+  -webkit-overflow-scrolling: touch;
+  top: 150px;
+  left: 0;
+  margin: 0;
+  background-color: #fff;
+  -webkit-background-clip: content;
+  box-shadow: 1px 1px 50px rgba(0, 0, 0, .3);
+  border-radius: 3px;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-duration: .3s;
+  animation-duration: .3s;
+  min-width: 200px;
+  z-index: 101;
   box-sizing: border-box;
 }

@@ -25,6 +25,11 @@ module.exports = {
       comment: '验证码',
       field: 'verify_code'
     },
+    create_date: { // 创建时间
+      type: Seq.BIGINT(50),
+      comment: '创建时间',
+      field: 'create_date'
+    },
     expire_time: { // 验证码过期时间
       type: Seq.BIGINT(50),
       comment: '过期时间',

@@ -13,7 +13,7 @@ class User {
   static async verify_user (ctx, next) {
 
     let uid = ctx.params.uid
-    let find_user = await  models.user.findOne({where: {uid}})
+    let find_user = await models.user.findOne({where: {uid}})
     if (find_user) {
       await next()
     } else {
@@ -26,7 +26,7 @@ class User {
     const title = 'user'
     let uid = ctx.params.uid
 
-    let find_user_article = await  models.article.findAll({where: {uid}})
+    let find_user_article = await models.article.findAll({where: {uid}})
 
     await de.render(ctx, {
       title: title,
