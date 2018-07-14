@@ -950,6 +950,7 @@
   padding: 20px;
   width: 500px;
   .column-warp {
+    margin-bottom: 15px;
     .common-title {
       margin-bottom: 8px;
       font-weight: 700;
@@ -965,6 +966,7 @@
       color: #1C1F21;
       cursor: pointer;
       font-size: 14px;
+      width: 200px;
       .common-select-name {
         display: block;
         padding: 0 40px 0 12px;
@@ -975,6 +977,39 @@
         text-overflow: ellipsis;
         box-sizing: border-box;
       }
+    }
+    &.column-warp-topic{
+      float: left;
+    }
+    .item{
+      display: inline-block;
+      margin-right: 10px;
+      cursor: pointer;
+      i{
+        color: #aaaaaa;
+        font-size: 18px;
+        margin-right: 3px;
+      }
+    }
+  }
+  .create-topic{
+    float: left;
+    margin-top: 30px;
+    margin-left: 25px;
+    .create-topic-view{
+      .create-topic-input{
+        border: 1px solid #9199A1;
+        border-radius: 6px;
+        padding:5px 10px;
+        width: 130px;
+        vertical-align: middle;
+      }
+      button{
+        vertical-align: middle;
+      }
+    }
+    .box-hide{
+      display: none;
     }
   }
   .tag-warp {

@@ -861,6 +861,9 @@
   padding: 20px;
   width: 500px; }
 
+.writer-submit-view .column-warp {
+  margin-bottom: 15px; }
+
 .writer-submit-view .column-warp .common-title {
   margin-bottom: 8px;
   font-weight: 700;
@@ -875,7 +878,8 @@
   border-radius: 6px;
   color: #1C1F21;
   cursor: pointer;
-  font-size: 14px; }
+  font-size: 14px;
+  width: 200px; }
 
 .writer-submit-view .column-warp .common-select-box .common-select-name {
   display: block;
@@ -886,6 +890,37 @@
   overflow: hidden;
   text-overflow: ellipsis;
   box-sizing: border-box; }
+
+.writer-submit-view .column-warp.column-warp-topic {
+  float: left; }
+
+.writer-submit-view .column-warp .item {
+  display: inline-block;
+  margin-right: 10px;
+  cursor: pointer; }
+
+.writer-submit-view .column-warp .item i {
+  color: #aaaaaa;
+  font-size: 18px;
+  margin-right: 3px; }
+
+.writer-submit-view .create-topic {
+  float: left;
+  margin-top: 30px;
+  margin-left: 25px; }
+
+.writer-submit-view .create-topic .create-topic-view .create-topic-input {
+  border: 1px solid #9199A1;
+  border-radius: 6px;
+  padding: 5px 10px;
+  width: 130px;
+  vertical-align: middle; }
+
+.writer-submit-view .create-topic .create-topic-view button {
+  vertical-align: middle; }
+
+.writer-submit-view .create-topic .box-hide {
+  display: none; }
 
 .writer-submit-view .tag-warp {
   margin-top: 24px; }

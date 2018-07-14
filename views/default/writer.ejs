@@ -41,20 +41,45 @@
 
     <div id="writer-submit" style="display: none">
         <div class="writer-submit-view">
-            <div class="column-warp">
-                <p class="common-title">个人专题</p>
-                <div class="common-select-box column-box js-column-box">
-                    <span class="common-select-name" id="column_name">职场生活</span>
-                    <i class="imv2-arrow1_d"></i>
-                    <ul class="common-select-ul" id="column_ul_list" style="display: none;">
-                        <li class="">请选择需要投递的栏目</li>
-                        <li data-columnid="2" class="modal-li-item active">职场生活</li>
-                        <li data-columnid="123" class="modal-li-item">幽默段子</li>
-                        <li data-columnid="124" class="modal-li-item">其它</li>
-                        <li data-columnid="125" class="modal-li-item">资讯</li>
-                    </ul>
+            <div class="clearfix">
+                <div class="column-warp column-warp-topic">
+                    <p class="common-title">个人专题</p>
+                    <div class="common-select-box column-box js-column-box">
+
+                        <span class="common-select-name" id="column_name">请选择需要投递的栏目</span>
+                        <i class="imv2-arrow1_d"></i>
+                        <ul class="common-select-ul" id="column_ul_list" style="display: none;">
+                            <li class="active">请选择需要投递的栏目</li>
+                            <li data-columnid="2" class="modal-li-item">职场生活</li>
+                            <li data-columnid="116" class="modal-li-item">区块链</li>
+                            <li data-columnid="117" class="modal-li-item">人工智能</li>
+                            <li data-columnid="118" class="modal-li-item">云计算/大数据</li>
+                            <li data-columnid="119" class="modal-li-item">前端开发</li>
+                            <li data-columnid="120" class="modal-li-item">后端开发</li>
+                            <li data-columnid="121" class="modal-li-item">移动互联</li>
+                            <li data-columnid="122" class="modal-li-item">工具资源</li>
+                            <li data-columnid="123" class="modal-li-item">幽默段子</li>
+                            <li data-columnid="124" class="modal-li-item">其它</li>
+                            <li data-columnid="125" class="modal-li-item">资讯</li>
+                        </ul>
+                    </div>
                 </div>
-                <span class="common-error-tip"></span>
+                <div class="create-topic">
+                    <div class="create-topic-view box-hide">
+                        <input class="create-topic-input" type="text">
+                        <button class="btn btn-primary btn-sm" id="save-create-topic">保存</button>
+                        <button class="btn btn-primary btn-sm" id="hide-create-topic">取消</button>
+                    </div>
+                    <button class="btn btn-primary btn-sm" id="show-create-topic">创建新专题</button>
+                </div>
+            </div>
+
+            <div class="column-warp">
+                <p class="common-title">文章形式</p>
+                <ul>
+                    <li class="item"><i class="iconfont icon-danxuankuang"></i>原创</li>
+                    <li class="item"><i class="iconfont icon-danxuankuang"></i>转载</li>
+                </ul>
             </div>
 
             <div class="tag-warp">
@@ -97,6 +122,8 @@
                     </div>
                 </div>
             </div>
+
+
         </div>
         <div class="modal-footer clearfix">
             <button type="button" class="btn btn-light" id="save-draft">保存并取消</button>
@@ -115,6 +142,7 @@
   window.onload = function () {
 
     !function (window) {
+
 
       /* get page height */
       var sHeight = document.documentElement.scrollHeight
@@ -144,6 +172,8 @@
         var dWidth = fata_modal.offsetWidth
         fata_modal.style.top = (cHeight - dHeight) / 2 + 'px'
         fata_modal.style.left = (sWidth - dWidth) / 2 + 'px'
+
+        document.getElementById('writer-submit').innerHTML = ''
       }
 
       function close_model () {
@@ -151,13 +181,29 @@
         document.body.removeChild(fata_modal)
       }
 
+      /*打开model*/
       var openBtn = document.getElementById('issue-article-model')
       openBtn.addEventListener('click', open_modal)
 
+      function show_create () {
+        /*创建专题*/
+        var create_topic = document.getElementsByClassName('create-topic-view')[0]
+        var save_create_topic = document.getElementById('save-create-topic')
+        /*保存*/
+        var hide_create_topic = document.getElementById('hide-create-topic')
+        /*取消*/
+        var show_create_topic = document.getElementById('show-create-topic')
+        create_topic.classList.remove('box-hide')
+        show_create_topic.classList.add('box-hide')
+      }
+
+      /*公共事件监听*/
       document.addEventListener('click', function (event) {
         var target = event.target;
         if (target.id == "save-draft") {
           close_model()
+        } else if (target.id == "show-create-topic") {
+          show_create()
         }
       })
 
