@@ -36,7 +36,7 @@ i {
 
 p {
   color: #555;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.8; }
 
 menu,
@@ -247,7 +247,7 @@ caption {
   background-color: #fff;
   -webkit-background-clip: content;
   box-shadow: 1px 1px 50px rgba(0, 0, 0, 0.3);
-  border-radius: 3px;
+  border-radius: 12px;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
   -webkit-animation-duration: .3s;

@@ -21,7 +21,7 @@ class User {
     }
   }
 
-  static async get_user (ctx) {
+  static async render_user_center (ctx) {
 
     const title = 'user'
     let uid = ctx.params.uid
@@ -41,7 +41,7 @@ class User {
     })
   }
 
-  static async get_user_topic (ctx) {
+  static async render_user_center_topic (ctx) {
 
     const title = 'user'
     let uid = ctx.params.uid

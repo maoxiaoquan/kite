@@ -5,7 +5,7 @@ class Subscribe {
 
   constructor () {}
 
-  static async get_subscribe_tag (ctx) {
+  static async render_subscribe_tag (ctx) {
     const title = 'tag'
 
     let page = 1

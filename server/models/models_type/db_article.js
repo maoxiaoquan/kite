@@ -36,6 +36,11 @@ module.exports = {
       comment: '内容',
       field: 'content'
     },
+    origin_content: { // 原内容
+      type: Seq.TEXT('long'),
+      comment: '原内容',
+      field: 'origin_content'
+    },
     source: {// 来源 （1原创 2转载）
       type: Seq.STRING(20),
       comment: '来源 （1原创 2转载）',
@@ -52,9 +57,14 @@ module.exports = {
       field: 'type'
     },
     create_date: { // 创建时间
-      type: Seq.BIGINT(50),
+      type: Seq.DATE,
       comment: '创建时间',
       field: 'create_date'
+    },
+    create_date_timestamp: { // 创建时间戳
+      type: Seq.DATE,
+      comment: '创建时间戳',
+      field: 'create_date_timestamp'
     },
     cover_img: {
       type: Seq.STRING(20),
@@ -67,12 +77,14 @@ module.exports = {
       field: 'read_count',
       defaultValue: 0
     },
-    topic_ids: { /* 文章所属的用户专栏id 多个*/
-      type:  Seq.STRING(100),
+    topic_ids: {
+      /* 文章所属的用户专栏id 可多个*/
+      type: Seq.STRING(100),
       comment: '文章所属的用户专栏id',
       field: 'article_topic_ids'
     },
-    tag_ids: { /* 文章所属的标签名字  可以多个*/
+    tag_ids: {
+      /* 文章所属的标签名字 可多个*/
       type: Seq.STRING(100),
       comment: '文章所属的标签id',
       field: 'article_tag_ids'

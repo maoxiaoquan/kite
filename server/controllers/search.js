@@ -10,7 +10,7 @@ class Search {
    * @param   {obejct} ctx 上下文对象
    */
 
-  static async get_search (ctx) {
+  static async form_search (ctx) {
 
     const title = 'search'
 

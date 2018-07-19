@@ -46,11 +46,6 @@ module.exports = {
       comment: 'uid',
       field:'uid'
     },
-    nickname: { // 昵称
-      type: Seq.STRING(16),
-      comment: '昵称',
-      field: 'nickname'
-    },
     enable: { // 是否可以显示
       type: Seq.BOOLEAN,
       comment: '是否可以显示',

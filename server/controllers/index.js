@@ -1,14 +1,14 @@
 const models = require('../models')
 const {render} = require('../utils/res_data')
 
-class index {
+class Index {
   constructor (state) {
     this.state = {
       title: '333'
     }
   }
 
-  async get_index (ctx) {
+  static async render_get_index (ctx) {
 
     let page = 1
     let pageSize = 10
@@ -42,4 +42,4 @@ class index {
   }
 }
 
-module.exports = new index()
+module.exports = Index

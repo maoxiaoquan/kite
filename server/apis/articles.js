@@ -30,7 +30,7 @@ class Articles {
 
 
   /**
-   * 更新用户
+   * 更新文章
    * @param   {obejct} ctx 上下文对象
    */
   static async edit_article(ctx) {

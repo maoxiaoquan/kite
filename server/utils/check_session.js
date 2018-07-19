@@ -1,7 +1,7 @@
 class Check_Session {
   constructor () { }
 
-  async Check_Session (ctx, next) {
+  static async Check_Session (ctx, next) {
 
     if (ctx.session.islogin) {
       await next()
@@ -11,7 +11,7 @@ class Check_Session {
     }
   }
 
-  async ajaxCheck_Session (ctx, next) {
+  static async ajaxCheck_Session (ctx, next) {
 
     if (ctx.session.islogin) {
       await next()
@@ -27,4 +27,4 @@ class Check_Session {
 
 }
 
-module.exports = new Check_Session()
+module.exports = Check_Session

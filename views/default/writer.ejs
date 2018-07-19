@@ -25,16 +25,16 @@
     <!--writer-content start-->
     <div class="writer-content">
         <div class="writer-box">
-            <input class="writer-input" style="display: block" type="text" placeholder="请输入文章标题">
+            <input class="writer-input" style="display: block" type="text" id="article-title" placeholder="请输入文章标题">
             <ul class="writer-nav">
                 <li><i class="iconfont icon-tupian"></i></li>
                 <li><i class="iconfont icon-chexiaofanhuichehuishangyibu"></i></li>
                 <li><i class="iconfont icon-zhongzhi"></i></li>
             </ul>
-            <textarea class="write-textarea" name="" id="" cols="30" rows="10"></textarea>
+            <textarea class="write-textarea" name="" id="write-textarea" cols="30" rows="10" wrap="hard"></textarea>
         </div>
         <div class="content-preview">
-            <div id="mark-text"></div>
+            <div id="mark-text" class="box-article-view"></div>
         </div>
     </div>
     <!--writer-content end-->
@@ -42,25 +42,14 @@
     <div id="writer-submit" style="display: none">
         <div class="writer-submit-view">
             <div class="clearfix">
-                <div class="column-warp column-warp-topic">
+                <div class="topic-warp topic-warp-topic">
                     <p class="common-title">个人专题</p>
-                    <div class="common-select-box column-box js-column-box">
+                    <div class="common-select-box topic-box js-topic-box" id="js-topic-box">
 
-                        <span class="common-select-name" id="column_name">请选择需要投递的栏目</span>
-                        <i class="imv2-arrow1_d"></i>
-                        <ul class="common-select-ul" id="column_ul_list" style="display: none;">
+                        <span class="common-select-name" id="topic_name">请选择需要投递的栏目</span>
+                        <i class="iconfont icon-moreunfold" id="topic_name_i"></i>
+                        <ul class="common-select-ul box-hide" id="topic_ul_list">
                             <li class="active">请选择需要投递的栏目</li>
-                            <li data-columnid="2" class="modal-li-item">职场生活</li>
-                            <li data-columnid="116" class="modal-li-item">区块链</li>
-                            <li data-columnid="117" class="modal-li-item">人工智能</li>
-                            <li data-columnid="118" class="modal-li-item">云计算/大数据</li>
-                            <li data-columnid="119" class="modal-li-item">前端开发</li>
-                            <li data-columnid="120" class="modal-li-item">后端开发</li>
-                            <li data-columnid="121" class="modal-li-item">移动互联</li>
-                            <li data-columnid="122" class="modal-li-item">工具资源</li>
-                            <li data-columnid="123" class="modal-li-item">幽默段子</li>
-                            <li data-columnid="124" class="modal-li-item">其它</li>
-                            <li data-columnid="125" class="modal-li-item">资讯</li>
                         </ul>
                     </div>
                 </div>
@@ -74,51 +63,35 @@
                 </div>
             </div>
 
-            <div class="column-warp">
-                <p class="common-title">文章形式</p>
-                <ul>
-                    <li class="item"><i class="iconfont icon-danxuankuang"></i>原创</li>
-                    <li class="item"><i class="iconfont icon-danxuankuang"></i>转载</li>
-                </ul>
+            <div class="clearfix">
+                <div class="topic-warp topic-warp-topic">
+                    <p class="common-title">文章形式</p>
+                    <div class="common-select-box topic-box js-topic-box" id="js-topic-box-type" style="width: 130px">
+                        <span class="common-select-name" id="article_type">请选择</span>
+                        <i class="iconfont icon-moreunfold" id="article_type_i_type"></i>
+                        <ul class="common-select-ul box-hide" id="topic_ul_list_type" style="height: 115px">
+                            <li class="active">请选择</li>
+                            <li class="" data-id="1">原创</li>
+                            <li class="" data-id="2">转载</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
             <div class="tag-warp">
                 <p class="common-title">文章标签<span><em id="chosen_tag_num">0</em>/3</span></p>
                 <div class="search-box clearfix">
                     <div class="clearfix js-chosen-tags">
-                        <span class="tag-item" data-tag="17">JavaScript</span>
-                        <span class="tag-item" data-tag="17">JavaScript</span>
-                        <span class="tag-item" data-tag="17">JavaScript</span>
+
                     </div>
-                    <input class="l" placeholder="选择下列热门标签或输入关键词检索标签" id="search_input">
+                    <input class="search-input" placeholder="选择下列热门标签或输入关键词检索标签" id="search_input"
+                           style="width: 440px;">
                 </div>
-                <span class="common-error-tip"></span>
                 <p class="search-result hide js-search-result">相关“<span class="js-search-text"></span>”的搜索 <span
                             class="js-search-num"></span> 个</p>
-                <div class="nano tag-list js-tag-nano has-scrollbar" style="height: 160px;">
-                    <div class="nano-content clearfix js-tag-list" tabindex="0" style="margin-right: -8px;">
-                        <span class="tag-item" data-tag="17">JavaScript</span>
-                        <span class="tag-item" data-tag="13">Node.js</span>
-                        <span class="tag-item" data-tag="52">Vue.js</span>
-                        <span class="tag-item" data-tag="50">React.JS</span>
-                        <span class="tag-item" data-tag="14">Html5</span>
-                        <span class="tag-item" data-tag="7">Maya</span>
-                        <span class="tag-item" data-tag="9">Premiere</span>
-                        <span class="tag-item" data-tag="40">ZBrush</span>
-                        <span class="tag-item" data-tag="43">产品更新</span>
-                        <span class="tag-item" data-tag="49">产品</span>
-                        <span class="tag-item" data-tag="46">职场生活</span>
-                        <span class="tag-item" data-tag="75">资讯</span>
-                        <span class="tag-item" data-tag="48">征文</span>
-                        <span class="tag-item" data-tag="67">面试</span>
-                        <span class="tag-item" data-tag="74">幽默段子</span>
-                        <span class="tag-item" data-tag="76">架构</span>
-                        <span class="tag-item" data-tag="77">安全</span>
-                        <span class="tag-item" data-tag="78">活动</span>
-                        <span class="tag-item" data-tag="54">Ruby</span>
-                    </div>
-                    <div class="nano-pane" style="display: none;">
-                        <div class="nano-slider" style="height: 71px; transform: translate(0px, 0px);"></div>
+                <div class="tag-list-view js-tag-nano has-scrollbar" style="height: 160px;">
+                    <div class="clearfix js-tag-list">
+
                     </div>
                 </div>
             </div>
@@ -155,16 +128,19 @@
       var fata_mask = document.createElement('div')
       /* box_modal create element */
       var fata_modal = document.createElement('div')
+      var model_view = document.getElementById('writer-submit').innerHTML
+
+      var get_article_tag_all = _server.get_article_tag_all()
 
       function open_modal () {
-        fata_mask.id = 'mask';
+        fata_mask.id = 'mask'
         fata_mask.style.height = sHeight + 'px'
         fata_mask.style.width = sWidth + 'px'
         document.body.appendChild(fata_mask)
 
-        fata_modal.id = 'box-modal';
-        fata_modal.classList.add("box-layer")
-        fata_modal.innerHTML = document.getElementById('writer-submit').innerHTML
+        fata_modal.id = 'box-modal'
+        fata_modal.classList.add('box-layer')
+        fata_modal.innerHTML = model_view
         document.body.appendChild(fata_modal)
 
         /* get box modal width height */
@@ -174,45 +150,236 @@
         fata_modal.style.left = (sWidth - dWidth) / 2 + 'px'
 
         document.getElementById('writer-submit').innerHTML = ''
+        render_topic_ul_li()
+        render_tag_ul_li()
       }
 
       function close_model () {
+        document.getElementById('writer-submit').innerHTML = model_view
         document.body.removeChild(fata_mask)
         document.body.removeChild(fata_modal)
       }
 
-      /*打开model*/
+      /*打开保存文章 创建整个model层*/
       var openBtn = document.getElementById('issue-article-model')
       openBtn.addEventListener('click', open_modal)
 
       function show_create () {
         /*创建专题*/
         var create_topic = document.getElementsByClassName('create-topic-view')[0]
-        var save_create_topic = document.getElementById('save-create-topic')
         /*保存*/
-        var hide_create_topic = document.getElementById('hide-create-topic')
+        var save_create_topic = document.getElementById('save-create-topic')
         /*取消*/
+        var hide_create_topic = document.getElementById('hide-create-topic')
         var show_create_topic = document.getElementById('show-create-topic')
+
         create_topic.classList.remove('box-hide')
         show_create_topic.classList.add('box-hide')
+
+        save_create_topic.onclick = function () { /*创建专题事件*/
+          _server.create_user_article_topic().then(function (res) {
+            if (res.state === 'success') {
+              alert('创建成功')
+              create_topic.classList.add('box-hide')
+              show_create_topic.classList.remove('box-hide')
+              render_topic_ul_li()
+            } else {
+              alert(res.message)
+            }
+          })
+        }
+
+        hide_create_topic.onclick = function () { /*取消创建专题事件*/
+          create_topic.classList.add('box-hide')
+          show_create_topic.classList.remove('box-hide')
+        }
+
       }
+
+      /*获取专题点击选项框*/
+
+      function show_topic_ul_list () {
+        var topic_ul_list = document.getElementById('topic_ul_list')
+        topic_ul_list.classList.remove('box-hide')
+        topic_ul_list.addEventListener('click', function (e) {
+          console.log('e.target', e)
+          document.querySelector('#topic_name').innerHTML = e.target.innerHTML
+          document.querySelector('#topic_name').setAttribute('data-id', e.target.getAttribute('data-id'))
+          topic_ul_list.classList.add('box-hide')
+        })
+      }
+
+      function show_topic_ul_list_type () {
+        var topic_ul_list = document.getElementById('topic_ul_list_type')
+        topic_ul_list.classList.remove('box-hide')
+        topic_ul_list.addEventListener('click', function (e) {
+          document.querySelector('#article_type').innerHTML = e.target.innerHTML
+          document.querySelector('#article_type').setAttribute('data-id', e.target.getAttribute('data-id'))
+          topic_ul_list.classList.add('box-hide')
+        })
+      }
+
+      function render_topic_ul_li () {  /*渲染所有当前用户所属专题*/
+        var topic_ul_list = document.getElementById('topic_ul_list')
+        var html = ''
+        _server.get_user_article_topic_all().then(function (res) {
+          for (var item in res.data.list) {
+            console.log('html', res.data.list[item].user_article_topic_name)
+            html += '<li data-id="' + res.data.list[item].user_article_topic_id + '">' + res.data.list[item].user_article_topic_name + '</li>'
+          }
+          topic_ul_list.innerHTML = html
+        })
+      }
+
+      function render_tag_ul_li () { /*渲染所有文章标签*/
+        var tag_ul_list = document.querySelector('.js-tag-list')
+        var html = ''
+        get_article_tag_all.then(function (res) {
+          for (var item in res.data.list) {
+            console.log('html', res.data.list[item].article_tag_name)
+            html += '<span class="tag-item" data-tag-id="' + res.data.list[item].article_tag_id + '">' + res.data.list[item].article_tag_name + '</span>'
+          }
+          tag_ul_list.innerHTML = html
+        })
+      }
+
+      function find_article_tag () {
+        var inputField = document.getElementById('search_input')
+        var tag_ul_list = document.querySelector('.js-tag-list')
+        var js_search_text = document.querySelector('.js-search-text')
+        var js_search_num = document.querySelector('.js-search-num')
+        var js_search_result = document.querySelector('.js-search-result')
+        var html = ''
+        var _arr = []
+        get_article_tag_all.then(function (res) {
+          for (var item in res.data.list) {
+            console.log(res.data.list[item])
+            if ((res.data.list[item].article_tag_name).toLowerCase().indexOf(inputField.value.toLowerCase()) >= 0) {
+              _arr.push(res.data.list[item])
+            }
+          }
+          for (var item in _arr) {
+            console.log(_arr[item])
+            html += '<span class="tag-item" data-tag-id="' + _arr[item].article_tag_id + '">' + _arr[item].article_tag_name + '</span>'
+          }
+          if (inputField.value.length === 0) {
+            js_search_result.classList.add('hide')
+          } else {
+            js_search_result.classList.remove('hide')
+            js_search_text.innerHTML = inputField.value
+            js_search_num.innerHTML = _arr.length
+          }
+          tag_ul_list.innerHTML = html
+        })
+      }
+
+      $('body').on('keyup', '#search_input', function () {
+        find_article_tag()
+      })
+
+      var current_article_tag_arr = []
+
+      function current_article_tag (obj) { /*替换选中*/
+        console.log(obj)
+        document.getElementById('search_input').value = ''
+        let _arr = []
+        for (var item in current_article_tag_arr) {
+          _arr.push(current_article_tag_arr[item].article_tag_name)
+        }
+        if (current_article_tag_arr.length < 3 && _arr.indexOf(obj.text()) === -1) {
+          current_article_tag_arr.push({article_tag_id: obj.attr('data-tag-id'), article_tag_name: obj.text()})
+        }
+        render_current_article_tag()
+      }
+
+      function render_current_article_tag () {
+        var html = ''
+        var js_chosen_tags = $('.js-chosen-tags')
+        var inputField = document.getElementById('search_input')
+        for (var item in current_article_tag_arr) {
+          console.log(current_article_tag_arr[item])
+          html += '<span class="tag-item" data-tag-id="' + current_article_tag_arr[item].article_tag_id + '">' + current_article_tag_arr[item].article_tag_name + '</span>'
+        }
+        js_chosen_tags.html(html)
+        inputField.style.width = (400 - $('.js-chosen-tags').width()) + 'px'
+        if (current_article_tag_arr.length >= 3) {
+          inputField.style.display = 'none'
+        } else {
+          inputField.style.display = 'block'
+        }
+        $('#chosen_tag_num').text(current_article_tag_arr.length)
+      }
+
+      function delete_current_article_tag (obj) { /*替换选中*/
+
+        for (var item in current_article_tag_arr) {
+          if (obj.text() === current_article_tag_arr[item].article_tag_name) {
+            current_article_tag_arr.splice(item, 1)
+          }
+        }
+
+        render_current_article_tag()
+      }
+
+      $('body').on('click', '.js-tag-list .tag-item', function () {
+        current_article_tag($(this))
+      })
+
+      $('body').on('click', '.js-chosen-tags .tag-item', function () {
+        delete_current_article_tag($(this))
+      })
 
       /*公共事件监听*/
       document.addEventListener('click', function (event) {
-        var target = event.target;
-        if (target.id == "save-draft") {
+        var target = event.target
+        if (target.id == 'save-draft') {
           close_model()
-        } else if (target.id == "show-create-topic") {
+        } else if (target.id == 'show-create-topic') {
           show_create()
+        } else if (target.id == 'topic_name' || target.id == 'topic_name_i') {
+          show_topic_ul_list()
+        } else if (target.id == 'article_type' || target.id == 'article_type_i_type') {
+          show_topic_ul_list_type()
         }
       })
 
-      document.getElementById('mark-text').innerHTML =
-        marked('# Marked in the browser\n\nRendered by **marked**.')
+      /*文档编写区域*/
+      var write_textarea = document.getElementById("write-textarea")
+
+      write_textarea.addEventListener("keyup", function (e) {
+        document.getElementById('mark-text').innerHTML =
+          marked(write_textarea.value, {breaks: true})
+      })
+
+      /*保存文章*/
+
+      function getObjectValues(object)
+      {
+        var values = [];
+        for (var property in object)
+          values.push(object[property].article_tag_id);
+        return values;
+      }
+
+      $('body').on('click', '#save_article', function () {
+        var article_titile = document.querySelector('#article-title').value /*文章的标题*/
+        var write_textarea_value = write_textarea.value /*编写区域原内容*/
+        var marked_write_textarea_value = marked(write_textarea.value, {breaks: true}) /*marked编译后内容*/
+        var topic_name_value = document.querySelector('#topic_name').textContent/*个人专题*/
+        var topic_name_id = document.querySelector('#topic_name').getAttribute('data-id') /*个人专题id*/
+        var article_type_value = document.querySelector('#article_type').textContent
+        var article_type_id = document.querySelector('#article_type').getAttribute('data-id')
+        var article_tag_id_arr = getObjectValues(current_article_tag_arr)
+
+
+        console.log(write_textarea_value)
+        console.log(marked_write_textarea_value)
+      })
 
     }(window)
 
   }
+
 
 </script>
 <!--<script>

@@ -41,6 +41,19 @@ class Format {
     }
   }
 
+
+  /**
+   * 前台页面数据返回
+   */
+
+  async home_resJson (ctx, {state, message, data = {}}) {
+    ctx.body = {
+      state,
+      message,
+      data
+    }
+  }
+
   async render (ctx, {title, view_url, state, message, data = {}}) {
     await ctx.render(view_url, {
       title,
