@@ -353,8 +353,7 @@
 
       /*保存文章*/
 
-      function getObjectValues(object)
-      {
+      function getObjectValues (object) {
         var values = [];
         for (var property in object)
           values.push(object[property].article_tag_id);
@@ -362,18 +361,24 @@
       }
 
       $('body').on('click', '#save_article', function () {
-        var article_titile = document.querySelector('#article-title').value /*文章的标题*/
-        var write_textarea_value = write_textarea.value /*编写区域原内容*/
-        var marked_write_textarea_value = marked(write_textarea.value, {breaks: true}) /*marked编译后内容*/
-        var topic_name_value = document.querySelector('#topic_name').textContent/*个人专题*/
-        var topic_name_id = document.querySelector('#topic_name').getAttribute('data-id') /*个人专题id*/
-        var article_type_value = document.querySelector('#article_type').textContent
-        var article_type_id = document.querySelector('#article_type').getAttribute('data-id')
-        var article_tag_id_arr = getObjectValues(current_article_tag_arr)
 
+        var params = {
+          title: document.querySelector('#article-title').value,//文章的标题
+          excerpt: '', /*摘记*/
+          content: marked(write_textarea.value, {breaks: true}), /*主内容*/
+          origin_content: write_textarea.value, /*源内容*/
+          source: document.querySelector('#article_type').getAttribute('data-id'), // 来源 （1原创 2转载）
+          type: 1, // 类型 （1文章 2说说 3视频 4公告 ）
+          topic_ids: document.querySelector('#topic_name').getAttribute('data-id'),
+          tag_ids: getObjectValues(current_article_tag_arr).join(',')
+        }
 
-        console.log(write_textarea_value)
-        console.log(marked_write_textarea_value)
+        _server.post_article_writer(params).then(function (res) {
+          console.log(res)
+        }).catch(function () {
+
+        })
+
       })
 
     }(window)

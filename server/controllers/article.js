@@ -68,20 +68,22 @@ class Article {
       return false
     }
 
+    console.log(' moment().utc().utcOffset(+8)', moment().utc().utcOffset(+8).format('YYYY-MM-DD HH:mm:ss'))
     try {
       await models.article.create({
         uid: ctx.session.uid,
         author: ctx.session.nickname,
         title: formData.title,
-        content: formData.content,
-        origin_content: formData.content,
+        excerpt: formData.content, /*摘记*/
+        content: formData.content, /*主内容*/
+        origin_content: formData.content, /*源内容*/
         source: formData.source, // 来源 （1原创 2转载）
-        excerpt: formData.content,
         status: 1, // '状态(0:草稿;1:审核中;2:审核通过;3:回收站)'
-        type: 1, // 类型 （1文章 2说说 3视频 4公告 ）
-        create_date: moment().utc().utcOffset(+8).format('X'),
-        topic_ids: '',
-        tag_ids: ''
+        type: formData.type, // 类型 （1文章 2说说 3视频 4公告 ）
+        create_date: moment().utc().utcOffset(+8).format('YYYY-MM-DD'), /*时间*/
+        create_date_timestamp: moment().utc().utcOffset(+8).format('X'), /*时间戳 */
+        topic_ids: formData.topic_ids,
+        tag_ids: formData.tag_ids
       }).then(function (data) {
         home_resJson(ctx, {
           state: 'success',

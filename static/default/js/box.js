@@ -26,6 +26,9 @@ _Fetch.interceptors.response.use(function (response) {
     },
     get_article_tag_all: function () { /*获取所有文章标签*/
       return _Fetch.get('/get_article_tag_all')
+    },
+    post_article_writer: function (data) { /*编写文章*/
+      return _Fetch.post('/article_writer', data)
     }
   }
 

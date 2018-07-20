@@ -47,7 +47,7 @@ router.post('sign_up', sign.post_sign_up) // 注册数据 post TYPE:AJAX
 
 router.post('sign_up_code', sign.post_sign_up_code) // 注册数据 post TYPE:AJAX
 
-router.post('writer', ajaxCheck_Session, article.post_create_writer) // 编写文章post TYPE:AJAX
+router.post('article_writer', ajaxCheck_Session, article.post_create_writer) // 编写文章post TYPE:AJAX
 
 router.get('get_article_tag_all', ajaxCheck_Session, article.get_article_tag_all) // 获取所有文章标签 TYPE:AJAX
 
