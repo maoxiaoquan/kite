@@ -28,7 +28,7 @@ class Article {
       state: 'success',
       message: 'article',
       data: {
-        article: sql_article.dataValues
+        article: sql_article
       }
     })
   }
@@ -49,15 +49,27 @@ class Article {
     try {
 
       if (!formData.title) {
-        console.log('req_data', formData)
         throw  new err_mess('请输入文章标题')
       }
+
+      if (formData.title.length > 50) {
+        throw  new err_mess('文章标题过长，请小于50个字符')
+      }
+
       if (!formData.content) {
         throw  new err_mess('请输入文章内容')
       }
 
-      if (!formData.type) {
-        throw  new err_mess('请选择文章类型')
+      if (!formData.topic_ids) {
+        throw  new err_mess('请选择个人专题')
+      }
+
+      if (formData.source.length === 0 || formData.source === null) {
+        throw  new err_mess('请选择文章来源类型')
+      }
+
+      if (!formData.tag_ids) {
+        throw  new err_mess('请选择文章标签')
       }
 
     } catch (err) {
@@ -68,7 +80,6 @@ class Article {
       return false
     }
 
-    console.log(' moment().utc().utcOffset(+8)', moment().utc().utcOffset(+8).format('YYYY-MM-DD HH:mm:ss'))
     try {
       await models.article.create({
         uid: ctx.session.uid,
@@ -131,7 +142,7 @@ class Article {
     })
     home_resJson(ctx, {
       state: 'success',
-      message: '获取当前用户个人专题成功',
+      message: '获取所有文章标签成功',
       data: {
         list: article_tag_all
       }

@@ -341,23 +341,35 @@
   white-space: nowrap; }
 
 .content-box .info-box .meta-row .meta-list .item {
-  display: inline-block;
-  padding-right: 10px; }
+  display: inline-block; }
 
-.content-box .info-box .meta-row .meta-list .item .category-title {
+.content-box .info-box .meta-row .meta-list .item:after {
   display: inline-block;
-  margin-right: 1.2rem;
+  content: "\B7";
+  margin: 0 6px;
+  color: #b2bac2; }
+
+.content-box .info-box .meta-row .meta-list .item:last-of-type:after {
+  content: ""; }
+
+.content-box .info-box .meta-row .meta-list .item .tag-class {
   padding: .38rem 0;
   font-size: 12px;
-  min-width: 4.5rem;
   text-align: center;
   line-height: 1;
-  color: #fff;
-  background-color: #c69f42;
-  border-radius: 2px; }
+  border-radius: 2px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; }
 
-.content-box .info-box .meta-row .meta-list .item .category-title.frontend {
-  background-color: #56c4e1; }
+.content-box .info-box .meta-row .meta-list .item .tag-class:after {
+  content: "/";
+  color: #b2bac2;
+  margin: 0 3px; }
+
+.content-box .info-box .meta-row .meta-list .item .tag-class:last-of-type:after {
+  content: ""; }
 
 .content-box .thumb {
   position: relative;
@@ -875,10 +887,6 @@
 
 .writer-lay.layout-content .writer-content .content-preview #mark-text::-webkit-scrollbar-thumb {
   background-color: #e0e0e0; }
-
-.writer-submit-view {
-  padding: 20px;
-  width: 500px; }
 
 .writer-submit-view .topic-warp {
   margin-bottom: 15px; }

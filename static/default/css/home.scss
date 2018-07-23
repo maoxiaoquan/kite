@@ -373,20 +373,36 @@
         white-space: nowrap;
         .item {
           display: inline-block;
-          padding-right: 10px;
-          .category-title {
+          &:after {
             display: inline-block;
-            margin-right: 1.2rem;
+            content: "\B7";
+            margin: 0 6px;
+            color: #b2bac2;
+          }
+          &:last-of-type {
+            &:after {
+              content: "";
+            }
+          }
+          .tag-class {
             padding: .38rem 0;
             font-size: 12px;
-            min-width: 4.5rem;
             text-align: center;
             line-height: 1;
-            color: #fff;
-            background-color: #c69f42;
             border-radius: 2px;
-            &.frontend {
-              background-color: #56c4e1;
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            &:after {
+              content: "/";
+              color: #b2bac2;
+              margin: 0 3px;
+            }
+            &:last-of-type {
+              &:after {
+                content: "";
+              }
             }
           }
         }
@@ -965,8 +981,6 @@
 }
 
 .writer-submit-view {
-  padding: 20px;
-  width: 500px;
   .topic-warp {
     margin-bottom: 15px;
     .common-title {

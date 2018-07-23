@@ -98,16 +98,24 @@
                                 </div>-->
                                 <div class="info-row meta-row">
                                     <ul class="meta-list">
-                                        <li class="item category">
-                                            <span class="category-title frontend"><%= item.category %></span>
-                                        </li>
                                         <li class="item username clickable">
-                                            <div class="user-popover-box">
-                                                <a href=""><%= item.author %></a>
-                                            </div>
+                                            <a href=""><%= item.author %></a>
                                         </li>
                                         <li class="item">10月前</li>
                                         <li class="item"><%= item.read_count %> 次阅读</li>
+                                        <li class="item">
+                                            <% item.tag_ids.split(',').forEach(function (item, key) { %>
+                                            <%
+                                            data.tag_all.forEach(function (tag_all_item, tag_all_key) {
+                                            if (tag_all_item.article_tag_id == item) {
+                                            %>
+                                            <a class="tag-class frontend" href="">
+                                                <%= tag_all_item.article_tag_name %>
+                                            </a>
+                                            <%
+                                            }}) %>
+                                            <% }) %>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>

@@ -21,6 +21,11 @@ class Index {
       order: [['create_date_timestamp', 'desc']]
     })
 
+    /*所有文章专题*/
+    let article_tag_all = await models.article_tag.findAll({
+      attributes: ['article_tag_id', 'article_tag_name']
+    })
+
     let article_column = await models.article_column.findAll({
       attributes: ['article_column_id', 'article_column_name', 'article_column_icon', 'article_column_icon_type'],
       where: {enable: 1},//为空，获取全部，也可以自己添加条件
@@ -35,7 +40,8 @@ class Index {
       data: {
         count: count,
         article_list: rows,
-        article_column: article_column
+        article_column: article_column,
+        tag_all: article_tag_all
       }
     })
   }

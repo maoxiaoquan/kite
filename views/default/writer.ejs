@@ -14,7 +14,8 @@
         <div class="writer-header-view clearfix">
             <ul class="writer-right">
                 <li><a class="btn btn-primary" href="javascript:;" id="save-article-draft">保存为草稿</a></li>
-                <li><a class="btn btn-primary" href="javascript:;" id="issue-article-model">发布文章</a></li>
+                <li><a class="btn btn-primary" href="javascript:;" id="issue-article-model" class="btn btn-primary"
+                       data-toggle="modal" data-target="#article-save-model">发布文章</a></li>
                 <li><a class="btn btn-outline-primary" href="/"><i class="iconfont icon-zhuye"></i></a></li>
             </ul>
         </div>
@@ -39,70 +40,83 @@
     </div>
     <!--writer-content end-->
 
-    <div id="writer-submit" style="display: none">
-        <div class="writer-submit-view">
-            <div class="clearfix">
-                <div class="topic-warp topic-warp-topic">
-                    <p class="common-title">个人专题</p>
-                    <div class="common-select-box topic-box js-topic-box" id="js-topic-box">
 
-                        <span class="common-select-name" id="topic_name">请选择需要投递的栏目</span>
-                        <i class="iconfont icon-moreunfold" id="topic_name_i"></i>
-                        <ul class="common-select-ul box-hide" id="topic_ul_list">
-                            <li class="active">请选择需要投递的栏目</li>
-                        </ul>
+    <div class="modal fade" id="article-save-model" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">保存文章</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="writer-submit-view">
+                        <div class="clearfix">
+                            <div class="topic-warp topic-warp-topic">
+                                <p class="common-title">个人专题</p>
+                                <div class="common-select-box topic-box js-topic-box" id="js-topic-box">
+
+                                    <span class="common-select-name" id="topic_name">请选择需要投递的栏目</span>
+                                    <i class="iconfont icon-moreunfold" id="topic_name_i"></i>
+                                    <ul class="common-select-ul box-hide" id="topic_ul_list">
+                                        <li class="active">请选择需要投递的栏目</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="create-topic">
+                                <div class="create-topic-view box-hide">
+                                    <input class="create-topic-input" type="text">
+                                    <button class="btn btn-primary btn-sm" id="save-create-topic">保存</button>
+                                    <button class="btn btn-primary btn-sm" id="hide-create-topic">取消</button>
+                                </div>
+                                <button class="btn btn-primary btn-sm" id="show-create-topic">创建新专题</button>
+                            </div>
+                        </div>
+
+                        <div class="clearfix">
+                            <div class="topic-warp topic-warp-topic">
+                                <p class="common-title">文章形式</p>
+                                <div class="common-select-box topic-box js-topic-box" id="js-topic-box-type"
+                                     style="width: 130px">
+                                    <span class="common-select-name" id="article_type">请选择</span>
+                                    <i class="iconfont icon-moreunfold" id="article_type_i_type"></i>
+                                    <ul class="common-select-ul box-hide" id="topic_ul_list_type" style="height: 115px">
+                                        <li class="active">请选择</li>
+                                        <li class="" data-id="1">原创</li>
+                                        <li class="" data-id="2">转载</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tag-warp">
+                            <p class="common-title">文章标签<span><em id="chosen_tag_num">0</em>/3</span></p>
+                            <div class="search-box clearfix">
+                                <div class="clearfix js-chosen-tags">
+
+                                </div>
+                                <input class="search-input" placeholder="选择下列热门标签或输入关键词检索标签" id="search_input"
+                                       style="width: 440px;">
+                            </div>
+                            <p class="search-result hide js-search-result">相关“<span class="js-search-text"></span>”的搜索
+                                <span
+                                        class="js-search-num"></span> 个</p>
+                            <div class="tag-list-view js-tag-nano has-scrollbar" style="height: 160px;">
+                                <div class="clearfix js-tag-list">
+
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
-                <div class="create-topic">
-                    <div class="create-topic-view box-hide">
-                        <input class="create-topic-input" type="text">
-                        <button class="btn btn-primary btn-sm" id="save-create-topic">保存</button>
-                        <button class="btn btn-primary btn-sm" id="hide-create-topic">取消</button>
-                    </div>
-                    <button class="btn btn-primary btn-sm" id="show-create-topic">创建新专题</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="save-draft">保存并取消</button>
+                    <button type="button" class="btn btn-primary" id="save_article">确定发布</button>
                 </div>
             </div>
-
-            <div class="clearfix">
-                <div class="topic-warp topic-warp-topic">
-                    <p class="common-title">文章形式</p>
-                    <div class="common-select-box topic-box js-topic-box" id="js-topic-box-type" style="width: 130px">
-                        <span class="common-select-name" id="article_type">请选择</span>
-                        <i class="iconfont icon-moreunfold" id="article_type_i_type"></i>
-                        <ul class="common-select-ul box-hide" id="topic_ul_list_type" style="height: 115px">
-                            <li class="active">请选择</li>
-                            <li class="" data-id="1">原创</li>
-                            <li class="" data-id="2">转载</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tag-warp">
-                <p class="common-title">文章标签<span><em id="chosen_tag_num">0</em>/3</span></p>
-                <div class="search-box clearfix">
-                    <div class="clearfix js-chosen-tags">
-
-                    </div>
-                    <input class="search-input" placeholder="选择下列热门标签或输入关键词检索标签" id="search_input"
-                           style="width: 440px;">
-                </div>
-                <p class="search-result hide js-search-result">相关“<span class="js-search-text"></span>”的搜索 <span
-                            class="js-search-num"></span> 个</p>
-                <div class="tag-list-view js-tag-nano has-scrollbar" style="height: 160px;">
-                    <div class="clearfix js-tag-list">
-
-                    </div>
-                </div>
-            </div>
-
-
-        </div>
-        <div class="modal-footer clearfix">
-            <button type="button" class="btn btn-light" id="save-draft">保存并取消</button>
-            <button type="button" class="btn btn-primary" id="save_article">确定发布</button>
-            <div class="captcha-verify-box js-verify-box hide"></div>
-            <span class="js-submit-tip"></span>
         </div>
     </div>
 
@@ -116,53 +130,10 @@
 
     !function (window) {
 
-
-      /* get page height */
-      var sHeight = document.documentElement.scrollHeight
-      /* get page width */
-      var sWidth = document.documentElement.scrollWidth
-      /* 可视区域宽高 */
-      var cHeight = document.documentElement.clientHeight
-
-      /* mask create element */
-      var fata_mask = document.createElement('div')
-      /* box_modal create element */
-      var fata_modal = document.createElement('div')
-      var model_view = document.getElementById('writer-submit').innerHTML
-
       var get_article_tag_all = _server.get_article_tag_all()
 
-      function open_modal () {
-        fata_mask.id = 'mask'
-        fata_mask.style.height = sHeight + 'px'
-        fata_mask.style.width = sWidth + 'px'
-        document.body.appendChild(fata_mask)
-
-        fata_modal.id = 'box-modal'
-        fata_modal.classList.add('box-layer')
-        fata_modal.innerHTML = model_view
-        document.body.appendChild(fata_modal)
-
-        /* get box modal width height */
-        var dHeight = fata_modal.offsetHeight
-        var dWidth = fata_modal.offsetWidth
-        fata_modal.style.top = (cHeight - dHeight) / 2 + 'px'
-        fata_modal.style.left = (sWidth - dWidth) / 2 + 'px'
-
-        document.getElementById('writer-submit').innerHTML = ''
-        render_topic_ul_li()
-        render_tag_ul_li()
-      }
-
-      function close_model () {
-        document.getElementById('writer-submit').innerHTML = model_view
-        document.body.removeChild(fata_mask)
-        document.body.removeChild(fata_modal)
-      }
-
-      /*打开保存文章 创建整个model层*/
-      var openBtn = document.getElementById('issue-article-model')
-      openBtn.addEventListener('click', open_modal)
+      render_topic_ul_li()
+      render_tag_ul_li()
 
       function show_create () {
         /*创建专题*/
@@ -317,7 +288,6 @@
             current_article_tag_arr.splice(item, 1)
           }
         }
-
         render_current_article_tag()
       }
 
@@ -332,9 +302,7 @@
       /*公共事件监听*/
       document.addEventListener('click', function (event) {
         var target = event.target
-        if (target.id == 'save-draft') {
-          close_model()
-        } else if (target.id == 'show-create-topic') {
+        if (target.id == 'show-create-topic') {
           show_create()
         } else if (target.id == 'topic_name' || target.id == 'topic_name_i') {
           show_topic_ul_list()
@@ -361,7 +329,7 @@
       }
 
       $('body').on('click', '#save_article', function () {
-
+        var load_index = layer.load(2, {time: 10 * 1000});
         var params = {
           title: document.querySelector('#article-title').value,//文章的标题
           excerpt: '', /*摘记*/
@@ -374,7 +342,13 @@
         }
 
         _server.post_article_writer(params).then(function (res) {
-          console.log(res)
+          layer.close(load_index)
+          if (res.state === 'success') {
+            $('#article-save-model').modal('hide')
+            window.location.href = '/user/<%=user_info.uid%>'
+          } else {
+            layer.msg(res.message);
+          }
         }).catch(function () {
 
         })
