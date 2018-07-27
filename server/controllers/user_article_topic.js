@@ -11,9 +11,12 @@ class UserArticleTopic {
 
   constructor () {}
 
-  static async get_user_article_topic_all (ctx) {  /*创建用户专题*/
+  static async get_user_article_topic_all (ctx) {  /*获取所有文章专题*/
     let article_tag_all = await models.user_article_topic.findAll({
-      attributes: ['user_article_topic_id', 'user_article_topic_name']
+      attributes: ['user_article_topic_id', 'user_article_topic_name'],
+      where: {
+        uid: ctx.session.uid
+      }
     })
     home_resJson(ctx, {
       state: 'success',

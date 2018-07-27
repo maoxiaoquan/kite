@@ -1,0 +1,62 @@
+<div class="main-top">
+
+    <a class="avatar" href="/user/<%= user_info.uid %>">
+        <img src="<%= user_info.avatar %>" alt="240">
+    </a>
+
+    <div class="title">
+        <a class="name" href="/user/<%= user_info.uid %>"><%= user_info.nickname %></a>
+    </div>
+
+    <div class="info">
+        <ul>
+            <li>
+                <div class="meta-block">
+                    <a href="/users/78d3e1ab9924/following">
+                        <p>10</p>我关注人<i class="iconfont ic-arrow"></i>
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="meta-block">
+                    <a href="/users/78d3e1ab9924/followers">
+                        <p>1</p>粉丝<i class="iconfont ic-arrow"></i>
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="meta-block">
+                    <a href="/user/78d3e1ab9924">
+                        <p>1</p>文章<i class="iconfont ic-arrow"></i>
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="meta-block">
+                    <a href="/user/78d3e1ab9924">
+                        <p>1</p>收获喜欢<i class="iconfont ic-arrow"></i>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<ul class="trigger-menu">
+    <li class="<% if (data.router_name == '/') { %>active<% } %>">
+        <a href="/user/<%= user_info.uid %>/article/all">
+            <i class="iconfont ic-articles"></i>我的文章</a>
+    </li>
+    <li class="<% if (data.router_name == 'topic') { %>active<% } %>">
+        <a href="/user/<%= user_info.uid %>/topic">
+            <i class="iconfont ic-feed"></i>我的专题</a>
+    </li>
+    <li class="">
+        <a href="/user/<%= user_info.uid %>?order_by=commented_at">
+            <i class="iconfont ic-latestcomments"></i> 动态</a>
+    </li>
+    <li class="">
+        <a href="/user/<%= user_info.uid %>?order_by=top">
+            <i class="iconfont ic-hot"></i> 最新评论</a>
+    </li>
+</ul>

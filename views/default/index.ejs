@@ -18,23 +18,20 @@
 
             <div class="recommend-collection">
 
-                <div class="board">
-                    <a class="board-content" href="">
-                        热门
-                    </a>
-                </div>
+                <a class="collection" href="/">
+                    <span class="collection-name"> 热门</span>
+                </a>
 
                 <% data.article_column.forEach(function (item, key) { %>
-                <a class="collection clearfix" href="">
-                    <i class="iconfont collection-img <%= item.article_column_icon %>"></i>
+                <a class="collection <% if(item.article_column_id == data.column_id){ %> active<% } %>"
+                   href="/column/<%= item.article_column_id %>">
                     <span class="collection-name"><%= item.article_column_name %></span>
                 </a>
                 <% }) %>
 
                 <a class="collection" href="/subscribe/tag">
-                    <i class="iconfont icon-more1 collection-img "></i>
                     <span class="collection-name">
-                    更多
+                    更多...
                     </span>
                 </a>
             </div>
@@ -42,10 +39,10 @@
         <!--home-lay layout-type end-->
     </div>
 
-    <div class="row" style="margin-left: 125px">
+    <div class="row" style="margin-left: 120px">
         <div class="col-xs-12 col-sm-8 col-md-8">
 
-
+            <% if (data.current_page === 'index'){ %>
             <div id="box-swiper" class="carousel slide box-swiper" data-ride="carousel">
                 <ol class="carousel-indicators">
                     <li data-target="#box-swiper" data-slide-to="0" class="active"></li>
@@ -72,8 +69,19 @@
                     <span class="sr-only">Next</span>
                 </a>
             </div>
+            <% }else { %>
 
+            <div class="header-top clearfix">
+                <div class="header-top-img">
+                    <img src="/default/img/list2.png" alt="">
+                </div>
+                <div class="header-top-view">
+                    <h3><%= data.current_page %></h3>
+                    <p class="info">别再最该拼搏的年纪选择安逸</p>
+                </div>
+            </div>
 
+            <% } %>
             <!--home-lay layout-content start-->
             <section class="home-lay layout-content">
 
@@ -101,7 +109,7 @@
                                         <li class="item username clickable">
                                             <a href=""><%= item.author %></a>
                                         </li>
-                                        <li class="item">10月前</li>
+                                        <li class="item"><%= item.create_date %></li>
                                         <li class="item"><%= item.read_count %> 次阅读</li>
                                         <li class="item">
                                             <% item.tag_ids.split(',').forEach(function (item, key) { %>
@@ -154,6 +162,20 @@
 <% include parts/footer_view.ejs %>
 <!--footer_view.ejs end-->
 
+<script>
+  $(function () {
+
+    function page_init () {
+      /*recommend-collection*/
+      var find_collection_active_length = $('.recommend-collection').find('.active').length
+      if (find_collection_active_length === 0) {
+        $('.recommend-collection .collection').eq(0).addClass('active')
+      }
+    }
+
+    page_init()
+  })
+</script>
 
 <!--<script>
 

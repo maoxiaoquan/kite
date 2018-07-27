@@ -17,13 +17,15 @@ const search = require('../controllers/search')// 搜索
 
 router.get('/', index.render_get_index) // 主页 page
 
+router.get('column/:column_id', index.render_get_index) // 文章内容页 page
+
 router.get('sign_in', sign.render_sign_in) // 登录 page
 
 router.get('sign_up', sign.render_sign_up) // 注册 page
 
-router.get('user/:uid', user.verify_user, user.render_user_center) // 用户个人中心页
+router.get('user/:uid/article/:topic_id', user.verify_user, user.render_user_center_article) // 用户个人中心专题页
 
-router.get('user/:uid/topic', user.verify_user, user.render_user_center_topic) // 用户个人中心页
+router.get('user/:uid/topic', user.verify_user, user.render_user_center_topic) // 用户个人中心专题页
 
 router.get('subscribe/tag', subscribe.render_subscribe_tag) // 订阅
 

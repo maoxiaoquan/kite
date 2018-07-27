@@ -21,7 +21,8 @@ class User {
     }
   }
 
-  static async render_user_center (ctx) {
+
+  static async render_user_center_article (ctx) {
 
     const title = 'user'
     let uid = ctx.params.uid
@@ -30,7 +31,7 @@ class User {
 
     await de.render(ctx, {
       title: title,
-      view_url: 'default/user',
+      view_url: 'default/user_center_article',
       state: 'success',
       message: 'user',
       data: {
@@ -48,7 +49,7 @@ class User {
     console.log('uid', ctx.query)
     await de.render(ctx, {
       title: title,
-      view_url: 'default/user',
+      view_url: 'default/user_center_topic',
       state: 'success',
       message: 'user',
       data: {
