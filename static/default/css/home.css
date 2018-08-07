@@ -198,7 +198,7 @@
 .side-menu {
   position: fixed;
   top: 90px;
-  width: 100px; }
+  width: 96px; }
 
 .side-menu .side-menu-view {
   border-radius: 5px;
@@ -278,6 +278,22 @@
 
 .home-lay.layout-content .article-list > li {
   border-bottom: 1px solid rgba(178, 186, 194, 0.15); }
+
+.home-lay .article-footer {
+  margin-top: 30px; }
+
+.home-lay .article-footer .reading-more {
+  width: 100%;
+  height: 39px;
+  border: none;
+  background: #999;
+  text-align: center;
+  color: #fff;
+  border-radius: 3px;
+  font-size: 14px; }
+
+.home-lay .article-footer .reading-more:hover {
+  background: #f46e65; }
 
 /*.home-lay layout-content end*/
 /*article  content-box start*/

@@ -39,7 +39,7 @@
         <!--home-lay layout-type end-->
     </div>
 
-    <div class="row" style="margin-left: 120px">
+    <div class="row" style="margin-left: 116px">
         <div class="col-xs-12 col-sm-8 col-md-8">
 
             <% if (data.current_page === 'index'){ %>
@@ -99,7 +99,7 @@
                             <div class="info-box">
                                 <div class="info-row title-row">
                                     <a href="/article/<%= item.aid %>"
-                                       class="title"><%= item.title %></a>
+                                       class="title" target="_blank"><%= item.title %></a>
                                 </div>
                                 <!-- <div class="content-text">
                                     <%= item.content %>
@@ -136,14 +136,10 @@
                 </ul>
 
 
-                <div class="nav-links">
-                    <span aria-current="page" class="page-numbers current">1</span>
-                    <a class="page-numbers" href="http://cosy.codenote.io/page/2">2</a>
-                    <span class="page-numbers dots">…</span>
-                    <a class="page-numbers" href="http://cosy.codenote.io/page/15">15</a>
-                    <a class="next page-numbers" href="http://cosy.codenote.io/page/2">2
-                    </a>
+                <div class="article-footer">
+                    <button class="reading-more">阅读更多</button>
                 </div>
+
             </section>
             <!--home-lay layout-content end-->
 
@@ -171,6 +167,17 @@
       if (find_collection_active_length === 0) {
         $('.recommend-collection .collection').eq(0).addClass('active')
       }
+    }
+
+    document.querySelector('.article-footer .reading-more').onclick = function () {
+      load_article()
+    }
+
+    function load_article () {
+      var params = {}
+      _server.get_index_article_list(params).then(function (res) {
+        console.log('res_index', res)
+      })
     }
 
     page_init()

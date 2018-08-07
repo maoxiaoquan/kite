@@ -45,6 +45,8 @@ router.get('search', search.form_search) // 搜索
 
 /*AJAX*/
 
+router.get('get_index_article', index.get_index)
+
 router.post('sign_up', sign.post_sign_up) // 注册数据 post TYPE:AJAX
 
 router.post('sign_up_code', sign.post_sign_up_code) // 注册数据 post TYPE:AJAX

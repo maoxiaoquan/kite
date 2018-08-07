@@ -29,6 +29,9 @@ _Fetch.interceptors.response.use(function (response) {
     },
     post_article_writer: function (data) { /*编写文章*/
       return _Fetch.post('/article_writer', data)
+    },
+    get_index_article_list: function (data) { /*获取首页文章*/
+      return _Fetch.get('/get_index_article', {params: data})
     }
   }
 

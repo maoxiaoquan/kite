@@ -10,7 +10,7 @@ const http = axios.create({
     'x-requested-with': 'XMLHttpRequest'
   }
 })
-
+/*稳定背后的代价，是我们在消耗自己未来的可能性。*/
 http.interceptors.request.use(function (config) {
   if (localStorage.box_tokens) {
     config.headers['x-access-token'] = localStorage.box_tokens

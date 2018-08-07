@@ -219,7 +219,7 @@
 .side-menu {
   position: fixed;
   top: 90px;
-  width: 100px;
+  width: 96px;
   .side-menu-view {
     border-radius: 5px;
     /*border: 1px solid #f9f9f9;*/
@@ -308,6 +308,22 @@
     .article-list {
       > li {
         border-bottom: 1px solid rgba(178, 186, 194, .15);
+      }
+    }
+  }
+  .article-footer {
+    margin-top: 30px;
+    .reading-more {
+      width: 100%;
+      height: 39px;
+      border: none;
+      background: #999;
+      text-align: center;
+      color: #fff;
+      border-radius: 3px;
+      font-size: 14px;
+      &:hover {
+        background: #f46e65;
       }
     }
   }
