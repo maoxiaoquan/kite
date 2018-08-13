@@ -62,9 +62,9 @@ class Index {
 
   static async get_index (ctx) {
 
-    let column_id = ctx.params.column_id || 'all'
-    let page = ctx.params.page || 1
-    let pageSize = ctx.params.pageSize || 25
+    let column_id = ctx.request.body.column_id || 'all'
+    let page = ctx.request.body.page || 1
+    let pageSize = ctx.request.body.pageSize || 25
 
     let find_article_column = await models.article_column.findOne({
       attributes: ['article_column_id', 'article_column_name', 'article_column_icon', 'article_column_icon_type', 'article_column_tags'],

@@ -173,10 +173,15 @@
       load_article()
     }
 
+    var page = 1
+
     function load_article () {
-      var params = {}
+      var params = {
+        page: page
+      }
       _server.get_index_article_list(params).then(function (res) {
         console.log('res_index', res)
+        page = res.data.page + 1
       })
     }
 
