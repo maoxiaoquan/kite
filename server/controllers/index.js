@@ -44,6 +44,7 @@ class Index {
       limit: 10
     })
 
+    console.log('article_tag_all', article_column)
     await render(ctx, {
       title: title,
       view_url: 'default/index',
@@ -62,15 +63,17 @@ class Index {
 
   static async get_index (ctx) {
 
-    let column_id = ctx.request.body.column_id || 'all'
-    let page = ctx.request.body.page || 1
-    let pageSize = ctx.request.body.pageSize || 25
+    let column_id = ctx.query.column_id || 'all'
+    let page = ctx.query.page || 1
+    let pageSize = ctx.query.pageSize || 25
 
     let find_article_column = await models.article_column.findOne({
       attributes: ['article_column_id', 'article_column_name', 'article_column_icon', 'article_column_icon_type', 'article_column_tags'],
       where: {article_column_id: column_id}//为空，获取全部，也可以自己添加条件
     })
-
+    let article_tag_all = await models.article_tag.findAll({
+      attributes: ['article_tag_id', 'article_tag_name']
+    })
     console.log('find_article_column', find_article_column)
 
     let current_article_tags = find_article_column ? find_article_column.article_column_tags.split(',') : ''
@@ -93,7 +96,8 @@ class Index {
           article_list: rows,
           column_id,
           page,
-          pageSize
+          pageSize,
+          article_tag: article_tag_all
         }
       })
     } else {

@@ -9,7 +9,7 @@
 <!--header_view.ejs end-->
 
 
-<div class="container box-container">
+<div class="container box-container" id="index">
 
     <div class="side-menu">
         <!--home-lay layout-type start-->
@@ -77,7 +77,7 @@
                 </div>
                 <div class="header-top-view">
                     <h3><%= data.current_page %></h3>
-                    <p class="info">别再最该拼搏的年纪选择安逸</p>
+                    <p class="info">别再最该拼搏的年纪选择安逸{{message}}</p>
                 </div>
             </div>
 
@@ -93,36 +93,28 @@
                  </div>-->
 
                 <ul class="article-list">
-                    <% data.article_list.forEach(function (item, key) { %>
-                    <li>
+                    <li v-for="item in article_list">
                         <article class="content-box content-box-index">
                             <div class="info-box">
                                 <div class="info-row title-row">
-                                    <a href="/article/<%= item.aid %>"
-                                       class="title" target="_blank"><%= item.title %></a>
+                                    <a :href="article_href(item.aid)"
+                                       class="title" target="_blank">{{ item.title }}</a>
                                 </div>
                                 <!-- <div class="content-text">
-                                    <%= item.content %>
+                                    {{ item.content  }}
                                 </div>-->
                                 <div class="info-row meta-row">
                                     <ul class="meta-list">
                                         <li class="item username clickable">
-                                            <a href=""><%= item.author %></a>
+                                            <a href="">{{ item.author }}</a>
                                         </li>
-                                        <li class="item"><%= item.create_date %></li>
-                                        <li class="item"><%= item.read_count %> 次阅读</li>
-                                        <li class="item">
-                                            <% item.tag_ids.split(',').forEach(function (item, key) { %>
-                                            <%
-                                            data.tag_all.forEach(function (tag_all_item, tag_all_key) {
-                                            if (tag_all_item.article_tag_id == item) {
-                                            %>
-                                            <a class="tag-class frontend" href="">
-                                                <%= tag_all_item.article_tag_name %>
+                                        <li class="item">{{ item.create_date }}</li>
+                                        <li class="item">{{ item.read_count }} 次阅读</li>
+                                        <li class="item" v-if="article_tag_filter(item.tag_ids.split(',')).length!==0">
+                                            <a v-for="item_article_tag in article_tag_filter(item.tag_ids.split(','))"
+                                               class="tag-class frontend" href="#">
+                                                {{item_article_tag.article_tag_name}}
                                             </a>
-                                            <%
-                                            }}) %>
-                                            <% }) %>
                                         </li>
                                     </ul>
                                 </div>
@@ -132,7 +124,6 @@
                             </div>
                         </article>
                     </li>
-                    <% }) %>
                 </ul>
 
 
@@ -177,15 +168,60 @@
 
     function load_article () {
       var params = {
-        page: page
+        page: page,
+        column_id: '<%= data.column_id %>'
       }
       _server.get_index_article_list(params).then(function (res) {
         console.log('res_index', res)
-        page = res.data.page + 1
+
+        page = Number(res.data.page) + 1
       })
     }
 
     page_init()
+  })
+
+  new Vue({
+    el: '#index',
+    data: {
+      message: 'Hello Vue!',
+      page: 1,
+      column_id: '<%= data.column_id %>',
+      tag_all: '',
+      article_list: []
+    },
+    created: function () {
+      this.get_index_article_list()
+    },
+    methods: {
+      get_index_article_list: function () {
+        var params = {
+          page: this.page,
+          column_id: this.column_id
+        }
+        var that = this
+        _server.get_index_article_list(params).then(function (res) {
+          that.$nextTick(function () {
+            that.article_list = res.data.article_list
+            that.article_tag = res.data.article_tag
+          })
+          console.log('this.article_list', this.article_list)
+        })
+      },
+      article_href: function (val) {
+        return '/article/' + val + ''
+      },
+      article_tag_filter: function (val) {
+        var _arr = []
+        this.article_tag.map(function (item, key) {
+          if (val.indexOf(String(item.article_tag_id)) !== -1) {
+            _arr.push(item)
+          }
+        })
+        console.log(_arr)
+        return _arr
+      }
+    }
   })
 </script>
 
