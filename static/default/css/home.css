@@ -295,6 +295,11 @@
 .home-lay .article-footer .reading-more:hover {
   background: #f46e65; }
 
+.home-lay .article-footer .reading-null {
+  text-align: center;
+  display: block;
+  color: #f7e1b5; }
+
 /*.home-lay layout-content end*/
 /*article  content-box start*/
 .content-box {
