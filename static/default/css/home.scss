@@ -1259,6 +1259,12 @@
           a {
             color: #ffc107;
           }
+          &.current {
+            a {
+              color: #ffffff;
+              background: #ffc107;
+            }
+          }
         }
       }
     }
@@ -1465,18 +1471,28 @@
           align-items: center;
           font-size: 0.8rem;
           color: #909090;
+          .meta{
+            display: inline-block;
+            margin: 10px 5px 0;
+          }
         }
         .subscribe-btn {
-          border: 1px solid #37c700;
-          background-color: #fff;
-          color: #37c700;
           margin: 1rem auto;
           font-size: 0.8rem;
+          background-color: #fff;
           border-radius: 2px;
           padding: .4rem 1rem;
           outline: none;
           transition: background-color .3s, color .3s;
           cursor: pointer;
+          &.not-subscribe{
+            border: 1px solid #37c700;
+            color: #37c700;
+          }
+          &.already-subscribe{
+            border: 1px solid #cccccc;
+            color: #999999;
+          }
         }
       }
     }
@@ -1484,6 +1500,33 @@
 }
 
 /*subscribe-lay end*/
+
+/*pageing start*/
+.pageing {
+  text-align: center;
+  padding: 20px 0;
+  a, span {
+    display: inline-block;
+  }
+  a {
+    padding: 5px 10px;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+    border-radius: 3px;
+    margin: 0 5px;
+    color: #999999;
+    font-size: 14px;
+    &.active {
+      border-color: #ffc107;
+      color: #ffc107;
+    }
+    &:hover {
+      color: #ffc107;
+    }
+  }
+}
+
+/*pageing end*/
 
 /*footer start*/
 .footer {

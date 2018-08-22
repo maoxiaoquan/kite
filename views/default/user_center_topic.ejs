@@ -23,9 +23,10 @@
                     <a class="btn btn-green" href="">创建新专题</a>
 
                     <ul>
+                        <% data.user_article_topic_all.forEach(function (item, key) { %>
                         <li class="topic-content-box">
                             <div class="topic-content-box-view">
-                                <a href="/topic" class="title">前端</a>
+                                <a href="/topic" class="title"><%= item.user_article_topic_name %></a>
                                 <p class="remarks">简介：这是一个简单的专题简介</p>
                                 <div class="meta">
                                     <span>关注数：12</span>
@@ -34,18 +35,11 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="topic-content-box">
-                            <div class="topic-content-box-view">
-                                <a href="/topic" class="title">前端</a>
-                                <p class="remarks">简介：这是一个简单的专题简介</p>
-                                <div class="meta">
-                                    <span>关注数：12</span>
-                                    <span>文章数：200</span>
-                                    <a href="">编辑</a>
-                                </div>
-                            </div>
-                        </li>
+                        <% }) %>
                     </ul>
+                    <!--page start-->
+                    <% include pages/topic_page.ejs %>
+                    <!--page end-->
                 </div>
 
 

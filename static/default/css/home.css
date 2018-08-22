@@ -1151,6 +1151,10 @@
 .user-lay.layout-content .main .topic-list li:hover a {
   color: #ffc107; }
 
+.user-lay.layout-content .main .topic-list li:hover.current a {
+  color: #ffffff;
+  background: #ffc107; }
+
 .user-lay.layout-content .article-list {
   border-bottom: 1px solid rgba(178, 186, 194, 0.15); }
 
@@ -1333,19 +1337,54 @@
   font-size: 0.8rem;
   color: #909090; }
 
+.subscribe-lay.layout-content .tag-list .item .tag .meta-box .meta {
+  display: inline-block;
+  margin: 10px 5px 0; }
+
 .subscribe-lay.layout-content .tag-list .item .tag .subscribe-btn {
-  border: 1px solid #37c700;
-  background-color: #fff;
-  color: #37c700;
   margin: 1rem auto;
   font-size: 0.8rem;
+  background-color: #fff;
   border-radius: 2px;
   padding: .4rem 1rem;
   outline: none;
   transition: background-color .3s, color .3s;
   cursor: pointer; }
 
+.subscribe-lay.layout-content .tag-list .item .tag .subscribe-btn.not-subscribe {
+  border: 1px solid #37c700;
+  color: #37c700; }
+
+.subscribe-lay.layout-content .tag-list .item .tag .subscribe-btn.already-subscribe {
+  border: 1px solid #cccccc;
+  color: #999999; }
+
 /*subscribe-lay end*/
+/*pageing start*/
+.pageing {
+  text-align: center;
+  padding: 20px 0; }
+
+.pageing a, .pageing span {
+  display: inline-block; }
+
+.pageing a {
+  padding: 5px 10px;
+  border: 1px solid #e0e0e0;
+  text-align: center;
+  border-radius: 3px;
+  margin: 0 5px;
+  color: #999999;
+  font-size: 14px; }
+
+.pageing a.active {
+  border-color: #ffc107;
+  color: #ffc107; }
+
+.pageing a:hover {
+  color: #ffc107; }
+
+/*pageing end*/
 /*footer start*/
 .footer {
   position: relative;

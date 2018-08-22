@@ -47,7 +47,9 @@ const user_article_topic = sequelize.define(require('./models_type/db_user_artic
 const user_tag = sequelize.define(require('./models_type/db_user_tag').NAME, require('./models_type/db_user_tag').TABLE, SEQ_PARAMETER)
 /*前台图片表*/
 const picture = sequelize.define(require('./models_type/db_picture').NAME, require('./models_type/db_picture').TABLE, SEQ_PARAMETER)
+
 /*----------------------------------后台表---------------------------------------*/
+
 /*后台用管理员表*/
 const admin_user = sequelize.define(require('./models_type/db_admin_user').NAME, require('./models_type/db_admin_user').TABLE, SEQ_PARAMETER)
 /*后台角色表*/

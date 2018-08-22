@@ -32,6 +32,9 @@ _Fetch.interceptors.response.use(function (response) {
     },
     get_index_article_list: function (data) { /*获取首页文章*/
       return _Fetch.get('/get_index_article', {params: data})
+    },
+    post_subscribe_tag: function (data) { /*订阅标签*/
+      return _Fetch.post('/post_subscribe_tag', data)
     }
   }
 

@@ -107,6 +107,17 @@ class Index {
       })
     }
   }
+
+  static async no_found_404 (ctx) {
+    const title = '404'
+    await render(ctx, {
+      title: title,
+      view_url: 'default/404',
+      state: 'success',
+      message: '404 页面'
+    })
+  }
+
 }
 
 module.exports = Index

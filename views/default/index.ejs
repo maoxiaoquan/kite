@@ -111,7 +111,7 @@
                                         </li>
                                         <li class="item"><%= item.create_date %></li>
                                         <li class="item"><%= item.read_count %> 次阅读</li>
-                                        <%if(item.tag_ids){%>
+                                        <% if(item.tag_ids){ %>
                                         <li class="item">
                                             <% item.tag_ids.split(',').forEach(function (item, key) { %>
                                             <%
@@ -125,7 +125,7 @@
                                             }}) %>
                                             <% }) %>
                                         </li>
-                                        <%}%>
+                                        <% } %>
                                     </ul>
                                 </div>
                             </div>
@@ -171,7 +171,7 @@
 
                 <div class="article-footer">
                     <button class="reading-more" @click="get_index_article_list" v-if="loading_btn">阅读更多</button>
-                    <span  class="reading-null" v-else>没有更多...</span>
+                    <span class="reading-null" v-else>没有更多...</span>
                 </div>
 
             </section>
@@ -215,7 +215,7 @@
       column_id: '<%= data.column_id %>',
       tag_all: '',
       article_list: [],
-      loading_btn: true
+      loading_btn: Number('<%= data.count %>') >= 25
     },
     created: function () {
       /* this.get_index_article_list()*/

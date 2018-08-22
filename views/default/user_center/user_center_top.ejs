@@ -1,11 +1,11 @@
 <div class="main-top">
 
-    <a class="avatar" href="/user/<%= user_info.uid %>">
-        <img src="<%= user_info.avatar %>" alt="240">
+    <a class="avatar" href="/user/<%= data.current_user.uid %>">
+        <img src="<%= data.current_user.avatar %>" alt="">
     </a>
 
     <div class="title">
-        <a class="name" href="/user/<%= user_info.uid %>"><%= user_info.nickname %></a>
+        <a class="name" href="/user/<%= data.current_user.uid %>"><%= data.current_user.nickname %></a>
     </div>
 
     <div class="info">
@@ -43,20 +43,20 @@
 </div>
 
 <ul class="trigger-menu">
-    <li class="<% if (data.router_name == '/') { %>active<% } %>">
-        <a href="/user/<%= user_info.uid %>/article/all">
+    <li class="<% if (data.router_name == '') { %>active<% } %>">
+        <a href="/user/<%= data.current_user.uid %>/article/all">
             <i class="iconfont ic-articles"></i>我的文章</a>
     </li>
     <li class="<% if (data.router_name == 'topic') { %>active<% } %>">
-        <a href="/user/<%= user_info.uid %>/topic">
+        <a href="/user/<%= data.current_user.uid %>/topic">
             <i class="iconfont ic-feed"></i>我的专题</a>
     </li>
     <li class="">
-        <a href="/user/<%= user_info.uid %>?order_by=commented_at">
+        <a href="/user/<%= data.current_user.uid %>?order_by=commented_at">
             <i class="iconfont ic-latestcomments"></i> 动态</a>
     </li>
     <li class="">
-        <a href="/user/<%= user_info.uid %>?order_by=top">
+        <a href="/user/<%= data.current_user.uid %>?order_by=top">
             <i class="iconfont ic-hot"></i> 最新评论</a>
     </li>
 </ul>

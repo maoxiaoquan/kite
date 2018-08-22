@@ -1,4 +1,4 @@
-const {render} = require('../utils/res_data')
+const {render, home_resJson} = require('../utils/res_data')
 const models = require('../models')
 
 class Subscribe {
@@ -8,10 +8,10 @@ class Subscribe {
   static async render_subscribe_tag (ctx) {
     const title = 'tag'
 
-    let page = 1
-    let pageSize = 10
+    let page = ctx.query.page || 1
+    let pageSize = ctx.query.pageSize || 25
 
-    console.log('ctx.session', ctx.session)
+    let find_user_info = ctx.session.uid ? await models.user_info.findOne({where: {uid: ctx.session.uid}}) : {}
 
     let {count, rows} = await models.article_tag.findAndCountAll({
       attributes: ['article_tag_id', 'article_tag_name', 'article_tag_us_name', 'article_tag_icon', 'article_tag_icon_type', 'article_tag_description'],
@@ -26,12 +26,52 @@ class Subscribe {
       state: 'success',
       message: 'subscribe',
       data: {
+        page,
         count,
-        rows
+        pageSize,
+        article_tag_list: rows,
+        article_tag_ids: find_user_info.article_tag_ids ? find_user_info.article_tag_ids.split(',') : []
       }
     })
   }
 
+  static async post_subscribe_tag (ctx) {
+    const {article_tag_id} = ctx.request.body
+
+    let find_user_info = await models.user_info.findOne({where: {uid: ctx.session.uid}})
+    let article_tag_ids = find_user_info.article_tag_ids ? find_user_info.article_tag_ids : ''
+    let article_tag_ids_arr = []
+
+    article_tag_ids.split(',').map((item, key) => {
+      if (item.length > 0) {
+        return item
+      }
+    })
+
+    if (article_tag_ids.split(',').indexOf(article_tag_id) === -1) {
+      await models.user_info.update({
+        article_tag_ids: article_tag_ids.push(article_tag_id)
+      }, {
+        where: {uid: ctx.session.uid}//为空，获取全部，也可以自己添加条件
+      }).then(() => {
+        home_resJson(ctx, {
+          state: 'success',
+          message: '关注文章标签成功'
+        })
+      }).catch(() => {
+        home_resJson(ctx, {
+          state: 'error',
+          message: '关注文章标签失败'
+        })
+      })
+    } else {
+      home_resJson(ctx, {
+        state: 'error',
+        message: '关注文章标签失败,当前文章标签已关注'
+      })
+    }
+
+  }
 }
 
 module.exports = Subscribe

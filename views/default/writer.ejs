@@ -312,9 +312,9 @@
       })
 
       /*文档编写区域*/
-      var write_textarea = document.getElementById("write-textarea")
+      var write_textarea = document.getElementById('write-textarea')
 
-      write_textarea.addEventListener("keyup", function (e) {
+      write_textarea.addEventListener('keyup', function (e) {
         document.getElementById('mark-text').innerHTML =
           marked(write_textarea.value, {breaks: true})
       })
@@ -322,17 +322,16 @@
       /*保存文章*/
 
       function getObjectValues (object) {
-        var values = [];
+        var values = []
         for (var property in object)
-          values.push(object[property].article_tag_id);
-        return values;
+          values.push(object[property].article_tag_id)
+        return values
       }
 
       $('body').on('click', '#save_article', function () {
-        var load_index = layer.load(2, {time: 10 * 1000});
+        var load_index = layer.load(2, {time: 10 * 1000})
         var params = {
           title: document.querySelector('#article-title').value,//文章的标题
-          excerpt: '', /*摘记*/
           content: marked(write_textarea.value, {breaks: true}), /*主内容*/
           origin_content: write_textarea.value, /*源内容*/
           source: document.querySelector('#article_type').getAttribute('data-id'), // 来源 （1原创 2转载）
@@ -345,9 +344,9 @@
           layer.close(load_index)
           if (res.state === 'success') {
             $('#article-save-model').modal('hide')
-            window.location.href = '/user/<%=user_info.uid%>'
+            window.location.href = '/user/<%= user_info.uid %>/article/all'
           } else {
-            layer.msg(res.message);
+            layer.msg(res.message)
           }
         }).catch(function () {
 

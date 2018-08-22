@@ -1,8 +1,8 @@
 const router = require('koa-router')()
 const {Check_Session, ajaxCheck_Session} = require('../utils/check_session')
 const index = require('../controllers/index')// 主页
-const sign = require('../controllers/sign')// 注册
-const user = require('../controllers/user') // 用户个人中心
+const user = require('../controllers/user')// 注册
+const personal_center = require('../controllers/personal_center') // 用户个人中心
 const article = require('../controllers/article') // 文章内容页
 const subscribe = require('../controllers/subscribe')// 订阅
 const user_article_topic = require('../controllers/user_article_topic')// 用户文章专题
@@ -19,27 +19,29 @@ router.get('/', index.render_get_index) // 主页 page
 
 router.get('column/:column_id', index.render_get_index) // 文章内容页 page
 
-router.get('sign_in', sign.render_sign_in) // 登录 page
+router.get('sign_in', user.render_sign_in) // 登录 page
 
-router.get('sign_up', sign.render_sign_up) // 注册 page
+router.get('sign_up', user.render_sign_up) // 注册 page
 
-router.get('user/:uid/article/:topic_id', user.verify_user, user.render_user_center_article) // 用户个人中心专题页
+router.get('user/:uid/article/:topic_id', personal_center.verify_user, personal_center.render_user_center_article) // 用户个人中心专题页
 
-router.get('user/:uid/topic', user.verify_user, user.render_user_center_topic) // 用户个人中心专题页
+router.get('user/:uid/topic', personal_center.verify_user, personal_center.render_user_center_topic) // 用户个人中心专题页
 
 router.get('subscribe/tag', subscribe.render_subscribe_tag) // 订阅
 
-router.get('tag', article.render_get_tag) // 文章标签
+router.get('tag/:article_tag_id', article.render_get_tag) // 文章标签
 
 router.get('article/:aid', article.render_article) // 文章内容页 page
 
 router.get('writer', Check_Session, article.render_writer) // 编写文章 page
 
-router.get('esc_sign_in', sign.esc_sign_in) // 退出登录
+router.get('404', index.no_found_404) // 编写文章 page
+
+router.get('esc_sign_in', user.esc_sign_in) // 退出登录
 
 /*FORM*/
 
-router.post('sign_in', sign.form_sign_in) // 登录数据 post TYPE:RENDER
+router.post('sign_in', user.form_sign_in) // 登录数据 post TYPE:RENDER
 
 router.get('search', search.form_search) // 搜索
 
@@ -47,15 +49,17 @@ router.get('search', search.form_search) // 搜索
 
 router.get('get_index_article', index.get_index)
 
-router.post('sign_up', sign.post_sign_up) // 注册数据 post TYPE:AJAX
+router.post('sign_up', user.post_sign_up) // 注册数据 post TYPE:AJAX
 
-router.post('sign_up_code', sign.post_sign_up_code) // 注册数据 post TYPE:AJAX
+router.post('sign_up_code', user.post_sign_up_code) // 注册数据 post TYPE:AJAX
 
 router.post('article_writer', ajaxCheck_Session, article.post_create_writer) // 编写文章post TYPE:AJAX
 
 router.get('get_article_tag_all', ajaxCheck_Session, article.get_article_tag_all) // 获取所有文章标签 TYPE:AJAX
 
 router.get('get_article_topic_all', ajaxCheck_Session, user_article_topic.get_user_article_topic_all) // 获取用户所有文章专题 TYPE:AJAX
+
+router.post('post_subscribe_tag', ajaxCheck_Session, subscribe.post_subscribe_tag) // 用户订阅标签 TYPE:AJAX
 
 router.post('create_user_article_topic', ajaxCheck_Session, user_article_topic.create_user_article_topic) // 用户文章专题 TYPE:AJAX
 

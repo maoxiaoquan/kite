@@ -20,51 +20,66 @@
 
                 <ul class="topic-list">
                     <li class="title">个人专题：</li>
-                    <li class="current"><a href="">全部</a></li>
-                    <li><a href="">HTML</a></li>
-                    <li><a href="">CSS3</a></li>
-                    <li><a href="">HTML</a></li>
-                    <li><a href="">CSS3</a></li>
-                    <li><a href="">HTML</a></li>
-                    <li><a href="">CSS3</a></li>
-                    <li><a href="">HTML</a></li>
-                    <li><a href="">CSS3</a></li>
-                    <li><a href="">HTML</a></li>
-                    <li><a href="">CSS3</a></li>
-                    <li><a href="">HTML</a></li>
-                    <li><a href="">CSS3</a></li>
+                    <li><a href="/user/<%= data.uid %>/article/all">全部</a></li>
+                    <% data.user_article_topic_all.forEach(function (item, key) { %>
+                    <li class="<% if(data.topic_id == item.user_article_topic_id){ %>current<% } %>"><a
+                                href="/user/<%= data.uid %>/article/<%= item.user_article_topic_id %>"><%= item.user_article_topic_name %></a>
+                    </li>
+                    <% }) %>
                 </ul>
 
                 <div id="list-container">
                     <!-- 文章列表模块 -->
                     <ul class="note-list">
                         <% data.article_list.forEach(function (item, key) { %>
-                        <li class="">
-                            <article class="content-box article-list">
+                        <li>
+                            <article class="content-box content-box-index article-list">
                                 <div class="info-box">
                                     <div class="info-row title-row">
-                                        <a href="/article" class="title"><%= item.title %></a>
+                                        <a href="/article/<%= item.aid %>"
+                                           class="title" target="_blank"><%= item.title %></a>
                                     </div>
+                                    <!-- <div class="content-text">
+                                    <%= item.content %>
+                                </div>-->
                                     <div class="info-row meta-row">
                                         <ul class="meta-list">
-                                            <li class="item category">
-                                                <span class="category-title frontend">前端</span>
-                                            </li>
                                             <li class="item username clickable">
-                                                <div class="user-popover-box">
-                                                    <a href="">花裤衩</a>
-                                                </div>
+                                                <a href=""><%= item.author %></a>
                                             </li>
-                                            <li class="item">10月前</li>
-                                            <li class="item">25781 次阅读</li>
+                                            <li class="item"><%= item.create_date %></li>
+                                            <li class="item"><%= item.read_count %> 次阅读</li>
+                                            <% if(item.tag_ids){ %>
+                                            <li class="item">
+                                                <% item.tag_ids.split(',').forEach(function (item, key) { %>
+                                                <%
+                                                data.tag_all.forEach(function (tag_all_item, tag_all_key) {
+                                                if (tag_all_item.article_tag_id == item) {
+                                                %>
+                                                <a class="tag-class frontend" href="">
+                                                    <%= tag_all_item.article_tag_name %>
+                                                </a>
+                                                <%
+                                                }}) %>
+                                                <% }) %>
+                                            </li>
+                                            <% } %>
                                             <li><a href="">编辑</a></li>
                                         </ul>
                                     </div>
+                                </div>
+                                <div class="lazy thumb thumb loaded"
+                                     style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
                                 </div>
                             </article>
                         </li>
                         <% }) %>
                     </ul>
+
+                    <!--page start-->
+                    <% include pages/user_page.ejs %>
+                    <!--page end-->
+
                 </div>
 
 
@@ -84,31 +99,14 @@
 <% include parts/footer_view.ejs %>
 <!--footer_view.ejs end-->
 
-<!--<script>
-
-var navbar = document.getElementById('layout-navbar')
-
-function getScrollTop () {
-  var scrollTop = 0;
-  if (document.documentElement && document.documentElement.scrollTop) {
-    scrollTop = document.documentElement.scrollTop;
-  }
-  else if (document.body) {
-    scrollTop = document.body.scrollTop;
-  }
-  return scrollTop;
-}
-
-window.onscroll = function () {
-  var st = getScrollTop()
-  if (st > 50) {
-    navbar.classList.add("navbar-fixed-top");
-  } else {
-    navbar.classList.remove("navbar-fixed-top");
-  }
-}
-
-</script>-->
+<script>
+  $(function () {
+    var find_active_length = $('.topic-list').find('.current').length
+    if (find_active_length === 0) {
+      $('.topic-list li').eq(1).addClass('current')
+    }
+  })
+</script>
 </body>
 
 <% include parts/footer.ejs %>

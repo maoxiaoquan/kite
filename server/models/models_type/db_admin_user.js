@@ -61,9 +61,9 @@ module.exports = {
       comment: '是否可以登录',
       field: 'enable'
     },
-    description: { // 角色描述
+    description: { // 账户描述
       type: Seq.STRING(100),
-      comment: '角色描述',
+      comment: '账户描述',
       field: 'description'
     }
   }

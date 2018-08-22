@@ -1,6 +1,8 @@
 const models = require('../models')
 const moment = require('moment')
 const {render, home_resJson} = require('../utils/res_data')
+const Op = require('sequelize').Op
+const trimHtml = require('trim-html')
 
 function err_mess (message) {
   this.message = message
@@ -45,7 +47,7 @@ class Article {
 
   static async post_create_writer (ctx) {
     let formData = ctx.request.body
-    console.log('formData', formData)
+
     try {
 
       if (!formData.title) {
@@ -80,14 +82,16 @@ class Article {
       return false
     }
 
+    console.log('trimHtml(formData.origin_content)',trimHtml(formData.origin_content))
+
     try {
       await models.article.create({
         uid: ctx.session.uid,
         author: ctx.session.nickname,
         title: formData.title,
-        excerpt: formData.content, /*摘记*/
+        excerpt: trimHtml(formData.origin_content).html, /*摘记*/
         content: formData.content, /*主内容*/
-        origin_content: formData.content, /*源内容*/
+        origin_content: formData.origin_content, /*源内容*/
         source: formData.source, // 来源 （1原创 2转载）
         status: 1, // '状态(0:草稿;1:审核中;2:审核通过;3:回收站)'
         type: formData.type, // 类型 （1文章 2说说 3视频 4公告 ）
@@ -126,13 +130,47 @@ class Article {
 
     const title = 'tag'
 
-    await render(ctx, {
-      title: title,
-      view_url: 'default/tag',
-      state: 'success',
-      message: 'user',
-      data: ''
+    let article_tag_id = ctx.params.article_tag_id
+
+    let page = ctx.query.page || 1
+    let pageSize = ctx.query.pageSize || 25
+
+    let sql_data_user = await models.article_tag.findOne({
+      where: {
+        article_tag_id: article_tag_id
+      }
     })
+    if (sql_data_user) {
+
+      let {count, rows} = await models.article.findAndCountAll({
+        where: {article_tag_ids: {[Op.like]: `%${article_tag_id}%`}},//为空，获取全部，也可以自己添加条件
+        offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: pageSize,//每页限制返回的数据条数
+        order: [['create_date_timestamp', 'desc']]
+      })
+      /*所有文章专题*/
+      let article_tag_all = await models.article_tag.findAll({
+        attributes: ['article_tag_id', 'article_tag_name']
+      })
+
+      await render(ctx, {
+        title: title,
+        view_url: 'default/tag',
+        state: 'success',
+        message: 'user',
+        data: {
+          page,
+          count,
+          pageSize,
+          article_tag_id,
+          tag_all: article_tag_all,
+          article_list: rows
+        }
+      })
+
+    } else {
+      ctx.redirect('/404')
+    }
   }
 
   static async get_article_tag_all (ctx) {

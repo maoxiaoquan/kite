@@ -72,7 +72,6 @@ class Aside extends Component {
               <Menu.Item key="8"><Link to="/master/index/user">用户管理</Link></Menu.Item>
               <Menu.Item key="9"><Link to="/master/index/article">文章管理</Link></Menu.Item>
               <Menu.Item key="10"><Link to="/master/index/article_tag">文章标签</Link></Menu.Item>
-              <Menu.Item key="18"><Link to="/master/index/article_tag">文章专题</Link></Menu.Item>
               <Menu.Item key="19"><Link to="/master/index/article_column">官方专栏</Link></Menu.Item>
               <Menu.Item key="11"><Link to="/master/index/user_tag">用户标签</Link></Menu.Item>
               <Menu.Item key="12"><Link to="/master/index/picture">图片管理</Link></Menu.Item>
