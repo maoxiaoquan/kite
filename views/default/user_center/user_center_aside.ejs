@@ -6,6 +6,7 @@
                  alt="22d8d123 271c 4d80 9c59 6990844a9e37"> 简书会员
         </a></li>
 </ul>
+<% if(user_info.uid === data.current_user.uid){ %>
 <ul class="list user-dynamic">
     <li>
         <a href="/users/78d3e1ab9924/subscriptions">
@@ -14,8 +15,10 @@
     <li>
         <a href="/users/78d3e1ab9924/liked_notes">
             <i class="iconfont ic-like"></i> <span>我喜欢的文章</span>
-        </a></li>
+        </a>
+    </li>
 </ul>
+<% } %>
 <div class="title">个人介绍</div>
 <div class="description">
     <div class="js-intro">这里筑梦师,是一名正在努力学习的iOS开发工程师,目前致力于全栈方向的学习,希望可以和大家一起交流技术,共同进步.<br>

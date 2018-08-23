@@ -1,7 +1,8 @@
 <!--分页 start-->
-<div class="pageing">
+<% var page = Number(data.page); var pageCount = 5;  var pageNum = Math.ceil(data.count / data.pageSize); var url_first = '/user/' + data.current_user.uid + '/topic/' %>
 
-    <% var page = Number(data.page); var pageCount = 5;  var pageNum = Math.ceil(data.count / data.pageSize); var url_first = '/user/' + data.current_user.uid + '/topic/' %>
+<% if(pageNum > 1){ %>
+<div class="pageing">
 
     <% if(pageNum <= pageCount){ %>
 
@@ -68,5 +69,5 @@
     <% } %>
 
 </div>
-
+<% } %>
 <!--分页 end-->

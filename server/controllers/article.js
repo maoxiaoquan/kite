@@ -24,6 +24,12 @@ class Article {
       }
     })
 
+    await models.article.update({
+      read_count: Number(sql_article.read_count) + 1
+    }, {
+      where: {aid}//为空，获取全部，也可以自己添加条件
+    })
+
     await render(ctx, {
       title: title,
       view_url: 'default/article',
@@ -82,7 +88,7 @@ class Article {
       return false
     }
 
-    console.log('trimHtml(formData.origin_content)',trimHtml(formData.origin_content))
+    console.log('trimHtml(formData.origin_content)', trimHtml(formData.origin_content))
 
     try {
       await models.article.create({
@@ -135,12 +141,12 @@ class Article {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 25
 
-    let sql_data_user = await models.article_tag.findOne({
+    let find_article_tag = await models.article_tag.findOne({
       where: {
         article_tag_id: article_tag_id
       }
     })
-    if (sql_data_user) {
+    if (find_article_tag) {
 
       let {count, rows} = await models.article.findAndCountAll({
         where: {article_tag_ids: {[Op.like]: `%${article_tag_id}%`}},//为空，获取全部，也可以自己添加条件
@@ -153,6 +159,10 @@ class Article {
         attributes: ['article_tag_id', 'article_tag_name']
       })
 
+      let subscribe_count = await models.user_info.count({
+        where: {article_tag_ids: {[Op.like]: `%${article_tag_id}%`}}
+      })
+
       await render(ctx, {
         title: title,
         view_url: 'default/tag',
@@ -163,6 +173,8 @@ class Article {
           count,
           pageSize,
           article_tag_id,
+          subscribe_count: subscribe_count,
+          article_tag: find_article_tag,
           tag_all: article_tag_all,
           article_list: rows
         }

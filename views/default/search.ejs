@@ -17,47 +17,53 @@
             <div class="col-xs-12 col-sm-8 col-md-8">
                 <div class="article-list">
                     <div class="main-top">
-                        <a class="avatar-collection" href="/c/e048f1a72e3d">
-                            <img src="//upload.jianshu.io/collections/images/309213/144*144.png?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240"
-                                 alt="240">
-                        </a>
                         <div class="title">
-                            <a class="name" href="/c/e048f1a72e3d">简书大学堂精选好课</a>
+                            <a class="name" href="/c/e048f1a72e3d">搜索：<%=data.search%></a>
                         </div>
                         <div class="info">
-                            收录了94篇文章 · 16259人关注
+                           一共有 <%=data.count%> 条结果
                         </div>
                     </div>
                     <ul class="trigger-menu">
-                        <li class=""><a href="/"><i class="iconfont ic-latestcomments"></i> 最新评论</a></li>
+                       <!-- <li class=""><a href="/"><i class="iconfont ic-latestcomments"></i> 最新评论</a></li>-->
                         <li class="active"><a href="/"><i class="iconfont ic-articles"></i> 最新收录</a></li>
-                        <li class=""><a href="/"><i class="iconfont ic-hot"></i> 热门</a></li>
+                        <!--<li class=""><a href="/"><i class="iconfont ic-hot"></i> 热门</a></li>-->
                     </ul>
                     <div class="list-container">
                         <ul>
+                            <% data.article_list.forEach(function (item, key) { %>
                             <li>
                                 <article class="content-box article-list">
                                     <div class="info-box">
                                         <div class="info-row title-row">
-                                            <a href="/article" class="title">手摸手，带你用vue撸后台 系列三(实战篇)</a>
+                                            <a href="/article/<%= item.aid %>"
+                                               class="title" target="_blank"><%= item.title %></a>
                                         </div>
                                         <div class="content-text">
-                                            想想看，你的生活中有没有这样的时候： 明明没有干什么却总是觉得没时间
-                                            ，倒在床上冥思苦想一天的收获，
-                                            除了身体的疲惫和精神的萧条，似乎什么也没剩下。更多时候，你除了倒在床上，自己..
+                                            <%- item.excerpt %>
                                         </div>
                                         <div class="info-row meta-row">
                                             <ul class="meta-list">
-                                                <li class="item category">
-                                                    <span class="category-title frontend">前端</span>
-                                                </li>
                                                 <li class="item username clickable">
-                                                    <div class="user-popover-box">
-                                                        <a href="">花裤衩</a>
-                                                    </div>
+                                                    <a href=""><%= item.author %></a>
                                                 </li>
-                                                <li class="item">10月前</li>
-                                                <li class="item">25781 次阅读</li>
+                                                <li class="item"><%= item.create_date %></li>
+                                                <li class="item"><%= item.read_count %> 次阅读</li>
+                                                <% if(item.tag_ids){ %>
+                                                <li class="item">
+                                                    <% item.tag_ids.split(',').forEach(function (item, key) { %>
+                                                    <%
+                                                    data.tag_all.forEach(function (tag_all_item, tag_all_key) {
+                                                    if (tag_all_item.article_tag_id == item) {
+                                                    %>
+                                                    <a class="tag-class frontend" href="">
+                                                        <%= tag_all_item.article_tag_name %>
+                                                    </a>
+                                                    <%
+                                                    }}) %>
+                                                    <% }) %>
+                                                </li>
+                                                <% } %>
                                             </ul>
                                         </div>
                                     </div>
@@ -66,193 +72,12 @@
                                     </div>
                                 </article>
                             </li>
-                            <li>
-                                <article class="article-list content-box">
-                                    <div class="info-box">
-                                        <div class="info-row title-row">
-                                            <a href="/article" class="title">手摸手，带你用vue撸后台 系列三(实战篇)</a>
-                                        </div>
-                                        <div class="content-text">
-                                            想想看，你的生活中有没有这样的时候： 明明没有干什么却总是觉得没时间
-                                            ，倒在床上冥思苦想一天的收获，
-                                            除了身体的疲惫和精神的萧条，似乎什么也没剩下。更多时候，你除了倒在床上，自己..
-                                        </div>
-                                        <div class="info-row meta-row">
-                                            <ul class="meta-list">
-                                                <li class="item category">
-                                                    <span class="category-title frontend">前端</span>
-                                                </li>
-                                                <li class="item username clickable">
-                                                    <div class="user-popover-box">
-                                                        <a href="">花裤衩</a>
-                                                    </div>
-                                                </li>
-                                                <li class="item">10月前</li>
-                                                <li class="item">25781 次阅读</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="lazy thumb thumb loaded"
-                                         style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
-                                    </div>
-                                </article>
-                            </li>
-                            <li>
-                                <article class="article-list content-box">
-                                    <div class="info-box">
-                                        <div class="info-row title-row">
-                                            <a href="/article" class="title">手摸手，带你用vue撸后台 系列三(实战篇)</a>
-                                        </div>
-                                        <div class="content-text">
-                                            想想看，你的生活中有没有这样的时候： 明明没有干什么却总是觉得没时间
-                                            ，倒在床上冥思苦想一天的收获，
-                                            除了身体的疲惫和精神的萧条，似乎什么也没剩下。更多时候，你除了倒在床上，自己..
-                                        </div>
-                                        <div class="info-row meta-row">
-                                            <ul class="meta-list">
-                                                <li class="item category">
-                                                    <span class="category-title frontend">前端</span>
-                                                </li>
-                                                <li class="item username clickable">
-                                                    <div class="user-popover-box">
-                                                        <a href="">花裤衩</a>
-                                                    </div>
-                                                </li>
-                                                <li class="item">10月前</li>
-                                                <li class="item">25781 次阅读</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="lazy thumb thumb loaded"
-                                         style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
-                                    </div>
-                                </article>
-                            </li>
-                            <li>
-                                <article class="article-list content-box">
-                                    <div class="info-box">
-                                        <div class="info-row title-row">
-                                            <a href="/article" class="title">手摸手，带你用vue撸后台 系列三(实战篇)</a>
-                                        </div>
-                                        <div class="content-text">
-                                            想想看，你的生活中有没有这样的时候： 明明没有干什么却总是觉得没时间
-                                            ，倒在床上冥思苦想一天的收获，
-                                            除了身体的疲惫和精神的萧条，似乎什么也没剩下。更多时候，你除了倒在床上，自己..
-                                        </div>
-                                        <div class="info-row meta-row">
-                                            <ul class="meta-list">
-                                                <li class="item category">
-                                                    <span class="category-title frontend">前端</span>
-                                                </li>
-                                                <li class="item username clickable">
-                                                    <div class="user-popover-box">
-                                                        <a href="">花裤衩</a>
-                                                    </div>
-                                                </li>
-                                                <li class="item">10月前</li>
-                                                <li class="item">25781 次阅读</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="lazy thumb thumb loaded"
-                                         style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
-                                    </div>
-                                </article>
-                            </li>
-                            <li>
-                                <article class="article-list content-box">
-                                    <div class="info-box">
-                                        <div class="info-row title-row">
-                                            <a href="/article" class="title">手摸手，带你用vue撸后台 系列三(实战篇)</a>
-                                        </div>
-                                        <div class="content-text">
-                                            想想看，你的生活中有没有这样的时候： 明明没有干什么却总是觉得没时间
-                                            ，倒在床上冥思苦想一天的收获，
-                                            除了身体的疲惫和精神的萧条，似乎什么也没剩下。更多时候，你除了倒在床上，自己..
-                                        </div>
-                                        <div class="info-row meta-row">
-                                            <ul class="meta-list">
-                                                <li class="item category">
-                                                    <span class="category-title frontend">前端</span>
-                                                </li>
-                                                <li class="item username clickable">
-                                                    <div class="user-popover-box">
-                                                        <a href="">花裤衩</a>
-                                                    </div>
-                                                </li>
-                                                <li class="item">10月前</li>
-                                                <li class="item">25781 次阅读</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="lazy thumb thumb loaded"
-                                         style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
-                                    </div>
-                                </article>
-                            </li>
-                            <li>
-                                <article class="article-list content-box">
-                                    <div class="info-box">
-                                        <div class="info-row title-row">
-                                            <a href="/article" class="title">手摸手，带你用vue撸后台 系列三(实战篇)</a>
-                                        </div>
-                                        <div class="content-text">
-                                            想想看，你的生活中有没有这样的时候： 明明没有干什么却总是觉得没时间
-                                            ，倒在床上冥思苦想一天的收获，
-                                            除了身体的疲惫和精神的萧条，似乎什么也没剩下。更多时候，你除了倒在床上，自己..
-                                        </div>
-                                        <div class="info-row meta-row">
-                                            <ul class="meta-list">
-                                                <li class="item category">
-                                                    <span class="category-title frontend">前端</span>
-                                                </li>
-                                                <li class="item username clickable">
-                                                    <div class="user-popover-box">
-                                                        <a href="">花裤衩</a>
-                                                    </div>
-                                                </li>
-                                                <li class="item">10月前</li>
-                                                <li class="item">25781 次阅读</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="lazy thumb thumb loaded"
-                                         style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
-                                    </div>
-                                </article>
-                            </li>
-                            <li>
-                                <article class="article-list content-box">
-                                    <div class="info-box">
-                                        <div class="info-row title-row">
-                                            <a href="/article" class="title">手摸手，带你用vue撸后台 系列三(实战篇)</a>
-                                        </div>
-                                        <div class="content-text">
-                                            想想看，你的生活中有没有这样的时候： 明明没有干什么却总是觉得没时间
-                                            ，倒在床上冥思苦想一天的收获，
-                                            除了身体的疲惫和精神的萧条，似乎什么也没剩下。更多时候，你除了倒在床上，自己..
-                                        </div>
-                                        <div class="info-row meta-row">
-                                            <ul class="meta-list">
-                                                <li class="item category">
-                                                    <span class="category-title frontend">前端</span>
-                                                </li>
-                                                <li class="item username clickable">
-                                                    <div class="user-popover-box">
-                                                        <a href="">花裤衩</a>
-                                                    </div>
-                                                </li>
-                                                <li class="item">10月前</li>
-                                                <li class="item">25781 次阅读</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="lazy thumb thumb loaded"
-                                         style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
-                                    </div>
-                                </article>
-                            </li>
+                            <% }) %>
                         </ul>
+
+                        <!--page.ejs start-->
+                        <% include pages/search_page.ejs %>
+                        <!--page.ejs end-->
                     </div>
                 </div>
             </div>

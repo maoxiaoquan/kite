@@ -19,12 +19,16 @@
                     <li class="nav-item"><a href="/subscribe/tag?page=1">最热</a></li> <!--class active-->
                     <!-- <li class="nav-item"><a href="/subscribe/all?sort=newest">最新</a></li>-->
                     <li class="nav-item search">
-                        <form role="search" class="search-form">
-                            <input maxlength="32" placeholder="搜索标签" class="search-input">
+                        <form role="search" class="search-tag-from" method="get" action="/subscribe/tag">
+                            <input maxlength="32" placeholder="搜索标签" required="true" name="tag_name" class="search-tag-input">
+                            <button class="search-tag-btn"><i class="iconfont icon-search"></i></button>
                         </form>
                     </li>
                 </ul>
             </nav>
+            <% if(data.tag_name){ %>
+            <p>搜索文章标签: <%= data.tag_name %> 结果有 <%= data.count %> 条</p>
+            <% } %>
         </header>
 
         <ul class="row tag-list">
@@ -42,14 +46,16 @@
                             <div class="meta article">18332 文章</div>
                         </div>
                     </div>
+                    <% if(user_info.islogin){ %>
                     <div class="action-box">
-                        <% if(data.article_tag_ids.indexOf(item.article_tag_id) === -1){ %>
+                        <% if(data.article_tag_ids.indexOf(String(item.article_tag_id)) === -1){ %>
                         <button data-tag-id="<%= item.article_tag_id %>" class="subscribe-btn not-subscribe">关注</button>
                         <% }else{ %>
                         <button data-tag-id="<%= item.article_tag_id %>" class="subscribe-btn already-subscribe">已关注
                         </button>
                         <% } %>
                     </div>
+                    <% } %>
                 </div>
             </li>
             <% }) %>
@@ -70,6 +76,7 @@
 <script>
   window.onload = function () {
     var subscribe_btn = document.getElementsByClassName('not-subscribe')
+    var already_subscribe = document.getElementsByClassName('already-subscribe')
     console.log(subscribe_btn)
 
     for (var i = 0; i < subscribe_btn.length; i++) {
@@ -78,6 +85,11 @@
           var tag_id = subscribe_btn[i].getAttribute('data-tag-id')
           _server.post_subscribe_tag({article_tag_id: tag_id}).then(function (res) {
             console.log(res)
+            if (res.state === 'success') {
+              window.location.reload()
+            } else {
+              alert(res.meaasge)
+            }
           }).catch(function (err) {
             console.log('错误')
           })

@@ -1,5 +1,6 @@
 const models = require('../models')
-const de = require('../utils/res_data')
+const {render} = require('../utils/res_data')
+const Op = require('sequelize').Op
 
 class Search {
 
@@ -13,14 +14,34 @@ class Search {
   static async form_search (ctx) {
 
     const title = 'search'
+    let page = ctx.query.page || 1
+    let pageSize = ctx.query.pageSize || 25
+    let search = ctx.query.search
 
+    let {count, rows} = await models.article.findAndCountAll({
+      where: {title: {[Op.like]: `%${search}%`}},//为空，获取全部，也可以自己添加条件
+      offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+      limit: pageSize,//每页限制返回的数据条数
+      order: [['create_date_timestamp', 'desc']]
+    })
+    /*所有文章专题*/
+    let article_tag_all = await models.article_tag.findAll({
+      attributes: ['article_tag_id', 'article_tag_name']
+    })
 
-    await de.render(ctx, {
+    await render(ctx, {
       title: title,
       view_url: 'default/search',
       state: 'success',
-      message: 'user',
-      data: ''
+      message: 'search',
+      data: {
+        page,
+        count,
+        pageSize,
+        search,
+        tag_all: article_tag_all,
+        article_list: rows
+      }
     })
   }
 

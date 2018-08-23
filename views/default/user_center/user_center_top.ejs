@@ -1,4 +1,4 @@
-<div class="main-top">
+<div class="main-top clearfix">
 
     <a class="avatar" href="/user/<%= data.current_user.uid %>">
         <img src="<%= data.current_user.avatar %>" alt="">
@@ -8,12 +8,18 @@
         <a class="name" href="/user/<%= data.current_user.uid %>"><%= data.current_user.nickname %></a>
     </div>
 
+    <% if(user_info.uid !== data.current_user.uid){ %>
+    <button class="off  user-follow-button">
+        <i class="iconfont"></i>
+        <span>关注</span>
+    </button>
+    <% } %>
     <div class="info">
         <ul>
             <li>
                 <div class="meta-block">
                     <a href="/users/78d3e1ab9924/following">
-                        <p>10</p>我关注人<i class="iconfont ic-arrow"></i>
+                        <p>10</p><% if(user_info.uid === data.current_user.uid){ %>我<% }else { %>他<% } %>关注人<i class="iconfont ic-arrow"></i>
                     </a>
                 </div>
             </li>
@@ -40,16 +46,20 @@
             </li>
         </ul>
     </div>
+
+
 </div>
 
 <ul class="trigger-menu">
     <li class="<% if (data.router_name == '') { %>active<% } %>">
         <a href="/user/<%= data.current_user.uid %>/article/all">
-            <i class="iconfont ic-articles"></i>我的文章</a>
+            <i class="iconfont ic-articles"></i>
+            <% if(user_info.uid === data.current_user.uid){ %>我<% }else { %>他<% } %>的文章</a>
     </li>
     <li class="<% if (data.router_name == 'topic') { %>active<% } %>">
         <a href="/user/<%= data.current_user.uid %>/topic">
-            <i class="iconfont ic-feed"></i>我的专题</a>
+            <i class="iconfont ic-feed"></i>
+            <% if(user_info.uid === data.current_user.uid){ %>我<% }else { %>他<% } %>的专题</a>
     </li>
     <li class="">
         <a href="/user/<%= data.current_user.uid %>?order_by=commented_at">

@@ -20,14 +20,15 @@
 
                 <div class="user-article-topic">
 
+                    <% if(user_info.uid === data.current_user.uid){ %>
                     <a class="btn btn-green" href="">创建新专题</a>
-
+                    <% } %>
                     <ul>
                         <% data.user_article_topic_all.forEach(function (item, key) { %>
                         <li class="topic-content-box">
                             <div class="topic-content-box-view">
-                                <a href="/topic" class="title"><%= item.user_article_topic_name %></a>
-                                <p class="remarks">简介：这是一个简单的专题简介</p>
+                                <a href="/user/<%= data.uid %>/article/<%= item.user_article_topic_id %>" class="title"><%= item.user_article_topic_name %></a>
+                                <p class="remarks">简介：默认简介为空</p>
                                 <div class="meta">
                                     <span>关注数：12</span>
                                     <span>文章数：200</span>

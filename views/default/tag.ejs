@@ -22,10 +22,10 @@
                                  alt="240">
                         </a>
                         <div class="title">
-                            <a class="name" href="/c/e048f1a72e3d">简书大学堂精选好课</a>
+                            <a class="name" href="/c/e048f1a72e3d"><%=data.article_tag.article_tag_name%></a>
                         </div>
                         <div class="info">
-                            收录了94篇文章 · 16259人关注
+                            收录了<%=data.count%>篇文章 · <%=data.subscribe_count%>人关注
                         </div>
                     </div>
                     <ul class="trigger-menu">
@@ -49,7 +49,7 @@
                                         <div class="info-row meta-row">
                                             <ul class="meta-list">
                                                 <li class="item username clickable">
-                                                    <a href=""><%= item.author %></a>
+                                                    <a href="/user/<%=item.uid%>/article/all"><%= item.author %></a>
                                                 </li>
                                                 <li class="item"><%= item.create_date %></li>
                                                 <li class="item"><%= item.read_count %> 次阅读</li>
