@@ -31,6 +31,12 @@ sequelize.authenticate().then(() => {
 
 /*前台用户表*/
 const user = sequelize.define(require('./models_type/db_user').NAME, require('./models_type/db_user').TABLE, SEQ_PARAMETER)
+/*前台用户关注用户表*/
+const user_attention = sequelize.define(require('./models_type/db_user_attention').NAME, require('./models_type/db_user_attention').TABLE, SEQ_PARAMETER)
+/*前台用户关注文章标签表*/
+const subscribe_article_tag = sequelize.define(require('./models_type/db_subscribe_article_tag').NAME, require('./models_type/db_subscribe_article_tag').TABLE, SEQ_PARAMETER)
+/*前台用户喜欢文章表*/
+const user_like_article = sequelize.define(require('./models_type/db_user_like_article').NAME, require('./models_type/db_user_like_article').TABLE, SEQ_PARAMETER)
 /*前台用户信息表*/
 const user_info = sequelize.define(require('./models_type/db_user_info').NAME, require('./models_type/db_user_info').TABLE, SEQ_PARAMETER)
 /*前台用户注册验证码*/
@@ -64,6 +70,9 @@ const admin_role_authority = sequelize.define(require('./models_type/db_admin_ro
 module.exports = {
   sequelize,
   user,
+  user_attention,
+  subscribe_article_tag,
+  user_like_article,
   user_tag,
   user_info,
   user_article_topic,
