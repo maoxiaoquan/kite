@@ -55,6 +55,6 @@ module.exports = {
       type: Seq.BIGINT(30),
       comment: '创建时间戳',
       field: 'create_date_timestamp'
-    },
+    }
   }
 }

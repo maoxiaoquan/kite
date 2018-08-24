@@ -16,11 +16,16 @@
         <header class="list-header">
             <nav role="navigation" class="list-nav">
                 <ul class="nav-list">
-                    <li class="nav-item"><a href="/subscribe/tag?page=1">最热</a></li> <!--class active-->
-                    <!-- <li class="nav-item"><a href="/subscribe/all?sort=newest">最新</a></li>-->
+                    <li class="nav-item <% if(Number(data.is_subscribe) === 1){ %>active <% } %>"><a
+                                href="/subscribe/tag?is_subscribe=1">全部</a></li> <!--class active-->
+                    <%if(user_info.islogin){%>
+                    <li class="nav-item <% if(Number(data.is_subscribe) === 2){ %>active <% } %>"><a
+                                href="/subscribe/tag?is_subscribe=2">已关注</a></li>
+                    <%}%>
                     <li class="nav-item search">
                         <form role="search" class="search-tag-from" method="get" action="/subscribe/tag">
-                            <input maxlength="32" placeholder="搜索标签" required="true" name="tag_name" class="search-tag-input">
+                            <input maxlength="32" placeholder="搜索标签" required="true" name="tag_name"
+                                   class="search-tag-input">
                             <button class="search-tag-btn"><i class="iconfont icon-search"></i></button>
                         </form>
                     </li>
@@ -42,18 +47,20 @@
                             <div class="title"><%= item.article_tag_name %></div>
                         </a>
                         <div class="meta-box">
-                            <div class="meta subscribe">258106 关注</div>
-                            <div class="meta article">18332 文章</div>
+                            <div class="meta article"><%=item.article_count%> 篇文章</div>
+                            <div class="meta subscribe"><%=item.subscribe_count%> 人关注</div>
                         </div>
                     </div>
                     <% if(user_info.islogin){ %>
                     <div class="action-box">
-                        
+
+                        <% if(data.subscribe_article_tag.indexOf(item.article_tag_id) === -1){ %>
                         <button data-tag-id="<%= item.article_tag_id %>" class="subscribe-btn not-subscribe">关注</button>
-                       
+                        <% }else { %>
                         <button data-tag-id="<%= item.article_tag_id %>" class="subscribe-btn already-subscribe">已关注
                         </button>
-                       
+                        <% } %>
+
                     </div>
                     <% } %>
                 </div>
@@ -75,24 +82,25 @@
 
 <script>
   window.onload = function () {
-    var subscribe_btn = document.getElementsByClassName('not-subscribe')
-    var already_subscribe = document.getElementsByClassName('already-subscribe')
-    console.log(subscribe_btn)
+    var subscribe_btn = document.getElementsByClassName('subscribe-btn')
 
     for (var i = 0; i < subscribe_btn.length; i++) {
       (function (i) {
-        subscribe_btn[i].onclick = function () {
-          var tag_id = subscribe_btn[i].getAttribute('data-tag-id')
-          _server.post_subscribe_tag({article_tag_id: tag_id}).then(function (res) {
-            console.log(res)
-            if (res.state === 'success') {
-              window.location.reload()
-            } else {
-              alert(res.meaasge)
-            }
-          }).catch(function (err) {
-            console.log('错误')
-          })
+
+        if (subscribe_btn.length > 0) {
+          subscribe_btn[i].onclick = function () {
+            var tag_id = subscribe_btn[i].getAttribute('data-tag-id')
+            _server.post_subscribe_tag({article_tag_id: tag_id}).then(function (res) {
+              console.log(res)
+              if (res.state === 'success') {
+                window.location.reload()
+              } else {
+                alert(res.meaasge)
+              }
+            }).catch(function (err) {
+              console.log('错误')
+            })
+          }
         }
       })(i)
     }

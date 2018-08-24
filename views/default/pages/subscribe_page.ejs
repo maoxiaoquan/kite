@@ -1,5 +1,9 @@
 <!--分页 start-->
-<% var page = Number(data.page); var pageCount = 5;  var pageNum = Math.ceil(data.count / data.pageSize); var url_first = '/subscribe/tag?tag_name=' + data.tag_name + '&' %>
+<%
+var page = Number(data.page);
+var pageCount = 5;  var pageNum = Math.ceil(data.count / data.pageSize);
+var url_first = '/subscribe/tag?tag_name=' + data.tag_name + '&is_subscribe=' + data.is_subscribe + '&'
+%>
 <% if(pageNum > 1){ %>
 <div class="pageing">
 

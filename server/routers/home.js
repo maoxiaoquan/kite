@@ -27,6 +27,10 @@ router.get('user/:uid/article/:topic_id', personal_center.verify_user, personal_
 
 router.get('user/:uid/topic', personal_center.verify_user, personal_center.render_user_center_topic) // 用户个人中心专题页
 
+router.get('user/:uid/attention', personal_center.verify_user, personal_center.render_user_center_attention) // 用户个人中心关注
+
+router.get('user/:uid/like', personal_center.verify_user, personal_center.render_user_center_like) // 用户个人中心喜欢
+
 router.get('subscribe/tag', subscribe.render_subscribe_tag) // 订阅
 
 router.get('tag/:article_tag_id', article.render_get_tag) // 文章标签
@@ -58,6 +62,8 @@ router.post('article_writer', ajaxCheck_Session, article.post_create_writer) // 
 router.get('get_article_tag_all', ajaxCheck_Session, article.get_article_tag_all) // 获取所有文章标签 TYPE:AJAX
 
 router.get('get_article_topic_all', ajaxCheck_Session, user_article_topic.get_user_article_topic_all) // 获取用户所有文章专题 TYPE:AJAX
+
+router.post('post_user_attention', ajaxCheck_Session, personal_center.post_user_attention) // 用户关注用户 TYPE:AJAX
 
 router.post('post_subscribe_tag', ajaxCheck_Session, subscribe.post_subscribe_tag) // 用户订阅标签 TYPE:AJAX
 

@@ -77,6 +77,18 @@ module.exports = {
       field: 'read_count',
       defaultValue: 0
     },
+    like_count: { // 喜欢数
+      type: Seq.BIGINT(20),
+      comment: '喜欢数',
+      field: 'like_count',
+      defaultValue: 0
+    },
+    comment_count: { // 评论数
+      type: Seq.BIGINT(20),
+      comment: '评论数',
+      field: 'comment_count',
+      defaultValue: 0
+    },
     topic_ids: {
       /* 文章所属的用户专栏id 可多个*/
       type: Seq.STRING(100),

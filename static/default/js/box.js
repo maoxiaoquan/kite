@@ -35,6 +35,9 @@ _Fetch.interceptors.response.use(function (response) {
     },
     post_subscribe_tag: function (data) { /*订阅标签*/
       return _Fetch.post('/post_subscribe_tag', data)
+    },
+    post_user_attention: function (data) { /*用户关注用户*/
+      return _Fetch.post('/post_user_attention', data)
     }
   }
 

@@ -8,7 +8,7 @@ module.exports = {
       type: Seq.INTEGER(10),
       primaryKey: true, // 定义主键
       comment: 'uid',
-      field:'uid'
+      field: 'uid'
     },
     avatar: { // 头像
       type: Seq.STRING(100),
@@ -64,6 +64,16 @@ module.exports = {
       type: Seq.BIGINT(50),
       comment: '最后登录时间',
       field: 'last_sign_time'
+    },
+    introduction: { // 简介
+      type: Seq.TEXT,
+      comment: '简介',
+      field: 'introduction'
+    },
+    user_tag_ids: {
+      type: Seq.STRING(100),
+      comment: '用户的标签',
+      field: 'user_tag_ids'
     },
     enable: { // 是否可以登录
       type: Seq.BOOLEAN,

@@ -49,6 +49,8 @@
                                             </li>
                                             <li class="item"><%= item.create_date %></li>
                                             <li class="item"><%= item.read_count %> 次阅读</li>
+                                            <li class="item"><%= item.like_count %> 次喜欢</li>
+                                            <li class="item"><%= item.comment_count %> 次评论</li>
                                             <% if(item.tag_ids){ %>
                                             <li class="item">
                                                 <% item.tag_ids.split(',').forEach(function (item, key) { %>

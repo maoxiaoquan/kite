@@ -97,20 +97,12 @@
                     <li>
                         <article class="content-box content-box-index">
                             <div class="info-box">
-                                <div class="info-row title-row">
-                                    <a href="/article/<%= item.aid %>"
-                                       class="title" target="_blank"><%= item.title %></a>
-                                </div>
-                                <!-- <div class="content-text">
-                                    <%= item.content %>
-                                </div>-->
                                 <div class="info-row meta-row">
                                     <ul class="meta-list">
                                         <li class="item username clickable">
-                                            <a href="/user/<%=item.uid%>/article/all"><%= item.author %></a>
+                                            <a href="/user/<%= item.uid %>/article/all"><%= item.author %></a>
                                         </li>
                                         <li class="item"><%= item.create_date %></li>
-                                        <li class="item"><%= item.read_count %> 次阅读</li>
                                         <% if(item.tag_ids){ %>
                                         <li class="item">
                                             <% item.tag_ids.split(',').forEach(function (item, key) { %>
@@ -118,7 +110,8 @@
                                             data.tag_all.forEach(function (tag_all_item, tag_all_key) {
                                             if (tag_all_item.article_tag_id == item) {
                                             %>
-                                            <a class="tag-class frontend" href="">
+                                            <a class="tag-class frontend"
+                                               href="/tag/<%= tag_all_item.article_tag_id %>">
                                                 <%= tag_all_item.article_tag_name %>
                                             </a>
                                             <%
@@ -126,6 +119,28 @@
                                             <% }) %>
                                         </li>
                                         <% } %>
+                                    </ul>
+                                </div>
+
+                                <div class="info-row title-row">
+                                    <a href="/article/<%= item.aid %>"
+                                       class="title" target="_blank"><%= item.title %></a>
+                                </div>
+
+                                <div class="info-row bottom-row">
+                                    <ul class="bottom-row-list">
+                                        <li class="item like-article">
+                                            <i class="iconfont icon-love"></i>
+                                            <strong><%= item.like_count %></strong>
+                                        </li>
+                                        <li class="item read-count">
+                                            <i class="iconfont icon-chakan"></i>
+                                            <strong><%= item.read_count %> </strong>
+                                        </li>
+                                        <li class="item comment-count">
+                                            <i class="iconfont icon-pinglun"></i>
+                                            <strong><%= item.comment_count %></strong>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -138,28 +153,44 @@
                     <li v-for="item in article_list"> <!--第一页之后ajax渲染-->
                         <article class="content-box content-box-index">
                             <div class="info-box">
-                                <div class="info-row title-row">
-                                    <a :href="article_href(item.aid)"
-                                       class="title" target="_blank">{{ item.title }}</a>
-                                </div>
-                                <!-- <div class="content-text">
-                                    {{ item.content  }}
-                                </div>-->
+
                                 <div class="info-row meta-row">
                                     <ul class="meta-list">
                                         <li class="item username clickable">
                                             <a href="">{{ item.author }}</a>
                                         </li>
                                         <li class="item">{{ item.create_date }}</li>
-                                        <li class="item">{{ item.read_count }} 次阅读</li>
                                         <li class="item" v-if="item.tag_ids">
                                             <a v-for="item_article_tag in article_tag_filter(item.tag_ids)"
-                                               class="tag-class frontend" href="#">
+                                               class="tag-class frontend" :href="tag_href(item_article_tag.article_tag_id)">
                                                 {{item_article_tag.article_tag_name}}
                                             </a>
                                         </li>
                                     </ul>
                                 </div>
+
+                                <div class="info-row title-row">
+                                    <a :href="article_href(item.aid)"
+                                       class="title" target="_blank">{{ item.title }}</a>
+                                </div>
+
+                                <div class="info-row bottom-row">
+                                    <ul class="bottom-row-list">
+                                        <li class="item like-article">
+                                            <i class="iconfont icon-love"></i>
+                                            <strong>{{ item.like_count }}</strong>
+                                        </li>
+                                        <li class="item read-count">
+                                            <i class="iconfont icon-chakan"></i>
+                                            <strong>{{ item.read_count }} </strong>
+                                        </li>
+                                        <li class="item comment-count">
+                                            <i class="iconfont icon-pinglun"></i>
+                                            <strong>{{ item.comment_count }}</strong>
+                                        </li>
+                                    </ul>
+                                </div>
+
                             </div>
                             <div class="lazy thumb thumb loaded"
                                  style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
@@ -245,6 +276,9 @@
       },
       article_href: function (val) {
         return '/article/' + val + ''
+      },
+      tag_href: function (val) {
+        return '/tag/' + val + ''
       },
       article_tag_filter: function (val) {
         var _arr = []

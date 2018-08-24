@@ -9,9 +9,14 @@
     </div>
 
     <% if(user_info.uid !== data.current_user.uid){ %>
-    <button class="off  user-follow-button">
+    <button data-uid="<%= data.current_user.uid %>"
+            class="user-follow-button <% if (data.current_user.user_attention_count > 0) { %> has <% }else{ %> no <% } %>">
         <i class="iconfont"></i>
+        <% if (data.current_user.user_attention_count > 0) { %>
+        <span>已关注</span>
+        <% }else{ %>
         <span>关注</span>
+        <% } %>
     </button>
     <% } %>
     <div class="info">
@@ -19,28 +24,38 @@
             <li>
                 <div class="meta-block">
                     <a href="/users/78d3e1ab9924/following">
-                        <p>10</p><% if(user_info.uid === data.current_user.uid){ %>我<% }else { %>他<% } %>关注人<i class="iconfont ic-arrow"></i>
+                        <p><%= data.current_user.user_attention_other_count %></p>
+                        <strong>
+                            <% if(user_info.uid === data.current_user.uid){ %>
+                            我关注的人
+                            <% }else { %>
+                            他关注的人
+                            <% } %>
+                        </strong>
                     </a>
                 </div>
             </li>
             <li>
                 <div class="meta-block">
                     <a href="/users/78d3e1ab9924/followers">
-                        <p>1</p>粉丝<i class="iconfont ic-arrow"></i>
+                        <p><%= data.current_user.other_user_attention_count %></p>
+                        <strong>粉丝</strong>
                     </a>
                 </div>
             </li>
             <li>
                 <div class="meta-block">
                     <a href="/user/78d3e1ab9924">
-                        <p>1</p>文章<i class="iconfont ic-arrow"></i>
+                        <p><%= data.current_user.user_article_count %></p>
+                        <strong>文章</strong>
                     </a>
                 </div>
             </li>
             <li>
                 <div class="meta-block">
                     <a href="/user/78d3e1ab9924">
-                        <p>1</p>收获喜欢<i class="iconfont ic-arrow"></i>
+                        <p>1</p>
+                        <strong>收获喜欢</strong>
                     </a>
                 </div>
             </li>
@@ -53,20 +68,42 @@
 <ul class="trigger-menu">
     <li class="<% if (data.router_name == '') { %>active<% } %>">
         <a href="/user/<%= data.current_user.uid %>/article/all">
-            <i class="iconfont ic-articles"></i>
-            <% if(user_info.uid === data.current_user.uid){ %>我<% }else { %>他<% } %>的文章</a>
+            文章
+        </a>
     </li>
     <li class="<% if (data.router_name == 'topic') { %>active<% } %>">
         <a href="/user/<%= data.current_user.uid %>/topic">
-            <i class="iconfont ic-feed"></i>
-            <% if(user_info.uid === data.current_user.uid){ %>我<% }else { %>他<% } %>的专题</a>
+            专题
+        </a>
     </li>
-    <li class="">
-        <a href="/user/<%= data.current_user.uid %>?order_by=commented_at">
-            <i class="iconfont ic-latestcomments"></i> 动态</a>
+    <li class="<% if (data.router_name == 'attention') { %>active<% } %>">
+        <a href="/user/<%= data.current_user.uid %>/attention">
+            关注
+        </a>
     </li>
-    <li class="">
-        <a href="/user/<%= data.current_user.uid %>?order_by=top">
-            <i class="iconfont ic-hot"></i> 最新评论</a>
+    <li class="<% if (data.router_name == 'like') { %>active<% } %>">
+        <a href="/user/<%= data.current_user.uid %>/like">
+            喜欢
+        </a>
     </li>
 </ul>
+
+<script>
+  window.onload = function () {
+    var subscribe_btn = document.getElementsByClassName('user-follow-button')[0]
+
+    subscribe_btn.onclick = function () {
+      var uid = subscribe_btn.getAttribute('data-uid')
+      _server.post_user_attention({attention_uid: uid}).then(function (res) {
+        console.log(res)
+        if (res.state === 'success') {
+          window.location.reload()
+        } else {
+          alert(res.meaasge)
+        }
+      }).catch(function (err) {
+        console.log('错误')
+      })
+    }
+  }
+</script>

@@ -154,13 +154,12 @@ class Article {
         limit: pageSize,//每页限制返回的数据条数
         order: [['create_date_timestamp', 'desc']]
       })
+
+      let subscribe_count = await models.subscribe_article_tag.count({where: {article_tag_id}})
+
       /*所有文章专题*/
       let article_tag_all = await models.article_tag.findAll({
         attributes: ['article_tag_id', 'article_tag_name']
-      })
-
-      let subscribe_count = await models.user_info.count({
-        where: {article_tag_ids: {[Op.like]: `%${article_tag_id}%`}}
       })
 
       await render(ctx, {
@@ -173,7 +172,7 @@ class Article {
           count,
           pageSize,
           article_tag_id,
-          subscribe_count: subscribe_count,
+          subscribe_count,
           article_tag: find_article_tag,
           tag_all: article_tag_all,
           article_list: rows

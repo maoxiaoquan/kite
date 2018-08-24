@@ -186,12 +186,12 @@
       .qrcode {
         width: 60px;
         height: 60px;
+        display: block;
+        float: left;
         opacity: .85;
       }
       .info {
-        display: inline-block;
-        vertical-align: middle;
-        margin-left: 7px;
+        margin-left: 70px;
       }
     }
 
@@ -368,27 +368,6 @@
     -ms-flex-pack: center;
     justify-content: center;
     min-width: 0;
-    .title-row {
-      margin: .5rem 0 .8rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      .title {
-        font-size: 16px;
-        letter-spacing: 1px;
-        font-weight: 600;
-        line-height: 1.2;
-        color: #2e3135;
-      }
-    }
-    .content-text {
-      font-size: 14px;
-      margin-bottom: 10px;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
-    }
     .meta-row {
       font-size: .5rem;
       color: #8f969c;
@@ -433,6 +412,54 @@
                 content: "";
               }
             }
+          }
+        }
+      }
+    }
+    .title-row {
+      margin: .5rem 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      .title {
+        font-size: 16px;
+        letter-spacing: 1px;
+        font-weight: 600;
+        line-height: 1.2;
+        color: #2e3135;
+      }
+    }
+    .content-text {
+      font-size: 14px;
+      margin-bottom: 10px;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+    .bottom-row {
+      &-list {
+        display: inline-block;
+        .item {
+          display: inline-block;
+          font-size: 12px;
+          margin-right: 10px;
+          color: #b4b4b4;
+          &:hover {
+            color: #333;
+          }
+          i {
+            vertical-align: middle;
+          }
+          strong {
+            margin-left: 2px;
+            vertical-align: middle;
+          }
+          &.like-article {
+            cursor: pointer;
+          }
+          &.like-article-off {
+            color: #00bb29;
           }
         }
       }
@@ -535,16 +562,6 @@
       background: #131313;
     }
   }
-}
-
-.widget_tag_cloud .tagcloud a {
-  font-size: 12px !important;
-  line-height: 1;
-  text-transform: uppercase;
-  padding: 6px 12px 5px 12px;
-  margin: 0 4px 8px 0;
-  border: 1px solid #eee;
-  display: inline-block;
 }
 
 /*article-lay layout-content end*/
@@ -1206,6 +1223,10 @@
             font-size: 15px;
             color: #333;
           }
+          strong {
+            color: #999;
+            font-weight: normal;
+          }
         }
       }
       .user-follow-button {
@@ -1328,6 +1349,79 @@
             font-size: 12px;
             display: inline-block;
             margin-right: 12px;
+          }
+        }
+      }
+    }
+  }
+  .user-article-tag-attention {
+    .user-article-tag-attention-view {
+      .item {
+        border-bottom: 1px solid hsla(240, 2%, 90%, .5);
+        .user {
+          position: relative;
+          box-sizing: border-box;
+          .link {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            padding: 6px 28px;
+            min-height: 85px;
+            .avatar {
+              display: inline-block;
+              position: relative;
+              background-position: 50%;
+              background-size: cover;
+              background-repeat: no-repeat;
+              background-color: #eee;
+              -webkit-box-flex: 0;
+              -ms-flex: 0 0 auto;
+              flex: 0 0 auto;
+              margin-right: 20px;
+              width: 45px;
+              height: 45px;
+              border-radius: 50%;
+            }
+            .info-box {
+              -webkit-box-flex: 1;
+              -ms-flex: 1 1 auto;
+              flex: 1 1 auto;
+              min-width: 0;
+              .username {
+                font-size: 16px;
+                font-weight: 600;
+                color: #2e3135;
+              }
+              .detail {
+                font-size: 12px;
+                font-weight: 500;
+                color: #b9c0c8;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+            }
+            .follow-btn {
+              -webkit-box-flex: 0;
+              -ms-flex: 0 0 auto;
+              flex: 0 0 auto;
+              margin: 0 0 0 12px;
+              padding: 0;
+              width: 88px;
+              height: 28px;
+              font-size: 12px;
+              color: #92c452;
+              background-color: #fff;
+              border: 1px solid #92c452;
+              border-radius: 2px;
+              &.active {
+                color: #fff;
+                background-color: #92c452;
+              }
+            }
           }
         }
       }

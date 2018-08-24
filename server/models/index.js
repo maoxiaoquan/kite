@@ -53,7 +53,8 @@ const user_article_topic = sequelize.define(require('./models_type/db_user_artic
 const user_tag = sequelize.define(require('./models_type/db_user_tag').NAME, require('./models_type/db_user_tag').TABLE, SEQ_PARAMETER)
 /*前台图片表*/
 const picture = sequelize.define(require('./models_type/db_picture').NAME, require('./models_type/db_picture').TABLE, SEQ_PARAMETER)
-
+/*前台用户评论表*/
+const comment = sequelize.define(require('./models_type/db_comment').NAME, require('./models_type/db_comment').TABLE, SEQ_PARAMETER)
 /*----------------------------------后台表---------------------------------------*/
 
 /*后台用管理员表*/
@@ -78,6 +79,7 @@ module.exports = {
   user_article_topic,
   verify_code,
   article,
+  comment,
   article_tag,
   article_column,
   picture,

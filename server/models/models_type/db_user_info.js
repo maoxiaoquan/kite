@@ -9,11 +9,6 @@ module.exports = {
       primaryKey: true, // 定义主键
       comment: 'uid',
       field: 'uid'
-    },
-    user_tag_ids: {
-      type: Seq.STRING(100),
-      comment: '用户的标签',
-      field: 'user_tag_ids'
     }
   }
 }
