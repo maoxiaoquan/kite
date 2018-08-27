@@ -24,6 +24,12 @@ class Article {
       }
     })
 
+    let findone_user = await models.user.findOne({
+      where: {
+        uid: sql_article.uid
+      }
+    })
+
     await models.article.update({
       read_count: Number(sql_article.read_count) + 1
     }, {
@@ -36,7 +42,8 @@ class Article {
       state: 'success',
       message: 'article',
       data: {
-        article: sql_article
+        article: sql_article,
+        user: findone_user,
       }
     })
   }
@@ -194,6 +201,43 @@ class Article {
       message: '获取所有文章标签成功',
       data: {
         list: article_tag_all
+      }
+    })
+  }
+
+  /**
+   * 文章的每日推荐
+   * @param   {obejct} ctx 上下文对象
+   */
+
+  static async render_article_daily_recommend (ctx) {
+
+    let page = ctx.query.page || 1
+    let pageSize = ctx.query.pageSize || 25
+
+    let {count, rows} = await models.article.findAndCountAll({
+      where: '',//为空，获取全部，也可以自己添加条件
+      offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+      limit: pageSize,//每页限制返回的数据条数
+      order: [['create_date_timestamp', 'desc']]
+    })
+
+    /*所有文章专题*/
+    let article_tag_all = await models.article_tag.findAll({
+      attributes: ['article_tag_id', 'article_tag_name']
+    })
+
+    await render(ctx, {
+      title: '每日推荐',
+      view_url: 'default/daily_recommend',
+      state: 'success',
+      message: 'daily_recommend',
+      data: {
+        page,
+        count,
+        pageSize,
+        tag_all: article_tag_all,
+        article_list: rows
       }
     })
   }

@@ -24,21 +24,23 @@
                         <% data.user_list.forEach(function (item, key) { %>
                         <li class="item">
                             <div class="user">
-                                <a href="/user/<%= item.uid %>/article/all" target="_blank" rel="" class="link">
-                                    <div class="lazy avatar avatar loaded" title=""
-                                         style="background-image: url(<%= item.avatar %>);"></div>
-                                    <div class="info-box">
-                                        <div class="username"><%= item.nickname %></div>
-                                        <div class="detail"><%= item.nickname %></div>
-                                    </div>
-                                    <button class="follow-btn active">已关注</button>
-                                </a>
+                                <div class="lazy avatar avatar loaded" title=""
+                                     style="background-image: url(<%= item.avatar %>);"></div>
+                                <div class="info-box">
+                                    <div class="username">
+                                        <a href="/user/<%= item.uid %>/article/all" target="_blank" rel=""
+                                           class="link">
+                                            <%= item.nickname %>
+                                        </a></div>
+                                    <div class="detail"><%= item.introduction %></div>
+                                </div>
+                                <button data-uid="<%= item.uid %>" class="follow-btn active">已关注</button>
                             </div>
                         </li>
                         <% }) %>
                     </ul>
                     <!--page start-->
-
+                    <% include pages/user_center_attention_page.ejs %>
                     <!--page end-->
                 </div>
 
@@ -59,31 +61,37 @@
 <% include parts/footer_view.ejs %>
 <!--footer_view.ejs end-->
 
-<!--<script>
+<script>
 
-var navbar = document.getElementById('layout-navbar')
+  window.onload = function () {
+    var follow_btn = document.getElementsByClassName('follow-btn')
 
-function getScrollTop () {
-  var scrollTop = 0;
-  if (document.documentElement && document.documentElement.scrollTop) {
-    scrollTop = document.documentElement.scrollTop;
+
+    for (var i = 0; i < follow_btn.length; i++) {
+      (function (i) {
+
+        if (follow_btn.length > 0) {
+          follow_btn[i].onclick = function () {
+            var uid = follow_btn[i].getAttribute('data-uid')
+            _server.post_user_attention({attention_uid: uid}).then(function (res) {
+              console.log(res)
+              if (res.state === 'success') {
+                window.location.reload()
+              } else {
+                alert(res.meaasge)
+              }
+            }).catch(function (err) {
+              console.log('错误')
+            })
+          }
+        }
+      })(i)
+    }
+
+
   }
-  else if (document.body) {
-    scrollTop = document.body.scrollTop;
-  }
-  return scrollTop;
-}
 
-window.onscroll = function () {
-  var st = getScrollTop()
-  if (st > 50) {
-    navbar.classList.add("navbar-fixed-top");
-  } else {
-    navbar.classList.remove("navbar-fixed-top");
-  }
-}
-
-</script>-->
+</script>
 </body>
 
 <% include parts/footer.ejs %>

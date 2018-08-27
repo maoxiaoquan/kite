@@ -8,7 +8,7 @@
         <a class="name" href="/user/<%= data.current_user.uid %>"><%= data.current_user.nickname %></a>
     </div>
 
-    <% if(user_info.uid !== data.current_user.uid){ %>
+    <% if((user_info.uid !== data.current_user.uid) && user_info.islogin){ %>
     <button data-uid="<%= data.current_user.uid %>"
             class="user-follow-button <% if (data.current_user.user_attention_count > 0) { %> has <% }else{ %> no <% } %>">
         <i class="iconfont"></i>
@@ -23,7 +23,7 @@
         <ul>
             <li>
                 <div class="meta-block">
-                    <a href="/users/78d3e1ab9924/following">
+                    <a href="/user/<%= data.current_user.uid %>/attention">
                         <p><%= data.current_user.user_attention_other_count %></p>
                         <strong>
                             <% if(user_info.uid === data.current_user.uid){ %>

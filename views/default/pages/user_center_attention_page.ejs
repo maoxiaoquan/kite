@@ -1,18 +1,18 @@
 <!--分页 start-->
 <%
 var page = Number(data.page);
-var pageCount = 5;
-var pageNum = Math.ceil(data.count / data.pageSize);
-var url_first = '/user/' + data.current_user.uid + '/article/' + data.topic_id + '' %>
-
+var pageCount = 5;  var pageNum = Math.ceil(data.count / data.pageSize);
+var url_first = '/user/' + data.current_user.uid + '/attention?'
+%>
 <% if(pageNum > 1){ %>
 <div class="pageing">
+
     <% if(pageNum <= pageCount){ %>
 
     <% for(var ij = 1 ;ij <= pageNum;ij++){ %>
 
     <!--中间页-->
-    <a class="<% if(page == ij){ %>active<% } %>" href="<%= url_first %>?page=<%= ij %>">
+    <a class="<% if(page == ij){ %>active<% } %>" href="<%= url_first %>page=<%= ij %>">
         <%= ij %>
     </a>
 
@@ -20,7 +20,7 @@ var url_first = '/user/' + data.current_user.uid + '/article/' + data.topic_id +
 
     <!--上一页-->
     <% if(Number(data.page) - Number(1) != 0){ %>
-    <a href="<%= url_first %>?page=<%= Number(page) - Number(1) %>">上一页</a>
+    <a href="<%= url_first %>page=<%= Number(page) - Number(1) %>">上一页</a>
     <% } %>
 
     <% if(Number(page) > (Number(pageCount) - 1) / 2 + 1){ %>
@@ -30,25 +30,25 @@ var url_first = '/user/' + data.current_user.uid + '/article/' + data.topic_id +
     <% for(var i = (Number(pageCount) - 1) / 2;i > 0;i--){ %>
     <% if((Number(page) - i) > 0){ %>
     <!--当前页-->
-    <a href="<%= url_first %>?page=<%= (page - i) %>">
+    <a href="<%= url_first %>page=<%= (page - i) %>">
         <%= page - i %>
     </a>
     <% } } %>
 
     <!--中间页-->
     <a class="active"
-       href="<%= url_first %>?page=<%= page %>">
+       href="<%= url_first %>page=<%= page %>">
         <%= page %>
     </a>
 
     <% if(page == 1){ %>
     <% for(var ii = 1;ii < pageCount;ii++){ %>
-    <a href="<%= url_first %>?page=<%= page + ii %>">
+    <a href="<%= url_first %>page=<%= page + ii %>">
         <%= page + ii %>
     </a>
     <% }}else if(page == 2){ %>
     <% for(var iii = 1;iii < Number(pageCount) - 1;iii++){ %>
-    <a href="<%= url_first %>?page=<%= page + iii %>">
+    <a href="<%= url_first %>page=<%= page + iii %>">
         <%= page + iii %>
     </a>
     <% }}else { %>
@@ -56,7 +56,7 @@ var url_first = '/user/' + data.current_user.uid + '/article/' + data.topic_id +
     <% for(var j = 1;j <= (Number(pageCount) - 1) / 2;j++){ %>
     <% if(page + j <= pageNum){ %>
     <!--当前页-->
-    <a href="<%= url_first %>?page=<%= page + j %>">
+    <a href="<%= url_first %>page=<%= page + j %>">
         <%= page + j %>
     </a>
     <% }}} %>
@@ -67,7 +67,7 @@ var url_first = '/user/' + data.current_user.uid + '/article/' + data.topic_id +
 
     <!--下一页-->
     <% if(page - pageNum != 0){ %>
-    <a href="<%= url_first %>?page=<%= Number(page) + Number(1) %>">下一页</a>
+    <a href="<%= url_first %>page=<%= Number(page) + Number(1) %>">下一页</a>
     <% } %>
     <% } %>
 

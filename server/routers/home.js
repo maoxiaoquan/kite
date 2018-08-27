@@ -35,6 +35,8 @@ router.get('subscribe/tag', subscribe.render_subscribe_tag) // 订阅
 
 router.get('tag/:article_tag_id', article.render_get_tag) // 文章标签
 
+router.get('daily_recommend', article.render_article_daily_recommend) // 文章的每日推荐
+
 router.get('article/:aid', article.render_article) // 文章内容页 page
 
 router.get('writer', Check_Session, article.render_writer) // 编写文章 page
