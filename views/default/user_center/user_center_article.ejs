@@ -1,0 +1,114 @@
+<!--header.ejs start-->
+<% include ../parts/header.ejs %>
+<!--header.ejs end-->
+
+<body class="black-theme">
+
+<!--header_view.ejs start-->
+<% include ../parts/header_view.ejs %>
+<!--header_view.ejs end-->
+
+
+<!--article-list-lay layout-content start-->
+<section class="user-lay layout-content">
+    <div class="container  box-container">
+        <div class="row">
+
+            <div class="col-xs-12 col-sm-8 col-md-8 main">
+
+                <% include user_center_top.ejs %>
+
+                <ul class="topic-list">
+                    <li class="title">个人专题：</li>
+                    <li><a href="/user/<%= data.uid %>/article/all">全部</a></li>
+                    <% data.user_article_topic_all.forEach(function (item, key) { %>
+                    <li class="<% if(data.topic_id == item.user_article_topic_id){ %>current<% } %>"><a
+                                href="/user/<%= data.uid %>/article/<%= item.user_article_topic_id %>"><%= item.user_article_topic_name %></a>
+                    </li>
+                    <% }) %>
+                </ul>
+
+                <div id="list-container">
+                    <!-- 文章列表模块 -->
+                    <ul class="note-list">
+                        <% data.article_list.forEach(function (item, key) { %>
+                        <li>
+                            <article class="content-box content-box-index article-list">
+                                <div class="info-box">
+                                    <div class="info-row title-row">
+                                        <a href="/article/<%= item.aid %>"
+                                           class="title" target="_blank"><%= item.title %></a>
+                                    </div>
+                                    <!-- <div class="content-text">
+                                    <%= item.content %>
+                                </div>-->
+                                    <div class="info-row meta-row">
+                                        <ul class="meta-list">
+                                            <li class="item username clickable">
+                                                <a href=""><%= item.author %></a>
+                                            </li>
+                                            <li class="item"><%= item.create_date %></li>
+                                            <li class="item"><%= item.read_count %> 次阅读</li>
+                                            <li class="item"><%= item.like_count %> 次喜欢</li>
+                                            <li class="item"><%= item.comment_count %> 次评论</li>
+                                            <% if(item.tag_ids){ %>
+                                            <li class="item">
+                                                <% item.tag_ids.split(',').forEach(function (item, key) { %>
+                                                <%
+                                                data.tag_all.forEach(function (tag_all_item, tag_all_key) {
+                                                if (tag_all_item.article_tag_id == item) {
+                                                %>
+                                                <a class="tag-class frontend" href="">
+                                                    <%= tag_all_item.article_tag_name %>
+                                                </a>
+                                                <%
+                                                }}) %>
+                                                <% }) %>
+                                            </li>
+                                            <% } %>
+                                            <li><a href="">编辑</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="lazy thumb thumb loaded"
+                                     style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
+                                </div>
+                            </article>
+                        </li>
+                        <% }) %>
+                    </ul>
+
+                    <!--page start-->
+                    <% include ../pages/user_page.ejs %>
+                    <!--page end-->
+
+                </div>
+
+
+            </div>
+
+            <div class="col-xs-12 col-sm-4 col-md-4 aside">
+                <% include user_center_aside.ejs %>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!--article-list-lay layout-content end-->
+
+
+<!--footer_view.ejs start-->
+<% include ../parts/footer_view.ejs %>
+<!--footer_view.ejs end-->
+
+<script>
+  $(function () {
+    var find_active_length = $('.topic-list').find('.current').length
+    if (find_active_length === 0) {
+      $('.topic-list li').eq(1).addClass('current')
+    }
+  })
+</script>
+</body>
+
+<% include ../parts/footer.ejs %>

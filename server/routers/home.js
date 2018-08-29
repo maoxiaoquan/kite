@@ -35,8 +35,6 @@ router.get('subscribe/tag', subscribe.render_subscribe_tag) // 订阅
 
 router.get('tag/:article_tag_id', article.render_get_tag) // 文章标签
 
-router.get('daily_recommend', article.render_article_daily_recommend) // 文章的每日推荐
-
 router.get('article/:aid', article.render_article) // 文章内容页 page
 
 router.get('writer', Check_Session, article.render_writer) // 编写文章 page
@@ -53,7 +51,11 @@ router.get('search', search.form_search) // 搜索
 
 /*AJAX*/
 
-router.get('get_index_article', index.get_index)
+router.get('get_index_article', index.get_index) // 首页文章
+
+router.get('get_article', article.get_article) // 根据aid获取文章
+
+router.get('user_info', user.get_user_info) // 根据uid 获取用户相应信息
 
 router.post('sign_up', user.post_sign_up) // 注册数据 post TYPE:AJAX
 
@@ -68,6 +70,8 @@ router.get('get_article_topic_all', ajaxCheck_Session, user_article_topic.get_us
 router.post('post_user_attention', ajaxCheck_Session, personal_center.post_user_attention) // 用户关注用户 TYPE:AJAX
 
 router.post('post_subscribe_tag', ajaxCheck_Session, subscribe.post_subscribe_tag) // 用户订阅标签 TYPE:AJAX
+
+router.post('user_like_article', ajaxCheck_Session, personal_center.post_user_like_article) // 用户like文章 TYPE:AJAX
 
 router.post('create_user_article_topic', ajaxCheck_Session, user_article_topic.create_user_article_topic) // 用户文章专题 TYPE:AJAX
 

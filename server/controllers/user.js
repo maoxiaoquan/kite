@@ -1,6 +1,7 @@
-const {sequelize, user, user_info, verify_code} = require('../models')
+const {sequelize, user, user_info, verify_code, user_attention, user_like_article, subscribe_article_tag, article} = require('../models')
 const {checkEmail, checkPhoneNum} = require('../utils/validators')
 const moment = require('moment')
+const {render, home_resJson} = require('../utils/res_data')
 const {sendMail, send_verify_code_mail} = require('../utils/send_email')
 const {random_number, tools} = require('../utils')
 const config = require('../../config')
@@ -190,7 +191,8 @@ class User {
             phone: '',
             email: req_data.account,
             verify_code: random,
-            expire_time: moment().utc().utcOffset(+8).format('X')
+            expire_time: moment().utc().utcOffset(+8).format('X'),
+            create_date: moment().utc().utcOffset(+8).format('YYYY-MM-DD'), /*时间*/
           }).then(function (data) {
 
             send_verify_code_mail(req_data.account, '注册验证码', random)
@@ -236,6 +238,10 @@ class User {
 
   }
 
+  /**
+   * 用户注册post
+   * @param   {obejct} ctx 上下文对象
+   */
   static async post_sign_up (ctx) { // post 数据
     let req_data = ctx.request.body
 
@@ -323,7 +329,8 @@ class User {
                 email: req_data.account,
                 sex: '未知',
                 reg_ip: ctx.request.ip,
-                reg_time: moment().utc().utcOffset(+8).format('X')
+                reg_time: moment().utc().utcOffset(+8).format('X'),
+                create_date_timestamp: moment().utc().utcOffset(+8).format('X') /*时间戳 */
               })
                 .then(function (user) {
                   return user_info.create({
@@ -381,6 +388,75 @@ class User {
         message: '请输入正确的手机号码或者邮箱'
       }
     }
+  }
+
+  /**
+   * 获取用户信息post
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async get_user_info (ctx) {
+
+    let uid = ctx.query.uid
+
+    try {
+      if (!uid) {
+        throw new err_mess('uid为空')
+      }
+    } catch (err) {
+      home_resJson(ctx, {
+        state: 'error',
+        message: err.message
+      })
+      return false
+    }
+
+    let findOne_user = await user.findOne({ //获取用户信息
+      where: {uid},
+      attributes: ['uid', 'avatar', 'nickname']
+    })
+
+    let user_attention_uid_arr = await user_attention.findAll({where: {uid}}).then((res) => {
+      return res.map((attention_item, key) => {
+        return attention_item.attention_uid
+      })
+    })
+
+    let user_like_article_arr = await user_like_article.findAll({where: {uid}}).then((res) => {
+      return res.map((user_like_article_item, key) => {
+        return user_like_article_item.aid
+      })
+    })
+
+    let subscribe_article_tag_arr = await subscribe_article_tag.findAll({where: {uid}}).then((res) => {
+      return res.map((subscribe_article_tag_item, key) => {
+        return subscribe_article_tag_item.article_tag_id
+      })
+    })
+
+    let other_user_attention_count = await user_attention.count({ // 多少人关注了
+      where: {
+        attention_uid: uid
+      }
+    })
+
+    let user_article_count = await article.count({ // 他有多少文章
+      where: {
+        uid
+      }
+    })
+
+    home_resJson(ctx, {
+      state: 'success',
+      message: '获取用户所有信息成功',
+      data: {
+        user: findOne_user,
+        attention_uid_arr: user_attention_uid_arr,
+        user_like_aid_arr: user_like_article_arr,
+        subscribe_article_tag_id_arr: subscribe_article_tag_arr,
+        other_user_attention_count,
+        user_article_count
+      }
+    })
   }
 
 }

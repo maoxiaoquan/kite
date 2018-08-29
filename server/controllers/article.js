@@ -13,6 +13,10 @@ class Article {
 
   constructor () {}
 
+  /**
+   * 文章页面render
+   * @param   {obejct} ctx 上下文对象
+   */
   static async render_article (ctx) {
     const title = 'article'
 
@@ -42,12 +46,17 @@ class Article {
       state: 'success',
       message: 'article',
       data: {
+        uid: ctx.session.uid,
         article: sql_article,
-        user: findone_user,
+        user: findone_user
       }
     })
   }
 
+  /**
+   * 新建文章页面render
+   * @param   {obejct} ctx 上下文对象
+   */
   static async render_writer (ctx) {
     const title = 'writer'
     await render(ctx, {
@@ -58,6 +67,10 @@ class Article {
     })
   }
 
+  /**
+   * 新建文章post提交
+   * @param   {obejct} ctx 上下文对象
+   */
   static async post_create_writer (ctx) {
     let formData = ctx.request.body
 
@@ -94,8 +107,6 @@ class Article {
       })
       return false
     }
-
-    console.log('trimHtml(formData.origin_content)', trimHtml(formData.origin_content))
 
     try {
       await models.article.create({
@@ -135,7 +146,7 @@ class Article {
   }
 
   /**
-   * 文章的标签
+   * 文章的标签页面
    * @param   {obejct} ctx 上下文对象
    */
 
@@ -191,6 +202,10 @@ class Article {
     }
   }
 
+  /**
+   * 获取所有文章标签get
+   * @param   {obejct} ctx 上下文对象
+   */
   static async get_article_tag_all (ctx) {
     let article_tag_all = await models.article_tag.findAll({
       attributes: ['article_tag_id', 'article_tag_name'],
@@ -206,40 +221,31 @@ class Article {
   }
 
   /**
-   * 文章的每日推荐
+   * ajax 查询一篇文章
    * @param   {obejct} ctx 上下文对象
    */
+  static async get_article (ctx) {
 
-  static async render_article_daily_recommend (ctx) {
+    let aid = ctx.query.aid
 
-    let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 25
-
-    let {count, rows} = await models.article.findAndCountAll({
-      where: '',//为空，获取全部，也可以自己添加条件
-      offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-      limit: pageSize,//每页限制返回的数据条数
-      order: [['create_date_timestamp', 'desc']]
+    let article = await models.article.findOne({
+      where: {aid}
     })
 
-    /*所有文章专题*/
-    let article_tag_all = await models.article_tag.findAll({
-      attributes: ['article_tag_id', 'article_tag_name']
-    })
-
-    await render(ctx, {
-      title: '每日推荐',
-      view_url: 'default/daily_recommend',
-      state: 'success',
-      message: 'daily_recommend',
-      data: {
-        page,
-        count,
-        pageSize,
-        tag_all: article_tag_all,
-        article_list: rows
-      }
-    })
+    if (article) {
+      home_resJson(ctx, {
+        state: 'success',
+        message: '获取文章成功',
+        data: {
+          article
+        }
+      })
+    } else {
+      home_resJson(ctx, {
+        state: 'error',
+        message: '获取文章失败'
+      })
+    }
   }
 
 }

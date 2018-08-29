@@ -11,7 +11,7 @@ process.env.NODE_ENV = 'development'; // 设置为开发环境
 
 const bundler = webpack(config);
 
-// Run Browsersync and use middleware for Hot Module Replacement
+// Run Browsersync
 browserSync({
   port: cfg.dev_port,
   ui: {

@@ -1,15 +1,20 @@
 const models = require('../models')
+const moment = require('moment')
 const {render, home_resJson} = require('../utils/res_data')
+
+function err_mess (message) {
+  this.message = message
+  this.name = 'UserException'
+}
 
 class Personal_center {
 
   constructor () { }
 
   /**
-   * 用户的个人中心
+   * 用户的个人中心验证
    * @param   {obejct} ctx 上下文对象
    */
-
   static async verify_user (ctx, next) {
 
     let uid = ctx.params.uid
@@ -58,6 +63,10 @@ class Personal_center {
     }
   }
 
+  /**
+   * 用户个人中心个人文章列表render
+   * @param   {obejct} ctx 上下文对象
+   */
   static async render_user_center_article (ctx) {
 
     const title = 'home'
@@ -87,7 +96,7 @@ class Personal_center {
 
     await render(ctx, {
       title: title,
-      view_url: 'default/user_center_article',
+      view_url: 'default/user_center/user_center_article',
       state: 'success',
       message: 'home',
       data: {
@@ -105,6 +114,10 @@ class Personal_center {
     })
   }
 
+  /**
+   * 用户个人中心个人专题列表render
+   * @param   {obejct} ctx 上下文对象
+   */
   static async render_user_center_topic (ctx) {
 
     const title = 'user'
@@ -122,7 +135,7 @@ class Personal_center {
 
     await render(ctx, {
       title: title,
-      view_url: 'default/user_center_topic',
+      view_url: 'default/user_center/user_center_topic',
       state: 'success',
       message: 'user',
       data: {
@@ -137,6 +150,10 @@ class Personal_center {
     })
   }
 
+  /**
+   * 用户个人中心用户关注用户render
+   * @param   {obejct} ctx 上下文对象
+   */
   static async render_user_center_attention (ctx) {
 
     let uid = ctx.params.uid
@@ -150,8 +167,6 @@ class Personal_center {
       })
     })
 
-    console.log('user_attention_uid_arr', user_attention_uid_arr)
-
     let {count, rows} = await models.user.findAndCountAll({
       where: {uid: {in: user_attention_uid_arr}},//为空，获取全部，也可以自己添加条件
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
@@ -161,7 +176,7 @@ class Personal_center {
 
     await render(ctx, {
       title: 'attention',
-      view_url: 'default/user_center_attention',
+      view_url: 'default/user_center/user_center_attention',
       state: 'success',
       message: 'home',
       data: {
@@ -176,8 +191,24 @@ class Personal_center {
     })
   }
 
+  /**
+   * 用户关注用户post
+   * @param   {obejct} ctx 上下文对象
+   */
   static async post_user_attention (ctx) {
     const {attention_uid} = ctx.request.body
+
+    try {
+      if (attention_uid == ctx.session.uid) {
+        throw new err_mess('关注用户失败，自己不能关注自己')
+      }
+    } catch (err) {
+      home_resJson(ctx, {
+        state: 'error',
+        message: err.message
+      })
+      return false
+    }
 
     let findone_user_attention = await models.user_attention.findOne({
       where: {
@@ -209,7 +240,9 @@ class Personal_center {
       await models.user_attention.create(
         {
           uid: ctx.session.uid,
-          attention_uid
+          attention_uid,
+          create_date: moment().utc().utcOffset(+8).format('YYYY-MM-DD'), /*时间*/
+          create_date_timestamp: moment().utc().utcOffset(+8).format('X') /*时间戳 */
         }
       ).then(() => {
         home_resJson(ctx, {
@@ -225,25 +258,30 @@ class Personal_center {
     }
   }
 
+  /**
+   * 用户like文章render
+   * @param   {obejct} ctx 上下文对象
+   */
   static async render_user_center_like (ctx) {
 
-    const title = 'home'
     let uid = ctx.params.uid
 
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 15
 
-    let where_params = {uid}
+    let user_like_article_arr = await models.user_like_article.findAll({where: {uid}}).then((res) => {
+      return res.map((user_like_article_item, key) => {
+        return user_like_article_item.aid
+      })
+    })
+
+    let where_params = {aid: {in: user_like_article_arr}}
+
     let {count, rows} = await models.article.findAndCountAll({
       where: where_params,//为空，获取全部，也可以自己添加条件
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: pageSize,//每页限制返回的数据条数
       order: [['create_date_timestamp', 'desc']]
-    })
-
-    let user_article_topic_all = await models.user_article_topic.findAll({
-      where: {uid},//为空，获取全部，也可以自己添加条件
-      attributes: ['user_article_topic_id', 'user_article_topic_name']
     })
 
     /*所有文章专题*/
@@ -252,15 +290,14 @@ class Personal_center {
     })
 
     await render(ctx, {
-      title: title,
-      view_url: 'default/user_center_like',
+      title: '我喜欢的文章',
+      view_url: 'default/user_center/user_center_like',
       state: 'success',
       message: 'home',
       data: {
         uid,
         current_user: ctx.request.current_user,
         count: count,
-        user_article_topic_all,
         page,
         pageSize,
         article_list: rows,
@@ -268,6 +305,95 @@ class Personal_center {
         router_name: 'like'
       }
     })
+  }
+
+  /**
+   * 用户like文章post
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async post_user_like_article (ctx) {
+
+    const {aid} = ctx.request.body
+
+    let findone_user_attention = await models.user_like_article.findOne({
+      where: {
+        uid: ctx.session.uid,
+        aid
+      }
+    })
+
+    if (findone_user_attention) { /*判断是否like文章，是则取消，否则添加*/
+
+      await models.sequelize.transaction(function (transaction) {
+        // 在事务中执行操作
+        return models.user_like_article.destroy({
+          where: {
+            uid: ctx.session.uid,
+            aid
+          }
+        }, {...transaction}) /* 删除user article关联 */
+          .then(function (user_like_article_destroy) {
+            return models.user_like_article.count({
+              where: {
+                aid
+              }
+            }, {...transaction})
+            /* 获取文章所有like数 */
+          }).then(function (user_like_article_count) {
+            return models.article.update({
+              like_count: user_like_article_count
+            }, {'where': {aid}}, {...transaction})
+            /* 修改文章like数 */
+          })
+
+      }).then(() => {
+        home_resJson(ctx, {
+          state: 'success',
+          message: '取消like文章成功'
+        })
+      }).catch(() => {
+        home_resJson(ctx, {
+          state: 'error',
+          message: '取消like文章失败'
+        })
+      })
+
+    } else {
+
+      await models.sequelize.transaction(function (transaction) {
+        // 在事务中执行操作
+        return models.user_like_article.create({
+          uid: ctx.session.uid,
+          aid,
+          create_date: moment().utc().utcOffset(+8).format('YYYY-MM-DD'), /*时间*/
+          create_date_timestamp: moment().utc().utcOffset(+8).format('X') /*时间戳 */
+        }, {...transaction}) /* 添加user article关联 */
+          .then(function (user_like_article_destroy) {
+            return models.user_like_article.count({
+              where: {
+                aid
+              }
+            }, {...transaction})
+            /* 获取文章所有like数 */
+          }).then(function (user_like_article_count) {
+            return models.article.update({
+              like_count: user_like_article_count
+            }, {'where': {aid}}, {...transaction})
+            /* 修改文章like数 */
+          })
+
+      }).then(() => {
+        home_resJson(ctx, {
+          state: 'success',
+          message: 'like文章成功'
+        })
+      }).catch(() => {
+        home_resJson(ctx, {
+          state: 'error',
+          message: 'like文章失败'
+        })
+      })
+    }
   }
 }
 

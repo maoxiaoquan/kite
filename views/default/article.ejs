@@ -10,7 +10,7 @@
 
 
 <!--home-lay layout-content start-->
-<section class="article-lay layout-content box-container">
+<section class="article-lay layout-content box-container" id="article-lay">
     <div class="container-article">
         <div class="row">
             <main class="lay-main col-xs-12 col-sm-12 col-md-12">
@@ -19,12 +19,11 @@
                         <h1><%= data.article.title %></h1>
                         <div class="author">
                             <a class="avatar" href="/user/<%= data.article.uid %>/article/all">
-                                <img src="<%= data.user.avatar %>" alt="96">
+                                <img src="<%= data.user.avatar %>" alt="">
                             </a>
                             <div class="info">
-                                <span class="name"><a href="/user/<%= data.article.uid %>/article/all">IMUKL</a></span>
-                                <!-- 关注用户按钮 -->
-                                <a class="btn btn-success follow"><i class="iconfont ic-follow"></i><span>关注</span></a>
+                                <span class="name"><a
+                                            href="/user/<%= data.article.uid %>/article/all"><%= data.user.nickname %></a></span>
                                 <!-- 文章数据信息 -->
                                 <div class="meta">
                                     <!-- 如果文章更新时间大于发布时间，那么使用 tooltip 显示更新时间 -->
@@ -62,11 +61,20 @@
                         <div class="info">
                             <a class="avatar" href="/user/<%= data.article.uid %>/article/all">
                                 <img src="<%= data.user.avatar %>" alt="96">
-                            </a> <a class="btn btn-success follow"><i class="iconfont ic-follow"></i><span>关注</span></a>
+                            </a>
+                            <% if(data.uid !== data.article.uid){ %>
+                            <a class="btn btn-success follow attention-article"
+                               :class="{'active':curr_user_info.attention_uid_arr.indexOf(<%= data.article.uid %>)!==-1}"
+                               @click="post_user_attention"
+                               href="javascript:;"
+                               data-uid="<%= data.article.uid %>">
+                                <i class="iconfont icon-tianjia"></i><span>关注</span>
+                            </a>
+                            <% } %>
                             <a class="title"
                                href="/user/<%= data.article.uid %>/article/all"><%= data.user.nickname %></a>
-                            <i class="iconfont ic-man"></i>
-                            <p>写了 46347 字，被 24 人关注</p></div>
+                            <p>一共有 {{article_user_info.user_article_count}} 篇文章 ，被
+                                {{article_user_info.other_user_attention_count}} 人关注</p></div>
                         <div class="signature">
                             昵称: 老徐
                             坐标: 山东,济南
@@ -78,10 +86,15 @@
 
                     <div class="meta-bottom clearfix">
                         <div class="like">
-                            <div class="btn like-group">
-                                <div class="btn-like"><a data-v-6ddd02c6="">喜欢</a></div>
-                                <div class="modal-wrap"><a data-v-6ddd02c6="">5</a></div>
-                            </div> <!----></div>
+                            <div class="btn like-group"
+                                 :class="{'active':curr_user_info.user_like_aid_arr.indexOf('<%= data.article.aid %>')!==-1}"
+                                 @click="post_user_like_article"
+                            >
+                                <div class="btn-like"><a href="javascript:;"><i class="iconfont icon-xin"></i>喜欢</a>
+                                </div>
+                                <div class="modal-wrap"><a href="javascript:;">{{article.like_count}}</a></div>
+                            </div> <!---->
+                        </div>
                         <div class="share-group">
                             <a class="share-circle">
                                 <i class="iconfont ic-wechat"></i>
@@ -113,18 +126,6 @@
             </main>
         </div>
 
-        <div class="article-suspended-panel article-suspended-panel">
-            <div class="like-btn panel-btn with-badge"></div>
-            <div class="comment-btn panel-btn with-badge"></div>
-            <div class="collect-btn panel-btn"><!----></div>
-            <div class="share-title">分享</div>
-            <div class="weibo-btn share-btn panel-btn"></div>
-            <div class="qq-btn share-btn panel-btn"></div>
-            <div class="wechat-btn share-btn panel-btn">
-                <img data-v-2febaf4d="" src="" class="wechat-qr-code-img shadow">
-            </div>
-        </div>
-
     </div>
 </section>
 <!--home-lay layout-content end-->
@@ -134,31 +135,88 @@
 <% include parts/footer_view.ejs %>
 <!--footer_view.ejs end-->
 
-<!--<script>
-
-  var navbar = document.getElementById('layout-navbar')
-
-  function getScrollTop () {
-    var scrollTop = 0;
-    if (document.documentElement && document.documentElement.scrollTop) {
-      scrollTop = document.documentElement.scrollTop;
+<script>
+  new Vue({
+    el: '#article-lay',
+    data: {
+      curr_uid: '<%= data.uid %>',
+      article_uid: '<%= data.article.uid %>',
+      curr_user_info: {
+        attention_uid_arr: [],
+        user_like_aid_arr: []
+      },
+      article_user_info: {
+        attention_uid_arr: [],
+        user_like_aid_arr: []
+      },
+      article: {}
+    },
+    created: function () {
+      this.get_article() // 根据aid ajax 获取文章
+      this.get_curr_user_info() // 获取当前登录用户信息
+      this.get_article_user_info() // 获取当前文章用户信息
+    },
+    methods: {
+      get_curr_user_info: function () {
+        var that = this
+        _server.get_user_info({uid: this.curr_uid}).then(function (res) {
+          that.$nextTick(function () {
+            if (res.state === 'success') {
+              that.curr_user_info = res.data
+            }
+          })
+        })
+      },
+      get_article_user_info: function () {
+        var that = this
+        _server.get_user_info({uid: this.article_uid}).then(function (res) {
+          that.$nextTick(function () {
+            if (res.state === 'success') {
+              that.article_user_info = res.data
+            }
+          })
+        })
+      },
+      get_article: function () { // 根据aid获取文章
+        var that = this
+        _server.get_article({aid: '<%= data.article.aid %>'}).then(function (res) {
+          that.$nextTick(function () {
+            if (res.state === 'success') {
+              that.article = res.data.article
+            }
+          })
+        })
+      },
+      post_user_attention: function () { /*用户关注用户*/
+        var that = this
+        _server.post_user_attention({attention_uid: '<%= data.article.uid %>'}).then(function (res) {
+          if (res.state === 'success') {
+            that.get_curr_user_info()
+            that.get_article_user_info()
+            /*获取当前文章用户信息*/
+          } else {
+            alert(res.message)
+          }
+        }).catch(function (err) {
+          console.log(err)
+        })
+      },
+      post_user_like_article: function () { /*用户like 文章*/
+        var that = this
+        _server.post_user_like_article({aid: '<%= data.article.aid %>'}).then(function (res) {
+          if (res.state === 'success') {
+            that.get_curr_user_info()
+            that.get_article()
+          } else {
+            alert(res.message)
+          }
+        }).catch(function (err) {
+          console.log(err)
+        })
+      }
     }
-    else if (document.body) {
-      scrollTop = document.body.scrollTop;
-    }
-    return scrollTop;
-  }
-
-  window.onscroll = function () {
-    var st = getScrollTop()
-    if (st > 50) {
-      navbar.classList.add("navbar-fixed-top");
-    } else {
-      navbar.classList.remove("navbar-fixed-top");
-    }
-  }
-
-</script>-->
+  })
+</script>
 </body>
 
 <% include parts/footer.ejs %>

@@ -2,6 +2,7 @@ const { sequelize, user, article } = require('../models')
 const { format_login, format_data } = require('../utils/res_data')
 const { tools: { encrypt } } = require('../utils')
 const config = require('../../config')
+const moment = require('moment')
 
 class Articles {
   constructor() { }

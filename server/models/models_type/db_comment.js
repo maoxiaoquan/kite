@@ -4,10 +4,15 @@ module.exports = {
   NAME: 'comments', /*表名*/
   TABLE: {
     /*表结构*/
-    id: { //ID
+    comment_id: { //评论 ID
       type: Seq.INTEGER(10),
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增
+      comment: 'id',
+      field: 'id'
+    },
+    comment_parent_id: { //评论 父ID
+      type: Seq.INTEGER(10),
       comment: 'id',
       field: 'id'
     },
@@ -19,7 +24,7 @@ module.exports = {
     uid: { // 评论用户ID
       type: Seq.INTEGER(10),
       comment: 'uid',
-      field:'uid'
+      field: 'uid'
     },
     nickname: { // 评论用户nickname
       type: Seq.STRING(20),
@@ -28,18 +33,8 @@ module.exports = {
     },
     avatar: { // 头像
       type: Seq.STRING(100),
-      comment: '头像', 
+      comment: '头像',
       field: 'avatar'
-    },
-    reply_uid: { // 回复者id
-      type: Seq.STRING(20),
-      comment: '权限父ID',
-      field: 'reply_uid'
-    },
-    reply_nickname: { // 回复者name
-      type: Seq.CHAR(100),
-      comment: '父权限名字',
-      field: 'reply_nickname'
     },
     content: { // 评论内容
       type: Seq.TEXT,
@@ -47,7 +42,7 @@ module.exports = {
       field: 'content'
     },
     create_date: { // 创建时间
-      type: Seq.BIGINT(50),
+      type: Seq.DATEONLY,
       comment: '创建时间',
       field: 'create_date'
     },
@@ -55,6 +50,11 @@ module.exports = {
       type: Seq.BIGINT(30),
       comment: '创建时间戳',
       field: 'create_date_timestamp'
+    },
+    status: { // 状态
+      type: Seq.INTEGER(5),
+      comment: '状态(1:审核中;2:审核通过;3:回收站)',
+      field: 'status'
     }
   }
 }

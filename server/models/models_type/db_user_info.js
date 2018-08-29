@@ -9,6 +9,16 @@ module.exports = {
       primaryKey: true, // 定义主键
       comment: 'uid',
       field: 'uid'
+    },
+    profession: { // 职业
+      type: Seq.STRING(20),
+      comment: 'profession',
+      field: 'profession'
+    },
+    home_page: { // 个人主页
+      type: Seq.STRING(20),
+      comment: 'home_page',
+      field: 'home_page'
     }
   }
 }

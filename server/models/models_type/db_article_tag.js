@@ -37,7 +37,7 @@ module.exports = {
       field: 'article_tag_description'
     },
     create_date: { // 创建时间
-      type: Seq.BIGINT(50),
+      type: Seq.DATEONLY,
       comment: '创建时间',
       field: 'create_date'
     },

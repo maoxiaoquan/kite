@@ -14,12 +14,29 @@ _Fetch.interceptors.response.use(function (response) {
   alert('服务器正忙，请稍后重试!')
 })
 
+function hasClass (obj, cls) {
+  var obj_class = obj.className,//获取 class 内容.
+    obj_class_lst = obj_class.split(/\s+/)//通过split空字符将cls转换成数组.
+  for (var x in obj_class_lst) {
+    if (obj_class_lst[x] == cls) {//循环数组, 判断是否包含cls
+      return true
+    }
+  }
+  return false
+}
+
 !function (window) {
   var _server = {
     create_user_article_topic: function () { /*创建用户专题*/
       return _Fetch.post('/create_user_article_topic', {
         user_article_topic_name: document.querySelector('.create-topic-input').value
       })
+    },
+    get_article: function (data) { //根据aid获取文章
+      return _Fetch.get('/get_article', {params: data})
+    },
+    get_user_info: function (data) { //根据uid获取用户相关信息
+      return _Fetch.get('/user_info', {params: data})
     },
     get_user_article_topic_all: function () { /*获取当前用户所有专题*/
       return _Fetch.get('/get_article_topic_all')
@@ -38,6 +55,9 @@ _Fetch.interceptors.response.use(function (response) {
     },
     post_user_attention: function (data) { /*用户关注用户*/
       return _Fetch.post('/post_user_attention', data)
+    },
+    post_user_like_article: function (data) { /*用户like文章*/
+      return _Fetch.post('/user_like_article', data)
     }
   }
 
