@@ -18,7 +18,7 @@
                 <div class="article-list">
                     <div class="main-top">
                         <div class="title">
-                            <a class="name" href="/c/e048f1a72e3d">搜索：<%=data.search%></a>
+                            <a class="name" href="javascript:;">搜索：<%=data.search%></a>
                         </div>
                         <div class="info">
                            一共有 <%=data.count%> 条结果
@@ -26,7 +26,7 @@
                     </div>
                     <ul class="trigger-menu">
                        <!-- <li class=""><a href="/"><i class="iconfont ic-latestcomments"></i> 最新评论</a></li>-->
-                        <li class="active"><a href="/"><i class="iconfont ic-articles"></i> 最新收录</a></li>
+                        <li class="active"><a href="/"><i class="iconfont ic-articles"></i> 文章</a></li>
                         <!--<li class=""><a href="/"><i class="iconfont ic-hot"></i> 热门</a></li>-->
                     </ul>
                     <div class="list-container">
@@ -48,7 +48,6 @@
                                                     <a href=""><%= item.author %></a>
                                                 </li>
                                                 <li class="item"><%= item.create_date %></li>
-                                                <li class="item"><%= item.read_count %> 次阅读</li>
                                                 <li class="item"><%= item.like_count %> 次喜欢</li>
                                                 <li class="item"><%= item.comment_count %> 次评论</li>
                                                 <% if(item.tag_ids){ %>

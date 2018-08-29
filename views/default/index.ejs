@@ -43,7 +43,7 @@
         <div class="col-xs-12 col-sm-8 col-md-8">
 
             <% if (data.current_page === 'index'){ %>
-            <div id="box-swiper" class="carousel slide box-swiper" data-ride="carousel">
+            <div id="box-swiper" class="carousel slide box-swiper" data-ride="carousel" style="height: 188px">
                 <ol class="carousel-indicators">
                     <li data-target="#box-swiper" data-slide-to="0" class="active"></li>
                     <li data-target="#box-swiper" data-slide-to="1"></li>
@@ -51,13 +51,13 @@
                 </ol>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img class="d-block w-100" src="/default/img/66677.png" alt="First slide">
+                        <img class="d-block w-100" src="/default/img/88888888.jpg" alt="First slide">
                     </div>
                     <div class="carousel-item">
-                        <img class="d-block w-100" src="/default/img/66677.png" alt="Second slide">
+                        <img class="d-block w-100" src="/default/img/88888888.jpg" alt="Second slide">
                     </div>
                     <div class="carousel-item">
-                        <img class="d-block w-100" src="/default/img/66677.png" alt="Third slide">
+                        <img class="d-block w-100" src="/default/img/88888888.jpg" alt="Third slide">
                     </div>
                 </div>
                 <a class="carousel-control-prev" href="#box-swiper" role="button" data-slide="prev">
@@ -97,10 +97,28 @@
                     <li>
                         <article class="content-box content-box-index">
                             <div class="info-box">
+
+                                <div class="info-row title-row">
+                                    <a href="/article/<%= item.aid %>"
+                                       class="title" target="_blank"><%= item.title %></a>
+                                </div>
+
+                                <div class="content-text">
+                                    <%- item.excerpt %>
+                                </div>
+
                                 <div class="info-row meta-row">
                                     <ul class="meta-list">
                                         <li class="item username clickable">
                                             <a href="/user/<%= item.uid %>/article/all"><%= item.author %></a>
+                                        </li>
+                                        <li class="item item-icon like-article">
+                                            <i class="iconfont icon-love"></i>
+                                            <strong><%= item.like_count %></strong>
+                                        </li>
+                                        <li class="item item-icon comment-count">
+                                            <i class="iconfont icon-pinglun"></i>
+                                            <strong><%= item.comment_count %></strong>
                                         </li>
                                         <li class="item"><%= item.create_date %></li>
                                         <% if(item.tag_ids){ %>
@@ -121,31 +139,9 @@
                                         <% } %>
                                     </ul>
                                 </div>
-
-                                <div class="info-row title-row">
-                                    <a href="/article/<%= item.aid %>"
-                                       class="title" target="_blank"><%= item.title %></a>
-                                </div>
-
-                                <div class="info-row bottom-row">
-                                    <ul class="bottom-row-list">
-                                        <li class="item like-article">
-                                            <i class="iconfont icon-love"></i>
-                                            <strong><%= item.like_count %></strong>
-                                        </li>
-                                        <li class="item read-count">
-                                            <i class="iconfont icon-chakan"></i>
-                                            <strong><%= item.read_count %> </strong>
-                                        </li>
-                                        <li class="item comment-count">
-                                            <i class="iconfont icon-pinglun"></i>
-                                            <strong><%= item.comment_count %></strong>
-                                        </li>
-                                    </ul>
-                                </div>
                             </div>
                             <div class="lazy thumb thumb loaded"
-                                 style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
+                                 style="background-image: url('/default/img/144-144.png'); background-size: cover;">
                             </div>
                         </article>
                     </li>
@@ -154,10 +150,27 @@
                         <article class="content-box content-box-index">
                             <div class="info-box">
 
+                                <div class="info-row title-row">
+                                    <a :href="article_href(item.aid)"
+                                       class="title" target="_blank">{{ item.title }}</a>
+                                </div>
+
+                                <div class="content-text">
+                                    {{item.excerpt}}
+                                </div>
+
                                 <div class="info-row meta-row">
                                     <ul class="meta-list">
                                         <li class="item username clickable">
                                             <a href="">{{ item.author }}</a>
+                                        </li>
+                                        <li class="item item-icon like-article">
+                                            <i class="iconfont icon-love"></i>
+                                            <strong>{{ item.like_count }}</strong>
+                                        </li>
+                                        <li class="item item-icon comment-count">
+                                            <i class="iconfont icon-pinglun"></i>
+                                            <strong>{{ item.comment_count }}</strong>
                                         </li>
                                         <li class="item">{{ item.create_date }}</li>
                                         <li class="item" v-if="item.tag_ids">
@@ -169,31 +182,10 @@
                                     </ul>
                                 </div>
 
-                                <div class="info-row title-row">
-                                    <a :href="article_href(item.aid)"
-                                       class="title" target="_blank">{{ item.title }}</a>
-                                </div>
-
-                                <div class="info-row bottom-row">
-                                    <ul class="bottom-row-list">
-                                        <li class="item like-article">
-                                            <i class="iconfont icon-love"></i>
-                                            <strong>{{ item.like_count }}</strong>
-                                        </li>
-                                        <li class="item read-count">
-                                            <i class="iconfont icon-chakan"></i>
-                                            <strong>{{ item.read_count }} </strong>
-                                        </li>
-                                        <li class="item comment-count">
-                                            <i class="iconfont icon-pinglun"></i>
-                                            <strong>{{ item.comment_count }}</strong>
-                                        </li>
-                                    </ul>
-                                </div>
 
                             </div>
                             <div class="lazy thumb thumb loaded"
-                                 style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
+                                 style="background-image: url('/default/img/144-144.png'); background-size: cover;">
                             </div>
                         </article>
                     </li>

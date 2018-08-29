@@ -59,7 +59,7 @@ class UserArticleTopic {
       await models.user_article_topic.create({
         user_article_topic_name: formData.user_article_topic_name,
         user_article_topic_description: formData.user_article_topic_description,
-        create_date: moment().utc().utcOffset(+8).format('YYYY-MM-DD'), /*时间*/
+        create_date: moment().utc().utcOffset(+8).format(), /*时间*/
         create_date_timestamp: moment().utc().utcOffset(+8).format('X'), /*时间戳 */
         uid: ctx.session.uid,
         enable: formData.enable || false

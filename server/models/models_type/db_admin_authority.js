@@ -42,7 +42,7 @@ module.exports = {
       comment: '权限树的连接路径',
       field: 'authority_url'
     },
-    authority_sort: { // 权限树的连接路径
+    authority_sort: { // 权限树的排序
       type: Seq.INTEGER(20),
       comment: '权限树的排序',
       field: 'authority_sort'

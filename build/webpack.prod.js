@@ -112,7 +112,6 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks(module) {
-        // any required modules inside node_modules are extracted to vendor
         return (
           module.resource &&
           /\.js$/.test(module.resource) &&
@@ -126,9 +125,6 @@ module.exports = {
       name: 'manifest',
       minChunks: Infinity
     }),
-    // This instance extracts shared chunks from code splitted chunks and bundles them
-    // in a separate chunk, similar to the vendor chunk
-    // see: https://webpack.js.org/plugins/commons-chunk-plugin/#extra-async-commons-chunk
     new webpack.optimize.CommonsChunkPlugin({
       name: 'app',
       async: 'vendor-async',

@@ -27,7 +27,9 @@ sequelize.authenticate().then(() => {
   console.log('链接失败' + error)
 })
 
-/*----------------------------------前台表---------------------------------------*/
+/**
+ * 前台表
+ */
 
 /*前台用户表*/
 const user = sequelize.define(require('./models_type/db_user').NAME, require('./models_type/db_user').TABLE, SEQ_PARAMETER)
@@ -51,11 +53,14 @@ const article_column = sequelize.define(require('./models_type/db_article_column
 const user_article_topic = sequelize.define(require('./models_type/db_user_article_topic').NAME, require('./models_type/db_user_article_topic').TABLE, SEQ_PARAMETER)
 /*前台用户角色表*/
 const user_tag = sequelize.define(require('./models_type/db_user_tag').NAME, require('./models_type/db_user_tag').TABLE, SEQ_PARAMETER)
-/*前台图片表*/
-const picture = sequelize.define(require('./models_type/db_picture').NAME, require('./models_type/db_picture').TABLE, SEQ_PARAMETER)
 /*前台用户评论表*/
 const comment = sequelize.define(require('./models_type/db_comment').NAME, require('./models_type/db_comment').TABLE, SEQ_PARAMETER)
-/*----------------------------------后台表---------------------------------------*/
+/*前台浏览行为表*/
+const user_behavior = sequelize.define(require('./models_type/db_user_behavior').NAME, require('./models_type/db_user_behavior').TABLE, SEQ_PARAMETER)
+
+/**
+ * 后台表
+ */
 
 /*后台用管理员表*/
 const admin_user = sequelize.define(require('./models_type/db_admin_user').NAME, require('./models_type/db_admin_user').TABLE, SEQ_PARAMETER)
@@ -67,6 +72,16 @@ const admin_user_role = sequelize.define(require('./models_type/db_admin_user_ro
 const admin_authority = sequelize.define(require('./models_type/db_admin_authority').NAME, require('./models_type/db_admin_authority').TABLE, SEQ_PARAMETER)
 /*角色与权限关系表*/
 const admin_role_authority = sequelize.define(require('./models_type/db_admin_role_authority').NAME, require('./models_type/db_admin_role_authority').TABLE, SEQ_PARAMETER)
+/*后台操作日志表*/
+const admin_system_log = sequelize.define(require('./models_type/db_admin_system_log').NAME, require('./models_type/db_admin_system_log').TABLE, SEQ_PARAMETER)
+
+/**
+ * 公共表
+ */
+
+/*图片表*/
+const picture = sequelize.define(require('./models_type/db_picture').NAME, require('./models_type/db_picture').TABLE, SEQ_PARAMETER)
+
 
 module.exports = {
   sequelize,
@@ -75,6 +90,7 @@ module.exports = {
   subscribe_article_tag,
   user_like_article,
   user_tag,
+  user_behavior,
   user_info,
   user_article_topic,
   verify_code,
@@ -87,6 +103,7 @@ module.exports = {
   admin_role,
   admin_user_role,
   admin_authority,
-  admin_role_authority
+  admin_role_authority,
+  admin_system_log
 }
 

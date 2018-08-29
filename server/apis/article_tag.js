@@ -2,6 +2,7 @@ const {sequelize, article_tag} = require('../models')
 const {format_login, format_data} = require('../utils/res_data')
 const {tools: {encrypt}} = require('../utils')
 const config = require('../../config')
+const moment = require('moment')
 
 function err_mess (message) {
   this.message = message
@@ -43,6 +44,8 @@ class Article_Tag {
       article_tag_icon: req_data.article_tag_icon,
       article_tag_icon_type: req_data.article_tag_icon_type,
       article_tag_description: req_data.article_tag_description,
+      create_date: moment().utc().utcOffset(+8).format(), /*时间*/
+      create_date_timestamp: moment().utc().utcOffset(+8).format('X'), /*时间戳 */
       enable: req_data.enable
     }).then(function (p) {
       console.log('created.' + JSON.stringify(p))

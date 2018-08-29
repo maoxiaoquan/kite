@@ -13,6 +13,10 @@ class Article {
 
   constructor () {}
 
+  /**
+   * 文章页面render
+   * @param   {obejct} ctx 上下文对象
+   */
   static async render_article (ctx) {
     const title = 'article'
 
@@ -21,6 +25,12 @@ class Article {
     let sql_article = await models.article.findOne({
       where: {
         aid: aid
+      }
+    })
+
+    let findone_user = await models.user.findOne({
+      where: {
+        uid: sql_article.uid
       }
     })
 
@@ -36,11 +46,17 @@ class Article {
       state: 'success',
       message: 'article',
       data: {
-        article: sql_article
+        uid: ctx.session.uid,
+        article: sql_article,
+        user: findone_user
       }
     })
   }
 
+  /**
+   * 新建文章页面render
+   * @param   {obejct} ctx 上下文对象
+   */
   static async render_writer (ctx) {
     const title = 'writer'
     await render(ctx, {
@@ -51,6 +67,10 @@ class Article {
     })
   }
 
+  /**
+   * 新建文章post提交
+   * @param   {obejct} ctx 上下文对象
+   */
   static async post_create_writer (ctx) {
     let formData = ctx.request.body
 
@@ -88,8 +108,6 @@ class Article {
       return false
     }
 
-    console.log('trimHtml(formData.origin_content)', trimHtml(formData.origin_content))
-
     try {
       await models.article.create({
         uid: ctx.session.uid,
@@ -101,7 +119,7 @@ class Article {
         source: formData.source, // 来源 （1原创 2转载）
         status: 1, // '状态(0:草稿;1:审核中;2:审核通过;3:回收站)'
         type: formData.type, // 类型 （1文章 2说说 3视频 4公告 ）
-        create_date: moment().utc().utcOffset(+8).format('YYYY-MM-DD'), /*时间*/
+        create_date: moment().utc().utcOffset(+8).format(), /*时间*/
         create_date_timestamp: moment().utc().utcOffset(+8).format('X'), /*时间戳 */
         topic_ids: formData.topic_ids,
         tag_ids: formData.tag_ids
@@ -128,7 +146,7 @@ class Article {
   }
 
   /**
-   * 文章的标签
+   * 文章的标签页面
    * @param   {obejct} ctx 上下文对象
    */
 
@@ -184,6 +202,10 @@ class Article {
     }
   }
 
+  /**
+   * 获取所有文章标签get
+   * @param   {obejct} ctx 上下文对象
+   */
   static async get_article_tag_all (ctx) {
     let article_tag_all = await models.article_tag.findAll({
       attributes: ['article_tag_id', 'article_tag_name'],
@@ -196,6 +218,34 @@ class Article {
         list: article_tag_all
       }
     })
+  }
+
+  /**
+   * ajax 查询一篇文章
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async get_article (ctx) {
+
+    let aid = ctx.query.aid
+
+    let article = await models.article.findOne({
+      where: {aid}
+    })
+
+    if (article) {
+      home_resJson(ctx, {
+        state: 'success',
+        message: '获取文章成功',
+        data: {
+          article
+        }
+      })
+    } else {
+      home_resJson(ctx, {
+        state: 'error',
+        message: '获取文章失败'
+      })
+    }
   }
 
 }
