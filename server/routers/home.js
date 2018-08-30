@@ -7,6 +7,7 @@ const article = require('../controllers/article') // 文章内容页
 const subscribe = require('../controllers/subscribe')// 订阅
 const user_article_topic = require('../controllers/user_article_topic')// 用户文章专题
 const search = require('../controllers/search')// 搜索
+const comment = require('../controllers/comment')// 评论
 
 /**
  * 获取标签列表操作
@@ -51,28 +52,33 @@ router.get('search', search.form_search) // 搜索
 
 /*AJAX*/
 
-router.get('get_index_article', index.get_index) // 首页文章
+router.get('get_index_article', index.get_index) // 首页文章 get
 
-router.get('get_article', article.get_article) // 根据aid获取文章
+router.get('get_article', article.get_article) // 根据aid获取文章 get
 
-router.get('user_info', user.get_user_info) // 根据uid 获取用户相应信息
+router.get('user_info', user.get_user_info) // 根据uid 获取用户相应信息 get
 
-router.post('sign_up', user.post_sign_up) // 注册数据 post TYPE:AJAX
+router.post('sign_up', user.post_sign_up) // 注册数据 post TYPE:AJAX post
 
-router.post('sign_up_code', user.post_sign_up_code) // 注册数据 post TYPE:AJAX
+router.post('sign_up_code', user.post_sign_up_code) // 注册数据 post TYPE:AJAX post
 
-router.post('article_writer', ajaxCheck_Session, article.post_create_writer) // 编写文章post TYPE:AJAX
+router.post('article_writer', ajaxCheck_Session, article.post_create_writer) // 编写文章post TYPE:AJAX post
 
-router.get('get_article_tag_all', ajaxCheck_Session, article.get_article_tag_all) // 获取所有文章标签 TYPE:AJAX
+router.get('get_article_tag_all', ajaxCheck_Session, article.get_article_tag_all) // 获取所有文章标签 TYPE:AJAX get
 
-router.get('get_article_topic_all', ajaxCheck_Session, user_article_topic.get_user_article_topic_all) // 获取用户所有文章专题 TYPE:AJAX
+router.get('get_article_topic_all', ajaxCheck_Session, user_article_topic.get_user_article_topic_all) // 获取用户所有文章专题 TYPE:AJAX get
 
-router.post('post_user_attention', ajaxCheck_Session, personal_center.post_user_attention) // 用户关注用户 TYPE:AJAX
+router.post('post_user_attention', ajaxCheck_Session, personal_center.post_user_attention) // 用户关注用户 TYPE:AJAX post
 
-router.post('post_subscribe_tag', ajaxCheck_Session, subscribe.post_subscribe_tag) // 用户订阅标签 TYPE:AJAX
+router.post('post_subscribe_tag', ajaxCheck_Session, subscribe.post_subscribe_tag) // 用户订阅标签 TYPE:AJAX post
 
-router.post('user_like_article', ajaxCheck_Session, personal_center.post_user_like_article) // 用户like文章 TYPE:AJAX
+router.post('user_like_article', ajaxCheck_Session, personal_center.post_user_like_article) // 用户like文章 TYPE:AJAX post
 
-router.post('create_user_article_topic', ajaxCheck_Session, user_article_topic.create_user_article_topic) // 用户文章专题 TYPE:AJAX
+router.post('create_user_article_topic', ajaxCheck_Session, user_article_topic.create_user_article_topic) // 用户文章专题 TYPE:AJAX post
+
+router.get('get_comment', comment.get_comment) // 获取用户发表的评论 TYPE:AJAX get
+
+router.post('create_comment', ajaxCheck_Session, comment.post_create_comment) // 用户发表评论 TYPE:AJAX post
+
 
 module.exports = router

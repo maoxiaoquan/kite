@@ -4,12 +4,12 @@ module.exports = {
   NAME: 'subscribe_article_tag', /*表名*/
   TABLE: {
     /*表结构*/
-    connection_id: { // 关系ID
+    id: { // 关系ID
       type: Seq.INTEGER(10),
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增
-      comment: 'connection_id 主键，自增',
-      field: 'connection_id'
+      comment: 'id 主键，自增',
+      field: 'id'
     },
     uid: { // 用户ID
       type: Seq.INTEGER(10),

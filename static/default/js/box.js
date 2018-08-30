@@ -58,8 +58,15 @@ function hasClass (obj, cls) {
     },
     post_user_like_article: function (data) { /*用户like文章*/
       return _Fetch.post('/user_like_article', data)
+    },
+    get_comment_list: function (data) { /*获取文章的评论*/
+      return _Fetch.get('/get_comment', {params: data})
+    },
+    post_create_comment: function (data) { /*用户发表评论*/
+      return _Fetch.post('/create_comment', data)
     }
   }
 
   window._server = _server
+
 }(window)

@@ -32,6 +32,12 @@ class Index {
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: pageSize,//每页限制返回的数据条数
       order: [['create_date_timestamp', 'desc']]
+    }).then((res) => {
+      res.rows.map((item, key) => {
+        item.create_at = moment(item.create_date).format('YYYY-MM-DD')
+        return item
+      })
+      return res
     })
 
     /*所有文章专题*/
@@ -75,7 +81,6 @@ class Index {
     let article_tag_all = await models.article_tag.findAll({
       attributes: ['article_tag_id', 'article_tag_name']
     })
-    console.log('find_article_column', find_article_column)
 
     let current_article_tags = find_article_column ? find_article_column.article_column_tags.split(',') : ''
 
@@ -86,6 +91,12 @@ class Index {
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: pageSize,//每页限制返回的数据条数
       order: [['create_date_timestamp', 'desc']]
+    }).then((res) => {
+      res.rows.map((item, key) => {
+        item.create_at = moment(item.create_date).format('YYYY-MM-DD')
+        return item
+      })
+      return res
     })
 
     if (rows) {

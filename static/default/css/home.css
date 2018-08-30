@@ -853,16 +853,8 @@
   margin-left: 50px;
   position: relative; }
 
-.box-comment .box-comment-part .comment-form .form-item .txt_yzm {
-  width: 16%;
-  border-radius: 40px 0 0 40px; }
-
-.box-comment .box-comment-part .comment-form .form-item .captcha-img {
-  max-height: 45px;
-  border-radius: 0 40px 40px 0;
-  cursor: pointer; }
-
 .box-comment .box-comment-part .comment-form .form-item .form-btn {
+  float: right;
   display: inline-block;
   border-radius: 40px;
   box-sizing: border-box;
@@ -916,6 +908,9 @@
 .box-comment .comment-list .comment-item .comment-body .comment-main p {
   margin: 0;
   word-break: break-all; }
+
+.box-comment .comment-list .comment-item .comment-body .comment-reply {
+  cursor: pointer; }
 
 .box-comment .comment-list .comment-item .comment-body .comment-reply-h3 {
   font-size: 14px;

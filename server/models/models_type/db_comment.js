@@ -1,20 +1,20 @@
 const Seq = require('sequelize')
 const shortid = require('shortid')
 module.exports = {
-  NAME: 'comments', /*表名*/
+  NAME: 'comment', /*表名*/
   TABLE: {
     /*表结构*/
-    comment_id: { //评论 ID
+    id: { //评论 ID
       type: Seq.INTEGER(10),
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增
       comment: 'id',
       field: 'id'
     },
-    comment_parent_id: { //评论 父ID
+    parent_id: { //评论 父ID
       type: Seq.INTEGER(10),
-      comment: 'id',
-      field: 'id'
+      comment: 'parent_id',
+      field: 'parent_id'
     },
     aid: { // 文章id
       type: Seq.STRING(20),
@@ -26,15 +26,10 @@ module.exports = {
       comment: 'uid',
       field: 'uid'
     },
-    nickname: { // 评论用户nickname
-      type: Seq.STRING(20),
-      comment: 'uid',
-      field: 'uid'
-    },
-    avatar: { // 头像
-      type: Seq.STRING(100),
-      comment: '头像',
-      field: 'avatar'
+    reply_uid: { // 回复评论用户ID
+      type: Seq.INTEGER(10),
+      comment: 'reply_uid',
+      field: 'reply_uid'
     },
     content: { // 评论内容
       type: Seq.TEXT,
@@ -42,7 +37,7 @@ module.exports = {
       field: 'content'
     },
     create_date: { // 创建时间
-      type: Seq.DATEONLY,
+      type: Seq.DATE,
       comment: '创建时间',
       field: 'create_date'
     },

@@ -920,16 +920,8 @@
           margin-left: 50px;
           position: relative;
         }
-        .txt_yzm {
-          width: 16%;
-          border-radius: 40px 0 0 40px;
-        }
-        .captcha-img {
-          max-height: 45px;
-          border-radius: 0 40px 40px 0;
-          cursor: pointer;
-        }
         .form-btn {
+          float: right;
           display: inline-block;
           border-radius: 40px;
           box-sizing: border-box;
@@ -983,6 +975,9 @@
             margin: 0;
             word-break: break-all;
           }
+        }
+        .comment-reply{
+          cursor: pointer;
         }
         .comment-reply-h3 {
           font-size: 14px;

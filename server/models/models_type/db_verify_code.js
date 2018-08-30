@@ -26,7 +26,7 @@ module.exports = {
       field: 'verify_code'
     },
     create_date: { // 创建时间
-      type: Seq.BIGINT(50),
+      type: Seq.DATE,
       comment: '创建时间',
       field: 'create_date'
     },
