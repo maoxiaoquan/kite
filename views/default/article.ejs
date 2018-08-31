@@ -135,134 +135,126 @@
 <% include parts/footer_view.ejs %>
 <!--footer_view.ejs end-->
 
-<style>
-    .modal-mask {
-        position: fixed;
-        z-index: 9998;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, .5);
-        display: table;
-        transition: opacity .3s ease;
-    }
-
-    .modal-wrapper {
-        display: table-cell;
-        vertical-align: middle;
-    }
-
-    .modal-container {
-        width: 300px;
-        margin: 0px auto;
-        padding: 20px 30px;
-        background-color: #fff;
-        border-radius: 2px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-        transition: all .3s ease;
-        font-family: Helvetica, Arial, sans-serif;
-    }
-
-    .modal-header h3 {
-        margin-top: 0;
-        color: #42b983;
-    }
-
-    .modal-body {
-        margin: 20px 0;
-    }
-
-    .modal-default-button {
-        float: right;
-    }
-
-    /*
-     * The following styles are auto-applied to elements with
-     * transition="modal" when their visibility is toggled
-     * by Vue.js.
-     *
-     * You can easily play with the modal transition by editing
-     * these styles.
-     */
-
-    .modal-enter {
-        opacity: 0;
-    }
-
-    .modal-leave-active {
-        opacity: 0;
-    }
-
-    .modal-enter .modal-container,
-    .modal-leave-active .modal-container {
-        -webkit-transform: scale(1.1);
-        transform: scale(1.1);
-    }
-</style>
-
-<!-- app -->
-<div id="app">
-    <button id="show-modal" @click="showModal = true">Show Modal</button>
-    <!-- use the modal component, pass in the prop -->
-    <modal v-if="showModal" @close="showModal = false">
-        <!--
-          you can use custom content here to overwrite
-          default content
-        -->
-        <h3 slot="header">custom header</h3>
-    </modal>
-</div>
 
 <!-- template for the modal component -->
-<script type="text/x-template" id="modal-template">
-    <transition name="modal">
-        <div class="modal-mask">
-            <div class="modal-wrapper">
-                <div class="modal-container">
+<script type="text/x-template" id="comment-list-template">
 
-                    <div class="modal-header">
-                        <slot name="header">
-                            default header
-                        </slot>
+    <div class="comment-item" data-author="堂弟 亚历山大">
+        <div class="avatar">
+            <img src="https://image.uisdc.com/wp-content/uploads/2018/06/avatar-uisdc-chat.png"
+                 alt="avatar">
+        </div>
+        <div class="comment-body">
+            <div class="comment-main">
+                <h4>堂弟 亚历山大</h4>
+                <p>{{commentItem.content}}</p>
+            </div>
+            <div class="comment-foot">
+                <span>{{commentItem.create_date}}</span>
+                <span class="comment-reply" @click="reply_btn('')">回复</span>
+            </div>
+        </div>
+        <div class="comment-item-children" v-if="commentItem.children.length>0||children_comment_input">
+
+            <div class="comment-item-children-view" v-if="commentItem.children.length>0">
+                <div class="comment-item child-item" data-author="堂弟 亚历山大"
+                     v-for="child_item in commentItem.children">
+                    <div class="avatar">
+                        <img src="https://image.uisdc.com/wp-content/uploads/2018/06/avatar-uisdc-chat.png"
+                             alt="avatar">
                     </div>
-
-                    <div class="modal-body">
-                        <slot name="body">
-                            default body
-                        </slot>
+                    <div class="comment-body">
+                        <div class="comment-main">
+                            <h4>堂弟 亚历山大</h4>
+                            <p v-html="child_item.content"></p>
+                        </div>
+                        <div class="comment-foot">
+                            <span>{{child_item.create_date}}</span>
+                            <span class="comment-reply" @click="reply_btn('@'+child_item.id+' ')">回复</span>
+                        </div>
                     </div>
+                </div>
+            </div>
 
-                    <div class="modal-footer">
-                        <slot name="footer">
-                            default footer
-                            <button class="modal-default-button" @click="$emit('close')">
-                                OK{{count}}
-                            </button>
-                        </slot>
+            <div class="comment-form" v-if="children_comment_input" :id="'comment-reply'+commentItem.id">
+                <div class="comment-form">
+                    <div class="comment-avatar">
+                        <img src="https://image.uisdc.com/wp-content/uploads/2018/06/avatar-uisdc-chat.png"
+                             alt="avatar">
+                    </div>
+                    <div class="form-item" style="margin-left: 50px;">
+                        <div class="input-view">
+                            <textarea v-model="comment_content" class="txt long-txt textarea "></textarea>
+                        </div>
+                        <div class="form-item form-btns clearfix">
+                            <div class="left-view">
+                                <i class="iconfont icon-biaoqing"></i>
+                            </div>
+                            <div class="right-view">
+                                <button type="submit" class="form-btn btn-cancel" @click="children_comment_input=false">
+                                    取消
+                                </button>
+                                <button type="submit" class="form-btn" @click="submit_comment">提交评论</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </transition>
+    </div>
+
 </script>
 
 <script>
-
-  Vue.component('modal', {
-    template: '#modal-template',
+  Vue.component('comment-list', {
+    template: '#comment-list-template',
+    props: ['commentItem'],
     data: function () {
       return {
-        count: 0
+        children_comment_input: false,
+        comment_content: '',
+        parent_id: '',
+        reply_id: ''
       }
     },
-  })
+    created: function () {
+      this.parent_id = this.commentItem.id
+    },
+    methods: {
+      reply_btn: function (val) {
+        var that = this
+        this.comment_content = val
+        this.children_comment_input = true
 
-  // start app
-  new Vue({
-    el: '#app',
-    data: {
-      showModal: false
+        if (this.reply_uid) {
+          this.reply_uid = this.commentItem.uid
+        } else {
+          this.reply_uid = ''
+        }
+      },
+      submit_comment: function () {
+        var params = {
+          aid: '<%= data.article.aid %>',
+          uid: '<%= data.uid %>',
+          reply_uid: this.reply_uid,
+          parent_id: this.commentItem.id,
+          content: this.comment_content
+        }
+        var that = this
+        _server.post_create_comment(params).then(function (res) {
+          if (res.state === 'success') {
+            alert(res.message)
+            that.$nextTick(function () {
+              that.comment_content = ''
+              that.commentItem.children.push(res.data)
+            })
+          } else {
+            alert(res.message)
+          }
+        }).catch(function (err) {
+          console.log(err)
+        })
+      }
     }
   })
 
@@ -372,13 +364,15 @@
         }
         var that = this
         _server.post_create_comment(params).then(function (res) {
-          if (res.state === 'success') {
-            alert(res.message)
-            that.comment_content = ''
-            that.get_comment_list()
-          } else {
-            alert(res.message)
-          }
+          that.$nextTick(function () {
+            if (res.state === 'success') {
+              alert(res.message)
+              that.comment_content = ''
+              that.comment_list.unshift(res.data)
+            } else {
+              alert(res.message)
+            }
+          })
         }).catch(function (err) {
           console.log(err)
         })

@@ -817,7 +817,21 @@
   font-weight: bold;
   font-size: 18px; }
 
-.box-comment .box-comment-part .comment-form .txt {
+.box-comment .box-comment-part .comment-form .comment-avatar {
+  float: left;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 35px; }
+
+.box-comment .box-comment-part .comment-form .form-item {
+  margin-bottom: 20px;
+  font-size: 14px;
+  line-height: 40px;
+  color: #555;
+  display: block; }
+
+.box-comment .box-comment-part .comment-form .form-item .txt {
   display: block;
   box-sizing: border-box;
   width: 100%;
@@ -833,28 +847,27 @@
   float: left;
   font-family: 'Microsoft Yahei', sans-serif; }
 
-.box-comment .box-comment-part .comment-form .txt.textarea {
+.box-comment .box-comment-part .comment-form .form-item .txt.textarea {
   height: 100px;
   border-radius: 20px; }
 
-.box-comment .box-comment-part .comment-form .form-item {
-  margin-bottom: 20px;
-  font-size: 14px;
-  line-height: 40px;
-  color: #555;
-  display: block; }
-
-.box-comment .box-comment-part .comment-form .form-item .input-span {
-  float: left;
-  margin-right: 10px;
-  font-weight: bold; }
-
 .box-comment .box-comment-part .comment-form .form-item .input-view {
-  margin-left: 50px;
   position: relative; }
 
-.box-comment .box-comment-part .comment-form .form-item .form-btn {
+.box-comment .box-comment-part .comment-form .form-item .left-view {
+  float: left; }
+
+.box-comment .box-comment-part .comment-form .form-item .left-view .iconfont {
+  margin-left: 15px;
+  margin-top: 10px;
+  display: inline-block;
+  font-size: 20px; }
+
+.box-comment .box-comment-part .comment-form .form-item .right-view {
   float: right;
+  padding-top: 15px; }
+
+.box-comment .box-comment-part .comment-form .form-item .form-btn {
   display: inline-block;
   border-radius: 40px;
   box-sizing: border-box;
@@ -865,8 +878,11 @@
   line-height: 40px;
   cursor: pointer;
   padding: 0 30px;
-  margin-left: 50px;
+  margin-left: 10px;
   outline: none; }
+
+.box-comment .box-comment-part .comment-form .form-item .form-btn.btn-cancel {
+  background: #999999; }
 
 .box-comment .comment-list {
   list-style: none;
@@ -874,14 +890,19 @@
   margin-bottom: 40px; }
 
 .box-comment .comment-list .comment-item {
-  margin-bottom: 30px; }
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f1f1f1; }
+
+.box-comment .comment-list .comment-item:last-child {
+  border-bottom: none; }
 
 .box-comment .comment-list .comment-item .avatar {
   float: left;
   margin: 0 13px 10px 0;
   margin-right: 0; }
 
-.box-comment .comment-list .comment-item .avatar span {
+.box-comment .comment-list .comment-item .avatar img {
   display: block;
   width: 40px;
   height: 40px;
@@ -912,36 +933,37 @@
 .box-comment .comment-list .comment-item .comment-body .comment-reply {
   cursor: pointer; }
 
-.box-comment .comment-list .comment-item .comment-body .comment-reply-h3 {
-  font-size: 14px;
-  color: #333;
-  font-weight: bold;
-  overflow: hidden;
-  margin-bottom: 15px; }
-
-.box-comment .comment-list .comment-item .comment-body .comment-reply-h3 span {
-  float: right;
-  font-size: 12px;
-  font-weight: normal;
-  cursor: pointer; }
-
-.box-comment .comment-list .comment-item .comment-body h5 {
+.box-comment .comment-list .comment-item .comment-body .comment-foot {
   font-size: 12px;
   color: #bbb;
   font-weight: normal;
   margin: 8px 0 0 15px; }
 
-.box-comment .comment-list .comment-item .comment-body h5 span {
+.box-comment .comment-list .comment-item .comment-body .comment-foot span {
   margin-right: 10px;
   white-space: nowrap; }
 
 .box-comment .comment-list .comment-item .comment-body .comment-form {
   margin-top: 20px; }
 
-.box-comment .comment-list .comment-item.child-item {
-  margin-left: 50px; }
+.box-comment .comment-list .comment-item .comment-item-children {
+  margin-left: 50px;
+  margin-top: 30px;
+  padding-left: 20px;
+  border-left: 1px solid #f1f1f1;
+  overflow: hidden; }
 
-.box-comment .comment-list .comment-item.child-item .avatar span {
+.box-comment .comment-list .comment-item .comment-item-children .comment-item:last-child {
+  margin-bottom: 0; }
+
+.box-comment .comment-list .comment-item .comment-item-children .comment-form {
+  margin-top: 30px; }
+
+.box-comment .comment-list .comment-item.child-item .avatar img {
+  width: 35px;
+  height: 35px; }
+
+.box-comment .comment-list .comment-item.child-item .comment-avatar {
   width: 35px;
   height: 35px; }
 

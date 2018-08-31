@@ -4,87 +4,32 @@
             <small>已发布评论 <em>89</em> 条</small>
         </h2>
         <div class="comment-form" id="comment_form">
-            <div class="comment_post">
-                <div class="form-item clearfix">
-                    <span class="input-span">评论</span>
-                    <div class="input-view">
-                        <textarea name="comment" v-model="comment_content" class="txt long-txt textarea "></textarea>
-                    </div>
+            <div class="comment-avatar">
+                <img src="https://image.uisdc.com/wp-content/uploads/2018/06/avatar-uisdc-chat.png"
+                     alt="avatar">
+            </div>
+            <div class="form-item" style="margin-left: 50px;">
+                <div class="input-view">
+                    <textarea name="comment" v-model="comment_content" class="txt long-txt textarea "></textarea>
                 </div>
                 <div class="form-item form-btns clearfix">
-                    <p class="error"></p>
-                    <button type="submit" class="form-btn" @click="submit_comment">提交评论</button>
+                    <div class="left-view">
+                        <i class="iconfont icon-biaoqing"></i>
+                    </div>
+                    <div class="right-view">
+                        <button type="submit" class="form-btn" @click="submit_comment">提交评论</button>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="comment-list">
             <div id="commentlist">
-                <div class="comment-item" data-author="堂弟 亚历山大" v-for="item in comment_list">
-                    <div class="avatar">
-                        <span>
-                            <img src="https://image.uisdc.com/wp-content/uploads/2018/06/avatar-uisdc-chat.png"
-                                 alt="avatar">
-                        </span>
-                    </div>
-                    <div class="comment-body">
-                        <div class="comment-main">
-                            <h4>堂弟 亚历山大</h4>
-                            <p>{{item.content}}</p>
-                        </div>
-                        <h5>
-                            <span>3小时前</span>
-                            <span>来自 上海市</span>
-                            <span>Chrome浏览器</span>
-                            <span>
-                                <span class="comment-reply" data-pid="27641">回复</span>
-                            </span>
-                        </h5>
-                    </div>
-                </div>
-
-
-                <div class="comment-item approved1" id="27440" data-author="小熊 贝琳达">
-                    <div class="avatar">
-                        <span><img src="https://image.uisdc.com/wp-content/uploads/2018/06/avatar-uisdc-chat.png"
-                                   alt="avatar"></span>
-                    </div>
-                    <div class="comment-body">
-                        <div class="comment-main">
-                            <h4>小熊 贝琳达</h4>
-                            <p>看看取了啥名</p>
-                        </div>
-                        <h5>
-                            <span>08-22 20:23:25</span>
-                            <span>来自 四川省绵阳市</span>
-                            <span>Chrome浏览器</span>
-                            <span>
-                                <span class="comment-reply" data-pid="27440">回复</span>
-                                <span class="comment-zan" data-id="27440"><em></em> 点赞</span>
-                            </span>
-                            <div class="comment-form hidden">
-                                <h3 class="comment-reply-h3">回复评论 <span class="close">取消回复</span></h3>
-                                <div class="comment_post">
-                                    <div class="form-item clearfix">
-                                        <span class="input-span">评论</span>
-                                        <div class="input-view">
-                                            <textarea name="comment"
-                                                      class="txt long-txt textarea textarea_need"></textarea><em
-                                                    class="total_count hidden">还可以输入<i class="count">798</i>字</em>
-                                        </div>
-                                    </div>
-                                    <div class="form-item form-btns clearfix">
-                                        <p class="error"></p>
-                                        <button type="submit" class="form-btn">提交评论</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </h5>
-                    </div>
-                </div>
-
+                <comment-list :comment-item="item" v-for="item in comment_list"/>
             </div>
             <p id="comment_loading" class="hidden"><i class="icon-spin1 animate-spin"></i> 评论加载中....</p>
             <span class="btn" id="get_comments" data-paged="3">底下还有哟~快放我们出去~ </span>
         </div>
     </div>
 </div>
+
+

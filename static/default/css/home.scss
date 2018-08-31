@@ -189,7 +189,7 @@
                 -ms-flex: 0 0 auto;
                 flex: 0 0 auto;
                 width: 36px;
-                height:  36px;
+                height: 36px;
                 border-radius: 50%;
                 margin-right: 12px;
               }
@@ -885,25 +885,12 @@
       }
     }
     .comment-form {
-      .txt {
-        display: block;
-        box-sizing: border-box;
-        width: 100%;
-        border-radius: 40px;
-        line-height: 25px;
-        height: 45px;
-        padding: 5px 15px;
-        border: none;
-        background: #f7f7f7;
-        color: #555;
-        font-size: 14px;
-        outline: none;
+      .comment-avatar {
         float: left;
-        font-family: 'Microsoft Yahei', sans-serif;
-        &.textarea {
-          height: 100px;
-          border-radius: 20px;
-        }
+        width: 40px;
+        height: 40px;
+        overflow: hidden;
+        border-radius: 35px;
       }
       .form-item {
         margin-bottom: 20px;
@@ -911,17 +898,43 @@
         line-height: 40px;
         color: #555;
         display: block;
-        .input-span {
+        .txt {
+          display: block;
+          box-sizing: border-box;
+          width: 100%;
+          border-radius: 40px;
+          line-height: 25px;
+          height: 45px;
+          padding: 5px 15px;
+          border: none;
+          background: #f7f7f7;
+          color: #555;
+          font-size: 14px;
+          outline: none;
           float: left;
-          margin-right: 10px;
-          font-weight: bold;
+          font-family: 'Microsoft Yahei', sans-serif;
+          &.textarea {
+            height: 100px;
+            border-radius: 20px;
+          }
         }
         .input-view {
-          margin-left: 50px;
           position: relative;
         }
-        .form-btn {
+        .left-view {
+          float: left;
+          .iconfont {
+            margin-left: 15px;
+            margin-top: 10px;
+            display: inline-block;
+            font-size: 20px;
+          }
+        }
+        .right-view {
           float: right;
+          padding-top: 15px;
+        }
+        .form-btn {
           display: inline-block;
           border-radius: 40px;
           box-sizing: border-box;
@@ -932,8 +945,11 @@
           line-height: 40px;
           cursor: pointer;
           padding: 0 30px;
-          margin-left: 50px;
+          margin-left: 10px;
           outline: none;
+          &.btn-cancel {
+            background: #999999;
+          }
         }
       }
     }
@@ -944,11 +960,16 @@
     margin-bottom: 40px;
     .comment-item {
       margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #f1f1f1;
+      &:last-child{
+        border-bottom: none;
+      }
       .avatar {
         float: left;
         margin: 0 13px 10px 0;
         margin-right: 0;
-        span {
+        img {
           display: block;
           width: 40px;
           height: 40px;
@@ -976,23 +997,10 @@
             word-break: break-all;
           }
         }
-        .comment-reply{
+        .comment-reply {
           cursor: pointer;
         }
-        .comment-reply-h3 {
-          font-size: 14px;
-          color: #333;
-          font-weight: bold;
-          overflow: hidden;
-          margin-bottom: 15px;
-          span {
-            float: right;
-            font-size: 12px;
-            font-weight: normal;
-            cursor: pointer;
-          }
-        }
-        h5 {
+        .comment-foot {
           font-size: 12px;
           color: #bbb;
           font-weight: normal;
@@ -1006,9 +1014,27 @@
           margin-top: 20px;
         }
       }
-      &.child-item {
+      .comment-item-children {
         margin-left: 50px;
-        .avatar span {
+        margin-top: 30px;
+        padding-left: 20px;
+        border-left: 1px solid #f1f1f1;
+        overflow: hidden;
+        .comment-item {
+          &:last-child{
+            margin-bottom: 0;
+          }
+        }
+        .comment-form{
+          margin-top: 30px;
+        }
+      }
+      &.child-item {
+        .avatar img {
+          width: 35px;
+          height: 35px;
+        }
+        .comment-avatar {
           width: 35px;
           height: 35px;
         }

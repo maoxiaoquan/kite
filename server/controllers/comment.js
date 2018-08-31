@@ -30,10 +30,22 @@ class Comment {
       return JSON.parse(JSON.stringify(res))
     })
 
-    await rows.map(async (item, key) => {
-      item.user = await models.user.findOne({where: {uid: item.uid}}).then(res => JSON.stringify(res))
-      return item
-    })
+    let arr = []
+
+    for (let item in rows) {
+      if (rows[item].parent_id === 0) {
+        arr.push(rows[item])
+      }
+    }
+
+    for (let item in arr) {
+      arr[item].children = []
+      for (let item_arr in rows) {
+        if (rows[item_arr].parent_id === arr[item].id) {
+          arr[item].children.unshift(rows[item_arr])
+        }
+      }
+    }
 
     await home_resJson(ctx, {
       state: 'success',
@@ -42,7 +54,7 @@ class Comment {
         page,
         pageSize,
         count,
-        comment_list: rows
+        comment_list: arr
       }
     })
 
@@ -81,13 +93,11 @@ class Comment {
         create_date_timestamp: moment().utc().utcOffset(+8).format('X'), /*时间戳 */
         status: 1
       }).then(async (data) => {
-        console.log('--------------', data.get({
-          plain: true
-        }))
         let _data = {
           ...data.get({
             plain: true
           }),
+          children: [],
           user: await models.user.findOne({where: {uid: data.uid}})
         }
         home_resJson(ctx, {
