@@ -84,6 +84,9 @@ const admin_system_log = sequelize.define(require('./models_type/db_admin_system
 /*图片表*/
 const picture = sequelize.define(require('./models_type/db_picture').NAME, require('./models_type/db_picture').TABLE, SEQ_PARAMETER)
 
+/* 表关联 */
+user.hasMany(comment, {foreignKey: 'uid',as:'user'})
+comment.belongsTo(user, {foreignKey: 'uid',as:'user'})
 
 module.exports = {
   sequelize,

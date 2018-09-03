@@ -1,10 +1,10 @@
 const models = require('../models')
 const moment = require('moment')
-const {render, home_resJson} = require('../utils/res_data')
+const { render, home_resJson } = require('../utils/res_data')
 const Op = require('sequelize').Op
 const trimHtml = require('trim-html')
 
-function err_mess (message) {
+function err_mess(message) {
   this.message = message
   this.name = 'UserException'
 }
@@ -13,19 +13,23 @@ function err_mess (message) {
 
 class Comment {
 
-  constructor () {}
+  constructor() { }
 
-  static async get_comment (ctx) {
+  static async get_comment(ctx) {
 
     let aid = ctx.query.aid
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 25
 
-    let {count, rows} = await models.comment.findAndCountAll({
-      where: {aid},//为空，获取全部，也可以自己添加条件
+    let { count, rows } = await models.comment.findAndCountAll({
+      where: { aid },//为空，获取全部，也可以自己添加条件
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: pageSize,//每页限制返回的数据条数
-      order: [['create_date_timestamp', 'desc']]
+      order: [['create_date_timestamp', 'desc']],
+      include: [{
+        model: models.user,
+        as:'user'
+      }]
     }).then((res) => {
       return JSON.parse(JSON.stringify(res))
     })
@@ -64,14 +68,14 @@ class Comment {
    * 新建评论post提交
    * @param   {obejct} ctx 上下文对象
    */
-  static async post_create_comment (ctx) {
+  static async post_create_comment(ctx) {
 
     let formData = ctx.request.body
 
     try {
 
       if (!formData.content) {
-        throw  new err_mess('请输入评论内容')
+        throw new err_mess('请输入评论内容')
       }
 
     } catch (err) {
@@ -98,7 +102,7 @@ class Comment {
             plain: true
           }),
           children: [],
-          user: await models.user.findOne({where: {uid: data.uid}})
+          user: await models.user.findOne({ where: { uid: data.uid } })
         }
         home_resJson(ctx, {
           state: 'success',
