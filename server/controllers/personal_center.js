@@ -74,7 +74,7 @@ class Personal_center {
     let topic_id = ctx.params.topic_id || 'all'
 
     let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 15
+    let pageSize = ctx.query.pageSize || 10
 
     let where_params = topic_id === 'all' ? {uid} : {uid, article_topic_ids: topic_id}
     let {count, rows} = await models.article.findAndCountAll({
@@ -82,6 +82,12 @@ class Personal_center {
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: pageSize,//每页限制返回的数据条数
       order: [['create_date_timestamp', 'desc']]
+    }).then((res) => {
+      res.rows.map((item, key) => {
+        item.create_at = moment(item.create_date).format('YYYY-MM-DD')
+        return item
+      })
+      return res
     })
 
     let user_article_topic_all = await models.user_article_topic.findAll({
@@ -100,7 +106,6 @@ class Personal_center {
       state: 'success',
       message: 'home',
       data: {
-        uid,
         current_user: ctx.request.current_user,
         count: count,
         user_article_topic_all,
@@ -123,7 +128,7 @@ class Personal_center {
     const title = 'user'
     let uid = ctx.params.uid
     let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 25
+    let pageSize = ctx.query.pageSize || 10
 
     let {count, rows} = await models.user_article_topic.findAndCountAll({
       where: {uid},//为空，获取全部，也可以自己添加条件
@@ -139,7 +144,6 @@ class Personal_center {
       state: 'success',
       message: 'user',
       data: {
-        uid,
         current_user: ctx.request.current_user,
         page,
         count,
@@ -159,7 +163,7 @@ class Personal_center {
     let uid = ctx.params.uid
 
     let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 15
+    let pageSize = ctx.query.pageSize || 10
 
     let user_attention_uid_arr = await models.user_attention.findAll({where: {uid}}).then((res) => {
       return res.map((attention_item, tag_key) => {
@@ -180,7 +184,6 @@ class Personal_center {
       state: 'success',
       message: 'home',
       data: {
-        uid,
         current_user: ctx.request.current_user,
         count,
         page,
@@ -267,7 +270,7 @@ class Personal_center {
     let uid = ctx.params.uid
 
     let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 15
+    let pageSize = ctx.query.pageSize || 10
 
     let user_like_article_arr = await models.user_like_article.findAll({where: {uid}}).then((res) => {
       return res.map((user_like_article_item, key) => {
@@ -282,6 +285,12 @@ class Personal_center {
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: pageSize,//每页限制返回的数据条数
       order: [['create_date_timestamp', 'desc']]
+    }).then((res) => {
+      res.rows.map((item, key) => {
+        item.create_at = moment(item.create_date).format('YYYY-MM-DD')
+        return item
+      })
+      return res
     })
 
     /*所有文章专题*/
@@ -295,7 +304,6 @@ class Personal_center {
       state: 'success',
       message: 'home',
       data: {
-        uid,
         current_user: ctx.request.current_user,
         count: count,
         page,

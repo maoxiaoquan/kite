@@ -20,10 +20,10 @@
 
                 <ul class="topic-list">
                     <li class="title">个人专题：</li>
-                    <li><a href="/user/<%= data.uid %>/article/all">全部</a></li>
+                    <li><a href="/user/<%= data.current_user.uid %>/article/all">全部</a></li>
                     <% data.user_article_topic_all.forEach(function (item, key) { %>
                     <li class="<% if(data.topic_id == item.user_article_topic_id){ %>current<% } %>"><a
-                                href="/user/<%= data.uid %>/article/<%= item.user_article_topic_id %>"><%= item.user_article_topic_name %></a>
+                                href="/user/<%= data.current_user.uid %>/article/<%= item.user_article_topic_id %>"><%= item.user_article_topic_name %></a>
                     </li>
                     <% }) %>
                 </ul>
@@ -47,10 +47,10 @@
                                             <li class="item username clickable">
                                                 <a href=""><%= item.author %></a>
                                             </li>
-                                            <li class="item"><%= item.create_date %></li>
-                                            <li class="item"><%= item.read_count %> 次阅读</li>
-                                            <li class="item"><%= item.like_count %> 次喜欢</li>
-                                            <li class="item"><%= item.comment_count %> 次评论</li>
+                                            <li class="item"><%= item.create_at %></li>
+                                            <li class="item"><%= item.read_count %> 阅读</li>
+                                            <li class="item"><%= item.like_count %> 喜欢</li>
+                                            <li class="item"><%= item.comment_count %> 评论</li>
                                             <% if(item.tag_ids){ %>
                                             <li class="item">
                                                 <% item.tag_ids.split(',').forEach(function (item, key) { %>
@@ -70,9 +70,11 @@
                                         </ul>
                                     </div>
                                 </div>
+                                <% if(item.cover_img){ %>
                                 <div class="lazy thumb thumb loaded"
-                                     style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
+                                     style="background-image: url('<%= item.cover_img %>'); background-size: cover;">
                                 </div>
+                                <% } %>
                             </article>
                         </li>
                         <% }) %>

@@ -47,6 +47,15 @@
   border-radius: 60px;
   border: 1px solid #ddd; }
 
+.navbar .dropdown {
+  padding-top: 5px; }
+
+.navbar .xiezuo {
+  border: none; }
+
+.navbar .xiezuo i {
+  font-size: 20px; }
+
 .navbar .btn-outline-warning {
   color: #ffc107; }
 
@@ -119,11 +128,15 @@
 
 .home-lay.layout-aside .aside-component .issue-btn a {
   font-size: 15px;
-  width: 45%;
+  width: 100%;
+  /*width: 45%;*/
   text-align: center;
   display: inline-block;
   cursor: pointer;
   color: #ffffff; }
+
+.home-lay.layout-aside .aside-component .issue-btn a i {
+  margin-right: 10px; }
 
 .home-lay.layout-aside .aside-component .issue-btn .btn-dynamic,
 .home-lay.layout-aside .aside-component .issue-btn .btn-note {
@@ -374,11 +387,11 @@
   text-overflow: ellipsis; }
 
 .content-box .info-box .title-row .title {
-  font-size: 16px;
+  font-size: 17px;
   letter-spacing: 1px;
   font-weight: 600;
   line-height: 1.2;
-  color: #2e3135; }
+  color: #333; }
 
 .content-box .info-box .title-row .title:visited {
   color: #909090; }
@@ -387,7 +400,7 @@
   font-size: 13px;
   line-height: 24px;
   color: #999;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -608,10 +621,9 @@
 
 .article-lay.layout-content .lay-main .article-view .follow-detail {
   padding: 20px;
-  background-color: rgba(181, 181, 181, 0.1);
-  border: 1px solid #efefef;
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.05);
   border-radius: 4px;
+  background: #f7f7f7;
+  border-radius: 20px;
   font-size: 12px; }
 
 .article-lay.layout-content .lay-main .article-view .follow-detail .info {
@@ -953,17 +965,31 @@
   border-left: 1px solid #f1f1f1;
   overflow: hidden; }
 
+.box-comment .comment-list .comment-item .comment-item-children .comment-item {
+  margin-bottom: 15px;
+  padding-bottom: 10px; }
+
 .box-comment .comment-list .comment-item .comment-item-children .comment-item:last-child {
   margin-bottom: 0; }
 
 .box-comment .comment-list .comment-item .comment-item-children .comment-form {
   margin-top: 30px; }
 
-.box-comment .comment-list .comment-item.child-item .avatar img {
+.box-comment .comment-list .comment-item .comment-item-children .comment-main {
+  padding: 6px 10px; }
+
+.box-comment .comment-list .comment-item .comment-item-children .comment-main h4 {
+  margin-bottom: 0;
+  font-size: 13px; }
+
+.box-comment .comment-list .comment-item .comment-item-children .comment-main p {
+  font-size: 13px; }
+
+.box-comment .comment-list .comment-item .comment-item-children .avatar img {
   width: 35px;
   height: 35px; }
 
-.box-comment .comment-list .comment-item.child-item .comment-avatar {
+.box-comment .comment-list .comment-item .comment-item-children .comment-avatar {
   width: 35px;
   height: 35px; }
 
@@ -1958,6 +1984,62 @@
   color: #999999; }
 
 /*subscribe-lay end*/
+/*v-model start*/
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: table;
+  transition: opacity .3s ease; }
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle; }
+
+.modal-container {
+  width: 300px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all .3s ease;
+  font-family: Helvetica, Arial, sans-serif; }
+
+.modal-header h3 {
+  margin-top: 0;
+  color: #42b983; }
+
+.modal-body {
+  margin: 20px 0; }
+
+.modal-default-button {
+  float: right; }
+
+/*
+ * The following styles are auto-applied to elements with
+ * transition="modal" when their visibility is toggled
+ * by Vue.js.
+ *
+ * You can easily play with the modal transition by editing
+ * these styles.
+ */
+.modal-enter {
+  opacity: 0; }
+
+.modal-leave-active {
+  opacity: 0; }
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1); }
+
+/*v-model end*/
 /*pageing start*/
 .pageing {
   text-align: center;

@@ -19,6 +19,7 @@
         <% } %>
     </button>
     <% } %>
+
     <div class="info">
         <ul>
             <li>
@@ -45,7 +46,7 @@
             </li>
             <li>
                 <div class="meta-block">
-                    <a href="/user/78d3e1ab9924">
+                    <a href="/user/<%= data.current_user.uid %>/article/all">
                         <p><%= data.current_user.user_article_count %></p>
                         <strong>文章</strong>
                     </a>
@@ -75,6 +76,11 @@
     <li class="<% if (data.router_name == 'like') { %>active<% } %>">
         <a href="/user/<%= data.current_user.uid %>/like">
             喜欢
+        </a>
+    </li>
+    <li class="<% if (data.router_name == 'like') { %>active<% } %>">
+        <a href="/user/<%= data.current_user.uid %>/like">
+            动态
         </a>
     </li>
 </ul>

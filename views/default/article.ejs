@@ -27,11 +27,10 @@
                                 <!-- 文章数据信息 -->
                                 <div class="meta">
                                     <!-- 如果文章更新时间大于发布时间，那么使用 tooltip 显示更新时间 -->
-                                    <span class="publish-time"
-                                          data-original-title="最后编辑于 2018.08.02 08:12"><%= data.article.create_date %></span>
-                                    <span class="views-count">阅读 <%= data.article.read_count %></span>
-                                    <span class="comments-count">评论 <%= data.article.comment_count %></span>
-                                    <span class="likes-count">喜欢 <%= data.article.like_count %></span>
+                                    <span class="publish-time"><%= data.article.create_at %></span>
+                                    <span class="views-count">阅读 {{article.read_count}}</span>
+                                    <span class="comments-count">评论 {{comment_count}}</span>
+                                    <span class="likes-count">喜欢 {{article.like_count}}</span>
                                 </div>
                             </div>
                             <!-- 如果是当前作者，加入编辑按钮 -->
@@ -47,14 +46,13 @@
                         <div class="btn btn-pay">赞赏支持</div>
                     </div>
 
-                    <div class="show-foot">
-                        <div class="copyright" data-toggle="tooltip" data-html="true"
-                             data-original-title="转载请联系作者获得授权，并标注“简书作者”。">
+                    <div class="show-foot clearfix">
+                        <div class="copyright">
                             © 著作权归作者所有
                         </div>
-                        <div class="modal-wrap" data-report-note="">
-                            <a id="report-modal">举报文章</a>
-                        </div>
+                        <!-- <div class="modal-wrap">
+                             <a id="report-modal">举报文章</a>
+                         </div>-->
                     </div>
 
                     <div class="follow-detail">
@@ -62,7 +60,7 @@
                             <a class="avatar" href="/user/<%= data.article.uid %>/article/all">
                                 <img src="<%= data.user.avatar %>" alt="96">
                             </a>
-                            <% if(data.uid !== data.article.uid){ %>
+                            <% if(user_info.uid !== data.article.uid){ %>
                             <a class="btn btn-success follow attention-article"
                                :class="{'active':curr_user_info.attention_uid_arr.indexOf(<%= data.article.uid %>)!==-1}"
                                @click="post_user_attention"
@@ -99,11 +97,6 @@
                             <a class="share-circle">
                                 <i class="iconfont ic-wechat"></i>
                             </a>
-                            <a class="share-circle" data-action="weibo-share" data-toggle="tooltip"
-                               href="javascript:void((function(s,d,e,r,l,p,t,z,c){var%20f='http://v.t.sina.com.cn/share/share.php?appkey=1881139527',u=z||d.location,p=['&amp;url=',e(u),'&amp;title=',e(t||d.title),'&amp;source=',e(r),'&amp;sourceUrl=',e(l),'&amp;content=',c||'gb2312','&amp;pic=',e(p||'')].join('');function%20a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=440,height=430,left=',(s.width-440)/2,',top=',(s.height-430)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent,'','','', '推荐 Bana 的文章《vue相关库》（ 分享自 @简书 ）','https://www.jianshu.com/p/c4dada6b25e6?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=weibo','页面编码gb2312|utf-8默认gb2312'));"
-                               data-original-title="分享到微博">
-                                <i class="iconfont ic-weibo"></i>
-                            </a>
                             <a class="share-circle" data-toggle="tooltip" id="longshare" target="_blank"
                                data-original-title="" title="">
                                 <div class="qrcode" id="qrcode" style="display: none;">
@@ -139,14 +132,13 @@
 <!-- template for the modal component -->
 <script type="text/x-template" id="comment-list-template">
 
-    <div class="comment-item" data-author="堂弟 亚历山大">
+    <div class="comment-item" :data-id="commentItem.id">
         <div class="avatar">
-            <img src="https://image.uisdc.com/wp-content/uploads/2018/06/avatar-uisdc-chat.png"
-                 alt="avatar">
+            <img :src="commentItem.user.avatar" alt="avatar">
         </div>
         <div class="comment-body">
             <div class="comment-main">
-                <h4>堂弟 亚历山大</h4>
+                <h4><a>{{commentItem.user.nickname}}</a></h4>
                 <p>{{commentItem.content}}</p>
             </div>
             <div class="comment-foot">
@@ -157,20 +149,19 @@
         <div class="comment-item-children" v-if="commentItem.children.length>0||children_comment_input">
 
             <div class="comment-item-children-view" v-if="commentItem.children.length>0">
-                <div class="comment-item child-item" data-author="堂弟 亚历山大"
+                <div class="comment-item" data-author="堂弟 亚历山大"
                      v-for="child_item in commentItem.children">
                     <div class="avatar">
-                        <img src="https://image.uisdc.com/wp-content/uploads/2018/06/avatar-uisdc-chat.png"
-                             alt="avatar">
+                        <img :src="child_item.user.avatar" alt="avatar">
                     </div>
                     <div class="comment-body">
                         <div class="comment-main">
-                            <h4>堂弟 亚历山大</h4>
+                            <h4>{{child_item.user.nickname}}</h4>
                             <p v-html="child_item.content"></p>
                         </div>
                         <div class="comment-foot">
                             <span>{{child_item.create_date}}</span>
-                            <span class="comment-reply" @click="reply_btn('@'+child_item.id+' ')">回复</span>
+                            <span class="comment-reply" @click="reply_btn('@'+child_item.user.nickname+' ')">回复</span>
                         </div>
                     </div>
                 </div>
@@ -235,7 +226,7 @@
       submit_comment: function () {
         var params = {
           aid: '<%= data.article.aid %>',
-          uid: '<%= data.uid %>',
+          uid: '<%= user_info.uid %>',
           reply_uid: this.reply_uid,
           parent_id: this.commentItem.id,
           content: this.comment_content
@@ -260,21 +251,27 @@
 
   new Vue({
     el: '#article-lay',
-    data: {
-      curr_uid: '<%= data.uid %>',
-      article_uid: '<%= data.article.uid %>',
-      curr_user_info: {
-        attention_uid_arr: [],
-        user_like_aid_arr: []
-      },
-      article_user_info: {
-        attention_uid_arr: [],
-        user_like_aid_arr: []
-      },
-      article: {},
-      /*comment start*/
-      comment_list: [],// 用户评论的列表
-      comment_content: '', // 顶级输入框
+    data: function () {
+      return {
+        curr_uid: '<%= user_info.uid %>',
+        article_uid: '<%= data.article.uid %>',
+        curr_user_info: {
+          attention_uid_arr: [],
+          user_like_aid_arr: []
+        },
+        article_user_info: {
+          attention_uid_arr: [],
+          user_like_aid_arr: []
+        },
+        article: {},
+        /*comment start*/
+        comment_page: 1,
+        comment_pageSize: 10,
+        comment_count: 0,
+        comment_list: [],// 用户评论的列表
+        comment_content: '', // 顶级输入框
+        comment_loading_btn: true
+      }
     },
     created: function () {
       this.get_article() // 根据aid ajax 获取文章
@@ -283,7 +280,7 @@
       this.get_comment_list() // 获取用户的评论
     },
     methods: {
-      get_curr_user_info: function () {
+      get_curr_user_info: function () {// 获取当前登录用户信息
         var that = this
         _server.get_user_info({uid: this.curr_uid}).then(function (res) {
           that.$nextTick(function () {
@@ -293,7 +290,7 @@
           })
         })
       },
-      get_article_user_info: function () {
+      get_article_user_info: function () {// 获取当前文章用户信息
         var that = this
         _server.get_user_info({uid: this.article_uid}).then(function (res) {
           that.$nextTick(function () {
@@ -315,7 +312,9 @@
       },
       post_user_attention: function () { /*用户关注用户*/
         var that = this
-        _server.post_user_attention({attention_uid: '<%= data.article.uid %>'}).then(function (res) {
+        _server.post_user_attention({
+          attention_uid: '<%= data.article.uid %>'
+        }).then(function (res) {
           if (res.state === 'success') {
             that.get_curr_user_info()
             that.get_article_user_info()
@@ -341,13 +340,23 @@
         })
       },
       /*一级评论提交*/
-      get_comment_list: function () {
+      get_comment_list: function () { // 获取评论列表
         var that = this
-        _server.get_comment_list({aid: '<%= data.article.aid %>'}).then(function (res) {
+        _server.get_comment_list({
+          aid: '<%= data.article.aid %>',
+          page: that.comment_page,
+          pageSize: that.comment_pageSize
+        }).then(function (res) {
           that.$nextTick(function () {
             if (res.state === 'success') {
-              console.log('res.comment_list', res.comment_list)
-              that.comment_list = res.data.comment_list
+              that.comment_list = that.comment_list.concat(res.data.comment_list)
+              that.comment_count = res.data.count
+              that.comment_page += 1
+              if (res.data.comment_list.length < that.comment_pageSize) {
+                that.comment_loading_btn = false
+              } else {
+                that.comment_loading_btn = true
+              }
             } else {
               alert(res.message)
             }
@@ -356,10 +365,10 @@
           console.log(err)
         })
       },
-      submit_comment: function () {
+      submit_comment: function () { // 提交评论
         var params = {
           aid: '<%= data.article.aid %>',
-          uid: '<%= data.uid %>',
+          uid: '<%= user_info.uid %>',
           content: this.comment_content
         }
         var that = this
@@ -367,8 +376,9 @@
           that.$nextTick(function () {
             if (res.state === 'success') {
               alert(res.message)
-              that.comment_content = ''
-              that.comment_list.unshift(res.data)
+              that.comment_content = '' // 评论输入框为空
+              that.comment_list.unshift(res.data) // 手动插入回复后的评论数据
+              that.comment_count += 1  // 手动评论数据 +1
             } else {
               alert(res.message)
             }

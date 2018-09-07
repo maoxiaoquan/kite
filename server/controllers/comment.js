@@ -1,10 +1,10 @@
 const models = require('../models')
 const moment = require('moment')
-const { render, home_resJson } = require('../utils/res_data')
+const {render, home_resJson} = require('../utils/res_data')
 const Op = require('sequelize').Op
 const trimHtml = require('trim-html')
 
-function err_mess(message) {
+function err_mess (message) {
   this.message = message
   this.name = 'UserException'
 }
@@ -13,42 +13,39 @@ function err_mess(message) {
 
 class Comment {
 
-  constructor() { }
+  constructor () { }
 
-  static async get_comment(ctx) {
+  static async get_comment (ctx) {
 
     let aid = ctx.query.aid
     let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 25
+    let pageSize = ctx.query.pageSize || 10
 
-    let { count, rows } = await models.comment.findAndCountAll({
-      where: { aid },//为空，获取全部，也可以自己添加条件
+    console.log('pageSize', pageSize)
+
+    let {count, rows} = await models.comment.findAndCountAll({ // 默认一级评论
+      where: {aid, parent_id: 0},//为空，获取全部，也可以自己添加条件
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-      limit: pageSize,//每页限制返回的数据条数
+      limit: Number(pageSize),//每页限制返回的数据条数
       order: [['create_date_timestamp', 'desc']],
-      include: [{
-        model: models.user,
-        as:'user'
-      }]
+      include: [{model: models.user, as: 'user'}]
     }).then((res) => {
       return JSON.parse(JSON.stringify(res))
     })
 
-    let arr = []
-
-    for (let item in rows) {
-      if (rows[item].parent_id === 0) {
-        arr.push(rows[item])
-      }
-    }
-
-    for (let item in arr) {
-      arr[item].children = []
-      for (let item_arr in rows) {
-        if (rows[item_arr].parent_id === arr[item].id) {
-          arr[item].children.unshift(rows[item_arr])
+    for (let item in rows) { // 循环取子评论
+      await (async (i) => {
+        rows[i].children = []
+        let data = await models.comment.findAll({
+          where: {parent_id: rows[i].id},
+          include: [{model: models.user, as: 'user'}]
+        }).then((res) => {
+          return JSON.parse(JSON.stringify(res))
+        })
+        if (data) {
+          rows[i].children = data
         }
-      }
+      })(item)
     }
 
     await home_resJson(ctx, {
@@ -58,7 +55,7 @@ class Comment {
         page,
         pageSize,
         count,
-        comment_list: arr
+        comment_list: rows
       }
     })
 
@@ -68,7 +65,7 @@ class Comment {
    * 新建评论post提交
    * @param   {obejct} ctx 上下文对象
    */
-  static async post_create_comment(ctx) {
+  static async post_create_comment (ctx) {
 
     let formData = ctx.request.body
 
@@ -97,12 +94,16 @@ class Comment {
         create_date_timestamp: moment().utc().utcOffset(+8).format('X'), /*时间戳 */
         status: 1
       }).then(async (data) => {
+
+        await models.article.update({
+          comment_count: await models.comment.count({where: {aid: formData.aid, parent_id: 0}})
+        }, {'where': {aid: formData.aid}})
         let _data = {
           ...data.get({
             plain: true
           }),
           children: [],
-          user: await models.user.findOne({ where: { uid: data.uid } })
+          user: await models.user.findOne({where: {uid: data.uid}})
         }
         home_resJson(ctx, {
           state: 'success',

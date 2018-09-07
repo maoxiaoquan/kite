@@ -52,6 +52,15 @@
     border-radius: 60px;
     border: 1px solid #ddd;
   }
+  .dropdown {
+    padding-top: 5px;
+  }
+  .xiezuo {
+    border: none;
+    i {
+      font-size: 20px;
+    }
+  }
   .btn-outline-warning {
     color: $btn-color-warning;
     &:hover {
@@ -131,11 +140,15 @@
         border-radius: 24px;
         a {
           font-size: 15px;
-          width: 45%;
+          width: 100%;
+          /*width: 45%;*/
           text-align: center;
           display: inline-block;
           cursor: pointer;
           color: #ffffff;
+          i {
+            margin-right: 10px;
+          }
         }
         .btn-dynamic,
         .btn-note {
@@ -412,11 +425,11 @@
       overflow: hidden;
       text-overflow: ellipsis;
       .title {
-        font-size: 16px;
+        font-size: 17px;
         letter-spacing: 1px;
         font-weight: 600;
         line-height: 1.2;
-        color: #2e3135;
+        color: #333;
         &:visited {
           color: #909090;
         }
@@ -426,7 +439,7 @@
       font-size: 13px;
       line-height: 24px;
       color: #999;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
@@ -663,10 +676,9 @@
       }
       .follow-detail {
         padding: 20px;
-        background-color: hsla(0, 0%, 71%, .1);
-        border: 1px solid #efefef;
-        box-shadow: 0 0 16px rgba(0, 0, 0, 0.05);
         border-radius: 4px;
+        background: #f7f7f7;
+        border-radius: 20px;
         font-size: 12px;
         .info {
           min-height: 47px;
@@ -962,7 +974,7 @@
       margin-bottom: 30px;
       padding-bottom: 20px;
       border-bottom: 1px solid #f1f1f1;
-      &:last-child{
+      &:last-child {
         border-bottom: none;
       }
       .avatar {
@@ -1021,15 +1033,25 @@
         border-left: 1px solid #f1f1f1;
         overflow: hidden;
         .comment-item {
-          &:last-child{
+          margin-bottom: 15px;
+          padding-bottom: 10px;
+          &:last-child {
             margin-bottom: 0;
           }
         }
-        .comment-form{
+        .comment-form {
           margin-top: 30px;
         }
-      }
-      &.child-item {
+        .comment-main {
+          padding: 6px 10px;
+          h4 {
+            margin-bottom: 0;
+            font-size: 13px;
+          }
+          p {
+            font-size: 13px;
+          }
+        }
         .avatar img {
           width: 35px;
           height: 35px;
@@ -2127,6 +2149,73 @@
 }
 
 /*subscribe-lay end*/
+
+/*v-model start*/
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+  display: table;
+  transition: opacity .3s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  width: 300px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+  transition: all .3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-header h3 {
+  margin-top: 0;
+  color: #42b983;
+}
+
+.modal-body {
+  margin: 20px 0;
+}
+
+.modal-default-button {
+  float: right;
+}
+
+/*
+ * The following styles are auto-applied to elements with
+ * transition="modal" when their visibility is toggled
+ * by Vue.js.
+ *
+ * You can easily play with the modal transition by editing
+ * these styles.
+ */
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+/*v-model end*/
 
 /*pageing start*/
 .pageing {

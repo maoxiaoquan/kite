@@ -67,7 +67,7 @@ module.exports = {
       field: 'create_date_timestamp'
     },
     cover_img: {
-      type: Seq.STRING(20),
+      type: Seq.STRING(150),
       comment: '封面图片',
       field: 'cover_img'
     },

@@ -1,7 +1,7 @@
 <div class="box-comment">
     <div class="box-comment-part">
         <h2 class="box-comment-part-title">发表评论
-            <small>已发布评论 <em>89</em> 条</small>
+            <small>已发布评论 <em>{{comment_count}}</em> 条</small>
         </h2>
         <div class="comment-form" id="comment_form">
             <div class="comment-avatar">
@@ -26,8 +26,8 @@
             <div id="commentlist">
                 <comment-list :comment-item="item" v-for="item in comment_list"/>
             </div>
-            <p id="comment_loading" class="hidden"><i class="icon-spin1 animate-spin"></i> 评论加载中....</p>
-            <span class="btn" id="get_comments" data-paged="3">底下还有哟~快放我们出去~ </span>
+           <!-- <p id="comment_loading" class="hidden"><i class="icon-spin1 animate-spin"></i> 评论加载中....</p>-->
+            <span class="btn" id="get_comments" v-show="comment_loading_btn&&comment_count>comment_pageSize" @click="get_comment_list">底下还有哟~快放我们出去~ </span>
         </div>
     </div>
 </div>

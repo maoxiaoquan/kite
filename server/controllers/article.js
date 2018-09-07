@@ -18,7 +18,6 @@ class Article {
    * @param   {obejct} ctx 上下文对象
    */
   static async render_article (ctx) {
-    const title = 'article'
 
     let aid = ctx.params.aid
 
@@ -26,6 +25,9 @@ class Article {
       where: {
         aid: aid
       }
+    }).then((res) => {
+      res.create_at = moment(res.create_date).format('YYYY-MM-DD')
+      return res
     })
 
     let findone_user = await models.user.findOne({
@@ -41,12 +43,11 @@ class Article {
     })
 
     await render(ctx, {
-      title: title,
+      title: 'article',
       view_url: 'default/article',
       state: 'success',
       message: 'article',
       data: {
-        uid: ctx.session.uid,
         article: sql_article,
         user: findone_user
       }
@@ -58,9 +59,8 @@ class Article {
    * @param   {obejct} ctx 上下文对象
    */
   static async render_writer (ctx) {
-    const title = 'writer'
     await render(ctx, {
-      title: title,
+      title: 'writer',
       view_url: 'default/writer',
       state: 'success',
       message: 'writer'
@@ -152,8 +152,6 @@ class Article {
 
   static async render_get_tag (ctx) {
 
-    const title = 'tag'
-
     let article_tag_id = ctx.params.article_tag_id
 
     let page = ctx.query.page || 1
@@ -171,6 +169,12 @@ class Article {
         offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize,//每页限制返回的数据条数
         order: [['create_date_timestamp', 'desc']]
+      }).then((res) => {
+        res.rows.map((item, key) => {
+          item.create_at = moment(item.create_date).format('YYYY-MM-DD')
+          return item
+        })
+        return res
       })
 
       let subscribe_count = await models.subscribe_article_tag.count({where: {article_tag_id}})
@@ -181,7 +185,7 @@ class Article {
       })
 
       await render(ctx, {
-        title: title,
+        title: 'tag',
         view_url: 'default/tag',
         state: 'success',
         message: 'user',

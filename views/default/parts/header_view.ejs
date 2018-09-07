@@ -10,14 +10,17 @@
 
         <div class="collapse navbar-collapse" id="navbarsExample07">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active"><a class="nav-link" href="/">主页 <span class="sr-only">(current)</span></a>
+                <li class="nav-item active"><!--class active--><a class="nav-link" href="/">主页 <span class="sr-only">(current)</span></a>
                 </li>
-              <!--  <li class="nav-item"><a class="nav-link" href="/">说说</a></li>-->
-                <li class="nav-item"><a class="nav-link disabled" href="#">实验室</a></li>
+                <!--  <li class="nav-item"><a class="nav-link" href="/">说说</a></li>-->
+                <% if(user_info.islogin){ %>
+                <li class="nav-item active"><a class="nav-link" href="#">动态</a></li>
+                <% } %>
             </ul>
             <form class="form-inline mr-lg-5" method="get" action="/search">
                 <div class="form-search">
-                    <input class="form-control form-search-view" type="text" required="true" name="search" placeholder="搜索文章" aria-label="Search">
+                    <input class="form-control form-search-view" type="text" required="true" name="search"
+                           placeholder="搜索文章" aria-label="Search">
                     <button class="search-btn"><i class="iconfont icon-search"></i></button>
                 </div>
             </form>
@@ -26,18 +29,20 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle  mr-lg-3" href="https://example.com"
                        data-toggle="dropdown">
-                        <img class="avatar-img" src="<%=user_info.avatar%>" alt="">
+                        <img class="avatar-img" src="<%= user_info.avatar %>" alt="">
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/user/<%=user_info.uid%>/article/all">我的主页</a>
+                        <a class="dropdown-item" href="/user/<%= user_info.uid %>/article/all">我的主页</a>
                         <a class="dropdown-item" href="/user/setting">设置</a>
                         <a class="dropdown-item" href="/esc_sign_in">退出</a>
                     </div>
                 </li>
-                <li class="nav-item"><a class="btn btn-sm btn-outline-warning" href="/writer">写文章</a></li>
+                <li class="nav-item"><a class="btn btn-sm btn-outline-warning xiezuo" href="/writer"><i
+                                class="iconfont icon-xiezuo"></i></a></li>
                 <% } else { %>
                 <li class="nav-item"><a class="btn btn-sm mr-lg-3 sign-btn btn-block" href="/sign_in">登录</a></li>
-                <li class="nav-item"><a class="btn btn-sm mr-lg-3 sign-btn btn-outline-warning" href="/sign_up">注册语雀</a></li>
+                <li class="nav-item"><a class="btn btn-sm mr-lg-3 sign-btn btn-outline-warning" href="/sign_up">注册语雀</a>
+                </li>
                 <% } %>
             </ul>
         </div>

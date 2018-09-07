@@ -57,7 +57,7 @@ const user_tag = sequelize.define(require('./models_type/db_user_tag').NAME, req
 const comment = sequelize.define(require('./models_type/db_comment').NAME, require('./models_type/db_comment').TABLE, SEQ_PARAMETER)
 /*前台用户浏览行为表*/
 const user_behavior = sequelize.define(require('./models_type/db_user_behavior').NAME, require('./models_type/db_user_behavior').TABLE, SEQ_PARAMETER)
-/*前台浏览行为表*/
+/*用户动态表*/
 const user_dynamic = sequelize.define(require('./models_type/db_user_dynamic').NAME, require('./models_type/db_user_dynamic').TABLE, SEQ_PARAMETER)
 
 /**
@@ -85,7 +85,7 @@ const admin_system_log = sequelize.define(require('./models_type/db_admin_system
 const picture = sequelize.define(require('./models_type/db_picture').NAME, require('./models_type/db_picture').TABLE, SEQ_PARAMETER)
 
 /* 表关联 */
-user.hasMany(comment, {foreignKey: 'uid',as:'user'})
+/*user.hasMany(comment, {foreignKey: 'uid',as:'user'})*/
 comment.belongsTo(user, {foreignKey: 'uid',as:'user'})
 
 module.exports = {

@@ -38,9 +38,9 @@
                                                 <a href=""><%= item.author %></a>
                                             </li>
                                             <li class="item"><%= item.create_date %></li>
-                                            <li class="item"><%= item.read_count %> 次阅读</li>
-                                            <li class="item"><%= item.like_count %> 次喜欢</li>
-                                            <li class="item"><%= item.comment_count %> 次评论</li>
+                                            <li class="item"><%= item.read_count %> 阅读</li>
+                                            <li class="item"><%= item.like_count %> 喜欢</li>
+                                            <li class="item"><%= item.comment_count %> 评论</li>
                                             <% if(item.tag_ids){ %>
                                             <li class="item">
                                                 <% item.tag_ids.split(',').forEach(function (item, key) { %>
@@ -60,9 +60,11 @@
                                         </ul>
                                     </div>
                                 </div>
+                                <% if(item.cover_img){ %>
                                 <div class="lazy thumb thumb loaded"
-                                     style="background-image: url('/default/img/2017100416064445-e1512811758795.jpeg'); background-size: cover;">
+                                     style="background-image: url('<%= item.cover_img %>'); background-size: cover;">
                                 </div>
+                                <% } %>
                             </article>
                         </li>
                         <% }) %>
