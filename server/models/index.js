@@ -57,8 +57,8 @@ const user_tag = sequelize.define(require('./models_type/db_user_tag').NAME, req
 const comment = sequelize.define(require('./models_type/db_comment').NAME, require('./models_type/db_comment').TABLE, SEQ_PARAMETER)
 /*前台用户浏览行为表*/
 const user_behavior = sequelize.define(require('./models_type/db_user_behavior').NAME, require('./models_type/db_user_behavior').TABLE, SEQ_PARAMETER)
-/*用户动态表*/
-const user_dynamic = sequelize.define(require('./models_type/db_user_dynamic').NAME, require('./models_type/db_user_dynamic').TABLE, SEQ_PARAMETER)
+/*用户消息表*/
+const user_message = sequelize.define(require('./models_type/db_user_message').NAME, require('./models_type/db_user_message').TABLE, SEQ_PARAMETER)
 
 /**
  * 后台表
@@ -88,6 +88,8 @@ const picture = sequelize.define(require('./models_type/db_picture').NAME, requi
 /*user.hasMany(comment, {foreignKey: 'uid',as:'user'})*/
 comment.belongsTo(user, {foreignKey: 'uid',as:'user'})
 
+user_message.belongsTo(user, {foreignKey: 'other_uid',as:'other_user'})
+
 module.exports = {
   sequelize,
   user,
@@ -98,7 +100,7 @@ module.exports = {
   user_behavior,
   user_info,
   user_article_topic,
-  user_dynamic,
+  user_message,
   verify_code,
   article,
   comment,

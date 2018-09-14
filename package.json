@@ -8,7 +8,7 @@
     "dev": "node build/dev-server.js",
     "build": "webpack  --config  build/webpack.prod.js -p",
     "mysql": "node ./server/models/create.js",
-    "server-dev": "nodemon ./server/app.js",
+    "server-dev": "nodemon ./server/app.js --config nodemon.json",
     "server": "pm2 start pm2.json",
     "scss": "node-sass -w -r ./static/default/css -o ./static/default/css"
   },

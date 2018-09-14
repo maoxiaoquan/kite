@@ -11,9 +11,13 @@ class UserArticleTopic {
 
   constructor () {}
 
+  /**
+   * 获取所有文章专题get
+   * @param   {obejct} ctx 上下文对象
+   */
   static async get_user_article_topic_all (ctx) {  /*获取所有文章专题*/
     let article_tag_all = await models.user_article_topic.findAll({
-      attributes: ['user_article_topic_id', 'user_article_topic_name'],
+      attributes: ['topic_id', 'topic_name', 'topic_description'],
       where: {
         uid: ctx.session.uid
       }
@@ -27,18 +31,22 @@ class UserArticleTopic {
     })
   }
 
+  /**
+   * 创建用户专题
+   * @param   {obejct} ctx 上下文对象
+   */
   static async create_user_article_topic (ctx) {  /*创建用户专题*/
     let formData = ctx.request.body
     try {
 
-      if (formData.user_article_topic_name.length === 0) {
+      if (formData.topic_name.length === 0) {
         throw  new err_mess('请输入文章专题名字')
       }
 
       let find_user_article_topic = await models.user_article_topic.findOne({
         where: {
           uid: ctx.session.uid,
-          user_article_topic_name: formData.user_article_topic_name
+          topic_name: formData.topic_name
         }
       })
 
@@ -57,10 +65,8 @@ class UserArticleTopic {
 
     try {
       await models.user_article_topic.create({
-        user_article_topic_name: formData.user_article_topic_name,
-        user_article_topic_description: formData.user_article_topic_description,
-        create_date: moment().utc().utcOffset(+8).format(), /*时间*/
-        create_date_timestamp: moment().utc().utcOffset(+8).format('X'), /*时间戳 */
+        topic_name: formData.topic_name,
+        topic_description: formData.topic_description,
         uid: ctx.session.uid,
         enable: formData.enable || false
       }).then(function (data) {
@@ -81,6 +87,64 @@ class UserArticleTopic {
         message: err.message
       })
     }
+
+  }
+
+
+  /**
+   * 更新用户专题
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async update_user_article_topic (ctx) {
+    const res_data = ctx.request.body
+    await models.user_article_topic.update({
+      topic_name: res_data.topic_name,
+      topic_description: res_data.topic_description
+    }, {
+      where: {
+        topic_id: res_data.topic_id,//查询条件
+        uid: ctx.session.uid
+      }
+    })
+      .then(function (p) {
+        home_resJson(ctx, {
+          state: 'success',
+          message: '更新成功'
+        })
+      }).catch(function (err) {
+        home_resJson(ctx, {
+          state: 'error',
+          message: '更新失败'
+        })
+      })
+  }
+
+  /**
+   * 删除用户文章专题
+   * @param   {obejct} ctx 上下文对象
+   */
+
+
+  static async delete_user_article_topic (ctx) {
+    const res_data = ctx.request.body
+
+    await models.user_article_topic.destroy({
+      where: {
+        topic_id: res_data.topic_id, //查询条件
+        uid: ctx.session.uid
+      }
+    })
+      .then(function (p) {
+        home_resJson(ctx, {
+          state: 'success',
+          message: '删除用户文章成功'
+        })
+      }).catch(function (err) {
+        home_resJson(ctx, {
+          state: 'error',
+          message: '删除用户文章失败'
+        })
+      })
 
   }
 

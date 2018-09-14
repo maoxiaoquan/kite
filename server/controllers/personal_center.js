@@ -92,7 +92,7 @@ class Personal_center {
 
     let user_article_topic_all = await models.user_article_topic.findAll({
       where: {uid},//为空，获取全部，也可以自己添加条件
-      attributes: ['user_article_topic_id', 'user_article_topic_name']
+      attributes: ['topic_id', 'topic_name']
     })
 
     /*所有文章专题*/
@@ -119,40 +119,6 @@ class Personal_center {
     })
   }
 
-  /**
-   * 用户个人中心个人专题列表render
-   * @param   {obejct} ctx 上下文对象
-   */
-  static async render_user_center_topic (ctx) {
-
-    const title = 'user'
-    let uid = ctx.params.uid
-    let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 10
-
-    let {count, rows} = await models.user_article_topic.findAndCountAll({
-      where: {uid},//为空，获取全部，也可以自己添加条件
-      attributes: ['user_article_topic_id', 'user_article_topic_name'],
-      offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-      limit: pageSize,//每页限制返回的数据条数
-      order: [['create_date_timestamp', 'desc']]
-    })
-
-    await render(ctx, {
-      title: title,
-      view_url: 'default/user_center/user_center_topic',
-      state: 'success',
-      message: 'user',
-      data: {
-        current_user: ctx.request.current_user,
-        page,
-        count,
-        pageSize,
-        user_article_topic_all: rows,
-        router_name: 'topic'
-      }
-    })
-  }
 
   /**
    * 用户个人中心用户关注用户render
@@ -243,11 +209,18 @@ class Personal_center {
       await models.user_attention.create(
         {
           uid: ctx.session.uid,
-          attention_uid,
-          create_date: moment().utc().utcOffset(+8).format(), /*时间*/
-          create_date_timestamp: moment().utc().utcOffset(+8).format('X') /*时间戳 */
+          attention_uid
         }
-      ).then(() => {
+      ).then(async () => {
+
+        await models.user_message.create({ // 用户行为记录
+          uid: attention_uid,
+          type: 3,  // 类型 1 喜欢文章  2 关注标签 3 关注用户 4 评论回复 5 文章有新的评论
+          other_uid: ctx.session.uid,
+          title: '有新的关注',
+          content: ''
+        })
+
         home_resJson(ctx, {
           state: 'success',
           message: '关注用户成功'
@@ -372,9 +345,7 @@ class Personal_center {
         // 在事务中执行操作
         return models.user_like_article.create({
           uid: ctx.session.uid,
-          aid,
-          create_date: moment().utc().utcOffset(+8).format(), /*时间*/
-          create_date_timestamp: moment().utc().utcOffset(+8).format('X') /*时间戳 */
+          aid
         }, {...transaction}) /* 添加user article关联 */
           .then(function (user_like_article_destroy) {
             return models.user_like_article.count({
@@ -390,7 +361,8 @@ class Personal_center {
             /* 修改文章like数 */
           })
 
-      }).then(() => {
+      }).then(async () => {
+
         home_resJson(ctx, {
           state: 'success',
           message: 'like文章成功'
@@ -402,6 +374,23 @@ class Personal_center {
         })
       })
     }
+  }
+
+  /**
+   * 用户like文章render
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async render_user_center_message (ctx) {
+
+    await render(ctx, {
+      title: '消息',
+      view_url: 'default/user_center/user_center_message',
+      state: 'success',
+      data: {
+        current_user: ctx.request.current_user,
+        router_name: 'message'
+      }
+    })
   }
 }
 

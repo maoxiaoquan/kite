@@ -115,9 +115,7 @@ class Subscribe {
       await models.subscribe_article_tag.create(
         {
           uid: ctx.session.uid,
-          article_tag_id,
-          create_date: moment().utc().utcOffset(+8).format(), /*时间*/
-          create_date_timestamp: moment().utc().utcOffset(+8).format('X') /*时间戳 */
+          article_tag_id
         }
       ).then(() => {
         home_resJson(ctx, {

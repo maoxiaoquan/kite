@@ -1,5 +1,6 @@
 const Seq = require('sequelize')
 const shortid = require('shortid')
+const time = require('../../utils/time')
 module.exports = {
   NAME: 'admin_authority', /*表名*/
   TABLE: {
@@ -53,9 +54,10 @@ module.exports = {
       field: 'authority_description'
     },
     create_date: { // 创建时间
-      type: Seq.BIGINT(50),
+      type: Seq.DATE,
       comment: '创建时间',
-      field: 'create_date'
+      field: 'create_date',
+      defaultValue: time.TimeNow.time /*时间*/
     }
   }
 }

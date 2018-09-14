@@ -34,7 +34,6 @@ module.exports = {
   checkQqNum (str) {
     return RegExp(/^[1-9][0-9]{4,9}$/).test(str)
   },
-
   checkUrl (str) {
     return str && validator.isURL(str)
   }

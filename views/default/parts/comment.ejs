@@ -24,7 +24,7 @@
         </div>
         <div class="comment-list">
             <div id="commentlist">
-                <comment-list :comment-item="item" v-for="item in comment_list"/>
+                <comment-list :comment-item="item"  v-for="item in comment_list"/>
             </div>
            <!-- <p id="comment_loading" class="hidden"><i class="icon-spin1 animate-spin"></i> 评论加载中....</p>-->
             <span class="btn" id="get_comments" v-show="comment_loading_btn&&comment_count>comment_pageSize" @click="get_comment_list">底下还有哟~快放我们出去~ </span>

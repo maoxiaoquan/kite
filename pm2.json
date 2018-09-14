@@ -11,7 +11,11 @@
     "watch": false,
     "ignore_watch": [
       "node_modules",
-      "logs"
+      "pm2log",
+      "static/upload",
+      "src",
+      "build",
+      "public"
     ]
   }
 }

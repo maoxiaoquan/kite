@@ -119,8 +119,6 @@ class Article {
         source: formData.source, // 来源 （1原创 2转载）
         status: 1, // '状态(0:草稿;1:审核中;2:审核通过;3:回收站)'
         type: formData.type, // 类型 （1文章 2说说 3视频 4公告 ）
-        create_date: moment().utc().utcOffset(+8).format(), /*时间*/
-        create_date_timestamp: moment().utc().utcOffset(+8).format('X'), /*时间戳 */
         topic_ids: formData.topic_ids,
         tag_ids: formData.tag_ids
       }).then(function (data) {

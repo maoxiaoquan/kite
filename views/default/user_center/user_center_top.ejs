@@ -63,11 +63,6 @@
             文章
         </a>
     </li>
-    <li class="<% if (data.router_name == 'topic') { %>active<% } %>">
-        <a href="/user/<%= data.current_user.uid %>/topic">
-            专题
-        </a>
-    </li>
     <li class="<% if (data.router_name == 'attention') { %>active<% } %>">
         <a href="/user/<%= data.current_user.uid %>/attention">
             关注
@@ -78,16 +73,23 @@
             喜欢
         </a>
     </li>
-    <li class="<% if (data.router_name == 'like') { %>active<% } %>">
-        <a href="/user/<%= data.current_user.uid %>/like">
-            动态
+    <% if(user_info.islogin){ %>
+    <li class="<% if (data.router_name == 'message') { %>active<% } %>">
+        <a href="/user/<%= data.current_user.uid %>/message">
+            消息
         </a>
     </li>
+    <% } %>
 </ul>
 
 <script>
   window.onload = function () {
+
     var subscribe_btn = document.getElementsByClassName('user-follow-button')[0]
+
+    if (!subscribe_btn) {
+      return false
+    }
 
     subscribe_btn.onclick = function () {
       var uid = subscribe_btn.getAttribute('data-uid')

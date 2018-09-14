@@ -1,3 +1,4 @@
+const moment = require('moment')
 // eslint-disable-next-line
 Date.prototype.Format = function (fmt) {
   const o = {
@@ -22,4 +23,15 @@ exports.timestampFormat = function (timestamp, fmt = 'yyyy-MM-dd hh:mm:ss') {
 
 exports.timestampFormat2 = function (timestamp, fmt = 'yyyy-MM-dd') {
   return new Date(timestamp * 1000).Format(fmt)
+}
+
+exports.TimeNow = {
+  time () {
+    let date = new Date()
+    return moment(date.setHours(date.getHours() + 8)).format()
+  },
+  timestamp () {
+    let date = new Date()
+    return moment(date.setHours(date.getHours() + 8)).format('X')
+  }
 }

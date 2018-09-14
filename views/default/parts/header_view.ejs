@@ -1,6 +1,6 @@
 <!--header start-->
 
-<nav class="navbar navbar-expand-lg navbar-white bg-white fixed-top navbar-bootom-border">
+<nav class="navbar navbar-expand-lg navbar-white bg-white fixed-top navbar-bootom-border" id="header-view">
     <div class="container">
         <a class="navbar-brand" href="#"><img class="logo" src="/default/img/logo22.svg" alt=""></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07"
@@ -14,7 +14,12 @@
                 </li>
                 <!--  <li class="nav-item"><a class="nav-link" href="/">说说</a></li>-->
                 <% if(user_info.islogin){ %>
-                <li class="nav-item active"><a class="nav-link" href="#">动态</a></li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/user/<%= user_info.uid %>/message">
+                        消息
+                        <span :class="{'user-message-unread':unread_message_count>0}" v-if="unread_message_count>0">{{unread_message_count}}</span>
+                    </a>
+                </li>
                 <% } %>
             </ul>
             <form class="form-inline mr-lg-5" method="get" action="/search">

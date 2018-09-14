@@ -93,21 +93,12 @@
                                 <div class="modal-wrap"><a href="javascript:;">{{article.like_count}}</a></div>
                             </div> <!---->
                         </div>
-                        <div class="share-group">
-                            <a class="share-circle">
-                                <i class="iconfont ic-wechat"></i>
-                            </a>
-                            <a class="share-circle" data-toggle="tooltip" id="longshare" target="_blank"
-                               data-original-title="" title="">
-                                <div class="qrcode" id="qrcode" style="display: none;">
-                                    <img src="//cdn2.jianshu.io/assets/web/download-index-side-qrcode-cb13fc9106a478795f8d10f9f632fccf.png"
-                                         alt="Download index side qrcode">
-                                    <p>下载app生成长微博图片</p>
-                                </div>
-                                <i class="iconfont ic-picture"></i>
-                            </a>
-                            <a class="share-circle more-share" title="">更多分享</a>
-                        </div>
+                        <!-- <div class="share-group">
+                             <a class="share-circle">
+                                 <i class="iconfont ic-wechat"></i>
+                             </a>
+                             <a class="share-circle more-share" title="">更多分享</a>
+                         </div>-->
                     </div>
                     <!--article footer end-->
 
@@ -132,7 +123,7 @@
 <!-- template for the modal component -->
 <script type="text/x-template" id="comment-list-template">
 
-    <div class="comment-item" :data-id="commentItem.id">
+    <div class="comment-item" :id="'comment'+commentItem.id" ref="comment_list">
         <div class="avatar">
             <img :src="commentItem.user.avatar" alt="avatar">
         </div>
@@ -141,15 +132,17 @@
                 <h4><a>{{commentItem.user.nickname}}</a></h4>
                 <p>{{commentItem.content}}</p>
             </div>
-            <div class="comment-foot">
+            <div class="comment-foot clearfix">
                 <span>{{commentItem.create_date}}</span>
                 <span class="comment-reply" @click="reply_btn('')">回复</span>
+                <span class="comment-delete" v-if="sign_uid==commentItem.uid"
+                      @click="delete_comment(commentItem.id)">删除</span>
             </div>
         </div>
         <div class="comment-item-children" v-if="commentItem.children.length>0||children_comment_input">
 
             <div class="comment-item-children-view" v-if="commentItem.children.length>0">
-                <div class="comment-item" data-author="堂弟 亚历山大"
+                <div class="comment-item" :id="'comment'+child_item.id" data-author="堂弟 亚历山大"
                      v-for="child_item in commentItem.children">
                     <div class="avatar">
                         <img :src="child_item.user.avatar" alt="avatar">
@@ -159,9 +152,11 @@
                             <h4>{{child_item.user.nickname}}</h4>
                             <p v-html="child_item.content"></p>
                         </div>
-                        <div class="comment-foot">
+                        <div class="comment-foot clearfix">
                             <span>{{child_item.create_date}}</span>
                             <span class="comment-reply" @click="reply_btn('@'+child_item.user.nickname+' ')">回复</span>
+                            <span class="comment-delete" v-if="sign_uid==child_item.uid"
+                                  @click="delete_comment(child_item.id)">删除</span>
                         </div>
                     </div>
                 </div>
@@ -202,6 +197,7 @@
     props: ['commentItem'],
     data: function () {
       return {
+        sign_uid: '<%= user_info.uid %>',
         children_comment_input: false,
         comment_content: '',
         parent_id: '',
@@ -216,16 +212,12 @@
         var that = this
         this.comment_content = val
         this.children_comment_input = true
-
-        if (this.reply_uid) {
-          this.reply_uid = this.commentItem.uid
-        } else {
-          this.reply_uid = ''
-        }
+        this.reply_uid = this.commentItem.uid
       },
       submit_comment: function () {
         var params = {
           aid: '<%= data.article.aid %>',
+          article_uid: '<%= data.article.uid %>',
           uid: '<%= user_info.uid %>',
           reply_uid: this.reply_uid,
           parent_id: this.commentItem.id,
@@ -245,6 +237,19 @@
         }).catch(function (err) {
           console.log(err)
         })
+      },
+      delete_comment: function (id) {
+        var that = this
+        _server.post_delete_comment({aid: '<%= data.article.aid %>', comment_id: id}).then(function (res) {
+          if (res.state === 'success') {
+            document.querySelector('#comment' + id + '').style.display = 'none'
+            alert(res.message)
+          } else {
+            alert(res.message)
+          }
+        }).catch(function (err) {
+          console.log(err)
+        })
       }
     }
   })
@@ -253,7 +258,7 @@
     el: '#article-lay',
     data: function () {
       return {
-        curr_uid: '<%= user_info.uid %>',
+        sign_uid: '<%= user_info.uid %>',
         article_uid: '<%= data.article.uid %>',
         curr_user_info: {
           attention_uid_arr: [],
@@ -282,7 +287,7 @@
     methods: {
       get_curr_user_info: function () {// 获取当前登录用户信息
         var that = this
-        _server.get_user_info({uid: this.curr_uid}).then(function (res) {
+        _server.get_user_info({uid: this.sign_uid}).then(function (res) {
           that.$nextTick(function () {
             if (res.state === 'success') {
               that.curr_user_info = res.data
@@ -339,7 +344,6 @@
           console.log(err)
         })
       },
-      /*一级评论提交*/
       get_comment_list: function () { // 获取评论列表
         var that = this
         _server.get_comment_list({
@@ -368,6 +372,7 @@
       submit_comment: function () { // 提交评论
         var params = {
           aid: '<%= data.article.aid %>',
+          article_uid: '<%= data.article.uid %>',
           uid: '<%= user_info.uid %>',
           content: this.comment_content
         }

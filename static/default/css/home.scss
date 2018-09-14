@@ -75,6 +75,18 @@
   .sign-btn {
     font-size: 16px;
   }
+  .user-message-unread {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    line-height: 16px;
+    font-size: 12px;
+    color: #fff;
+    background: #f46e65;
+    border-radius: 80px;
+    vertical-align: top;
+  }
 }
 
 /*home-lay layout-header start*/
@@ -734,6 +746,7 @@
       .meta-bottom {
         margin-top: 40px;
         margin-bottom: 80px;
+        text-align: center;
         .like {
           display: inline-block;
           .like-group {
@@ -1009,9 +1022,6 @@
             word-break: break-all;
           }
         }
-        .comment-reply {
-          cursor: pointer;
-        }
         .comment-foot {
           font-size: 12px;
           color: #bbb;
@@ -1020,6 +1030,13 @@
           span {
             margin-right: 10px;
             white-space: nowrap;
+            cursor: pointer;
+          }
+          .comment-reply {
+          }
+          .comment-delete {
+            float: right;
+            color: #f46e65;
           }
         }
         .comment-form {
@@ -1802,7 +1819,7 @@
     .topic-list {
       li {
         display: inline-block;
-        margin: 10px 0;
+        margin: 6px 0;
         &.title {
           color: #999999;
           margin-right: 10px;
@@ -1810,6 +1827,7 @@
         a {
           display: block;
           padding: 0 15px;
+          font-size: 14px;
           border-radius: 5px;
           margin: 0 5px;
         }
@@ -1838,38 +1856,30 @@
     border-bottom: 1px solid rgba(178, 186, 194, .15);
   }
 
-  .user-article-topic {
-    ul {
-      li {
-        padding: 15px 0;
-        border-bottom: 1px solid rgba(178, 186, 194, .15);
+  .topic-modal {
+    padding: 20px 30px;
+    .form-group {
+      label {
+        font-size: 15px;
       }
-    }
-    .btn {
-      color: #ffffff;
-      margin-bottom: 5px;
-      font-size: 14px;
-    }
-    .topic-content-box {
-      .topic-content-box-view {
-        .title {
-          color: #42c02e;
-        }
-        .remarks {
-          font-size: 14px;
-          color: #999999;
-          padding: 3px 0 0;
-        }
-        .meta {
-          span, a {
-            font-size: 12px;
-            display: inline-block;
-            margin-right: 12px;
-          }
-        }
+      .form-control {
+        font-size: 15px;
       }
     }
   }
+
+  .topic-modal-create {
+    margin-right: 6px;
+    width: 100px;
+    font-size: 14px;
+  }
+
+  .topic-modal-cancel {
+    width: 100px;
+    margin-left: 6px;
+    font-size: 14px;
+  }
+
   .user-article-tag-attention {
     .user-article-tag-attention-view {
       .item {
@@ -1941,6 +1951,117 @@
         }
       }
     }
+  }
+}
+
+#user-article-topic-view {
+  margin-top: 20px;
+  .btn-secondary {
+    margin-bottom: 20px;
+  }
+  .user-article-topic-table {
+    display: block;
+    width: 100%;
+  }
+  .user-article-topic-item {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 8px;
+    display: flex;
+    input {
+      border: 1px solid #e0e0e0;
+      padding: 5px;
+      display: block;
+    }
+    .input-view, .operate {
+      flex: 1;
+    }
+    .input-view {
+      margin-right: 5px;
+      font-size: 14px;
+    }
+    .operate {
+      padding: 3px 0 0 3px;
+    }
+    &.active {
+      input {
+        border-color: #fff;
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+#user-center-message {
+  .user-center-message-view {
+    .user-center-message-item {
+      border-bottom: 1px solid rgba(178, 186, 194, 0.15);
+      padding: 15px 0;
+      .title {
+        font-size: 14px;
+        color: #999;
+      }
+      .main {
+        margin-top: 10px;
+        .user-info {
+          display: inline-block;
+          margin-right: 20px;
+          .avatar {
+            display: inline-block;
+            width: 38px;
+            height: 38px;
+            border-radius: 100px;
+          }
+          .nickname {
+            font-size: 14px;
+            display: inline-block;
+            margin-left: 10px;
+          }
+        }
+        .content {
+          margin-top: 7px;
+          display: inline-block;
+          font-size: 14px;
+        }
+        .delete-message {
+          display: none;
+          float: right;
+          width: 80px;
+          height: 25px;
+          line-height: 25px;
+          text-align: center;
+          background: #ffc107;
+          border-radius: 60px;
+          font-size: 14px;
+          color: #fff;
+          cursor: pointer;
+        }
+      }
+      &:hover {
+        .delete-message {
+          display: block;
+        }
+      }
+    }
+  }
+  .load-user-message {
+    width: 100px;
+    height: 38px;
+    text-align: center;
+    line-height: 38px;
+    background: #f46e65;
+    color: #fff;
+    display: block;
+    margin: 30px auto 0;
+    border-radius: 80px;
+    font-size: 14px;
+  }
+}
+
+.user-article-like {
+  .cancel-like {
+    color: #ffc107;
+    cursor: pointer;
   }
 }
 
@@ -2171,25 +2292,41 @@
 .modal-container {
   width: 300px;
   margin: 0px auto;
-  padding: 20px 30px;
   background-color: #fff;
   border-radius: 2px;
+  padding-top: 15px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
+  position: relative;
+  .icon-guanbijiantou {
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+    width: 45px;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+  }
 }
 
-.modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
+.box-modal-header {
+  text-align: center;
+  padding: 10px 15px;
+  h3 {
+    margin-top: 0;
+    color: #42b983;
+  }
 }
 
-.modal-body {
-  margin: 20px 0;
+.box-modal-body {
+
 }
 
-.modal-default-button {
-  float: right;
+.box-modal-footer {
+  text-align: center;
+  padding: 0 15px 25px;
 }
 
 /*

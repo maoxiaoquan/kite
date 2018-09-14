@@ -1,52 +1,56 @@
 const Seq = require('sequelize')
 const shortid = require('shortid')
+const time = require('../../utils/time')
+
 module.exports = {
   NAME: 'user_article_topic', /*表名*/
   TABLE: {
     /*表结构*/
-    user_article_topic_id: { // 专题ID
+    topic_id: { // 专题ID
       type: Seq.INTEGER(10),
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增
       comment: '专题ID',
-      field:'user_article_topic_id'
+      field:'topic_id'
     },
-    user_article_topic_name: { // 专题名字
+    topic_name: { // 专题名字
       type: Seq.STRING(20),
       comment: '专题名字',
-      field: 'user_article_topic_name'
+      field: 'topic_name'
     },
-    user_article_topic_description: { // 专题描述
+    topic_description: { // 专题描述
       type: Seq.STRING(100),
       comment: '专题描述',
-      field: 'user_article_topic_description'
+      field: 'topic_description'
     },
-    user_article_topic_subscribe: { // 专题订阅数量
+    topic_subscribe: { // 专题订阅数量
       type: Seq.INTEGER(10),
       comment: '专题订阅数量',
-      field: 'user_article_topic_subscribe'
+      field: 'topic_subscribe'
     },
-    user_article_topic_icon: { // 专题图标
+    topic_icon: { // 专题图标
       type: Seq.STRING(20),
       comment: '专题图标',
-      field: 'user_article_topic_icon'
+      field: 'topic_icon'
     },
-    user_article_topic_icon_type: { // 专题图标类型 1是图片 2是字体图标
+    topic_icon_type: { // 专题图标类型 1是图片 2是字体图标
       type: Seq.INTEGER(20),
       comment: '标签图标类型',
-      field: 'user_article_topic_icon_type'
+      field: 'topic_icon_type'
     },
     create_date: { // 创建时间
-      type: Seq.BIGINT(50),
+      type: Seq.DATE,
       comment: '创建时间',
-      field: 'create_date'
+      field: 'create_date',
+      defaultValue: time.TimeNow.time /*时间*/
     },
     create_date_timestamp: { // 创建时间戳
       type: Seq.BIGINT(30),
       comment: '创建时间戳',
-      field: 'create_date_timestamp'
+      field: 'create_date_timestamp',
+      defaultValue: time.TimeNow.timestamp /*时间戳 */
     },
-    uid: { // 专题ID
+    uid: { // uid
       type: Seq.INTEGER(10),
       comment: 'uid',
       field:'uid'

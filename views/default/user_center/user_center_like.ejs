@@ -37,7 +37,7 @@
                                             <li class="item username clickable">
                                                 <a href=""><%= item.author %></a>
                                             </li>
-                                            <li class="item"><%= item.create_date %></li>
+                                            <li class="item"><%= item.create_at %></li>
                                             <li class="item"><%= item.read_count %> 阅读</li>
                                             <li class="item"><%= item.like_count %> 喜欢</li>
                                             <li class="item"><%= item.comment_count %> 评论</li>
@@ -56,7 +56,7 @@
                                                 <% }) %>
                                             </li>
                                             <% } %>
-                                            <li><a href="">编辑</a></li>
+                                            <li class="item"><span class="cancel-like">取消喜欢</span></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -92,31 +92,16 @@
 <% include ../parts/footer_view.ejs %>
 <!--footer_view.ejs end-->
 
-<!--<script>
-
-var navbar = document.getElementById('layout-navbar')
-
-function getScrollTop () {
-  var scrollTop = 0;
-  if (document.documentElement && document.documentElement.scrollTop) {
-    scrollTop = document.documentElement.scrollTop;
+<script>
+  window.onload = function () {
+    var cancel_like = document.getElementsByClassName('cancel-like')
+    console.log(cancel_like)
+    for (var i = 0; i < cancel_like.length; i++) {
+      console.log('666', cancel_like[i])
+    }
   }
-  else if (document.body) {
-    scrollTop = document.body.scrollTop;
-  }
-  return scrollTop;
-}
+</script>
 
-window.onscroll = function () {
-  var st = getScrollTop()
-  if (st > 50) {
-    navbar.classList.add("navbar-fixed-top");
-  } else {
-    navbar.classList.remove("navbar-fixed-top");
-  }
-}
-
-</script>-->
 </body>
 
 <% include ../parts/footer.ejs %>

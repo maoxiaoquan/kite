@@ -1,5 +1,5 @@
 const Seq = require('sequelize')
-
+const time = require('../../utils/time')
 module.exports = {
   NAME: 'admin_role_authority', /*表名*/
   TABLE: {

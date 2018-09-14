@@ -1,4 +1,4 @@
-const {sequelize, user, user_info, verify_code, user_attention, user_like_article, subscribe_article_tag, article} = require('../models')
+const models = require('../models')
 const {checkEmail, checkPhoneNum} = require('../utils/validators')
 const moment = require('moment')
 const {render, home_resJson} = require('../utils/res_data')
@@ -72,7 +72,7 @@ class User {
     if (checkEmail(formData.account)) { /*邮箱登录*/
 
       try {
-        let sql_data_user = await user.findOne({
+        let sql_data_user = await models.user.findOne({
           where: {
             email: formData.account
           }
@@ -178,7 +178,7 @@ class User {
     if (checkEmail(req_data.account)) { /*邮箱注册验证码*/
 
       try {
-        let email = await user.findOne({
+        let email = await models.user.findOne({
           where: {
             email: req_data.account
           }
@@ -187,7 +187,7 @@ class User {
 
           let random = random_number(true, 6, 6)
 
-          await verify_code.create({
+          await models.verify_code.create({
             phone: '',
             email: req_data.account,
             verify_code: random,
@@ -275,7 +275,7 @@ class User {
 
       try {
 
-        let nickname_date = await user.findOne({
+        let nickname_date = await models.user.findOne({
           where: {
             nickname: req_data.nickname
           }
@@ -289,7 +289,7 @@ class User {
           return false
         }
 
-        let email = await user.findOne({
+        let email = await models.user.findOne({
           where: {
             email: req_data.account
           }
@@ -316,11 +316,11 @@ class User {
               }
             })
 
-            let user_count = await user.count()
+            let user_count = await models.user.count()
 
-            await sequelize.transaction(function (transaction) {
+            await models.sequelize.transaction(function (transaction) {
               // 在事务中执行操作
-              return user.create({
+              return models.user.create({
                 /*注册写入数据库操作*/
                 uid: Number(user_count) + 10000,
                 avatar: 'http://oq33egsog.bkt.clouddn.com/avatar1.jpg',
@@ -328,12 +328,10 @@ class User {
                 password: tools.encrypt(req_data.password, config.encrypt_key),
                 email: req_data.account,
                 sex: '未知',
-                reg_ip: ctx.request.ip,
-                reg_time: moment().utc().utcOffset(+8).format('X'),
-                create_date_timestamp: moment().utc().utcOffset(+8).format('X') /*时间戳 */
+                reg_ip: ctx.request.ip
               })
                 .then(function (user) {
-                  return user_info.create({
+                  return models.user_info.create({
                     /*注册写入数据库操作*/
                     uid: user.uid
                   })
@@ -410,36 +408,36 @@ class User {
       return false
     }
 
-    let findOne_user = await user.findOne({ //获取用户信息
+    let findOne_user = await models.user.findOne({ //获取用户信息
       where: {uid},
       attributes: ['uid', 'avatar', 'nickname']
     })
 
-    let user_attention_uid_arr = await user_attention.findAll({where: {uid}}).then((res) => {
+    let user_attention_uid_arr = await models.user_attention.findAll({where: {uid}}).then((res) => {
       return res.map((attention_item, key) => {
         return attention_item.attention_uid
       })
     })
 
-    let user_like_article_arr = await user_like_article.findAll({where: {uid}}).then((res) => {
+    let user_like_article_arr = await models.user_like_article.findAll({where: {uid}}).then((res) => {
       return res.map((user_like_article_item, key) => {
         return user_like_article_item.aid
       })
     })
 
-    let subscribe_article_tag_arr = await subscribe_article_tag.findAll({where: {uid}}).then((res) => {
+    let subscribe_article_tag_arr = await models.subscribe_article_tag.findAll({where: {uid}}).then((res) => {
       return res.map((subscribe_article_tag_item, key) => {
         return subscribe_article_tag_item.article_tag_id
       })
     })
 
-    let other_user_attention_count = await user_attention.count({ // 多少人关注了
+    let other_user_attention_count = await models.user_attention.count({ // 多少人关注了
       where: {
         attention_uid: uid
       }
     })
 
-    let user_article_count = await article.count({ // 他有多少文章
+    let user_article_count = await models.article.count({ // 他有多少文章
       where: {
         uid
       }
@@ -456,6 +454,116 @@ class User {
         other_user_attention_count,
         user_article_count
       }
+    })
+  }
+
+  /**
+   * 获取未读用户消息数量
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async get_unread_message_count (ctx) {
+
+    let unread_message_count = await models.user_message.count({
+      where: {
+        uid: ctx.session.uid,
+        is_system: false,
+        is_read: false
+      }
+    })
+
+    home_resJson(ctx, {
+      state: 'success',
+      message: '数据返回成功',
+      data: {
+        unread_message_count: unread_message_count
+      }
+    })
+  }
+
+  /**
+   * 获取用户消息
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async get_user_message (ctx) {
+
+    let page = ctx.query.page || 1
+    let pageSize = ctx.query.pageSize || 10
+
+    let unread_user_message_id = await models.user_message.findAll({ // 获取所有未读消息id
+      where: {
+        is_system: false,
+        is_read: false
+      }
+    }).then((res) => {
+      return res.map((item, key) => {
+        return item.id
+      })
+    })
+
+    let {count, rows} = await models.user_message.findAndCountAll({
+      where: {
+        uid: ctx.session.uid,
+        is_system: false
+      },//为空，获取全部，也可以自己添加条件
+      offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+      limit: pageSize,//每页限制返回的数据条数
+      order: [['create_date_timestamp', 'desc']],
+      include: [{model: models.user, as: 'other_user'}]
+    })
+
+    if (unread_user_message_id.length > 0) { // 修改未读为已读
+      await models.user_message.update(
+        {
+          is_read: true
+        },
+        {
+          where: {
+            id: {in: unread_user_message_id},
+            uid: ctx.session.uid
+          }
+        })
+    }
+
+    home_resJson(ctx, {
+      state: 'success',
+      message: '数据返回成功',
+      data: {
+        count,
+        user_message_list: rows,
+        page,
+        pageSize
+      }
+    })
+  }
+
+  /**
+   * 删除用户消息
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async post_delete_user_message (ctx) {
+
+    let formData = ctx.request.body
+
+    await models.user_message.destroy({
+      where:
+        {
+          id: formData.user_message_id,
+          uid: ctx.session.uid
+        }
+    }).then((data) => {
+
+      home_resJson(ctx, {
+        state: 'success',
+        message: '删除用户消息成功'
+      })
+
+    }).catch((err) => {
+
+      home_resJson(ctx, {
+        state: 'error',
+        message: '删除用户消息失败'
+      })
+
     })
   }
 

@@ -1,5 +1,7 @@
 const Seq = require('sequelize')
 const shortid = require('shortid')
+const time = require('../../utils/time')
+
 module.exports = {
   NAME: 'user', /*表名*/
   TABLE: {
@@ -50,15 +52,17 @@ module.exports = {
       comment: '最后登录ip',
       field: 'last_sign_ip'
     },
-    reg_time: { // 注册时间
-      type: Seq.BIGINT(50),
-      comment: '注册时间',
-      field: 'reg_time'
+    create_date: { // 创建时间
+      type: Seq.DATE,
+      comment: '创建时间',
+      field: 'create_date',
+      defaultValue: time.TimeNow.time /*时间*/
     },
     create_date_timestamp: { // 创建时间戳
       type: Seq.BIGINT(30),
       comment: '创建时间戳',
-      field: 'create_date_timestamp'
+      field: 'create_date_timestamp',
+      defaultValue: time.TimeNow.timestamp /*时间戳 */
     },
     last_sign_time: { // 最后登录时间
       type: Seq.BIGINT(50),

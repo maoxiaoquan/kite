@@ -26,11 +26,11 @@ router.get('sign_up', user.render_sign_up) // 注册 page
 
 router.get('user/:uid/article/:topic_id', personal_center.verify_user, personal_center.render_user_center_article) // 用户个人中心专题页
 
-router.get('user/:uid/topic', personal_center.verify_user, personal_center.render_user_center_topic) // 用户个人中心专题页
-
 router.get('user/:uid/attention', personal_center.verify_user, personal_center.render_user_center_attention) // 用户个人中心关注
 
 router.get('user/:uid/like', personal_center.verify_user, personal_center.render_user_center_like) // 用户个人中心喜欢
+
+router.get('user/:uid/message', personal_center.verify_user, personal_center.render_user_center_message) // 用户个人中心动态
 
 router.get('subscribe/tag', subscribe.render_subscribe_tag) // 订阅
 
@@ -68,6 +68,10 @@ router.get('get_article_tag_all', ajaxCheck_Session, article.get_article_tag_all
 
 router.get('get_article_topic_all', ajaxCheck_Session, user_article_topic.get_user_article_topic_all) // 获取用户所有文章专题 TYPE:AJAX get
 
+router.post('update_user_article_topic', ajaxCheck_Session, user_article_topic.update_user_article_topic) // 更新用户所有文章专题 TYPE:AJAX get
+
+router.post('delete_user_article_topic', ajaxCheck_Session, user_article_topic.delete_user_article_topic) // 删除用户所有文章专题 TYPE:AJAX get
+
 router.post('post_user_attention', ajaxCheck_Session, personal_center.post_user_attention) // 用户关注用户 TYPE:AJAX post
 
 router.post('post_subscribe_tag', ajaxCheck_Session, subscribe.post_subscribe_tag) // 用户订阅标签 TYPE:AJAX post
@@ -79,6 +83,14 @@ router.post('create_user_article_topic', ajaxCheck_Session, user_article_topic.c
 router.get('get_comment', comment.get_comment) // 获取用户发表的评论 TYPE:AJAX get
 
 router.post('create_comment', ajaxCheck_Session, comment.post_create_comment) // 用户发表评论 TYPE:AJAX post
+
+router.post('delete_comment', ajaxCheck_Session, comment.post_delete_comment) // 删除评论 TYPE:AJAX post
+
+router.get('unread_message_count', ajaxCheck_Session, user.get_unread_message_count) // 获取未读用户消息数量 TYPE:AJAX get
+
+router.get('user_message', ajaxCheck_Session, user.get_user_message) // 用户消息 TYPE:AJAX get
+
+router.post('delete_user_message', ajaxCheck_Session, user.post_delete_user_message) // 删除用户消息 TYPE:AJAX post
 
 
 module.exports = router

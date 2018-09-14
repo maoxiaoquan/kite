@@ -1,6 +1,6 @@
 const router = require('koa-router')();
 
-const home = require('./home');
+const home = require('./web');
 const admins = require('./admin');
 const api = require('./api');
 

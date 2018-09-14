@@ -42,9 +42,7 @@ class Picture {
       picture_title: req_data.picture_title,
       picture_url: req_data.picture_url ? req_data.picture_url[0].response.data.filename : '',
       picture_type: req_data.picture_type,
-      enable: req_data.enable,
-      create_date: moment().utc().utcOffset(+8).format(), /*时间*/
-      create_date_timestamp: moment().utc().utcOffset(+8).format('X') /*时间戳 */
+      enable: req_data.enable
     }).then(function (p) {
       console.log('created.' + JSON.stringify(p))
       format_data(ctx, {

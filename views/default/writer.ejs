@@ -148,7 +148,9 @@
         show_create_topic.classList.add('box-hide')
 
         save_create_topic.onclick = function () { /*创建专题事件*/
-          _server.create_user_article_topic().then(function (res) {
+          _server.create_user_article_topic({
+            topic_name: document.querySelector('.create-topic-input').value
+          }).then(function (res) {
             if (res.state === 'success') {
               alert('创建成功')
               create_topic.classList.add('box-hide')
@@ -195,8 +197,8 @@
         var html = ''
         _server.get_user_article_topic_all().then(function (res) {
           for (var item in res.data.list) {
-            console.log('html', res.data.list[item].user_article_topic_name)
-            html += '<li data-id="' + res.data.list[item].user_article_topic_id + '">' + res.data.list[item].user_article_topic_name + '</li>'
+            console.log('html', res.data.list[item].topic_name)
+            html += '<li data-id="' + res.data.list[item].topic_id + '">' + res.data.list[item].topic_name + '</li>'
           }
           topic_ul_list.innerHTML = html
         })
@@ -251,7 +253,6 @@
       var current_article_tag_arr = []
 
       function current_article_tag (obj) { /*替换选中*/
-        console.log(obj)
         document.getElementById('search_input').value = ''
         let _arr = []
         for (var item in current_article_tag_arr) {
