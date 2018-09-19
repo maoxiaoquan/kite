@@ -11,14 +11,19 @@ module.exports = {
       field: 'uid'
     },
     profession: { // 职业
-      type: Seq.STRING(20),
+      type: Seq.STRING(50),
       comment: 'profession',
       field: 'profession'
     },
     home_page: { // 个人主页
-      type: Seq.STRING(20),
+      type: Seq.STRING(100),
       comment: 'home_page',
       field: 'home_page'
+    },
+    company: { // 公司
+      type: Seq.STRING(50),
+      comment: 'company',
+      field: 'company'
     }
   }
 }

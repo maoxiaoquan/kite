@@ -21,7 +21,7 @@ class Personal_center {
 
     let find_user = await models.user.findOne({
       where: {uid},
-      attributes: ['uid', 'avatar', 'nickname']
+      attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
     })
 
     let user_attention_count = await models.user_attention.count({ // 是否关注
@@ -119,7 +119,6 @@ class Personal_center {
     })
   }
 
-
   /**
    * 用户个人中心用户关注用户render
    * @param   {obejct} ctx 上下文对象
@@ -131,11 +130,26 @@ class Personal_center {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10
 
-    let user_attention_uid_arr = await models.user_attention.findAll({where: {uid}}).then((res) => {
+    let any = ctx.query.any || 'me'
+
+    let user_attention_uid_arr
+
+    let me_attention = await models.user_attention.findAll({where: {uid}}).then((res) => {
       return res.map((attention_item, tag_key) => {
         return attention_item.attention_uid
       })
     })
+    let other_attention = await models.user_attention.findAll({where: {attention_uid: uid}}).then((res) => {
+      return res.map((attention_item, tag_key) => {
+        return attention_item.uid
+      })
+    })
+
+    if (any === 'me') {
+      user_attention_uid_arr = me_attention
+    } else {
+      user_attention_uid_arr = other_attention
+    }
 
     let {count, rows} = await models.user.findAndCountAll({
       where: {uid: {in: user_attention_uid_arr}},//为空，获取全部，也可以自己添加条件
@@ -155,7 +169,10 @@ class Personal_center {
         page,
         pageSize,
         user_list: rows,
-        router_name: 'attention'
+        router_name: 'attention',
+        me_attention,
+        other_attention,
+        any
       }
     })
   }

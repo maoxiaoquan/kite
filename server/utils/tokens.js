@@ -16,14 +16,14 @@ class Tokens {
         ctx.request.userInfo = jwt_data
         await next()
       } catch (err) {
-        res_data.format_data(ctx, {
+        res_data.admin_resJson(ctx, {
           state: 'error',
           message: '登录超时'
         }, false)
       }
 
     } else {
-      res_data.format_data(ctx, {
+      res_data.admin_resJson(ctx, {
         state: 'error',
         message: '请登录'
       }, false)

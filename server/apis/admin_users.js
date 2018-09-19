@@ -1,4 +1,4 @@
-const { format_login, format_data } = require('../utils/res_data')
+const { sign_resJson, admin_resJson } = require('../utils/res_data')
 const tokens = require('../utils/tokens')
 const { checkUserName, checkPwd, checkEmail } = require('../utils/validators')
 const { tools: { encrypt } } = require('../utils')
@@ -44,7 +44,7 @@ class Admin_users {
       }
 
     } catch (err) {
-      format_login(ctx, {
+      sign_resJson(ctx, {
         state: 'error',
         message: err.message
       }, false)
@@ -54,7 +54,7 @@ class Admin_users {
     let find_user_role = await admin_user_role.findOne({ where: { uid: admin_user_findOne.uid } })
     let datas = { account, role_id: find_user_role ? find_user_role.role_id : '' }
     let token = tokens.setToken('cxh', 3000, datas)
-    format_login(ctx, {
+    sign_resJson(ctx, {
       state: 'success',
       message: '登录成功',
       token
@@ -95,7 +95,7 @@ class Admin_users {
       }
 
     } catch (err) {
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'error',
         message: err.message
       })
@@ -113,12 +113,12 @@ class Admin_users {
       enable: req_data.enable || false
     })
       .then(function (p) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '注册成功'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '注册失败'
         })
@@ -144,12 +144,12 @@ class Admin_users {
         }
       })
       .then(function (p) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '更新成功'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '更新失败'
         })
@@ -168,7 +168,7 @@ class Admin_users {
       offset: (page - 1) * Number(pageSize),//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: Number(pageSize)//每页限制返回的数据条数
     })
-    format_data(ctx, {
+    admin_resJson(ctx, {
       state: 'success',
       message: '返回成功',
       data: {
@@ -195,12 +195,12 @@ class Admin_users {
     if (!find_admin_user_role) { /* 无关联 */
       await admin_user.destroy({ 'where': { uid } })
         .then(function (p) {
-          format_data(ctx, {
+          admin_resJson(ctx, {
             state: 'success',
             message: '删除管理员用户成功'
           })
         }).catch(function (err) {
-          format_data(ctx, {
+          admin_resJson(ctx, {
             state: 'error',
             message: '删除管理员用户失败'
           })
@@ -215,12 +215,12 @@ class Admin_users {
           });
 
       }).then(function (results) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '删除管理员用户成功,同时删除管理员角色关联'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '删除管理员用户失败,同时回滚所有操作'
         })

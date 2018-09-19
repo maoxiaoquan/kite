@@ -36,6 +36,9 @@ function hasClass (obj, cls) {
     get_user_info: function (data) { //根据uid获取用户相关信息
       return _Fetch.get('/user_info', {params: data})
     },
+    post_update_user_info: function (data) { //根据uid获取用户相关信息
+      return _Fetch.post('/update_user_info', data)
+    },
     get_user_article_topic_all: function () { /*获取当前用户所有专题*/
       return _Fetch.get('/get_article_topic_all')
     },

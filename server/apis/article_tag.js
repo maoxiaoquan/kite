@@ -1,5 +1,5 @@
 const {sequelize, article_tag} = require('../models')
-const {format_login, format_data} = require('../utils/res_data')
+const {sign_resJson, admin_resJson} = require('../utils/res_data')
 const {tools: {encrypt}} = require('../utils')
 const config = require('../../config')
 const moment = require('moment')
@@ -31,7 +31,7 @@ class Article_Tag {
         throw new err_mess('标签名英文已存在!')
       }
     } catch (err) {
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'error',
         message: err.message
       })
@@ -47,13 +47,13 @@ class Article_Tag {
       enable: req_data.enable
     }).then(function (p) {
       console.log('created.' + JSON.stringify(p))
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'success',
         message: '标签创建成功'
       })
     }).catch(function (err) {
       console.log('failed: ' + err)
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'error',
         message: '标签创建出错'
       })
@@ -73,7 +73,7 @@ class Article_Tag {
       offset: (page - 1) * Number(pageSize),//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: Number(pageSize)//每页限制返回的数据条数
     })
-    format_data(ctx, {
+    admin_resJson(ctx, {
       state: 'success',
       message: '返回成功',
       data: {
@@ -92,7 +92,7 @@ class Article_Tag {
       attributes: ['article_tag_id', 'article_tag_name', 'article_tag_us_name', 'article_tag_icon', 'article_tag_icon_type', 'article_tag_description', 'enable'],
       where: {enable: 1}//为空，获取全部，也可以自己添加条件
     })
-    format_data(ctx, {
+    admin_resJson(ctx, {
       state: 'success',
       message: '返回成功',
       data: {
@@ -120,12 +120,12 @@ class Article_Tag {
       }
     })
       .then(function (p) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '更新标签成功'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '更新标签失败'
         })
@@ -141,12 +141,12 @@ class Article_Tag {
 
     await article_tag.destroy({'where': {article_tag_id}})
       .then(function (p) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '删除用户成功'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '删除用户失败'
         })

@@ -1,5 +1,5 @@
 const {sequelize, user_tag} = require('../models')
-const {format_login, format_data} = require('../utils/res_data')
+const {sign_resJson, admin_resJson} = require('../utils/res_data')
 const {tools: {encrypt}} = require('../utils')
 const config = require('../../config')
 const moment = require('moment')
@@ -28,7 +28,7 @@ class User_Tag {
         throw new err_mess('用户标签名已存在!')
       }
     } catch (err) {
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'error',
         message: err.message
       })
@@ -42,13 +42,13 @@ class User_Tag {
       user_tag_icon_type: req_data.user_tag_icon_type
     }).then(function (p) {
       console.log('created.' + JSON.stringify(p))
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'success',
         message: '标签创建成功'
       })
     }).catch(function (err) {
       console.log('failed: ' + err)
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'error',
         message: '标签创建出错'
       })
@@ -68,7 +68,7 @@ class User_Tag {
       offset: (page - 1) * Number(pageSize),//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: Number(pageSize)//每页限制返回的数据条数
     })
-    format_data(ctx, {
+    admin_resJson(ctx, {
       state: 'success',
       message: '返回成功',
       data: {
@@ -95,12 +95,12 @@ class User_Tag {
       }
     })
       .then(function (p) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '更新用户标签成功'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '更新用户标签失败'
         })
@@ -116,12 +116,12 @@ class User_Tag {
 
     await user_tag.destroy({'where': {user_tag_id}})
       .then(function (p) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '删除用户标签成功'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '删除用户标签失败'
         })

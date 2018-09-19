@@ -1,5 +1,5 @@
 const {sequelize, picture} = require('../models')
-const {format_login, format_data} = require('../utils/res_data')
+const {sign_resJson, admin_resJson} = require('../utils/res_data')
 const moment = require('moment')
 const {tools: {encrypt}} = require('../utils')
 const config = require('../../config')
@@ -31,7 +31,7 @@ class Picture {
       }
 
     } catch (err) {
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'error',
         message: err.message
       })
@@ -45,13 +45,13 @@ class Picture {
       enable: req_data.enable
     }).then(function (p) {
       console.log('created.' + JSON.stringify(p))
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'success',
         message: '图片创建成功'
       })
     }).catch(function (err) {
       console.log('failed: ' + err)
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'error',
         message: '图片创建出错'
       })
@@ -71,7 +71,7 @@ class Picture {
       offset: (page - 1) * Number(pageSize),//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: Number(pageSize)//每页限制返回的数据条数
     })
-    format_data(ctx, {
+    admin_resJson(ctx, {
       state: 'success',
       message: '返回成功',
       data: {
@@ -98,12 +98,12 @@ class Picture {
       }
     })
       .then(function (p) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '更新图片成功'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '更新图片失败'
         })
@@ -119,12 +119,12 @@ class Picture {
 
     await picture.destroy({'where': {picture_id}})
       .then(function (p) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '删除图片成功'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '删除图片失败'
         })

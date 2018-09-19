@@ -52,7 +52,6 @@ router.post('/delete_article_column', tokens.verifyToken, article_column.delete_
 
 /*文章专题管理 （专题为个人）*/
 
-
 /*用户标签管理*/
 /*根据分页获取标签*/
 router.get('/get_user_tag_list', tokens.verifyToken, user_tag.get_user_tag_list)
@@ -76,7 +75,7 @@ router.post('/delete_picture', tokens.verifyToken, picture.delete_picture)
  * 上传
  */
 
-router.post('/upload_picture', tokens.verifyToken, util_upload.single('file'), upload.upload_picture)
+router.post('/upload_picture', tokens.verifyToken, util_upload('admin_swiper').single('file'), upload.upload_picture)
 
 /**
  * 管理员用户

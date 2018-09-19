@@ -1,5 +1,5 @@
 const { sequelize, user, article } = require('../models')
-const { format_login, format_data } = require('../utils/res_data')
+const { sign_resJson, admin_resJson } = require('../utils/res_data')
 const { tools: { encrypt } } = require('../utils')
 const config = require('../../config')
 const moment = require('moment')
@@ -19,7 +19,7 @@ class Articles {
       offset: (page - 1) * Number(pageSize),//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: Number(pageSize)//每页限制返回的数据条数
     })
-    format_data(ctx, {
+    admin_resJson(ctx, {
       state: 'success',
       message: '返回成功',
       data: {
@@ -49,12 +49,12 @@ class Articles {
         }
       })
       .then(function (p) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '更新成功'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '更新失败'
         })
@@ -76,12 +76,12 @@ class Articles {
 
     await article.destroy({ 'where': { aid } })
       .then(function (p) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '删除文章成功'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '删除文章失败'
         })

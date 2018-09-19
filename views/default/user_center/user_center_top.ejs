@@ -24,7 +24,7 @@
         <ul>
             <li>
                 <div class="meta-block">
-                    <a href="/user/<%= data.current_user.uid %>/attention">
+                    <a href="/user/<%= data.current_user.uid %>/attention/?any=me">
                         <p><%= data.current_user.user_attention_other_count %></p>
                         <strong>
                             <% if(user_info.uid === data.current_user.uid){ %>
@@ -38,7 +38,7 @@
             </li>
             <li>
                 <div class="meta-block">
-                    <a href="/users/78d3e1ab9924/followers">
+                    <a href="/user/<%= data.current_user.uid %>/attention/?any=other">
                         <p><%= data.current_user.other_user_attention_count %></p>
                         <strong>粉丝</strong>
                     </a>

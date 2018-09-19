@@ -56,7 +56,7 @@
                                                 <% }) %>
                                             </li>
                                             <% } %>
-                                            <li class="item"><span class="cancel-like">取消喜欢</span></li>
+                                            <li class="item"><span data-aid="<%= item.aid %>" class="cancel-like">取消喜欢</span></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -78,7 +78,7 @@
 
             </div>
 
-            <div class="col-xs-12 col-sm-4 col-md-4 aside">
+            <div class="col-xs-12 col-sm-4 col-md-4 box-aside">
                 <% include user_center_aside.ejs %>
             </div>
 
@@ -88,16 +88,25 @@
 <!--article-list-lay layout-content end-->
 
 
-<!--footer_view.ejs start-->
-<% include ../parts/footer_view.ejs %>
-<!--footer_view.ejs end-->
-
 <script>
   window.onload = function () {
     var cancel_like = document.getElementsByClassName('cancel-like')
     console.log(cancel_like)
     for (var i = 0; i < cancel_like.length; i++) {
-      console.log('666', cancel_like[i])
+      (function (j) {
+        cancel_like[j].onclick = function () {
+          var aid = this.getAttribute('data-aid')
+          _server.post_user_like_article({aid: aid}).then(function (res) {
+            if (res.state === 'success') {
+             window.location.reload()
+            } else {
+              alert(res.message)
+            }
+          }).catch(function (err) {
+            console.log(err)
+          })
+        }
+      })(i)
     }
   }
 </script>

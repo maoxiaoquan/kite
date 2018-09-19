@@ -17,7 +17,7 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/user/<%= user_info.uid %>/message">
                         消息
-                        <span :class="{'user-message-unread':unread_message_count>0}" v-if="unread_message_count>0">{{unread_message_count}}</span>
+                        <span :class="{'user-message-unread':unread_message_count>0}" v-if="unread_message_count>0" v-text="unread_message_count"></span>
                     </a>
                 </li>
                 <% } %>
@@ -38,7 +38,7 @@
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="/user/<%= user_info.uid %>/article/all">我的主页</a>
-                        <a class="dropdown-item" href="/user/setting">设置</a>
+                        <a class="dropdown-item" href="/user/settings/profile">设置</a>
                         <a class="dropdown-item" href="/esc_sign_in">退出</a>
                     </div>
                 </li>

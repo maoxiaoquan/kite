@@ -1,10 +1,11 @@
 const models = require('../models')
-const {checkEmail, checkPhoneNum} = require('../utils/validators')
+const {checkEmail, checkPhoneNum, checkUrl} = require('../utils/validators')
 const moment = require('moment')
 const {render, home_resJson} = require('../utils/res_data')
 const {sendMail, send_verify_code_mail} = require('../utils/send_email')
 const {random_number, tools} = require('../utils')
 const config = require('../../config')
+const Op = require('sequelize').Op
 
 const {query_user_verify_code} = require('../sql/query')
 
@@ -249,6 +250,9 @@ class User {
       if (!req_data.nickname) {
         throw new err_mess('昵称不存在')
       }
+      if (req_data.nickname.length > 20) {
+        throw new err_mess('昵称过长')
+      }
       if (!req_data.account) {
         throw new err_mess('账户不存在')
       }
@@ -327,7 +331,7 @@ class User {
                 nickname: req_data.nickname,
                 password: tools.encrypt(req_data.password, config.encrypt_key),
                 email: req_data.account,
-                sex: '未知',
+                sex: 0,
                 reg_ip: ctx.request.ip
               })
                 .then(function (user) {
@@ -389,7 +393,7 @@ class User {
   }
 
   /**
-   * 获取用户信息post
+   * 获取用户信息get
    * @param   {obejct} ctx 上下文对象
    */
   static async get_user_info (ctx) {
@@ -410,7 +414,11 @@ class User {
 
     let findOne_user = await models.user.findOne({ //获取用户信息
       where: {uid},
-      attributes: ['uid', 'avatar', 'nickname']
+      attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+    })
+
+    let findOne_user_info = await models.user_info.findOne({ //获取用户信息
+      where: {uid}
     })
 
     let user_attention_uid_arr = await models.user_attention.findAll({where: {uid}}).then((res) => {
@@ -448,6 +456,7 @@ class User {
       message: '获取用户所有信息成功',
       data: {
         user: findOne_user,
+        user_info: findOne_user_info,
         attention_uid_arr: user_attention_uid_arr,
         user_like_aid_arr: user_like_article_arr,
         subscribe_article_tag_id_arr: subscribe_article_tag_arr,
@@ -456,6 +465,89 @@ class User {
       }
     })
   }
+
+  static async post_update_user_info (ctx) {
+
+    let req_data = ctx.request.body
+
+    let nickname_date = await models.user.findOne({
+      where: {
+        nickname: req_data.nickname,
+        uid: {
+          [Op.ne]: ctx.session.uid
+        }
+      }
+    })
+
+    try {
+
+      if (req_data.nickname.length > 20) {
+        throw new err_mess('昵称过长')
+      }
+
+      if (nickname_date) {
+        throw new err_mess('用户昵称已存在，请重新输入')
+      }
+
+      if (req_data.introduction.length > 50) {
+        throw new err_mess('个人介绍过长')
+      }
+
+      if (req_data.profession.length > 20) {
+        throw new err_mess('职位名输入过长')
+      }
+
+      if (req_data.company.length > 20) {
+        throw new err_mess('公司名字输入过长')
+      }
+
+      if (!checkUrl(req_data.home_page)) {
+        throw new err_mess('请输入正确的个人网址')
+      }
+
+    } catch (err) {
+
+      home_resJson(ctx, {
+        state: 'error',
+        message: err.message
+      })
+      return false
+    }
+
+    let update_user = await models.user.update({
+      sex: req_data.sex,
+      nickname: req_data.nickname,
+      introduction: req_data.introduction
+    }, {
+      where: {
+        uid: ctx.session.uid//查询条件
+      }
+    })
+
+    let update_user_info = await models.user_info.update({
+      profession: req_data.profession,
+      company: req_data.company,
+      home_page: req_data.home_page
+    }, {
+      where: {
+        uid: ctx.session.uid//查询条件
+      }
+    })
+
+    home_resJson(ctx, {
+      state: 'success',
+      message: '修改用户信息成功',
+      data: {
+        user: update_user,
+        user_info: update_user_info
+      }
+    })
+  }
+
+  /**
+   * 修改用户信息post
+   * @param   {obejct} ctx 上下文对象
+   */
 
   /**
    * 获取未读用户消息数量
@@ -466,7 +558,6 @@ class User {
     let unread_message_count = await models.user_message.count({
       where: {
         uid: ctx.session.uid,
-        is_system: false,
         is_read: false
       }
     })
@@ -564,6 +655,42 @@ class User {
         message: '删除用户消息失败'
       })
 
+    })
+  }
+
+  /**
+   * 渲染user settings profile
+   * @param   {obejct} ctx 上下文对象
+   */
+
+  static async render_user_settings_profile (ctx) { // get 页面
+
+    await render(ctx, {
+      title: '个人资料页',
+      view_url: 'default/user_settings/user_settings_profile',
+      state: 'success',
+      message: 'user_settings_profile',
+      data: {
+        router_name: 'profile'
+      }
+    })
+  }
+
+  /**
+   * 渲染user settings profile
+   * @param   {obejct} ctx 上下文对象
+   */
+
+  static async render_user_settings_password (ctx) { // get 页面
+
+    await render(ctx, {
+      title: '密码修改',
+      view_url: 'default/user_settings/user_settings_password',
+      state: 'success',
+      message: 'user_settings_profile',
+      data: {
+        router_name: 'password'
+      }
     })
   }
 

@@ -2,7 +2,7 @@
 <%
 var page = Number(data.page);
 var pageCount = 5;  var pageNum = Math.ceil(data.count / data.pageSize);
-var url_first = '/user/' + data.current_user.uid + '/attention?'
+var url_first = '/user/' + data.current_user.uid + '/attention?any=' + data.any + '&'
 %>
 <% if(pageNum > 1){ %>
 <div class="pageing">

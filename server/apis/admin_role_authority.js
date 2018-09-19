@@ -1,4 +1,4 @@
-const {format_data} = require('../utils/res_data')
+const {admin_resJson} = require('../utils/res_data')
 const {
   sequelize,
   admin_role,
@@ -37,7 +37,7 @@ class role_authority {
         throw new err_mess('角色已存在!')
       }
     } catch (err) {
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'error',
         message: err.message
       })
@@ -46,12 +46,12 @@ class role_authority {
 
     await admin_role.create({role_name, role_description})
       .then(function (p) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '角色创建成功'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '角色创建出错'
         })
@@ -73,12 +73,12 @@ class role_authority {
       }
     })
       .then(function (p) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '修改角色成功'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '修改角色失败'
         })
@@ -99,12 +99,12 @@ class role_authority {
     if (!find_user_role && !find_role_authority) {  /* 角色与用户权限无关联的时候 */
       await admin_role.destroy({'where': {role_id}})
         .then(function (p) {
-          format_data(ctx, {
+          admin_resJson(ctx, {
             state: 'success',
             message: '删除角色成功'
           })
         }).catch(function (err) {
-          format_data(ctx, {
+          admin_resJson(ctx, {
             state: 'error',
             message: '删除角色失败'
           })
@@ -122,12 +122,12 @@ class role_authority {
           })
 
       }).then(function (results) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '删除角色,同时删除权限用户角色关联'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '删除角色失败,同时回滚所有操作'
         })
@@ -142,12 +142,12 @@ class role_authority {
           })
 
       }).then(function (results) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '删除角色,同时删除用户角色关联'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '删除角色失败,同时回滚所有操作'
         })
@@ -162,12 +162,12 @@ class role_authority {
           })
 
       }).then(function (results) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '删除角色,同时删除权限角色关联'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '删除角色失败,同时回滚所有操作'
         })
@@ -188,7 +188,7 @@ class role_authority {
       offset: (page - 1) * Number(pageSize),//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: Number(pageSize)//每页限制返回的数据条数
     })
-    format_data(ctx, {
+    admin_resJson(ctx, {
       state: 'success',
       message: '返回成功',
       data: {
@@ -204,7 +204,7 @@ class role_authority {
    */
   static async get_admin_role_all (ctx) {
     let admin_role_findAll = await admin_role.findAll()
-    format_data(ctx, {
+    admin_resJson(ctx, {
       state: 'success',
       message: '返回成功',
       data: admin_role_findAll
@@ -230,7 +230,7 @@ class role_authority {
         throw new err_mess('权限路径已存在!')
       }
     } catch (err) {
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'error',
         message: err.message
       })
@@ -254,13 +254,13 @@ class role_authority {
       authority_description
     }).then(function (p) {
       console.log('created.' + JSON.stringify(p))
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'success',
         message: '权限创建成功'
       })
     }).catch(function (err) {
       console.log('failed: ' + err)
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'error',
         message: '权限创建出错'
       })
@@ -276,7 +276,7 @@ class role_authority {
 
     let admin_authority_findAll = await admin_authority.findAll()
 
-    format_data(ctx, {
+    admin_resJson(ctx, {
       state: 'success',
       message: '返回成功',
       data: admin_authority_findAll
@@ -303,13 +303,13 @@ class role_authority {
     })
       .then(function (p) {
         console.log('update.' + JSON.stringify(p))
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '更新权限成功'
         })
       }).catch(function (err) {
         console.log('failed: ' + err)
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '更新权限失败'
         })
@@ -337,12 +337,12 @@ class role_authority {
           })
 
       }).then(function (results) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '删除权限树,同时删除权限角色关联'
         })
       }).catch(function (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '删除权限树成功,同时回滚所有操作'
         })
@@ -350,7 +350,7 @@ class role_authority {
 
     } else {
       await admin_authority.destroy({'where': {'authority_id': {in: authority_id_arr}}})
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'success',
         message: '删除权限树成功'
       })
@@ -366,7 +366,7 @@ class role_authority {
 
     let admin_user_role_findAll = await admin_user_role.findAll()
 
-    format_data(ctx, {
+    admin_resJson(ctx, {
       state: 'success',
       message: '返回成功',
       data: admin_user_role_findAll
@@ -398,13 +398,13 @@ class role_authority {
         }
       }).then(function (p) {
         console.log('created.' + JSON.stringify(p))
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '更新用户角色成功'
         })
       }).catch(function (err) {
         console.log('failed: ' + err)
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '更新用户角色失败'
         })
@@ -416,13 +416,13 @@ class role_authority {
         role_id: req_data.role_id
       }).then(function (p) {
         console.log('created.' + JSON.stringify(p))
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'success',
           message: '用户角色关联成功'
         })
       }).catch(function (err) {
         console.log('failed: ' + err)
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: '用户角色关联出错'
         })
@@ -448,7 +448,7 @@ class role_authority {
       authority_id_arr.push(item.authority_id)
     })
 
-    format_data(ctx, {
+    admin_resJson(ctx, {
       state: 'success',
       message: '获取当前角色所有权限成功',
       data: authority_id_arr
@@ -474,7 +474,7 @@ class role_authority {
       })
     }
 
-    format_data(ctx, {
+    admin_resJson(ctx, {
       state: 'success',
       message: '修改成功',
       data: ''

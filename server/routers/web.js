@@ -8,7 +8,10 @@ const subscribe = require('../controllers/subscribe')// 订阅
 const user_article_topic = require('../controllers/user_article_topic')// 用户文章专题
 const search = require('../controllers/search')// 搜索
 const comment = require('../controllers/comment')// 评论
+const upload = require('../controllers/upload')// 上传
 
+/*工具类*/
+const util_upload = require('../utils/upload') // 上传工具类
 /**
  * 获取标签列表操作
  * @param   {String} TYPE 当前router 作用类型 AJAX:ajax传递数据 RENDER:render渲染页面或者 post form提交数据
@@ -38,6 +41,10 @@ router.get('tag/:article_tag_id', article.render_get_tag) // 文章标签
 
 router.get('article/:aid', article.render_article) // 文章内容页 page
 
+router.get('user/settings/profile', Check_Session, user.render_user_settings_profile) // 个人设置 资料
+
+router.get('user/settings/password', Check_Session, user.render_user_settings_password) // 个人设置 密码修改
+
 router.get('writer', Check_Session, article.render_writer) // 编写文章 page
 
 router.get('404', index.no_found_404) // 编写文章 page
@@ -57,6 +64,10 @@ router.get('get_index_article', index.get_index) // 首页文章 get
 router.get('get_article', article.get_article) // 根据aid获取文章 get
 
 router.get('user_info', user.get_user_info) // 根据uid 获取用户相应信息 get
+
+router.get('upload_user_avatar', ajaxCheck_Session, util_upload('user_avatar').single('file'), upload.upload_user_avatar) // 用户修改头像 post
+
+router.post('update_user_info', user.post_update_user_info) // 根据uid 获取用户相应信息 get
 
 router.post('sign_up', user.post_sign_up) // 注册数据 post TYPE:AJAX post
 
@@ -91,6 +102,5 @@ router.get('unread_message_count', ajaxCheck_Session, user.get_unread_message_co
 router.get('user_message', ajaxCheck_Session, user.get_user_message) // 用户消息 TYPE:AJAX get
 
 router.post('delete_user_message', ajaxCheck_Session, user.post_delete_user_message) // 删除用户消息 TYPE:AJAX post
-
 
 module.exports = router

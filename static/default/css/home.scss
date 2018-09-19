@@ -127,7 +127,6 @@
 
 .home-lay {
   &.layout-aside {
-
     .aside-component {
       height: 114px;
       background: rgba(43, 51, 59, .06);
@@ -180,65 +179,8 @@
       }
     }
 
-    .sidebar-block {
-      background: rgba(43, 51, 59, .06);
-      border-radius: 8px;
-      margin-bottom: 20px;
-      font-size: 13px;
-      line-height: 16px;
-      color: #333;
-      &.user-block {
-        .user-block-header {
-          padding: 12px 15px;
-          border-bottom: 1px solid hsla(0, 0%, 59%, .1);
-        }
-        .user-list {
-          .item {
-            .link {
-              padding: 12px 15px;
-              display: -webkit-box;
-              display: -ms-flexbox;
-              display: flex;
-              -webkit-box-align: center;
-              -ms-flex-align: center;
-              align-items: center;
-              cursor: pointer;
-              .avatar {
-                display: inline-block;
-                position: relative;
-                background-position: 50%;
-                background-size: cover;
-                background-repeat: no-repeat;
-                background-color: #eee;
-                -webkit-box-flex: 0;
-                -ms-flex: 0 0 auto;
-                flex: 0 0 auto;
-                width: 36px;
-                height: 36px;
-                border-radius: 50%;
-                margin-right: 12px;
-              }
-              .username {
-                color: #333;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-              }
-              .position {
-                color: #909090;
-                font-size: 12px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-              }
-            }
-          }
-        }
-      }
-    }
-
     .download {
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       display: block;
       padding: 10px 20px;
       font-size: 14px;
@@ -258,28 +200,24 @@
       }
     }
 
-    .aside-widget {
-      word-break: break-word;
-      .widget-title {
-        position: relative;
-        font-size: 12px;
-        text-transform: uppercase;
-        color: #000;
-        letter-spacing: 5px;
-        padding-bottom: 15px;
-        margin-bottom: 25px;
-        border-bottom: 2px solid #f9f9f9;
-        &::before {
-          content: '';
-          display: block;
-          position: absolute;
-          width: 30px;
-          height: 2px;
-          bottom: -2px;
-          background: #131313;
+    .website-information {
+      ul {
+        display: block;
+        li {
+          display: inline-block;
+          font-size: 12px;
+          &.item:not(:last-child):after {
+            content: "\B7";
+            margin: 0 5px;
+            color: #c6cfda;
+          }
+          a {
+            color: #999999;
+          }
         }
       }
     }
+
   }
 }
 
@@ -1880,8 +1818,20 @@
     font-size: 14px;
   }
 
-  .user-article-tag-attention {
-    .user-article-tag-attention-view {
+  .user-article-attention {
+    .user-article-attention-any {
+      a {
+        display: inline-block;
+        font-size: 14px;
+        margin-right: 15px;
+        &.active {
+          padding-bottom: 15px;
+          color: #ffc107;
+          border-bottom: 1px solid #ffc107;
+        }
+      }
+    }
+    .user-article-attention-view {
       .item {
         border-bottom: 1px solid hsla(240, 2%, 90%, .5);
         position: relative;
@@ -2065,7 +2015,7 @@
   }
 }
 
-.aside {
+.box-aside {
   .list {
     margin-bottom: 16px;
     padding-bottom: 16px;
@@ -2271,6 +2221,168 @@
 
 /*subscribe-lay end*/
 
+/*user-setting-lay layout-content start*/
+.user-setting-lay.layout-content {
+  .user-setting-aside {
+    box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 10px 0;
+    .title {
+      padding: 10px 20px;
+      font-weight: bold;
+      i {
+        margin-right: 15px;
+      }
+    }
+    .setting-tap-list {
+      display: block;
+      li {
+        a {
+          display: block;
+          padding: 10px 20px;
+          font-size: 14px;
+          i {
+            margin-right: 15px;
+          }
+          &:hover {
+            color: #f46e65;
+          }
+          &.active {
+            color: #f46e65;
+          }
+        }
+      }
+    }
+  }
+  .setting-view {
+    box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 30px;
+    .sub-view-box {
+      > h1 {
+        color: #333333;
+        font-size: 20px;
+        font-weight: bold;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #f1f1f1;
+      }
+      .setting-list {
+        .item-view {
+          padding: 24px 0;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          border-bottom: 1px solid #f1f1f1;
+          .title {
+            font-size: 14px;
+            color: #333;
+            width: 120px;
+          }
+          .avatar-uploader {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+          }
+          .input-box {
+            flex: 1;
+            input {
+              width: 100%;
+            }
+          }
+          .profile-radio {
+            input {
+              width: auto;
+              display: inline-block;
+            }
+            span {
+              margin: 0 20px 0 6px;
+              font-size: 15px;
+              vertical-align: middle;
+            }
+          }
+          .file-input {
+            display: none;
+          }
+          .input {
+            display: block;
+            border: none;
+            outline: none;
+            color: #909090;
+            font-size: 14px;
+          }
+          .avatar {
+            display: inline-block;
+            position: relative;
+            background-position: 50%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-color: #eee;
+            -webkit-box-flex: 0;
+            -ms-flex: 0 0 auto;
+            flex: 0 0 auto;
+            width: 72px;
+            height: 72px;
+            margin-right: 12px;
+          }
+
+          .hint {
+            color: #909090;
+            font-size: 12px;
+            margin-bottom: 18px;
+          }
+          .button, button {
+            font-size: 12px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-color: #007fff;
+            color: #fff;
+            border-radius: 2px;
+            border: none;
+            padding: 6px 15px;
+            outline: none;
+            transition: background-color .3s, color .3s;
+            cursor: pointer;
+          }
+        }
+      }
+      .action-box,
+      .footer-view {
+        margin-left: 12px;
+        .hint {
+          color: #909090;
+          font-size: 12px;
+          margin-bottom: 18px;
+        }
+        .button, button {
+          font-size: 12px;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          background-color: #007fff;
+          color: #fff;
+          border-radius: 2px;
+          border: none;
+          padding: 6px 15px;
+          outline: none;
+          transition: background-color .3s, color .3s;
+          cursor: pointer;
+        }
+        .button-save {
+          padding: 8px 30px;
+          font-size: 14px;
+          margin-top: 20px;
+        }
+      }
+    }
+  }
+}
+
+/*user-setting-lay layout-content start*/
+
 /*v-model start*/
 .modal-mask {
   position: fixed;
@@ -2380,22 +2492,6 @@
 }
 
 /*pageing end*/
-
-/*footer start*/
-.footer {
-  position: relative;
-  border-top: 1px solid #f3f3f3;
-  background: #ffffff;
-  .footer-bottom {
-    text-align: center;
-    .footer-copyright {
-      padding-top: 30px;
-      padding-bottom: 30px;
-    }
-  }
-}
-
-/*footer end*/
 
 /*text view start*/
 body .box-article-view {

@@ -27,8 +27,8 @@ module.exports = {
       comment: '密码',
       field: 'password'
     },
-    sex: { // 性别
-      type: Seq.STRING(10),
+    sex: { // 性别  1 boy  2 girl 0 secret
+      type: Seq.INTEGER(6),
       comment: '性别',
       field: 'sex'
     },

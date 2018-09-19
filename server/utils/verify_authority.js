@@ -1,4 +1,4 @@
-const { format_login, format_data } = require('../utils/res_data')
+const { sign_resJson, admin_resJson } = require('../utils/res_data')
 const { ad_role, ad_authority, ad_user_role, ad_role_authority } = require('../models')
 
 function err_mess(message) {
@@ -26,13 +26,13 @@ class VerifyAuthority {
           await next()
         }
       } catch (err) {
-        format_data(ctx, {
+        admin_resJson(ctx, {
           state: 'error',
           message: err.message
         })
       }
     } else {
-      format_data(ctx, {
+      admin_resJson(ctx, {
         state: 'error',
         message: '当前用户无任何操作权限'
       })

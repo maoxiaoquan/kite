@@ -1,0 +1,166 @@
+<!--header.ejs start-->
+<% include ../parts/header.ejs %>
+<!--header.ejs end-->
+
+<body class="black-theme">
+
+<!--header_view.ejs start-->
+<% include ../parts/header_view.ejs %>
+<!--header_view.ejs end-->
+
+
+<!--article-list-lay layout-content start-->
+<section class="user-setting-lay layout-content" id="user-setting-profile">
+    <div class="container box-container">
+        <div class="row">
+
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <!--user_settings_aside.ejs start-->
+                <% include user_settings_aside.ejs %>
+                <!--user_settings_aside.ejs end-->
+            </div>
+
+            <div class="col-xs-12 col-sm-8 col-md-8">
+                <div class="view setting-view">
+                    <div class="sub-view-box setting-profile-view">
+
+                        <h1>个人资料</h1>
+
+                        <ul class="setting-list">
+                            <li class="item-view">
+
+                                <span class="title">头像</span>
+                                <div class="avatar-uploader avatar-uploader">
+                                    <input type="file" class="file-input">
+                                    <div class="lazy avatar avatar loaded"
+                                         style="background-image: url(<%= user_info.avatar %>);"></div>
+                                    <div class="action-box">
+                                        <div class="hint">支持 jpg、png 格式大小 5M 以内的图片</div>
+                                        <button class="button upload-btn">点击上传</button>
+                                    </div>
+                                </div>
+
+                            </li>
+                            <li class="item-view">
+
+                                <span class="title">昵称</span>
+                                <div class="input-box profile-input profile-input">
+                                    <input v-model="form_data.nickname" placeholder="填写你的昵称" class="input">
+                                </div>
+
+                            </li>
+
+                            <li class="item-view">
+                                <span class="title">性别</span>
+                                <div class="input-box profile-radio">
+                                    <input type="radio" name="sex" value="1" v-model="form_data.sex"> <span>男</span>
+                                    <input type="radio" name="sex" value="2" v-model="form_data.sex"> <span>女</span>
+                                    <input type="radio" name="sex" value="0" v-model="form_data.sex"><span>保密</span>
+                                </div>
+                            </li>
+                            <li class="item-view">
+
+                                <span class="title">职业</span>
+                                <div class="input-box profile-input profile-input">
+                                    <input placeholder="填写你的职业" v-model="form_data.profession" class="input">
+                                </div>
+
+                            </li>
+                            <li class="item-view">
+
+                                <span class="title">公司</span>
+                                <div class="input-box profile-input profile-input">
+                                    <input placeholder="填写你的公司" v-model="form_data.company" class="input">
+                                </div>
+
+                            </li>
+                            <li class="item-view">
+
+                                <span class="title">个人介绍</span>
+                                <div class="input-box profile-input profile-input">
+                                    <input v-model="form_data.introduction" placeholder="填写职业技能、擅长的事情、喜欢的事情等"
+                                           class="input">
+                                </div>
+
+                            </li>
+                            <li class="item-view">
+
+                                <span class="title">个人主页</span>
+                                <div class="input-box profile-input profile-input">
+                                    <input placeholder="填写你的个人主页" v-model="form_data.home_page" class="input">
+                                </div>
+
+                            </li>
+                        </ul>
+
+                        <div class="footer-view">
+                            <button class="button button-save" @click="post_update_user_info">保存</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--article-list-lay layout-content end-->
+
+
+<script>
+
+  new Vue({
+    el: '#user-setting-profile',
+    data: function () {
+      return {
+        sign_uid: '<%= user_info.uid %>',
+        user_info: '',
+        form_data: {
+          nickname: '',
+          sex: '',
+          profession: '',
+          company: '',
+          introduction: '',
+          home_page: ''
+        }
+      }
+    },
+    created: function () {
+      this.get_curr_user_info()
+    },
+    methods: {
+      get_curr_user_info: function () {// 获取当前登录用户信息
+        var that = this
+        _server.get_user_info({uid: this.sign_uid}).then(function (res) {
+          that.$nextTick(function () {
+            if (res.state === 'success') {
+              that.user_info = res.data
+              that.form_data.nickname = res.data.user.nickname
+              that.form_data.sex = res.data.user.sex
+              that.form_data.profession = res.data.user_info.profession
+              that.form_data.company = res.data.user_info.company
+              that.form_data.introduction = res.data.user.introduction
+              that.form_data.home_page = res.data.user_info.home_page
+            }
+          })
+        })
+      },
+      post_update_user_info: function () {
+        var that = this
+        _server.post_update_user_info(that.form_data).then(function (res) {
+          that.$nextTick(function () {
+            if (res.state === 'success') {
+              alert('保存成功')
+              that.get_curr_user_info()
+            }else {
+              alert(res.message)
+            }
+          })
+        })
+      }
+    }
+  })
+</script>
+
+</body>
+
+<% include ../parts/footer.ejs %>
