@@ -62,7 +62,6 @@ class Format {
       data,
       user_info: {
         islogin: ctx.session.islogin,
-        nickname: ctx.session.nickname,
         uid: ctx.session.uid,
         avatar: ctx.session.avatar
       }

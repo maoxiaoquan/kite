@@ -18,11 +18,6 @@ module.exports = {
       comment: 'uid',
       field: 'uid'
     },
-    author: { // 作者
-      type: Seq.STRING(20),
-      comment: '作者',
-      field: 'author'
-    },
     title: { // 标题
       type: Seq.TEXT,
       comment: '标题',

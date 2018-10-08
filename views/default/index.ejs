@@ -110,7 +110,7 @@
                                 <div class="info-row meta-row">
                                     <ul class="meta-list">
                                         <li class="item username clickable">
-                                            <a href="/user/<%= item.uid %>/article/all"><%= item.author %></a>
+                                            <a href="/user/<%= item.uid %>/article/all"><%= item.user.nickname %></a>
                                         </li>
                                         <li class="item item-icon like-article">
                                             <i class="iconfont icon-love"></i>
@@ -164,7 +164,7 @@
                                 <div class="info-row meta-row">
                                     <ul class="meta-list">
                                         <li class="item username clickable">
-                                            <a href="">{{ item.author }}</a>
+                                            <a href="">{{ item.user.nickname }}</a>
                                         </li>
                                         <li class="item item-icon like-article">
                                             <i class="iconfont icon-love"></i>

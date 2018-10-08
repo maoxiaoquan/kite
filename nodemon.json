@@ -3,11 +3,11 @@
   "ignore": [
     ".git",
     ".svn",
-    "pm2log",
-    "src",
-    "static",
-    "view",
-    "node_modules"
+    "/pm2log/",
+    "/src/",
+    "/static/",
+    "/view/",
+    "/node_modules/"
   ],
   "verbose": true,
   "execMap": {

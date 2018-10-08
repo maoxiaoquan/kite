@@ -31,12 +31,15 @@
 
                                 <span class="title">头像</span>
                                 <div class="avatar-uploader avatar-uploader">
-                                    <input type="file" class="file-input">
                                     <div class="lazy avatar avatar loaded"
-                                         style="background-image: url(<%= user_info.avatar %>);"></div>
+                                         :style="{'background-image':'url('+form_data.avatar+')'}"></div>
                                     <div class="action-box">
                                         <div class="hint">支持 jpg、png 格式大小 5M 以内的图片</div>
-                                        <button class="button upload-btn">点击上传</button>
+                                        <a class="button upload-btn" href="javascript:;">点击上传
+                                            <input type="file" name="fileUpload"
+                                                   @change="change_file($event)"
+                                                   class="file-input">
+                                        </a>
                                     </div>
                                 </div>
 
@@ -120,8 +123,10 @@
           profession: '',
           company: '',
           introduction: '',
-          home_page: ''
-        }
+          home_page: '',
+          avatar: ""
+        },
+        file: {}
       }
     },
     created: function () {
@@ -134,12 +139,7 @@
           that.$nextTick(function () {
             if (res.state === 'success') {
               that.user_info = res.data
-              that.form_data.nickname = res.data.user.nickname
-              that.form_data.sex = res.data.user.sex
-              that.form_data.profession = res.data.user_info.profession
-              that.form_data.company = res.data.user_info.company
-              that.form_data.introduction = res.data.user.introduction
-              that.form_data.home_page = res.data.user_info.home_page
+              that.form_data = res.data.user
             }
           })
         })
@@ -151,12 +151,39 @@
             if (res.state === 'success') {
               alert('保存成功')
               that.get_curr_user_info()
-            }else {
+            } else {
               alert(res.message)
             }
           })
         })
-      }
+      },
+      post_upload_user_avatar: function () {
+        var that = this
+        console.log('this.file', this.file)
+        var data = new FormData();//重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
+        data.append('file', this.file, this.file.name)
+        console.log(data.get('file'))
+        _server.post_upload_user_avatar(data).then(function (res) {
+          that.$nextTick(function () {
+            if (res.state === 'success') {
+              alert('上传用户头像成功')
+              that.get_curr_user_info()
+            } else {
+              alert(res.message)
+            }
+          })
+        })
+      },
+      change_file: function (event) {
+        var that = this
+        console.log('event.target', event.target.files)
+        this.file = event.target.files[0]
+        console.log('this.file', this.file)
+        setTimeout(function () {
+          that.post_upload_user_avatar()
+        }, 500)
+        console.log(1111)
+      },
     }
   })
 </script>

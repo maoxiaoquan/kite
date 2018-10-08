@@ -29,7 +29,6 @@ class Picture {
       if (!req_data.picture_url) {
         throw new err_mess('请上传图片!')
       }
-
     } catch (err) {
       admin_resJson(ctx, {
         state: 'error',

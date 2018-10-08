@@ -1,4 +1,4 @@
-const {sequelize, picture} = require('../models')
+const models = require('../models')
 const {home_resJson} = require('../utils/res_data')
 const {tools: {encrypt}} = require('../utils')
 const config = require('../../config')
@@ -16,15 +16,25 @@ class Picture {
    * @param   {obejct} ctx 上下文对象
    */
   static async upload_user_avatar (ctx) {
-    let destination = ctx.req.file.destination
+    let destination = ctx.req.file.destination.split('static')[1]
     let filename = ctx.req.file.filename
+
+
+    let user = await models.user.update({
+      avatar: `${destination + '/' + filename}`
+    }, {
+      where: {
+        uid: ctx.session.uid//查询条件
+      }
+    })
+    console.log('user.avatar',user)
+
+    ctx.session.avatar = `${destination + '/' + filename}`
+
 
     home_resJson(ctx, {
       state: 'success',
-      message: '返回成功',
-      data: {
-        filename: `${destination.split('static')[1] + '/' + filename}`//返回文件名
-      }
+      message: '修改用户头像成功',
     })
   }
 

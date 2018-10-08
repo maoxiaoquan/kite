@@ -36,11 +36,6 @@ class Article extends React.Component {
           key: 'aid'
         },
         {
-          title: '作者',
-          dataIndex: 'author',
-          key: 'author'
-        },
-        {
           title: '标题',
           dataIndex: 'title',
           key: 'title'

@@ -24,7 +24,8 @@ class Article {
     let sql_article = await models.article.findOne({
       where: {
         aid: aid
-      }
+      },
+      include: [{model: models.user, as: 'user'}]
     }).then((res) => {
       res.create_at = moment(res.create_date).format('YYYY-MM-DD')
       return res
@@ -111,7 +112,7 @@ class Article {
     try {
       await models.article.create({
         uid: ctx.session.uid,
-        author: ctx.session.nickname,
+        author: '',
         title: formData.title,
         excerpt: trimHtml(formData.origin_content).html, /*摘记*/
         content: formData.content, /*主内容*/
@@ -166,7 +167,8 @@ class Article {
         where: {article_tag_ids: {[Op.like]: `%${article_tag_id}%`}},//为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize,//每页限制返回的数据条数
-        order: [['create_date_timestamp', 'desc']]
+        order: [['create_date_timestamp', 'desc']],
+        include: [{model: models.user, as: 'user'}]
       }).then((res) => {
         res.rows.map((item, key) => {
           item.create_at = moment(item.create_date).format('YYYY-MM-DD')
@@ -231,7 +233,8 @@ class Article {
     let aid = ctx.query.aid
 
     let article = await models.article.findOne({
-      where: {aid}
+      where: {aid},
+      include: [{model: models.user, as: 'user'}]
     })
 
     if (article) {

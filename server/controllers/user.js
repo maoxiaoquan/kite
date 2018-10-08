@@ -1,5 +1,5 @@
 const models = require('../models')
-const {checkEmail, checkPhoneNum, checkUrl} = require('../utils/validators')
+const {checkEmail, checkPhoneNum, checkUrl, checkPwd} = require('../utils/validators')
 const moment = require('moment')
 const {render, home_resJson} = require('../utils/res_data')
 const {sendMail, send_verify_code_mail} = require('../utils/send_email')
@@ -85,7 +85,6 @@ class User {
 
             let session = ctx.session
             session.islogin = true
-            session.nickname = sql_data_user.dataValues.nickname
             session.uid = sql_data_user.dataValues.uid
             session.avatar = sql_data_user.dataValues.avatar
 
@@ -173,6 +172,8 @@ class User {
     }
   }
 
+  // 注册验证码发送
+
   static async post_sign_up_code (ctx) {
 
     let req_data = ctx.request.body
@@ -192,8 +193,9 @@ class User {
             phone: '',
             email: req_data.account,
             verify_code: random,
+            type: 'sign_up',
             expire_time: moment().utc().utcOffset(+8).format('X'),
-            create_date: moment().utc().utcOffset(+8).format(), /*时间*/
+            create_date: moment().utc().utcOffset(+8).format() /*时间*/
           }).then(function (data) {
 
             send_verify_code_mail(req_data.account, '注册验证码', random)
@@ -259,6 +261,9 @@ class User {
       if (!req_data.password) {
         throw new err_mess('密码不存在')
       }
+      if (!checkPwd(req_data.password)) {
+        throw new err_mess('密码格式输入有误!')
+      }
       if (req_data.password !== req_data.double_password) {
         throw new err_mess('两次输入密码不一致')
       }
@@ -323,10 +328,11 @@ class User {
             let user_count = await models.user.count()
 
             await models.sequelize.transaction(function (transaction) {
+              let num = Number(user_count) + 10000
               // 在事务中执行操作
               return models.user.create({
                 /*注册写入数据库操作*/
-                uid: Number(user_count) + 10000,
+                uid: num,
                 avatar: 'http://oq33egsog.bkt.clouddn.com/avatar1.jpg',
                 nickname: req_data.nickname,
                 password: tools.encrypt(req_data.password, config.encrypt_key),
@@ -337,7 +343,7 @@ class User {
                 .then(function (user) {
                   return models.user_info.create({
                     /*注册写入数据库操作*/
-                    uid: user.uid
+                    uid: num
                   })
                 })
 
@@ -466,6 +472,11 @@ class User {
     })
   }
 
+  /**
+   * 修改用户信息post
+   * @param   {obejct} ctx 上下文对象
+   */
+
   static async post_update_user_info (ctx) {
 
     let req_data = ctx.request.body
@@ -481,7 +492,7 @@ class User {
 
     try {
 
-      if (req_data.nickname.length > 20) {
+      if (req_data.nickname && req_data.nickname.length > 20) {
         throw new err_mess('昵称过长')
       }
 
@@ -489,19 +500,19 @@ class User {
         throw new err_mess('用户昵称已存在，请重新输入')
       }
 
-      if (req_data.introduction.length > 50) {
+      if (req_data.introduction && req_data.introduction.length > 50) {
         throw new err_mess('个人介绍过长')
       }
 
-      if (req_data.profession.length > 20) {
+      if (req_data.profession && req_data.profession.length > 20) {
         throw new err_mess('职位名输入过长')
       }
 
-      if (req_data.company.length > 20) {
+      if (req_data.company && req_data.company.length > 20) {
         throw new err_mess('公司名字输入过长')
       }
 
-      if (!checkUrl(req_data.home_page)) {
+      if (req_data.home_page && !checkUrl(req_data.home_page)) {
         throw new err_mess('请输入正确的个人网址')
       }
 
@@ -515,9 +526,9 @@ class User {
     }
 
     let update_user = await models.user.update({
-      sex: req_data.sex,
-      nickname: req_data.nickname,
-      introduction: req_data.introduction
+      sex: req_data.sex || '',
+      nickname: req_data.nickname || '',
+      introduction: req_data.introduction || ''
     }, {
       where: {
         uid: ctx.session.uid//查询条件
@@ -525,9 +536,9 @@ class User {
     })
 
     let update_user_info = await models.user_info.update({
-      profession: req_data.profession,
-      company: req_data.company,
-      home_page: req_data.home_page
+      profession: req_data.profession || '',
+      company: req_data.company || '',
+      home_page: req_data.home_page || ''
     }, {
       where: {
         uid: ctx.session.uid//查询条件
@@ -545,9 +556,77 @@ class User {
   }
 
   /**
-   * 修改用户信息post
+   * 修改用户密码
    * @param   {obejct} ctx 上下文对象
    */
+
+  static async post_update_user_password (ctx) {
+    let req_data = ctx.request.body
+
+    let user = await models.user.findOne({
+      where: {
+        uid: ctx.session.uid
+      }
+    })
+
+    if (tools.encrypt(req_data.old_password, config.encrypt_key) === user.password) {
+
+      try {
+
+        if (!req_data.old_password) {
+          throw new err_mess('请输入旧密码')
+        }
+
+        if (!req_data.new_password) {
+          throw new err_mess('请输入新密码')
+        }
+
+        if (!checkPwd(req_data.new_password)) {
+          throw new err_mess('密码格式输入有误!')
+        }
+
+        if (!req_data.repeat_new_password) {
+          throw new err_mess('请重复输入新密码')
+        }
+
+        if (req_data.repeat_new_password !== req_data.new_password) {
+          throw new err_mess('两次输入密码不相同')
+        }
+
+      } catch (err) {
+
+        home_resJson(ctx, {
+          state: 'error',
+          message: err.message
+        })
+        return false
+      }
+
+      await models.user.update({
+        password: tools.encrypt(req_data.new_password, config.encrypt_key)
+      }, {
+        where: {
+          uid: ctx.session.uid//查询条件
+        }
+      }).then(() => {
+        home_resJson(ctx, {
+          state: 'success',
+          message: '修改用户密码成功'
+        })
+      }).catch(() => {
+        home_resJson(ctx, {
+          state: 'error',
+          message: '修改密码失败。请再次尝试'
+        })
+      })
+
+    } else {
+      home_resJson(ctx, {
+        state: 'error',
+        message: '旧密码错误，请重新输入'
+      })
+    }
+  }
 
   /**
    * 获取未读用户消息数量
@@ -599,7 +678,11 @@ class User {
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: pageSize,//每页限制返回的数据条数
       order: [['create_date_timestamp', 'desc']],
-      include: [{model: models.user, as: 'other_user'}]
+      include: [{
+        model: models.user,
+        as: 'other_user',
+        attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+      }]
     })
 
     if (unread_user_message_id.length > 0) { // 修改未读为已读
@@ -692,6 +775,230 @@ class User {
         router_name: 'password'
       }
     })
+  }
+
+  /**
+   * 渲染user reset password
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async render_reset_password (ctx) { // get 页面
+
+    await render(ctx, {
+      title: '重置密码',
+      view_url: 'default/reset_password',
+      state: 'success',
+      message: 'reset_password'
+    })
+  }
+
+  /**
+   * 重置密码code发送
+   * @param   {obejct} ctx 上下文对象
+   */
+
+  static async post_reset_password_code (ctx) {
+
+    let req_data = ctx.request.body
+    if (req_data.type === 'email') { /*邮箱注册验证码*/
+
+      try {
+
+        if (!req_data.email) {
+          throw new err_mess('邮箱不存在')
+        }
+        if (!checkEmail(req_data.email)) {
+          throw new err_mess('邮箱格式输入有误')
+        }
+
+      } catch (err) {
+        home_resJson(ctx, {
+          state: 'error',
+          message: err.message
+        })
+        return false
+      }
+
+      try {
+
+        let email = await models.user.findOne({
+          where: {
+            email: req_data.email
+          }
+        })
+        if (email) {
+
+          let random = random_number(true, 6, 6)
+
+          await models.verify_code.create({
+            phone: '',
+            email: req_data.email,
+            type: 'reset_password',
+            verify_code: random,
+            expire_time: moment().utc().utcOffset(+8).format('X'),
+            create_date: moment().utc().utcOffset(+8).format() /*时间*/
+          }).then(function (data) {
+
+            send_verify_code_mail(req_data.email, '重置密码验证码', random)
+            home_resJson(ctx, {
+              state: 'success',
+              message: '验证码已发送到邮箱'
+            })
+          }).catch(function (err) {
+            home_resJson(ctx, {
+              state: 'error',
+              message: err
+            })
+          })
+
+        } else {
+          home_resJson(ctx, {
+            state: 'error',
+            message: '邮箱不存在'
+          })
+        }
+
+      } catch (err) {
+        home_resJson(ctx, {
+          state: 'error',
+          message: err
+        })
+      }
+
+    } else if (req_data.type === 'phone') {  /* 手机号码*/
+      home_resJson(ctx, {
+        state: 'error',
+        message: '暂时未开放手机号码修改密码'
+      })
+
+    } else {        /* 非手机号码非邮箱*/
+      home_resJson(ctx, {
+        state: 'error',
+        message: '请输入正确的手机号码或者邮箱'
+      })
+    }
+
+  }
+
+  /**
+   * 重置密码code发送
+   * @param   {obejct} ctx 上下文对象
+   */
+
+  static async post_reset_password (ctx) {
+    let req_data = ctx.request.body
+    try {
+
+      if (!req_data.email) {
+        throw new err_mess('邮箱不存在')
+      }
+      if (!checkEmail(req_data.email)) {
+        throw new err_mess('邮箱格式输入有误')
+      }
+      if (!req_data.code) {
+        throw new err_mess('验证码不存在')
+      }
+      if (!req_data.new_password) {
+        throw new err_mess('密码不存在')
+      }
+      if (!checkPwd(req_data.new_password)) {
+        throw new err_mess('密码格式输入有误!')
+      }
+      if (req_data.new_password !== req_data.repeat_new_password) {
+        throw new err_mess('两次输入密码不一致')
+      }
+
+    } catch (err) {
+      home_resJson(ctx, {
+        state: 'error',
+        message: err.message
+      })
+      return false
+    }
+
+    if (req_data.type === 'email') { /*邮箱注册*/
+
+      try {
+
+        let email = await models.user.findOne({
+          where: {
+            email: req_data.email
+          }
+        })
+
+        try {
+          if (email) {
+
+            await query_user_verify_code(req_data.email).then((data) => {  /*重置密码验证码验证*/
+              if (data.length > 0) {
+                let time_num = moment().utc().utcOffset(+8).format('X')
+                if (req_data.code === data[0].verify_code) {
+
+                  if ((Number(time_num) - Number(data[0].expire_time)) > (30 * 60)) {
+                    throw new err_mess('验证码已过时，请再次发送')
+                  }
+
+                } else {
+                  throw new err_mess('验证码错误')
+                }
+
+              } else {
+                throw new err_mess('请发送验证码')
+              }
+            })
+
+            await models.user.update({
+              password: tools.encrypt(req_data.new_password, config.encrypt_key)
+            }, {
+              where: {
+                email: req_data.email//查询条件
+              }
+            }).then(() => {
+              home_resJson(ctx, {
+                state: 'success',
+                message: '修改用户密码成功'
+              })
+            }).catch(() => {
+              home_resJson(ctx, {
+                state: 'error',
+                message: '修改密码失败。请再次尝试'
+              })
+            })
+
+          } else {
+            home_resJson(ctx, {
+              state: 'error',
+              message: '邮箱不存在'
+            })
+          }
+
+        } catch (err) {
+
+          home_resJson(ctx, {
+            state: 'error',
+            message: err.message
+          })
+        }
+
+      } catch (err) {
+        home_resJson(ctx, {
+          state: 'error',
+          message: err
+        })
+      }
+
+    } else if (req_data.type === 'phone') {  // 手机号码重置密码
+
+      home_resJson(ctx, {
+        state: 'error',
+        message: '暂时未开放手机号码重置密码'
+      })
+
+    } else {        /* 非手机号码非邮箱*/
+      home_resJson(ctx, {
+        state: 'error',
+        message: '请输入正确的手机号码或者邮箱'
+      })
+    }
   }
 
 }

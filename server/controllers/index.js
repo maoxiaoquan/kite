@@ -31,7 +31,8 @@ class Index {
       where: where_params,//为空，获取全部，也可以自己添加条件
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: pageSize,//每页限制返回的数据条数
-      order: [['create_date_timestamp', 'desc']]
+      order: [['create_date_timestamp', 'desc']],
+      include: [{model: models.user, as: 'user', attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']}]
     }).then((res) => {
       res.rows.map((item, key) => {
         item.create_at = moment(item.create_date).format('YYYY-MM-DD')
@@ -90,7 +91,8 @@ class Index {
       where: find_params,//为空，获取全部，也可以自己添加条件
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: pageSize,//每页限制返回的数据条数
-      order: [['create_date_timestamp', 'desc']]
+      order: [['create_date_timestamp', 'desc']],
+      include: [{model: models.user, as: 'user'}]
     }).then((res) => {
       res.rows.map((item, key) => {
         item.create_at = moment(item.create_date).format('YYYY-MM-DD')

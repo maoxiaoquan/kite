@@ -36,8 +36,11 @@ function hasClass (obj, cls) {
     get_user_info: function (data) { //根据uid获取用户相关信息
       return _Fetch.get('/user_info', {params: data})
     },
-    post_update_user_info: function (data) { //根据uid获取用户相关信息
+    post_update_user_info: function (data) { //根据uid更新用户相关信息
       return _Fetch.post('/update_user_info', data)
+    },
+    post_update_user_password: function (data) { //根据uid更新用户密码
+      return _Fetch.post('/update_user_password', data)
     },
     get_user_article_topic_all: function () { /*获取当前用户所有专题*/
       return _Fetch.get('/get_article_topic_all')
@@ -83,6 +86,15 @@ function hasClass (obj, cls) {
     },
     post_delete_user_message: function (data) { // 删除用户消息
       return _Fetch.post('/delete_user_message', data)
+    },
+    post_upload_user_avatar: function (data) { // 上传用户头像
+      return _Fetch.post('/upload_user_avatar', data, {headers: {'Content-Type': 'multipart/form-data'}})
+    },
+    post_reset_password_code: function (data) { // 发送重置密码验证码
+      return _Fetch.post('/reset_password_code', data)
+    },
+    post_reset_password: function (data) { // 重置密码
+      return _Fetch.post('/reset_password', data)
     }
   }
 

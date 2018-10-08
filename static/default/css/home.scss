@@ -1222,7 +1222,6 @@
       }
     }
     .remember-btn {
-      float: left;
       margin: 15px 0;
       span {
         margin-left: 5px;
@@ -1327,6 +1326,14 @@
         }
       }
 
+    }
+    .sign-footer {
+      text-align: center;
+      .return-btn {
+        padding: 25px 0 30px;
+        color: #498ad5;
+        display: inline-block;
+      }
     }
   }
 }
@@ -2303,9 +2310,6 @@
               vertical-align: middle;
             }
           }
-          .file-input {
-            display: none;
-          }
           .input {
             display: block;
             border: none;
@@ -2375,6 +2379,34 @@
           padding: 8px 30px;
           font-size: 14px;
           margin-top: 20px;
+        }
+        .upload-btn {
+          position: relative;
+          .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 30px;
+            opacity: 0;
+            cursor: pointer;
+            &:hover {
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+    .setting-password-view {
+      .password-input {
+        input {
+          display: inline-block !important;
+          width: auto !important;
+        }
+        .reset-password {
+          display: inline-block;
+          font-size: 14px;
+          color: #ffc107;
         }
       }
     }

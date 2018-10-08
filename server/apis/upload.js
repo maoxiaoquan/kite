@@ -18,15 +18,14 @@ class Picture {
    * @param   {obejct} ctx 上下文对象
    */
   static async upload_picture (ctx) {
-    let destination = ctx.req.file.destination
+    let destination = ctx.req.file.destination.split('static')[1]
     let filename = ctx.req.file.filename
-    console.log('ctx.req.file.filename', destination.split('static')[1])
 
     admin_resJson(ctx, {
       state: 'success',
       message: '返回成功',
       data: {
-        filename: `${destination.split('static')[1] + '/' + filename}`//返回文件名
+        filename: `${destination + '/' + filename}`//返回文件名
       }
     })
   }

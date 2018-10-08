@@ -255,3 +255,9 @@ caption {
   min-width: 200px;
   z-index: 101;
   box-sizing: border-box; }
+
+.pull-left {
+  float: left; }
+
+.pull-right {
+  float: right; }

@@ -51,6 +51,8 @@ router.get('404', index.no_found_404) // 编写文章 page
 
 router.get('esc_sign_in', user.esc_sign_in) // 退出登录
 
+router.get('reset_password', user.render_reset_password) // 重置密码
+
 /*FORM*/
 
 router.post('sign_in', user.form_sign_in) // 登录数据 post TYPE:RENDER
@@ -65,9 +67,11 @@ router.get('get_article', article.get_article) // 根据aid获取文章 get
 
 router.get('user_info', user.get_user_info) // 根据uid 获取用户相应信息 get
 
-router.get('upload_user_avatar', ajaxCheck_Session, util_upload('user_avatar').single('file'), upload.upload_user_avatar) // 用户修改头像 post
+router.post('upload_user_avatar', ajaxCheck_Session, util_upload('user_avatar').single('file'), upload.upload_user_avatar) // 用户修改头像 post
 
-router.post('update_user_info', user.post_update_user_info) // 根据uid 获取用户相应信息 get
+router.post('update_user_info', ajaxCheck_Session, user.post_update_user_info) // 根据uid 更新用户相应信息 post
+
+router.post('update_user_password', ajaxCheck_Session, user.post_update_user_password) // 根据uid 更新用户登录密码
 
 router.post('sign_up', user.post_sign_up) // 注册数据 post TYPE:AJAX post
 
@@ -102,5 +106,9 @@ router.get('unread_message_count', ajaxCheck_Session, user.get_unread_message_co
 router.get('user_message', ajaxCheck_Session, user.get_user_message) // 用户消息 TYPE:AJAX get
 
 router.post('delete_user_message', ajaxCheck_Session, user.post_delete_user_message) // 删除用户消息 TYPE:AJAX post
+
+router.post('reset_password_code', user.post_reset_password_code) // 重置密码验证码发送 TYPE:AJAX post
+
+router.post('reset_password', user.post_reset_password) // 重置密码 TYPE:AJAX post
 
 module.exports = router

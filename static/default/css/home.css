@@ -1135,7 +1135,6 @@
   padding-bottom: 10px; }
 
 .sign-lay.layout-content .sign-view .remember-btn {
-  float: left;
   margin: 15px 0; }
 
 .sign-lay.layout-content .sign-view .remember-btn span {
@@ -1228,6 +1227,14 @@
 
 .sign-lay.layout-content .sign-view .more-sign li .qq i {
   color: #498ad5; }
+
+.sign-lay.layout-content .sign-view .sign-footer {
+  text-align: center; }
+
+.sign-lay.layout-content .sign-view .sign-footer .return-btn {
+  padding: 25px 0 30px;
+  color: #498ad5;
+  display: inline-block; }
 
 /*sign-in end*/
 /*writer-lay layout-content start*/
@@ -2125,9 +2132,6 @@
   font-size: 15px;
   vertical-align: middle; }
 
-.user-setting-lay.layout-content .setting-view .sub-view-box .setting-list .item-view .file-input {
-  display: none; }
-
 .user-setting-lay.layout-content .setting-view .sub-view-box .setting-list .item-view .input {
   display: block;
   border: none;
@@ -2199,6 +2203,33 @@
   padding: 8px 30px;
   font-size: 14px;
   margin-top: 20px; }
+
+.user-setting-lay.layout-content .setting-view .sub-view-box .action-box .upload-btn,
+.user-setting-lay.layout-content .setting-view .sub-view-box .footer-view .upload-btn {
+  position: relative; }
+
+.user-setting-lay.layout-content .setting-view .sub-view-box .action-box .upload-btn .file-input,
+.user-setting-lay.layout-content .setting-view .sub-view-box .footer-view .upload-btn .file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 30px;
+  opacity: 0;
+  cursor: pointer; }
+
+.user-setting-lay.layout-content .setting-view .sub-view-box .action-box .upload-btn .file-input:hover,
+.user-setting-lay.layout-content .setting-view .sub-view-box .footer-view .upload-btn .file-input:hover {
+  cursor: pointer; }
+
+.user-setting-lay.layout-content .setting-view .setting-password-view .password-input input {
+  display: inline-block !important;
+  width: auto !important; }
+
+.user-setting-lay.layout-content .setting-view .setting-password-view .password-input .reset-password {
+  display: inline-block;
+  font-size: 14px;
+  color: #ffc107; }
 
 /*user-setting-lay layout-content start*/
 /*v-model start*/

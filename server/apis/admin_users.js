@@ -83,10 +83,10 @@ class Admin_users {
         throw new err_mess('请输入密码!')
       }
       if (!checkPwd(req_data.password)) {
-        throw new err_mess('密码输入有误!')
+        throw new err_mess('密码格式输入有误!')
       }
       if (!checkEmail(req_data.email)) {
-        throw new err_mess('邮箱输入有误!')
+        throw new err_mess('邮箱格式输入有误!')
       }
       let admin_user_findOne = await await admin_user.findOne({ where: { account: req_data.account } })
 

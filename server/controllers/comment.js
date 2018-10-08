@@ -28,7 +28,13 @@ class Comment {
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: Number(pageSize),//每页限制返回的数据条数
       order: [['create_date_timestamp', 'desc']],
-      include: [{model: models.user, as: 'user'}]
+      include: [
+        {
+          model: models.user,
+          as: 'user',
+          attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+        }
+      ]
     }).then((res) => {
       return JSON.parse(JSON.stringify(res))
     })
@@ -160,7 +166,6 @@ class Comment {
   static async post_delete_comment (ctx) {
 
     let formData = ctx.request.body
-
 
     let find_children_comment_id = await models.comment.findAll({where: {parent_id: formData.comment_id}}).then((res) => {
       return res.map((item, key) => {

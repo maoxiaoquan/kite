@@ -39,6 +39,11 @@ module.exports = {
       field: 'create_date_timestamp',
       defaultValue: time.TimeNow.timestamp /*时间戳 */
     },
+    type: { // 验证码类型
+      type: Seq.STRING(20),
+      comment: '验证码类型',
+      field: 'type'
+    },
     expire_time: { // 验证码过期时间
       type: Seq.BIGINT(50),
       comment: '过期时间',

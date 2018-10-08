@@ -87,8 +87,8 @@ const picture = sequelize.define(require('./models_type/db_picture').NAME, requi
 /* 表关联 */
 /*user.hasMany(comment, {foreignKey: 'uid',as:'user'})*/
 comment.belongsTo(user, {foreignKey: 'uid',as:'user'})
-
 user_message.belongsTo(user, {foreignKey: 'other_uid',as:'other_user'})
+article.belongsTo(user, {foreignKey: 'uid',as:'user'})
 
 module.exports = {
   sequelize,

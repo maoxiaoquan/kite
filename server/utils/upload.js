@@ -11,10 +11,10 @@ module.exports = (type) => {
   const month = date.getMonth() + 1
 
   let destination_url = {
-    user_avatar: `static/upload/user_avatar/${year}-${month}`,
-    user: 'static/upload/user/',
-    admin: 'static/upload/admin',
-    admin_swiper: `static/upload/admin/swiper/${year}-${month}`
+    user_avatar: `static/upload/web/user_avatar/${year}/${month}`,
+    user: 'static/upload/web/user/',
+    admin: 'static/upload/admin/',
+    admin_swiper: `static/upload/admin/swiper/${year}/${month}`
   }
 
   return multer({
