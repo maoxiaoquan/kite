@@ -1344,6 +1344,12 @@
 .writer-lay.layout-content {
   height: 100%;
   background-color: #f8f9fa;
+  &.full-screen {
+    .writer-content {
+      width: 960px;
+      margin: 0 auto;
+    }
+  }
   .writer-header {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1402,7 +1408,6 @@
       padding: 20px 25px;
     }
     .writer-box {
-      border-right: 1px solid #f3f3f3;
       .writer-input {
         height: 50px;
         border: none;
@@ -1460,8 +1465,25 @@
       }
     }
     .content-preview {
-      padding-top: 110px;
+      border-left: 1px solid #f3f3f3;
+      .title {
+        word-wrap: break-word;
+        white-space: normal;
+        word-break: break-all;
+        text-align: left;
+        max-width: 100%;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        position: static;
+        color: #48494d;
+        font-size: 34px;
+        font-weight: 700;
+        line-height: 1.3;
+      }
       #mark-text {
+        word-wrap: break-word;
+        white-space: normal;
+        word-break: break-all;
         font-size: 16px;
         width: 100%;
         height: 100%;
@@ -1483,9 +1505,45 @@
     }
   }
 
+  .modal-container {
+    width: 500px;
+  }
+  .writer-submit-view-footer {
+    border-top: 1px solid #f3f3f3;
+    margin-top: 20px;
+    padding-top: 20px;
+    .writer-modal-create {
+      padding: 5px 20px;
+      margin: 0 15px;
+    }
+    .writer-modal-cancel {
+      padding: 5px 20px;
+      margin: 0 15px;
+    }
+  }
+}
+
+.upload-pic-view {
+  padding: 0 30px;
+  .info {
+    margin: 15px 0;
+  }
+  .form-control {
+    width: 100%;
+    margin-bottom: 0;
+    display: block;
+  }
+  .footer-left-btn {
+    position: relative;
+    border: 1px solid #e0e0e0;
+    &:hover {
+      color: #666666;
+    }
+  }
 }
 
 .writer-submit-view {
+  padding: 0 15px;
   .topic-warp {
     margin-bottom: 15px;
     .common-title {
@@ -1524,7 +1582,7 @@
       }
       .common-select-ul {
         position: absolute;
-        height: 300px;
+        max-height: 250px;
         z-index: 1;
         top: 33px;
         padding: 8px 0;
@@ -1534,9 +1592,6 @@
         box-shadow: 0 8px 16px 0 rgba(28, 31, 33, .2);
         border-radius: 8px;
         overflow-y: auto;
-        &.box-hide {
-          display: none;
-        }
         li {
           padding: 0 16px;
           height: 33px;
@@ -1630,9 +1685,6 @@
       font-size: 12px;
       color: #9199A1;
       line-height: 18px;
-      &.hide {
-        display: none;
-      }
       .js-search-text {
         color: #00bb29;
       }

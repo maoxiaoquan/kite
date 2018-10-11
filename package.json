@@ -19,6 +19,7 @@
     "axios": "^0.17.1",
     "bundle-loader": "^0.5.5",
     "busboy": "^0.2.14",
+    "cheerio": "^1.0.0-rc.2",
     "ejs": "^2.5.7",
     "jsonwebtoken": "^8.2.0",
     "koa": "^2.3.0",

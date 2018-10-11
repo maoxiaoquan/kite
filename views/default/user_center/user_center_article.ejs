@@ -38,7 +38,7 @@
                     </ul>
 
                     <!-- use the modal component, pass in the prop -->
-                    <topic-modal :show.sync="create_show_modal">
+                    <box-modal :show.sync="create_show_modal" data-customize="modal">
                         <h3 slot="header">创建新专题</h3>
                         <div class="topic-modal">
                             <div class="form-group">
@@ -62,7 +62,7 @@
                                     class="btn btn-secondary topic-modal-cancel">取消
                             </button>
                         </div>
-                    </topic-modal>
+                    </box-modal>
 
                     <div id="list-container">
                         <!-- 文章列表模块 -->

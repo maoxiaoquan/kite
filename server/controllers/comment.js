@@ -27,29 +27,52 @@ class Comment {
       where: {aid, parent_id: 0},//为空，获取全部，也可以自己添加条件
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: Number(pageSize),//每页限制返回的数据条数
-      order: [['create_date_timestamp', 'desc']],
-      include: [
-        {
-          model: models.user,
-          as: 'user',
-          attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-        }
-      ]
+      order: [['create_date_timestamp', 'desc']]
     }).then((res) => {
       return JSON.parse(JSON.stringify(res))
     })
 
-    for (let item in rows) { // 循环取子评论
+    for (let item in rows) { // 循环取用户
       await (async (i) => {
-        rows[i].children = []
-        let data = await models.comment.findAll({
-          where: {parent_id: rows[i].id},
-          include: [{model: models.user, as: 'user'}]
+        rows[i].user = {}
+        let data = await models.user.findOne({
+          where: {uid: rows[i].uid},
+          attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
         }).then((res) => {
           return JSON.parse(JSON.stringify(res))
         })
         if (data) {
-          rows[i].children = data
+          rows[i].user = data
+        }
+      })(item)
+    }
+
+    for (let item in rows) { // 循环取子评论
+      await (async (i) => {
+        rows[i].children = []
+        let child_data = await models.comment.findAll({
+          where: {parent_id: rows[i].id}
+        }).then((res) => {
+          return JSON.parse(JSON.stringify(res))
+        })
+
+        for (let child_item in child_data) { // 循环取用户  代码有待优化，层次过于复杂
+          await (async (j) => {
+            child_data[j].user = {}
+            let data = await models.user.findOne({
+              where: {uid: rows[j].uid},
+              attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+            }).then((res) => {
+              return JSON.parse(JSON.stringify(res))
+            })
+            if (data) {
+              child_data[j].user = data
+            }
+          })(child_item)
+        }
+
+        if (child_data) {
+          rows[i].children = child_data
         }
       })(item)
     }

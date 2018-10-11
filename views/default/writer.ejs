@@ -6,7 +6,7 @@
 
 
 <!--writer-lay layout-content start-->
-<section class="writer-lay layout-content" id="writer">
+<section class="writer-lay layout-content" :class="{'full-screen':!edit_full_screen}" id="writer">
 
     <!--writer-header start-->
     <div class="writer-header" id="writer-header">
@@ -15,7 +15,7 @@
             <ul class="writer-right">
                 <li><a class="btn btn-primary" href="javascript:;" id="save-article-draft">保存为草稿</a></li>
                 <li><a class="btn btn-primary" href="javascript:;" id="issue-article-model" class="btn btn-primary"
-                       data-toggle="modal" data-target="#article-save-model">发布文章</a></li>
+                       @click="create_show_modal=true">发布文章</a></li>
                 <li><a class="btn btn-outline-primary" href="/"><i class="iconfont icon-zhuye"></i></a></li>
             </ul>
         </div>
@@ -26,100 +26,140 @@
     <!--writer-content start-->
     <div class="writer-content">
         <div class="writer-box">
-            <input class="writer-input" style="display: block" type="text" id="article-title" placeholder="请输入文章标题">
+            <input class="writer-input" style="display: block" v-model="article_title" type="text" id="article-title"
+                   placeholder="请输入文章标题">
             <ul class="writer-nav">
-                <li><i class="iconfont icon-tupian"></i></li>
-                <li><i class="iconfont icon-chexiaofanhuichehuishangyibu"></i></li>
-                <li><i class="iconfont icon-zhongzhi"></i></li>
+                <li @click="upload_article_modal_show=true;upload_img_url = '';"><i class="iconfont icon-tupian"></i>
+                </li>
+                <li><a href="http://www.markdown.cn" target="_blank"><i class="iconfont icon-md"></i></a></li>
+                <li @click="edit_full_screen=!edit_full_screen">
+                    <i class="iconfont"
+                       :class="{'icon-quanping':!edit_full_screen,'icon-suoping':edit_full_screen}"></i>
+                </li>
             </ul>
-            <textarea class="write-textarea" name="" id="write-textarea" cols="30" rows="10" wrap="hard"></textarea>
+            <textarea class="write-textarea" name="" id="write-textarea" v-model="article_content" cols="30" rows="10"
+                      wrap="hard"></textarea>
         </div>
-        <div class="content-preview">
+        <div class="content-preview" v-show="edit_full_screen">
+            <h2 class="title">{{article_title}}</h2>
             <div id="mark-text" class="box-article-view"></div>
         </div>
     </div>
     <!--writer-content end-->
 
+    <!-- use the modal component, pass in the prop -->
+    <box-modal :show.sync="upload_article_modal_show" data-customize="modal">
+        <h3 slot="header">插入图片</h3>
+        <div class="upload-pic-view">
 
-    <div class="modal fade" id="article-save-model" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">保存文章</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="writer-submit-view">
-                        <div class="clearfix">
-                            <div class="topic-warp topic-warp-topic">
-                                <p class="common-title">个人专题</p>
-                                <div class="common-select-box topic-box js-topic-box" id="js-topic-box">
+            <p class="info">请直接填写图片URL：</p>
+            <div class="input-view">
+                <input v-model="upload_img_url" type="text" class="form-control"
+                       placeholder="http://example.com/image.jpg">
+            </div>
+            <p class="info">或者：</p>
+            <div class="upload-local">
+                <a href="#" class="btn btn-default footer-left-btn">
+                    <input  @change="change_file($event)" type="file" id="uploader" name="files[]" multiple="" onchange=""
+                           style="position:absolute; top:0; right:0; opacity:0; filter: alpha(opacity=0);
+                               font-size:23px; direction: ltr; cursor: pointer;">
+                    插入本地图片和附件...</a>
+            </div>
 
-                                    <span class="common-select-name" id="topic_name">请选择需要投递的栏目</span>
-                                    <i class="iconfont icon-moreunfold" id="topic_name_i"></i>
-                                    <ul class="common-select-ul box-hide" id="topic_ul_list">
-                                        <li class="active">请选择需要投递的栏目</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="create-topic">
-                                <div class="create-topic-view box-hide">
-                                    <input class="create-topic-input" type="text">
-                                    <button class="btn btn-primary btn-sm" id="save-create-topic">保存</button>
-                                    <button class="btn btn-primary btn-sm" id="hide-create-topic">取消</button>
-                                </div>
-                                <button class="btn btn-primary btn-sm" id="show-create-topic">创建新专题</button>
-                            </div>
-                        </div>
-
-                        <div class="clearfix">
-                            <div class="topic-warp topic-warp-topic">
-                                <p class="common-title">文章形式</p>
-                                <div class="common-select-box topic-box js-topic-box" id="js-topic-box-type"
-                                     style="width: 130px">
-                                    <span class="common-select-name" id="article_type">请选择</span>
-                                    <i class="iconfont icon-moreunfold" id="article_type_i_type"></i>
-                                    <ul class="common-select-ul box-hide" id="topic_ul_list_type" style="height: 115px">
-                                        <li class="active">请选择</li>
-                                        <li class="" data-id="1">原创</li>
-                                        <li class="" data-id="2">转载</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="tag-warp">
-                            <p class="common-title">文章标签<span><em id="chosen_tag_num">0</em>/3</span></p>
-                            <div class="search-box clearfix">
-                                <div class="clearfix js-chosen-tags">
-
-                                </div>
-                                <input class="search-input" placeholder="选择下列热门标签或输入关键词检索标签" id="search_input"
-                                       style="width: 440px;">
-                            </div>
-                            <p class="search-result hide js-search-result">相关“<span class="js-search-text"></span>”的搜索
-                                <span
-                                        class="js-search-num"></span> 个</p>
-                            <div class="tag-list-view js-tag-nano has-scrollbar" style="height: 160px;">
-                                <div class="clearfix js-tag-list">
-
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="save-draft">保存并取消</button>
-                    <button type="button" class="btn btn-primary" id="save_article">确定发布</button>
-                </div>
+        </div>
+        <div slot="footer">
+            <div class="writer-submit-view-footer">
+                <button type="button" class="btn btn-primary writer-modal-create" @click="save_upload">确定
+                </button>
+                <button type="button" class="btn btn-secondary writer-modal-cancel"
+                        @click="upload_article_modal_show = false">
+                    取消
+                </button>
             </div>
         </div>
-    </div>
+    </box-modal>
 
+
+    <!-- use the modal component, pass in the prop -->
+    <box-modal :show.sync="create_show_modal" data-customize="modal">
+        <h3 slot="header">发布文章</h3>
+        <div class="writer-submit-view">
+            <div class="clearfix">
+                <div class="topic-warp topic-warp-topic">
+                    <p class="common-title">个人专题</p>
+                    <div class="common-select-box topic-box js-topic-box">
+                        <span class="common-select-name"
+                              @click="topic_ul_list_show=!topic_ul_list_show">{{current_topic.topic_name?current_topic.topic_name:'请选择需要投递的栏目'}}</span>
+                        <i class="iconfont icon-moreunfold" @click="topic_ul_list_show=!topic_ul_list_show"></i>
+                        <ul class="common-select-ul" v-show="topic_ul_list_show">
+                            <li class="active" @click="current_topic={};topic_ul_list_show=false">请选择需要投递的栏目</li>
+                            <li v-for="item in user_article_topic_all"
+                                @click="current_topic=item;topic_ul_list_show=false">{{item.topic_name}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="create-topic">
+                    <div class="create-topic-view" v-show="create_topic_show">
+                        <input class="create-topic-input" v-model="topic_name" type="text">
+                        <button class="btn btn-primary btn-sm" @click="save_create_topic">保存</button>
+                        <button class="btn btn-primary btn-sm" @click="create_topic_show=false">取消</button>
+                    </div>
+                    <button class="btn btn-primary btn-sm" v-show="!create_topic_show" @click="create_topic_show=true">
+                        创建新专题
+                    </button>
+                </div>
+            </div>
+
+            <div class="clearfix">
+                <div class="topic-warp topic-warp-topic">
+                    <p class="common-title">文章形式</p>
+                    <div class="common-select-box topic-box js-topic-box" style="width: 130px">
+                        <span class="common-select-name" @click="article_type_list_show=!article_type_list_show">{{current_article_type.text}}</span>
+                        <i class="iconfont icon-moreunfold" @click="article_type_list_show=!article_type_list_show"></i>
+                        <ul class="common-select-ul" v-show="article_type_list_show">
+                            <li v-for="item in article_type_list"
+                                @click="current_article_type=item;article_type_list_show=false">{{item.text}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tag-warp">
+                <p class="common-title">文章标签<span><em
+                                id="chosen_tag_num">{{current_article_tag_arr.length}}</em>/3</span></p>
+                <div class="search-box clearfix" ref="search_box">
+                    <div class="clearfix js-chosen-tags" ref="js_chosen_tags" v-show="current_article_tag_arr.length>0">
+                        <span class="tag-item" v-for="item in current_article_tag_arr"
+                              @click="delete_current_article_tag(item)">{{item.article_tag_name}}</span>
+                    </div>
+                    <input class="search-input" v-show="current_article_tag_arr.length<3"
+                           placeholder="选择下列热门标签或输入关键词检索标签"
+                           :style="{'width':search_box_width}"
+                           v-model="search_article_tag">
+                </div>
+                <p class="search-result js-search-result" v-show="search_result_show">相关“<span class="js-search-text">{{search_article_tag}}</span>”的搜索
+                    <span class="js-search-num">{{article_tag_all.length}}</span> 个</p>
+                <div class="tag-list-view js-tag-nano has-scrollbar" style="height: 160px;">
+                    <div class="clearfix js-tag-list">
+                        <span class="tag-item" v-for="item in article_tag_all" @click="add_article_tag(item)">{{item.article_tag_name}}</span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div slot="footer">
+            <div class="writer-submit-view-footer">
+                <button type="button" class="btn btn-primary writer-modal-create" @click="save_article">保存
+                </button>
+                <button type="button" class="btn btn-secondary writer-modal-cancel" @click="create_show_modal = false">
+                    取消
+                </button>
+            </div>
+        </div>
+    </box-modal>
 
 </section>
 <!--writer-lay layout-content end-->
@@ -130,232 +170,158 @@
   new Vue({
     el: '#writer',
     data: function () {
-      return {}
+      return {
+        upload_article_modal_show: false, // upload picture 上传图片模态窗口
+        edit_full_screen: true, // edit is full screen 编辑器是否全屏显示
+        article_title: '', // article title   文章的标题
+        article_content: '', // article content   文章输入主内容
+        create_show_modal: false,  // article save model   保存时模态框是否显示的控制
+        current_topic: {},   // current user article topic  当前选中的用户文章专题
+        topic_ul_list_show: false, // whether to display topic list  用户文章专题列表是否显示控制
+        topic_name: '', // create user article topic name 创建文章专题input绑定的值
+        create_topic_show: false, // whether to display create topic btn and input 创建用户文章专题input是否显示
+        article_type_list: [ // whether to display create topic btn and input 文章类型列表
+          {
+            id: '',
+            text: '请选择'
+          },
+          {
+            id: 1,
+            text: '原创'
+          },
+          {
+            id: 2,
+            text: '转载'
+          }
+        ],
+        current_article_type: { // 选中文章类型的数据
+          id: '',
+          text: '请选择'
+        },
+        article_type_list_show: false,
+        source_article_tag_all: [],
+        article_tag_all: [],
+        user_article_topic_all: [],
+        search_article_tag: '',
+        search_box_width: '100%',
+        current_article_tag_arr: [],
+        search_result_show: false,
+        upload_img_url: '', // 图片上传url
+      }
+    },
+    created: function () {
+      this.get_article_tag_all()
+      this.get_user_article_topic_all()
+    },
+    watch: {
+      article_content: function (val) {
+        document.getElementById('mark-text').innerHTML =
+          marked(val, {breaks: true})
+      },
+      search_article_tag: function (val) {
+        var that = this
+        var _arr = []
+        for (var item in that.source_article_tag_all) {
+          if ((that.source_article_tag_all[item].article_tag_name).toLowerCase().indexOf(that.search_article_tag.toLowerCase()) >= 0) {
+            _arr.push(that.source_article_tag_all[item])
+          }
+        }
+        that.article_tag_all = _arr
+        if (that.search_article_tag.length === 0) {
+          that.search_result_show = false
+        } else {
+          that.search_result_show = true
+        }
+      }
     },
     methods: {
-
-    }
-  })
-
-  window.onload = function () {
-
-    !function (window) {
-
-      var get_article_tag_all = _server.get_article_tag_all()
-
-      render_topic_ul_li()
-      render_tag_ul_li()
-
-      function show_create () {
-        /*创建专题*/
-        var create_topic = document.getElementsByClassName('create-topic-view')[0]
-        /*保存*/
-        var save_create_topic = document.getElementById('save-create-topic')
-        /*取消*/
-        var hide_create_topic = document.getElementById('hide-create-topic')
-        var show_create_topic = document.getElementById('show-create-topic')
-
-        create_topic.classList.remove('box-hide')
-        show_create_topic.classList.add('box-hide')
-
-        save_create_topic.onclick = function () { /*创建专题事件*/
-          _server.create_user_article_topic({
-            topic_name: document.querySelector('.create-topic-input').value
-          }).then(function (res) {
-            if (res.state === 'success') {
-              alert('创建成功')
-              create_topic.classList.add('box-hide')
-              show_create_topic.classList.remove('box-hide')
-              render_topic_ul_li()
-            } else {
-              alert(res.message)
-            }
-          })
-        }
-
-        hide_create_topic.onclick = function () { /*取消创建专题事件*/
-          create_topic.classList.add('box-hide')
-          show_create_topic.classList.remove('box-hide')
-        }
-
-      }
-
-      /*获取专题点击选项框*/
-
-      function show_topic_ul_list () {
-        var topic_ul_list = document.getElementById('topic_ul_list')
-        topic_ul_list.classList.remove('box-hide')
-        topic_ul_list.addEventListener('click', function (e) {
-          console.log('e.target', e)
-          document.querySelector('#topic_name').innerHTML = e.target.innerHTML
-          document.querySelector('#topic_name').setAttribute('data-id', e.target.getAttribute('data-id'))
-          topic_ul_list.classList.add('box-hide')
+      get_article_tag_all: function () {
+        var that = this
+        _server.get_article_tag_all().then(function (res) {
+          that.source_article_tag_all = res.data.list
+          that.article_tag_all = res.data.list
         })
-      }
-
-      function show_topic_ul_list_type () {
-        var topic_ul_list = document.getElementById('topic_ul_list_type')
-        topic_ul_list.classList.remove('box-hide')
-        topic_ul_list.addEventListener('click', function (e) {
-          document.querySelector('#article_type').innerHTML = e.target.innerHTML
-          document.querySelector('#article_type').setAttribute('data-id', e.target.getAttribute('data-id'))
-          topic_ul_list.classList.add('box-hide')
-        })
-      }
-
-      function render_topic_ul_li () {  /*渲染所有当前用户所属专题*/
-        var topic_ul_list = document.getElementById('topic_ul_list')
-        var html = ''
+      },
+      get_user_article_topic_all: function () {
+        var that = this
         _server.get_user_article_topic_all().then(function (res) {
-          for (var item in res.data.list) {
-            console.log('html', res.data.list[item].topic_name)
-            html += '<li data-id="' + res.data.list[item].topic_id + '">' + res.data.list[item].topic_name + '</li>'
-          }
-          topic_ul_list.innerHTML = html
+          that.user_article_topic_all = res.data.list
         })
-      }
-
-      function render_tag_ul_li () { /*渲染所有文章标签*/
-        var tag_ul_list = document.querySelector('.js-tag-list')
-        var html = ''
-        get_article_tag_all.then(function (res) {
-          for (var item in res.data.list) {
-            console.log('html', res.data.list[item].article_tag_name)
-            html += '<span class="tag-item" data-tag-id="' + res.data.list[item].article_tag_id + '">' + res.data.list[item].article_tag_name + '</span>'
-          }
-          tag_ul_list.innerHTML = html
-        })
-      }
-
-      function find_article_tag () {
-        var inputField = document.getElementById('search_input')
-        var tag_ul_list = document.querySelector('.js-tag-list')
-        var js_search_text = document.querySelector('.js-search-text')
-        var js_search_num = document.querySelector('.js-search-num')
-        var js_search_result = document.querySelector('.js-search-result')
-        var html = ''
-        var _arr = []
-        get_article_tag_all.then(function (res) {
-          for (var item in res.data.list) {
-            console.log(res.data.list[item])
-            if ((res.data.list[item].article_tag_name).toLowerCase().indexOf(inputField.value.toLowerCase()) >= 0) {
-              _arr.push(res.data.list[item])
-            }
-          }
-          for (var item in _arr) {
-            console.log(_arr[item])
-            html += '<span class="tag-item" data-tag-id="' + _arr[item].article_tag_id + '">' + _arr[item].article_tag_name + '</span>'
-          }
-          if (inputField.value.length === 0) {
-            js_search_result.classList.add('hide')
+      },
+      save_create_topic: function () {
+        var that = this
+        _server.create_user_article_topic({
+          topic_name: that.topic_name
+        }).then(function (res) {
+          if (res.state === 'success') {
+            alert('创建成功')
+            that.topic_name = ''
+            that.get_user_article_topic_all()
+            that.create_topic_show = false
           } else {
-            js_search_result.classList.remove('hide')
-            js_search_text.innerHTML = inputField.value
-            js_search_num.innerHTML = _arr.length
+            alert(res.message)
           }
-          tag_ul_list.innerHTML = html
         })
-      }
-
-      $('body').on('keyup', '#search_input', function () {
-        find_article_tag()
-      })
-
-      var current_article_tag_arr = []
-
-      function current_article_tag (obj) { /*替换选中*/
-        document.getElementById('search_input').value = ''
+      },
+      add_article_tag: function (val) {
+        var that = this
+        that.search_article_tag = ''
         let _arr = []
-        for (var item in current_article_tag_arr) {
-          _arr.push(current_article_tag_arr[item].article_tag_name)
+        for (var item in that.current_article_tag_arr) {
+          _arr.push(that.current_article_tag_arr[item].article_tag_name)
         }
-        if (current_article_tag_arr.length < 3 && _arr.indexOf(obj.text()) === -1) {
-          current_article_tag_arr.push({article_tag_id: obj.attr('data-tag-id'), article_tag_name: obj.text()})
+        if (that.current_article_tag_arr.length < 3 && _arr.indexOf(val.article_tag_name) === -1) {
+          that.current_article_tag_arr.push(val)
         }
-        render_current_article_tag()
-      }
-
-      function render_current_article_tag () {
-        var html = ''
-        var js_chosen_tags = $('.js-chosen-tags')
-        var inputField = document.getElementById('search_input')
-        for (var item in current_article_tag_arr) {
-          console.log(current_article_tag_arr[item])
-          html += '<span class="tag-item" data-tag-id="' + current_article_tag_arr[item].article_tag_id + '">' + current_article_tag_arr[item].article_tag_name + '</span>'
-        }
-        js_chosen_tags.html(html)
-        inputField.style.width = (400 - $('.js-chosen-tags').width()) + 'px'
-        if (current_article_tag_arr.length >= 3) {
-          inputField.style.display = 'none'
-        } else {
-          inputField.style.display = 'block'
-        }
-        $('#chosen_tag_num').text(current_article_tag_arr.length)
-      }
-
-      function delete_current_article_tag (obj) { /*替换选中*/
-
-        for (var item in current_article_tag_arr) {
-          if (obj.text() === current_article_tag_arr[item].article_tag_name) {
-            current_article_tag_arr.splice(item, 1)
+        that.render_current_article_tag()
+      },
+      delete_current_article_tag: function (val) {
+        var that = this
+        for (var item in that.current_article_tag_arr) {
+          if (val.article_tag_name === that.current_article_tag_arr[item].article_tag_name) {
+            that.current_article_tag_arr.splice(item, 1)
           }
         }
-        render_current_article_tag()
-      }
-
-      $('body').on('click', '.js-tag-list .tag-item', function () {
-        current_article_tag($(this))
-      })
-
-      $('body').on('click', '.js-chosen-tags .tag-item', function () {
-        delete_current_article_tag($(this))
-      })
-
-      /*公共事件监听*/
-      document.addEventListener('click', function (event) {
-        var target = event.target
-        if (target.id == 'show-create-topic') {
-          show_create()
-        } else if (target.id == 'topic_name' || target.id == 'topic_name_i') {
-          show_topic_ul_list()
-        } else if (target.id == 'article_type' || target.id == 'article_type_i_type') {
-          show_topic_ul_list_type()
-        }
-      })
-
-      /*文档编写区域*/
-      var write_textarea = document.getElementById('write-textarea')
-
-      write_textarea.addEventListener('keyup', function (e) {
-        document.getElementById('mark-text').innerHTML =
-          marked(write_textarea.value, {breaks: true})
-      })
-
-      /*保存文章*/
-
-      function getObjectValues (object) {
+        that.render_current_article_tag()
+      },
+      render_current_article_tag: function () {
+        var that = this
+        that.$nextTick(function () {
+          that.search_box_width = (that.$refs.search_box.offsetWidth - that.$refs.js_chosen_tags.offsetWidth - 15) + 'px'
+        })
+      },
+      getObjectValues: function (object) {
         var values = []
         for (var property in object)
           values.push(object[property].article_tag_id)
         return values
-      }
-
-      $('body').on('click', '#save_article', function () {
+      },
+      save_upload: function () { // 图片上传保存写入marked
+        var that = this
+        if (!that.upload_img_url) {
+          alert('请填写插入的图片地址')
+          return false
+        }
+        that.article_content += '![Alt text](' + that.upload_img_url + ')'
+        that.upload_article_modal_show = false
+      },
+      save_article: function () {
+        var that = this
         var load_index = layer.load(2, {time: 10 * 1000})
         var params = {
-          title: document.querySelector('#article-title').value,//文章的标题
-          content: marked(write_textarea.value, {breaks: true}), /*主内容*/
-          origin_content: write_textarea.value, /*源内容*/
-          source: document.querySelector('#article_type').getAttribute('data-id'), // 来源 （1原创 2转载）
+          title: that.article_title,//文章的标题
+          content: marked(that.article_content, {breaks: true}), /*主内容*/
+          origin_content: that.article_content, /*源内容*/
+          source: that.current_article_type.id, // 来源 （1原创 2转载）
           type: 1, // 类型 （1文章 2说说 3视频 4公告 ）
-          topic_ids: document.querySelector('#topic_name').getAttribute('data-id'),
-          tag_ids: getObjectValues(current_article_tag_arr).join(',')
+          topic_ids: that.current_topic.topic_id,
+          tag_ids: that.getObjectValues(that.current_article_tag_arr).join(',')
         }
 
         _server.post_article_writer(params).then(function (res) {
           layer.close(load_index)
           if (res.state === 'success') {
-            $('#article-save-model').modal('hide')
+            this.create_show_modal = false
             window.location.href = '/user/<%= user_info.uid %>/article/all'
           } else {
             layer.msg(res.message)
@@ -363,40 +329,34 @@
         }).catch(function () {
 
         })
-
-      })
-
-    }(window)
-
-  }
-
-
+      },
+      post_upload_article_picture: function () {
+        var that = this
+        var data = new FormData()//重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
+        data.append('file', this.file, this.file.name)
+        _server.post_upload_article_picture(data).then(function (res) {
+          that.$nextTick(function () {
+            if (res.state === 'success') {
+              alert('上传文章图片成功')
+              that.article_content += '![Alt text](' + res.data.img + ')'
+              that.upload_article_modal_show = false
+            } else {
+              alert(res.message)
+            }
+          })
+        })
+      },
+      change_file: function (event) {
+        var that = this
+        this.file = event.target.files[0]
+        setTimeout(function () {
+          that.post_upload_article_picture()
+        }, 200)
+      },
+    }
+  })
 </script>
-<!--<script>
 
-  var navbar = document.getElementById('layout-navbar')
-
-  function getScrollTop () {
-    var scrollTop = 0;
-    if (document.documentElement && document.documentElement.scrollTop) {
-      scrollTop = document.documentElement.scrollTop;
-    }
-    else if (document.body) {
-      scrollTop = document.body.scrollTop;
-    }
-    return scrollTop;
-  }
-
-  window.onscroll = function () {
-    var st = getScrollTop()
-    if (st > 50) {
-      navbar.classList.add("navbar-fixed-top");
-    } else {
-      navbar.classList.remove("navbar-fixed-top");
-    }
-  }
-
-</script>-->
 </body>
 
 <% include parts/footer.ejs %>

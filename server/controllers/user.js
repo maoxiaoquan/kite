@@ -677,13 +677,25 @@ class User {
       },//为空，获取全部，也可以自己添加条件
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: pageSize,//每页限制返回的数据条数
-      order: [['create_date_timestamp', 'desc']],
-      include: [{
-        model: models.user,
-        as: 'other_user',
-        attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-      }]
+      order: [['create_date_timestamp', 'desc']]
+    }).then((res) => {
+      return JSON.parse(JSON.stringify(res))
     })
+
+    for (let item in rows) { // 循环取用户
+      await (async (i) => {
+        rows[i].other_user = {}
+        let data = await models.user.findOne({
+          where: {uid: rows[i].other_uid},
+          attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+        }).then((res) => {
+          return JSON.parse(JSON.stringify(res))
+        })
+        if (data) {
+          rows[i].other_user = data
+        }
+      })(item)
+    }
 
     if (unread_user_message_id.length > 0) { // 修改未读为已读
       await models.user_message.update(
@@ -698,7 +710,7 @@ class User {
         })
     }
 
-    home_resJson(ctx, {
+    await home_resJson(ctx, {
       state: 'success',
       message: '数据返回成功',
       data: {

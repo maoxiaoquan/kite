@@ -12,7 +12,7 @@ module.exports = (type) => {
 
   let destination_url = {
     user_avatar: `static/upload/web/user_avatar/${year}/${month}`,
-    user: 'static/upload/web/user/',
+    article_picture: `static/upload/web/article_picture/${year}/${month}`,
     admin: 'static/upload/admin/',
     admin_swiper: `static/upload/admin/swiper/${year}/${month}`
   }

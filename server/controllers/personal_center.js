@@ -81,8 +81,7 @@ class Personal_center {
       where: where_params,//为空，获取全部，也可以自己添加条件
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: pageSize,//每页限制返回的数据条数
-      order: [['create_date_timestamp', 'desc']],
-      include: [{model: models.user, as: 'user'}]
+      order: [['create_date_timestamp', 'desc']]
     }).then((res) => {
       res.rows.map((item, key) => {
         item.create_at = moment(item.create_date).format('YYYY-MM-DD')
@@ -90,6 +89,21 @@ class Personal_center {
       })
       return res
     })
+
+    for (let item in rows) { // 循环取用户
+      await (async (i) => {
+        rows[i].user = {}
+        let data = await models.user.findOne({
+          where: {uid: rows[i].uid},
+          attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+        }).then((res) => {
+          return JSON.parse(JSON.stringify(res))
+        })
+        if (data) {
+          rows[i].user = data
+        }
+      })(item)
+    }
 
     let user_article_topic_all = await models.user_article_topic.findAll({
       where: {uid},//为空，获取全部，也可以自己添加条件
@@ -275,8 +289,7 @@ class Personal_center {
       where: where_params,//为空，获取全部，也可以自己添加条件
       offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
       limit: pageSize,//每页限制返回的数据条数
-      order: [['create_date_timestamp', 'desc']],
-      include: [{model: models.user, as: 'user'}]
+      order: [['create_date_timestamp', 'desc']]
     }).then((res) => {
       res.rows.map((item, key) => {
         item.create_at = moment(item.create_date).format('YYYY-MM-DD')
@@ -284,6 +297,21 @@ class Personal_center {
       })
       return res
     })
+
+    for (let item in rows) { // 循环取用户
+      await (async (i) => {
+        rows[i].user = {}
+        let data = await models.user.findOne({
+          where: {uid: rows[i].uid},
+          attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+        }).then((res) => {
+          return JSON.parse(JSON.stringify(res))
+        })
+        if (data) {
+          rows[i].user = data
+        }
+      })(item)
+    }
 
     /*所有文章专题*/
     let article_tag_all = await models.article_tag.findAll({

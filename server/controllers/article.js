@@ -3,10 +3,50 @@ const moment = require('moment')
 const {render, home_resJson} = require('../utils/res_data')
 const Op = require('sequelize').Op
 const trimHtml = require('trim-html')
+const cheerio = require('cheerio')
 
 function err_mess (message) {
   this.message = message
   this.name = 'UserException'
+}
+
+function getNoMarkupStr (markupStr) {
+  /* markupStr 源码</> */
+  //console.log(markupStr);
+  let noMarkupStr = markupStr
+  /* 得到可视文本(不含图片),将&nbsp;&lt;&gt;转为空字符串和<和>显示,同时去掉了换行,文本单行显示 */
+  //console.log("1--S" + noMarkupStr + "E--");
+  noMarkupStr = noMarkupStr.replace(/(\r\n|\n|\r)/gm, '')
+  /* 去掉可视文本中的换行,(没有用,上一步已经自动处理) */
+  //console.log("2--S" + noMarkupStr + "E--");
+  noMarkupStr = noMarkupStr.replace(/^\s+/g, '')
+  /* 替换开始位置一个或多个空格为一个空字符串 */
+  //console.log("3--S" + noMarkupStr + "E--");
+  noMarkupStr = noMarkupStr.replace(/\s+$/g, '')
+  /* 替换结束位置一个或多个空格为一个空字符串 */
+  //console.log("4--S" + noMarkupStr + "E--");
+  noMarkupStr = noMarkupStr.replace(/\s+/g, ' ')
+  /* 替换中间位置一个或多个空格为一个空格 */
+  //console.log("5--S" + noMarkupStr + "E--");
+  return noMarkupStr
+}
+
+function getSubStr (string) {
+  let str = ''
+  let len = 0
+  for (var i = 0; i < string.length; i++) {
+    if (string[i].match(/[^\x00-\xff]/ig) != null) {
+      len += 2
+    } else {
+      len += 1
+    }
+    if (len > 240) {/* 240为要截取的长度 */
+      str += '...'
+      break
+    }
+    str += string[i]
+  }
+  return str
 }
 
 class Article {
@@ -24,8 +64,7 @@ class Article {
     let sql_article = await models.article.findOne({
       where: {
         aid: aid
-      },
-      include: [{model: models.user, as: 'user'}]
+      }
     }).then((res) => {
       res.create_at = moment(res.create_date).format('YYYY-MM-DD')
       return res
@@ -109,15 +148,20 @@ class Article {
       return false
     }
 
+    const result = formData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
+
+    let $ = cheerio.load(formData.content)
+
     try {
       await models.article.create({
         uid: ctx.session.uid,
         author: '',
         title: formData.title,
-        excerpt: trimHtml(formData.origin_content).html, /*摘记*/
+        excerpt: getSubStr(getNoMarkupStr($.text())), /*摘记*/
         content: formData.content, /*主内容*/
         origin_content: formData.origin_content, /*源内容*/
         source: formData.source, // 来源 （1原创 2转载）
+        cover_img: result[2],
         status: 1, // '状态(0:草稿;1:审核中;2:审核通过;3:回收站)'
         type: formData.type, // 类型 （1文章 2说说 3视频 4公告 ）
         topic_ids: formData.topic_ids,
@@ -167,8 +211,7 @@ class Article {
         where: {article_tag_ids: {[Op.like]: `%${article_tag_id}%`}},//为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize,//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize,//每页限制返回的数据条数
-        order: [['create_date_timestamp', 'desc']],
-        include: [{model: models.user, as: 'user'}]
+        order: [['create_date_timestamp', 'desc']]
       }).then((res) => {
         res.rows.map((item, key) => {
           item.create_at = moment(item.create_date).format('YYYY-MM-DD')
@@ -176,6 +219,21 @@ class Article {
         })
         return res
       })
+
+      for (let item in rows) { // 循环取用户
+        await (async (i) => {
+          rows[i].user = {}
+          let data = await models.user.findOne({
+            where: {uid: rows[i].uid},
+            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+          }).then((res) => {
+            return JSON.parse(JSON.stringify(res))
+          })
+          if (data) {
+            rows[i].user = data
+          }
+        })(item)
+      }
 
       let subscribe_count = await models.subscribe_article_tag.count({where: {article_tag_id}})
 
@@ -233,8 +291,7 @@ class Article {
     let aid = ctx.query.aid
 
     let article = await models.article.findOne({
-      where: {aid},
-      include: [{model: models.user, as: 'user'}]
+      where: {aid}
     })
 
     if (article) {

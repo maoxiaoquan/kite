@@ -139,7 +139,14 @@
           that.$nextTick(function () {
             if (res.state === 'success') {
               that.user_info = res.data
-              that.form_data = res.data.user
+
+              that.form_data.nickname = res.data.user.nickname
+              that.form_data.sex = res.data.user.sex
+              that.form_data.profession = res.data.user_info.profession
+              that.form_data.company = res.data.user.company
+              that.form_data.introduction = res.data.user.introduction
+              that.form_data.home_page = res.data.user_info.home_page
+              that.form_data.avatar = res.data.user.avatar
             }
           })
         })

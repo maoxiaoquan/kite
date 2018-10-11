@@ -261,3 +261,6 @@ caption {
 
 .pull-right {
   float: right; }
+
+[data-customize="modal"] {
+  display: none; }

@@ -95,6 +95,9 @@ function hasClass (obj, cls) {
     },
     post_reset_password: function (data) { // 重置密码
       return _Fetch.post('/reset_password', data)
+    },
+    post_upload_article_picture: function (data) { // 上传文章图片
+      return _Fetch.post('/upload_article_picture', data, {headers: {'Content-Type': 'multipart/form-data'}})
     }
   }
 
@@ -130,8 +133,12 @@ var modal_template = ' <transition name="modal">' +
 /* <child :foo.sync=”msg”></child> 就会被扩展为： <child :foo=”bar” @update:foo=”val => bar = val”>  （@是v-on的简写）*/
 
 // register modal component
-Vue.component('topic-modal', {
-  props: ['show'],
+Vue.component('box-modal', {
+  props: {
+    show: {
+      default: false
+    }
+  },
   methods: {
     close_model: function () {
       this.$emit('update:show', false)

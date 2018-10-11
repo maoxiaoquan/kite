@@ -69,6 +69,8 @@ router.get('user_info', user.get_user_info) // 根据uid 获取用户相应信�
 
 router.post('upload_user_avatar', ajaxCheck_Session, util_upload('user_avatar').single('file'), upload.upload_user_avatar) // 用户修改头像 post
 
+router.post('upload_article_picture', ajaxCheck_Session, util_upload('article_picture').single('file'), upload.upload_article_picture) // 文章图片上传
+
 router.post('update_user_info', ajaxCheck_Session, user.post_update_user_info) // 根据uid 更新用户相应信息 post
 
 router.post('update_user_password', ajaxCheck_Session, user.post_update_user_password) // 根据uid 更新用户登录密码
