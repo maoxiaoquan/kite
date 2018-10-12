@@ -84,11 +84,11 @@ const admin_system_log = sequelize.define(require('./models_type/db_admin_system
 /*图片表*/
 const picture = sequelize.define(require('./models_type/db_picture').NAME, require('./models_type/db_picture').TABLE, SEQ_PARAMETER)
 
-/* 表关联 */
+/* 表关联 已遗弃*/
 /*user.hasMany(comment, {foreignKey: 'uid',as:'user'})*/
-comment.belongsTo(user, {foreignKey: 'uid',as:'user'})
+/*comment.belongsTo(user, {foreignKey: 'uid',as:'user'})
 user_message.belongsTo(user, {foreignKey: 'other_uid',as:'other_user'})
-article.belongsTo(user, {foreignKey: 'uid',as:'user'})
+article.belongsTo(user, {foreignKey: 'uid',as:'user'})*/
 
 module.exports = {
   sequelize,

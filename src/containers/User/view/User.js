@@ -26,15 +26,10 @@ const FormItem = Form.Item
 const confirm = Modal.confirm
 
 class User extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       columns: [
-        {
-          title: 'id',
-          dataIndex: 'uid',
-          key: 'uid'
-        },
         {
           title: '昵称',
           dataIndex: 'nickname',
@@ -67,7 +62,7 @@ class User extends React.Component {
             return (
               <div className="table-is-login">
                 {
-                  value ? (<Icon type="check-circle" />) : (<Icon type="close-circle" />)
+                  value ? (<Icon type="check-circle"/>) : (<Icon type="close-circle"/>)
                 }
               </div>
             )
@@ -80,33 +75,36 @@ class User extends React.Component {
             return (
               <div className="table-right-btn">
                 <Button onClick={() => { this.editUser(record) }} size="small"
-                  type="primary"
+                        type="primary"
                 >修改</Button>
                 <Button className="box-btn-red"
-                  onClick={() => {
-                    this.deleteUser(record)
-                  }}
-                  size="small"
+                        onClick={() => {
+                          this.deleteUser(record)
+                        }}
+                        size="small"
                 >删除</Button>
+                <Button className="box-btn-orange"
+                        size="small">设置用户标签</Button>
               </div>
             )
           }
         }],
       pagination: {},
       modal_visible_edit: false,
-      loading: false
+      loading: false,
+      modal_visible_user_tags: false
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.fetch_user_list()
   }
 
-  editUser(val) {
+  editUser (val) {
     this.setState({
       modal_visible_edit: true
     })
-    this.props.dispatch({ type: 'SET_CURRENT_USER_INFO', data: val })
+    this.props.dispatch({type: 'SET_CURRENT_USER_INFO', data: val})
     this.props.form.setFieldsValue({
       nickname: val.nickname,
       enable: val.enable,
@@ -115,8 +113,8 @@ class User extends React.Component {
     })
   }
 
-  deleteUser(val) {
-    this.props.dispatch({ type: 'SET_CURRENT_USER_INFO', data: val })
+  deleteUser (val) {
+    this.props.dispatch({type: 'SET_CURRENT_USER_INFO', data: val})
     confirm({
       title: '确认要删除此用户吗？',
       content: '此操作不可逆转',
@@ -124,27 +122,31 @@ class User extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_user_delete({ uid: this.props.state_user.current_user_info.uid })
-        /*删除管理员用户*/
+        this.fetch_user_delete({uid: this.props.state_user.current_user_info.uid})
+        /*删除用户*/
       },
-      onCancel() {
+      onCancel () {
         console.log('Cancel')
       }
     })
   }
 
-  TablePageChange = async (pages) => {
+  set_user_tag () {
+
+  }
+
+  async TablePageChange (pages) {
     let pagination = {}
     pagination.current = pages.current
     await this.setState({
-      pagination: {
-        current: pages.current
-      }
-    })
+        pagination: {
+          current: pages.current
+        }
+      })
     this.fetch_user_list(pages)
   }
 
-  handleSubmit = (e) => {
+  handleSubmit (e) {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -153,19 +155,19 @@ class User extends React.Component {
     })
   }
 
-  fetch_user_delete = (values) => { /*删除管理员用户*/
+  fetch_user_delete (values) { /*删除用户*/
     this.props.dispatch(delete_user(values, (res) => {
       alert.message_success('删除用户成功')
       this.fetch_user_list()
     }))
   }
 
-  fetch_user_list = () => {  /*获取管理员用户带分页的列表*/
+  fetch_user_list () {  /*获取用户带分页的列表*/
     const that = this
-    this.setState({ loading: true })
-    const { pagination: { current } } = this.state
-    this.props.dispatch(get_user_list({ params: { page: current } }, (res) => {
-      let pagination = { ...that.state.pagination }
+    this.setState({loading: true})
+    const {pagination: {current}} = this.state
+    this.props.dispatch(get_user_list({params: {page: current}}, (res) => {
+      let pagination = {...that.state.pagination}
       pagination.total = res.count
       pagination.current = current
       that.setState({
@@ -175,8 +177,8 @@ class User extends React.Component {
     }))
   }
 
-  fetch_user_edit = (values) => { /*修改管理员用户账户*/
-    this.props.dispatch(edit_user({ uid: this.props.state_user.current_user_info.uid, ...values }, (res) => {
+  fetch_user_edit = (values) => { /*修改用户*/
+    this.props.dispatch(edit_user({uid: this.props.state_user.current_user_info.uid, ...values}, (res) => {
       alert.message_success('修改用户成功')
       this.fetch_user_list()
       this.setState({
@@ -185,15 +187,15 @@ class User extends React.Component {
     }))
   }
 
-  render() {
-    const { loading } = this.state
-    const { state_user = {} } = this.props
-    const { getFieldDecorator } = this.props.form
+  render () {
+    const {loading} = this.state
+    const {state_user = {}} = this.props
+    const {getFieldDecorator} = this.props.form
 
     const prefixSelector = getFieldDecorator('prefix', {
       initialValue: '86'
     })(
-      <Select style={{ width: 70 }}>
+      <Select style={{width: 70}}>
         <Option value="86">+86</Option>
         <Option value="87">+87</Option>
       </Select>
@@ -201,12 +203,12 @@ class User extends React.Component {
 
     const formItemLayout = {
       labelCol: {
-        xs: { span: 24 },
-        sm: { span: 5 }
+        xs: {span: 24},
+        sm: {span: 5}
       },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 19 }
+        xs: {span: 24},
+        sm: {span: 19}
       }
     }
     const tailFormItemLayout = {
@@ -228,7 +230,7 @@ class User extends React.Component {
           <ul className="header-dropdown">
             <li className="dropdown">
               <a className="dropdown-toggle" href="javascript:void(0);">
-                <Icon type="ellipsis" />
+                <Icon type="ellipsis"/>
               </a>
             </li>
           </ul>
@@ -257,53 +259,18 @@ class User extends React.Component {
                   label="昵称"
                 >
                   {getFieldDecorator('nickname', {
-                    rules: [{ required: true, message: '请输入昵称！', whitespace: true }]
+                    rules: [{required: true, message: '请输入昵称！', whitespace: true}]
                   })(
-                    <Input placeholder="昵称" />
+                    <Input placeholder="昵称"/>
                   )}
                 </FormItem>
 
                 <FormItem
                   {...formItemLayout}
-                  label="密码"
+                  label="是否可登录"
                 >
-                  {getFieldDecorator('password', {
-                    rules: [{
-                      required: true, message: '请输入密码！'
-                    }, {
-                      validator: this.validateToNextPassword
-                    }]
-                  })(
-                    <Input placeholder="密码"
-                      type="password"
-                    />
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label="重复密码"
-                >
-                  {getFieldDecorator('confirm', {
-                    rules: [{
-                      required: true, message: '重复输入密码！'
-                    }, {
-                      validator: this.compareToFirstPassword
-                    }]
-                  })(
-                    <Input onBlur={this.handleConfirmBlur}
-                      placeholder="重复密码"
-                      type="password"
-                    />
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label="是否有效"
-                >
-                  {getFieldDecorator('enable', { valuePropName: 'checked' })(
-                    <Switch />
+                  {getFieldDecorator('enable', {valuePropName: 'checked'})(
+                    <Switch/>
                   )}
                 </FormItem>
 
@@ -319,6 +286,54 @@ class User extends React.Component {
               </Form>
             </Modal>
 
+
+            <Modal
+              footer={null}
+              onCancel={() => {
+                this.setState({
+                  modal_visible_user_tags: false
+                })
+              }}
+              title="设置用户角色标签"
+              visible={this.state.modal_visible_user_tags}
+            >
+              <Form
+                className="from-view"
+                onSubmit={this.handleSubmit}
+              >
+
+
+                <FormItem
+                  {...formItemLayout}
+                  label="昵称"
+                >
+                  {getFieldDecorator('nickname', {
+                    rules: [{required: true, message: '请输入昵称！', whitespace: true}]
+                  })(
+                    <Input placeholder="昵称"/>
+                  )}
+                </FormItem>
+
+                <FormItem
+                  {...formItemLayout}
+                  label="是否可登录"
+                >
+                  {getFieldDecorator('enable', {valuePropName: 'checked'})(
+                    <Switch/>
+                  )}
+                </FormItem>
+
+                <FormItem
+                  {...tailFormItemLayout}
+                >
+                  <Button
+                    className="register-btn"
+                    htmlType="submit"
+                    type="primary"
+                  >更新</Button>
+                </FormItem>
+              </Form>
+            </Modal>
 
 
             <Table
@@ -338,7 +353,7 @@ class User extends React.Component {
 
 const UserForm = Form.create()(User)
 
-export default connect(({ state_user }) => {
+export default connect(({state_user}) => {
   return {
     state_user
   }

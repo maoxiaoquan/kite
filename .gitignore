@@ -4,6 +4,7 @@
 # misc
 .DS_Store
 npm-debug.log*
+/static/upload
 /.
 /.idea
 .idea

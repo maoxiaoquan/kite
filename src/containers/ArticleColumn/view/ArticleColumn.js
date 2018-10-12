@@ -50,6 +50,29 @@ class ArticleColumn extends React.Component {
           key: 'article_column_icon'
         },
         {
+          title: '下属专题',
+          dataIndex: 'article_column_tags',
+          key: 'article_column_tags',
+          render: (value, record) => {
+            return (
+              <div className="table-article-tag-view">
+                {
+                  this.state.article_tag_all.map((item, key) => {
+                    let tags = record.article_column_tags.split(',')
+                    return tags.map((child_item, child_key) => {
+                      if (item.article_tag_id === Number(child_item)) {
+                        return (
+                          <Tag className="table-article-tag-list" key={child_key} color="orange">{item.article_tag_name}</Tag>
+                        )
+                      }
+                    })
+                  })
+                }
+              </div>
+            )
+          }
+        },
+        {
           title: '备注',
           dataIndex: 'article_column_description',
           key: 'article_column_description'
@@ -199,7 +222,7 @@ class ArticleColumn extends React.Component {
     callback()
   }
 
-  fetch_create_article_column = (values) => {  /*创建专栏*/
+  fetch_create_article_column = (values) => {/*创建专栏*/
     this.props.dispatch(create_article_column(values, (res) => {
       alert.message_success('创建专栏成功')
       this.fetch_article_column_list()
@@ -209,7 +232,7 @@ class ArticleColumn extends React.Component {
     }))
   }
 
-  fetch_update_article_column = (values) => { /*修改专栏*/
+  fetch_update_article_column = (values) => {/*修改专栏*/
     this.props.dispatch(update_article_column({article_column_id: this.props.state_article_column.current_info.article_column_id, ...values}, (res) => {
       alert.message_success('修改专栏成功')
       this.fetch_article_column_list()
@@ -219,14 +242,14 @@ class ArticleColumn extends React.Component {
     }))
   }
 
-  fetch_delete_article_column = (values) => { /*删除管理员用户*/
+  fetch_delete_article_column = (values) => {/*删除管理员用户*/
     this.props.dispatch(delete_article_column(values, (res) => {
       alert.message_success('删除专栏成功')
       this.fetch_article_column_list()
     }))
   }
 
-  fetch_article_column_list = () => {  /*获取管理员用户带分页的列表*/
+  fetch_article_column_list = () => {/*获取管理员用户带分页的列表*/
     const that = this
     this.setState({loading: true})
     const {pagination: {current}} = this.state
@@ -422,7 +445,8 @@ class ArticleColumn extends React.Component {
           <Alert
             style={{marginTop: '20px'}}
             message="备注信息"
-            description="文章专栏与文章标题之间的关系是，专栏下可以有多个标题，一个标题可以从属于多个专栏，创建的专栏如果不选择下属标题，默认是关闭状态，只有下属标题大于0，才会开放"
+            description="文章专栏与文章标题之间的关系是，文章专栏下可以有多个文章标签，一个文章标签可以从属于多个文章专栏，
+            创建的文章专栏如果不选择下属标题，默认是关闭状态，只有下属标题大于0，才会开放"
             type="info"
             showIcon
           />

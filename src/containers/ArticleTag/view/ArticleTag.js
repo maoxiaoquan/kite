@@ -33,11 +33,6 @@ class ArticleTag extends React.Component {
     this.state = {
       columns: [
         {
-          title: 'article_tag_id',
-          dataIndex: 'article_tag_id',
-          key: 'article_tag_id'
-        },
-        {
           title: '标签名',
           dataIndex: 'article_tag_name',
           key: 'article_tag_name'

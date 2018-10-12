@@ -12,7 +12,7 @@ export const get_article_list = (data, callback) => {
 
 export const edit_user = (data, callback) => {
   return () => {
-    http.post('/api/edit_user', data).then((res) => {
+    http.post('/api/edit_article', data).then((res) => {
       if (callback)
         callback(res)
     })

@@ -40,7 +40,9 @@ class UserTag extends React.Component {
         {
           title: '标签名',
           dataIndex: 'user_tag_name',
-          key: 'user_tag_name'
+          key: 'user_tag_name',
+          render: (text, record) => (
+            <Tag className="table-article-tag-list" color="orange">{record.user_tag_name}</Tag>)
         },
         {
           title: '标签图标',
@@ -250,7 +252,7 @@ class UserTag extends React.Component {
     return (
       <div className="box-card">
         <div className="box-card-header">
-          <h2><strong>标签管理</strong></h2>
+          <h2><strong>用户标签</strong></h2>
           <ul className="header-dropdown">
             <li className="dropdown">
               <a className="dropdown-toggle" href="javascript:void(0);">
@@ -265,7 +267,7 @@ class UserTag extends React.Component {
               className="article-tag-user-create-btn"
               icon="plus" type="primary"
               onClick={() => this.showModal(0)}
-            >创建标签</Button>
+            >创建用户标签</Button>
             {/*<p>{this.props.match.url}</p>
           <p>{this.props.match.params.id}</p>*/}
 

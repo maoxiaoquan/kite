@@ -40,9 +40,6 @@ class Users {
     await user.update({
       avatar: 'http://oq33egsog.bkt.clouddn.com/avatar1.jpg',
       nickname: nickname,
-      password: encrypt(password, config.encrypt_key),
-      email: account,
-      sex: '未知',
       enable: enable || false
     }, {
         where: {
