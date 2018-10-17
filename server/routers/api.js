@@ -1,13 +1,15 @@
 const router = require('koa-router')()
-const admin_users = require('../apis/admin_users')// 后台用户
-const users = require('../apis/users')// 前台用户
-const user_tag = require('../apis/user_tag')// 前台用户标签
-const articles = require('../apis/articles')//文章
-const article_tag = require('../apis/article_tag')// 文章标签
-const article_column = require('../apis/article_column')// 文章专栏 （专栏为官方）
-const picture = require('../apis/picture')// 图片管理
-const upload = require('../apis/upload')// 上传
-const role_authority = require('../apis/admin_role_authority')// 后台角色权限
+const admin_users = require('../admin_controllers/admin_users')// 后台用户
+const users = require('../admin_controllers/users')// 前台用户
+const user_tag = require('../admin_controllers/user_tag')// 前台用户标签
+const articles = require('../admin_controllers/articles')//文章
+const article_tag = require('../admin_controllers/article_tag')// 文章标签
+const article_column = require('../admin_controllers/article_column')// 文章专栏 （专栏为官方）
+const picture = require('../admin_controllers/picture')// 图片管理
+const upload = require('../admin_controllers/upload')// 上传
+const role_authority = require('../admin_controllers/admin_role_authority')// 后台角色权限
+const comment = require('../admin_controllers/comment')// 评论
+const admin_system_log = require('../admin_controllers/admin_system_log')// 评论
 const tokens = require('../utils/tokens') //登录tokens
 const verify_authority = require('../utils/verify_authority') //权限验证
 
@@ -52,14 +54,16 @@ router.post('/delete_article_column', tokens.verifyToken, article_column.delete_
 
 /*文章专题管理 （专题为个人）*/
 
-/*用户标签管理*/
-/*根据分页获取标签*/
+// 用户标签管理
+/*根据分页获取用户标签*/
 router.get('/get_user_tag_list', tokens.verifyToken, user_tag.get_user_tag_list)
-/*用户创建标签*/
+// 获取所有用户标签
+router.get('/get_user_tag_all', tokens.verifyToken, user_tag.get_user_tag_all)
+// 创建用户标签
 router.post('/create_user_tag', tokens.verifyToken, user_tag.create_user_tag)
-/*用户更新标签*/
+/*用户更新用户标签*/
 router.post('/update_user_tag', tokens.verifyToken, user_tag.update_user_tag)
-/*用户删除标签*/
+/*用户删除用户标签*/
 router.post('/delete_user_tag', tokens.verifyToken, user_tag.delete_user_tag)
 
 /*图片管理*/
@@ -70,6 +74,16 @@ router.post('/create_picture', tokens.verifyToken, picture.create_picture)
 router.post('/update_picture', tokens.verifyToken, picture.update_picture)
 /*图片删除*/
 router.post('/delete_picture', tokens.verifyToken, picture.delete_picture)
+
+
+// 评论模块
+// 评论分页列表
+router.get('/get_comment_list', tokens.verifyToken, comment.get_comment_list)
+// 评论数据更新
+router.post('/update_comment', tokens.verifyToken, comment.update_comment)
+// 评论数据删除
+router.post('/delete_comment', tokens.verifyToken, comment.delete_comment)
+
 
 /**
  * 上传
@@ -138,5 +152,14 @@ router.post('/set_admin_role_authority', tokens.verifyToken, role_authority.set_
 //router.use('/user', tokens.testToken())
 //api 获取用户 POST
 //console.log('router',router)
+
+/**
+ * 后台系统日志
+ */
+
+// 获取分页系统日志
+router.get('/get_admin_system_log_list', tokens.verifyToken, admin_system_log.get_admin_system_log_list)
+//删除系统日志
+router.post('/delete_admin_system_log', tokens.verifyToken, admin_system_log.delete_admin_system_log)
 
 module.exports = router

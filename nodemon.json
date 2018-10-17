@@ -1,19 +1,17 @@
 {
   "restartable": "rs",
   "ignore": [
-    ".git",
-    ".svn",
-    "/pm2log/",
-    "/src/",
-    "/static/",
-    "/view/",
-    "/node_modules/"
+    "./pm2log",
+    "./src",
+    "./static",
+    "./view"
   ],
   "verbose": true,
   "execMap": {
     "js": "node --harmony"
   },
   "watch": [
+    "./server"
   ],
   "env": {
     "NODE_ENV": "development"

@@ -12,6 +12,11 @@ module.exports = {
       defaultValue: shortid.generate,
       field: 'uid'
     },
+    avatar: { // 头像
+      type: Seq.STRING(100),
+      comment: '头像',
+      field: 'avatar'
+    },
     account: { // 账户
       type: Seq.CHAR(16),
       comment: '账户',

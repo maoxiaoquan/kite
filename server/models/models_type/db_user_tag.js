@@ -43,6 +43,11 @@ module.exports = {
       comment: '创建时间戳',
       field: 'create_date_timestamp',
       defaultValue: time.TimeNow.timestamp /*时间戳 */
+    },
+    enable: { // 是否有效
+      type: Seq.BOOLEAN,
+      comment: '是否有效',
+      field: 'enable'
     }
   }
 }

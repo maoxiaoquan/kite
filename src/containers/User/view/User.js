@@ -21,6 +21,10 @@ import {
 } from '../actions/UserAction'
 import alert from '../../../utils/alert'
 
+import {
+  get_user_tag_all
+} from '../../UserTag/actions/UserTagAction'
+
 const Option = Select.Option
 const FormItem = Form.Item
 const confirm = Modal.confirm
@@ -55,6 +59,29 @@ class User extends React.Component {
           }
         },
         {
+          title: '拥有的角色标签',
+          dataIndex: 'user_tag_ids',
+          key: 'user_tag_ids',
+          render: (value, record) => {
+            return (
+              <div className="table-article-tag-view">
+                {
+                  this.state.user_tag_all.map((item, key) => {
+                    let tags = record.user_tag_ids.split(',')
+                    return tags.map((child_item, child_key) => {
+                      if (item.user_tag_id === Number(child_item)) {
+                        return (
+                          <Tag className="table-article-tag-list" key={child_key} color="purple">{item.user_tag_name}</Tag>
+                        )
+                      }
+                    })
+                  })
+                }
+              </div>
+            )
+          }
+        },
+        {
           title: '是否可以登陆',
           dataIndex: 'enable',
           key: 'enable',
@@ -83,8 +110,6 @@ class User extends React.Component {
                         }}
                         size="small"
                 >删除</Button>
-                <Button className="box-btn-orange"
-                        size="small">设置用户标签</Button>
               </div>
             )
           }
@@ -92,12 +117,13 @@ class User extends React.Component {
       pagination: {},
       modal_visible_edit: false,
       loading: false,
-      modal_visible_user_tags: false
+      user_tag_all: []
     }
   }
 
   componentDidMount () {
     this.fetch_user_list()
+    this.fetch_user_tag_all()
   }
 
   editUser (val) {
@@ -107,9 +133,8 @@ class User extends React.Component {
     this.props.dispatch({type: 'SET_CURRENT_USER_INFO', data: val})
     this.props.form.setFieldsValue({
       nickname: val.nickname,
-      enable: val.enable,
-      password: '',
-      confirm: ''
+      user_tag_ids: val.user_tag_ids ? val.user_tag_ids.split(',') : [],
+      enable: val.enable
     })
   }
 
@@ -131,18 +156,14 @@ class User extends React.Component {
     })
   }
 
-  set_user_tag () {
-
-  }
-
   async TablePageChange (pages) {
     let pagination = {}
     pagination.current = pages.current
     await this.setState({
-        pagination: {
-          current: pages.current
-        }
-      })
+      pagination: {
+        current: pages.current
+      }
+    })
     this.fetch_user_list(pages)
   }
 
@@ -153,6 +174,14 @@ class User extends React.Component {
         this.fetch_user_edit(values)
       }
     })
+  }
+
+  fetch_user_tag_all () {
+    this.props.dispatch(get_user_tag_all('', (res) => {
+      this.setState({
+        user_tag_all: res.user_tag_all
+      })
+    }))
   }
 
   fetch_user_delete (values) { /*删除用户*/
@@ -250,7 +279,7 @@ class User extends React.Component {
             >
               <Form
                 className="from-view"
-                onSubmit={this.handleSubmit}
+                onSubmit={this.handleSubmit.bind(this)}
               >
 
 
@@ -262,6 +291,25 @@ class User extends React.Component {
                     rules: [{required: true, message: '请输入昵称！', whitespace: true}]
                   })(
                     <Input placeholder="昵称"/>
+                  )}
+                </FormItem>
+
+
+                <FormItem
+                  {...formItemLayout}
+                  label="用户角色标签"
+                >
+                  {getFieldDecorator('user_tag_ids', {
+                    rules: [
+                      {required: false, message: '请选择文章专栏下属专题!', type: 'array'}
+                    ]
+                  })(
+                    <Select mode="multiple" placeholder="请选择文章专栏下属专题">
+                      {
+                        this.state.user_tag_all.map((item) =>
+                          <Option key={item.user_tag_id}>{item.user_tag_name}</Option>)
+                      }
+                    </Select>
                   )}
                 </FormItem>
 
@@ -281,56 +329,7 @@ class User extends React.Component {
                     className="register-btn"
                     htmlType="submit"
                     type="primary"
-                  >更新</Button>
-                </FormItem>
-              </Form>
-            </Modal>
-
-
-            <Modal
-              footer={null}
-              onCancel={() => {
-                this.setState({
-                  modal_visible_user_tags: false
-                })
-              }}
-              title="设置用户角色标签"
-              visible={this.state.modal_visible_user_tags}
-            >
-              <Form
-                className="from-view"
-                onSubmit={this.handleSubmit}
-              >
-
-
-                <FormItem
-                  {...formItemLayout}
-                  label="昵称"
-                >
-                  {getFieldDecorator('nickname', {
-                    rules: [{required: true, message: '请输入昵称！', whitespace: true}]
-                  })(
-                    <Input placeholder="昵称"/>
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label="是否可登录"
-                >
-                  {getFieldDecorator('enable', {valuePropName: 'checked'})(
-                    <Switch/>
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...tailFormItemLayout}
-                >
-                  <Button
-                    className="register-btn"
-                    htmlType="submit"
-                    type="primary"
-                  >更新</Button>
+                  >确定</Button>
                 </FormItem>
               </Form>
             </Modal>

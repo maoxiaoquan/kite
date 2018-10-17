@@ -338,6 +338,15 @@ class UserTag extends React.Component {
                   )}
                 </FormItem>
 
+                <FormItem
+                  {...formItemLayout}
+                  label="是否有效"
+                >
+                  {getFieldDecorator('enable', {valuePropName: 'checked'})(
+                    <Switch/>
+                  )}
+                </FormItem>
+
 
                 <FormItem
                   {...tailFormItemLayout}
