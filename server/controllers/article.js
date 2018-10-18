@@ -161,7 +161,7 @@ class Article {
         content: formData.content, /*主内容*/
         origin_content: formData.origin_content, /*源内容*/
         source: formData.source, // 来源 （1原创 2转载）
-        cover_img: result[2],
+        cover_img: result ? result[2] : '',
         status: 1, // '状态(0:草稿;1:审核中;2:审核通过;3:回收站)'
         type: formData.type, // 类型 （1文章 2说说 3视频 4公告 ）
         topic_ids: formData.topic_ids,

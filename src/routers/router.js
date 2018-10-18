@@ -61,6 +61,7 @@ const Manager = ({match}) => (
   <div className="admin-main-content-view">
     <Aside/>
     <div className="admin-content-wrapper">
+      <Route component={createComponent(Index)} exact path={`${match.url}/index`}/>
       <Route component={createComponent(User)} exact path={`${match.url}/user`}/>
       <Route component={createComponent(Article)} exact path={`${match.url}/article`}/>
       <Route component={createComponent(ArticleTag)} exact path={`${match.url}/article_tag`}/>
@@ -80,32 +81,6 @@ const Main = ({match}) => (
   <div className="main">
     <Header/>
     <div className="admin-main-content">
-      <div className="block-header">
-        <Row>
-          <Col
-            lg={{span: 12}}  /*3 ≥992px 响应式栅格 */
-            md={{span: 12}}  /*4 ≥768px 响应式栅格 */
-            sm={{span: 24}}  /*5 ≥576px 响应式栅格 */
-            xl={{span: 12}}  /*2 ≥1200px 响应式栅格 */
-            xs={{span: 24}}  /*6 <576px 响应式栅格 */
-            xxl={{span: 12}} /*1 ≥1600px 响应式栅格 */
-          >
-            <h2>Horizontal Menu Dashboad
-              <small>Welcome to Oreo</small>
-            </h2>
-          </Col>
-          <Col
-            lg={{span: 12}}  /* 3 */
-            md={{span: 12}}  /* 4 */
-            sm={{span: 0}}  /* 5 */
-            xl={{span: 12}}  /* 2 */
-            xs={{span: 0}}  /* 6 */
-            xxl={{span: 12}} /* 1 */
-          >
-          </Col>
-        </Row>
-      </div>
-
       <Route component={Index} path={`${match.url}/index`}/>
       <Route component={Manager} path={`${match.url}/manager`}/>
     </div>

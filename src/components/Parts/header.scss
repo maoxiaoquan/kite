@@ -1,20 +1,16 @@
 #admin-header {
   font-family: "Montserrat", sans-serif;
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+  -webkit-box-shadow: 0 2px 12px 0 #dfe3eb;
+  box-shadow: 0 2px 12px 0 #dfe3eb;
   .admin-header-view {
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 11;
     width: 100%;
-    padding: 0;
-    margin-bottom: 20px;
-    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.15);
     height: 60px;
     background: #8c99e0;
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
-    z-index: 10;
-    width: 100%;
     padding: 0 5px;
     .navbar-header {
       .navbar-brand {
@@ -22,12 +18,12 @@
         float: left;
         padding-top: 15px;
         margin-left: 15px;
-        >img {
+        > img {
           width: 30px;
           display: inline-block;
           vertical-align: middle;
         }
-        >span {
+        > span {
           display: inline-block;
           vertical-align: middle;
           color: #ffffff;
@@ -74,7 +70,7 @@
         .input-group-addon {
           border: 1px solid #E3E3E3;
           border-radius: 30px;
-          padding: 12px 18px 11px 0;
+          padding: 10px 18px 10px 0;
           border-left: 0;
           border-bottom-left-radius: 0;
           border-top-left-radius: 0;
@@ -111,10 +107,7 @@
   .menu-container {
     width: 100%;
     margin: 0 auto;
-    background: #263238;
-    position: fixed;
-    top: 60px;
-    z-index: 10;
+    background: #fff;
     .menu {
       .pullDown {
         .menu-dropdown-icon {
@@ -123,7 +116,7 @@
             text-decoration: none;
             padding: 10px 15px;
             display: block;
-            color: #bbb;
+            color: #999;
             font-size: 14px;
           }
         }

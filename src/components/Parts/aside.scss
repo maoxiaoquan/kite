@@ -12,11 +12,14 @@
   -ms-flex-order: 0;
   order: 0;
   margin-right: 30px;
-  width: 250px;
+  width: 230px;
+  .box-card-header{
+    border-bottom: none;
+  }
   .admin-aside-content {
     position: fixed;
     background: #fff;
-    width: 250px;
+    width: 230px;
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
     display: -webkit-box;
@@ -26,7 +29,7 @@
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
-    height: calc(100vh - 50px) !important;
+    height: calc(100vh - 160px) !important;
   }
   .ant-menu {
     border-right: none;
@@ -43,6 +46,9 @@
   }
   .ant-menu-item {
     > span {
+      font-size: 14px;
+    }
+    > a {
       font-size: 14px;
     }
   }

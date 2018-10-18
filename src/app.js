@@ -10,6 +10,7 @@ import { AppContainer } from 'react-hot-loader';
 import rootReducer from './stores/reducers';
 
 import './app.scss';
+
 import App from './routers/router';
 /* router 文件 */
 

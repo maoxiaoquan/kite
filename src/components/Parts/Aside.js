@@ -40,6 +40,9 @@ class Aside extends Component {
     return (
       <div className="admin-aside " id="admin-aside">
         <div className="admin-aside-content box-card">
+
+
+
           <div className="box-card-header">
             <h2><strong>VACUO</strong> 主列表</h2>
             {/*<ul className="header-dropdown">
@@ -60,15 +63,9 @@ class Aside extends Component {
 
             <Menu
               mode="inline"
-              defaultOpenKeys={['12']}
+              defaultOpenKeys={['12', '2']}
               onClick={this.handleClick}
             >
-              <Menu.Item key="1">
-                <Link to="/master/index/main">
-                  <Icon type="pie-chart"/>
-                  <span>主页</span>
-                </Link>
-              </Menu.Item>
               <SubMenu key="12" title={<span><Icon type="setting"/><span>网站管理</span></span>}>
                 <Menu.Item key="8"><Link to="/main/manager/user">用户管理</Link></Menu.Item>
                 <Menu.Item key="9"><Link to="/main/manager/article">文章管理</Link></Menu.Item>

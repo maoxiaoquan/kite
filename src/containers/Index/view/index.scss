@@ -10,7 +10,104 @@
 }
 
 .layout-index {
+  .layout-one {
+    .box-card {
+      padding: 20px;
+      .iconfont {
+        width: 60px;
+        height: 60px;
+        line-height: 60px;
+        font-size: 30px;
+        float: left;
+        border-radius: 5px;
+        display: block;
+        text-align: center;
+        color: #fff;
+      }
+      .content {
+        padding-left: 90px;
+        p {
+          font-size: 16px;
+          margin-top: 5px;
+          margin-bottom: 5px;
+          font-weight: bold;
+        }
+      }
+    }
+    .count-view {
+      &:nth-of-type(1) {
+        .iconfont {
+          background-image: -webkit-gradient(linear, left top, right top, from(#b57fff), to(#8a7fff));
+          background-image: linear-gradient(to right, #b57fff, #8a7fff);
+          -webkit-box-shadow: 0 0 0 0 #896ddb, 0 0 0 0 #9f7fff;
+          box-shadow: 0 0 0 0 #896ddb, 0 0 0 0 #9f7fff;
+        }
+      }
+      &:nth-of-type(2) {
+        .iconfont {
+          background-image: -webkit-gradient(linear, left top, right top, from(#40dcb2), to(#40dc7e));
+          background-image: linear-gradient(to right, #40dcb2, #40dc7e);
+          -webkit-box-shadow: 0 0 0 0 #37bd83, 0 0 0 0 #40dc98;
+          box-shadow: 0 0 0 0 #37bd83, 0 0 0 0 #40dc98;
+        }
+      }
+      &:nth-of-type(3) {
+        .iconfont {
+          background-image: -webkit-gradient(linear, left top, right top, from(#4cc4ff), to(#4ca6ff));
+          background-image: linear-gradient(to right, #4cc4ff, #4ca6ff);
+          -webkit-box-shadow: 0 0 0 0 #419cdb, 0 0 0 0 #4cb5ff;
+          box-shadow: 0 0 0 0 #419cdb, 0 0 0 0 #4cb5ff;
+        }
+      }
+      &:nth-of-type(4) {
+        .iconfont {
+          background-image: -webkit-gradient(linear, left top, right top, from(#fc0), to(#ffa100));
+          background-image: linear-gradient(to right, #fc0, #ffa100);
+          -webkit-box-shadow: 0 0 0 0 #db9d00, 0 0 0 0 #ffb600;
+          box-shadow: 0 0 0 0 #db9d00, 0 0 0 0 #ffb600;
+        }
+      }
+    }
+  }
   .user-info {
+    height: 500px;
+    overflow: hidden;
+    .header {
+      position: relative;
+      img {
+        width: 100%;
+        height: 230px;
+      }
+      .avatar {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        border-radius: 160px;
+        overflow: hidden;
+        left: 30px;
+        bottom: -40px;
+        border: 2px solid #e0e0e0;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+    .info-pannel {
+      padding: 40px 30px 30px;
+      .name {
+        margin-top: 10px;
+      }
+      .text {
+        li {
+          margin-top: 5px;
+        }
+      }
+    }
+  }
 
+  .weather {
+    height: 500px;
+    overflow: hidden;
   }
 }
