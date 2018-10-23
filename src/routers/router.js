@@ -61,7 +61,7 @@ const Manager = ({match}) => (
   <div className="admin-main-content-view">
     <Aside/>
     <div className="admin-content-wrapper">
-      <Route component={createComponent(Index)} exact path={`${match.url}/index`}/>
+      <Route component={Index} exact path={`${match.url}/index`}/>
       <Route component={createComponent(User)} exact path={`${match.url}/user`}/>
       <Route component={createComponent(Article)} exact path={`${match.url}/article`}/>
       <Route component={createComponent(ArticleTag)} exact path={`${match.url}/article_tag`}/>
@@ -69,10 +69,10 @@ const Manager = ({match}) => (
       <Route component={createComponent(ArticleColumn)} exact path={`${match.url}/article_column`}/>
       <Route component={createComponent(UserTag)} exact path={`${match.url}/user_tag`}/>
       <Route component={createComponent(Picture)} exact path={`${match.url}/picture`}/>
-      <Route component={createComponent(adminUser)} exact path={`${match.url}/adminUser`}/>
-      <Route component={createComponent(adminRole)} exact path={`${match.url}/adminRole`}/>
-      <Route component={createComponent(adminAuthority)} exact path={`${match.url}/adminAuthority`}/>
-      <Route component={createComponent(AdminSystemLog)} exact path={`${match.url}/adminSystemLog`}/>
+      <Route component={createComponent(adminUser)} exact path={`${match.url}/admin_user`}/>
+      <Route component={createComponent(adminRole)} exact path={`${match.url}/admin_role`}/>
+      <Route component={createComponent(adminAuthority)} exact path={`${match.url}/admin_authority`}/>
+      <Route component={createComponent(AdminSystemLog)} exact path={`${match.url}/admin_system_log`}/>
     </div>
   </div>
 )
@@ -81,7 +81,6 @@ const Main = ({match}) => (
   <div className="main">
     <Header/>
     <div className="admin-main-content">
-      <Route component={Index} path={`${match.url}/index`}/>
       <Route component={Manager} path={`${match.url}/manager`}/>
     </div>
   </div>
@@ -96,7 +95,7 @@ class RouteConfig extends Component {
           <Route component={createComponent(SignIn)} exact path="/sign_in"/>
           <Route component={createComponent(SignUp)} exact path="/sign_up"/>
           <Route exact path="/" render={() => (
-            <Redirect to="/main/index"/>
+            <Redirect to="/main/manager/index"/>
           )}/>
         </div>
       </HashRouter>

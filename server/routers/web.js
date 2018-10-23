@@ -113,4 +113,6 @@ router.post('reset_password_code', user.post_reset_password_code) // 重置密�
 
 router.post('reset_password', user.post_reset_password) // 重置密码 TYPE:AJAX post
 
+router.get('user_tag_all', user.get_user_tag_all) // 获取所有用户角色标签
+
 module.exports = router

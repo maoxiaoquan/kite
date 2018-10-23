@@ -112,7 +112,8 @@ class Header extends Component {
         <div className="menu-container">
           <div className="menu">
             <ul className="pullDown clearfix">
-              <li className="menu-dropdown-icon"><Link to="/main/index">主页</Link></li>
+              <li className="menu-dropdown-icon"><a href="javascript:;">常用快捷导航</a></li>
+              <li className="menu-dropdown-icon"><Link to="/main/manager/index">主页</Link></li>
               <li className="menu-dropdown-icon"><Link to="/main/manager/user">管理</Link></li>
               <li className="menu-dropdown-icon"><Link to="/">网站配置</Link></li>
               <li className="menu-dropdown-icon"><Link to="/">数据备份</Link></li>

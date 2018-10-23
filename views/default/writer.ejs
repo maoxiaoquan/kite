@@ -307,7 +307,6 @@
       },
       save_article: function () {
         var that = this
-        var load_index = layer.load(2, {time: 10 * 1000})
         var params = {
           title: that.article_title,//文章的标题
           content: marked(that.article_content, {breaks: true}), /*主内容*/
@@ -319,12 +318,11 @@
         }
 
         _server.post_article_writer(params).then(function (res) {
-          layer.close(load_index)
           if (res.state === 'success') {
             this.create_show_modal = false
             window.location.href = '/user/<%= user_info.uid %>/article/all'
           } else {
-            layer.msg(res.message)
+            alert(res.message)
           }
         }).catch(function () {
 

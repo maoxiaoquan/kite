@@ -69,6 +69,169 @@
       }
     }
   }
+
+  .layout-ix-statistics {
+    .header-top {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      list-style-type: none;
+      margin: 0;
+      -ms-flex-pack: distribute;
+      justify-content: space-around;
+      li {
+        cursor: pointer;
+        margin-bottom: -1px;
+        text-align: center;
+        position: relative;
+        a {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          position: relative;
+          text-decoration: none;
+          padding: 18px;
+          font-size: 14px;
+          color: #666666;
+        }
+        &.active {
+          a {
+            font-weight: 600;
+            color: #2a2a2a;
+            &:before {
+              display: block;
+              position: absolute;
+              content: '';
+              width: 100%;
+              height: 6px;
+              border-radius: 3px;
+              bottom: -2px;
+              left: 0;
+              background: rgb(64, 220, 126);
+            }
+          }
+        }
+      }
+    }
+    .content {
+      .summary-container {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        background-color: #ecf2f5;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding: 1.5rem 4rem 1rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ebeff1;
+        border-left: none;
+        border-right: none;
+        .summory {
+          justify-content: center;
+          .value {
+            font-size: 23px;
+            color: #2a2a2a;
+          }
+        }
+      }
+      .chart-header {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        margin-bottom: 2.125rem;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        .legends {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          color: #a4abb3;
+          padding: 0 0 0 30px;
+          .legend {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            -webkit-box-align: baseline;
+            -ms-flex-align: baseline;
+            align-items: baseline;
+            margin-left: 30px;
+            &:nth-of-type(1) {
+              .legend-item-color {
+                background: linear-gradient(90deg, rgb(62, 221, 129) 0%, rgb(59, 221, 173) 100%);
+              }
+            }
+            &:nth-of-type(2) {
+              .legend-item-color {
+                background: linear-gradient(90deg, rgb(141, 127, 255) 0%, rgb(177, 127, 255) 100%);
+              }
+            }
+            &:nth-of-type(3) {
+              .legend-item-color {
+                background: rgba(236, 242, 245, 0.8);
+              }
+            }
+            .legend-item-color {
+              min-width: 15px;
+              min-height: 15px;
+              border-radius: .2rem;
+            }
+            .legend-title {
+              padding: 0 .75rem;
+              white-space: nowrap;
+            }
+          }
+        }
+        .dropdown {
+          margin-right: 30px;
+          .btn{
+            color: rgb(255, 255, 255);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            font-weight: 500;
+            cursor: default;
+            font-size: 12px;
+            line-height: 20px;
+            border-width: 2px;
+            border-style: solid;
+            border-color: transparent;
+            border-image: initial;
+            transition: none 0s ease 0s;
+            padding: 10px 20px;
+            border-radius: 5px;
+            &.btn-outline-success {
+              color: rgb(42, 42, 42);
+              background-color: transparent;
+              border-width: 2px;
+              border-style: solid;
+              border-color: rgb(64, 220, 126);
+              border-image: initial;
+            }
+          }
+          .dropdown-menu{
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
   .user-info {
     height: 500px;
     overflow: hidden;
@@ -110,4 +273,5 @@
     height: 500px;
     overflow: hidden;
   }
+
 }

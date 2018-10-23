@@ -1,21 +1,22 @@
-const {admin_resJson} = require('../utils/res_data')
+const { admin_resJson } = require('../utils/res_data')
 const {
   sequelize,
   admin_role,
   admin_authority,
-  admin_user_role, admin_role_authority
-} = require('../models')
+  admin_user_role,
+  admin_role_authority
+} = require('../../db/mysqldb')
 const moment = require('moment')
-const {isEmpty} = require('../utils/tools')
-const {create_admin_system_log} = require('./admin_system_log')
+const { isEmpty } = require('../utils/tools')
+const { create_admin_system_log } = require('./admin_system_log')
 
-function err_mess (message) {
+function err_mess(message) {
   this.message = message
   this.name = 'UserException'
 }
 
 class role_authority {
-  constructor () {
+  constructor() {
     // super()
   }
 
@@ -24,8 +25,8 @@ class role_authority {
    * 创建角色
    * @param   {obejct} ctx 上下文对象
    */
-  static async create_admin_role (ctx) {
-    const {role_name, role_description} = ctx.request.body
+  static async create_admin_role(ctx) {
+    const { role_name, role_description } = ctx.request.body
     try {
       if (!role_name) {
         throw new err_mess('请输入角色名!')
@@ -33,7 +34,7 @@ class role_authority {
       if (!role_description) {
         throw new err_mess('请输入角色介绍!')
       }
-      let find_role = await admin_role.findOne({where: {role_name}})
+      let find_role = await admin_role.findOne({ where: { role_name } })
       if (find_role) {
         throw new err_mess('角色已存在!')
       }
@@ -45,10 +46,11 @@ class role_authority {
       return false
     }
 
-    await admin_role.create({role_name, role_description})
-      .then(async function (p) {
-
-        await create_admin_system_log({ // 写入日志
+    await admin_role
+      .create({ role_name, role_description })
+      .then(async function(p) {
+        await create_admin_system_log({
+          // 写入日志
           uid: ctx.request.userInfo.uid,
           type: 1,
           content: `成功创建了‘${role_name}’角色`
@@ -58,7 +60,8 @@ class role_authority {
           state: 'success',
           message: '角色创建成功'
         })
-      }).catch(function (err) {
+      })
+      .catch(function(err) {
         admin_resJson(ctx, {
           state: 'error',
           message: '角色创建出错'
@@ -70,29 +73,36 @@ class role_authority {
    * 修改角色
    * @param   {obejct} ctx 上下文对象
    */
-  static async edit_admin_role (ctx) {
+  static async edit_admin_role(ctx) {
     const req_data = ctx.request.body
-    await admin_role.update({
-      role_name: req_data.role_name,
-      role_description: req_data.role_description
-    }, {
-      where: {
-        role_id: req_data.role_id//查询条件
-      }
-    })
-      .then(async function (p) {
-
-        await create_admin_system_log({ // 写入日志
+    await admin_role
+      .update(
+        {
+          role_name: req_data.role_name,
+          role_description: req_data.role_description
+        },
+        {
+          where: {
+            role_id: req_data.role_id //查询条件
+          }
+        }
+      )
+      .then(async function(p) {
+        await create_admin_system_log({
+          // 写入日志
           uid: ctx.request.userInfo.uid,
           type: 1,
-          content: `成功更新了id为‘${req_data.role_id}’的角色为‘${req_data.role_name}’`
+          content: `成功更新了id为‘${req_data.role_id}’的角色为‘${
+            req_data.role_name
+          }’`
         })
 
         admin_resJson(ctx, {
           state: 'success',
           message: '修改角色成功'
         })
-      }).catch(function (err) {
+      })
+      .catch(function(err) {
         admin_resJson(ctx, {
           state: 'error',
           message: '修改角色失败'
@@ -104,104 +114,138 @@ class role_authority {
    * 删除角色
    * @param   {obejct} ctx 上下文对象
    */
-  static async delete_admin_role (ctx) {
+  static async delete_admin_role(ctx) {
+    const { role_id } = ctx.request.body
 
-    const {role_id} = ctx.request.body
+    let find_user_role = await admin_user_role.findOne({ where: { role_id } })
+    let find_role_authority = await admin_role_authority.findOne({
+      where: { role_id }
+    })
 
-    let find_user_role = await admin_user_role.findOne({where: {role_id}})
-    let find_role_authority = await admin_role_authority.findOne({where: {role_id}})
-
-    if (!find_user_role && !find_role_authority) {  /* 角色与用户权限无关联的时候 */
-      await admin_role.destroy({'where': {role_id}})
-        .then(function (p) {
+    if (!find_user_role && !find_role_authority) {
+      /* 角色与用户权限无关联的时候 */
+      await admin_role
+        .destroy({ where: { role_id } })
+        .then(function(p) {
           admin_resJson(ctx, {
             state: 'success',
             message: '删除角色成功'
           })
-        }).catch(function (err) {
+        })
+        .catch(function(err) {
           admin_resJson(ctx, {
             state: 'error',
             message: '删除角色失败'
           })
         })
     } else if (find_user_role && find_role_authority) {
-      await sequelize.transaction(function (transaction) {
-        // 在事务中执行操作
-        return admin_role.destroy({'where': {role_id}}, {...transaction}) /* 先删除角色权限 */
-          .then(function (delete_admin_authority) {
-            return admin_user_role.destroy({'where': {role_id}}, {transaction})/* 再删除用户角色关联 */
-              .then(function (delete_admin_authority) {
-                return admin_role_authority.destroy({'where': {role_id}}, {transaction})
-                /* 再删除权限角色表权限角色关联 */
-              })
+      await sequelize
+        .transaction(function(transaction) {
+          // 在事务中执行操作
+          return admin_role
+            .destroy(
+              { where: { role_id } },
+              { ...transaction }
+            ) /* 先删除角色权限 */
+            .then(function(delete_admin_authority) {
+              return admin_user_role
+                .destroy(
+                  { where: { role_id } },
+                  { transaction }
+                ) /* 再删除用户角色关联 */
+                .then(function(delete_admin_authority) {
+                  return admin_role_authority.destroy(
+                    { where: { role_id } },
+                    { transaction }
+                  )
+                  /* 再删除权限角色表权限角色关联 */
+                })
+            })
+        })
+        .then(function(results) {
+          admin_resJson(ctx, {
+            state: 'success',
+            message: '删除角色,同时删除权限用户角色关联'
           })
-
-      }).then(function (results) {
-        admin_resJson(ctx, {
-          state: 'success',
-          message: '删除角色,同时删除权限用户角色关联'
         })
-      }).catch(function (err) {
-        admin_resJson(ctx, {
-          state: 'error',
-          message: '删除角色失败,同时回滚所有操作'
+        .catch(function(err) {
+          admin_resJson(ctx, {
+            state: 'error',
+            message: '删除角色失败,同时回滚所有操作'
+          })
         })
-      })
     } else if (find_user_role) {
-      await sequelize.transaction(function (transaction) {
-        // 在事务中执行操作
-        return admin_role.destroy({'where': {role_id}}, {...transaction}) /* 先删除角色权限 */
-          .then(function (delete_admin_authority) {
-            return admin_user_role.destroy({'where': {role_id}}, {transaction})
-            /* 再删除用户角色关联 */
+      await sequelize
+        .transaction(function(transaction) {
+          // 在事务中执行操作
+          return admin_role
+            .destroy(
+              { where: { role_id } },
+              { ...transaction }
+            ) /* 先删除角色权限 */
+            .then(function(delete_admin_authority) {
+              return admin_user_role.destroy(
+                { where: { role_id } },
+                { transaction }
+              )
+              /* 再删除用户角色关联 */
+            })
+        })
+        .then(function(results) {
+          admin_resJson(ctx, {
+            state: 'success',
+            message: '删除角色,同时删除用户角色关联'
           })
-
-      }).then(function (results) {
-        admin_resJson(ctx, {
-          state: 'success',
-          message: '删除角色,同时删除用户角色关联'
         })
-      }).catch(function (err) {
-        admin_resJson(ctx, {
-          state: 'error',
-          message: '删除角色失败,同时回滚所有操作'
+        .catch(function(err) {
+          admin_resJson(ctx, {
+            state: 'error',
+            message: '删除角色失败,同时回滚所有操作'
+          })
         })
-      })
     } else if (find_role_authority) {
-      await sequelize.transaction(function (transaction) {
-        // 在事务中执行操作
-        return admin_role.destroy({'where': {role_id}}, {...transaction}) /* 先删除角色权限 */
-          .then(function (delete_admin_authority) {
-            return admin_role_authority.destroy({'where': {role_id}}, {transaction})
-            /* 再删除用户角色关联 */
+      await sequelize
+        .transaction(function(transaction) {
+          // 在事务中执行操作
+          return admin_role
+            .destroy(
+              { where: { role_id } },
+              { ...transaction }
+            ) /* 先删除角色权限 */
+            .then(function(delete_admin_authority) {
+              return admin_role_authority.destroy(
+                { where: { role_id } },
+                { transaction }
+              )
+              /* 再删除用户角色关联 */
+            })
+        })
+        .then(function(results) {
+          admin_resJson(ctx, {
+            state: 'success',
+            message: '删除角色,同时删除权限角色关联'
           })
-
-      }).then(function (results) {
-        admin_resJson(ctx, {
-          state: 'success',
-          message: '删除角色,同时删除权限角色关联'
         })
-      }).catch(function (err) {
-        admin_resJson(ctx, {
-          state: 'error',
-          message: '删除角色失败,同时回滚所有操作'
+        .catch(function(err) {
+          admin_resJson(ctx, {
+            state: 'error',
+            message: '删除角色失败,同时回滚所有操作'
+          })
         })
-      })
     }
-
   }
 
   /**
    * 获取角色列表
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_admin_role_list (ctx) {
-    const {page = 1, pageSize = 10} = ctx.query
-    let {count, rows} = await admin_role.findAndCountAll({
+  static async get_admin_role_list(ctx) {
+    const { page = 1, pageSize = 10 } = ctx.query
+    let { count, rows } = await admin_role.findAndCountAll({
       attributes: ['role_id', 'role_name', 'role_description'],
-      where: '',//为空，获取全部，也可以自己添加条件
-      offset: (page - 1) * Number(pageSize),//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-      limit: Number(pageSize)//每页限制返回的数据条数
+      where: '', //为空，获取全部，也可以自己添加条件
+      offset: (page - 1) * Number(pageSize), //开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+      limit: Number(pageSize) //每页限制返回的数据条数
     })
     admin_resJson(ctx, {
       state: 'success',
@@ -217,7 +261,7 @@ class role_authority {
    * 获取全部角色
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_admin_role_all (ctx) {
+  static async get_admin_role_all(ctx) {
     let admin_role_findAll = await admin_role.findAll()
     admin_resJson(ctx, {
       state: 'success',
@@ -231,16 +275,19 @@ class role_authority {
    * 创建权限
    * @param   {obejct} ctx 上下文对象
    */
-  static async create_admin_authority (ctx) {
-
+  static async create_admin_authority(ctx) {
     const req_data = ctx.request.body
 
     try {
-      let find_authority_name = await admin_authority.findOne({where: {authority_name: req_data.authority_name}})
+      let find_authority_name = await admin_authority.findOne({
+        where: { authority_name: req_data.authority_name }
+      })
       if (find_authority_name) {
         throw new err_mess('权限名已存在!')
       }
-      let find_authority_url = await admin_authority.findOne({where: {authority_url: req_data.authority_url}})
+      let find_authority_url = await admin_authority.findOne({
+        where: { authority_url: req_data.authority_url }
+      })
       if (find_authority_url) {
         throw new err_mess('权限路径已存在!')
       }
@@ -260,42 +307,44 @@ class role_authority {
       authority_sort,
       authority_description
     } = req_data
-    await admin_authority.create({
-      authority_name,
-      authority_type,
-      authority_parent_id,
-      authority_url,
-      authority_sort,
-      authority_description
-    }).then(async function (p) {
-      console.log('created.' + JSON.stringify(p))
-
-      await create_admin_system_log({ // 写入日志
-        uid: ctx.request.userInfo.uid,
-        type: 1,
-        content: `成功创建了‘${authority_name}’权限`
+    await admin_authority
+      .create({
+        authority_name,
+        authority_type,
+        authority_parent_id,
+        authority_url,
+        authority_sort,
+        authority_description
       })
+      .then(async function(p) {
+        console.log('created.' + JSON.stringify(p))
 
-      admin_resJson(ctx, {
-        state: 'success',
-        message: '权限创建成功'
-      })
-    }).catch(function (err) {
-      console.log('failed: ' + err)
-      admin_resJson(ctx, {
-        state: 'error',
-        message: '权限创建出错'
-      })
-    })
+        await create_admin_system_log({
+          // 写入日志
+          uid: ctx.request.userInfo.uid,
+          type: 1,
+          content: `成功创建了‘${authority_name}’权限`
+        })
 
+        admin_resJson(ctx, {
+          state: 'success',
+          message: '权限创建成功'
+        })
+      })
+      .catch(function(err) {
+        console.log('failed: ' + err)
+        admin_resJson(ctx, {
+          state: 'error',
+          message: '权限创建出错'
+        })
+      })
   }
 
   /**
    * 获取权限列表
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_admin_authority_list (ctx) {
-
+  static async get_admin_authority_list(ctx) {
     let admin_authority_findAll = await admin_authority.findAll()
 
     admin_resJson(ctx, {
@@ -303,40 +352,47 @@ class role_authority {
       message: '返回成功',
       data: admin_authority_findAll
     })
-
   }
 
   /**
    * 修改权限
    * @param   {obejct} ctx 上下文对象
    */
-  static async update_admin_authority (ctx) {
+  static async update_admin_authority(ctx) {
     const req_data = ctx.request.body
-    await admin_authority.update({
-      authority_name: req_data.authority_name,
-      authority_type: req_data.authority_type,
-      authority_url: req_data.authority_url,
-      authority_sort: req_data.authority_sort,
-      authority_description: req_data.authority_description
-    }, {
-      where: {
-        authority_id: req_data.authority_id//查询条件
-      }
-    })
-      .then(async function (p) {
+    await admin_authority
+      .update(
+        {
+          authority_name: req_data.authority_name,
+          authority_type: req_data.authority_type,
+          authority_url: req_data.authority_url,
+          authority_sort: req_data.authority_sort,
+          authority_description: req_data.authority_description
+        },
+        {
+          where: {
+            authority_id: req_data.authority_id //查询条件
+          }
+        }
+      )
+      .then(async function(p) {
         console.log('update.' + JSON.stringify(p))
 
-        await create_admin_system_log({ // 写入日志
+        await create_admin_system_log({
+          // 写入日志
           uid: ctx.request.userInfo.uid,
           type: 1,
-          content: `成功更新了id为‘${req_data.authority_id}’的权限为‘${req_data.authority_name}’`
+          content: `成功更新了id为‘${req_data.authority_id}’的权限为‘${
+            req_data.authority_name
+          }’`
         })
 
         admin_resJson(ctx, {
           state: 'success',
           message: '更新权限成功'
         })
-      }).catch(function (err) {
+      })
+      .catch(function(err) {
         console.log('failed: ' + err)
         admin_resJson(ctx, {
           state: 'error',
@@ -349,36 +405,48 @@ class role_authority {
    * 删除权限列表
    * @param   {obejct} ctx 上下文对象
    */
-  static async delete_admin_authority (ctx) {
+  static async delete_admin_authority(ctx) {
+    const { authority_id_arr } = ctx.request.body
 
-    const {authority_id_arr} = ctx.request.body
+    let find_admin_role_authority = await admin_role_authority.findAll({
+      where: { authority_id: { in: authority_id_arr } }
+    })
 
-    let find_admin_role_authority = await admin_role_authority.findAll({'where': {'authority_id': {in: authority_id_arr}}})
-
-    if (!isEmpty(find_admin_role_authority)) {/* 如果存在则走事务删除所有与之关联的角色权限表的关联 */
+    if (!isEmpty(find_admin_role_authority)) {
+      /* 如果存在则走事务删除所有与之关联的角色权限表的关联 */
       // 创建事务
-      await sequelize.transaction(function (transaction) {
-        // 在事务中执行操作
-        return admin_authority.destroy({'where': {'authority_id': {in: authority_id_arr}}}, {...transaction}) /* 先删除权限表权限 */
-          .then(function (delete_admin_authority) {
-            return admin_role_authority.destroy({'where': {'authority_id': {in: authority_id_arr}}}, {...transaction})
-            /* 再删除权限角色表权限角色关联 */
+      await sequelize
+        .transaction(function(transaction) {
+          // 在事务中执行操作
+          return admin_authority
+            .destroy(
+              { where: { authority_id: { in: authority_id_arr } } },
+              { ...transaction }
+            ) /* 先删除权限表权限 */
+            .then(function(delete_admin_authority) {
+              return admin_role_authority.destroy(
+                { where: { authority_id: { in: authority_id_arr } } },
+                { ...transaction }
+              )
+              /* 再删除权限角色表权限角色关联 */
+            })
+        })
+        .then(function(results) {
+          admin_resJson(ctx, {
+            state: 'success',
+            message: '删除权限树,同时删除权限角色关联'
           })
-
-      }).then(function (results) {
-        admin_resJson(ctx, {
-          state: 'success',
-          message: '删除权限树,同时删除权限角色关联'
         })
-      }).catch(function (err) {
-        admin_resJson(ctx, {
-          state: 'error',
-          message: '删除权限树成功,同时回滚所有操作'
+        .catch(function(err) {
+          admin_resJson(ctx, {
+            state: 'error',
+            message: '删除权限树成功,同时回滚所有操作'
+          })
         })
-      })
-
     } else {
-      await admin_authority.destroy({'where': {'authority_id': {in: authority_id_arr}}})
+      await admin_authority.destroy({
+        where: { authority_id: { in: authority_id_arr } }
+      })
       admin_resJson(ctx, {
         state: 'success',
         message: '删除权限树成功'
@@ -391,8 +459,7 @@ class role_authority {
    * 获取用户角色列表
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_admin_user_role_all (ctx) {
-
+  static async get_admin_user_role_all(ctx) {
     let admin_user_role_findAll = await admin_user_role.findAll()
 
     admin_resJson(ctx, {
@@ -400,15 +467,13 @@ class role_authority {
       message: '返回成功',
       data: admin_user_role_findAll
     })
-
   }
 
   /**
    * 创建用户角色关联
    * @param   {obejct} ctx 上下文对象
    */
-  static async create_admin_user_role (ctx) {
-
+  static async create_admin_user_role(ctx) {
     const req_data = ctx.request.body
 
     let find_role = await admin_user_role.findOne({
@@ -418,44 +483,51 @@ class role_authority {
     })
 
     if (find_role) {
-
-      await admin_user_role.update({
-        role_id: req_data.role_id
-      }, {
-        where: {
-          uid: req_data.uid//查询条件
-        }
-      }).then(function (p) {
-        console.log('created.' + JSON.stringify(p))
-        admin_resJson(ctx, {
-          state: 'success',
-          message: '更新用户角色成功'
+      await admin_user_role
+        .update(
+          {
+            role_id: req_data.role_id
+          },
+          {
+            where: {
+              uid: req_data.uid //查询条件
+            }
+          }
+        )
+        .then(function(p) {
+          console.log('created.' + JSON.stringify(p))
+          admin_resJson(ctx, {
+            state: 'success',
+            message: '更新用户角色成功'
+          })
         })
-      }).catch(function (err) {
-        console.log('failed: ' + err)
-        admin_resJson(ctx, {
-          state: 'error',
-          message: '更新用户角色失败'
+        .catch(function(err) {
+          console.log('failed: ' + err)
+          admin_resJson(ctx, {
+            state: 'error',
+            message: '更新用户角色失败'
+          })
         })
-      })
-
     } else {
-      await admin_user_role.create({
-        uid: req_data.uid,
-        role_id: req_data.role_id
-      }).then(function (p) {
-        console.log('created.' + JSON.stringify(p))
-        admin_resJson(ctx, {
-          state: 'success',
-          message: '用户角色关联成功'
+      await admin_user_role
+        .create({
+          uid: req_data.uid,
+          role_id: req_data.role_id
         })
-      }).catch(function (err) {
-        console.log('failed: ' + err)
-        admin_resJson(ctx, {
-          state: 'error',
-          message: '用户角色关联出错'
+        .then(function(p) {
+          console.log('created.' + JSON.stringify(p))
+          admin_resJson(ctx, {
+            state: 'success',
+            message: '用户角色关联成功'
+          })
         })
-      })
+        .catch(function(err) {
+          console.log('failed: ' + err)
+          admin_resJson(ctx, {
+            state: 'error',
+            message: '用户角色关联出错'
+          })
+        })
     }
   }
 
@@ -464,7 +536,7 @@ class role_authority {
    * @param   {obejct} ctx 上下文对象
    */
 
-  static async get_admin_role_authority (ctx) {
+  static async get_admin_role_authority(ctx) {
     const res_data = ctx.query
     let authority_id_arr = []
     let admin_role_authority_findAll = await admin_role_authority.findAll({
@@ -489,11 +561,11 @@ class role_authority {
    * @param   {obejct} ctx 上下文对象
    */
 
-  static async set_admin_role_authority (ctx) {
+  static async set_admin_role_authority(ctx) {
     const req_data = ctx.request.body
 
     /*先delele后创建*/
-    await admin_role_authority.destroy({'where': {role_id: req_data.role_id}})
+    await admin_role_authority.destroy({ where: { role_id: req_data.role_id } })
 
     for (let i in req_data.role_authority_list) {
       await admin_role_authority.create({
@@ -509,7 +581,6 @@ class role_authority {
       data: ''
     })
   }
-
 }
 
 module.exports = role_authority

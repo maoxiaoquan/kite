@@ -1,14 +1,16 @@
 {
-  "name": "FateCMS",
+  "name": "Kite",
   "version": "1.0.0",
   "description": "blog cms",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "cli-dev": "nodemon cli_server/cli_server.js ./cli_server/cli_nodemon.json",
+    "cli": "node cli_server/cli_server.js",
     "dev": "node build/dev-server.js",
     "build": "webpack  --config  build/webpack.prod.js -p",
-    "mysql": "node ./server/models/create.js",
-    "server-dev": "nodemon ./server/app.js --config nodemon.json",
+    "mysql": "node ./mysqldb/create.js",
+    "server-dev": "nodemon ./server/app.js --config _nodemon.json",
     "server": "pm2 start pm2.json",
     "scss": "node-sass -w -r ./static/default/css -o ./static/default/css"
   },
@@ -33,6 +35,7 @@
     "koa-session-minimal": "^3.0.4",
     "koa-static": "^4.0.1",
     "koa-views": "^6.1.1",
+    "lowdb": "^1.0.0",
     "marked": "^0.3.19",
     "moment": "^2.22.1",
     "mysql": "^2.15.0",

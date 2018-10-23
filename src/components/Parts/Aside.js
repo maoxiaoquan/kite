@@ -15,32 +15,107 @@ const SubMenu = Menu.SubMenu
 const MenuItemGroup = Menu.ItemGroup
 
 class Aside extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      one: '刷5558新',
-      current: 'mail'
+  // submenu keys of first level
+  rootSubmenuKeys = ['web', 'admin']
+
+  state = {
+    openKeys: ['web'],
+    aside_list: [
+      {
+        title: '主页',
+        key: 'index',
+        icon: 'home',
+        link: '/main/manager/index'
+      },
+      {
+        title: '网站管理',
+        key: 'web',
+        icon: 'mail',
+        children: [
+          {
+            title: '用户管理',
+            key: 'user',
+            link: '/main/manager/user'
+          },
+          {
+            title: '文章管理',
+            key: 'article',
+            link: '/main/manager/article'
+          },
+          {
+            title: '文章标签',
+            key: 'article_tag',
+            link: '/main/manager/article_tag'
+          },
+          {
+            title: '文章专栏',
+            key: 'article_column',
+            link: '/main/manager/article_column'
+          },
+          {
+            title: '用户标签',
+            key: 'user_tag',
+            link: '/main/manager/user_tag'
+          },
+          {
+            title: '图片管理',
+            key: 'picture',
+            link: '/main/manager/picture'
+          },
+          {
+            title: '评论管理',
+            key: 'comment',
+            link: '/main/manager/comment'
+          }
+        ]
+      },
+      {
+        title: '系统管理',
+        key: 'admin',
+        icon: 'mail',
+        children: [
+          {
+            title: '管理员管理',
+            key: 'admin_user',
+            link: '/main/manager/admin_user'
+          },
+          {
+            title: '角色管理',
+            key: 'admin_role',
+            link: '/main/manager/admin_role'
+          },
+          {
+            title: '权限菜单',
+            key: 'admin_authority',
+            link: '/main/manager/admin_authority'
+          },
+          {
+            title: '系统日志',
+            key: 'admin_system_log',
+            link: '/main/manager/admin_system_log'
+          }
+        ]
+      }
+    ]
+  }
+
+  onOpenChange = (openKeys) => {
+    const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1)
+    if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+      this.setState({openKeys})
+    } else {
+      this.setState({
+        openKeys: latestOpenKey ? [latestOpenKey] : [],
+      })
     }
   }
 
-  componentWillMount () {
-
-  }
-
-  handleClick = (e) => {
-    console.log('click ', e)
-  }
-
-  click () {
-    console.log(this.props)
-  }
-
   render () {
-    const {title} = this.props
+    const {aside_list = []} = this.state
+
     return (
       <div className="admin-aside " id="admin-aside">
         <div className="admin-aside-content box-card">
-
 
 
           <div className="box-card-header">
@@ -61,28 +136,43 @@ class Aside extends Component {
 
           <div className="admin-aside-view clearfix">
 
+
             <Menu
               mode="inline"
-              defaultOpenKeys={['12', '2']}
-              onClick={this.handleClick}
+              onOpenChange={this.onOpenChange}
+              openKeys={this.state.openKeys}
             >
-              <SubMenu key="12" title={<span><Icon type="setting"/><span>网站管理</span></span>}>
-                <Menu.Item key="8"><Link to="/main/manager/user">用户管理</Link></Menu.Item>
-                <Menu.Item key="9"><Link to="/main/manager/article">文章管理</Link></Menu.Item>
-                <Menu.Item key="10"><Link to="/main/manager/article_tag">文章标签</Link></Menu.Item>
-                <Menu.Item key="19"><Link to="/main/manager/article_column">官方专栏</Link></Menu.Item>
-                <Menu.Item key="11"><Link to="/main/manager/user_tag">用户标签</Link></Menu.Item>
-                <Menu.Item key="12"><Link to="/main/manager/picture">图片管理</Link></Menu.Item>
-                <Menu.Item key="15"><Link to="/main/manager/comment">评论管理</Link></Menu.Item>
-              </SubMenu>
-              <SubMenu key="2" title={<span><Icon type="setting"/><span>系统管理</span></span>}>
-                <Menu.Item key="3"> <Link to="/main/manager/adminUser">管理员管理</Link></Menu.Item>
-                <Menu.Item key="4"><Link to="/main/manager/adminRole">角色管理</Link></Menu.Item>
-                <Menu.Item key="5"><Link to="/main/manager/adminAuthority">权限菜单</Link></Menu.Item>
-                <Menu.Item key="7"><Link to="/main/manager/adminSystemLog">系统日志</Link></Menu.Item>
-              </SubMenu>
+              {
+                aside_list.map(item => {
+                    if (item.link) {
+                      return (
+                        <Menu.Item key={item.key}>
+                          <Link to={item.link}>
+                            {item.icon ? <Icon type={item.icon}/> : ''}{item.title}
+                          </Link>
+                        </Menu.Item>
+                      )
+                    } else {
+                      return (
+                        <SubMenu key={item.key} title={<span><Icon type={item.icon}/><span>{item.title}</span></span>}>
+                          {
+                            item.children.map(child_item => {
+                              return (
+                                <Menu.Item key={child_item.key}>
+                                  <Link to={child_item.link}>
+                                    {child_item.icon ? <Icon type={child_item.icon}/> : ''}{child_item.title}
+                                  </Link>
+                                </Menu.Item>
+                              )
+                            })
+                          }
+                        </SubMenu>
+                      )
+                    }
+                  }
+                )
+              }
             </Menu>
-
           </div>
         </div>
       </div>

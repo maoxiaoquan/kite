@@ -69,6 +69,72 @@ class Index extends React.Component {
 
         <div>
           <Row gutter={24}>
+
+            <Col span={14}>
+              <div className="box-card">
+
+                <div className="layout-ix-statistics">
+
+                  <ul className="header-top">
+                    <li className="active"><a href=""><span>文章</span></a></li>
+                    <li><a href=""><span>评论</span></a></li>
+                  </ul>
+
+                  <div className="content">
+
+                    <div className="summary-container">
+                      <div className="summory">
+                        <div className="title">审核通过</div>
+                        <div className="value">3654</div>
+                      </div>
+                      <div className="summory">
+                        <div className="title">审核中</div>
+                        <div className="value">946</div>
+                      </div>
+                      <div className="summory">
+                        <div className="title">回收站</div>
+                        <div className="value">654</div>
+                      </div>
+                      <div className="summory">
+                        <div className="title">草稿</div>
+                        <div className="value">230</div>
+                      </div>
+                    </div>
+
+
+                    <div className="chart-header">
+                      <div className="legends">
+                        <div className="legend">
+                          <div className="legend-item-color"></div>
+                          <div className="legend-title">Payment</div>
+                        </div>
+                        <div className="legend">
+                          <div className="legend-item-color"></div>
+                          <div className="legend-title">Canceled</div>
+                        </div>
+                        <div className="legend">
+                          <div className="legend-item-color"></div>
+                          <div className="legend-title">All orders</div>
+                        </div>
+                      </div>
+
+                      <div className="dropdown" ngbdropdown="">
+                        <button className="btn dropdown-toggle btn-outline-success" type="button"> week
+                        </button>
+                        <ul className="dropdown-menu">
+                          <li className="dropdown-item"> week</li>
+                          <li className="dropdown-item"> month</li>
+                          <li className="dropdown-item"> year</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            </Col>
+
             <Col span={5}>
               <div className="box-card user-info">
                 <div className="header">
@@ -139,34 +205,6 @@ class Index extends React.Component {
               </div>
             </Col>
 
-            <Col span={14}>
-              <div className="box-card user-info">
-                <div className="el-card__header">
-                  <div className="">
-                    <img src="https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png" alt=""/>
-                  </div>
-                </div>
-                <div className="el-card__body">
-                  <div>
-                    <a href="#" className="link--mallki mallki-text">
-                      doracms
-                      <span></span>
-                      <span></span>
-                    </a>
-                    <div className="info-pannel">
-                      <ul>
-                        <li><label>上次登录时间：</label>2018-10-17 17:19:52</li>
-                        <li><label>上次登录IP：</label>125.36.117.156</li>
-                        <li><label>我的权限：</label>
-                          <button type="button" className="el-button el-button--text el-button--mini"><span>查看</span>
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Col>
           </Row>
         </div>
 

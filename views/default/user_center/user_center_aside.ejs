@@ -1,11 +1,5 @@
-<ul class="list user-dynamic">
-    <li class="badge-icon">
-        <a target="_blank" href="/mobile/club">
-            <img width="20" heigth="20"
-                 src="//upload.jianshu.io/user_badge/22d8d123-271c-4d80-9c59-6990844a9e37"
-                 alt="22d8d123 271c 4d80 9c59 6990844a9e37"> 简书会员
-        </a></li>
-</ul>
+<user-tag></user-tag>
+
 <% if(user_info.uid === data.current_user.uid){ %>
 <ul class="list user-dynamic">
     <li>
@@ -15,6 +9,7 @@
     </li>
 </ul>
 <% } %>
+
 <div class="title">个人介绍</div>
 <div class="description">
     <div class="js-intro">
@@ -25,3 +20,58 @@
         <% } %>
     </div>
 </div>
+
+<script>
+
+  var user_tag_template =
+    '<ul class="list user-dynamic">' +
+  '    <li class="badge-icon" v-for="item in user_tag_item">' +
+  '        <a target="_blank" href="/mobile/club">' +
+  '            <img width="20" heigth="20"' +
+  '                 src="//upload.jianshu.io/user_badge/22d8d123-271c-4d80-9c59-6990844a9e37"' +
+  '                 alt="22d8d123 271c 4d80 9c59 6990844a9e37"> {{item.user_tag_name}}' +
+  '        </a> ' +
+  '    </li> ' +
+  '</ul> '
+
+  Vue.component('user-tag', {
+    data: function () {
+      return {
+        user_tag_all: [],
+        user: {},
+        curr_user_tag_ids: [],
+        user_tag_item: []
+      }
+    },
+    created: function () {
+      this.get_user_tag_all()
+    },
+    methods: {
+      get_user_tag_all: function () {
+        var that = this
+        _server.get_user_tag_all().then(function (res) {
+          that.user_tag_all = res.data.user_tag_all
+          that.get_user_info()
+        })
+      },
+      get_user_info: function () {
+        var that = this
+        _server.get_user_info({uid:<%= data.current_user.uid %>}).then(function (res) {
+          that.user = res.data.user
+          that.curr_user_tag = res.data.user.user_tag_ids.split(',')
+          that.user_tag_filter()
+        })
+      },
+      user_tag_filter: function () {
+        var that = this
+        this.user_tag_all.map(function (item) {
+          if (that.curr_user_tag.indexOf(String(item.user_tag_id)) !== -1) {
+            that.user_tag_item.push(item)
+          }
+        })
+        console.log('that.user_tag_item',that.user_tag_item)
+      }
+    },
+    template: user_tag_template
+  })
+</script>

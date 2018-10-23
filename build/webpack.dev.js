@@ -1,9 +1,9 @@
-const webpack = require('webpack');
-const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin'); // css单独打包
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack')
+const path = require('path')
+const ExtractTextPlugin = require('extract-text-webpack-plugin') // css单独打包
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const APP_PATH = path.resolve(__dirname, '../src');
+const APP_PATH = path.resolve(__dirname, '../src')
 
 /* 此配置是开发模式下的调试配置 */
 
@@ -33,9 +33,7 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              plugins: [
-                ['import', { libraryName: 'antd', style: 'css' }]
-              ]
+              plugins: [['import', { libraryName: 'antd', style: 'css' }]]
             }
           } // loader的名称（必须）
         ],
@@ -43,27 +41,33 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['css-hot-loader'].concat(ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: ['css-loader', 'autoprefixer-loader']
-        }))
+        use: ['css-hot-loader'].concat(
+          ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: ['css-loader', 'autoprefixer-loader']
+          })
+        )
       },
       {
         test: /\.less$/,
         exclude: /^node_modules$/,
-        use: ['css-hot-loader'].concat(ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: ['css-loader', 'autoprefixer-loader', 'less-loader']
-        })),
+        use: ['css-hot-loader'].concat(
+          ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: ['css-loader', 'autoprefixer-loader', 'less-loader']
+          })
+        ),
         include: [APP_PATH]
       },
       {
         test: /\.scss$/,
         exclude: /^node_modules$/,
-        use: ['css-hot-loader'].concat(ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: ['css-loader', 'autoprefixer-loader', 'sass-loader']
-        })),
+        use: ['css-hot-loader'].concat(
+          ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: ['css-loader', 'autoprefixer-loader', 'sass-loader']
+          })
+        ),
         include: [APP_PATH]
       },
       {
@@ -83,7 +87,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '../public/index.html'), // 源模板文件
+      template: path.resolve(__dirname, '../src/public/index.html'), // 源模板文件
       filename: path.resolve(__dirname, '../dist/index.html'), // 输出文件【注意：这里的根路径是module.exports.output.path】
       showErrors: true,
       inject: 'body'
@@ -91,10 +95,10 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks(module) {
-        if (module.resource && (/^.*\.(css|scss|less)$/).test(module.resource)) {
-          return false;
+        if (module.resource && /^.*\.(css|scss|less)$/.test(module.resource)) {
+          return false
         }
-        return module.context && module.context.indexOf('node_modules') !== -1;
+        return module.context && module.context.indexOf('node_modules') !== -1
       }
     }),
     new webpack.HotModuleReplacementPlugin(), // 热模块替换插件
@@ -115,5 +119,4 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.less', '.scss', '.css'] // 后缀名自动补全
   }
-};
-
+}

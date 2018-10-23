@@ -1,5 +1,10 @@
 const { sign_resJson, admin_resJson } = require('../utils/res_data')
-const { ad_role, ad_authority, ad_user_role, ad_role_authority } = require('../models')
+const {
+  ad_role,
+  ad_authority,
+  ad_user_role,
+  ad_role_authority
+} = require('../../db/mysqldb')
 
 function err_mess(message) {
   this.message = message
@@ -7,16 +12,24 @@ function err_mess(message) {
 }
 
 class VerifyAuthority {
-  constructor() { }
+  constructor() {}
   static async check(ctx, next) {
     const { url, userInfo = {} } = ctx.request
     const { role_id } = userInfo
-    if (role_id) {/* 判断当前登录用户是否有角色，否则无任何权限 */
+    if (role_id) {
+      /* 判断当前登录用户是否有角色，否则无任何权限 */
       try {
-
-        let find_ad_authority = await ad_authority.findOne({ where: { authority_url: url.split('/')[url.split('/').length - 1] } })
-        if (find_ad_authority) { /* 查看权限列表中是否有此权限，没有则是直接通过 */
-          let find_ad_role_authority = await ad_role_authority.findOne({ where: { authority_id: find_ad_authority.authority_id, role_id: role_id } })
+        let find_ad_authority = await ad_authority.findOne({
+          where: { authority_url: url.split('/')[url.split('/').length - 1] }
+        })
+        if (find_ad_authority) {
+          /* 查看权限列表中是否有此权限，没有则是直接通过 */
+          let find_ad_role_authority = await ad_role_authority.findOne({
+            where: {
+              authority_id: find_ad_authority.authority_id,
+              role_id: role_id
+            }
+          })
           if (find_ad_role_authority) {
             await next()
           } else {

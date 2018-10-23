@@ -1,19 +1,19 @@
-const webpack = require('webpack');
-const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin'); // css单独打包
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack')
+const path = require('path')
+const ExtractTextPlugin = require('extract-text-webpack-plugin') // css单独打包
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ProgressbarWebpack = require('progress-bar-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
-const APP_PATH = path.resolve(__dirname, '../src');
+const APP_PATH = path.resolve(__dirname, '../src')
 
-process.env.NODE_ENV = 'production'; // 设置为生产环境
+process.env.NODE_ENV = 'production' // 设置为生产环境
 /* 此配置是生产环境下的极质打包模式 */
 
-console.log('极质打包进行中......');
+console.log('极质打包进行中......')
 
-const assetsPath = function (_path) {
+const assetsPath = function(_path) {
   return path.posix.join('asset', _path)
 }
 
@@ -21,17 +21,11 @@ module.exports = {
   entry: {
     // 文件入口配置
     index: path.resolve(__dirname, '../src/app.js'),
-    vendor: [
-      'react',
-      'react-dom',
-      'react-router',
-      'react-redux',
-      'redux'
-    ]
+    vendor: ['react', 'react-dom', 'react-router', 'react-redux', 'redux']
   },
   output: {
     path: path.resolve(__dirname, '../static/'),
-    publicPath: '/', // 编译好的文件，在服务器的路径,域名会自动添加到前面  
+    publicPath: '/', // 编译好的文件，在服务器的路径,域名会自动添加到前面
     filename: assetsPath('js/[name].[chunkhash].js'),
     chunkFilename: assetsPath('js/[id].[chunkhash].js')
   },
@@ -44,9 +38,7 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['env', 'stage-0', 'react'],
-            plugins: [
-              ['import', { libraryName: 'antd', style: 'css' }]
-            ]
+            plugins: [['import', { libraryName: 'antd', style: 'css' }]]
           }
         }, // loader的名称（必须）
         include: [APP_PATH]
@@ -93,7 +85,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '../public/index.html'), // 源模板文件
+      template: path.resolve(__dirname, '../src/public/index.html'), // 源模板文件
       filename: path.resolve(__dirname, '../static/asset/index.html'), // 输出文件【注意：这里的根路径是module.exports.output.path】
       showErrors: true,
       inject: 'body',
@@ -115,9 +107,7 @@ module.exports = {
         return (
           module.resource &&
           /\.js$/.test(module.resource) &&
-          module.resource.indexOf(
-            path.join(__dirname, '../node_modules')
-          ) === 0
+          module.resource.indexOf(path.join(__dirname, '../node_modules')) === 0
         )
       }
     }),
@@ -154,5 +144,4 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.less', '.scss', '.css'] // 后缀名自动补全
   }
-};
-
+}

@@ -179,12 +179,13 @@
 </script>
 
 <script>
-  $(function () {
-    var find_active_length = $('.topic-list').find('.current').length
+
+  window.onload = function () {
+    var find_active_length = document.querySelector('.topic-list').querySelectorAll('.current').length
     if (find_active_length === 0) {
-      $('.topic-list li').eq(1).addClass('current')
+      document.querySelectorAll('.topic-list li')[1].classList.add('current')
     }
-  })
+  }
 
   Vue.component('topic-list', {
     template: '#user-article-topic-template',
@@ -198,7 +199,6 @@
       }
     },
     created: function () {
-      console.log('item', this.item)
       this.topic_name = this.item.topic_name
       this.topic_description = this.item.topic_description
     },

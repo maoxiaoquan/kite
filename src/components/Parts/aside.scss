@@ -17,7 +17,7 @@
     border-bottom: none;
   }
   .admin-aside-content {
-    position: fixed;
+   /* position: fixed;*/
     background: #fff;
     width: 230px;
     -webkit-transform: translate3d(0, 0, 0);
@@ -29,13 +29,13 @@
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
-    height: calc(100vh - 160px) !important;
+    //height: calc(100vh - 160px) !important;
   }
   .ant-menu {
     border-right: none;
   }
   .admin-aside-view {
-    padding-bottom: 50px;
+    padding-bottom: 30px;
     .title-h2 {
       height: 50px;
       padding: 25px 15px 10px;

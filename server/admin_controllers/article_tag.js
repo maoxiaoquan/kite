@@ -1,34 +1,39 @@
-const models = require('../models')
-const {sign_resJson, admin_resJson} = require('../utils/res_data')
-const {tools: {encrypt}} = require('../utils')
+const models = require('../../db/mysqldb')
+const { sign_resJson, admin_resJson } = require('../utils/res_data')
+const {
+  tools: { encrypt }
+} = require('../utils')
 const config = require('../../config')
 const moment = require('moment')
 
-const {create_admin_system_log} = require('./admin_system_log')
+const { create_admin_system_log } = require('./admin_system_log')
 
-function err_mess (message) {
+function err_mess(message) {
   this.message = message
   this.name = 'UserException'
 }
 
 class Article_Tag {
-  constructor () { }
+  constructor() {}
 
   /**
    * -----------------------------------权限操作--------------------------------
    * 创建标签
    * @param   {obejct} ctx 上下文对象
    */
-  static async create_article_tag (ctx) {
-
+  static async create_article_tag(ctx) {
     const req_data = ctx.request.body
 
     try {
-      let find_article_tag_name = await models.article_tag.findOne({where: {article_tag_name: req_data.article_tag_name}})
+      let find_article_tag_name = await models.article_tag.findOne({
+        where: { article_tag_name: req_data.article_tag_name }
+      })
       if (find_article_tag_name) {
         throw new err_mess('标签名已存在!')
       }
-      let find_article_tag_us_name = await models.article_tag.findOne({where: {article_tag_us_name: req_data.article_tag_us_name}})
+      let find_article_tag_us_name = await models.article_tag.findOne({
+        where: { article_tag_us_name: req_data.article_tag_us_name }
+      })
       if (find_article_tag_us_name) {
         throw new err_mess('标签名英文已存在!')
       }
@@ -40,47 +45,58 @@ class Article_Tag {
       return false
     }
 
-    await models.article_tag.create({
-      article_tag_name: req_data.article_tag_name,
-      article_tag_us_name: req_data.article_tag_us_name,
-      article_tag_icon: req_data.article_tag_icon,
-      article_tag_icon_type: req_data.article_tag_icon_type,
-      article_tag_description: req_data.article_tag_description,
-      enable: req_data.enable
-    }).then(async function (p) {
-      console.log('created.' + JSON.stringify(p))
-
-      await create_admin_system_log({ // 写入日志
-        uid: ctx.request.userInfo.uid,
-        type: 1,
-        content: `成功创建了‘${req_data.article_tag_name}’文章标签`
+    await models.article_tag
+      .create({
+        article_tag_name: req_data.article_tag_name,
+        article_tag_us_name: req_data.article_tag_us_name,
+        article_tag_icon: req_data.article_tag_icon,
+        article_tag_icon_type: req_data.article_tag_icon_type,
+        article_tag_description: req_data.article_tag_description,
+        enable: req_data.enable
       })
+      .then(async function(p) {
+        console.log('created.' + JSON.stringify(p))
 
-      admin_resJson(ctx, {
-        state: 'success',
-        message: '标签创建成功'
-      })
-    }).catch(function (err) {
-      console.log('failed: ' + err)
-      admin_resJson(ctx, {
-        state: 'error',
-        message: '标签创建出错'
-      })
-    })
+        await create_admin_system_log({
+          // 写入日志
+          uid: ctx.request.userInfo.uid,
+          type: 1,
+          content: `成功创建了‘${req_data.article_tag_name}’文章标签`
+        })
 
+        admin_resJson(ctx, {
+          state: 'success',
+          message: '标签创建成功'
+        })
+      })
+      .catch(function(err) {
+        console.log('failed: ' + err)
+        admin_resJson(ctx, {
+          state: 'error',
+          message: '标签创建出错'
+        })
+      })
   }
 
   /**
    * 获取标签列表操作
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_article_tag_list (ctx) {
-    const {page = 1, pageSize = 10} = ctx.query
-    let {count, rows} = await models.article_tag.findAndCountAll({
-      attributes: ['article_tag_id', 'article_tag_name', 'article_tag_us_name', 'article_tag_icon', 'article_tag_icon_type', 'article_tag_description', 'enable'],
-      where: '',//为空，获取全部，也可以自己添加条件
-      offset: (page - 1) * Number(pageSize),//开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-      limit: Number(pageSize)//每页限制返回的数据条数
+  static async get_article_tag_list(ctx) {
+    const { page = 1, pageSize = 10 } = ctx.query
+    let { count, rows } = await models.article_tag.findAndCountAll({
+      attributes: [
+        'article_tag_id',
+        'article_tag_name',
+        'article_tag_us_name',
+        'article_tag_icon',
+        'article_tag_icon_type',
+        'article_tag_description',
+        'enable'
+      ],
+      where: '', //为空，获取全部，也可以自己添加条件
+      offset: (page - 1) * Number(pageSize), //开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+      limit: Number(pageSize) //每页限制返回的数据条数
     })
     admin_resJson(ctx, {
       state: 'success',
@@ -96,10 +112,18 @@ class Article_Tag {
    * 获取所有标签操作
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_article_tag_all (ctx) {
+  static async get_article_tag_all(ctx) {
     let article_tag_all = await models.article_tag.findAll({
-      attributes: ['article_tag_id', 'article_tag_name', 'article_tag_us_name', 'article_tag_icon', 'article_tag_icon_type', 'article_tag_description', 'enable'],
-      where: {enable: 1}//为空，获取全部，也可以自己添加条件
+      attributes: [
+        'article_tag_id',
+        'article_tag_name',
+        'article_tag_us_name',
+        'article_tag_icon',
+        'article_tag_icon_type',
+        'article_tag_description',
+        'enable'
+      ],
+      where: { enable: 1 } //为空，获取全部，也可以自己添加条件
     })
     admin_resJson(ctx, {
       state: 'success',
@@ -114,33 +138,40 @@ class Article_Tag {
    * 更新标签
    * @param   {obejct} ctx 上下文对象
    */
-  static async update_article_tag (ctx) {
+  static async update_article_tag(ctx) {
     const req_data = ctx.request.body
-    await models.article_tag.update({
-      article_tag_name: req_data.article_tag_name,
-      article_tag_us_name: req_data.article_tag_us_name,
-      article_tag_icon: req_data.article_tag_icon,
-      article_tag_icon_type: req_data.article_tag_icon_type,
-      article_tag_description: req_data.article_tag_description,
-      enable: req_data.enable
-    }, {
-      where: {
-        article_tag_id: req_data.article_tag_id//查询条件
-      }
-    })
-      .then(async function (p) {
-
-        await create_admin_system_log({ // 写入日志
+    await models.article_tag
+      .update(
+        {
+          article_tag_name: req_data.article_tag_name,
+          article_tag_us_name: req_data.article_tag_us_name,
+          article_tag_icon: req_data.article_tag_icon,
+          article_tag_icon_type: req_data.article_tag_icon_type,
+          article_tag_description: req_data.article_tag_description,
+          enable: req_data.enable
+        },
+        {
+          where: {
+            article_tag_id: req_data.article_tag_id //查询条件
+          }
+        }
+      )
+      .then(async function(p) {
+        await create_admin_system_log({
+          // 写入日志
           uid: ctx.request.userInfo.uid,
           type: 1,
-          content: `成功更新了id为‘${req_data.article_tag_id}’的文章标签名字为‘${req_data.article_tag_name}’`
+          content: `成功更新了id为‘${
+            req_data.article_tag_id
+          }’的文章标签名字为‘${req_data.article_tag_name}’`
         })
 
         admin_resJson(ctx, {
           state: 'success',
           message: '更新标签成功'
         })
-      }).catch(function (err) {
+      })
+      .catch(function(err) {
         admin_resJson(ctx, {
           state: 'error',
           message: '更新标签失败'
@@ -151,16 +182,18 @@ class Article_Tag {
   /**
    * 删除标签
    */
-  static async delete_article_tag (ctx) {
+  static async delete_article_tag(ctx) {
+    const { article_tag_id } = ctx.request.body
 
-    const {article_tag_id} = ctx.request.body
+    let find_article_tag = await models.article_tag.findOne({
+      where: { article_tag_id }
+    })
 
-    let find_article_tag = await models.article_tag.findOne({'where': {article_tag_id}})
-
-    await models.article_tag.destroy({'where': {article_tag_id}})
-      .then(async function (p) {
-
-        await create_admin_system_log({ // 写入日志
+    await models.article_tag
+      .destroy({ where: { article_tag_id } })
+      .then(async function(p) {
+        await create_admin_system_log({
+          // 写入日志
           uid: ctx.request.userInfo.uid,
           type: 1,
           content: `成功删除了‘${find_article_tag.article_tag_name}’文章标签`
@@ -170,15 +203,14 @@ class Article_Tag {
           state: 'success',
           message: '删除用户成功'
         })
-      }).catch(function (err) {
+      })
+      .catch(function(err) {
         admin_resJson(ctx, {
           state: 'error',
           message: '删除用户失败'
         })
       })
-
   }
-
 }
 
 module.exports = Article_Tag

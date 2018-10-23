@@ -1,6 +1,7 @@
 module.exports = {
-  dev_port: 8060,// 前台开发端口
-  produce_port: 8061,// server端口
+  cli_port: 8060,// cli port
+  dev_port: 8061,// 前台开发端口
+  produce_port: 8062,// server端口
   // 密码盐
   encrypt_key: 'fate',
   database: {
