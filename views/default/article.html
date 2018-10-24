@@ -1,0 +1,393 @@
+<!--header.html start-->
+<% include parts/header.html %>
+<!--header.html end-->
+
+<body class="black-theme">
+
+  <!--header_view.html start-->
+  <% include parts/header_view.html %>
+  <!--header_view.html end-->
+
+
+  <!--home-lay layout-content start-->
+  <section class="article-lay layout-content box-container" id="article-lay">
+    <div class="container-article">
+      <div class="row">
+        <main class="lay-main col-xs-12 col-sm-12 col-md-12">
+          <div class="article-view">
+            <div class="article-title">
+              <h1>
+                <%= data.article.title %>
+              </h1>
+              <div class="author">
+                <a class="avatar" href="/user/<%= data.article.uid %>/article/all">
+                  <img src="<%= data.user.avatar %>" alt="">
+                </a>
+                <div class="info">
+                  <span class="name"><a href="/user/<%= data.article.uid %>/article/all">
+                      <%= data.user.nickname %></a></span>
+                  <!-- 文章数据信息 -->
+                  <div class="meta">
+                    <!-- 如果文章更新时间大于发布时间，那么使用 tooltip 显示更新时间 -->
+                    <span class="publish-time">
+                      <%= data.article.create_at %></span>
+                    <span class="views-count">阅读 {{article.read_count}}</span>
+                    <span class="comments-count">评论 {{comment_count}}</span>
+                    <span class="likes-count">喜欢 {{article.like_count}}</span>
+                  </div>
+                </div>
+                <!-- 如果是当前作者，加入编辑按钮 -->
+              </div>
+            </div>
+            <article class="article-content box-article-view">
+              <h1>
+                <%- data.article.content %>
+              </h1>
+            </article>
+
+            <!--article footer start-->
+            <!-- <div id="free-reward-panel" class="support-author">
+                        <p>小礼物走一走，来简书关注我</p>
+                        <div class="btn btn-pay">赞赏支持</div>
+                    </div>-->
+
+            <div class="show-foot clearfix">
+              <div class="copyright">
+                © 著作权归作者所有
+              </div>
+              <!-- <div class="modal-wrap">
+                             <a id="report-modal">举报文章</a>
+                         </div>-->
+            </div>
+
+            <div class="follow-detail">
+              <div class="info">
+                <a class="avatar" href="/user/<%= data.article.uid %>/article/all">
+                  <img src="<%= data.user.avatar %>" alt="96">
+                </a>
+                <% if(user_info.uid !== data.article.uid){ %>
+                <a class="btn btn-success follow attention-article" :class="{'active':curr_user_info.attention_uid_arr.indexOf(<%= data.article.uid %>)!==-1}"
+                  @click="post_user_attention" href="javascript:;" data-uid="<%= data.article.uid %>">
+                  <i class="iconfont icon-tianjia"></i><span>关注</span>
+                </a>
+                <% } %>
+                <a class="title" href="/user/<%= data.article.uid %>/article/all">
+                  <%= data.user.nickname %></a>
+                <p>一共有 {{article_user_info.user_article_count}} 篇文章 ，被
+                  {{article_user_info.other_user_attention_count}} 人关注</p>
+              </div>
+              <div class="signature">
+                <%= data.user.introduction %>
+              </div>
+            </div>
+
+            <div class="meta-bottom clearfix">
+              <div class="like">
+                <div class="btn like-group" :class="{'active':curr_user_info.user_like_aid_arr.indexOf('<%= data.article.aid %>')!==-1}"
+                  @click="post_user_like_article">
+                  <div class="btn-like"><a href="javascript:;"><i class="iconfont icon-xin"></i>喜欢</a>
+                  </div>
+                  <div class="modal-wrap"><a href="javascript:;">{{article.like_count}}</a></div>
+                </div>
+                <!---->
+              </div>
+              <!-- <div class="share-group">
+                             <a class="share-circle">
+                                 <i class="iconfont ic-wechat"></i>
+                             </a>
+                             <a class="share-circle more-share" title="">更多分享</a>
+                         </div>-->
+            </div>
+            <!--article footer end-->
+
+            <!--comment.html start-->
+            <% include parts/comment.html %>
+            <!--comment.html end-->
+
+          </div>
+        </main>
+      </div>
+
+    </div>
+  </section>
+  <!--home-lay layout-content end-->
+
+
+  <!-- template for the modal component -->
+  <script type="text/x-template" id="comment-list-template">
+
+    <div class="comment-item" :id="'comment'+commentItem.id" ref="comment_list">
+        <div class="avatar">
+            <img :src="commentItem.user.avatar" alt="avatar">
+        </div>
+        <div class="comment-body">
+            <div class="comment-main">
+                <h4><a>{{commentItem.user.nickname}}</a></h4>
+                <p>{{commentItem.content}}</p>
+            </div>
+            <div class="comment-foot clearfix">
+                <span>{{commentItem.create_date}}</span>
+                <span class="comment-reply" @click="reply_btn('')">回复</span>
+                <span class="comment-delete" v-if="sign_uid==commentItem.uid"
+                      @click="delete_comment(commentItem.id)">删除</span>
+            </div>
+        </div>
+        <div class="comment-item-children" v-if="commentItem.children.length>0||children_comment_input">
+
+            <div class="comment-item-children-view" v-if="commentItem.children.length>0">
+                <div class="comment-item" :id="'comment'+child_item.id" data-author="堂弟 亚历山大"
+                     v-for="child_item in commentItem.children">
+                    <div class="avatar">
+                        <img :src="child_item.user.avatar" alt="avatar">
+                    </div>
+                    <div class="comment-body">
+                        <div class="comment-main">
+                            <h4>{{child_item.user.nickname}}</h4>
+                            <p v-html="child_item.content"></p>
+                        </div>
+                        <div class="comment-foot clearfix">
+                            <span>{{child_item.create_date}}</span>
+                            <span class="comment-reply" @click="reply_btn('@'+child_item.user.nickname+' ')">回复</span>
+                            <span class="comment-delete" v-if="sign_uid==child_item.uid"
+                                  @click="delete_comment(child_item.id)">删除</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comment-form" v-if="children_comment_input" :id="'comment-reply'+commentItem.id">
+                <div class="comment-form">
+                    <div class="comment-avatar">
+                        <img src="https://image.uisdc.com/wp-content/uploads/2018/06/avatar-uisdc-chat.png"
+                             alt="avatar">
+                    </div>
+                    <div class="form-item" style="margin-left: 50px;">
+                        <div class="input-view">
+                            <textarea v-model="comment_content" class="txt long-txt textarea "></textarea>
+                        </div>
+                        <div class="form-item form-btns clearfix">
+                            <div class="left-view">
+                                <i class="iconfont icon-biaoqing"></i>
+                            </div>
+                            <div class="right-view">
+                                <button type="submit" class="form-btn btn-cancel" @click="children_comment_input=false">
+                                    取消
+                                </button>
+                                <button type="submit" class="form-btn" @click="submit_comment">提交评论</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</script>
+
+  <script>
+    Vue.component('comment-list', {
+      template: '#comment-list-template',
+      props: ['commentItem'],
+      data: function () {
+        return {
+          sign_uid: '<%= user_info.uid %>',
+          children_comment_input: false,
+          comment_content: '',
+          parent_id: '',
+          reply_id: ''
+        }
+      },
+      created: function () {
+        this.parent_id = this.commentItem.id
+      },
+      methods: {
+        reply_btn: function (val) {
+          var that = this
+          this.comment_content = val
+          this.children_comment_input = true
+          this.reply_uid = this.commentItem.uid
+        },
+        submit_comment: function () {
+          var params = {
+            aid: '<%= data.article.aid %>',
+            article_uid: '<%= data.article.uid %>',
+            uid: '<%= user_info.uid %>',
+            reply_uid: this.reply_uid,
+            parent_id: this.commentItem.id,
+            content: this.comment_content
+          }
+          var that = this
+          _server.post_create_comment(params).then(function (res) {
+            if (res.state === 'success') {
+              alert(res.message)
+              that.$nextTick(function () {
+                that.comment_content = ''
+                that.commentItem.children.push(res.data)
+              })
+            } else {
+              alert(res.message)
+            }
+          }).catch(function (err) {
+            console.log(err)
+          })
+        },
+        delete_comment: function (id) {
+          var that = this
+          _server.post_delete_comment({ aid: '<%= data.article.aid %>', comment_id: id }).then(function (res) {
+            if (res.state === 'success') {
+              document.querySelector('#comment' + id + '').style.display = 'none'
+              alert(res.message)
+            } else {
+              alert(res.message)
+            }
+          }).catch(function (err) {
+            console.log(err)
+          })
+        }
+      }
+    })
+
+    new Vue({
+      el: '#article-lay',
+      data: function () {
+        return {
+          sign_uid: '<%= user_info.uid %>',
+          article_uid: '<%= data.article.uid %>',
+          curr_user_info: {
+            attention_uid_arr: [],
+            user_like_aid_arr: []
+          },
+          article_user_info: {
+            attention_uid_arr: [],
+            user_like_aid_arr: []
+          },
+          article: {},
+          /*comment start*/
+          comment_page: 1,
+          comment_pageSize: 10,
+          comment_count: 0,
+          comment_list: [],// 用户评论的列表
+          comment_content: '', // 顶级输入框
+          comment_loading_btn: true
+        }
+      },
+      created: function () {
+        this.get_article() // 根据aid ajax 获取文章
+        this.get_curr_user_info() // 获取当前登录用户信息
+        this.get_article_user_info() // 获取当前文章用户信息
+        this.get_comment_list() // 获取用户的评论
+      },
+      methods: {
+        get_curr_user_info: function () {// 获取当前登录用户信息
+          var that = this
+          _server.get_user_info({ uid: this.sign_uid }).then(function (res) {
+            that.$nextTick(function () {
+              if (res.state === 'success') {
+                that.curr_user_info = res.data
+              }
+            })
+          })
+        },
+        get_article_user_info: function () {// 获取当前文章用户信息
+          var that = this
+          _server.get_user_info({ uid: this.article_uid }).then(function (res) {
+            that.$nextTick(function () {
+              if (res.state === 'success') {
+                that.article_user_info = res.data
+              }
+            })
+          })
+        },
+        get_article: function () { // 根据aid获取文章
+          var that = this
+          _server.get_article({ aid: '<%= data.article.aid %>' }).then(function (res) {
+            that.$nextTick(function () {
+              if (res.state === 'success') {
+                that.article = res.data.article
+              }
+            })
+          })
+        },
+        post_user_attention: function () { /*用户关注用户*/
+          var that = this
+          _server.post_user_attention({
+            attention_uid: '<%= data.article.uid %>'
+          }).then(function (res) {
+            if (res.state === 'success') {
+              that.get_curr_user_info()
+              that.get_article_user_info()
+              /*获取当前文章用户信息*/
+            } else {
+              alert(res.message)
+            }
+          }).catch(function (err) {
+            console.log(err)
+          })
+        },
+        post_user_like_article: function () { /*用户like 文章*/
+          var that = this
+          _server.post_user_like_article({ aid: '<%= data.article.aid %>' }).then(function (res) {
+            if (res.state === 'success') {
+              that.get_curr_user_info()
+              that.get_article()
+            } else {
+              alert(res.message)
+            }
+          }).catch(function (err) {
+            console.log(err)
+          })
+        },
+        get_comment_list: function () { // 获取评论列表
+          var that = this
+          _server.get_comment_list({
+            aid: '<%= data.article.aid %>',
+            page: that.comment_page,
+            pageSize: that.comment_pageSize
+          }).then(function (res) {
+            that.$nextTick(function () {
+              if (res.state === 'success') {
+                that.comment_list = that.comment_list.concat(res.data.comment_list)
+                that.comment_count = res.data.count
+                that.comment_page += 1
+                if (res.data.comment_list.length < that.comment_pageSize) {
+                  that.comment_loading_btn = false
+                } else {
+                  that.comment_loading_btn = true
+                }
+              } else {
+                alert(res.message)
+              }
+            })
+          }).catch(function (err) {
+            console.log(err)
+          })
+        },
+        submit_comment: function () { // 提交评论
+          var params = {
+            aid: '<%= data.article.aid %>',
+            article_uid: '<%= data.article.uid %>',
+            uid: '<%= user_info.uid %>',
+            content: this.comment_content
+          }
+          var that = this
+          _server.post_create_comment(params).then(function (res) {
+            that.$nextTick(function () {
+              if (res.state === 'success') {
+                alert(res.message)
+                that.comment_content = '' // 评论输入框为空
+                that.comment_list.unshift(res.data) // 手动插入回复后的评论数据
+                that.comment_count += 1  // 手动评论数据 +1
+              } else {
+                alert(res.message)
+              }
+            })
+          }).catch(function (err) {
+            console.log(err)
+          })
+        }
+      }
+    })
+  </script>
+</body>
+
+<% include parts/footer.html %>

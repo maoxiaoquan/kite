@@ -28,29 +28,31 @@ const sessionMysqlConfig = {
 
 // 存放sessionId的cookie配置
 let cookie = {
-  domain: 'localhost',    // 写 cookie 所在的域名
-  path: '/',              // 写 cookie 所在的路径
-  maxAge: 1000 * 60 * 60,      // cookie 有效时长
-  httpOnly: true,         // 是否只用于 http 请求中获取
-  overwrite: false        // 是否允许重写
+  domain: 'localhost', // 写 cookie 所在的域名
+  path: '/', // 写 cookie 所在的路径
+  maxAge: 1000 * 60 * 60, // cookie 有效时长
+  httpOnly: true, // 是否只用于 http 请求中获取
+  overwrite: false // 是否允许重写
 }
 
 // 配置session中间件
-app.use(session({
-  key: 'SID',
-  store: new MysqlStore(sessionMysqlConfig),
-  cookie: cookie
-}))
+app.use(
+  session({
+    key: 'SID',
+    store: new MysqlStore(sessionMysqlConfig),
+    cookie: cookie
+  })
+)
 
 // 配置静态资源加载中间件
-app.use(koaStatic(
-  path.join(__dirname, '../static')
-))
+app.use(koaStatic(path.join(__dirname, '../static')))
 
 // 配置服务端模板渲染引擎中间件
-app.use(views(path.join(__dirname, '../views'), {
-  extension: 'ejs'
-}))
+app.use(
+  views(path.join(__dirname, '../views'), {
+    map: { html: 'ejs' }
+  })
+)
 
 // 加载路由中间件
 app.use(routers.routes()).use(routers.allowedMethods())

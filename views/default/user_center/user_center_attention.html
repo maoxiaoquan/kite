@@ -1,0 +1,131 @@
+<!--header.html start-->
+<% include ../parts/header.html %>
+<!--header.html end-->
+
+<body class="black-theme">
+
+  <!--header_view.html start-->
+  <% include ../parts/header_view.html %>
+  <!--header_view.html end-->
+
+
+  <!--article-list-lay layout-content start-->
+  <section class="user-lay layout-content" id="user-center-attention">
+    <div class="container  box-container">
+      <div class="row">
+
+        <div class="col-xs-12 col-sm-8 col-md-8 main">
+
+          <% include user_center_top.html %>
+
+          <div class="user-article-attention">
+
+            <div class="user-article-attention-any">
+              <a href="/user/<%= data.current_user.uid %>/attention/?any=me" class="<% if(data.any === 'me'){ %>active<% } %>">我关注的</a>
+              <a href="/user/<%= data.current_user.uid %>/attention/?any=other" class="<% if(data.any === 'other'){ %>active<% } %>">关注我的</a>
+            </div>
+
+            <% if(data.any === 'me'){ %>
+            <ul class="user-article-attention-view">
+              <% data.user_list.forEach(function (item, key) { %>
+              <li class="item">
+                <div class="user">
+                  <div class="lazy avatar avatar loaded" title="" style="background-image: url(<%= item.avatar %>);"></div>
+                  <div class="info-box">
+                    <div class="username">
+                      <a href="/user/<%= item.uid %>/article/all" target="_blank" rel="" class="link">
+                        <%= item.nickname %>
+                      </a></div>
+                    <div class="detail">
+                      <%= item.introduction %>
+                    </div>
+                  </div>
+                  <button data-uid="<%= item.uid %>" class="follow-btn active">
+                    <% if (data.other_attention.indexOf(item.uid) === -1) { %>
+                    已关注
+                    <% } else{ %>
+                    互相关注
+                    <% } %>
+                  </button>
+                </div>
+              </li>
+              <% }) %>
+            </ul>
+            <% }else{ %>
+            <ul class="user-article-attention-view">
+              <% data.user_list.forEach(function (item, key) { %>
+              <li class="item">
+                <div class="user">
+                  <div class="lazy avatar avatar loaded" title="" style="background-image: url(<%= item.avatar %>);"></div>
+                  <div class="info-box">
+                    <div class="username">
+                      <a href="/user/<%= item.uid %>/article/all" target="_blank" rel="" class="link">
+                        <%= item.nickname %>
+                      </a></div>
+                    <div class="detail">
+                      <%= item.introduction %>
+                    </div>
+                  </div>
+                  <button data-uid="<%= item.uid %>" class="follow-btn active">
+                    <% if (data.me_attention.indexOf(item.uid) === -1) { %>
+                    关注
+                    <% } else{ %>
+                    互相关注
+                    <% } %>
+                  </button>
+                </div>
+              </li>
+              <% }) %>
+            </ul>
+            <% } %>
+            <!--page start-->
+            <% include ../pages/user_center_attention_page.html %>
+            <!--page end-->
+          </div>
+
+
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-4 box-aside">
+          <% include user_center_aside.html %>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <!--article-list-lay layout-content end-->
+
+
+  <script>
+
+    window.onload = function () {
+      var follow_btn = document.getElementsByClassName('follow-btn')
+
+      for (var i = 0; i < follow_btn.length; i++) {
+        (function (i) {
+          if (follow_btn.length > 0) {
+            follow_btn[i].onclick = function () {
+              var uid = follow_btn[i].getAttribute('data-uid')
+              _server.post_user_attention({ attention_uid: uid }).then(function (res) {
+                if (res.state === 'success') {
+                  window.location.reload()
+                } else {
+                  alert(res.meaasge)
+                }
+              }).catch(function (err) {
+                console.log('错误')
+              })
+            }
+          }
+        })(i)
+      }
+    }
+
+    new Vue({
+      el: '#user-center-attention'
+    })
+
+  </script>
+</body>
+
+<% include ../parts/footer.html %>

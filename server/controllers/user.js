@@ -27,7 +27,7 @@ class User {
   }
 
   static async render_sign_in(ctx) {
-    /*router to sign_in.ejs*/
+    /*router to sign_in.html*/
     const title = 'sign_in'
 
     if (ctx.session.islogin) {

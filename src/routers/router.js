@@ -5,7 +5,8 @@ import {
   Switch,
   Link,
   Redirect,
-  HashRouter
+  HashRouter,
+  browserHistory
 } from 'react-router-dom'
 import { Menu, Icon, Row, Col } from 'antd'
 
@@ -52,51 +53,95 @@ import AdminSystemLog from 'bundle-loader?lazy!../containers/AdminSystemLog/view
 // components load their module for initial visit
 // //这里只是给this.props.child传一个方法，最后在Bundle的render里面调用
 const createComponent = component => props => (
-  <Bundle load={component}>
-    {Component => <Component {...props} />}
-  </Bundle>
+  <Bundle load={component}>{Component => <Component {...props} />}</Bundle>
 )
 
-const Manager = ({match}) => (
+const Manager = ({ match }) => (
   <div className="admin-main-content-view">
-    <Aside/>
+    <Aside />
     <div className="admin-content-wrapper">
-      <Route component={Index} exact path={`${match.url}/index`}/>
-      <Route component={createComponent(User)} exact path={`${match.url}/user`}/>
-      <Route component={createComponent(Article)} exact path={`${match.url}/article`}/>
-      <Route component={createComponent(ArticleTag)} exact path={`${match.url}/article_tag`}/>
-      <Route component={createComponent(Comment)} exact path={`${match.url}/comment`}/>
-      <Route component={createComponent(ArticleColumn)} exact path={`${match.url}/article_column`}/>
-      <Route component={createComponent(UserTag)} exact path={`${match.url}/user_tag`}/>
-      <Route component={createComponent(Picture)} exact path={`${match.url}/picture`}/>
-      <Route component={createComponent(adminUser)} exact path={`${match.url}/admin_user`}/>
-      <Route component={createComponent(adminRole)} exact path={`${match.url}/admin_role`}/>
-      <Route component={createComponent(adminAuthority)} exact path={`${match.url}/admin_authority`}/>
-      <Route component={createComponent(AdminSystemLog)} exact path={`${match.url}/admin_system_log`}/>
+      <Route component={Index} exact path={`${match.url}/index`} />
+      <Route
+        component={createComponent(User)}
+        exact
+        path={`${match.url}/user`}
+      />
+      <Route
+        component={createComponent(Article)}
+        exact
+        path={`${match.url}/article`}
+      />
+      <Route
+        component={createComponent(ArticleTag)}
+        exact
+        path={`${match.url}/article_tag`}
+      />
+      <Route
+        component={createComponent(Comment)}
+        exact
+        path={`${match.url}/comment`}
+      />
+      <Route
+        component={createComponent(ArticleColumn)}
+        exact
+        path={`${match.url}/article_column`}
+      />
+      <Route
+        component={createComponent(UserTag)}
+        exact
+        path={`${match.url}/user_tag`}
+      />
+      <Route
+        component={createComponent(Picture)}
+        exact
+        path={`${match.url}/picture`}
+      />
+      <Route
+        component={createComponent(adminUser)}
+        exact
+        path={`${match.url}/admin_user`}
+      />
+      <Route
+        component={createComponent(adminRole)}
+        exact
+        path={`${match.url}/admin_role`}
+      />
+      <Route
+        component={createComponent(adminAuthority)}
+        exact
+        path={`${match.url}/admin_authority`}
+      />
+      <Route
+        component={createComponent(AdminSystemLog)}
+        exact
+        path={`${match.url}/admin_system_log`}
+      />
     </div>
   </div>
 )
 
-const Main = ({match}) => (
+const Main = ({ match }) => (
   <div className="main">
-    <Header/>
+    <Header />
     <div className="admin-main-content">
-      <Route component={Manager} path={`${match.url}/manager`}/>
+      <Route component={Manager} path={`${match.url}/manager`} />
     </div>
   </div>
 )
 
 class RouteConfig extends Component {
-  render () {
+  render() {
     return (
-      <HashRouter>
+      <HashRouter history={browserHistory}>
         <div className="app-view">
-          <Route component={Main} path="/main"/>
-          <Route component={createComponent(SignIn)} exact path="/sign_in"/>
-          <Route component={createComponent(SignUp)} exact path="/sign_up"/>
-          <Route exact path="/" render={() => (
-            <Redirect to="/main/manager/index"/>
-          )}/>
+          <Route component={Main} path="/main" />
+          <Route component={createComponent(SignIn)} exact path="/sign_in" />
+          <Route component={createComponent(SignUp)} exact path="/sign_up" />
+          <Route
+            exact
+            path="/"
+            render={() => <Redirect to="/main/manager/index" />}
+          />
         </div>
       </HashRouter>
     )

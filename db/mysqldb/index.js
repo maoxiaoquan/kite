@@ -16,11 +16,6 @@ const sequelize = new Seq(
   }
 )
 
-const SEQ_PARAMETER = {
-  timestamps: false,
-  freezeTableName: true
-}
-
 sequelize
   .authenticate()
   .then(() => {
@@ -29,6 +24,11 @@ sequelize
   .catch(error => {
     console.log('链接失败' + error)
   })
+
+const SEQ_PARAMETER = {
+  timestamps: false,
+  freezeTableName: true
+}
 
 /**
  * 前台表

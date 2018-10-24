@@ -1,0 +1,56 @@
+<!--header.html start-->
+<% include parts/header.html %>
+<!--header.html end-->
+
+<body class="black-theme">
+
+  <!--header_view.html start-->
+  <% include parts/header_view.html %>
+  <!--header_view.html end-->
+
+
+  <div class="container box-container" id="index">
+
+    <div class="row" style="margin-left: 116px">
+      <div class="col-xs-12 col-sm-8 col-md-8">
+
+
+        <!--home-lay layout-content start-->
+        <section>
+
+        </section>
+        <!--home-lay layout-content end-->
+
+
+      </div>
+      <div class="col-xs-12 col-sm-4 col-md-4">
+        <!--aside.html start-->
+        <% include parts/aside.html %>
+        <!--aside.html end-->
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+
+    new Vue({
+      el: '#index',
+      data: {
+
+      },
+      created: function () {
+        /* this.get_index_article_list()*/
+      },
+      methods: {
+
+
+      }
+    })
+  </script>
+
+
+
+</body>
+
+<% include parts/footer.html %>

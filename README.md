@@ -1,8 +1,6 @@
-# Fate
+# Kite
+
 koa+react+mongodb blog
-
-## 这是一个博客系统，暂时命名为Fate
-
 
 设计
 
@@ -10,4 +8,4 @@ koa+react+mongodb blog
 
 专题与文章关联 专题由用户创建，属于个人
 
-未创建  talk 说说，  关注 页面
+未创建 talk 说说， 关注 页面

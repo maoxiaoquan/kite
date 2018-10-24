@@ -1,11 +1,11 @@
 {
   "restartable": "rs",
-  "ignore": ["./pm2log", "./src", "./static", "./view"],
+  "ignore": ["./pm2log", "./src", "./static", "./view", "./db"],
   "verbose": true,
   "execMap": {
     "js": "node --harmony"
   },
-  "watch": ["./server"],
+  "watch": ["./"],
   "env": {
     "NODE_ENV": "development"
   },

@@ -1,0 +1,196 @@
+<!--header.html start-->
+<% include ../parts/header.html %>
+<!--header.html end-->
+
+<body class="black-theme">
+
+  <!--header_view.html start-->
+  <% include ../parts/header_view.html %>
+  <!--header_view.html end-->
+
+
+  <!--article-list-lay layout-content start-->
+  <section class="user-setting-lay layout-content" id="user-setting-profile">
+    <div class="container box-container">
+      <div class="row">
+
+        <div class="col-xs-12 col-sm-4 col-md-4">
+          <!--user_settings_aside.html start-->
+          <% include user_settings_aside.html %>
+          <!--user_settings_aside.html end-->
+        </div>
+
+        <div class="col-xs-12 col-sm-8 col-md-8">
+          <div class="view setting-view">
+            <div class="sub-view-box setting-profile-view">
+
+              <h1>个人资料</h1>
+
+              <ul class="setting-list">
+                <li class="item-view">
+
+                  <span class="title">头像</span>
+                  <div class="avatar-uploader avatar-uploader">
+                    <div class="lazy avatar avatar loaded" :style="{'background-image':'url('+form_data.avatar+')'}"></div>
+                    <div class="action-box">
+                      <div class="hint">支持 jpg、png 格式大小 5M 以内的图片</div>
+                      <a class="button upload-btn" href="javascript:;">点击上传
+                        <input type="file" name="fileUpload" @change="change_file($event)" class="file-input">
+                      </a>
+                    </div>
+                  </div>
+
+                </li>
+                <li class="item-view">
+
+                  <span class="title">昵称</span>
+                  <div class="input-box profile-input profile-input">
+                    <input v-model="form_data.nickname" placeholder="填写你的昵称" class="input">
+                  </div>
+
+                </li>
+
+                <li class="item-view">
+                  <span class="title">性别</span>
+                  <div class="input-box profile-radio">
+                    <input type="radio" name="sex" value="1" v-model="form_data.sex"> <span>男</span>
+                    <input type="radio" name="sex" value="2" v-model="form_data.sex"> <span>女</span>
+                    <input type="radio" name="sex" value="0" v-model="form_data.sex"><span>保密</span>
+                  </div>
+                </li>
+                <li class="item-view">
+
+                  <span class="title">职业</span>
+                  <div class="input-box profile-input profile-input">
+                    <input placeholder="填写你的职业" v-model="form_data.profession" class="input">
+                  </div>
+
+                </li>
+                <li class="item-view">
+
+                  <span class="title">公司</span>
+                  <div class="input-box profile-input profile-input">
+                    <input placeholder="填写你的公司" v-model="form_data.company" class="input">
+                  </div>
+
+                </li>
+                <li class="item-view">
+
+                  <span class="title">个人介绍</span>
+                  <div class="input-box profile-input profile-input">
+                    <input v-model="form_data.introduction" placeholder="填写职业技能、擅长的事情、喜欢的事情等" class="input">
+                  </div>
+
+                </li>
+                <li class="item-view">
+
+                  <span class="title">个人主页</span>
+                  <div class="input-box profile-input profile-input">
+                    <input placeholder="填写你的个人主页" v-model="form_data.home_page" class="input">
+                  </div>
+
+                </li>
+              </ul>
+
+              <div class="footer-view">
+                <button class="button button-save" @click="post_update_user_info">保存</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--article-list-lay layout-content end-->
+
+
+  <script>
+
+    new Vue({
+      el: '#user-setting-profile',
+      data: function () {
+        return {
+          sign_uid: '<%= user_info.uid %>',
+          user_info: '',
+          form_data: {
+            nickname: '',
+            sex: '',
+            profession: '',
+            company: '',
+            introduction: '',
+            home_page: '',
+            avatar: ""
+          },
+          file: {}
+        }
+      },
+      created: function () {
+        this.get_curr_user_info()
+      },
+      methods: {
+        get_curr_user_info: function () {// 获取当前登录用户信息
+          var that = this
+          _server.get_user_info({ uid: this.sign_uid }).then(function (res) {
+            that.$nextTick(function () {
+              if (res.state === 'success') {
+                that.user_info = res.data
+
+                that.form_data.nickname = res.data.user.nickname
+                that.form_data.sex = res.data.user.sex
+                that.form_data.profession = res.data.user_info.profession
+                that.form_data.company = res.data.user.company
+                that.form_data.introduction = res.data.user.introduction
+                that.form_data.home_page = res.data.user_info.home_page
+                that.form_data.avatar = res.data.user.avatar
+              }
+            })
+          })
+        },
+        post_update_user_info: function () {
+          var that = this
+          _server.post_update_user_info(that.form_data).then(function (res) {
+            that.$nextTick(function () {
+              if (res.state === 'success') {
+                alert('保存成功')
+                that.get_curr_user_info()
+              } else {
+                alert(res.message)
+              }
+            })
+          })
+        },
+        post_upload_user_avatar: function () {
+          var that = this
+          console.log('this.file', this.file)
+          var data = new FormData();//重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
+          data.append('file', this.file, this.file.name)
+          console.log(data.get('file'))
+          _server.post_upload_user_avatar(data).then(function (res) {
+            that.$nextTick(function () {
+              if (res.state === 'success') {
+                alert('上传用户头像成功')
+                that.get_curr_user_info()
+              } else {
+                alert(res.message)
+              }
+            })
+          })
+        },
+        change_file: function (event) {
+          var that = this
+          console.log('event.target', event.target.files)
+          this.file = event.target.files[0]
+          console.log('this.file', this.file)
+          setTimeout(function () {
+            that.post_upload_user_avatar()
+          }, 500)
+          console.log(1111)
+        },
+      }
+    })
+  </script>
+
+</body>
+
+<% include ../parts/footer.html %>

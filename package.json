@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "cli-dev": "nodemon cli_server/cli_server.js ./cli_server/cli_nodemon.json",
+    "cli-dev": "nodemon cli_server/cli_server.js --config ./cli_server/cli_nodemon.json",
     "cli": "node cli_server/cli_server.js",
     "dev": "node build/dev-server.js",
     "build": "webpack  --config  build/webpack.prod.js -p",
     "mysql": "node ./mysqldb/create.js",
     "server-dev": "nodemon ./server/app.js --config _nodemon.json",
     "server": "pm2 start pm2.json",
-    "scss": "node-sass -w -r ./static/default/css -o ./static/default/css"
+    "scss": "node-sass -w -r ./static/default/scss -o ./static/default/css",
+    "cli-scss": "node-sass -w -r ./cli_server/static/default/scss -o ./cli_server/static/default/css"
   },
   "author": "xiaoquan",
   "license": "ISC",

@@ -1,0 +1,89 @@
+<!--header.html start-->
+<% include parts/header.html %>
+<!--header.html end-->
+
+<body class="black-theme">
+
+  <!--home-lay layout-content start-->
+  <section class="sign-lay layout-content">
+    <div class="sign-view card">
+      <div class="title">
+        <a class="active" href="/sign_in">登录</a>
+        <b>·</b>
+        <a href="/sign_up">注册</a>
+      </div>
+      <% if(state === 'error'){ %>
+      <p>
+        <%= message %>
+      </p>
+      <% } %>
+      <div class="js-sign-in-container">
+        <form id="new_session" action="/sign_in" accept-charset="UTF-8" method="post">
+          <!-- 正常登录登录名输入框 -->
+          <div class="input-prepend restyle js-normal">
+            <input placeholder="手机号或邮箱" type="text" name="account" value="<%= data.account %>">
+            <i class="iconfont icon-account"></i>
+          </div>
+
+          <!-- 海外登录登录名输入框 -->
+
+          <div class="input-prepend">
+            <input placeholder="密码" type="password" name="password" value="<%= data.password %>">
+            <i class="iconfont icon-mima"></i>
+          </div>
+          <div class="remember-btn clearfix">
+            <div class="pull-left">
+              <input type="checkbox" value="true" checked="checked" id="session_remember_me"><span>记住我</span>
+            </div>
+            <div class="pull-right">
+              <a href="/reset_password">忘记密码</a>
+            </div>
+          </div>
+          <button class="sign-in-button" id="sign-in-form-submit-btn" type="submit">
+            登录
+          </button>
+        </form>
+        <!-- 更多登录方式 -->
+        <div class="more-sign">
+          <h6>社交帐号登录</h6>
+          <ul>
+            <li><a class="weibo" href="javascript:alert(暂未开放，请等待后续开放);"><i class="iconfont icon-xinlang"></i></a></li>
+            <li><a class="weixin" target="_blank" href="javascript:alert(暂未开放，请等待后续开放);"><i class="iconfont icon-iconfontweixin"></i></a></li>
+            <li><a class="qq" target="_blank" href="javascript:alert(暂未开放，请等待后续开放);"><i class="iconfont icon-qq"></i></a></li>
+          </ul>
+
+          <div class="weibo-geetest-captcha"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--home-lay layout-content end-->
+
+  <!--<script>
+
+  var navbar = document.getElementById('layout-navbar')
+
+  function getScrollTop () {
+    var scrollTop = 0;
+    if (document.documentElement && document.documentElement.scrollTop) {
+      scrollTop = document.documentElement.scrollTop;
+    }
+    else if (document.body) {
+      scrollTop = document.body.scrollTop;
+    }
+    return scrollTop;
+  }
+
+  window.onscroll = function () {
+    var st = getScrollTop()
+    if (st > 50) {
+      navbar.classList.add("navbar-fixed-top");
+    } else {
+      navbar.classList.remove("navbar-fixed-top");
+    }
+  }
+
+</script>-->
+</body>
+
+<% include parts/footer.html %>

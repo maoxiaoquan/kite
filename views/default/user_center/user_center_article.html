@@ -1,0 +1,285 @@
+<!--header.html start-->
+<% include ../parts/header.html %>
+<!--header.html end-->
+
+<body class="black-theme">
+
+  <!--header_view.html start-->
+  <% include ../parts/header_view.html %>
+  <!--header_view.html end-->
+
+
+  <!--article-list-lay layout-content start-->
+  <section class="user-lay layout-content" id="user-center-article">
+    <div class="container  box-container">
+      <div class="row">
+
+        <div class="col-xs-12 col-sm-8 col-md-8 main">
+
+          <% include user_center_top.html %>
+
+          <div id="user-center-article-view" v-if="topic_article_show">
+            <ul class="topic-list">
+              <li class="title">个人专题：</li>
+              <li><a href="/user/<%= data.current_user.uid %>/article/all">全部</a></li>
+              <% data.user_article_topic_all.forEach(function (item, key) { %>
+              <li class="<% if(data.topic_id == item.topic_id){ %>current<% } %>"><a href="/user/<%= data.current_user.uid %>/article/<%= item.topic_id %>">
+                  <%= item.topic_name %></a>
+              </li>
+              <% }) %>
+              <% if(user_info.uid === data.current_user.uid){ %>
+              <li>
+                <a class="btn btn-green" @click="create_show_modal=true" href="javascript:;">创建新专题</a>
+              </li>
+              <li>
+                <a class="btn btn-info" href="javascript:;" @click="topic_article_show=false">编辑专题</a>
+              </li>
+              <% } %>
+            </ul>
+
+            <!-- use the modal component, pass in the prop -->
+            <box-modal :show.sync="create_show_modal" data-customize="modal">
+              <h3 slot="header">创建新专题</h3>
+              <div class="topic-modal">
+                <div class="form-group">
+                  <label for="topic-name-input">专题名字</label>
+                  <input type="email" v-model="topic_name" class="form-control" id="topic-name-input" placeholder="请输入个人文章专题名字">
+                </div>
+                <div class="form-group">
+                  <label for="article-topic-description">专题描述</label>
+                  <textarea v-model="topic_description" type="password" class="form-control" id="article-topic-description"
+                    placeholder="请输入个人文章专题描述"></textarea>
+                </div>
+              </div>
+              <div slot="footer">
+                <button type="button" class="btn btn-primary topic-modal-create" @click="create_new_user_topic">创建
+                </button>
+                <button type="button" @click="create_show_modal=false" class="btn btn-secondary topic-modal-cancel">取消
+                </button>
+              </div>
+            </box-modal>
+
+            <div id="list-container">
+              <!-- 文章列表模块 -->
+              <ul class="note-list">
+                <% data.article_list.forEach(function (item, key) { %>
+                <li>
+                  <article class="content-box content-box-index article-list">
+                    <div class="info-box">
+                      <div class="info-row title-row">
+                        <a href="/article/<%= item.aid %>" class="title" target="_blank">
+                          <%= item.title %></a>
+                      </div>
+                      <!-- <div class="content-text">
+                                    <%= item.content %>
+                                </div>-->
+                      <div class="info-row meta-row">
+                        <ul class="meta-list">
+                          <li class="item username clickable">
+                            <a href="">
+                              <%= item.user.nickname %></a>
+                          </li>
+                          <li class="item">
+                            <%= item.create_at %>
+                          </li>
+                          <li class="item">
+                            <%= item.read_count %> 阅读</li>
+                          <li class="item">
+                            <%= item.like_count %> 喜欢</li>
+                          <li class="item">
+                            <%= item.comment_count %> 评论</li>
+                          <% if(item.tag_ids){ %>
+                          <li class="item">
+                            <% item.tag_ids.split(',').forEach(function (item, key) { %>
+                            <%
+                                                    data.tag_all.forEach(function (tag_all_item, tag_all_key) {
+                                                    if (tag_all_item.article_tag_id == item) {
+                                                    %>
+                            <a class="tag-class frontend" href="">
+                              <%= tag_all_item.article_tag_name %>
+                            </a>
+                            <%
+                                                    }}) %>
+                            <% }) %>
+                          </li>
+                          <% } %>
+                          <li><a href="">编辑</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <% if(item.cover_img){ %>
+                    <div class="lazy thumb thumb loaded" style="background-image: url('<%= item.cover_img %>'); background-size: cover;">
+                    </div>
+                    <% } %>
+                  </article>
+                </li>
+                <% }) %>
+              </ul>
+
+              <!--page start-->
+              <% include ../pages/user_page.html %>
+              <!--page end-->
+
+            </div>
+          </div>
+
+          <div v-else="topic_article_show" id="user-article-topic-view">
+            <button type="button" @click="window.location.reload()" class="btn btn-secondary btn-sm">返回</button>
+
+            <div class="user-article-topic-table">
+              <div class="user-article-topic-item">
+                <div class="input-view">
+                  <span class="title">专题名字</span>
+                </div>
+                <div class="input-view">
+                  <span class="title">专题简介</span>
+                </div>
+                <div class="operate">
+                  <span class="title">操作</span>
+                </div>
+              </div>
+
+              <topic-list :item="item" v-for="item in topic_list" @update-list="get_user_article_topic_list" />
+
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="col-xs-12 col-sm-4 col-md-4 box-aside">
+          <% include user_center_aside.html %>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <!--article-list-lay layout-content end-->
+
+
+  <!-- template for the modal component -->
+  <script type="text/x-template" id="user-article-topic-template">
+
+    <div class="user-article-topic-item" :class="{'active':!is_edit}" v-if="is_show">
+        <div class="input-view">
+            <input type="text" v-model="topic_name">
+        </div>
+        <div class="input-view">
+            <input type="text" v-model="topic_description">
+        </div>
+        <div class="operate">
+            <button type="button" v-show="!is_edit" @click="is_edit=true" class="btn btn-primary btn-sm">修改</button>
+            <button type="button" v-show="is_edit" @click="save_edit" class="btn btn-primary btn-sm">保存</button>
+            <button type="button" v-show="is_edit" @click="cancel_save" class="btn btn-primary btn-sm">取消</button>
+            <button type="button" @click="delete_topic" class="btn btn-danger btn-sm">删除</button>
+        </div>
+    </div>
+
+</script>
+
+  <script>
+
+    window.onload = function () {
+      var find_active_length = document.querySelector('.topic-list').querySelectorAll('.current').length
+      if (find_active_length === 0) {
+        document.querySelectorAll('.topic-list li')[1].classList.add('current')
+      }
+    }
+
+    Vue.component('topic-list', {
+      template: '#user-article-topic-template',
+      props: ['item'],
+      data: function () {
+        return {
+          topic_name: '',
+          topic_description: '',
+          is_edit: false,
+          is_show: true
+        }
+      },
+      created: function () {
+        this.topic_name = this.item.topic_name
+        this.topic_description = this.item.topic_description
+      },
+      methods: {
+        cancel_save: function () {
+          this.topic_name = this.item.topic_name
+          this.topic_description = this.item.topic_description
+          this.is_edit = false
+        },
+        save_edit: function () {
+          var that = this
+          _server.update_user_article_topic({
+            topic_name: that.topic_name,
+            topic_description: that.topic_description,
+            topic_id: that.item.topic_id,
+          }).then(function (res) {
+            if (res.state === 'success') {
+              that.is_edit = false
+              alert(res.message)
+              that.$emit('update-list')
+            } else {
+              alert(res.message)
+            }
+          })
+        },
+        delete_topic: function () {
+          var that = this
+          _server.delete_user_article_topic({
+            topic_id: that.item.topic_id,
+          }).then(function (res) {
+            if (res.state === 'success') {
+              alert(res.message)
+              that.is_show = false
+            } else {
+              alert(res.message)
+            }
+          })
+        }
+      }
+    })
+
+    new Vue({
+      el: '#user-center-article',
+      data: {
+        create_show_modal: false,
+        topic_article_show: true,
+        topic_name: '',
+        topic_description: '',
+        topic_list: []
+      },
+      created: function () {
+        this.get_user_article_topic_list()
+      },
+      methods: {
+        create_new_user_topic: function () {
+          var that = this
+          _server.create_user_article_topic({
+            topic_name: that.topic_name,
+            topic_description: that.topic_description,
+          }).then(function (res) {
+            if (res.state === 'success') {
+              that.create_show_modal = false
+              that.topic_name = ''
+              that.topic_description = ''
+              alert('创建成功')
+              window.location.reload()
+            } else {
+              alert(res.message)
+            }
+          })
+        },
+        get_user_article_topic_list: function () {
+          var that = this
+          _server.get_user_article_topic_all().then(function (res) {
+            that.$nextTick(function () {
+              that.topic_list = res.data ? res.data.list : []
+            })
+          })
+        }
+      }
+    })
+  </script>
+</body>
+
+<% include ../parts/footer.html %>
