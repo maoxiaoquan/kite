@@ -1,11 +1,11 @@
-const router = require('koa-router')();
+const router = require('koa-router')()
 
-const home = require('./web');
-const admins = require('./admin');
-const api = require('./api');
+const home = require('./web')
+const admins = require('./admin')
+const api = require('./api')
 
-router.use('/', home.routes(), home.allowedMethods());
-router.use('/admin', admins.routes(), admins.allowedMethods());
-router.use('/api', api.routes(), api.allowedMethods());
+router.use('/', home.routes(), home.allowedMethods())
+router.use('/admin', admins.routes(), admins.allowedMethods())
+router.use('/api', api.routes(), api.allowedMethods())
 
-module.exports = router;
+module.exports = router

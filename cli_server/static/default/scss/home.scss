@@ -75,7 +75,7 @@
     margin-bottom: 20px;
     font-size: 20px;
     color: #333;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid rgba(178, 186, 194, 0.15);
   }
   .info {
     margin-bottom: 20px;
@@ -93,7 +93,55 @@
 }
 
 .box-content-footer {
-  &.center {
+  padding-top: 30px;
+  border-top: 1px solid rgba(178, 186, 194, 0.15);
+  margin-top: 30px;
+  .center {
     text-align: center;
+  }
+}
+
+.form-field {
+  .label-title {
+    opacity: 0.75;
+    margin-bottom: 5px;
+    display: inline-block;
+  }
+  .input-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    border: 1px solid #e4f5ef;
+    color: #2c3e50;
+    border-radius: 3px;
+    transition: background 0.3s;
+    position: relative;
+    input {
+      position: relative;
+      z-index: 1;
+      height: 38px;
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 14px;
+      color: #2c3e50;
+      padding: 0;
+      width: 100%;
+      display: block;
+      border: none;
+      background: 0 0;
+      outline: 0;
+    }
+  }
+}
+
+#init-step-one {
+  .input-enter {
+    width: 380px;
+    margin: 0 auto;
+  }
+  .form-field {
+    margin-bottom: 20px;
   }
 }
