@@ -35,7 +35,7 @@
         <div class="form-field">
           <label class="label-title" for="">数据库密码</label>
           <div class="input-wrapper">
-            <input type="text" v-model="password">
+            <input type="password" v-model="password">
           </div>
         </div>
 
@@ -67,7 +67,7 @@
       <div class="container">
         <div class="clearfix">
           <button class="box-btn big pull-left" @click="step_submit(0)">返回 <i class="iconfont icon-back"></i></button>
-          <button class="box-btn big pull-right">确定 <i class="iconfont icon-more"></i></button>
+          <button class="box-btn big pull-right" @click="set_mysql">确定 <i class="iconfont icon-more"></i></button>
         </div>
       </div>
     </div>
@@ -101,8 +101,27 @@
               }
             })
           })
-        }
-
+        },
+        set_mysql: function (val) {
+          var that = this
+          _server.post_set_mysql({
+            database: that.database,
+            username: that.username,
+            password: that.password,
+            host: that.host,
+            mysql_port: 3306,
+          }).then(function (res) {
+            that.$nextTick(function () {
+              if (res.state === 'success') {
+                console.log(res.message)
+                console.log('数据库创建成功')
+                that.step_submit(2)
+              } else {
+                console.log(res.message)
+              }
+            })
+          })
+        },
       }
     })
   </script>

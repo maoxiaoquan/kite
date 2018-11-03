@@ -109,7 +109,7 @@ class Admin_users {
       if (!checkEmail(req_data.email)) {
         throw new err_mess('邮箱格式输入有误!')
       }
-      let admin_user_findOne = await await admin_user.findOne({
+      let admin_user_findOne = await admin_user.findOne({
         where: { account: req_data.account }
       })
 

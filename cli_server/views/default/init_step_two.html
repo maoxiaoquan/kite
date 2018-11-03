@@ -1,0 +1,135 @@
+<!--header.html start-->
+<% include parts/header.html %>
+<!--header.html end-->
+
+<body class="black-theme">
+
+  <!--header_view.html start-->
+  <% include parts/header_view.html %>
+  <!--header_view.html end-->
+
+
+  <div id="init-step-two">
+    <div class="container box-container">
+
+      <div class="box-content">
+        <h2 class="title">创建后台超级管理员账号</h2>
+        <p class="info">这牢记你所填写的密码 </p>
+      </div>
+
+      <div class="box-content input-enter">
+        <div class="form-field">
+          <label class="label-title" for="">账号</label>
+          <div class="input-wrapper">
+            <input type="text" v-model="account">
+
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="label-title" for="">昵称</label>
+          <div class="input-wrapper">
+            <input type="text" v-model="nickname">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="label-title" for="">密码</label>
+          <div class="input-wrapper">
+            <input type="password" v-model="password">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="label-title" for="">重复密码</label>
+          <div class="input-wrapper">
+            <input type="password" v-model="confirm">
+          </div>
+        </div>
+
+        <p class="info">以下是分割线，下方的邮箱用来前台用户注册时发送邮件给对方的邮箱（如果填写错误，可以使用上方注册的管理员账号，前往后台修改） </p>
+
+        <div class="form-field">
+          <label class="label-title" for="">邮箱</label>
+          <div class="input-wrapper">
+            <input type="text" v-model="email">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="label-title" for="">邮箱服务商后缀（例如：qq、163等等）</label>
+          <div class="input-wrapper">
+            <input type="text" v-model="email_suffix">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="label-title" for="">邮箱密码</label>
+          <div class="input-wrapper">
+            <input type="password" v-model="email_password">
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="box-content-footer">
+      <div class="container">
+        <div class="clearfix center">
+          <button class="box-btn big" @click="step_submit">创建超级管理员账号 <i class="iconfont icon-more"></i></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <script>
+
+    new Vue({
+      el: '#init-step-two',
+      data: {
+
+        account: "",
+        nickname: "",
+        password: "",
+        confirm: "",
+        email_suffix: "",
+        email: "",
+        email_password: ""
+      },
+      created: function () {
+        /* this.get_index_article_list()*/
+      },
+      methods: {
+        step_submit: function (val) {
+          var that = this
+          var params = {
+            account: this.account,
+            nickname: this.nickname,
+            password: this.password,
+            confirm: this.confirm,
+            email_suffix: this.email_suffix,
+            email: this.email,
+            email_password: this.email_password
+          }
+          _server.post_create_admin_user(params).then(function (res) {
+            that.$nextTick(function () {
+              if (res.state === 'success') {
+                alert(res.message)
+              } else {
+                alert(res.message)
+              }
+            })
+          })
+        },
+      }
+    })
+  </script>
+
+
+
+</body>
+
+<% include parts/footer.html %>

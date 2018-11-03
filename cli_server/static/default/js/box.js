@@ -42,6 +42,14 @@ function hasClass(obj, cls) {
     post_set_step: function(data) {
       //根据uid更新用户相关信息
       return _Fetch.post('/set_step', data)
+    },
+    post_set_mysql: function(data) {
+      //根据uid更新用户相关信息
+      return _Fetch.post('/set_mysql', data)
+    },
+    post_create_admin_user: function(data) {
+      //根据uid更新用户相关信息
+      return _Fetch.post('/create_admin_user', data)
     }
   }
 

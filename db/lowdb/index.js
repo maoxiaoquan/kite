@@ -11,8 +11,12 @@ if (!lowdb.has('cli').value()) {
   lowdb.set('cli', { step: 0, is_success: false }).write()
 }
 
-if (!lowdb.has('config').value()) {
-  lowdb.set('config', {}).write()
+if (!lowdb.has('mysql').value()) {
+  lowdb.set('mysql', {}).write()
+}
+
+if (!lowdb.has('email').value()) {
+  lowdb.set('email', {}).write()
 }
 
 module.exports = {

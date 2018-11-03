@@ -38,7 +38,8 @@
   width: 100%;
   background: #fff;
   -webkit-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); }
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  z-index: 100; }
   #kite-header .nav-view .pull-left h2 {
     font-size: 18px;
     padding-top: 16px;
@@ -78,7 +79,8 @@
 .box-content-footer {
   padding-top: 30px;
   border-top: 1px solid rgba(178, 186, 194, 0.15);
-  margin-top: 30px; }
+  margin-top: 30px;
+  padding-bottom: 60px; }
   .box-content-footer .center {
     text-align: center; }
 
@@ -113,9 +115,11 @@
     background: 0 0;
     outline: 0; }
 
-#init-step-one .input-enter {
+#init-step-one .input-enter,
+#init-step-two .input-enter {
   width: 380px;
   margin: 0 auto; }
 
-#init-step-one .form-field {
+#init-step-one .form-field,
+#init-step-two .form-field {
   margin-bottom: 20px; }
