@@ -70,6 +70,9 @@
 .box-container {
   .box-content {
     margin-bottom: 30px;
+    &.center {
+      text-align: center;
+    }
   }
   .title {
     padding-bottom: 20px;

@@ -9,26 +9,22 @@
   <!--header_view.html end-->
 
 
-  <div class="container box-container" id="index">
+  <div id="index">
+    <div class="container box-container">
 
-    <div class="row" style="margin-left: 116px">
-      <div class="col-xs-12 col-sm-8 col-md-8">
+      <div class="box-content">
+        <h2 class="title">请点击按钮初始化项目</h2>
+      </div>
 
+      <div class="box-content">
 
-        <!--home-lay layout-content start-->
-        <section>
-
-        </section>
-        <!--home-lay layout-content end-->
-
+        <p class="info">您的网站已经初始化完成，后续此处会开放开发辅助功能，敬请期待， </p>
 
       </div>
-      <div class="col-xs-12 col-sm-4 col-md-4">
-        <!--aside.html start-->
-        <% include parts/aside.html %>
-        <!--aside.html end-->
-      </div>
+
     </div>
+
+
   </div>
 
 
@@ -37,14 +33,19 @@
     new Vue({
       el: '#index',
       data: {
-
+        database: "",
+        username: "",
+        password: "",
+        host: "",
+        mysql_port: 3306,
       },
       created: function () {
         /* this.get_index_article_list()*/
       },
       methods: {
+        init: function () {
 
-
+        }
       }
     })
   </script>

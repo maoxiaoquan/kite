@@ -56,6 +56,8 @@
 
 .box-container .box-content {
   margin-bottom: 30px; }
+  .box-container .box-content.center {
+    text-align: center; }
 
 .box-container .title {
   padding-bottom: 20px;

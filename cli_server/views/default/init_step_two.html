@@ -118,6 +118,7 @@
             that.$nextTick(function () {
               if (res.state === 'success') {
                 alert(res.message)
+                window.location.reload()
               } else {
                 alert(res.message)
               }

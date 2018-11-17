@@ -211,10 +211,15 @@ class Init {
         uid: create_admin_user.uid,
         role_id: create_admin_role.role_id
       })
-      .then(function(p) {
+      .then(async p => {
+        await lowdb
+          .set('cli', {
+            is_success: true
+          })
+          .write()
         home_resJson(ctx, { state: 'success', message: '注册成功' })
       })
-      .catch(function(err) {
+      .catch(err => {
         home_resJson(ctx, { state: 'error', message: '注册失败' })
       })
   }

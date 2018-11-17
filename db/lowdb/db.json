@@ -1,0 +1,14 @@
+{
+  "cli": {
+    "step": 2,
+    "is_success": false
+  },
+  "mysql": {
+    "database": "fatecms",
+    "username": "root",
+    "password": "root",
+    "host": "localhost",
+    "mysql_port": 3306
+  },
+  "email": {}
+}
