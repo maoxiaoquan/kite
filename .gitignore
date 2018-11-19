@@ -5,7 +5,7 @@
 .DS_Store
 npm-debug.log*
 /static/upload
-./db/lowdb/db.json
+/db/lowdb/db.json
 /.
 /.idea
 .idea
