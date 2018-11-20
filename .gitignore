@@ -4,9 +4,8 @@
 # misc
 .DS_Store
 npm-debug.log*
-/static/upload
+/static/upload/
 /db/lowdb/db.json
-/.
 /.idea
 .idea
 yarn.lock

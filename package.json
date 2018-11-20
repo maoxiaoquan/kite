@@ -18,7 +18,6 @@
   "author": "xiaoquan",
   "license": "ISC",
   "dependencies": {
-    "antd": "^3.10.1",
     "axios": "^0.17.1",
     "bundle-loader": "^0.5.5",
     "busboy": "^0.2.14",
@@ -46,6 +45,14 @@
     "pm2": "^2.7.2",
     "prop-types": "^15.6.0",
     "qs": "^6.5.1",
+    "sequelize": "^4.37.1",
+    "shortid": "^2.2.8",
+    "trim-html": "^0.1.9",
+    "webpack": "^3.6.0",
+    "nodemon": "^1.12.1"
+  },
+  "devDependencies": {
+    "antd": "^3.10.1",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-redux": "^5.0.6",
@@ -54,12 +61,6 @@
     "react-router-redux": "^4.0.8",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
-    "sequelize": "^4.37.1",
-    "shortid": "^2.2.8",
-    "trim-html": "^0.1.9",
-    "webpack": "^3.6.0"
-  },
-  "devDependencies": {
     "autoprefixer-loader": "^3.2.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^7.2.3",
@@ -93,7 +94,6 @@
     "jsx-loader": "^0.13.2",
     "less-loader": "^4.0.5",
     "node-sass": "^4.5.3",
-    "nodemon": "^1.12.1",
     "postcss-loader": "^2.0.8",
     "progress-bar-webpack-plugin": "^1.10.0",
     "react-hot-loader": "^3.1.1",
