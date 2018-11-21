@@ -47,7 +47,7 @@ browserSync({
       // bundler should be the same as above
       webpackHotMiddleware(bundler),
       proxy({
-        target: `http://localhost:${cfg.produce_port}/`,
+        target: `http://localhost:${cfg.product_port}/`,
         changeOrigin: true
       })
     ]

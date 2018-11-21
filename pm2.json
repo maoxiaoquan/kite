@@ -1,6 +1,6 @@
 {
   "apps": {
-    "name": "fatecms",
+    "name": "kite",
     "script": "./server/app.js",
     "min_uptime": "60s",
     "max_restarts": 30,

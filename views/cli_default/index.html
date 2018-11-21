@@ -26,7 +26,7 @@
 
         <div class="box-content-footer">
             <div class="container">
-                <button class="box-btn big">点我重启项目</button>
+                <button class="box-btn big" @click="restart_project">点我重启项目</button>
             </div>
         </div>
 
@@ -53,6 +53,12 @@
         methods: {
             init: function () {
 
+            },
+            restart_project: function () {
+                var that = this
+                _server.post_restart_project().then(function (res) {
+                    console.log('res666666666666', res)
+                })
             }
         }
     })

@@ -68,5 +68,5 @@ app.use(
 app.use(routers.routes()).use(routers.allowedMethods())
 
 // 监听启动端口
-app.listen(config.produce_port)
-console.log(`the server is start at port ${config.produce_port}`)
+app.listen(config.product_port)
+console.log(`the server is start at port ${config.product_port}`)

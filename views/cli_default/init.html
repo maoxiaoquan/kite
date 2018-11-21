@@ -4,73 +4,79 @@
 
 <body class="black-theme">
 
-  <!--header_view.html start-->
-  <% include parts/header_view.html %>
-  <!--header_view.html end-->
+<!--header_view.html start-->
+<% include parts/header_view.html %>
+<!--header_view.html end-->
 
-  <div id="init">
+<div id="init">
     <div class="container box-container">
 
-      <div class="box-content">
-        <h2 class="title">欢迎</h2>
-        <p class="info">欢迎使用Kite安装程序，在开始前，我们需要您数据库的一些信息，请准备以下信息，如果你愿意花时间，可以看看安装文档 <a href="">介绍文档</a> </p>
-      </div>
+        <div class="box-content">
+            <h2 class="title">欢迎</h2>
+            <p class="info">欢迎使用Kite安装程序，在开始前，我们需要您数据库的一些信息，请准备以下信息，如果你愿意花时间，可以看看安装文档 <a href="">介绍文档</a></p>
+        </div>
 
-      <div class="box-content">
-        <h2 class="title">需要准备</h2>
-        <p class="info">以下信息必须正确填入，否则安装程序无法进行 ，如需不填已备注，未备注则必填</p>
-        <ul class="info-list">
-          <li>1. 数据库名</li>
-          <li>2. 数据库用户名</li>
-          <li>3. 数据库密码</li>
-          <li>4. 数据库主机</li>
-          <li>5. 数据库端口号(mysql一般默认为3306)</li>
-          <li>6. 域名（如果是没有，或者只是开发，则不填）</li>
-        </ul>
-        <p class="info">如果填写错误，或者进行下一步失败，可以手动打开文件进行编辑</p>
-        <p class="info">注：所填写的数据都将保存在您当前的服务器本地</p>
-      </div>
+        <div class="box-content">
+            <h2 class="title">需要准备</h2>
+            <p class="info">以下信息必须正确填入，否则安装程序无法进行 ，如需不填已备注，未备注则必填</p>
+            <ul class="info-list">
+                <li>1. 数据库名</li>
+                <li>2. 数据库用户名</li>
+                <li>3. 数据库密码</li>
+                <li>4. 数据库主机</li>
+                <li>5. 数据库端口号(mysql一般默认为3306)</li>
+                <li>6. 域名（如果是没有，或者只是开发，则不填）</li>
+            </ul>
+            <p class="info">如果填写错误，或者进行下一步失败，可以手动打开文件进行编辑</p>
+            <p class="info">注：所填写的数据都将保存在您当前的服务器本地</p>
+        </div>
+
+        <button class="box-demo" @click="step_submit2">666</button>
 
     </div>
 
     <div class="box-content-footer">
-      <div class="container">
-        <div class="clearfix center">
-          <button class="box-btn big" @click="step_submit">现在开始 <i class="iconfont icon-more"></i></button>
+        <div class="container">
+            <div class="clearfix center">
+                <button class="box-btn big" @click="step_submit">现在开始 <i class="iconfont icon-more"></i></button>
+            </div>
         </div>
-      </div>
     </div>
 
-  </div>
+</div>
 
 
-
-  <script>
+<script>
 
     new Vue({
-      el: '#init',
-      data: function () {
-        return {
-          step: ""
+        el: '#init',
+        data: function () {
+            return {
+                step: ""
+            }
+        },
+        methods: {
+            step_submit: function () {
+                var that = this
+                _server.post_set_step({step: 1}).then(function (res) {
+                    that.$nextTick(function () {
+                        if (res.state === 'success') {
+                            window.location.href = '/init_step_one'
+                        } else {
+                            alert(res.message)
+                        }
+                    })
+                })
+            },
+            step_submit2: function () {
+                var that = this
+                _server.post_restart_project().then(function (res) {
+                    console.log('res666666666666', res)
+                })
+            }
         }
-      },
-      methods: {
-        step_submit: function () {
-          var that = this
-          _server.post_set_step({ step: 1 }).then(function (res) {
-            that.$nextTick(function () {
-              if (res.state === 'success') {
-                window.location.href = '/init_step_one'
-              } else {
-                alert(res.message)
-              }
-            })
-          })
-        }
-      }
     })
-  </script>
-
+</script>
 
 
 </body>

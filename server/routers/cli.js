@@ -22,4 +22,6 @@ router.post('set_mysql', init.post_set_mysql) // set mysql
 
 router.post('create_admin_user', init.post_create_admin_user) // set mysql
 
+router.post('restart_project', init.post_restart_project) // restart project
+
 module.exports = router

@@ -5,15 +5,15 @@
   height: 100%;
   position: relative;
   .admin-sign-in-view {
-    width: 420px;
+    width: 380px;
     position: absolute;
     top: 50%;
     left: 50%;
     overflow: auto;
     border-radius: 10px;
-    -webkit-box-shadow: 0 0 30px #ccc;
-    box-shadow: 0 0 30px #ccc;
-    background-color: rgba(34, 44, 54, .9);
+    -webkit-box-shadow: 0 0 30px #f2f2f2;
+    box-shadow: 0 0 30px #f2f2f2;
+    background-color: #fff;
     margin-top: -15px;
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
@@ -25,52 +25,11 @@
       font-weight: bold;
     }
     .admin-sign-in-header {
-      background-color: rgba(29, 35, 46, .8);
-      text-align: left;
-      margin: 0;
-      padding: 12px 25px;
-      ul {
-        margin-top: 3px;
-        li {
-          display: inline-block;
-          margin-right: 10px;
-          &:nth-child(1) {
-            i {
-              background: #eb6460;
-            }
-          }
-          &:nth-child(2) {
-            i {
-              background: #f9ba41;
-            }
-          }
-          &:nth-child(3) {
-            i {
-              background: #58ad8d;
-            }
-          }
-          i {
-            width: 15px;
-            display: block;
-            height: 15px;
-            border-radius: 30px;
-          }
-        }
-      }
+      text-align: center;
+      padding: 30px 25px 10px;
     }
     .from-view {
       padding: 10px 45px 30px;
-      .ant-form-item {
-        .ant-input {
-          border-radius: 0;
-          background-color: rgba(29, 35, 46, .8);
-          border: rgba(29, 35, 46, .8);
-          color: #f6f6f6;
-        }
-      }
-    }
-    .anticon {
-      color: #B5B5B6;
     }
   }
   .sign-in-btn {

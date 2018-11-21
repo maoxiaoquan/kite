@@ -24,7 +24,6 @@ import Aside from '../components/Parts/Aside'
 // 异步加载
 /*eslint-disable*/
 import SignIn from 'bundle-loader?lazy!../containers/Sign/view/SignIn' //登录组件
-import SignUp from 'bundle-loader?lazy!../containers/Sign/view/SignUp' //登录组件
 /* HOME */
 import User from 'bundle-loader?lazy!../containers/User/view/User'
 /* 前台用户 */
@@ -136,7 +135,6 @@ class RouteConfig extends Component {
         <div className="app-view">
           <Route component={Main} path="/main" />
           <Route component={createComponent(SignIn)} exact path="/sign_in" />
-          <Route component={createComponent(SignUp)} exact path="/sign_up" />
           <Route
             exact
             path="/"

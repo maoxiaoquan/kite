@@ -3,9 +3,8 @@ const { lowdb } = require('./db/lowdb')
 const config = lowdb.read().value()
 
 module.exports = {
-  cli_port: 8060, // cli port
-  dev_port: 8061, // 前台开发端口
-  produce_port: 8062, // server端口
+  dev_port: 8085, // 前台开发端口
+  product_port: 8086, // server端口
   // 密码盐
   encrypt_key: 'fate',
   database: {

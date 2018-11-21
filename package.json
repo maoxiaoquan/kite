@@ -5,15 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "cli-dev": "nodemon cli_server/cli_server.js --config ./cli_server/cli_nodemon.json",
-    "cli": "node cli_server/cli_server.js",
     "dev": "node build/dev-server.js",
     "build": "webpack  --config  build/webpack.prod.js -p",
     "mysql": "node ./mysqldb/create.js",
     "server-dev": "nodemon ./server/app.js --config _nodemon.json",
     "server": "pm2 start pm2.json",
     "scss": "node-sass -w -r ./static/default/scss -o ./static/default/css",
-    "cli-scss": "node-sass -w -r ./cli_server/static/default/scss -o ./cli_server/static/default/css"
+    "cli-scss": "node-sass -w -r ./static/cli_default/scss -o ./static/cli_default/css"
   },
   "author": "xiaoquan",
   "license": "ISC",
@@ -42,14 +40,15 @@
     "mysql2": "^1.5.3",
     "nodemailer": "^4.6.4",
     "nodemailer-smtp-transport": "^2.7.4",
+    "nodemon": "^1.12.1",
     "pm2": "^2.7.2",
     "prop-types": "^15.6.0",
     "qs": "^6.5.1",
     "sequelize": "^4.37.1",
+    "shelljs": "^0.8.3",
     "shortid": "^2.2.8",
     "trim-html": "^0.1.9",
-    "webpack": "^3.6.0",
-    "nodemon": "^1.12.1"
+    "webpack": "^3.6.0"
   },
   "devDependencies": {
     "antd": "^3.10.1",
