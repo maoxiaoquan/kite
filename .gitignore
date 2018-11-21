@@ -9,6 +9,7 @@ npm-debug.log*
 /.idea
 .idea
 yarn.lock
+/log
 yarn.error.log
 yarn-error.log
 package-lock.json
