@@ -250,120 +250,119 @@ class UserTag extends React.Component {
     }
 
     return (
-      <div className="box-card">
-        <div className="box-card-header">
-          <h2><strong>用户标签</strong></h2>
-          <ul className="header-dropdown">
-            <li className="dropdown">
-              <a className="dropdown-toggle" href="javascript:void(0);">
-                <Icon type="ellipsis"/>
-              </a>
-            </li>
-          </ul>
+
+      <div className="layout-main">
+
+        <div className="layout-main-title">
+          <Icon type="user"/> <em>标签管理</em>
         </div>
-        <div className="box-card-body">
-          <div className="article-tag">
-            <Button
-              className="article-tag-user-create-btn"
-              icon="plus" type="primary"
-              onClick={() => this.showModal(0)}
-            >创建用户标签</Button>
-            {/*<p>{this.props.match.url}</p>
-          <p>{this.props.match.params.id}</p>*/}
 
-            <Modal
-              footer={null}
-              onCancel={() => {
-                this.setState({
-                  modal_visible_edit: false
-                })
-              }}
-              title="填写标签"
-              visible={this.state.modal_visible_edit}
+        <div className="layout-nav-btn">
+          <Button
+            className="article-tag-user-create-btn layout-btn"
+            icon="plus" type="primary"
+            onClick={() => this.showModal(0)}
+          >创建用户标签</Button>
+
+        </div>
+
+
+        <div className="user-tag">
+
+          <Modal
+            footer={null}
+            onCancel={() => {
+              this.setState({
+                modal_visible_edit: false
+              })
+            }}
+            title="填写标签"
+            visible={this.state.modal_visible_edit}
+          >
+            <Form
+              className="from-view"
+              onSubmit={this.handleSubmit}
             >
-              <Form
-                className="from-view"
-                onSubmit={this.handleSubmit}
+
+              <FormItem
+                {...formItemLayout}
+                label="标签名"
               >
+                {getFieldDecorator('user_tag_name', {
+                  rules: [{required: true, message: '请输入标签名！', whitespace: true}]
+                })(
+                  <Input placeholder="标签名"/>
+                )}
+              </FormItem>
 
-                <FormItem
-                  {...formItemLayout}
-                  label="标签名"
+
+              <FormItem
+                {...formItemLayout}
+                label="标签名图标"
+              >
+                {getFieldDecorator('user_tag_icon', {
+                  rules: [{required: true, message: '请输入标签名图标！', whitespace: true}]
+                })(
+                  <Input placeholder="标签名图标"/>
+                )}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                hasFeedback
+                label="标签图标类型"
+              >
+                {getFieldDecorator('user_tag_icon_type', {
+                  rules: [
+                    {required: true, message: '请选择标签图标类型！'}
+                  ]
+                })(
+                  <Select placeholder="标签图标类型！">
+                    <Option value="1">图片</Option>
+                    <Option value="2">字体图标</Option>
+                  </Select>
+                )}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                hasFeedback
+                label="标签描述"
+              >
+                {getFieldDecorator('user_tag_description', {
+                  rules: [{required: true, message: '请输入标签描述'}]
+                })(
+                  <TextArea placeholder="请输入标签描述" type="text"/>
+                )}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="是否有效"
+              >
+                {getFieldDecorator('enable', {valuePropName: 'checked'})(
+                  <Switch/>
+                )}
+              </FormItem>
+
+
+              <FormItem
+                {...tailFormItemLayout}
+              >
+                <Button
+                  className="register-btn"
+                  htmlType="submit"
+                  type="primary"
                 >
-                  {getFieldDecorator('user_tag_name', {
-                    rules: [{required: true, message: '请输入标签名！', whitespace: true}]
-                  })(
-                    <Input placeholder="标签名"/>
-                  )}
-                </FormItem>
+                  {
+                    is_create ? '创建标签' : '更新'
+                  }
+                </Button>
+              </FormItem>
+            </Form>
+          </Modal>
 
-
-                <FormItem
-                  {...formItemLayout}
-                  label="标签名图标"
-                >
-                  {getFieldDecorator('user_tag_icon', {
-                    rules: [{required: true, message: '请输入标签名图标！', whitespace: true}]
-                  })(
-                    <Input placeholder="标签名图标"/>
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  hasFeedback
-                  label="标签图标类型"
-                >
-                  {getFieldDecorator('user_tag_icon_type', {
-                    rules: [
-                      {required: true, message: '请选择标签图标类型！'}
-                    ]
-                  })(
-                    <Select placeholder="标签图标类型！">
-                      <Option value="1">图片</Option>
-                      <Option value="2">字体图标</Option>
-                    </Select>
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  hasFeedback
-                  label="标签描述"
-                >
-                  {getFieldDecorator('user_tag_description', {
-                    rules: [{required: true, message: '请输入标签描述'}]
-                  })(
-                    <TextArea placeholder="请输入标签描述" type="text"/>
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label="是否有效"
-                >
-                  {getFieldDecorator('enable', {valuePropName: 'checked'})(
-                    <Switch/>
-                  )}
-                </FormItem>
-
-
-                <FormItem
-                  {...tailFormItemLayout}
-                >
-                  <Button
-                    className="register-btn"
-                    htmlType="submit"
-                    type="primary"
-                  >
-                    {
-                      is_create ? '创建标签' : '更新'
-                    }
-                  </Button>
-                </FormItem>
-              </Form>
-            </Modal>
-
+          <div className="layout-table">
             <Table
               columns={this.state.columns}
               dataSource={state_user_tag.list}

@@ -18,10 +18,10 @@ const TreeNode = Tree.TreeNode
 const FormItem = Form.Item
 const Option = Select.Option
 const confirm = Modal.confirm
-const { TextArea } = Input
+const {TextArea} = Input
 
 class AdminRole extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       columns: [
@@ -49,33 +49,33 @@ class AdminRole extends React.Component {
 
                 <Button onClick={async () => {
                   this.edit_role(record)
-                  await this.props.dispatch({ type: 'SET_CURRENT_ROLE_INFO', data: record })
+                  await this.props.dispatch({type: 'SET_CURRENT_ROLE_INFO', data: record})
                 }}
-                  size="small"
-                  type="primary">修改
+                        size="small"
+                        type="primary">修改
                 </Button>
 
                 <Button className="box-btn-red"
-                  onClick={async () => {
-                    await this.props.dispatch({ type: 'SET_CURRENT_ROLE_INFO', data: record })
-                    this.delete_role()
-                  }}
-                  size="small" >删除</Button>
+                        onClick={async () => {
+                          await this.props.dispatch({type: 'SET_CURRENT_ROLE_INFO', data: record})
+                          this.delete_role()
+                        }}
+                        size="small">删除</Button>
 
                 <Button className="box-btn-orange"
-                  onClick={async () => {
-                    this.setState({
-                      visible_set_authority_modal: true
-                    })
-                    await this.props.dispatch(get_admin_role_authority({ params: { ...record } }, res => {
-                      console.log('res', res)
-                      this.setState({
-                        role_authority_list: this.init_tree_data(res)
-                      })
-                    }))
-                    await this.props.dispatch({ type: 'SET_CURRENT_ROLE_INFO', data: record })
-                  }}
-                  size="small"
+                        onClick={async () => {
+                          this.setState({
+                            visible_set_authority_modal: true
+                          })
+                          await this.props.dispatch(get_admin_role_authority({params: {...record}}, res => {
+                            console.log('res', res)
+                            this.setState({
+                              role_authority_list: this.init_tree_data(res)
+                            })
+                          }))
+                          await this.props.dispatch({type: 'SET_CURRENT_ROLE_INFO', data: record})
+                        }}
+                        size="small"
                 >设置权限</Button>
 
               </div>
@@ -94,7 +94,7 @@ class AdminRole extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     /*获取后台角色分页列表*/
     this.fetch_admin_role_list()
     /*获取后台权限所有*/
@@ -112,7 +112,7 @@ class AdminRole extends React.Component {
   init_tree_data = (val) => { /* 初始化选中树 */
     let tree_arr = []
     console.log('val', val)
-    const { admin_authority_source_list } = this.props.state_admin_authority
+    const {admin_authority_source_list} = this.props.state_admin_authority
     admin_authority_source_list.map(item => {
       if (Number(item.authority_type) === 2 && val.indexOf(item.authority_id) !== -1) {
         tree_arr.push(item.authority_id)
@@ -138,7 +138,7 @@ class AdminRole extends React.Component {
   }
 
   delete_role = () => { /* 删除角色 删除角色的同时要删除3张表之前的关联  用户角色表 角色表 角色权限表 */
-    const { current_role_info } = this.props.state_admin_role
+    const {current_role_info} = this.props.state_admin_role
     confirm({
       title: '确认要删除当前角色吗?',
       content: '删除当前角色会删除角色用户关联，以及角色权限关联',
@@ -146,15 +146,15 @@ class AdminRole extends React.Component {
       okType: 'danger',
       cancelText: '否',
       onOk: async () => {
-        await this.props.dispatch(delete_admin_role({ role_id: current_role_info.role_id }, res => {
+        await this.props.dispatch(delete_admin_role({role_id: current_role_info.role_id}, res => {
           /*获取后台角色分页列表*/
           this.fetch_admin_role_list()
         }))
       },
-      onCancel() {
-        console.log('Cancel');
+      onCancel () {
+        console.log('Cancel')
       }
-    });
+    })
   }
 
   handleOk = () => { /*判断是修改还是创建*/
@@ -208,11 +208,13 @@ class AdminRole extends React.Component {
     }))
   }
 
-
   fetch_set_admin_role_authority = () => { /* 传递tyepe=2子节点 */
-    const { current_role_info, role_authority_list_all } = this.props.state_admin_role
+    const {current_role_info, role_authority_list_all} = this.props.state_admin_role
     console.log('role_authority_list_all', role_authority_list_all)
-    this.props.dispatch(set_admin_role_authority({ ...current_role_info, role_authority_list: role_authority_list_all }, () => {
+    this.props.dispatch(set_admin_role_authority({
+      ...current_role_info,
+      role_authority_list: role_authority_list_all
+    }, () => {
       alert.message_success('角色权限设置成功')
       this.setState({
         visible_set_authority_modal: false
@@ -222,10 +224,10 @@ class AdminRole extends React.Component {
 
   fetch_admin_role_list = () => { /*获取角色分页列表*/
     const that = this
-    this.setState({ loading: true })
-    const { pagination: { current } } = this.state
-    this.props.dispatch(get_admin_role_list({ params: { page: current } }, (res) => {
-      let pagination = { ...that.state.pagination }
+    this.setState({loading: true})
+    const {pagination: {current}} = this.state
+    this.props.dispatch(get_admin_role_list({params: {page: current}}, (res) => {
+      let pagination = {...that.state.pagination}
       pagination.total = res.count
       pagination.current = current
       that.setState({
@@ -237,8 +239,8 @@ class AdminRole extends React.Component {
 
   onCheck = (checkedKeys, event) => {
     console.log('event', event)
-    this.setState({ role_authority_list: checkedKeys })
-    this.props.dispatch({ type: 'SET_ROLE_AUTHORITY_LIST_ALL', data: [...checkedKeys, ...event.halfCheckedKeys] })
+    this.setState({role_authority_list: checkedKeys})
+    this.props.dispatch({type: 'SET_ROLE_AUTHORITY_LIST_ALL', data: [...checkedKeys, ...event.halfCheckedKeys]})
   }
 
   renderTreeNodes = (data) => {
@@ -256,22 +258,22 @@ class AdminRole extends React.Component {
         )
       }
       return <TreeNode key={item.authority_id}
-        title={item.authority_name} />
+                       title={item.authority_name}/>
     })
   }
 
-  render() {
-    const { state_admin_role, state_admin_authority } = this.props
-    const { loading, role_name, role_description, is_create } = this.state
+  render () {
+    const {state_admin_role, state_admin_authority} = this.props
+    const {loading, role_name, role_description, is_create} = this.state
 
     const formItemLayout = {
       labelCol: {
-        xs: { span: 24 },
-        sm: { span: 4 }
+        xs: {span: 24},
+        sm: {span: 4}
       },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 20 }
+        xs: {span: 24},
+        sm: {span: 20}
       }
     }
     const tailFormItemLayout = {
@@ -287,102 +289,101 @@ class AdminRole extends React.Component {
       }
     }
     return (
-      <div className="box-card">
-        <div className="box-card-header">
-          <h2><strong>角色管理</strong></h2>
-          <ul className="header-dropdown">
-            <li className="dropdown">
-              <a className="dropdown-toggle"
-                href="javascript:void(0);">
-                <Icon type="ellipsis" />
-              </a>
-            </li>
-          </ul>
+
+      <div className="layout-main">
+
+        <div className="layout-main-title">
+          <Icon type="user"/> <em>权限菜单</em>
         </div>
-        <div className="box-card-body">
-          <div className="admin-role">
-            <Button className="admin-role-create-btn"
-              icon="plus"
-              onClick={this.showModal}
-              type="primary">创建角色</Button>
 
-            <Modal
-              footer={null}
-              onCancel={this.handleCancel}
-              title="创建角色"
-              visible={this.state.visible_create_role_modal}
+        <div className="layout-nav-btn">
+
+          <Button className="admin-role-create-btn layout-btn"
+                  icon="plus"
+                  onClick={this.showModal}
+                  type="primary">创建角色</Button>
+        </div>
+
+        <div className="admin-role">
+
+          <Modal
+            footer={null}
+            onCancel={this.handleCancel}
+            title="创建角色"
+            visible={this.state.visible_create_role_modal}
+          >
+            <FormItem
+              {...formItemLayout}
+              label="角色名"
             >
-              <FormItem
-                {...formItemLayout}
-                label="角色名"
-              >
-                <Input className="input-view"
-                  onChange={(e) => { this.setState({ role_name: e.target.value }) }}
-                  placeholder="请填写角色名"
-                  value={role_name} />
-              </FormItem>
+              <Input className="input-view"
+                     onChange={(e) => { this.setState({role_name: e.target.value}) }}
+                     placeholder="请填写角色名"
+                     value={role_name}/>
+            </FormItem>
 
-              <FormItem
-                {...formItemLayout}
-                label="角色描述"
-              >
-                <TextArea autosize={{ minRows: 2, maxRows: 6 }}
-                  onChange={(e) => { this.setState({ role_description: e.target.value }) }}
-                  placeholder="请填写角色描述"
-                  value={role_description} />
-              </FormItem>
-
-              <FormItem
-                {...tailFormItemLayout}
-              >
-                <Button
-                  className="register-btn"
-                  htmlType="submit"
-                  onClick={this.handleOk}
-                  type="primary"
-                >
-                  {
-                    is_create ? '创建' : '更新'
-                  }
-                </Button>
-              </FormItem>
-            </Modal>
-
-
-            <Modal
-              footer={null}
-              onCancel={() => {
-                this.setState({
-                  visible_set_authority_modal: false
-                })
-              }}
-              title="设置权限"
-              visible={this.state.visible_set_authority_modal}
+            <FormItem
+              {...formItemLayout}
+              label="角色描述"
             >
-              <Tree
-                checkable
-                checkedKeys={this.state.role_authority_list}
-                onCheck={this.onCheck}
-                ref="tree"
-                showLine
-              >
-                {this.renderTreeNodes(state_admin_authority.admin_authority_list)}
-              </Tree>
-              <div className="admin-role-foot">
-                <Button
-                  icon="save"
-                  onClick={() => { this.fetch_set_admin_role_authority() }}
-                  type="primary">确定</Button>
-                <Button
-                  onClick={() => {
-                    this.setState({
-                      visible_set_authority_modal: false
-                    })
-                  }}
-                >取消</Button>
-              </div>
-            </Modal>
+                <TextArea autosize={{minRows: 2, maxRows: 6}}
+                          onChange={(e) => { this.setState({role_description: e.target.value}) }}
+                          placeholder="请填写角色描述"
+                          value={role_description}/>
+            </FormItem>
 
+            <FormItem
+              {...tailFormItemLayout}
+            >
+              <Button
+                className="register-btn"
+                htmlType="submit"
+                onClick={this.handleOk}
+                type="primary"
+              >
+                {
+                  is_create ? '创建' : '更新'
+                }
+              </Button>
+            </FormItem>
+          </Modal>
+
+
+          <Modal
+            footer={null}
+            onCancel={() => {
+              this.setState({
+                visible_set_authority_modal: false
+              })
+            }}
+            title="设置权限"
+            visible={this.state.visible_set_authority_modal}
+          >
+            <Tree
+              checkable
+              checkedKeys={this.state.role_authority_list}
+              onCheck={this.onCheck}
+              ref="tree"
+              showLine
+            >
+              {this.renderTreeNodes(state_admin_authority.admin_authority_list)}
+            </Tree>
+            <div className="admin-role-foot">
+              <Button
+                icon="save"
+                onClick={() => { this.fetch_set_admin_role_authority() }}
+                type="primary">确定</Button>
+              <Button
+                onClick={() => {
+                  this.setState({
+                    visible_set_authority_modal: false
+                  })
+                }}
+              >取消</Button>
+            </div>
+          </Modal>
+
+          <div className="layout-table">
             <Table
               columns={this.state.columns}
               dataSource={state_admin_role.admin_role_list}
@@ -393,12 +394,12 @@ class AdminRole extends React.Component {
             />
           </div>
         </div>
-      </div >
+      </div>
     )
   }
 }
 
-export default connect(({ state_admin_role, state_admin_authority }) => {
+export default connect(({state_admin_role, state_admin_authority}) => {
   return {
     state_admin_role,
     state_admin_authority

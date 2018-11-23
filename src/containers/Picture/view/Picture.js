@@ -312,113 +312,112 @@ class Picture extends React.Component {
     }
 
     return (
-      <div className="box-card">
-        <div className="box-card-header">
-          <h2><strong>图片管理</strong></h2>
-          <ul className="header-dropdown">
-            <li className="dropdown">
-              <a className="dropdown-toggle" href="javascript:void(0);">
-                <Icon type="ellipsis"/>
-              </a>
-            </li>
-          </ul>
+
+      <div className="layout-main">
+
+        <div className="layout-main-title">
+          <Icon type="user"/> <em>标签管理</em>
         </div>
-        <div className="box-card-body">
-          <div className="picture-view">
-            <Button
-              className="article-tag-user-create-btn"
-              icon="plus" type="primary"
-              onClick={() => this.showModal(0)}
-            >创建图片</Button>
-            {/*<p>{this.props.match.url}</p>
-          <p>{this.props.match.params.id}</p>*/}
 
-            <Modal
-              footer={null}
-              onCancel={() => {
-                this.setState({
-                  modal_visible_edit: false
-                })
-              }}
-              title="填写内容"
-              visible={this.state.modal_visible_edit}
+        <div className="layout-nav-btn">
+          <Button
+            className="article-tag-user-create-btn layout-btn"
+            icon="plus" type="primary"
+            onClick={() => this.showModal(0)}
+          >创建图片</Button>
+        </div>
+
+
+        <div className="picture-view">
+
+
+          <Modal
+            footer={null}
+            onCancel={() => {
+              this.setState({
+                modal_visible_edit: false
+              })
+            }}
+            title="填写内容"
+            visible={this.state.modal_visible_edit}
+          >
+            <Form
+              className="from-view"
+              onSubmit={this.handleSubmit}
             >
-              <Form
-                className="from-view"
-                onSubmit={this.handleSubmit}
+
+              <FormItem
+                {...formItemLayout}
+                label="图片标题"
               >
+                {getFieldDecorator('picture_title', {
+                  rules: [{required: true, message: '请输入图片标题！', whitespace: true}]
+                })(
+                  <Input placeholder="图片标题"/>
+                )}
+              </FormItem>
 
-                <FormItem
-                  {...formItemLayout}
-                  label="图片标题"
+
+              <FormItem
+                {...formItemLayout}
+                hasFeedback
+                label="图片类型"
+              >
+                {getFieldDecorator('picture_type', {
+                  rules: [
+                    {required: true, message: '请选择图片类型！'}
+                  ]
+                })(
+                  <Select placeholder="图片类型！">
+                    <Option value="1">首页轮播图</Option>
+                    <Option value="2">首页广告</Option>
+                  </Select>
+                )}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="Upload"
+              >
+                {getFieldDecorator('picture_url', {
+                  getValueFromEvent: this.normFile
+                })(
+                  <Upload {...this.state.upload_prop} fileList={this.state.fileList}>
+                    <div>
+                      <Icon type="plus"/>
+                      <div className="ant-upload-text">Upload</div>
+                    </div>
+                  </Upload>
+                )}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="是否有效"
+              >
+                {getFieldDecorator('enable', {valuePropName: 'checked'})(
+                  <Switch/>
+                )}
+              </FormItem>
+
+
+              <FormItem
+                {...tailFormItemLayout}
+              >
+                <Button
+                  className="register-btn"
+                  htmlType="submit"
+                  type="primary"
                 >
-                  {getFieldDecorator('picture_title', {
-                    rules: [{required: true, message: '请输入图片标题！', whitespace: true}]
-                  })(
-                    <Input placeholder="图片标题"/>
-                  )}
-                </FormItem>
+                  {
+                    is_create ? '创建标签' : '更新'
+                  }
+                </Button>
+              </FormItem>
+            </Form>
+          </Modal>
 
-
-                <FormItem
-                  {...formItemLayout}
-                  hasFeedback
-                  label="图片类型"
-                >
-                  {getFieldDecorator('picture_type', {
-                    rules: [
-                      {required: true, message: '请选择图片类型！'}
-                    ]
-                  })(
-                    <Select placeholder="图片类型！">
-                      <Option value="1">首页轮播图</Option>
-                      <Option value="2">首页广告</Option>
-                    </Select>
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label="Upload"
-                >
-                  {getFieldDecorator('picture_url', {
-                    getValueFromEvent: this.normFile
-                  })(
-                    <Upload {...this.state.upload_prop} fileList={this.state.fileList}>
-                      <div>
-                        <Icon type="plus"/>
-                        <div className="ant-upload-text">Upload</div>
-                      </div>
-                    </Upload>
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label="是否有效"
-                >
-                  {getFieldDecorator('enable', {valuePropName: 'checked'})(
-                    <Switch/>
-                  )}
-                </FormItem>
-
-
-                <FormItem
-                  {...tailFormItemLayout}
-                >
-                  <Button
-                    className="register-btn"
-                    htmlType="submit"
-                    type="primary"
-                  >
-                    {
-                      is_create ? '创建标签' : '更新'
-                    }
-                  </Button>
-                </FormItem>
-              </Form>
-            </Modal>
-
+          <div className="layout-table">
             <Table
               columns={this.state.columns}
               dataSource={state_picture.list}

@@ -232,102 +232,99 @@ class Article extends React.Component {
       }
     }
     return (
-      <div className="box-card">
-        <div className="box-card-header">
-          <h2><strong>文章管理</strong></h2>
-          <ul className="header-dropdown">
-            <li className="dropdown">
-              <a className="dropdown-toggle" href="javascript:void(0);">
-                <Icon type="ellipsis"/>
-              </a>
-            </li>
-          </ul>
+
+      <div className="layout-main">
+
+        <div className="layout-main-title">
+          <Icon type="user"/> <em>权限菜单</em>
         </div>
-        <div className="box-card-body">
-          <div className="admin-user">
 
-            <Modal
-              footer={null}
-              onCancel={() => {
-                this.setState({
-                  modal_visible_edit: false
-                })
-              }}
-              title="修改文章"
-              visible={this.state.modal_visible_edit}
+
+        <div className="admin-article">
+
+          <Modal
+            footer={null}
+            onCancel={() => {
+              this.setState({
+                modal_visible_edit: false
+              })
+            }}
+            title="修改文章"
+            visible={this.state.modal_visible_edit}
+          >
+            <Form
+              className="from-view"
+              onSubmit={this.handleSubmit}
             >
-              <Form
-                className="from-view"
-                onSubmit={this.handleSubmit}
+
+              <FormItem
+                {...formItemLayout}
+                hasFeedback
+                label="状态"
               >
+                {getFieldDecorator('status', {
+                  rules: [
+                    {required: true, message: '请选择状态！'}
+                  ]
+                })(
+                  <Select placeholder="状态">
+                    {
+                      this.state.status.map((item, key) => <Option key={key}>{item}</Option>)
+                    }
+                  </Select>
+                )}
+              </FormItem>
 
-                <FormItem
-                  {...formItemLayout}
-                  hasFeedback
-                  label="状态"
-                >
-                  {getFieldDecorator('status', {
-                    rules: [
-                      {required: true, message: '请选择状态！'}
-                    ]
-                  })(
-                    <Select placeholder="状态">
-                      {
-                        this.state.status.map((item, key) => <Option key={key}>{item}</Option>)
-                      }
-                    </Select>
-                  )}
-                </FormItem>
+              <FormItem
+                {...formItemLayout}
+                hasFeedback
+                label="类型"
+              >
+                {getFieldDecorator('type', {
+                  rules: [
+                    {required: true, message: '请选择类型！'}
+                  ]
+                })(
+                  <Select placeholder="类型">
+                    {
+                      this.state.type.map((item, key) => <Option key={key}>{item}</Option>)
+                    }
+                  </Select>
+                )}
+              </FormItem>
 
-                <FormItem
-                  {...formItemLayout}
-                  hasFeedback
-                  label="类型"
-                >
-                  {getFieldDecorator('type', {
-                    rules: [
-                      {required: true, message: '请选择类型！'}
-                    ]
-                  })(
-                    <Select placeholder="类型">
-                      {
-                        this.state.type.map((item, key) => <Option key={key}>{item}</Option>)
-                      }
-                    </Select>
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  hasFeedback
-                  label="来源"
-                >
-                  {getFieldDecorator('source', {
-                    rules: [
-                      {required: true, message: '请选择来源！'}
-                    ]
-                  })(
-                    <Select placeholder="来源">
-                      <Option key="1">原创</Option>
-                      <Option key="2">转载</Option>
-                    </Select>
-                  )}
-                </FormItem>
+              <FormItem
+                {...formItemLayout}
+                hasFeedback
+                label="来源"
+              >
+                {getFieldDecorator('source', {
+                  rules: [
+                    {required: true, message: '请选择来源！'}
+                  ]
+                })(
+                  <Select placeholder="来源">
+                    <Option key="1">原创</Option>
+                    <Option key="2">转载</Option>
+                  </Select>
+                )}
+              </FormItem>
 
 
-                <FormItem
-                  {...tailFormItemLayout}
-                >
-                  <Button
-                    className="register-btn"
-                    htmlType="submit"
-                    type="primary"
-                  >更新</Button>
-                </FormItem>
-              </Form>
-            </Modal>
+              <FormItem
+                {...tailFormItemLayout}
+              >
+                <Button
+                  className="register-btn"
+                  htmlType="submit"
+                  type="primary"
+                >更新</Button>
+              </FormItem>
+            </Form>
+          </Modal>
 
 
+          <div className="layout-table">
             <Table
               columns={this.state.columns}
               dataSource={state_article.list}
@@ -337,6 +334,7 @@ class Article extends React.Component {
               rowKey="aid"
             />
           </div>
+
         </div>
       </div>
     )

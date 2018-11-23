@@ -198,68 +198,64 @@ class Comment extends React.Component {
     }
 
     return (
-      <div className="box-card">
-        <div className="box-card-header">
-          <h2><strong>评论管理</strong></h2>
-          <ul className="header-dropdown">
-            <li className="dropdown">
-              <a className="dropdown-toggle" href="javascript:void(0);">
-                <Icon type="ellipsis"/>
-              </a>
-            </li>
-          </ul>
+
+      <div className="layout-main">
+
+        <div className="layout-main-title">
+          <Icon type="user"/> <em>标签管理</em>
         </div>
-        <div className="box-card-body">
-          <div className="article-tag">
 
-            <Modal
-              footer={null}
-              onCancel={() => {
-                this.setState({
-                  modal_visible_edit: false
-                })
-              }}
-              title="填写标签"
-              visible={this.state.modal_visible_edit}
+        <div className="admin-comment">
+
+          <Modal
+            footer={null}
+            onCancel={() => {
+              this.setState({
+                modal_visible_edit: false
+              })
+            }}
+            title="填写标签"
+            visible={this.state.modal_visible_edit}
+          >
+            <Form
+              className="from-view"
+              onSubmit={this.handleSubmit}
             >
-              <Form
-                className="from-view"
-                onSubmit={this.handleSubmit}
+
+              <FormItem
+                {...formItemLayout}
+                hasFeedback
+                label="状态"
               >
+                {getFieldDecorator('status', {
+                  rules: [
+                    {required: true, message: '请选择状态！'}
+                  ]
+                })(
+                  <Select placeholder="状态">
+                    {
+                      this.state.status.map((item, key) => <Option key={key}>{item}</Option>)
+                    }
+                  </Select>
+                )}
+              </FormItem>
 
-                <FormItem
-                  {...formItemLayout}
-                  hasFeedback
-                  label="状态"
+
+              <FormItem
+                {...tailFormItemLayout}
+              >
+                <Button
+                  className="register-btn"
+                  htmlType="submit"
+                  type="primary"
                 >
-                  {getFieldDecorator('status', {
-                    rules: [
-                      {required: true, message: '请选择状态！'}
-                    ]
-                  })(
-                    <Select placeholder="状态">
-                      {
-                        this.state.status.map((item, key) => <Option key={key}>{item}</Option>)
-                      }
-                    </Select>
-                  )}
-                </FormItem>
+                  确定
+                </Button>
+              </FormItem>
+            </Form>
+          </Modal>
 
-
-                <FormItem
-                  {...tailFormItemLayout}
-                >
-                  <Button
-                    className="register-btn"
-                    htmlType="submit"
-                    type="primary"
-                  >
-                    确定
-                  </Button>
-                </FormItem>
-              </Form>
-            </Modal>
-
+          <div className="layout-table">
             <Table
               columns={this.state.columns}
               dataSource={state_comment.list}

@@ -22,6 +22,31 @@
       },
     }
   })
+
+  var matches = function (el, selector) {
+    return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector)
+  }
+
+  window.onload = function () {
+
+    document.querySelector('.navbar-toggler').onclick = function () {
+      if (matches(document.querySelector('.navbar-collapse'), '.show')) {
+        document.querySelector('.navbar-collapse').classList.remove('show')
+      } else {
+        document.querySelector('.navbar-collapse').classList.add('show')
+      }
+    }
+
+    document.querySelector('.dropdown-toggle').onclick = function () {
+      if (matches(document.querySelector('.dropdown-menu'), '.show')) {
+        document.querySelector('.dropdown-menu').classList.remove('show')
+      } else {
+        document.querySelector('.dropdown-menu').classList.add('show')
+      }
+    }
+
+  }
+
 </script>
 
 </html>

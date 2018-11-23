@@ -14,6 +14,7 @@ _Fetch.interceptors.response.use(function (response) {
   alert('服务器正忙，请稍后重试!')
 })
 
+
 function hasClass (obj, cls) {
   var obj_class = obj.className,//获取 class 内容.
     obj_class_lst = obj_class.split(/\s+/)//通过split空字符将cls转换成数组.

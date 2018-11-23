@@ -145,20 +145,15 @@ class AdminSystemLog extends React.Component {
     const {loading} = this.state
 
     return (
-      <div className="box-card">
-        <div className="box-card-header">
-          <h2><strong>系统日志</strong></h2>
-          <ul className="header-dropdown">
-            <li className="dropdown">
-              <a className="dropdown-toggle" href="javascript:void(0);">
-                <Icon type="ellipsis"/>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="box-card-body">
-          <div className="article-tag">
+      <div className="layout-main">
 
+        <div className="layout-main-title">
+          <Icon type="user"/> <em>权限菜单</em>
+        </div>
+
+        <div className="admin-system-tag">
+
+          <div className="layout-table">
             <Table
               columns={this.state.columns}
               dataSource={state_admin_system_log.list}

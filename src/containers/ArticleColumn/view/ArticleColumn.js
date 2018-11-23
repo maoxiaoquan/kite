@@ -62,7 +62,8 @@ class ArticleColumn extends React.Component {
                     return tags.map((child_item, child_key) => {
                       if (item.article_tag_id === Number(child_item)) {
                         return (
-                          <Tag className="table-article-tag-list" key={child_key} color="orange">{item.article_tag_name}</Tag>
+                          <Tag className="table-article-tag-list" key={child_key}
+                               color="orange">{item.article_tag_name}</Tag>
                         )
                       }
                     })
@@ -302,136 +303,137 @@ class ArticleColumn extends React.Component {
     }
 
     return (
-      <div className="box-card">
-        <div className="box-card-header">
-          <h2><strong>专栏管理</strong></h2>
-          <ul className="header-dropdown">
-            <li className="dropdown">
-              <a className="dropdown-toggle" href="javascript:void(0);">
-                <Icon type="ellipsis"/>
-              </a>
-            </li>
-          </ul>
+
+      <div className="layout-main">
+
+        <div className="layout-main-title">
+          <Icon type="user"/> <em>权限菜单</em>
         </div>
-        <div className="box-card-body">
-          <div className="article-tag">
-            <Button
-              className="article-tag-user-create-btn"
-              icon="plus" type="primary"
-              onClick={() => this.showModal(0)}
-            >创建专栏</Button>
-            {/*<p>{this.props.match.url}</p>
-          <p>{this.props.match.params.id}</p>*/}
 
-            <Modal
-              footer={null}
-              onCancel={() => {
-                this.setState({
-                  modal_visible_edit: false
-                })
-              }}
-              title="填写专栏"
-              visible={this.state.modal_visible_edit}
+        <div className="layout-nav-btn">
+
+
+          <Button
+            className="article-tag-user-create-btn layout-btn"
+            icon="plus" type="primary"
+            onClick={() => this.showModal(0)}
+          >创建专栏</Button>
+
+        </div>
+
+
+        <div className="article-column">
+
+          <Modal
+            footer={null}
+            onCancel={() => {
+              this.setState({
+                modal_visible_edit: false
+              })
+            }}
+            title="填写专栏"
+            visible={this.state.modal_visible_edit}
+          >
+            <Form
+              className="from-view"
+              onSubmit={this.handleSubmit}
             >
-              <Form
-                className="from-view"
-                onSubmit={this.handleSubmit}
+
+              <FormItem
+                {...formItemLayout}
+                label="专栏名"
               >
+                {getFieldDecorator('article_column_name', {
+                  rules: [{required: true, message: '请输入专栏名！', whitespace: true}]
+                })(
+                  <Input placeholder="专栏名"/>
+                )}
+              </FormItem>
 
-                <FormItem
-                  {...formItemLayout}
-                  label="专栏名"
-                >
-                  {getFieldDecorator('article_column_name', {
-                    rules: [{required: true, message: '请输入专栏名！', whitespace: true}]
-                  })(
-                    <Input placeholder="专栏名"/>
-                  )}
-                </FormItem>
+              <FormItem
+                {...formItemLayout}
+                label="专栏名图标"
+              >
+                {getFieldDecorator('article_column_icon', {
+                  rules: [{required: true, message: '请输入专栏名图标！', whitespace: true}]
+                })(
+                  <Input placeholder="专栏名图标"/>
+                )}
+              </FormItem>
 
-                <FormItem
-                  {...formItemLayout}
-                  label="专栏名图标"
-                >
-                  {getFieldDecorator('article_column_icon', {
-                    rules: [{required: true, message: '请输入专栏名图标！', whitespace: true}]
-                  })(
-                    <Input placeholder="专栏名图标"/>
-                  )}
-                </FormItem>
+              <FormItem
+                {...formItemLayout}
+                hasFeedback
+                label="专栏图标类型"
+              >
+                {getFieldDecorator('article_column_icon_type', {
+                  rules: [
+                    {required: true, message: '请选择专栏图标类型！'}
+                  ]
+                })(
+                  <Select placeholder="专栏图标类型！">
+                    <Option key="1">图片</Option>
+                    <Option key="2">字体图标</Option>
+                  </Select>
+                )}
+              </FormItem>
 
-                <FormItem
-                  {...formItemLayout}
-                  hasFeedback
-                  label="专栏图标类型"
-                >
-                  {getFieldDecorator('article_column_icon_type', {
-                    rules: [
-                      {required: true, message: '请选择专栏图标类型！'}
-                    ]
-                  })(
-                    <Select placeholder="专栏图标类型！">
-                      <Option key="1">图片</Option>
-                      <Option key="2">字体图标</Option>
-                    </Select>
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label="专栏下属专题"
-                >
-                  {getFieldDecorator('article_column_tags', {
-                    rules: [
-                      {required: true, message: '请选择文章专栏下属专题!', type: 'array'}
-                    ]
-                  })(
-                    <Select mode="multiple" placeholder="请选择文章专栏下属专题">
-                      {
-                        this.state.article_tag_all.map((item) => <Option
-                          key={item.article_tag_id}>{item.article_tag_name}</Option>)
-                      }
-                    </Select>
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  hasFeedback
-                  label="专栏描述"
-                >
-                  {getFieldDecorator('article_column_description', {
-                    rules: [{required: true, message: '请输入专栏描述'}]
-                  })(
-                    <TextArea placeholder="请输入专栏描述" type="text"/>
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label="是否有效"
-                >
-                  {getFieldDecorator('enable', {valuePropName: 'checked'})(
-                    <Switch/>
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...tailFormItemLayout}
-                >
-                  <Button
-                    className="register-btn"
-                    htmlType="submit"
-                    type="primary"
-                  >
+              <FormItem
+                {...formItemLayout}
+                label="专栏下属专题"
+              >
+                {getFieldDecorator('article_column_tags', {
+                  rules: [
+                    {required: true, message: '请选择文章专栏下属专题!', type: 'array'}
+                  ]
+                })(
+                  <Select mode="multiple" placeholder="请选择文章专栏下属专题">
                     {
-                      is_create ? '创建专栏' : '更新'
+                      this.state.article_tag_all.map((item) => <Option
+                        key={item.article_tag_id}>{item.article_tag_name}</Option>)
                     }
-                  </Button>
-                </FormItem>
-              </Form>
-            </Modal>
+                  </Select>
+                )}
+              </FormItem>
 
+              <FormItem
+                {...formItemLayout}
+                hasFeedback
+                label="专栏描述"
+              >
+                {getFieldDecorator('article_column_description', {
+                  rules: [{required: true, message: '请输入专栏描述'}]
+                })(
+                  <TextArea placeholder="请输入专栏描述" type="text"/>
+                )}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="是否有效"
+              >
+                {getFieldDecorator('enable', {valuePropName: 'checked'})(
+                  <Switch/>
+                )}
+              </FormItem>
+
+              <FormItem
+                {...tailFormItemLayout}
+              >
+                <Button
+                  className="register-btn"
+                  htmlType="submit"
+                  type="primary"
+                >
+                  {
+                    is_create ? '创建专栏' : '更新'
+                  }
+                </Button>
+              </FormItem>
+            </Form>
+          </Modal>
+
+          <div className="layout-table">
             <Table
               columns={this.state.columns}
               dataSource={state_article_column.list}
@@ -446,13 +448,15 @@ class ArticleColumn extends React.Component {
             style={{marginTop: '20px'}}
             message="备注信息"
             description="文章专栏与文章标题之间的关系是，文章专栏下可以有多个文章标签，一个文章标签可以从属于多个文章专栏，
-            创建的文章专栏如果不选择下属标题，默认是关闭状态，只有下属标题大于0，才会开放"
+    创建的文章专栏如果不选择下属标题，默认是关闭状态，只有下属标题大于0，才会开放"
             type="info"
             showIcon
           />
 
         </div>
+
       </div>
+
     )
   }
 }

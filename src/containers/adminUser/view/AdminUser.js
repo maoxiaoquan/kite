@@ -30,7 +30,7 @@ const FormItem = Form.Item
 const confirm = Modal.confirm
 
 class AdminUser extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       columns: [
@@ -59,7 +59,7 @@ class AdminUser extends React.Component {
                 {/* <Tag color="orange">超级管理员</Tag>*/}
                 {this.current_user_role(record) ? (
                   <Tag color="orange">{this.current_user_role(record).role_name}</Tag>) : (
-                    <Tag color="#666">无</Tag>)}
+                  <Tag color="#666">无</Tag>)}
               </div>
             )
           }
@@ -102,7 +102,7 @@ class AdminUser extends React.Component {
             return (
               <div className="table-is-login">
                 {
-                  value ? (<Icon type="check-circle" />) : (<Icon type="close-circle" />)
+                  value ? (<Icon type="check-circle"/>) : (<Icon type="close-circle"/>)
                 }
               </div>
             )
@@ -115,21 +115,21 @@ class AdminUser extends React.Component {
             return (
               <div className="table-right-btn">
                 <Button onClick={() => { this.editUser(record) }} size="small"
-                  type="primary"
+                        type="primary"
                 >修改</Button>
                 <Button className="box-btn-red"
-                  onClick={() => {
-                    this.deleteUser(record)
-                  }}
-                  size="small"
+                        onClick={() => {
+                          this.deleteUser(record)
+                        }}
+                        size="small"
                 >删除</Button>
                 <Button className="box-btn-orange"
-                  onClick={async () => {
-                    await this.props.dispatch({ type: 'SET_ADMIN_CURRENT_USER_INFO', data: record })
-                    this.setState({
-                      modal_visible_authority: true
-                    })
-                  }} size="small">设置角色</Button>
+                        onClick={async () => {
+                          await this.props.dispatch({type: 'SET_ADMIN_CURRENT_USER_INFO', data: record})
+                          this.setState({
+                            modal_visible_authority: true
+                          })
+                        }} size="small">设置角色</Button>
               </div>
             )
           }
@@ -144,11 +144,11 @@ class AdminUser extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.initAdminUserPage()
   }
 
-  async initAdminUserPage() {/*初始化获取所有列表*/
+  async initAdminUserPage () {/*初始化获取所有列表*/
     await this.fetch_admin_user_list()
     /*管理员用户列表*/
     await this.props.dispatch(get_admin_role_all())
@@ -162,7 +162,7 @@ class AdminUser extends React.Component {
       modal_visible_register: true,
       is_create: false
     })
-    this.props.dispatch({ type: 'SET_ADMIN_CURRENT_USER_INFO', data: data })
+    this.props.dispatch({type: 'SET_ADMIN_CURRENT_USER_INFO', data: data})
     this.props.form.setFieldsValue({
       account: data.account,
       nickname: data.nickname,
@@ -175,7 +175,7 @@ class AdminUser extends React.Component {
   }
 
   deleteUser = (value) => {
-    this.props.dispatch({ type: 'SET_ADMIN_CURRENT_USER_INFO', data: value })
+    this.props.dispatch({type: 'SET_ADMIN_CURRENT_USER_INFO', data: value})
     confirm({
       title: '确认要删除此用户吗？',
       content: '此操作不可逆转',
@@ -183,18 +183,18 @@ class AdminUser extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_admin_user_delete({ uid: this.props.state_admin_user.current_user_info.uid })
+        this.fetch_admin_user_delete({uid: this.props.state_admin_user.current_user_info.uid})
         /*删除管理员用户*/
       },
-      onCancel() {
+      onCancel () {
         console.log('Cancel')
       }
     })
   }
 
   current_user_role = (value) => {  /*获取当前管理员用户的角色*/
-    const { state_admin_user } = this.props
-    const { current_user_info, admin_user_role_all, admin_role_all } = state_admin_user
+    const {state_admin_user} = this.props
+    const {current_user_info, admin_user_role_all, admin_role_all} = state_admin_user
 
     let curr_info = value || current_user_info
 
@@ -239,7 +239,7 @@ class AdminUser extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    const { is_create } = this.state
+    const {is_create} = this.state
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values)
@@ -254,7 +254,7 @@ class AdminUser extends React.Component {
 
   handleConfirmBlur = (e) => {
     const value = e.target.value
-    this.setState({ confirmDirty: this.state.confirmDirty || !!value })
+    this.setState({confirmDirty: this.state.confirmDirty || !!value})
   }
   compareToFirstPassword = (rule, value, callback) => {
     const form = this.props.form
@@ -291,7 +291,7 @@ class AdminUser extends React.Component {
   validateToNextPassword = (rule, value, callback) => {
     const form = this.props.form
     if (value && this.state.confirmDirty) {
-      form.validateFields(['confirm'], { force: true })
+      form.validateFields(['confirm'], {force: true})
     }
     callback()
   }
@@ -307,7 +307,7 @@ class AdminUser extends React.Component {
   }
 
   fetch_admin_user_edit = (values) => { /*修改管理员用户账户*/
-    this.props.dispatch(edit_admin_user({ uid: this.props.state_admin_user.current_user_info.uid, ...values }, (res) => {
+    this.props.dispatch(edit_admin_user({uid: this.props.state_admin_user.current_user_info.uid, ...values}, (res) => {
       alert.message_success('修改用户成功')
       this.fetch_admin_user_list()
       this.setState({
@@ -325,10 +325,10 @@ class AdminUser extends React.Component {
 
   fetch_admin_user_list = () => {  /*获取管理员用户带分页的列表*/
     const that = this
-    this.setState({ loading: true })
-    const { pagination: { current } } = this.state
-    this.props.dispatch(get_admin_user_list({ params: { page: current } }, (res) => {
-      let pagination = { ...that.state.pagination }
+    this.setState({loading: true})
+    const {pagination: {current}} = this.state
+    this.props.dispatch(get_admin_user_list({params: {page: current}}, (res) => {
+      let pagination = {...that.state.pagination}
       pagination.total = res.count
       pagination.current = current
       that.setState({
@@ -338,16 +338,16 @@ class AdminUser extends React.Component {
     }))
   }
 
-  render() {
-    const { state_admin_user } = this.props
-    const { admin_role_all = [] } = state_admin_user
-    const { loading, is_create } = this.state
-    const { getFieldDecorator } = this.props.form
+  render () {
+    const {state_admin_user} = this.props
+    const {admin_role_all = []} = state_admin_user
+    const {loading, is_create} = this.state
+    const {getFieldDecorator} = this.props.form
 
     const prefixSelector = getFieldDecorator('prefix', {
       initialValue: '86'
     })(
-      <Select style={{ width: 70 }}>
+      <Select style={{width: 70}}>
         <Option value="86">+86</Option>
         <Option value="87">+87</Option>
       </Select>
@@ -355,12 +355,12 @@ class AdminUser extends React.Component {
 
     const formItemLayout = {
       labelCol: {
-        xs: { span: 24 },
-        sm: { span: 5 }
+        xs: {span: 24},
+        sm: {span: 5}
       },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 19 }
+        xs: {span: 24},
+        sm: {span: 19}
       }
     }
     const tailFormItemLayout = {
@@ -377,190 +377,189 @@ class AdminUser extends React.Component {
     }
 
     return (
-      <div className="box-card">
-        <div className="box-card-header">
-          <h2><strong>管理员管理</strong></h2>
-          <ul className="header-dropdown">
-            <li className="dropdown">
-              <a className="dropdown-toggle" href="javascript:void(0);">
-                <Icon type="ellipsis" />
-              </a>
-            </li>
-          </ul>
+
+      <div className="layout-main">
+
+        <div className="layout-main-title">
+          <Icon type="user"/> <em>权限菜单</em>
         </div>
-        <div className="box-card-body">
-          <div className="admin-user">
-            <Button
-              className="admin-user-create-btn"
-              icon="plus" type="primary"
-              onClick={() => this.showModal(0)}
-            >创建管理员</Button>
-            {/*<p>{this.props.match.url}</p>
-          <p>{this.props.match.params.id}</p>*/}
 
-            <Modal
-              footer={null}
-              onCancel={() => {
-                this.setState({
-                  modal_visible_register: false
-                })
-              }}
-              title="填写管理用户"
-              visible={this.state.modal_visible_register}
+        <div className="layout-nav-btn">
+
+          <Button
+            className="admin-user-create-btn layout-btn"
+            icon="plus" type="primary"
+            onClick={() => this.showModal(0)}
+          >创建管理员</Button>
+
+        </div>
+
+        <div className="admin-user">
+
+          <Modal
+            footer={null}
+            onCancel={() => {
+              this.setState({
+                modal_visible_register: false
+              })
+            }}
+            title="填写管理用户"
+            visible={this.state.modal_visible_register}
+          >
+            <Form
+              className="from-view"
+              onSubmit={this.handleSubmit}
             >
-              <Form
-                className="from-view"
-                onSubmit={this.handleSubmit}
-              >
 
-                <FormItem
-                  {...formItemLayout}
-                  label="账户"
-                >
-                  {getFieldDecorator('account', {
-                    rules: [{ required: true, message: '请输入账户！', whitespace: true }]
-                  })(
-                    <Input placeholder="账户" />
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label="昵称"
-                >
-                  {getFieldDecorator('nickname', {
-                    rules: [{ required: true, message: '请输入昵称！', whitespace: true }]
-                  })(
-                    <Input placeholder="昵称" />
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label="密码"
-                >
-                  {getFieldDecorator('password', {
-                    rules: [{
-                      required: true, message: '请输入密码！'
-                    }, {
-                      validator: this.validateToNextPassword
-                    }]
-                  })(
-                    <Input placeholder="密码"
-                      type="password"
-                    />
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label="重复密码"
-                >
-                  {getFieldDecorator('confirm', {
-                    rules: [{
-                      required: true, message: '重复输入密码！'
-                    }, {
-                      validator: this.compareToFirstPassword
-                    }]
-                  })(
-                    <Input onBlur={this.handleConfirmBlur}
-                      placeholder="重复密码"
-                      type="password"
-                    />
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label="电子邮件"
-                >
-                  {getFieldDecorator('email', {
-                    rules: [{
-                      type: 'email', message: '输入的电子邮件无效！'
-                    }, {
-                      required: true, message: '请输入您的电子邮件！'
-                    }]
-                  })(
-                    <Input placeholder="邮箱" />
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label="手机号码"
-                >
-                  {getFieldDecorator('phone', {
-                    rules: [{ required: true, message: '请输入你的手机号码！' }]
-                  })(
-                    <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label="是否有效"
-                >
-                  {getFieldDecorator('enable', { valuePropName: 'checked' })(
-                    <Switch />
-                  )}
-                </FormItem>
-
-                <FormItem
-                  {...tailFormItemLayout}
-                >
-                  <Button
-                    className="register-btn"
-                    htmlType="submit"
-                    type="primary"
-                  >
-                    {
-                      is_create ? '创建账户' : '更新'
-                    }
-                  </Button>
-                </FormItem>
-              </Form>
-            </Modal>
-
-
-            <Modal
-              footer={null}
-              onCancel={() => {
-                this.setState({
-                  modal_visible_authority: false
-                })
-              }}
-              title="修改用户权限"
-              visible={this.state.modal_visible_authority}
-            >
               <FormItem
                 {...formItemLayout}
-                label="管理员账户"
+                label="账户"
               >
-                <Input disabled={true} type="text" value={state_admin_user.current_user_info.account} />
+                {getFieldDecorator('account', {
+                  rules: [{required: true, message: '请输入账户！', whitespace: true}]
+                })(
+                  <Input placeholder="账户"/>
+                )}
               </FormItem>
+
               <FormItem
                 {...formItemLayout}
-                label="角色类型"
+                label="昵称"
               >
-                <Select placeholder="请设置权限" style={{ width: 150 }} onChange={this.selectRole}>
-                  {
-                    admin_role_all.map(item => <Option key={item.role_id}>{item.role_name}</Option>)
-                  }
-                </Select>
+                {getFieldDecorator('nickname', {
+                  rules: [{required: true, message: '请输入昵称！', whitespace: true}]
+                })(
+                  <Input placeholder="昵称"/>
+                )}
               </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="密码"
+              >
+                {getFieldDecorator('password', {
+                  rules: [{
+                    required: true, message: '请输入密码！'
+                  }, {
+                    validator: this.validateToNextPassword
+                  }]
+                })(
+                  <Input placeholder="密码"
+                         type="password"
+                  />
+                )}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="重复密码"
+              >
+                {getFieldDecorator('confirm', {
+                  rules: [{
+                    required: true, message: '重复输入密码！'
+                  }, {
+                    validator: this.compareToFirstPassword
+                  }]
+                })(
+                  <Input onBlur={this.handleConfirmBlur}
+                         placeholder="重复密码"
+                         type="password"
+                  />
+                )}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="电子邮件"
+              >
+                {getFieldDecorator('email', {
+                  rules: [{
+                    type: 'email', message: '输入的电子邮件无效！'
+                  }, {
+                    required: true, message: '请输入您的电子邮件！'
+                  }]
+                })(
+                  <Input placeholder="邮箱"/>
+                )}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="手机号码"
+              >
+                {getFieldDecorator('phone', {
+                  rules: [{required: true, message: '请输入你的手机号码！'}]
+                })(
+                  <Input addonBefore={prefixSelector} style={{width: '100%'}}/>
+                )}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="是否有效"
+              >
+                {getFieldDecorator('enable', {valuePropName: 'checked'})(
+                  <Switch/>
+                )}
+              </FormItem>
+
               <FormItem
                 {...tailFormItemLayout}
               >
                 <Button
                   className="register-btn"
+                  htmlType="submit"
                   type="primary"
-                  onClick={this.handleSubmitAuthority}
                 >
-                  修改权限
+                  {
+                    is_create ? '创建账户' : '更新'
+                  }
                 </Button>
               </FormItem>
-            </Modal>
+            </Form>
+          </Modal>
 
+
+          <Modal
+            footer={null}
+            onCancel={() => {
+              this.setState({
+                modal_visible_authority: false
+              })
+            }}
+            title="修改用户权限"
+            visible={this.state.modal_visible_authority}
+          >
+            <FormItem
+              {...formItemLayout}
+              label="管理员账户"
+            >
+              <Input disabled={true} type="text" value={state_admin_user.current_user_info.account}/>
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="角色类型"
+            >
+              <Select placeholder="请设置权限" style={{width: 150}} onChange={this.selectRole}>
+                {
+                  admin_role_all.map(item => <Option key={item.role_id}>{item.role_name}</Option>)
+                }
+              </Select>
+            </FormItem>
+            <FormItem
+              {...tailFormItemLayout}
+            >
+              <Button
+                className="register-btn"
+                type="primary"
+                onClick={this.handleSubmitAuthority}
+              >
+                修改权限
+              </Button>
+            </FormItem>
+          </Modal>
+
+          <div className="layout-table">
             <Table
               columns={this.state.columns}
               dataSource={state_admin_user.admin_user_list}
@@ -578,7 +577,7 @@ class AdminUser extends React.Component {
 
 const AdminUserForm = Form.create()(AdminUser)
 
-export default connect(({ state_admin_user }) => {
+export default connect(({state_admin_user}) => {
   return {
     state_admin_user
   }
