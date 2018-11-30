@@ -36,9 +36,14 @@ class Aside extends Component {
             link: '/manager/user'
           },
           {
-            title: '文章管理',
+            title: '文章汇总',
             key: 'article',
             link: '/manager/article'
+          },
+          {
+            title: '文章审核',
+            key: 'article_review',
+            link: '/manager/article_review'
           },
           {
             title: '文章标签',
@@ -110,7 +115,7 @@ class Aside extends Component {
 
           <div className="admin-logo">
             <Link className="admin-logo-text" to="/manager/index">Kite</Link>
-            <span className="user-tag">超级管理员</span>
+
           </div>
 
           <div className="admin-aside-nav clearfix">

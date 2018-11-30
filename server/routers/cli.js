@@ -1,6 +1,6 @@
 const router = require('koa-router')()
-const index = require('../cli_controllers/index') // 主页
-const init = require('../cli_controllers/init') // init
+const index = require('../controllers/cli/index') // 主页
+const init = require('../controllers/cli/init') // init
 
 const RouterLimit = require('../utils/cli_router_limit')
 

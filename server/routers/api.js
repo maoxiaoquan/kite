@@ -1,25 +1,27 @@
 const router = require('koa-router')()
-const admin_users = require('../admin_controllers/admin_users')// 后台用户
-const users = require('../admin_controllers/users')// 前台用户
-const user_tag = require('../admin_controllers/user_tag')// 前台用户标签
-const articles = require('../admin_controllers/articles')//文章
-const article_tag = require('../admin_controllers/article_tag')// 文章标签
-const article_column = require('../admin_controllers/article_column')// 文章专栏 （专栏为官方）
-const picture = require('../admin_controllers/picture')// 图片管理
-const upload = require('../admin_controllers/upload')// 上传
-const role_authority = require('../admin_controllers/admin_role_authority')// 后台角色权限
-const comment = require('../admin_controllers/comment')// 评论
-const admin_system_log = require('../admin_controllers/admin_system_log')// 评论
+const admin_users = require('../controllers/admin/admin_users')// 后台用户
+const users = require('../controllers/admin/users')// 前台用户
+const user_tag = require('../controllers/admin/user_tag')// 前台用户标签
+const articles = require('../controllers/admin/articles')//文章
+const article_tag = require('../controllers/admin/article_tag')// 文章标签
+const article_column = require('../controllers/admin/article_column')// 文章专栏 （专栏为官方）
+const picture = require('../controllers/admin/picture')// 图片管理
+const upload = require('../controllers/admin/upload')// 上传
+const role_authority = require('../controllers/admin/admin_role_authority')// 后台角色权限
+const comment = require('../controllers/admin/comment')// 评论
+const admin_system_log = require('../controllers/admin/admin_system_log')// 评论
+const admin_index = require('../controllers/admin/admin_index') //登录tokens
 const tokens = require('../utils/tokens') //登录tokens
 const verify_authority = require('../utils/verify_authority') //权限验证
 
 /*工具类*/
 const util_upload = require('../utils/upload')
+// 此文件所有接口都是后台管理员操作前后台数据所用
 
 /* 前台用户 */
 //获取用户列表
 router.get('/get_user_list', tokens.verifyToken, users.get_user_list)
-//更新用户
+//更新用户资料
 router.post('/edit_user', tokens.verifyToken, users.edit_user)
 //删除用户
 router.post('/delete_user', tokens.verifyToken, users.delete_user)
@@ -75,7 +77,6 @@ router.post('/update_picture', tokens.verifyToken, picture.update_picture)
 /*图片删除*/
 router.post('/delete_picture', tokens.verifyToken, picture.delete_picture)
 
-
 // 评论模块
 // 评论分页列表
 router.get('/get_comment_list', tokens.verifyToken, comment.get_comment_list)
@@ -84,7 +85,6 @@ router.post('/update_comment', tokens.verifyToken, comment.update_comment)
 // 评论数据删除
 router.post('/delete_comment', tokens.verifyToken, comment.delete_comment)
 
-
 /**
  * 上传
  */
@@ -92,9 +92,14 @@ router.post('/delete_comment', tokens.verifyToken, comment.delete_comment)
 router.post('/upload_picture', tokens.verifyToken, util_upload('admin_swiper').single('file'), upload.upload_picture)
 
 /**
- * 管理员用户
+ *  首页数据
  */
 
+router.get('/get_admin_index_statistics', tokens.verifyToken, admin_index.admin_index_statistics)
+
+/**
+ * 管理员用户
+ */
 //登录
 router.post('/sign_in', admin_users.admin_sign_in)
 //创建用户
@@ -103,6 +108,8 @@ router.post('/create_admin_user', /* tokens.verifyToken,  */admin_users.create_a
 router.post('/edit_admin_user', tokens.verifyToken, admin_users.edit_admin_user)
 //删除用户
 router.post('/delete_admin_user', tokens.verifyToken, /* verify_authority.check, */ admin_users.delete_admin_user)
+//获取用户信息
+router.post('/get_admin_user_info', tokens.verifyToken, /* verify_authority.check, */ admin_users.get_admin_user_info)
 //获取用户列表
 router.get('/get_admin_user_list', tokens.verifyToken, admin_users.get_admin_user_list)
 

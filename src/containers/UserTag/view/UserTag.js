@@ -217,14 +217,6 @@ class UserTag extends React.Component {
     const {loading, is_create} = this.state
     const {getFieldDecorator} = this.props.form
 
-    const prefixSelector = getFieldDecorator('prefix', {
-      initialValue: '86'
-    })(
-      <Select style={{width: 70}}>
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
-      </Select>
-    )
 
     const formItemLayout = {
       labelCol: {

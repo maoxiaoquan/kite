@@ -1,0 +1,15 @@
+.admin-article-review {
+  .article-review-aside {
+    position: fixed;
+    top: 0px;
+    left: 260px;
+    bottom: 0;
+    width: 300px;
+    background: #F1F2F3;
+    z-index: 99;
+    padding-top: 70px;
+  }
+  .article-review-content {
+    padding-left: 300px;
+  }
+}

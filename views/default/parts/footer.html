@@ -29,19 +29,27 @@
 
   window.onload = function () {
 
-    document.querySelector('.navbar-toggler').onclick = function () {
-      if (matches(document.querySelector('.navbar-collapse'), '.show')) {
-        document.querySelector('.navbar-collapse').classList.remove('show')
-      } else {
-        document.querySelector('.navbar-collapse').classList.add('show')
+    if (document.querySelector('.recommend-collection') && document.querySelectorAll('.recommend-collection .active').length === 0) {
+      document.querySelectorAll('.recommend-collection .collection')[0].classList.add('active')
+    }
+
+    if (document.querySelector('.navbar-toggler')) {
+      document.querySelector('.navbar-toggler').onclick = function () {
+        if (matches(document.querySelector('.navbar-collapse'), '.show')) {
+          document.querySelector('.navbar-collapse').classList.remove('show')
+        } else {
+          document.querySelector('.navbar-collapse').classList.add('show')
+        }
       }
     }
 
-    document.querySelector('.dropdown-toggle').onclick = function () {
-      if (matches(document.querySelector('.dropdown-menu'), '.show')) {
-        document.querySelector('.dropdown-menu').classList.remove('show')
-      } else {
-        document.querySelector('.dropdown-menu').classList.add('show')
+    if (document.querySelector('.dropdown-toggle')) {
+      document.querySelector('.dropdown-toggle').onclick = function () {
+        if (matches(document.querySelector('.dropdown-menu'), '.show')) {
+          document.querySelector('.dropdown-menu').classList.remove('show')
+        } else {
+          document.querySelector('.dropdown-menu').classList.add('show')
+        }
       }
     }
 

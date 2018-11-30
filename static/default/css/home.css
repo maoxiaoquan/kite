@@ -1,5 +1,5 @@
 .box-container {
-  padding-top: 110px;
+  padding-top: 100px;
   padding-bottom: 50px; }
 
 /*header start*/
@@ -19,11 +19,14 @@
 .navbar .form-search {
   position: relative; }
   .navbar .form-search .form-search-view {
-    border: none;
-    background-color: #f5f5f5;
     font-size: 14px;
     color: #333;
-    padding-right: 33px; }
+    padding: 0 40px 0 20px;
+    width: 160px;
+    height: 38px;
+    border: 1px solid #eee;
+    border-radius: 40px;
+    background: #eee; }
   .navbar .form-search .search-btn {
     border: none;
     position: absolute;
@@ -35,8 +38,8 @@
     text-align: center;
     display: block;
     position: absolute;
-    right: 3px;
-    top: 5px;
+    right: 8px;
+    top: 7px;
     cursor: pointer; }
 
 .navbar .avatar-img {
@@ -184,22 +187,20 @@
 /*home-lay layout-header end*/
 /*home-lay layout-type start*/
 .side-menu {
-  position: fixed;
-  top: 90px;
-  width: 96px; }
-  .side-menu .side-menu-view {
-    border-radius: 5px;
-    /*border: 1px solid #f9f9f9;*/
-    /*background: #f9f9f9;*/
-    -webkit-box-shadow: 0 0 10px rgba(106, 115, 111, 0.15);
-    box-shadow: 0 0 10px rgba(106, 115, 111, 0.15);
-    /*box-shadow: 0 0 8px 0 rgba(7, 17, 27, 0.05);*/
-    padding: 12px 13px; }
+  border-radius: 12px;
+  width: 100px;
+  float: left;
+  margin-right: 15px;
+  border: 1px solid #f1f1f1;
+  /*-webkit-box-shadow: 0 0 10px rgba(106, 115, 111, 0.15);*/
+  /* box-shadow: 0 0 10px rgba(106, 115, 111, 0.15);*/
+  /*box-shadow: 0 0 8px 0 rgba(7, 17, 27, 0.05);*/
+  padding: 12px 13px; }
   .side-menu .recommend-collection .collection {
     display: block;
     margin-bottom: 10px;
     font-size: 14px;
-    padding: 5px 0;
+    padding: 2px 0;
     border-radius: 5px;
     transition: 0.5s all;
     -webkit-transition: 0.5s all;

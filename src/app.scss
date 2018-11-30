@@ -409,9 +409,11 @@ a:focus {
 }
 
 .admin-manager {
+  padding-top: 80px;
+  overflow: hidden;
   margin-left: 260px;
   .admin-content {
-    padding: 20px 55px 50px;
+    padding: 20px 35px 30px;
   }
 }
 
@@ -420,11 +422,11 @@ a:focus {
     text-align: left;
     margin-bottom: 30px;
     i {
-      font-size: 20px;
+      font-size: 18px;
       color: #14C0FF;
     }
     em {
-      font-size: 20px;
+      font-size: 16px;
       font-style: normal;
       letter-spacing: 1px;
       margin-left: 10px;
@@ -442,14 +444,22 @@ a:focus {
       }
     }
   }
+  .layout-card-view {
+    border-radius: 5px;
+    padding: 45px 30px;
+    background: #FFFFFF;
+    -webkit-box-shadow: 2px 2px 20px 0 rgba(221, 221, 221, 0.75);
+    box-shadow: 2px 2px 20px 0 rgba(221, 221, 221, 0.75);
+  }
 }
 
 .layout-table {
-  border-radius: 5px;
+  border-radius: 3px;
   padding: 45px 30px;
   background: #FFFFFF;
-  -webkit-box-shadow: 2px 2px 20px 0 rgba(221, 221, 221, 0.75);
-  box-shadow: 2px 2px 20px 0 rgba(221, 221, 221, 0.75);
+  box-shadow: 0 0 20px #F2F3F6;
+  /*-webkit-box-shadow: 2px 2px 20px 0 rgba(221, 221, 221, 0.75);
+  box-shadow: 2px 2px 20px 0 rgba(221, 221, 221, 0.75);*/
   .ant-table {
     tbody {
       tr {
@@ -460,7 +470,6 @@ a:focus {
 }
 
 .box-card {
-  margin-top: 30px;
   margin-bottom: 30px;
   transition: .5s;
   display: inline-block;
@@ -470,12 +479,12 @@ a:focus {
   border-radius: 6px;
   width: 100%;
   .box-card-header {
-    padding: 17.5px;
+    padding: 30px 30px 0;
     position: relative;
     color: #2a2a2a;
     font-weight: 600;
     h2 {
-      font-size: 15px;
+      font-size: 18px;
       color: #757575;
       position: relative;
       margin-bottom: 0;
@@ -542,12 +551,6 @@ a:focus {
 
 .box-tree-title {
   width: 100%;
-}
-
-.admin-wrapper {
-  .box-card-body {
-    min-height: 700px;
-  }
 }
 
 .ant-btn {

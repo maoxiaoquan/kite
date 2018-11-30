@@ -390,19 +390,21 @@ class AdminAuthority extends React.Component {
 
           </Modal>
 
-          <Tree
-            showLine
-          >
-            {
-              state_admin_authority.admin_authority_list.map((item) => {
-                return (
-                  <TreeNode key={item.authority_id} title={customLabel(item)}>
-                    {TreeNodeTree(item.children)}
-                  </TreeNode>
-                )
-              })
-            }
-          </Tree>
+          <div className="layout-card-view">
+            <Tree
+              showLine
+            >
+              {
+                state_admin_authority.admin_authority_list.map((item) => {
+                  return (
+                    <TreeNode key={item.authority_id} title={customLabel(item)}>
+                      {TreeNodeTree(item.children)}
+                    </TreeNode>
+                  )
+                })
+              }
+            </Tree>
+          </div>
         </div>
       </div>
 

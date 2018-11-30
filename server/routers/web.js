@@ -1,14 +1,14 @@
 const router = require('koa-router')()
 const {Check_Session, ajaxCheck_Session} = require('../utils/check_session')
-const index = require('../controllers/index')// 主页
-const user = require('../controllers/user')// 注册
-const personal_center = require('../controllers/personal_center') // 用户个人中心
-const article = require('../controllers/article') // 文章内容页
-const subscribe = require('../controllers/subscribe')// 订阅
-const user_article_topic = require('../controllers/user_article_topic')// 用户文章专题
-const search = require('../controllers/search')// 搜索
-const comment = require('../controllers/comment')// 评论
-const upload = require('../controllers/upload')// 上传
+const index = require('../controllers/web/index')// 主页
+const user = require('../controllers/web/user')// 注册
+const personal_center = require('../controllers/web/personal_center') // 用户个人中心
+const article = require('../controllers/web/article') // 文章内容页
+const subscribe = require('../controllers/web/subscribe')// 订阅
+const user_article_topic = require('../controllers/web/user_article_topic')// 用户文章专题
+const search = require('../controllers/web/search')// 搜索
+const comment = require('../controllers/web/comment')// 评论
+const upload = require('../controllers/web/upload')// 上传
 
 /*工具类*/
 const util_upload = require('../utils/upload') // 上传工具类
