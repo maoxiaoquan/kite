@@ -33,6 +33,7 @@
         "moduleName": "babel-runtime"
       }
     ],
+    "syntax-dynamic-import",
     "react-hot-loader/babel",
     "transform-decorators-legacy"
   ]

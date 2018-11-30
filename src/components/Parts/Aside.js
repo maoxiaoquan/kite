@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Menu, Icon, Row, Col, Progress } from 'antd'
+import { Menu, Layout, Icon, Row, Col, Progress } from 'antd'
 import {
   BrowserRouter as Router,
   Route,
@@ -11,6 +11,7 @@ import axios from 'axios'
 
 import './aside.scss'
 
+const {Header, Content, Footer, Sider} = Layout
 const SubMenu = Menu.SubMenu
 const MenuItemGroup = Menu.ItemGroup
 
@@ -102,6 +103,10 @@ class Aside extends Component {
     ]
   }
 
+  componentDidMount () {
+    console.log('this.state.aside_list', this.state.aside_list)
+  }
+
   handleClick = (e) => {
     console.log('click ', e)
   }
@@ -110,58 +115,68 @@ class Aside extends Component {
     const {aside_list = []} = this.state
 
     return (
-      <div className="admin-side-menu">
-        <div className="admin-side-scroll">
 
-          <div className="admin-logo">
-            <Link className="admin-logo-text" to="/manager/index">Kite</Link>
+      <Layout.Sider
+        breakpoint="lg"
+        collapsedWidth="0"
+        style={{height: '100vh', position: 'fixed', left: 0}}
+        onBreakpoint={(broken) => { console.log(broken) }}
+        onCollapse={(collapsed, type) => { console.log(collapsed, type) }}
+      >
 
-          </div>
+        <div className="admin-side-menu">
+          <div className="admin-side-scroll">
 
-          <div className="admin-aside-nav clearfix">
+            <div className="admin-logo">
+              <Link className="admin-logo-text" to="/manager/index">Kite</Link>
 
-            <Menu
-              onClick={this.handleClick}
-              defaultOpenKeys={['web']}
-              theme={'dark'}
-              mode="inline"
-            >
-              {
-                aside_list.map(item => {
-                    if (item.link) {
-                      return (
-                        <Menu.Item key={item.key}>
-                          <Link to={item.link}>
-                            {item.icon ? <Icon type={item.icon}/> : ''}{item.title}
-                          </Link>
-                        </Menu.Item>
-                      )
-                    } else {
-                      return (
-                        <SubMenu key={item.key} title={<span><Icon
-                          type={item.icon}/><span>{item.title}</span></span>}>
-                          {
-                            item.children.map(child_item => {
-                              return (
-                                <Menu.Item key={child_item.key}>
-                                  <Link to={child_item.link}>
-                                    {child_item.icon ? <Icon
-                                      type={child_item.icon}/> : ''}{child_item.title}
-                                  </Link>
-                                </Menu.Item>
-                              )
-                            })
-                          }
-                        </SubMenu>
-                      )
+            </div>
+
+            <div className="admin-aside-nav clearfix">
+
+              <Menu
+                onClick={this.handleClick}
+                defaultOpenKeys={['web']}
+                theme={'dark'}
+                mode="inline"
+              >
+                {
+                  aside_list.map(item => {
+                      if (item.link) {
+                        return (
+                          <Menu.Item key={item.key}>
+                            <Link to={item.link}>
+                              {item.icon ? <Icon type={item.icon}/> : ''}{item.title}
+                            </Link>
+                          </Menu.Item>
+                        )
+                      } else {
+                        return (
+                          <SubMenu key={item.key} title={<span><Icon
+                            type={item.icon}/><span>{item.title}</span></span>}>
+                            {
+                              item.children.map(child_item => {
+                                return (
+                                  <Menu.Item key={child_item.key}>
+                                    <Link to={child_item.link}>
+                                      {child_item.icon ? <Icon
+                                        type={child_item.icon}/> : ''}{child_item.title}
+                                    </Link>
+                                  </Menu.Item>
+                                )
+                              })
+                            }
+                          </SubMenu>
+                        )
+                      }
                     }
-                  }
-                )
-              }
-            </Menu>
+                  )
+                }
+              </Menu>
+            </div>
           </div>
         </div>
-      </div>
+      </Layout.Sider>
     )
   }
 }

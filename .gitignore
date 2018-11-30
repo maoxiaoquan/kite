@@ -1,46 +1,8 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/admin/node_modules
-# roadhog-api-doc ignore
-/admin/src/utils/request-temp.js
-/admin/_roadhog-api-doc
-
-# production
-/admin/dist
-/admin/.vscode
-
-# misc
-/admin/.DS_Store
-/admin/npm-debug.log*
-/admin/yarn-error.log
-
-/admin/coverage
-/admin/.idea
-/admin/yarn.lock
-/admin/package-lock.json
-*bak
-/admin/.vscode
-
-# visual studio code
-/admin/.history
-/admin/*.log
-
-functions/mock
-/admin/.temp/**
-
-# umi
-/admin/.umi
-/admin/.umi-production
-
-# screenshot
-/admin/screenshot
-/admin/.firebase
-
-
 # dependencies
 /node_modules
 /.vscode
+
+
 # misc
 .DS_Store
 npm-debug.log*
