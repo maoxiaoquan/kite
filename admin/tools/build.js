@@ -3,7 +3,7 @@
 process.env.NODE_ENV = 'production'
 
 const webpack = require('webpack')
-const webpackConfig = require('./webpack.prod')
+const webpackConfig = require('./webpack.prod.config')
 
 /*const spinner = ora('building for production...')
 spinner.start()*/

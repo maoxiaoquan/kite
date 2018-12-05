@@ -1,40 +1,24 @@
 {
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
         "targets": {
-          "browsers": [
-            "last 2 versions",
-            "safari >= 7"
-          ]
+          "node": "current"
         }
       }
     ],
     [
-      "es2015",
+      "@babel/preset-stage-2",
       {
-        "modules": false
+        "decoratorsLegacy": "true"
       }
     ],
-    "react",
-    "stage-0",
-    "stage-1",
-    "stage-2",
-    "stage-3"
+    "@babel/preset-flow",
+    "@babel/preset-react"
   ],
   "plugins": [
-    [
-      "transform-runtime",
-      {
-        "helpers": false,
-        "polyfill": false,
-        "regenerator": true,
-        "moduleName": "babel-runtime"
-      }
-    ],
-    "syntax-dynamic-import",
-    "transform-decorators-legacy",
-    "react-hot-loader/babel"
+    "@babel/plugin-transform-runtime",
+    "@babel/plugin-syntax-dynamic-import"
   ]
 }
