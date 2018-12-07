@@ -3,7 +3,7 @@ import {
   Route,
   Redirect,
   HashRouter,
-  browserHistory
+  BrowserRouter
 } from 'react-router-dom'
 
 import routerConfig from '../config/router.config'
@@ -27,7 +27,7 @@ class RouteConfig extends PureComponent {
 
   render () {
     return (
-      <HashRouter history={browserHistory}>
+      <HashRouter>
         <Fragment>
           {
             routerConfig.map((item, key) => {

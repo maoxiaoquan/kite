@@ -8,6 +8,8 @@ import thunk from 'redux-thunk'
 import { AppContainer } from 'react-hot-loader'
 import rootReducer from './stores/reducers/index'
 
+import 'antd/dist/antd.css'
+
 import './app.scss'
 
 import App from './routers/router'
