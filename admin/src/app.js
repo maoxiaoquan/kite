@@ -1,3 +1,5 @@
+import '@babel/polyfill'
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
@@ -7,8 +9,6 @@ import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import { AppContainer } from 'react-hot-loader'
 import rootReducer from './stores/reducers/index'
-
-import 'antd/dist/antd.css'
 
 import './app.scss'
 
