@@ -83,7 +83,7 @@ module.exports = require('./webpack.base.config')({
 
   plugins: [
     // Minify and optimize the index.html
-    new BundleAnalyzerPlugin(),
+   /* new BundleAnalyzerPlugin(),*/
     new MiniCssExtractPlugin({
       filename: 'css/[name].[chunkhash:5].css',
       chunkFilename: 'css/[name].[contenthash:5].css',
