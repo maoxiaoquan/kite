@@ -60,12 +60,12 @@ class Admin_users {
       return false
     }
 
-    await create_admin_system_log({
+    /*await create_admin_system_log({
       // 写入日志
       uid: admin_user_findOne.uid,
       type: 4,
       content: '登录了系统'
-    })
+    })*/
 
     let find_user_role = await admin_user_role.findOne({
       where: {uid: admin_user_findOne.uid}
