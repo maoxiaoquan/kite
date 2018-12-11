@@ -203,7 +203,7 @@ class Init {
             avatar: 'http://oq33egsog.bkt.clouddn.com/avatar1.jpg',
             nickname: req_data.nickname,
             password: encrypt(req_data.password, config.encrypt_key),
-            reg_ip: ctx.request.ip,
+            // reg_ip: ctx.request.ip,
             enable: true
         })
 
