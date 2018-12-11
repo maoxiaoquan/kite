@@ -71,7 +71,7 @@ module.exports = {
     },
     reg_ip: {
       // 注册IP
-      type: Seq.STRING(50),
+      type: Seq.STRING(100),
       comment: '注册IP',
       field: 'reg_ip'
     },
