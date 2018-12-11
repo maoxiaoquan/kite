@@ -194,8 +194,8 @@ class Init {
             .write()
 
         let create_admin_role = await admin_role.create({
-            role_name: '超级管理员',
-            role_description: '拥有最高权限的角色'
+            role_name: 'super admin',
+            role_description: 'super admin'
         })
 
         let create_admin_user = await admin_user.create({
