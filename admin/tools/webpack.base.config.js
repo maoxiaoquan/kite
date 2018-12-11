@@ -84,35 +84,13 @@ module.exports = options => ({
         }
       },
       {
-        test: /\.(jpg|png|gif)$/,
+        test: /\.(jpe?g|png|gif)(\?.*)?$/,
+        exclude: /node_modules/,
         use: [
           {
-            loader: 'url-loader',
+            loader: 'file-loader',
             options: {
-              // Inline files smaller than 10 kB
-              limit: 10 * 1024
-            }
-          },
-          {
-            loader: 'image-webpack-loader',
-            options: {
-              mozjpeg: {
-                enabled: false
-                // NOTE: mozjpeg is disabled as it causes errors in some Linux environments
-                // Try enabling it in your environment by switching the config to:
-                // enabled: true,
-                // progressive: true,
-              },
-              gifsicle: {
-                interlaced: false
-              },
-              optipng: {
-                optimizationLevel: 7
-              },
-              pngquant: {
-                quality: '65-90',
-                speed: 4
-              }
+              name: 'images/[name].[ext]?[hash]'
             }
           }
         ]
@@ -133,11 +111,6 @@ module.exports = options => ({
     // inside your code for any environment checks; Terser will automatically
     // drop any unreachable code.
     // new webpack.HotModuleReplacementPlugin()
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].[chunkhash:5].css',
-      chunkFilename: 'css/[name].[contenthash:5].css'
-    }),
-
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV)
@@ -150,6 +123,11 @@ module.exports = options => ({
     mainFields: ['browser', 'jsnext:main', 'main']
   },
   devtool: options.devtool,
+  stats: {
+    // clear min-css warning
+    entrypoints: false,
+    children: false
+  },
   target: 'web', // Make web variables accessible to webpack, e.g. window
   performance: options.performance || {}
 })

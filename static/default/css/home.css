@@ -2,6 +2,9 @@
   padding-top: 100px;
   padding-bottom: 50px; }
 
+.theme-gray {
+  background: #fcfcfc; }
+
 /*header start*/
 .navbar-bootom-border {
   /* border: 1px solid transparent;
@@ -83,8 +86,9 @@
 /*home-lay layout-header start*/
 .header-top {
   width: 100%;
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(178, 186, 194, 0.15); }
+  padding: 24px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(27, 95, 160, 0.1); }
   .header-top .header-top-img {
     width: 80px;
     height: 80px;
@@ -186,39 +190,37 @@
 
 /*home-lay layout-header end*/
 /*home-lay layout-type start*/
-.side-menu {
-  border-radius: 12px;
-  width: 100px;
-  float: left;
-  margin-right: 15px;
-  border: 1px solid #f1f1f1;
-  /*-webkit-box-shadow: 0 0 10px rgba(106, 115, 111, 0.15);*/
-  /* box-shadow: 0 0 10px rgba(106, 115, 111, 0.15);*/
-  /*box-shadow: 0 0 8px 0 rgba(7, 17, 27, 0.05);*/
-  padding: 12px 13px; }
-  .side-menu .recommend-collection .collection {
-    display: block;
-    margin-bottom: 10px;
+.recommend-collection {
+  margin-top: 20px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(27, 95, 160, 0.1); }
+  .recommend-collection .collection {
+    display: inline-block;
     font-size: 14px;
-    padding: 2px 0;
+    padding: 2px 10px;
+    background: #fff;
     border-radius: 5px;
     transition: 0.5s all;
     -webkit-transition: 0.5s all;
     text-align: center; }
-    .side-menu .recommend-collection .collection .collection-img {
+    .recommend-collection .collection .collection-img {
       display: block; }
-    .side-menu .recommend-collection .collection.active {
-      background: #31db7a;
-      color: #fff; }
-    .side-menu .recommend-collection .collection:hover {
+    .recommend-collection .collection.active {
       color: #31db7a; }
-      .side-menu .recommend-collection .collection:hover.active {
-        color: #fff; }
+    .recommend-collection .collection:hover {
+      color: #31db7a; }
 
 /*home-lay layout-type end*/
 /*.home-lay layout-content start*/
 .home-lay.layout-content {
-  position: relative; }
+  position: relative;
+  padding: 24px 0;
+  margin-top: 20px;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(27, 95, 160, 0.1); }
   .home-lay.layout-content .filter-menu {
     margin-bottom: 30px; }
     .home-lay.layout-content .filter-menu > button {
@@ -254,7 +256,10 @@
       .home-lay.layout-content .filter-menu > button.active:after, .home-lay.layout-content .filter-menu > button:hover:after {
         opacity: 1; }
   .home-lay.layout-content .article-list > li {
+    padding: 0 24px;
     border-bottom: 1px solid rgba(178, 186, 194, 0.15); }
+    .home-lay.layout-content .article-list > li:hover {
+      background: #f9f9f9; }
 
 .home-lay .article-footer {
   margin-top: 30px; }
@@ -311,8 +316,6 @@
         font-weight: 600;
         line-height: 1.2;
         color: #333; }
-        .content-box .info-box .title-row .title:visited {
-          color: #909090; }
     .content-box .info-box .content-text {
       font-size: 13px;
       line-height: 24px;

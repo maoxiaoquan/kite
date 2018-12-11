@@ -5,6 +5,10 @@
   padding-bottom: 50px;
 }
 
+.theme-gray {
+  background: #fcfcfc;
+}
+
 /*header start*/
 
 .navbar-bootom-border {
@@ -99,8 +103,9 @@
 
 .header-top {
   width: 100%;
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(178, 186, 194, 0.15);
+  padding: 24px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(27, 95, 160, .1);
   .header-top-img {
     width: 80px;
     height: 80px;
@@ -229,40 +234,29 @@
 
 /*home-lay layout-type start*/
 
-.side-menu {
-  // background: rgba(43, 51, 59, 0.06);
-  border-radius: 12px;
-  width: 100px;
-  float: left;
-  margin-right: 15px;
-  border: 1px solid #f1f1f1;
-  /*-webkit-box-shadow: 0 0 10px rgba(106, 115, 111, 0.15);*/
-  /* box-shadow: 0 0 10px rgba(106, 115, 111, 0.15);*/
-  /*box-shadow: 0 0 8px 0 rgba(7, 17, 27, 0.05);*/
-  padding: 12px 13px;
-  .recommend-collection {
-    .collection {
+.recommend-collection {
+  margin-top: 20px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(27, 95, 160, .1);
+  .collection {
+    display: inline-block;
+    font-size: 14px;
+    padding: 2px 10px;
+    background: #fff;
+    border-radius: 5px;
+    transition: 0.5s all;
+    -webkit-transition: 0.5s all;
+    text-align: center;
+    .collection-img {
       display: block;
-      margin-bottom: 10px;
-      font-size: 14px;
-      padding: 2px 0;
-      border-radius: 5px;
-      transition: 0.5s all;
-      -webkit-transition: 0.5s all;
-      text-align: center;
-      .collection-img {
-        display: block;
-      }
-      &.active {
-        background: #31db7a;
-        color: #fff;
-      }
-      &:hover {
-        color: #31db7a;
-        &.active {
-          color: #fff;
-        }
-      }
+    }
+    &.active {
+      color: #31db7a;
+    }
+    &:hover {
+      color: #31db7a;
     }
   }
 }
@@ -274,6 +268,11 @@
 .home-lay {
   &.layout-content {
     position: relative;
+    padding: 24px 0;
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(27, 95, 160, .1);
     .filter-menu {
       margin-bottom: 30px;
       > button {
@@ -316,7 +315,11 @@
     }
     .article-list {
       > li {
+        padding: 0 24px;
         border-bottom: 1px solid rgba(178, 186, 194, 0.15);
+        &:hover {
+          background: #f9f9f9;
+        }
       }
     }
   }
@@ -382,9 +385,6 @@
         font-weight: 600;
         line-height: 1.2;
         color: #333;
-        &:visited {
-          color: #909090;
-        }
       }
     }
     .content-text {

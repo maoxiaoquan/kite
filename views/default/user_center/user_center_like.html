@@ -4,121 +4,125 @@
 
 <body class="black-theme">
 
-  <!--header_view.html start-->
-  <% include ../parts/header_view.html %>
-  <!--header_view.html end-->
+<!--header_view.html start-->
+<% include ../parts/header_view.html %>
+<!--header_view.html end-->
 
 
-  <!--article-list-lay layout-content start-->
-  <section class="user-lay layout-content" id="user-center-like">
+<!--article-list-lay layout-content start-->
+<section class="user-lay layout-content" id="user-center-like">
     <div class="container  box-container">
-      <div class="row">
+        <div class="row">
 
-        <div class="col-xs-12 col-sm-8 col-md-8 main">
+            <div class="col-xs-12 col-sm-8 col-md-8 main">
 
-          <% include user_center_top.html %>
+                <% include user_center_top.html %>
 
-          <div class="user-article-like">
+                <div class="user-article-like">
 
-            <ul class="user-article-like-view">
-              <% data.article_list.forEach(function (item, key) { %>
-              <li>
-                <article class="content-box content-box-index article-list">
-                  <div class="info-box">
-                    <div class="info-row title-row">
-                      <a href="/article/<%= item.aid %>" class="title" target="_blank">
-                        <%= item.title %></a>
-                    </div>
-                    <!-- <div class="content-text">
-                                    <%= item.content %>
-                                </div>-->
-                    <div class="info-row meta-row">
-                      <ul class="meta-list">
-                        <li class="item username clickable">
-                          <a href="">
-                            <%= item.user.nickname %></a>
-                        </li>
-                        <li class="item">
-                          <%= item.create_at %>
-                        </li>
-                        <li class="item">
-                          <%= item.read_count %> 阅读</li>
-                        <li class="item">
-                          <%= item.like_count %> 喜欢</li>
-                        <li class="item">
-                          <%= item.comment_count %> 评论</li>
-                        <% if(item.tag_ids){ %>
-                        <li class="item">
-                          <% item.tag_ids.split(',').forEach(function (item, key) { %>
-                          <%
+                    <ul class="user-article-like-view">
+                        <% data.article_list.forEach(function (item, key) { %>
+                        <li>
+                            <article class="content-box content-box-index article-list">
+                                <div class="info-box">
+                                    <div class="info-row title-row">
+                                        <a href="/article/<%= item.aid %>" class="title" target="_blank">
+                                            <%= item.title %></a>
+                                    </div>
+                                    <!-- <div class="content-text">
+                                                    <%= item.content %>
+                                                </div>-->
+                                    <div class="info-row meta-row">
+                                        <ul class="meta-list">
+                                            <li class="item username clickable">
+                                                <a href="">
+                                                    <%= item.user.nickname %></a>
+                                            </li>
+                                            <li class="item">
+                                                <%= item.create_at %>
+                                            </li>
+                                            <li class="item">
+                                                <%= item.read_count %> 阅读
+                                            </li>
+                                            <li class="item">
+                                                <%= item.like_count %> 喜欢
+                                            </li>
+                                            <li class="item">
+                                                <%= item.comment_count %> 评论
+                                            </li>
+                                            <% if(item.tag_ids){ %>
+                                            <li class="item">
+                                                <% item.tag_ids.split(',').forEach(function (item, key) { %>
+                                                <%
                                                 data.tag_all.forEach(function (tag_all_item, tag_all_key) {
                                                 if (tag_all_item.article_tag_id == item) {
                                                 %>
-                          <a class="tag-class frontend" href="">
-                            <%= tag_all_item.article_tag_name %>
-                          </a>
-                          <%
+                                                <a class="tag-class frontend" href="">
+                                                    <%= tag_all_item.article_tag_name %>
+                                                </a>
+                                                <%
                                                 }}) %>
-                          <% }) %>
+                                                <% }) %>
+                                            </li>
+                                            <% } %>
+                                            <li class="item"><span data-aid="<%= item.aid %>"
+                                                                   class="cancel-like">取消喜欢</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <% if(item.cover_img){ %>
+                                <div class="lazy thumb thumb loaded"
+                                     style="background-image: url('<%= item.cover_img %>'); background-size: cover;">
+                                </div>
+                                <% } %>
+                            </article>
                         </li>
-                        <% } %>
-                        <li class="item"><span data-aid="<%= item.aid %>" class="cancel-like">取消喜欢</span></li>
-                      </ul>
-                    </div>
-                  </div>
-                  <% if(item.cover_img){ %>
-                  <div class="lazy thumb thumb loaded" style="background-image: url('<%= item.cover_img %>'); background-size: cover;">
-                  </div>
-                  <% } %>
-                </article>
-              </li>
-              <% }) %>
-            </ul>
+                        <% }) %>
+                    </ul>
 
-            <!--page start-->
-            <% include ../pages/user_center_like.html %>
-            <!--page end-->
-          </div>
+                    <!--page start-->
+                    <% include ../pages/user_center_like.html %>
+                    <!--page end-->
+                </div>
 
+
+            </div>
+
+            <div class="col-xs-12 col-sm-4 col-md-4 box-aside">
+                <% include user_center_aside.html %>
+            </div>
 
         </div>
-
-        <div class="col-xs-12 col-sm-4 col-md-4 box-aside">
-          <% include user_center_aside.html %>
-        </div>
-
-      </div>
     </div>
-  </section>
-  <!--article-list-lay layout-content end-->
+</section>
+<!--article-list-lay layout-content end-->
 
 
-  <script>
-    window.onload = function () {
-      var cancel_like = document.getElementsByClassName('cancel-like')
-      console.log(cancel_like)
-      for (var i = 0; i < cancel_like.length; i++) {
-        (function (j) {
-          cancel_like[j].onclick = function () {
-            var aid = this.getAttribute('data-aid')
-            _server.post_user_like_article({ aid: aid }).then(function (res) {
-              if (res.state === 'success') {
-                window.location.reload()
-              } else {
-                alert(res.message)
-              }
-            }).catch(function (err) {
-              console.log(err)
-            })
+<script>
+
+  var cancel_like = document.getElementsByClassName('cancel-like')
+  console.log(cancel_like)
+  for (var i = 0; i < cancel_like.length; i++) {
+    (function (j) {
+      cancel_like[j].onclick = function () {
+        var aid = this.getAttribute('data-aid')
+        _server.post_user_like_article({aid: aid}).then(function (res) {
+          if (res.state === 'success') {
+            window.location.reload()
+          } else {
+            alert(res.message)
           }
-        })(i)
+        }).catch(function (err) {
+          console.log(err)
+        })
       }
-    }
+    })(i)
+  }
 
-    new Vue({
-      el: '#user-center-like'
-    })
-  </script>
+  new Vue({
+    el: '#user-center-like'
+  })
+</script>
 
 </body>
 

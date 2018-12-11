@@ -7,6 +7,7 @@ const optimizeCss = require('optimize-css-assets-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const webpack = require('webpack')
 const config = require('./config')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
@@ -18,7 +19,6 @@ module.exports = require('./webpack.base.config')({
     require.resolve('react-app-polyfill/ie11'),
     path.resolve(__dirname, '../src/app.js')
   ],
-
   // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
   output: {
     path: config.build.output.path,
@@ -69,6 +69,12 @@ module.exports = require('./webpack.base.config')({
           minChunks: 2,
           reuseExistingChunk: true,
           enforce: true
+        },
+        styles: {
+          name: 'styles',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true
         }
       }
     },
@@ -78,6 +84,11 @@ module.exports = require('./webpack.base.config')({
   plugins: [
     // Minify and optimize the index.html
     new BundleAnalyzerPlugin(),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].[chunkhash:5].css',
+      chunkFilename: 'css/[name].[contenthash:5].css',
+      orderWarning: true, // Disable to remove warnings about conflicting order between imports
+    }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../public/index.html'), // 源模板文件
       minify: {
@@ -112,7 +123,6 @@ module.exports = require('./webpack.base.config')({
       hashDigestLength: 20
     })
   ],
-
   performance: {
     assetFilter: assetFilename =>
       !/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename)

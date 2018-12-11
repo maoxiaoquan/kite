@@ -2,7 +2,7 @@
 <% include parts/header.html %>
 <!--header.html end-->
 
-<body class="black-theme">
+<body class="theme-gray">
 
 <!--header_view.html start-->
 <% include parts/header_view.html %>
@@ -12,31 +12,15 @@
 <div class="index-container box-container" id="index">
 
     <div class="side-menu">
-        <div class="recommend-collection">
-            <a class="collection" href="/">
-                <span class="collection-name"> 热门</span>
-            </a>
-            <% data.article_column.forEach(function (item, key) { %>
-            <a class="collection <% if(item.article_column_id == data.column_id){ %> active <% } %>"
-               href="/column/<%= item.article_column_id %>">
-                <i class="iconfont icon-guanji"></i>
-                <span class="collection-name"><%= item.article_column_name %></span>
-            </a>
-            <% }) %>
-            <a class="collection" href="/subscribe/tag">
-                            <span class="collection-name">
-                              更多...
-                            </span>
-            </a>
-        </div>
     </div>
 
     <div class="row">
         <div class="col-xs-12 col-sm-8 col-md-8">
 
+
             <% if (data.current_page === 'index'){ %>
             <div id="box-swiper" class="carousel slide box-swiper" data-ride="carousel">
-                <img src="/default/img/666.png" alt="">
+                <img src="https://image-static.segmentfault.com/131/301/1313011719-5bc6a63ef190f" alt="">
             </div>
             <% }else { %>
 
@@ -53,15 +37,35 @@
             </div>
 
             <% } %>
+
+
+            <div class="recommend-collection">
+                <a class="collection" href="/">
+                    <span class="collection-name"> 热门</span>
+                </a>
+                <% data.article_column.forEach(function (item, key) { %>
+                <a class="collection <% if(item.article_column_id == data.column_id){ %> active <% } %>"
+                   href="/column/<%= item.article_column_id %>">
+                    <i class="iconfont icon-guanji"></i>
+                    <span class="collection-name"><%= item.article_column_name %></span>
+                </a>
+                <% }) %>
+                <a class="collection" href="/subscribe/tag">
+                            <span class="collection-name">
+                              更多...
+                            </span>
+                </a>
+            </div>
+
             <!--home-lay layout-content start-->
             <section class="home-lay layout-content">
 
-                <!-- <div class="filter-menu text-center">
-                           <button class="active">文章</button>
-                           <button data-cid="945">说说</button>
-                           <button data-cid="945">视频</button>
-                           <button data-cid="945">公告</button>
-                       </div>-->
+                <!--  <div class="filter-menu text-center">
+                              <button class="active">文章</button>
+                              <button data-cid="945">说说</button>
+                              <button data-cid="945">视频</button>
+                              <button data-cid="945">公告</button>
+                          </div>-->
 
                 <ul class="article-list">
                     <!--第一页默认服务端渲染-->
