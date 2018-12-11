@@ -20,7 +20,7 @@ class AdminSystemLog {
    */
 
   static async create_admin_system_log({ uid, type = 1, content }) {
-    await models.admin_system_log.create({
+    return models.admin_system_log.create({
       uid,
       type,
       content
