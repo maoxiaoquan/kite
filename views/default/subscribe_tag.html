@@ -10,8 +10,8 @@
 
 
 <!--article-list-lay layout-content start-->
-<section class="subscribe-lay layout-content">
-    <div class="container  box-container" style="padding-top: 60px">
+<section class="subscribe-lay layout-content" id="subscribe-lay">
+    <div class="container  box-container">
 
         <header class="list-header">
             <nav role="navigation" class="list-nav">
@@ -87,28 +87,37 @@
 
 <script>
 
-  var subscribe_btn = document.getElementsByClassName('subscribe-btn')
+  new Vue({
+    el: '#subscribe-lay',
+    data: function () {
+      return {}
+    },
+    created: function () {
+      var subscribe_btn = document.getElementsByClassName('subscribe-btn')
 
-  for (var i = 0; i < subscribe_btn.length; i++) {
-    (function (i) {
+      for (var i = 0; i < subscribe_btn.length; i++) {
+        (function (i) {
 
-      if (subscribe_btn.length > 0) {
-        subscribe_btn[i].onclick = function () {
-          var tag_id = subscribe_btn[i].getAttribute('data-tag-id')
-          _server.post_subscribe_tag({article_tag_id: tag_id}).then(function (res) {
-            console.log(res)
-            if (res.state === 'success') {
-              window.location.reload()
-            } else {
-              alert(res.meaasge)
+          if (subscribe_btn.length > 0) {
+            subscribe_btn[i].onclick = function () {
+              var tag_id = subscribe_btn[i].getAttribute('data-tag-id')
+              _server.post_subscribe_tag({article_tag_id: tag_id}).then(function (res) {
+                console.log(res)
+                if (res.state === 'success') {
+                  window.location.reload()
+                } else {
+                  alert(res.meaasge)
+                }
+              }).catch(function (err) {
+                console.log('错误')
+              })
             }
-          }).catch(function (err) {
-            console.log('错误')
-          })
-        }
+          }
+        })(i)
       }
-    })(i)
-  }
+    }
+  })
+
 
 </script>
 

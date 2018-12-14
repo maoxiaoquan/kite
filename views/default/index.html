@@ -9,187 +9,189 @@
 <!--header_view.html end-->
 
 
-<div class="index-container box-container" id="index">
+<div class="home-lay index-box-container" id="index">
 
-    <div class="side-menu">
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-8 col-md-8">
-
-
-            <% if (data.current_page === 'index'){ %>
-            <div id="box-swiper" class="carousel slide box-swiper" data-ride="carousel">
-                <img src="https://image-static.segmentfault.com/131/301/1313011719-5bc6a63ef190f" alt="">
-            </div>
-            <% }else { %>
-
-            <div class="header-top clearfix">
-                <div class="header-top-img">
-                    <img src="/default/img/list2.png" alt="">
-                </div>
-                <div class="header-top-view">
-                    <h3>
-                        <%= data.current_page %>
-                    </h3>
-                    <p class="info">别再最该拼搏的年纪选择安逸{{message}}</p>
-                </div>
-            </div>
-
-            <% } %>
-
-
-            <div class="recommend-collection">
+    <nav class="nav-header recommend-collection">
+        <ul class="nav-item-view index-container">
+            <li class="nav-item">
                 <a class="collection" href="/">
-                    <span class="collection-name"> 热门</span>
+                    <span class="collection-name"> 每日推荐 </span>
                 </a>
-                <% data.article_column.forEach(function (item, key) { %>
+            </li>
+            <% data.article_column.forEach(function (item, key) { %>
+            <li class="nav-item">
                 <a class="collection <% if(item.article_column_id == data.column_id){ %> active <% } %>"
                    href="/column/<%= item.article_column_id %>">
                     <i class="iconfont icon-guanji"></i>
                     <span class="collection-name"><%= item.article_column_name %></span>
                 </a>
-                <% }) %>
+            </li>
+            <% }) %>
+            <li class="nav-item">
                 <a class="collection" href="/subscribe/tag">
-                            <span class="collection-name">
-                              更多...
-                            </span>
+                    <span class="collection-name">
+                      更多...
+                    </span>
                 </a>
-            </div>
+            </li>
+        </ul>
+    </nav>
 
-            <!--home-lay layout-content start-->
-            <section class="home-lay layout-content">
+    <div class="index-container">
 
-                <!--  <div class="filter-menu text-center">
-                              <button class="active">文章</button>
-                              <button data-cid="945">说说</button>
-                              <button data-cid="945">视频</button>
-                              <button data-cid="945">公告</button>
-                          </div>-->
-
-                <ul class="article-list">
-                    <!--第一页默认服务端渲染-->
-                    <% data.article_list.forEach(function (item, key) { %>
-                    <li>
-                        <article class="content-box content-box-index">
-                            <div class="info-box">
-
-                                <div class="info-row title-row">
-                                    <a href="/article/<%= item.aid %>" class="title" target="_blank">
-                                        <%= item.title %></a>
-                                </div>
-
-                                <div class="content-text">
-                                    <%- item.excerpt %>
-                                </div>
-
-                                <div class="info-row meta-row">
-                                    <ul class="meta-list">
-                                        <li class="item username clickable">
-                                            <a href="/user/<%= item.uid %>/article/all">
-                                                <%= item.user.nickname %></a>
-                                        </li>
-                                        <li class="item item-icon like-article">
-                                            <i class="iconfont icon-love"></i>
-                                            <strong>
-                                                <%= item.like_count %></strong>
-                                        </li>
-                                        <li class="item item-icon comment-count">
-                                            <i class="iconfont icon-pinglun"></i>
-                                            <strong>
-                                                <%= item.comment_count %></strong>
-                                        </li>
-                                        <li class="item">
-                                            <%= item.create_at %>
-                                        </li>
-                                        <% if(item.tag_ids){ %>
-                                        <li class="item">
-                                            <% item.tag_ids.split(',').forEach(function (item, key) { %>
-                                            <%
-                                            data.tag_all.forEach(function (tag_all_item, tag_all_key) {
-                                            if (tag_all_item.article_tag_id == item) {
-                                            %>
-                                            <a class="tag-class frontend"
-                                               href="/tag/<%= tag_all_item.article_tag_id %>">
-                                                <%= tag_all_item.article_tag_name %>
-                                            </a>
-                                            <%
-                                            }}) %>
-                                            <% }) %>
-                                        </li>
-                                        <% } %>
-                                    </ul>
-                                </div>
-                            </div>
-                            <% if(item.cover_img){ %>
-                            <div class="lazy thumb thumb loaded"
-                                 style="background-image: url('<%= item.cover_img %>'); background-size: cover;">
-                            </div>
-                            <% } %>
-                        </article>
-                    </li>
-                    <% }) %>
-                    <li v-for="item in article_list">
-                        <!--第一页之后ajax渲染-->
-                        <article class="content-box content-box-index">
-                            <div class="info-box">
-
-                                <div class="info-row title-row">
-                                    <a :href="article_href(item.aid)" class="title" target="_blank">{{ item.title }}</a>
-                                </div>
-
-                                <div class="content-text">
-                                    {{item.excerpt}}
-                                </div>
-
-                                <div class="info-row meta-row">
-                                    <ul class="meta-list">
-                                        <li class="item username clickable">
-                                            <a href="">{{ item.user.nickname }}</a>
-                                        </li>
-                                        <li class="item item-icon like-article">
-                                            <i class="iconfont icon-love"></i>
-                                            <strong>{{ item.like_count }}</strong>
-                                        </li>
-                                        <li class="item item-icon comment-count">
-                                            <i class="iconfont icon-pinglun"></i>
-                                            <strong>{{ item.comment_count }}</strong>
-                                        </li>
-                                        <li class="item">{{ item.create_at }}</li>
-                                        <li class="item" v-if="item.tag_ids">
-                                            <a v-for="item_article_tag in article_tag_filter(item.tag_ids)"
-                                               class="tag-class frontend"
-                                               :href="tag_href(item_article_tag.article_tag_id)">
-                                                {{item_article_tag.article_tag_name}}
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-8 col-md-8">
 
 
-                            </div>
-                            <div class="lazy thumb thumb loaded" v-if="item.cover_img" style="background-size: cover;"
-                                 :style="{'background-image':'url('+item.cover_img+')'}">
-                            </div>
-                        </article>
-                    </li>
-                </ul>
+                <% if (data.current_page === 'index'){ %>
+                <div id="box-swiper" class="carousel slide box-swiper" data-ride="carousel">
+                    <img src="https://image-static.segmentfault.com/131/301/1313011719-5bc6a63ef190f" alt="">
+                </div>
+                <% }else { %>
 
-
-                <div class="article-footer">
-                    <button class="reading-more" @click="get_index_article_list" v-if="loading_btn">阅读更多</button>
-                    <span class="reading-null" v-else>没有更多...</span>
+                <div class="main-top clearfix">
+                    <div class="main-top-img">
+                        <img src="/default/img/list2.png" alt="">
+                    </div>
+                    <div class="main-top-view">
+                        <h3>
+                            <%= data.current_page %>
+                        </h3>
+                        <p class="info">别再最该拼搏的年纪选择安逸{{message}}</p>
+                    </div>
                 </div>
 
-            </section>
-            <!--home-lay layout-content end-->
+                <% } %>
+
+                <!--home-lay layout-content start-->
+                <section class="layout-content ">
+
+                    <ul class="article-list">
+                        <!--第一页默认服务端渲染-->
+                        <% data.article_list.forEach(function (item, key) { %>
+                        <li>
+                            <article class="content-box content-box-index">
+                                <div class="info-box">
+
+                                    <div class="info-row title-row">
+                                        <a href="/article/<%= item.aid %>" class="title" target="_blank">
+                                            <%= item.title %></a>
+                                    </div>
+
+                                    <div class="content-text">
+                                        <%- item.excerpt %>
+                                    </div>
+
+                                    <div class="info-row meta-row">
+                                        <ul class="meta-list">
+                                            <li class="item username clickable">
+                                                <a href="/user/<%= item.uid %>/article/all">
+                                                    <%= item.user.nickname %></a>
+                                            </li>
+                                            <li class="item item-icon like-article">
+                                                <i class="iconfont icon-love"></i>
+                                                <strong>
+                                                    <%= item.like_count %></strong>
+                                            </li>
+                                            <li class="item item-icon comment-count">
+                                                <i class="iconfont icon-pinglun"></i>
+                                                <strong>
+                                                    <%= item.comment_count %></strong>
+                                            </li>
+                                            <li class="item">
+                                                <%= item.create_at %>
+                                            </li>
+                                            <% if(item.tag_ids){ %>
+                                            <li class="item">
+                                                <% item.tag_ids.split(',').forEach(function (item, key) { %>
+                                                <%
+                                                data.tag_all.forEach(function (tag_all_item, tag_all_key) {
+                                                if (tag_all_item.article_tag_id == item) {
+                                                %>
+                                                <a class="tag-class frontend"
+                                                   href="/tag/<%= tag_all_item.article_tag_id %>">
+                                                    <%= tag_all_item.article_tag_name %>
+                                                </a>
+                                                <%
+                                                }}) %>
+                                                <% }) %>
+                                            </li>
+                                            <% } %>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <% if(item.cover_img){ %>
+                                <div class="lazy thumb thumb loaded"
+                                     style="background-image: url('<%= item.cover_img %>'); background-size: cover;">
+                                </div>
+                                <% } %>
+                            </article>
+                        </li>
+                        <% }) %>
+                        <li v-for="item in article_list">
+                            <!--第一页之后ajax渲染-->
+                            <article class="content-box content-box-index">
+                                <div class="info-box">
+
+                                    <div class="info-row title-row">
+                                        <a :href="article_href(item.aid)" class="title" target="_blank">{{ item.title
+                                            }}</a>
+                                    </div>
+
+                                    <div class="content-text">
+                                        {{item.excerpt}}
+                                    </div>
+
+                                    <div class="info-row meta-row">
+                                        <ul class="meta-list">
+                                            <li class="item username clickable">
+                                                <a href="">{{ item.user.nickname }}</a>
+                                            </li>
+                                            <li class="item item-icon like-article">
+                                                <i class="iconfont icon-love"></i>
+                                                <strong>{{ item.like_count }}</strong>
+                                            </li>
+                                            <li class="item item-icon comment-count">
+                                                <i class="iconfont icon-pinglun"></i>
+                                                <strong>{{ item.comment_count }}</strong>
+                                            </li>
+                                            <li class="item">{{ item.create_at }}</li>
+                                            <li class="item" v-if="item.tag_ids">
+                                                <a v-for="item_article_tag in article_tag_filter(item.tag_ids)"
+                                                   class="tag-class frontend"
+                                                   :href="tag_href(item_article_tag.article_tag_id)">
+                                                    {{item_article_tag.article_tag_name}}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
 
 
-        </div>
-        <div class="col-xs-12 col-sm-4 col-md-4">
-            <!--aside.html start-->
-            <% include parts/aside.html %>
-            <!--aside.html end-->
+                                </div>
+                                <div class="lazy thumb thumb loaded" v-if="item.cover_img"
+                                     style="background-size: cover;"
+                                     :style="{'background-image':'url('+item.cover_img+')'}">
+                                </div>
+                            </article>
+                        </li>
+                    </ul>
+
+
+                    <div class="article-footer">
+                        <button class="reading-more" @click="get_index_article_list" v-if="loading_btn">阅读更多</button>
+                        <span class="reading-null" v-else>没有更多...</span>
+                    </div>
+
+                </section>
+                <!--home-lay layout-content end-->
+
+
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <!--aside.html start-->
+                <% include parts/aside.html %>
+                <!--aside.html end-->
+            </div>
         </div>
     </div>
 </div>
@@ -253,31 +255,41 @@
   })
 </script>
 
-<!--<script>
+<script>
 
-var navbar = document.getElementById('layout-navbar')
+  var main_header = document.querySelector('.main-header'),
+    navbar = main_header.querySelector('.navbar'),
+    nav_header = document.querySelector('.nav-header')
 
-function getScrollTop () {
-  var scrollTop = 0;
-  if (document.documentElement && document.documentElement.scrollTop) {
-    scrollTop = document.documentElement.scrollTop;
+  function getScrollTop () {
+    return document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
   }
-  else if (document.body) {
-    scrollTop = document.body.scrollTop;
-  }
-  return scrollTop;
-}
 
-window.onscroll = function () {
-  var st = getScrollTop()
-  if (st > 50) {
-    navbar.classList.add("navbar-fixed-top");
-  } else {
-    navbar.classList.remove("navbar-fixed-top");
-  }
-}
+  var scrollTop_type_b = 0, scrollTop_type_t = 0
 
-</script>-->
+  window.onscroll = function () {
+
+    scrollTop_type_b = getScrollTop()
+
+    console.log('scrollTop', scrollTop_type_b)
+
+    if (scrollTop_type_t <= scrollTop_type_b) {//下滚
+      console.log('下滚')
+    }
+    else { //上滚
+      console.log('上滚')
+    }
+    /*setTimeout(function () {t = p}, 0)*/
+    scrollTop_type_t = scrollTop_type_b
+
+    if (scrollTop_type_b > 50) {
+      navbar.classList.add('navbar-fixed-top')
+    } else {
+      navbar.classList.remove('navbar-fixed-top')
+    }
+  }
+
+</script>
 
 </body>
 

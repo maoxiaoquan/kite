@@ -1,12 +1,3 @@
-@font-face {
-  font-family: 'Montserrat';
-  src: url("../font/Montserrat/Montserrat-Medium.eot");
-  /* IE9 Compat Modes */
-  src: url("../font/Montserrat/Montserrat-Medium.eot?#iefix") format("embedded-opentype"), url("../font/Montserrat/Montserrat-Medium.woff2") format("woff2"), url("../font/Montserrat/Montserrat-Medium.ttf") format("truetype");
-  /* Safari, Android, iOS */
-  font-style: normal;
-  font-weight: normal; }
-
 html {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;

@@ -1,57 +1,62 @@
 <!--header start-->
+<div class="main-header" id="main-header">
+    <header class="navbar  navbar-visible" id="header-view">
+        <div class="container navbar-view">
+            <!--<a class="navbar-brand" href="#"><img class="logo" src="/default/img/logo22.svg" alt=""></a>-->
+            <a class="navbar-brand logo-text" href="#">Kite</a>
 
-<nav class="navbar navbar-expand-lg navbar-white bg-white fixed-top navbar-bootom-border" id="header-view">
-    <div class="container">
-        <a class="navbar-brand" href="#"><img class="logo" src="/default/img/logo22.svg" alt=""></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07"
-                aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarsExample07">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active"><!--class active--><a class="nav-link" href="/">主页</a>
-                </li>
-                <!--  <li class="nav-item"><a class="nav-link" href="/">说说</a></li>-->
-                <% if(user_info.islogin){ %>
-                <li class="nav-item active">
-                    <a class="nav-link" href="/user/<%= user_info.uid %>/message">
-                        消息
-                        <span :class="{'user-message-unread':unread_message_count>0}" v-if="unread_message_count>0" v-text="unread_message_count"></span>
-                    </a>
-                </li>
-                <% } %>
-            </ul>
-            <form class="form-inline mr-lg-5" method="get" action="/search">
-                <div class="form-search">
-                    <input class="form-control form-search-view" type="text" required="true" name="search"
-                           placeholder="搜索文章" aria-label="Search">
-                    <button class="search-btn"><i class="iconfont icon-search"></i></button>
-                </div>
-            </form>
-            <ul class="navbar-nav nav-masthead">
-                <% if(user_info.islogin){ %>
-                <li class="nav-item dropdown">
-                    <a class="dropdown-toggle  mr-lg-3" href="javascript:;"
-                       data-toggle="dropdown">
-                        <img class="avatar-img" src="<%= user_info.avatar %>" alt="">
-                    </a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/user/<%= user_info.uid %>/article/all">我的主页</a>
-                        <a class="dropdown-item" href="/user/settings/profile">设置</a>
-                        <a class="dropdown-item" href="/esc_sign_in">退出</a>
-                    </div>
-                </li>
-                <li class="nav-item"><a class="btn btn-sm btn-outline-warning xiezuo" href="/writer"><i
-                                class="iconfont icon-xiezuo"></i></a></li>
-                <% } else { %>
-                <li class="nav-item"><a class="btn btn-sm mr-lg-3 sign-btn btn-block" href="/sign_in">登录</a></li>
-                <li class="nav-item"><a class="btn btn-sm mr-lg-3 sign-btn btn-outline-warning" href="/sign_up">注册语雀</a>
-                </li>
-                <% } %>
-            </ul>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-item-content mr-auto">
+                    <li class="nav-item active">
+                        <div class="phone-nav-icon" href="/">主页</div>
+                        <ul class="phone-nav-content">
+                            <li><a class="nav-link" href="/">主页</a></li>
+                            <% if(user_info.islogin){ %>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/user/<%= user_info.uid %>/message">
+                                    消息
+                                    <span :class="{'user-message-unread':unread_message_count>0}"
+                                          v-if="unread_message_count>0"
+                                          v-text="unread_message_count"></span>
+                                </a>
+                            </li>
+                            <% } %>
+                            <li><a href="">关于</a></li>
+                        </ul>
+                    </li>
+                    <!--  <li class="nav-item"><a class="nav-link" href="/">说说</a></li>-->
+                    <li>
+                        <form class="form-inline mr-lg-5" method="get" action="/search">
+                            <div class="form-search">
+                                <input class="form-control form-search-view" type="text" required="true" name="search"
+                                       placeholder="搜索文章" aria-label="Search">
+                                <button class="search-btn"><i class="iconfont icon-search"></i></button>
+                            </div>
+                        </form>
+                    </li>
+                    <% if(user_info.islogin){ %>
+                    <li class="nav-item dropdown">
+                        <a class="dropdown-toggle  mr-lg-3" href="javascript:;"
+                           data-toggle="dropdown">
+                            <img class="avatar-img" src="<%= user_info.avatar %>" alt="">
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/user/<%= user_info.uid %>/article/all">我的主页</a>
+                            <a class="dropdown-item" href="/user/settings/profile">设置</a>
+                            <a class="dropdown-item" href="/esc_sign_in">退出</a>
+                        </div>
+                    </li>
+                    <li class="nav-item"><a class="btn btn-sm btn-outline-warning xiezuo" href="/writer"><i
+                            class="iconfont icon-xiezuo"></i></a></li>
+                    <% } else { %>
+                    <li class="nav-item"><a class="btn btn-sm mr-lg-3 sign-btn btn-block" href="/sign_in">登录</a></li>
+                    <li class="nav-item"><a class="btn btn-sm mr-lg-3 sign-btn btn-outline-warning"
+                                            href="/sign_up">注册语雀</a>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
-
+    </header>
+</div>
 <!--header end-->
