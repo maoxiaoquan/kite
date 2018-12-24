@@ -10,6 +10,7 @@ const upload = require('../controllers/admin/upload')// 上传
 const role_authority = require('../controllers/admin/admin_role_authority')// 后台角色权限
 const comment = require('../controllers/admin/comment')// 评论
 const admin_system_log = require('../controllers/admin/admin_system_log')// 评论
+const banner = require('../controllers/admin/banner')//  banner 配置
 const admin_index = require('../controllers/admin/admin_index') //登录tokens
 const tokens = require('../utils/tokens') //登录tokens
 const verify_authority = require('../utils/verify_authority') //权限验证
@@ -161,12 +162,20 @@ router.post('/set_admin_role_authority', tokens.verifyToken, role_authority.set_
 //console.log('router',router)
 
 /**
+ * banner 设置
+ */
+// 获取 banner
+router.get('/banner_list', tokens.verifyToken, banner.get_banner_list)
+//设置banner
+router.post('/create_banner', tokens.verifyToken, banner.create_banner)
+
+/**
  * 后台系统日志
  */
 
 // 获取分页系统日志
-router.get('/get_admin_system_log_list', tokens.verifyToken, admin_system_log.get_admin_system_log_list)
+router.get('/get_admin_system_log_list', tokens.verifyToken, admin_system_log.get_admin_system_log_list) // 无权限
 //删除系统日志
-router.post('/delete_admin_system_log', tokens.verifyToken, admin_system_log.delete_admin_system_log)
+router.post('/delete_admin_system_log', tokens.verifyToken, admin_system_log.delete_admin_system_log) // 需设置权限
 
 module.exports = router

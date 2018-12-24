@@ -28,10 +28,10 @@ exports.timestampFormat2 = function (timestamp, fmt = 'yyyy-MM-dd') {
 exports.TimeNow = {
   time () {
     let date = new Date()
-    return moment(date.setHours(date.getHours() + 8)).format()
+    return moment(date.setHours(date.getHours())).format()
   },
   timestamp () {
     let date = new Date()
-    return moment(date.setHours(date.getHours() + 8)).format('X')
+    return moment(date.setHours(date.getHours())).format('X')
   }
 }

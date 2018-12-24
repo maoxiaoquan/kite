@@ -472,8 +472,6 @@ a:focus {
   .layout-card-view {
     padding: 45px 30px;
     background: #FFFFFF;
-    -webkit-box-shadow: 2px 2px 20px 0 rgba(221, 221, 221, 0.75);
-    box-shadow: 2px 2px 20px 0 rgba(221, 221, 221, 0.75);
   }
 }
 
@@ -489,6 +487,22 @@ a:focus {
         background: #FFFFFF;
       }
     }
+  }
+}
+
+.table--btn {
+  button {
+    margin: 0 5px;
+  }
+}
+
+.table-enable{
+  padding-left: 5px;
+  .anticon-check-circle {
+    color: #28a745;
+  }
+  .anticon-close-circle {
+    color: #f46e65;
   }
 }
 

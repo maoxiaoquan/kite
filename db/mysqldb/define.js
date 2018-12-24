@@ -8,7 +8,7 @@ const SEQ_PARAMETER = {
   freezeTableName: true
 }
 
-module.exports = function define(sequelize) {
+module.exports = function define (sequelize) {
   let _define = {
     /*前台用户表*/
     user: sequelize.define(
@@ -94,7 +94,12 @@ module.exports = function define(sequelize) {
       require('./models_type/db_user_message').TABLE,
       SEQ_PARAMETER
     ),
-
+    /*banner表*/
+    banner: sequelize.define(
+      require('./models_type/db_banner').NAME,
+      require('./models_type/db_banner').TABLE,
+      SEQ_PARAMETER
+    ),
     /**
      * 后台表
      */
@@ -148,5 +153,5 @@ module.exports = function define(sequelize) {
     )
   }
 
-  return { ..._define, sequelize }
+  return {..._define, sequelize}
 }

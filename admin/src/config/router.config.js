@@ -37,6 +37,11 @@ export default [
         component: () => import('../containers/ArticleTag/view/ArticleTag') // 文章标签
       },
       {
+        path: '/manager/banner',
+        name: 'Banner',
+        component: () => import('../containers/Banner/view/Banner') // Banner
+      },
+      {
         path: '/manager/article_column',
         name: 'ArticleColumn',
         component: () => import('../containers/ArticleColumn/view/ArticleColumn') // 文章标签

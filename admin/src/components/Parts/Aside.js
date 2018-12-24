@@ -59,7 +59,7 @@ class Aside extends Component {
       },
       {
         title: '用户管理',
-        key: 'web',
+        key: 'user',
         icon: 'user',
         children: [
           {
@@ -81,6 +81,18 @@ class Aside extends Component {
             title: '评论管理',
             key: 'comment',
             link: '/manager/comment'
+          }
+        ]
+      },
+      {
+        title: '网站管理',
+        key: 'web',
+        icon: 'file-text',
+        children: [
+          {
+            title: 'Banner管理',
+            key: 'Banner',
+            link: '/manager/banner'
           }
         ]
       },
@@ -114,7 +126,7 @@ class Aside extends Component {
     ]
   }
 
-  rootSubmenuKeys = ['web', 'article', 'admin']
+  rootSubmenuKeys = ['web', 'user', 'article', 'admin']
 
   onOpenChange = (openKeys) => {
     const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1)

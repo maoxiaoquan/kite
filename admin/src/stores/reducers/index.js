@@ -9,6 +9,7 @@ import state_comment from '../../containers/Comment/reducer/CommentReducer'
 import state_article_tag from '../../containers/ArticleTag/reducer/ArticleTagReducer'
 import state_article_column from '../../containers/ArticleColumn/reducer/ArticleColumnReducer'
 import state_picture from '../../containers/Picture/reducer/PictureReducer'
+import state_banner from '../../containers/Banner/reducer/BannerReducer'
 import state_admin_user from '../../containers/adminUser/reducer/AdminUserReducer'
 import state_admin_role from '../../containers/adminRole/reducer/adminRoleReducers'
 import state_admin_authority from '../../containers/adminAuthority/reducer/AdminAuthorityReducer'
@@ -26,6 +27,7 @@ const rootReducer = {
   state_article_tag,
   state_article_column,
   state_picture,
+  state_banner,
   state_admin_user,
   state_admin_role,
   state_admin_authority,

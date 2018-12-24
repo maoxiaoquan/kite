@@ -3,17 +3,24 @@
     <header class="navbar  navbar-visible" id="header-view">
         <div class="container navbar-view">
             <!--<a class="navbar-brand" href="#"><img class="logo" src="/default/img/logo22.svg" alt=""></a>-->
-            <a class="navbar-brand logo-text" href="#">Kite</a>
+            <a class="navbar-brand logo-text" href="/">Kite</a>
 
             <div class="collapse navbar-collapse">
                 <ul class="navbar-item-content mr-auto">
-                    <li class="nav-item active">
-                        <div class="phone-nav-icon" href="/">主页</div>
-                        <ul class="phone-nav-content">
-                            <li><a class="nav-link" href="/">主页</a></li>
+                    <li class="navbar-menu-content active">
+                        <div class="navbar-toggler">
+                            <i class="iconfont icon-viewgallery"></i>
+                        </div>
+                        <ul class="navbar-menu">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">
+                                    <i class="iconfont icon-zhuye" style="color: #00D0B2;"></i>主页
+                                </a>
+                            </li>
                             <% if(user_info.islogin){ %>
-                            <li class="nav-item active">
+                            <li class="nav-item">
                                 <a class="nav-link" href="/user/<%= user_info.uid %>/message">
+                                    <i style="color: #FE385F;" class="iconfont icon-icon-test"></i>
                                     消息
                                     <span :class="{'user-message-unread':unread_message_count>0}"
                                           v-if="unread_message_count>0"
@@ -21,11 +28,10 @@
                                 </a>
                             </li>
                             <% } %>
-                            <li><a href="">关于</a></li>
                         </ul>
                     </li>
                     <!--  <li class="nav-item"><a class="nav-link" href="/">说说</a></li>-->
-                    <li>
+                    <li class="nav-item search">
                         <form class="form-inline mr-lg-5" method="get" action="/search">
                             <div class="form-search">
                                 <input class="form-control form-search-view" type="text" required="true" name="search"
@@ -35,10 +41,11 @@
                         </form>
                     </li>
                     <% if(user_info.islogin){ %>
+                    <li class="nav-item"><a class="btn btn-sm btn-outline-warning xiezuo" href="/writer"><i
+                            class="iconfont icon-xiezuo"></i></a></li>
                     <li class="nav-item dropdown">
-                        <a class="dropdown-toggle  mr-lg-3" href="javascript:;"
-                           data-toggle="dropdown">
-                            <img class="avatar-img" src="<%= user_info.avatar %>" alt="">
+                        <a class="dropdown-toggle" href="javascript:;">
+                            <div class="avatar-img" style="background-image:url('<%= user_info.avatar %>') "></div>
                         </a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="/user/<%= user_info.uid %>/article/all">我的主页</a>
@@ -46,11 +53,9 @@
                             <a class="dropdown-item" href="/esc_sign_in">退出</a>
                         </div>
                     </li>
-                    <li class="nav-item"><a class="btn btn-sm btn-outline-warning xiezuo" href="/writer"><i
-                            class="iconfont icon-xiezuo"></i></a></li>
                     <% } else { %>
-                    <li class="nav-item"><a class="btn btn-sm mr-lg-3 sign-btn btn-block" href="/sign_in">登录</a></li>
-                    <li class="nav-item"><a class="btn btn-sm mr-lg-3 sign-btn btn-outline-warning"
+                    <li class="nav-item"><a class="btn btn-info btn-sm sign-btn btn-block" href="/sign_in">登录</a></li>
+                    <li class="nav-item"><a class="btn btn-danger btn-sm sign-btn btn-outline-warning"
                                             href="/sign_up">注册语雀</a>
                     </li>
                     <% } %>

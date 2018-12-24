@@ -1,4 +1,43 @@
 <script>
+
+  function header_nav_Scroll () {
+
+    var main_header = document.querySelector('.main-header')
+    var navbar = main_header.querySelector('#header-view')
+    var nav_header = document.querySelector('.nav-header')
+
+    function getScrollTop () {
+      return document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+    }
+
+    var scrollTop_type_b = 0, scrollTop_type_t = 0
+
+    window.onscroll = function () {
+
+      scrollTop_type_b = getScrollTop()
+
+      if (scrollTop_type_t <= scrollTop_type_b) {//下滚
+        if (scrollTop_type_b > 100) {
+          navbar && navbar.classList.remove('navbar-visible')
+          nav_header && nav_header.classList.add('top')
+        } else {
+        }
+      }
+      else { //上滚
+        if (scrollTop_type_b > 100) {
+          navbar && navbar.classList.add('navbar-visible')
+          nav_header && nav_header.classList.remove('top')
+        } else {
+
+        }
+      }
+      var _settime = setTimeout(function () { scrollTop_type_t = scrollTop_type_b}, 0)
+    }
+
+  }
+</script>
+
+<script>
   new Vue({
     el: '#header-view',
     data: function () {
@@ -29,16 +68,18 @@
 
   window.onload = function () {
 
+    header_nav_Scroll() // 头部滑动
+
     if (document.querySelector('.recommend-collection') && document.querySelectorAll('.recommend-collection .active').length === 0) {
       document.querySelectorAll('.recommend-collection .collection')[0].classList.add('active')
     }
 
     if (document.querySelector('.navbar-toggler')) {
       document.querySelector('.navbar-toggler').onclick = function () {
-        if (matches(document.querySelector('.navbar-collapse'), '.show')) {
-          document.querySelector('.navbar-collapse').classList.remove('show')
+        if (matches(document.querySelector('.navbar-menu'), '.show')) {
+          document.querySelector('.navbar-menu').classList.remove('show')
         } else {
-          document.querySelector('.navbar-collapse').classList.add('show')
+          document.querySelector('.navbar-menu').classList.add('show')
         }
       }
     }

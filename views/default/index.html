@@ -15,14 +15,13 @@
         <ul class="nav-item-view index-container">
             <li class="nav-item">
                 <a class="collection" href="/">
-                    <span class="collection-name"> 每日推荐 </span>
+                    <span class="collection-name"> 推荐 </span>
                 </a>
             </li>
             <% data.article_column.forEach(function (item, key) { %>
             <li class="nav-item">
                 <a class="collection <% if(item.article_column_id == data.column_id){ %> active <% } %>"
                    href="/column/<%= item.article_column_id %>">
-                    <i class="iconfont icon-guanji"></i>
                     <span class="collection-name"><%= item.article_column_name %></span>
                 </a>
             </li>
@@ -42,16 +41,41 @@
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-md-8">
 
-
                 <% if (data.current_page === 'index'){ %>
-                <div id="box-swiper" class="carousel slide box-swiper" data-ride="carousel">
-                    <img src="https://image-static.segmentfault.com/131/301/1313011719-5bc6a63ef190f" alt="">
+
+                <div class="bannerBox clearfix">
+                    <div class="bannerBox-img">
+                        <a href="//www.imooc.com/article/268019" target="_blank">
+                            <img src="//img3.mukewang.com/5c19a63f0001380305200332.jpg">
+                            <div class="bannerDescription">
+                                <span>多线程基础知识总结</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="bannerBox-img">
+                        <a href="//www.imooc.com/article/23266" target="_blank">
+                            <img src="//img4.mukewang.com/5c19a6750001002b06000338.jpg">
+
+                            <div class="bannerDescription">
+                                <span>Android中如何使用代码打开各种类型的文件</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="bannerBox-img">
+                        <a href="//www.imooc.com/article/23266" target="_blank">
+                            <img src="//img4.mukewang.com/5c19a6750001002b06000338.jpg">
+
+                            <div class="bannerDescription">
+                                <span>Android中如何使用代码打开各种类型的文件</span>
+                            </div>
+                        </a>
+                    </div>
                 </div>
                 <% }else { %>
 
                 <div class="main-top clearfix">
                     <div class="main-top-img">
-                        <img src="/default/img/list2.png" alt="">
+                        <img src="/upload/web/user_avatar/2018/12/1545033093539.jpg" alt="">
                     </div>
                     <div class="main-top-view">
                         <h3>
@@ -66,6 +90,20 @@
                 <!--home-lay layout-content start-->
                 <section class="layout-content ">
 
+                    <nav class="list-nav">
+                        <ul class="nav-list left">
+                            <li class="nav-item active"><a href="/timeline?sort=popular">热门</a></li>
+                            <li class="nav-item"><a href="/timeline?sort=newest">最新</a></li>
+                            <li class="nav-item"><a href="/timeline?sort=comment">评论</a></li>
+                        </ul>
+                        <ul class="nav-list right">
+                            <li class="nav-item"><a href="/timeline?sort=hottest">全部</a></li>
+                            <li class="nav-item"><a href="/timeline?sort=weeklyHottest">本周最热</a></li>
+                            <li class="nav-item"><a href="/timeline?sort=monthlyHottest">本月最热</a></li>
+                        </ul>
+                    </nav>
+
+
                     <ul class="article-list">
                         <!--第一页默认服务端渲染-->
                         <% data.article_list.forEach(function (item, key) { %>
@@ -78,9 +116,9 @@
                                             <%= item.title %></a>
                                     </div>
 
-                                    <div class="content-text">
-                                        <%- item.excerpt %>
-                                    </div>
+                                    <!-- <div class="content-text">
+                                         <%- item.excerpt %>
+                                     </div>-->
 
                                     <div class="info-row meta-row">
                                         <ul class="meta-list">
@@ -255,41 +293,6 @@
   })
 </script>
 
-<script>
-
-  var main_header = document.querySelector('.main-header'),
-    navbar = main_header.querySelector('.navbar'),
-    nav_header = document.querySelector('.nav-header')
-
-  function getScrollTop () {
-    return document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
-  }
-
-  var scrollTop_type_b = 0, scrollTop_type_t = 0
-
-  window.onscroll = function () {
-
-    scrollTop_type_b = getScrollTop()
-
-    console.log('scrollTop', scrollTop_type_b)
-
-    if (scrollTop_type_t <= scrollTop_type_b) {//下滚
-      console.log('下滚')
-    }
-    else { //上滚
-      console.log('上滚')
-    }
-    /*setTimeout(function () {t = p}, 0)*/
-    scrollTop_type_t = scrollTop_type_b
-
-    if (scrollTop_type_b > 50) {
-      navbar.classList.add('navbar-fixed-top')
-    } else {
-      navbar.classList.remove('navbar-fixed-top')
-    }
-  }
-
-</script>
 
 </body>
 

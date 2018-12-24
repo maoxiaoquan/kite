@@ -9,6 +9,7 @@ import { get_admin_index_statistics } from '../actions'
 const {SubMenu} = Menu
 const {Header, Content, Sider} = Layout
 
+
 class Index extends React.Component {
   constructor (props) {
     super(props)
@@ -20,6 +21,7 @@ class Index extends React.Component {
       }
     }
   }
+
 
   componentWillMount () {
     this.props.dispatch(get_admin_index_statistics())
