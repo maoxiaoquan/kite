@@ -30,7 +30,7 @@ class Subscribe {
 
     if (Number(is_subscribe) === 1) {
       /*all 的标签*/
-      find_where = tag_name
+      find_where = tag_name // 通过判断tag_name有无，是否是搜索
         ? { enable: 1, article_tag_name: { [Op.like]: `%${tag_name}%` } }
         : { enable: 1 }
     } else {

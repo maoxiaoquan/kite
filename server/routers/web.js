@@ -6,7 +6,7 @@ const personal_center = require('../controllers/web/personal_center') // 用户�
 const article = require('../controllers/web/article') // 文章内容页
 const subscribe = require('../controllers/web/subscribe')// 订阅
 const user_article_topic = require('../controllers/web/user_article_topic')// 用户文章专题
-const search = require('../controllers/web/search')// 搜索
+const banner = require('../controllers/web/banner')// banner
 const comment = require('../controllers/web/comment')// 评论
 const upload = require('../controllers/web/upload')// 上传
 
@@ -57,7 +57,7 @@ router.get('reset_password', user.render_reset_password) // 重置密码
 
 router.post('sign_in', user.form_sign_in) // 登录数据 post TYPE:RENDER
 
-router.get('search', search.form_search) // 搜索
+router.get('search', article.form_search_article) // 搜索
 
 /*AJAX*/
 
@@ -66,6 +66,8 @@ router.get('get_index_article', index.get_index) // 首页文章 get
 router.get('get_article', article.get_article) // 根据aid获取文章 get
 
 router.get('user_info', user.get_user_info) // 根据uid 获取用户相应信息 get
+
+router.get('home_banner', banner.get_home_banner) // 获取首页头部 banner
 
 router.post('upload_user_avatar', ajaxCheck_Session, util_upload('user_avatar').single('file'), upload.upload_user_avatar) // 用户修改头像 post
 

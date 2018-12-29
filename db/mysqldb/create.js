@@ -1,7 +1,7 @@
 const models = require('./index')
 /* alter: true */
 
-models.sequelize.sync({force: true}).then(() => {
+models.comment.sync({force: true}).then(() => {
   console.log('所有数据表创建完成')
   process.exit()
 })

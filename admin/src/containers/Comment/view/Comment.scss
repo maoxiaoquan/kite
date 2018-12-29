@@ -1,20 +1,13 @@
-.article-tag {
-  .table-right-btn {
+.admin-comment {
+  .admin-comment-bar {
+
+    margin-bottom: 20px;
+    .select-view {
+      width: 150px;
+    }
     button {
-      margin-left: 5px;
-    }
-  }
-  .table-is-login {
-    padding-left: 5px;
-    .anticon-check-circle {
-      color: #28a745;
-    }
-    .anticon-close-circle {
-      color: #f46e65;
+      margin: 0 5px;
     }
   }
 
-  .article-tag-user-create-btn {
-    margin-bottom: 15px;
-  }
 }

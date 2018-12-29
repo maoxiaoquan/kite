@@ -1,16 +1,17 @@
 const models = require('../../../db/mysqldb/index')
 const moment = require('moment')
-const { render, home_resJson } = require('../../utils/res_data')
+const {render, home_resJson} = require('../../utils/res_data')
 const Op = require('sequelize').Op
 const trimHtml = require('trim-html')
 const cheerio = require('cheerio')
+const web_where = require('../../utils/web_where')
 
-function err_mess(message) {
+function err_mess (message) {
   this.message = message
   this.name = 'UserException'
 }
 
-function getNoMarkupStr(markupStr) {
+function getNoMarkupStr (markupStr) {
   /* markupStr 源码</> */
   //console.log(markupStr);
   let noMarkupStr = markupStr
@@ -31,7 +32,7 @@ function getNoMarkupStr(markupStr) {
   return noMarkupStr
 }
 
-function getSubStr(string) {
+function getSubStr (string) {
   let str = ''
   let len = 0
   for (var i = 0; i < string.length; i++) {
@@ -51,13 +52,13 @@ function getSubStr(string) {
 }
 
 class Article {
-  constructor() {}
+  constructor () {}
 
   /**
    * 文章页面render
    * @param   {obejct} ctx 上下文对象
    */
-  static async render_article(ctx) {
+  static async render_article (ctx) {
     let aid = ctx.params.aid
 
     let sql_article = await models.article
@@ -82,7 +83,7 @@ class Article {
         read_count: Number(sql_article.read_count) + 1
       },
       {
-        where: { aid } //为空，获取全部，也可以自己添加条件
+        where: {aid} //为空，获取全部，也可以自己添加条件
       }
     )
 
@@ -102,7 +103,7 @@ class Article {
    * 新建文章页面render
    * @param   {obejct} ctx 上下文对象
    */
-  static async render_writer(ctx) {
+  static async render_writer (ctx) {
     await render(ctx, {
       title: 'writer',
       view_url: 'default/writer',
@@ -115,7 +116,7 @@ class Article {
    * 新建文章post提交
    * @param   {obejct} ctx 上下文对象
    */
-  static async post_create_writer(ctx) {
+  static async post_create_writer (ctx) {
     let formData = ctx.request.body
 
     try {
@@ -170,13 +171,13 @@ class Article {
           topic_ids: formData.topic_ids,
           tag_ids: formData.tag_ids
         })
-        .then(function(data) {
+        .then(function (data) {
           home_resJson(ctx, {
             state: 'success',
             message: '文章创建成功'
           })
         })
-        .catch(function(err) {
+        .catch(function (err) {
           home_resJson(ctx, {
             state: 'error',
             message: err
@@ -195,7 +196,7 @@ class Article {
    * @param   {obejct} ctx 上下文对象
    */
 
-  static async render_get_tag(ctx) {
+  static async render_get_tag (ctx) {
     let article_tag_id = ctx.params.article_tag_id
 
     let page = ctx.query.page || 1
@@ -207,41 +208,27 @@ class Article {
       }
     })
     if (find_article_tag) {
-      let { count, rows } = await models.article
+      let {count, rows} = await models.article
         .findAndCountAll({
-          where: { article_tag_ids: { [Op.like]: `%${article_tag_id}%` } }, //为空，获取全部，也可以自己添加条件
+          where: {
+            article_tag_ids: {[Op.like]: `%${article_tag_id}%`},
+            ...web_where.article // web 表示前台  公共文章限制文件
+          }, //为空，获取全部，也可以自己添加条件
           offset: (page - 1) * pageSize, //开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
           limit: pageSize, //每页限制返回的数据条数
           order: [['create_date_timestamp', 'desc']]
         })
-        .then(res => {
-          res.rows.map((item, key) => {
-            item.create_at = moment(item.create_date).format('YYYY-MM-DD')
-            return item
-          })
-          return res
-        })
 
-      for (let item in rows) {
-        // 循环取用户
-        await (async i => {
-          rows[i].user = {}
-          let data = await models.user
-            .findOne({
-              where: { uid: rows[i].uid },
-              attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-            })
-            .then(res => {
-              return JSON.parse(JSON.stringify(res))
-            })
-          if (data) {
-            rows[i].user = data
-          }
-        })(item)
+      for (let item in rows) {// 循环取用户 render 渲染必须用这种方法 与 ajax 有区别
+        rows[item].create_at = await moment(rows[item].create_date).format('YYYY-MM-DD H:m:s')
+        rows[item].user = await models.user.findOne({
+          where: {uid: rows[item].uid},
+          attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+        })
       }
 
       let subscribe_count = await models.subscribe_article_tag.count({
-        where: { article_tag_id }
+        where: {article_tag_id}
       })
 
       /*所有文章专题*/
@@ -274,10 +261,10 @@ class Article {
    * 获取所有文章标签get
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_article_tag_all(ctx) {
+  static async get_article_tag_all (ctx) {
     let article_tag_all = await models.article_tag.findAll({
       attributes: ['article_tag_id', 'article_tag_name'],
-      where: { enable: true } //为空，获取全部，也可以自己添加条件
+      where: {enable: true} //为空，获取全部，也可以自己添加条件
     })
     home_resJson(ctx, {
       state: 'success',
@@ -292,11 +279,11 @@ class Article {
    * ajax 查询一篇文章
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_article(ctx) {
+  static async get_article (ctx) {
     let aid = ctx.query.aid
 
     let article = await models.article.findOne({
-      where: { aid }
+      where: {aid}
     })
 
     if (article) {
@@ -313,6 +300,56 @@ class Article {
         message: '获取文章失败'
       })
     }
+  }
+
+  /**
+   * 搜索
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async form_search_article (ctx) {
+    const title = 'search'
+    let page = ctx.query.page || 1
+    let pageSize = ctx.query.pageSize || 25
+    let search = ctx.query.search
+
+    let {count, rows} = await models.article
+      .findAndCountAll({
+        where: {
+          title: {[Op.like]: `%${search}%`},
+          ...web_where.article // web 表示前台  公共文章限制文件
+        }, //为空，获取全部，也可以自己添加条件 // status: 2 限制只有 审核通过的显示
+        offset: (page - 1) * pageSize, //开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: pageSize, //每页限制返回的数据条数
+        order: [['create_date_timestamp', 'desc']]
+      })
+
+    for (let item in rows) {// 循环取用户 render 渲染必须用这种方法 与 ajax 有区别
+      rows[item].create_at = await moment(rows[item].create_date).format('YYYY-MM-DD H:m:s')
+      rows[item].user = await models.user.findOne({
+        where: {uid: rows[item].uid},
+        attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+      })
+    }
+
+    /*所有文章专题*/
+    let article_tag_all = await models.article_tag.findAll({
+      attributes: ['article_tag_id', 'article_tag_name']
+    })
+
+    await render(ctx, {
+      title: title,
+      view_url: 'default/search',
+      state: 'success',
+      message: 'search',
+      data: {
+        page,
+        count,
+        pageSize,
+        search,
+        tag_all: article_tag_all,
+        article_list: rows
+      }
+    })
   }
 }
 

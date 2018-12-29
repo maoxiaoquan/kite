@@ -31,20 +31,6 @@ module.exports = {
       comment: '验证码',
       field: 'verify_code'
     },
-    create_date: {
-      // 创建时间
-      type: Seq.DATE,
-      comment: '创建时间',
-      field: 'create_date',
-      defaultValue: time.TimeNow.time /*时间*/
-    },
-    create_date_timestamp: {
-      // 创建时间戳
-      type: Seq.BIGINT(30),
-      comment: '创建时间戳',
-      field: 'create_date_timestamp',
-      defaultValue: time.TimeNow.timestamp /*时间戳 */
-    },
     type: {
       // 验证码类型
       type: Seq.STRING(20),
@@ -56,6 +42,7 @@ module.exports = {
       type: Seq.BIGINT(50),
       comment: '过期时间',
       field: 'expire_time'
-    }
+    },
+    ...time.create_date
   }
 }

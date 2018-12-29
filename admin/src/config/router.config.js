@@ -27,11 +27,6 @@ export default [
         component: () => import('../containers/Article/view/Article') // 文章汇总
       },
       {
-        path: '/manager/article_review',
-        name: 'ArticleReview',
-        component: () => import('../containers/ArticleReview/view/ArticleReview') // 文章审核
-      },
-      {
         path: '/manager/article_tag',
         name: 'ArticleTag',
         component: () => import('../containers/ArticleTag/view/ArticleTag') // 文章标签

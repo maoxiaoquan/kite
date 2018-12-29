@@ -19,8 +19,8 @@ import './Banner.scss'
 import {
   get_banner_list,
   create_banner,
-  update_article_tag,
-  delete_article_tag
+  update_banner,
+  delete_banner
 } from '../actions/BannerAction'
 import alert from '../../../utils/alert'
 
@@ -37,6 +37,16 @@ class Banner extends React.Component {
     super(props)
     this.state = {
       columns: [
+        {
+          title: '序号',
+          dataIndex: 'index',
+          key: 'index',
+          render: (text, record, index) => (
+            <span style={{
+              'width': '20px',
+              'display': 'block'
+            }}>{Number((this.state.pagination.current - 1) * 10) + index + 1}</span>)
+        },
         {
           title: '标题',
           dataIndex: 'title',
@@ -85,7 +95,7 @@ class Banner extends React.Component {
           key: 'sort',
           render: (value, record) => {
             return (
-              <Tag color="volcano" >{record.sort}</Tag>
+              <Tag color="volcano">{record.sort}</Tag>
             )
           }
         },
@@ -127,7 +137,9 @@ class Banner extends React.Component {
             )
           }
         }],
-      pagination: {},
+      pagination: {
+        current: 1
+      },
       loading: false,
       confirmDirty: false,
       modal_visible_edit: false,
@@ -157,19 +169,20 @@ class Banner extends React.Component {
       modal_visible_edit: true,
       is_create: false
     })
-    this.props.dispatch({type: 'SET_ARTICLE_TAG_INFO', data: data})
+    this.props.dispatch({type: 'SET_BANNER_INFO', data: data})
     this.props.form.setFieldsValue({
-      article_tag_name: data.article_tag_name,
-      article_tag_us_name: data.article_tag_us_name,
-      article_tag_icon: data.article_tag_icon,
-      article_tag_icon_type: data.article_tag_icon_type,
-      article_tag_description: data.article_tag_description,
+      title: data.title,
+      article_url: data.article_url,
+      img_url: data.img_url,
+      type: data.type,
+      sort: data.sort,
+      description: data.description,
       enable: data.enable
     })
   }
 
   _delete = (value) => {
-    this.props.dispatch({type: 'SET_ARTICLE_TAG_INFO', data: value})
+    this.props.dispatch({type: 'SET_BANNER_INFO', data: value})
     confirm({
       title: '确认要删除此标签吗？',
       content: '此操作不可逆转',
@@ -177,7 +190,7 @@ class Banner extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_delete_article_tag({article_tag_id: this.props.state_article_tag.current_info.article_tag_id})
+        this.fetch_delete_banner({id: this.props.state_banner.current_info.id})
         /*删除标签*/
       },
       onCancel () {
@@ -253,8 +266,8 @@ class Banner extends React.Component {
   }
 
   fetch_update_banner = (values) => { /*修改标签*/
-    this.props.dispatch(update_article_tag({article_tag_id: this.props.state_article_tag.current_info.article_tag_id, ...values}, (res) => {
-      alert.message_success('修改标签成功')
+    this.props.dispatch(update_banner({id: this.props.state_banner.current_info.id, ...values}, (res) => {
+      alert.message_success('修改Banner成功')
       this.fetch_banner_list()
       this.setState({
         modal_visible_edit: false
@@ -262,19 +275,25 @@ class Banner extends React.Component {
     }))
   }
 
-  fetch_delete_article_tag = (values) => { /*删除管理员用户*/
-    this.props.dispatch(delete_article_tag(values, (res) => {
-      alert.message_success('删除标签成功')
+  fetch_delete_banner = (values) => { /*删除管理员用户*/
+    this.props.dispatch(delete_banner(values, (res) => {
+      alert.message_success('删除Banner成功')
       this.fetch_banner_list()
     }))
+  }
+
+  switch_banner_type = async (val) => {
+    await this.setState({
+      current_banner_type: val
+    })
+    this.fetch_banner_list()
   }
 
   fetch_banner_list = () => {  /*获取管理员用户带分页的列表*/
     const that = this
     this.setState({loading: true})
-    const {pagination: {current}} = this.state
-    console.log('this.state.pagination', this.state.pagination)
-    this.props.dispatch(get_banner_list({params: {page: current}}, (res) => {
+    const {pagination: {current}, current_banner_type} = this.state
+    this.props.dispatch(get_banner_list({params: {page: current, type: current_banner_type}}, (res) => {
       let pagination = {...that.state.pagination}
       pagination.total = res.count
       pagination.current = current
@@ -403,7 +422,7 @@ class Banner extends React.Component {
                 {...formItemLayout}
                 label="序号"
               >
-                {getFieldDecorator('sort', {initialValue: 0})(
+                {getFieldDecorator('sort', {initialValue: 1})(
                   <InputNumber min={1} max={10}/>
                 )}
                 <span className="ant-form-text"> 序号</span>
@@ -449,8 +468,13 @@ class Banner extends React.Component {
 
           <div className="nav-search-view">
             <label className="label-text">类型:</label>
+            <Button onClick={() => {
+              this.switch_banner_type('')
+            }}>全部</Button>
             {
-              banner_type.map(item => <Button key={item.id}>{item.text}</Button>)
+              banner_type.map(item => <Button key={item.id} onClick={() => {
+                this.switch_banner_type(item.id)
+              }}>{item.text}</Button>)
             }
           </div>
 

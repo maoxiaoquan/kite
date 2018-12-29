@@ -6,7 +6,7 @@
 }
 
 .index-box-container {
-  margin-top: 75px;
+  margin-top: 68px;
 }
 
 .theme-gray {
@@ -227,22 +227,22 @@
 
   .bannerBox {
     width: 100%;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: space-between;
 
     .bannerBox-img {
       position: relative;
-      height: 85px;
+      height: 110px;
       width: 100%;
       flex: 1;
       border-radius: 10px;
       overflow: hidden;
-      &:first-child{
+      &:first-child {
         flex: 2;
       }
-      &:nth-of-type(2){
-        margin: 0 8px;
+      &:nth-of-type(2) {
+        margin-left: 8px;
       }
       .bannerDescription {
         width: 100%;
@@ -264,6 +264,7 @@
     width: 100%;
     padding: 15px 20px;
     background: #fff;
+    margin-bottom: 15px;
     box-shadow: 0 1px 3px rgba(27, 95, 160, .1);
     .main-top-img {
       width: 50px;
@@ -272,9 +273,19 @@
       border-radius: 10px;
       float: left;
       overflow: hidden;
-      img {
+      .column-img-icon {
         width: 100%;
-        height: 100%;
+        height: 50px;
+        background-color: #fff;
+        background-position: 50%;
+        background-repeat: no-repeat;
+      }
+      .column-font-icon {
+        text-align: center;
+        line-height: 50px;
+        i {
+          font-size: 28px;
+        }
       }
     }
     .main-top-view {
@@ -291,7 +302,6 @@
 
   .layout-content {
     position: relative;
-    margin-top: 20px;
     background: #fff;
     border-radius: 2px;
     box-shadow: 0 1px 3px rgba(27, 95, 160, .1);
@@ -308,15 +318,35 @@
         justify-content: space-between;
         padding: 20px 0;
       }
-      .left .nav-item {
-        padding: 0 15px;
-        font-size: 14px;
-        border-right: 1px solid hsla(0, 0%, 59.2%, .2);
+      .left {
+        .nav-item {
+          padding: 0 15px;
+          font-size: 14px;
+          border-right: 1px solid hsla(0, 0%, 59.2%, .2);
+          &:last-child {
+            border-right: none;
+          }
+        }
       }
-      .right .nav-item {
-        font-size: 14px;
-        padding: 0 10px;
-        position: relative;
+      .right {
+        .nav-item {
+          font-size: 14px;
+          padding: 0 10px;
+          position: relative;
+        }
+        .nav-item:not(:last-child):after {
+          width: 2px;
+          height: 2px;
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+          content: "";
+          position: absolute;
+          left: 100%;
+          top: 50%;
+          background-color: #2b445d;
+          transform: translateY(-50%);
+          opacity: .5;
+        }
       }
     }
     .article-list {
@@ -423,6 +453,7 @@
 
   .article-footer {
     margin-top: 30px;
+    padding-bottom: 30px;
     .reading-more {
       width: 100%;
       height: 39px;
@@ -1149,17 +1180,25 @@
     margin-top: 30px;
     margin-bottom: 10px;
     text-align: center;
-    .avatar-collection {
+
+    .tag-img-icon {
       width: 80px;
       height: 80px;
       display: inline-block;
-      img {
-        width: 100%;
-        height: 100%;
-        border: 1px solid #ddd;
-        border-radius: 10%;
+      background-color: #fff;
+      background-position: 50%;
+      background-repeat: no-repeat;
+    }
+    .tag-font-icon {
+      display: inline-block;
+      width: 80px;
+      height: 80px;
+      line-height: 80px;
+      i {
+        font-size: 35px;
       }
     }
+
     .title {
       padding: 10px 0 0 0;
       .name {
@@ -2208,6 +2247,11 @@
     img {
       margin-right: 3px;
     }
+    .user-font-icon {
+      margin-right: 3px;
+      display: inline-block;
+      vertical-align: middle;
+    }
   }
   .title {
     float: left;
@@ -2328,6 +2372,14 @@
           background-color: #fff;
           background-position: 50%;
           background-repeat: no-repeat;
+        }
+        .tag-icon {
+          width: 100%;
+          height: 32px;
+          margin: 10px auto 15px;
+          i {
+            font-size: 28px;
+          }
         }
         .title {
           font-size: 1.2rem;

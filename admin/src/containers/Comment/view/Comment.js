@@ -33,14 +33,29 @@ class Comment extends React.Component {
     this.state = {
       columns: [
         {
-          title: 'id',
-          dataIndex: 'id',
-          key: 'id'
+          title: '序号',
+          dataIndex: 'index',
+          key: 'index',
+          render: (text, record, index) => (
+            <span style={{
+              'width': '20px',
+              'display': 'block'
+            }}>{Number((this.state.pagination.current - 1) * 10) + index + 1}</span>)
         },
         {
           title: '评论内容',
           dataIndex: 'content',
           key: 'content'
+        },
+        {
+          title: '来自文章',
+          dataIndex: 'article',
+          key: 'article',
+          render: (text, record) => (
+            <div>
+              <a href={`/article/${record.article.aid}`}>{record.article.title}</a>
+            </div>
+          )
         },
         {
           title: '状态',
@@ -50,11 +65,16 @@ class Comment extends React.Component {
             <Tag className="table-article-tag-list" color="orange">{this.state.status[record.status]}</Tag>)
         },
         {
+          title: '评论时间',
+          dataIndex: 'create_at',
+          key: 'create_at'
+        },
+        {
           title: '操作',
           key: 'action',
           render: (text, record) => {
             return (
-              <div className="table-right-btn">
+              <div className="table--btn">
                 <Button onClick={() => { this._edit(record) }} size="small"
                         type="primary"
                 >修改</Button>
@@ -68,10 +88,14 @@ class Comment extends React.Component {
             )
           }
         }],
-      pagination: {},
+      pagination: {
+        current: 1
+      },
       loading: false,
       modal_visible_edit: false,
-      status: ['', '审核中', '审核通过', '回收站']
+      status: ['', '未审核', '审核通过', '回收站'],
+      content_val: '',
+      status_val: '',
     }
   }
 
@@ -138,6 +162,31 @@ class Comment extends React.Component {
     }))
   }
 
+  getParams = () => {
+    const {
+      content_val,
+      status_val
+    } = this.state
+    return {
+      content: content_val,
+      status: status_val,
+    }
+  }
+
+  change_val = (val, type) => {
+    let data = {}
+    data[type] = val
+    this.setState(data)
+  }
+
+  reset_bar_from = () => {
+    const data = {
+      content_val: '',
+      status_val: ''
+    }
+    this.setState(data)
+  }
+
   fetch_delete_comment = (values) => { /*删除用户评论*/
     this.props.dispatch(delete_comment(values, (res) => {
       alert.message_success('删除用户评论成功')
@@ -146,10 +195,11 @@ class Comment extends React.Component {
   }
 
   fetch_comment_list = () => {  /*获取用户评论带分页的列表*/
+    let params = this.getParams()
     const that = this
     this.setState({loading: true})
     const {pagination: {current}} = this.state
-    this.props.dispatch(get_comment_list({params: {page: current}}, (res) => {
+    this.props.dispatch(get_comment_list({page: current, ...params}, (res) => {
       let pagination = {...that.state.pagination}
       pagination.total = res.count
       pagination.current = current
@@ -162,17 +212,11 @@ class Comment extends React.Component {
 
   render () {
     const {state_comment} = this.props
-    const {loading} = this.state
+    const {
+      loading, content_val,
+      status_val,
+    } = this.state
     const {getFieldDecorator} = this.props.form
-
-    const prefixSelector = getFieldDecorator('prefix', {
-      initialValue: '86'
-    })(
-      <Select style={{width: 70}}>
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
-      </Select>
-    )
 
     const formItemLayout = {
       labelCol: {
@@ -205,67 +249,108 @@ class Comment extends React.Component {
           <Icon type="user"/> <em>标签管理</em>
         </div>
 
-        <div className="admin-comment">
+        <div className="admin-comment layout-card-view">
 
-          <Modal
-            footer={null}
-            onCancel={() => {
-              this.setState({
-                modal_visible_edit: false
-              })
-            }}
-            title="填写标签"
-            visible={this.state.modal_visible_edit}
-          >
-            <Form
-              className="from-view"
-              onSubmit={this.handleSubmit}
-            >
 
-              <FormItem
-                {...formItemLayout}
-                hasFeedback
-                label="状态"
-              >
-                {getFieldDecorator('status', {
-                  rules: [
-                    {required: true, message: '请选择状态！'}
-                  ]
-                })(
-                  <Select placeholder="状态">
-                    {
-                      this.state.status.map((item, key) => <Option key={key}>{item}</Option>)
-                    }
-                  </Select>
-                )}
+          <div className="admin-comment-bar">
+            <Form layout="inline">
+              <FormItem label="文章标题">
+                <Input value={content_val} onChange={(e) => {
+                  this.change_val(e.target.value, 'content_val')
+                }}/>
               </FormItem>
-
-
-              <FormItem
-                {...tailFormItemLayout}
-              >
-                <Button
-                  className="register-btn"
-                  htmlType="submit"
-                  type="primary"
+              <FormItem label="状态">
+                <Select
+                  className="select-view"
+                  value={status_val}
+                  onChange={(value) => {
+                    this.change_val(value, 'status_val')
+                  }}
                 >
-                  确定
-                </Button>
+                  <Option value=''>全部</Option>
+                  {
+                    this.state.status.map((item, key) => item ? <Option key={key}>{item}</Option> : '')
+                  }
+                </Select>
               </FormItem>
+              <Form.Item>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  onClick={this.fetch_comment_list}
+                >
+                  搜索
+                </Button>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  onClick={this.reset_bar_from}
+                >
+                  重置
+                </Button>
+              </Form.Item>
             </Form>
-          </Modal>
-
-          <div className="layout-table">
-            <Table
-              columns={this.state.columns}
-              dataSource={state_comment.list}
-              loading={loading}
-              onChange={this.TablePageChange.bind(this)}
-              pagination={this.state.pagination}
-              rowKey="id"
-            />
           </div>
+
+
+          <Table
+            columns={this.state.columns}
+            dataSource={state_comment.list}
+            loading={loading}
+            onChange={this.TablePageChange.bind(this)}
+            pagination={this.state.pagination}
+            rowKey="id"
+          />
         </div>
+
+        <Modal
+          footer={null}
+          onCancel={() => {
+            this.setState({
+              modal_visible_edit: false
+            })
+          }}
+          title="填写标签"
+          visible={this.state.modal_visible_edit}
+        >
+          <Form
+            className="from-view"
+            onSubmit={this.handleSubmit}
+          >
+
+            <FormItem
+              {...formItemLayout}
+              hasFeedback
+              label="状态"
+            >
+              {getFieldDecorator('status', {
+                rules: [
+                  {required: true, message: '请选择状态！'}
+                ]
+              })(
+                <Select placeholder="状态">
+                  {
+                    this.state.status.map((item, key) => item ? <Option key={key}>{item}</Option> : '')
+                  }
+                </Select>
+              )}
+            </FormItem>
+
+
+            <FormItem
+              {...tailFormItemLayout}
+            >
+              <Button
+                className="register-btn"
+                htmlType="submit"
+                type="primary"
+              >
+                确定
+              </Button>
+            </FormItem>
+          </Form>
+        </Modal>
+
       </div>
     )
   }

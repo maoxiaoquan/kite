@@ -27,10 +27,23 @@ class AdminIndex {
       order: [['create_date_timestamp', 'desc']]
     })
 
+    let new_comment = await models.comment.findAll({
+      limit: 10, //每页限制返回的数据条数
+      order: [['create_date_timestamp', 'desc']]
+    })
+
     for (let i in new_article) {
-      new_article[i].setDataValue('create_at', await moment(new_article[i].create_date).format('YYYY-MM-DD'))
+      new_article[i].setDataValue('create_at', await moment(new_article[i].create_date).format('YYYY-MM-DD H:m:s'))
       new_article[i].setDataValue('user', await models.user.findOne({
         where: {uid: new_article[i].uid},
+        attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+      }))
+    }
+
+    for (let i in new_comment) {
+      new_comment[i].setDataValue('create_at', await moment(new_comment[i].create_date).format('YYYY-MM-DD H:m:s'))
+      new_comment[i].setDataValue('user', await models.user.findOne({
+        where: {uid: new_comment[i].uid},
         attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
       }))
     }
@@ -46,7 +59,8 @@ class AdminIndex {
           comment_count
         },
         new_article,
-        new_user
+        new_user,
+        new_comment
       }
     })
   }

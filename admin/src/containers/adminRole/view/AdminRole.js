@@ -26,9 +26,14 @@ class AdminRole extends React.Component {
     this.state = {
       columns: [
         {
-          title: '角色id',
-          dataIndex: 'role_id',
-          key: 'role_id'
+          title: '序号',
+          dataIndex: 'index',
+          key: 'index',
+          render: (text, record, index) => (
+            <span style={{
+              'width': '20px',
+              'display': 'block'
+            }}>{Number((this.state.pagination.current - 1) * 10) + index + 1}</span>)
         },
         {
           title: '角色名字',
@@ -82,7 +87,9 @@ class AdminRole extends React.Component {
             )
           }
         }],
-      pagination: {},
+      pagination: {
+        current: 1
+      },
       loading: false,
       visible_create_role_modal: false,
       visible_set_authority_modal: false,

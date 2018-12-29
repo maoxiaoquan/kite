@@ -26,31 +26,18 @@ module.exports = {
       comment: '图片的路径',
       field: 'picture_url'
     },
-    picture_type: {
-      // 图片的类型  可以是首页轮播图的，还有广告的，属于站点配置类图片
-      type: Seq.STRING(20),
+    description: {
+      // 图片的备注。作用等等
+      type: Seq.STRING(100),
       comment: '图片的类型',
-      field: 'picture_type'
-    },
-    create_date: {
-      // 创建时间
-      type: Seq.DATE,
-      comment: '创建时间',
-      field: 'create_date',
-      defaultValue: time.TimeNow.time /*时间*/
-    },
-    create_date_timestamp: {
-      // 创建时间戳
-      type: Seq.BIGINT(30),
-      comment: '创建时间戳',
-      field: 'create_date_timestamp',
-      defaultValue: time.TimeNow.timestamp /*时间戳 */
+      field: 'description'
     },
     enable: {
       // 是否可以显示
       type: Seq.BOOLEAN,
       comment: '是否可以显示',
       field: 'enable'
-    }
+    },
+    ...time.create_date
   }
 }

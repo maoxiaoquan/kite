@@ -20,8 +20,6 @@ class Users {
       attributes: [
         'uid',
         'nickname',
-        'email',
-        'phone',
         'last_sign_time',
         'reg_ip',
         'user_tag_ids',
@@ -49,15 +47,12 @@ class Users {
     const {
       uid,
       nickname,
-      password,
-      account,
       user_tag_ids,
       enable
     } = ctx.request.body
     await user
       .update(
         {
-          avatar: 'http://oq33egsog.bkt.clouddn.com/avatar1.jpg',
           nickname: nickname,
           user_tag_ids: user_tag_ids ? user_tag_ids.join(',') : '',
           enable: enable || false

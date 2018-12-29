@@ -14,7 +14,6 @@ _Fetch.interceptors.response.use(function (response) {
   alert('服务器正忙，请稍后重试!')
 })
 
-
 function hasClass (obj, cls) {
   var obj_class = obj.className,//获取 class 内容.
     obj_class_lst = obj_class.split(/\s+/)//通过split空字符将cls转换成数组.
@@ -102,7 +101,10 @@ function hasClass (obj, cls) {
     },
     get_user_tag_all: function () { // 获取所有角色标签
       return _Fetch.get('/user_tag_all')
-    }
+    },
+    get_home_banner: function () { // 获取首页banner
+      return _Fetch.get('/home_banner')
+    },
   }
 
   window._server = _server
@@ -150,3 +152,15 @@ Vue.component('box-modal', {
   },
   template: modal_template
 })
+
+function addLoadEvent (func) {	//
+  var oldonload = window.onload
+  if (typeof window.onload != 'function') {
+    window.onload = func
+  } else {
+    window.onload = function () {
+      oldonload()
+      func()
+    }
+  }
+}

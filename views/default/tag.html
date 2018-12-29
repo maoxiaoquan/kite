@@ -4,128 +4,136 @@
 
 <body class="black-theme">
 
-  <!--header_view.html start-->
-  <% include parts/header_view.html %>
-  <!--header_view.html end-->
+<!--header_view.html start-->
+<% include parts/header_view.html %>
+<!--header_view.html end-->
 
 
-  <!--article-list-lay layout-content start-->
-  <section class="tag-lay layout-content">
+<!--article-list-lay layout-content start-->
+<section class="tag-lay layout-content">
     <div class="container">
-      <div class="row">
+        <div class="row">
 
-        <div class="col-xs-12 col-sm-12 col-md-12">
-          <div class="article-list">
-            <div class="main-top">
-              <a class="avatar-collection" href="/c/e048f1a72e3d">
-                <img src="//upload.jianshu.io/collections/images/309213/144*144.png?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240"
-                  alt="240">
-              </a>
-              <div class="title">
-                <a class="name" href="/c/e048f1a72e3d">
-                  <%=data.article_tag.article_tag_name%></a>
-              </div>
-              <div class="info">
-                收录了
-                <%=data.count%> 篇文章 ·
-                <%=data.subscribe_count%> 人关注
-              </div>
-            </div>
-            <ul class="trigger-menu">
-              <!-- <li class=""><a href="/"><i class="iconfont ic-latestcomments"></i> 最新评论</a></li>-->
-              <li class="active"><a href="/"><i class="iconfont ic-articles"></i> 最新收录</a></li>
-              <!-- <li class=""><a href="/"><i class="iconfont ic-hot"></i> 热门</a></li>-->
-            </ul>
-            <div class="list-container">
-              <ul>
-                <% data.article_list.forEach(function (item, key) { %>
-                <li>
-                  <article class="content-box article-list">
-                    <div class="info-box">
-                      <div class="info-row title-row">
-                        <a href="/article/<%= item.aid %>" class="title" target="_blank">
-                          <%= item.title %></a>
-                      </div>
-                      <div class="content-text">
-                        <%- item.excerpt %>
-                      </div>
-                      <div class="info-row meta-row">
-                        <ul class="meta-list">
-                          <li class="item username clickable">
-                            <a href="/user/<%=item.uid%>/article/all">
-                              <%= item.user.nickname %></a>
-                          </li>
-                          <li class="item">
-                            <%= item.create_at %>
-                          </li>
-                          <li class="item">
-                            <%= item.like_count %> 喜欢</li>
-                          <li class="item">
-                            <%= item.comment_count %> 评论</li>
-                          <% if(item.tag_ids){ %>
-                          <li class="item">
-                            <% item.tag_ids.split(',').forEach(function (item, key) { %>
-                            <%
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="article-list">
+                    <div class="main-top">
+
+                        <%if(data.article_tag.article_tag_icon_type==='1'){%>
+                        <div class="tag-img-icon"
+                             style="background-image: url('<%= data.article_tag.article_tag_icon %>'); background-size: contain;"></div>
+                        <%}else{%>
+                        <div class="tag-font-icon"><i class="iconfont <%= data.article_tag.article_tag_icon %>"></i>
+                        </div>
+                        <%}%>
+
+                        <div class="title">
+                            <a class="name" href="/c/e048f1a72e3d">
+                                <%=data.article_tag.article_tag_name%></a>
+                        </div>
+                        <div class="info">
+                            收录了
+                            <%=data.count%> 篇文章 ·
+                            <%=data.subscribe_count%> 人关注
+                        </div>
+                    </div>
+                    <ul class="trigger-menu">
+                        <!-- <li class=""><a href="/"><i class="iconfont ic-latestcomments"></i> 最新评论</a></li>-->
+                        <li class="active"><a href="/"><i class="iconfont ic-articles"></i> 最新收录</a></li>
+                        <!-- <li class=""><a href="/"><i class="iconfont ic-hot"></i> 热门</a></li>-->
+                    </ul>
+                    <div class="list-container">
+                        <ul>
+                            <% data.article_list.forEach(function (item, key) { %>
+                            <li>
+                                <article class="content-box article-list">
+                                    <div class="info-box">
+                                        <div class="info-row title-row">
+                                            <a href="/article/<%= item.aid %>" class="title" target="_blank">
+                                                <%= item.title %></a>
+                                        </div>
+                                        <div class="content-text">
+                                            <%- item.excerpt %>
+                                        </div>
+                                        <div class="info-row meta-row">
+                                            <ul class="meta-list">
+                                                <li class="item username clickable">
+                                                    <a href="/user/<%=item.uid%>/article/all">
+                                                        <%= item.user.nickname %></a>
+                                                </li>
+                                                <li class="item">
+                                                    <%= item.create_at %>
+                                                </li>
+                                                <li class="item">
+                                                    <%= item.like_count %> 喜欢
+                                                </li>
+                                                <li class="item">
+                                                    <%= item.comment_count %> 评论
+                                                </li>
+                                                <% if(item.tag_ids){ %>
+                                                <li class="item">
+                                                    <% item.tag_ids.split(',').forEach(function (item, key) { %>
+                                                    <%
                                                     data.tag_all.forEach(function (tag_all_item, tag_all_key) {
                                                     if (tag_all_item.article_tag_id == item) {
                                                     %>
-                            <a class="tag-class frontend" href="">
-                              <%= tag_all_item.article_tag_name %>
-                            </a>
-                            <%
+                                                    <a class="tag-class frontend" href="">
+                                                        <%= tag_all_item.article_tag_name %>
+                                                    </a>
+                                                    <%
                                                     }}) %>
+                                                    <% }) %>
+                                                </li>
+                                                <% } %>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <% if(item.cover_img){ %>
+                                    <div class="lazy thumb thumb loaded"
+                                         style="background-image: url('<%= item.cover_img %>'); background-size: cover;">
+                                    </div>
+                                    <% } %>
+                                </article>
+                            </li>
                             <% }) %>
-                          </li>
-                          <% } %>
                         </ul>
-                      </div>
-                    </div>
-                    <% if(item.cover_img){ %>
-                    <div class="lazy thumb thumb loaded" style="background-image: url('<%= item.cover_img %>'); background-size: cover;">
-                    </div>
-                    <% } %>
-                  </article>
-                </li>
-                <% }) %>
-              </ul>
 
 
-              <!--PAGE.html start-->
-              <% include pages/tag_page.html %>
-              <!--PAGE.html end-->
+                        <!--PAGE.html start-->
+                        <% include pages/tag_page.html %>
+                        <!--PAGE.html end-->
+                    </div>
+                </div>
             </div>
-          </div>
+
         </div>
-
-      </div>
     </div>
-  </section>
-  <!--article-list-lay layout-content end-->
+</section>
+<!--article-list-lay layout-content end-->
 
 
-  <!--<script>
+<!--<script>
 
-  var navbar = document.getElementById('layout-navbar')
+var navbar = document.getElementById('layout-navbar')
 
-  function getScrollTop () {
-    var scrollTop = 0;
-    if (document.documentElement && document.documentElement.scrollTop) {
-      scrollTop = document.documentElement.scrollTop;
-    }
-    else if (document.body) {
-      scrollTop = document.body.scrollTop;
-    }
-    return scrollTop;
+function getScrollTop () {
+  var scrollTop = 0;
+  if (document.documentElement && document.documentElement.scrollTop) {
+    scrollTop = document.documentElement.scrollTop;
   }
-
-  window.onscroll = function () {
-    var st = getScrollTop()
-    if (st > 50) {
-      navbar.classList.add("navbar-fixed-top");
-    } else {
-      navbar.classList.remove("navbar-fixed-top");
-    }
+  else if (document.body) {
+    scrollTop = document.body.scrollTop;
   }
+  return scrollTop;
+}
+
+window.onscroll = function () {
+  var st = getScrollTop()
+  if (st > 50) {
+    navbar.classList.add("navbar-fixed-top");
+  } else {
+    navbar.classList.remove("navbar-fixed-top");
+  }
+}
 
 </script>-->
 </body>

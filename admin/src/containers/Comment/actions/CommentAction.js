@@ -2,7 +2,7 @@ import http from '../../../utils/http'
 
 export const get_comment_list = (data, callback) => {
   return (dispatch) => {
-    http.get('/api/get_comment_list', data).then((res) => {
+    http.post('/api/get_comment_list', data).then((res) => {
       if (callback)
         callback(res)
       return dispatch({type: 'GET_COMMENT_LIST', data: res})

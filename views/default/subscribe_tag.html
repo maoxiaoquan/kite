@@ -45,8 +45,12 @@
                 <div class="tag">
                     <div class="info-box">
                         <a href="/tag/<%= item.article_tag_id %>" rel="">
+                            <%if(item.article_tag_icon_type==='1'){%>
                             <div class="lazy thumb thumb loaded"
-                                 style="background-image: url(&quot;https://lc-mhke0kuv.cn-n1.lcfile.com/bac28828a49181c34110.png&quot;); background-size: contain;"></div>
+                                 style="background-image: url('<%= item.article_tag_icon %>'); background-size: contain;"></div>
+                            <%}else{%>
+                            <div class="tag-icon"><i class="iconfont <%= item.article_tag_icon %>"></i></div>
+                            <%}%>
                             <div class="title">
                                 <%= item.article_tag_name %>
                             </div>
@@ -87,36 +91,31 @@
 
 <script>
 
-  new Vue({
-    el: '#subscribe-lay',
-    data: function () {
-      return {}
-    },
-    created: function () {
-      var subscribe_btn = document.getElementsByClassName('subscribe-btn')
+  function subscribe_tag () {
+    var subscribe_btn = document.getElementsByClassName('subscribe-btn')
 
-      for (var i = 0; i < subscribe_btn.length; i++) {
-        (function (i) {
-
-          if (subscribe_btn.length > 0) {
-            subscribe_btn[i].onclick = function () {
-              var tag_id = subscribe_btn[i].getAttribute('data-tag-id')
-              _server.post_subscribe_tag({article_tag_id: tag_id}).then(function (res) {
-                console.log(res)
-                if (res.state === 'success') {
-                  window.location.reload()
-                } else {
-                  alert(res.meaasge)
-                }
-              }).catch(function (err) {
-                console.log('错误')
-              })
-            }
+    for (var i = 0; i < subscribe_btn.length; i++) {
+      (function (i) {
+        if (subscribe_btn.length > 0) {
+          subscribe_btn[i].onclick = function () {
+            var tag_id = subscribe_btn[i].getAttribute('data-tag-id')
+            _server.post_subscribe_tag({article_tag_id: tag_id}).then(function (res) {
+              console.log(res)
+              if (res.state === 'success') {
+                window.location.reload()
+              } else {
+                alert(res.meaasge)
+              }
+            }).catch(function (err) {
+              console.log('错误')
+            })
           }
-        })(i)
-      }
+        }
+      })(i)
     }
-  })
+  }
+
+  addLoadEvent(subscribe_tag())
 
 
 </script>

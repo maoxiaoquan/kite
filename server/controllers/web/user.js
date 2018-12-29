@@ -338,13 +338,11 @@ class User {
 
             await models.sequelize
               .transaction(function(transaction) {
-                let num = Number(user_count) + 10000
                 // 在事务中执行操作
                 return models.user
                   .create({
                     /*注册写入数据库操作*/
-                    uid: num || 10000,
-                    avatar: 'http://oq33egsog.bkt.clouddn.com/avatar1.jpg',
+                    avatar: '/default/img/default_avatar.jpg',
                     nickname: req_data.nickname,
                     password: tools.encrypt(
                       req_data.password,
@@ -357,7 +355,7 @@ class User {
                   .then(function(user) {
                     return models.user_info.create({
                       /*注册写入数据库操作*/
-                      uid: num
+                      uid: user.uid
                     })
                   })
               })

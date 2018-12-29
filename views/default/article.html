@@ -155,8 +155,13 @@
             <div class="comment-form" v-if="children_comment_input" :id="'comment-reply'+commentItem.id">
                 <div class="comment-form">
                     <div class="comment-avatar">
-                        <img src="https://image.uisdc.com/wp-content/uploads/2018/06/avatar-uisdc-chat.png"
+                        <% if(user_info.islogin){ %>
+                        <img src="<%= user_info.avatar %>"
                              alt="avatar">
+                        <% } else { %>
+                        <img src="/default/img/default_avatar.jpg"
+                             alt="avatar">
+                        <% } %>
                     </div>
                     <div class="form-item" style="margin-left: 50px;">
                         <div class="input-view">

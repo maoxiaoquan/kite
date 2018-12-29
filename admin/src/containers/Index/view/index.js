@@ -9,7 +9,6 @@ import { get_admin_index_statistics } from '../actions'
 const {SubMenu} = Menu
 const {Header, Content, Sider} = Layout
 
-
 class Index extends React.Component {
   constructor (props) {
     super(props)
@@ -22,13 +21,12 @@ class Index extends React.Component {
     }
   }
 
-
   componentWillMount () {
     this.props.dispatch(get_admin_index_statistics())
   }
 
   render () {
-    const {state_index: {count = {}, new_article = [], new_user = []}} = this.props
+    const {state_index: {count = {}, new_article = [], new_user = [], new_comment = []}} = this.props
     const {sex_arr} = this.state
     return (
       <div className="layout-index layout-main">
@@ -102,7 +100,7 @@ class Index extends React.Component {
                         <List.Item>
                           <List.Item.Meta
                             avatar={<Avatar src={item.user.avatar}/>}
-                            title={<a href="https://ant.design">{item.title}</a>}
+                            title={<a href="https://ant.design">{item.title}{item.create_date}</a>}
                             description={item.excerpt}
                           />
                         </List.Item>
@@ -143,22 +141,25 @@ class Index extends React.Component {
             <Col span={7}>
               <div className="box-card clearfix">
                 <div className="box-card-header">
-                  <h2>版本更新历史</h2>
+                  <h2>最新评论</h2>
                 </div>
                 <div className="box-card-body">
                   <div className="limit-height">
-                    <Timeline mode="alternate">
-                      <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-                      <Timeline.Item color="green">Solve initial network problems 2015-09-01</Timeline.Item>
-                      <Timeline.Item dot={<Icon type="clock-circle-o" style={{fontSize: '16px'}}/>}>Sed ut perspiciatis
-                        unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-                        eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-                        explicabo.</Timeline.Item>
-                      <Timeline.Item color="red">Network problems being solved 2015-09-01</Timeline.Item>
-                      <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-                      <Timeline.Item dot={<Icon type="clock-circle-o" style={{fontSize: '16px'}}/>}>Technical testing
-                        2015-09-01</Timeline.Item>
-                    </Timeline>
+                    <List
+                      itemLayout="horizontal"
+                      dataSource={new_comment}
+                      renderItem={item => {
+                        return (
+                          <List.Item>
+                            <List.Item.Meta
+                              avatar={<Avatar src={item.user.avatar}/>}
+                              title={<a href="https://ant.design">{item.user.nickname} {item.create_at}</a>}
+                              description={item.content}
+                            />
+                          </List.Item>
+                        )
+                      }}
+                    />
                   </div>
                 </div>
               </div>

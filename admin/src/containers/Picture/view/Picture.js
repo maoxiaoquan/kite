@@ -34,9 +34,14 @@ class Picture extends React.Component {
     this.state = {
       columns: [
         {
-          title: 'picture_id',
-          dataIndex: 'picture_id',
-          key: 'picture_id'
+          title: '序号',
+          dataIndex: 'index',
+          key: 'index',
+          render: (text, record, index) => (
+            <span style={{
+              'width': '20px',
+              'display': 'block'
+            }}>{Number((this.state.pagination.current - 1) * 10) + index + 1}</span>)
         },
         {
           title: '图片标题',
@@ -44,19 +49,26 @@ class Picture extends React.Component {
           key: 'picture_title'
         },
         {
-          title: '图片类型',
-          dataIndex: 'picture_type',
-          key: 'picture_type',
-          render: (value, record) => {
-            return (
-              <span>{this.state.menu_text[record.picture_type]}</span>
-            )
-          }
+          title: '图片说明',
+          dataIndex: 'description',
+          key: 'description'
         },
         {
           title: '图片地址',
           dataIndex: 'picture_url',
           key: 'picture_url'
+        },
+        {
+          title: '图片演示',
+          dataIndex: 'picture_url',
+          key: 'picture_show',
+          render: (value, record) => {
+            return (
+              <div className="admin-table-img-show">
+                <img src={record.picture_url} alt=""/>
+              </div>
+            )
+          }
         },
         {
           title: '是否可用',
@@ -91,7 +103,9 @@ class Picture extends React.Component {
             )
           }
         }],
-      pagination: {},
+      pagination: {
+        current: 1
+      },
       loading: false,
       confirmDirty: false,
       modal_visible_edit: false,
@@ -108,7 +122,6 @@ class Picture extends React.Component {
         listType: 'picture-card'
       },
       fileList: []
-
     }
   }
 
@@ -124,7 +137,7 @@ class Picture extends React.Component {
     this.props.dispatch({type: 'SET_PICTURE_INFO', data: data})
     this.props.form.setFieldsValue({
       picture_title: data.picture_title,
-      picture_type: data.picture_type,
+      description: data.description,
       picture_url: data.picture_url,
       enable: data.enable
     })
@@ -211,7 +224,6 @@ class Picture extends React.Component {
     const {is_create} = this.state
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values)
         if (is_create) {
           this.fetch_create_picture(values)
         } else {
@@ -357,21 +369,14 @@ class Picture extends React.Component {
                 )}
               </FormItem>
 
-
               <FormItem
                 {...formItemLayout}
-                hasFeedback
-                label="图片类型"
+                label="图片说明"
               >
-                {getFieldDecorator('picture_type', {
-                  rules: [
-                    {required: true, message: '请选择图片类型！'}
-                  ]
+                {getFieldDecorator('description', {
+                  rules: [{required: true, message: '图片说明！', whitespace: true}]
                 })(
-                  <Select placeholder="图片类型！">
-                    <Option value="1">首页轮播图</Option>
-                    <Option value="2">首页广告</Option>
-                  </Select>
+                  <Input placeholder="图片说明"/>
                 )}
               </FormItem>
 

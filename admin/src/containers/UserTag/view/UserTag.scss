@@ -1,20 +1,10 @@
-.article-tag {
-  .table-right-btn {
-    button {
-      margin-left: 5px;
-    }
-  }
-  .table-is-login {
-    padding-left: 5px;
-    .anticon-check-circle {
-      color: #28a745;
-    }
-    .anticon-close-circle {
-      color: #f46e65;
-    }
+.user-tag {
+  .tag-img-icon {
+    width: 35px;
+    height: 35px;
   }
 
-  .article-tag-user-create-btn {
-    margin-bottom: 15px;
+  .tag-font-icon {
+    font-size: 20px;
   }
 }

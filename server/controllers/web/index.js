@@ -2,65 +2,67 @@ const models = require('../../../db/mysqldb/index')
 const moment = require('moment')
 const {render, home_resJson} = require('../../utils/res_data')
 const Op = require('sequelize').Op
+const web_where = require('../../utils/web_where')
 
 class Index {
   constructor (state) {
-    this.state = {
-      title: '333'
-    }
   }
 
   static async render_get_index (ctx) {
     let page = 1
     let pageSize = 25
-    const title = 'home'
+    let where_params = {} // 查询参数
+    let order_params = [] // 排序参数
+    let sort = ctx.query.sort || 'all'
+    let column_id = ctx.params.column_id || 'index'
 
-    let column_id = ctx.params.column_id || 'all'
-
+    /*当前文章专栏*/
     let find_article_column = await models.article_column.findOne({
       attributes: [
         'article_column_id',
         'article_column_name',
         'article_column_icon',
         'article_column_icon_type',
-        'article_column_tags'
+        'article_column_tags',
+        'article_column_description'
       ],
       where: {article_column_id: column_id} //为空，获取全部，也可以自己添加条件
     })
 
-    let current_article_tags = find_article_column
-      ? find_article_column.article_column_tags.split(',')
-      : ''
-
-    let where_params = !find_article_column
-      ? ''
-      : {
-        article_tag_ids: {
-          [Op.regexp]: `^[${current_article_tags.join('|')}]`
-        }
-      }
     /*所有文章专题*/
     let article_tag_all = await models.article_tag.findAll({
       attributes: ['article_tag_id', 'article_tag_name']
     })
-
-    let article_column = await models.article_column.findAll({
+    /*所有文章专栏*/
+    let article_column_all = await models.article_column.findAll({
       attributes: [
         'article_column_id',
         'article_column_name',
         'article_column_icon',
-        'article_column_icon_type'
+        'article_column_icon_type',
+        'article_column_description'
       ],
       where: {enable: 1}, //为空，获取全部，也可以自己添加条件
       limit: 10
     })
+
+    where_params = {
+      ...web_where.article
+    }
+    // where
+    // 判断专栏下方是否有专题
+    find_article_column && (where_params['article_tag_ids'] = {[Op.regexp]: `^[${find_article_column.article_column_tags.split(',').join('|')}]`})
+
+    // order
+    //
+    order_params.push(['create_date_timestamp', 'desc'])
 
     let {count, rows} = await models.article
       .findAndCountAll({
         where: where_params, //为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, //开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, //每页限制返回的数据条数
-        order: [['create_date_timestamp', 'desc']]
+        order: order_params
       })
 
     for (let item in rows) {// 循环取用户 render 渲染必须用这种方法 与 ajax 有区别
@@ -72,28 +74,29 @@ class Index {
     }
 
     await render(ctx, {
-      title: title,
+      title: '主页',
       view_url: 'default/index',
       state: 'success',
       message: 'home',
       data: {
         count: count,
         article_list: rows,
-        article_column: article_column,
+        article_column: article_column_all,
         tag_all: article_tag_all,
-        current_page:
-          column_id === 'all'
-            ? 'index'
-            : find_article_column.article_column_name,
-        column_id: column_id
+        column_id: column_id,
+        sort,
+        current_column: find_article_column
       }
     })
   }
 
   static async get_index (ctx) {
-    let column_id = ctx.query.column_id || 'all'
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 25
+    let column_id = ctx.query.column_id || 'all'
+    let sort = ctx.query.sort || 'all'
+    let where_params = {} // 查询参数
+    let order_params = [] // 排序参数
 
     let find_article_column = await models.article_column.findOne({
       attributes: [
@@ -109,24 +112,23 @@ class Index {
       attributes: ['article_tag_id', 'article_tag_name']
     })
 
-    let current_article_tags = find_article_column
-      ? find_article_column.article_column_tags.split(',')
-      : ''
+    where_params = {
+      ...web_where.article
+    }
+     // where
+    // 判断专栏下方是否有专题
+    find_article_column && (where_params['article_tag_ids'] = {[Op.regexp]: `^[${find_article_column.article_column_tags.split(',').join('|')}]`})
 
-    let find_params = !find_article_column
-      ? ''
-      : {
-        article_tag_ids: {
-          [Op.regexp]: `^[${current_article_tags.join('|')}]`
-        }
-      }
+    // order
+    //
+    order_params.push(['create_date_timestamp', 'desc'])
 
     let {count, rows} = await models.article
       .findAndCountAll({
-        where: find_params, //为空，获取全部，也可以自己添加条件
+        where: where_params, //为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, //开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, //每页限制返回的数据条数
-        order: [['create_date_timestamp', 'desc']]
+        order: order_params
       })
 
     for (let i in rows) {
@@ -147,6 +149,7 @@ class Index {
           pageSize,
           column_id,
           article_list: rows,
+          sort,
           article_tag: article_tag_all
         }
       })
@@ -159,9 +162,8 @@ class Index {
   }
 
   static async no_found_404 (ctx) {
-    const title = '404'
     await render(ctx, {
-      title: title,
+      title: '404',
       view_url: 'default/404',
       state: 'success',
       message: '404 页面'

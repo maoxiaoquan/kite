@@ -127,7 +127,7 @@ class Admin_users {
     await admin_user
       .create({
         account: req_data.account,
-        avatar: 'http://oq33egsog.bkt.clouddn.com/avatar1.jpg',
+        avatar: '/default/img/default_avatar.jpg',
         nickname: req_data.nickname,
         password: encrypt(req_data.password, config.encrypt_key),
         email: req_data.email,

@@ -31,9 +31,14 @@ class AdminSystemLog extends React.Component {
     this.state = {
       columns: [
         {
-          title: 'id',
-          dataIndex: 'id',
-          key: 'id'
+          title: '序号',
+          dataIndex: 'index',
+          key: 'index',
+          render: (text, record, index) => (
+            <span style={{
+              'width': '20px',
+              'display': 'block'
+            }}>{Number((this.state.pagination.current - 1) * 10) + index + 1}</span>)
         },
         {
           title: '操作时间',
@@ -78,7 +83,9 @@ class AdminSystemLog extends React.Component {
             )
           }
         }],
-      pagination: {},
+      pagination: {
+        current: 1
+      },
       loading: false,
       modal_visible_edit: false,
       type: ['类型', '创建', '修改', '删除', '登录']

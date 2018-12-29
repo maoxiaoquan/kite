@@ -10,8 +10,9 @@ module.exports = {
       // 用户ID
       type: Seq.INTEGER(10),
       primaryKey: true, // 定义主键
-      comment: 'uid',
-      field: 'uid'
+      autoIncrement: true, // 自动递增
+      comment: 'uid 主键，自增',
+      field: 'uid' //  相应的字段名称
     },
     avatar: {
       // 头像
@@ -61,20 +62,6 @@ module.exports = {
       comment: '最后登录ip',
       field: 'last_sign_ip'
     },
-    create_date: {
-      // 创建时间
-      type: Seq.DATE,
-      comment: '创建时间',
-      field: 'create_date',
-      defaultValue: time.TimeNow.time /*时间*/
-    },
-    create_date_timestamp: {
-      // 创建时间戳
-      type: Seq.BIGINT(30),
-      comment: '创建时间戳',
-      field: 'create_date_timestamp',
-      defaultValue: time.TimeNow.timestamp /*时间戳 */
-    },
     last_sign_time: {
       // 最后登录时间
       type: Seq.BIGINT(50),
@@ -97,6 +84,19 @@ module.exports = {
       type: Seq.BOOLEAN,
       comment: '是否可以登录',
       field: 'enable'
-    }
+    },
+    update_date: {
+      // 更新时间
+      type: Seq.DATE,
+      comment: '更新时间',
+      field: 'update_date',
+    },
+    update_date_timestamp: {
+      // 更新时间戳
+      type: Seq.BIGINT(30),
+      comment: '更新时间戳',
+      field: 'update_date_timestamp',
+    },
+    ...time.create_date
   }
 }

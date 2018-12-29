@@ -1,20 +1,17 @@
-.admin-user {
-  .table-right-btn {
+.admin-article {
+  .admin-article-bar {
+    margin-bottom: 20px;
+    .select-view {
+      width: 150px;
+    }
     button {
-      margin-left: 5px;
+      margin: 0 5px;
     }
   }
-  .table-is-login {
-    padding-left: 5px;
-    .anticon-check-circle {
-      color: #28a745;
+  .article-title{
+    color: #00bcd4;
+    &:hover{
+      color: #00D0B2;
     }
-    .anticon-close-circle {
-      color: #f46e65;
-    }
-  }
-
-  .admin-user-create-btn {
-    margin-bottom: 15px;
   }
 }

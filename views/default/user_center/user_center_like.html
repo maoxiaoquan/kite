@@ -100,24 +100,30 @@
 
 <script>
 
-  var cancel_like = document.getElementsByClassName('cancel-like')
-  console.log(cancel_like)
-  for (var i = 0; i < cancel_like.length; i++) {
-    (function (j) {
-      cancel_like[j].onclick = function () {
-        var aid = this.getAttribute('data-aid')
-        _server.post_user_like_article({aid: aid}).then(function (res) {
-          if (res.state === 'success') {
-            window.location.reload()
-          } else {
-            alert(res.message)
-          }
-        }).catch(function (err) {
-          console.log(err)
-        })
-      }
-    })(i)
-  }
+
+  addLoadEvent(!function () {
+
+    var cancel_like = document.getElementsByClassName('cancel-like')
+
+    for (var i = 0; i < cancel_like.length; i++) {
+      (function (j) {
+        cancel_like[j].onclick = function () {
+          var aid = this.getAttribute('data-aid')
+          _server.post_user_like_article({aid: aid}).then(function (res) {
+            if (res.state === 'success') {
+              window.location.reload()
+            } else {
+              alert(res.message)
+            }
+          }).catch(function (err) {
+            console.log(err)
+          })
+        }
+      })(i)
+    }
+
+  }())
+
 
   new Vue({
     el: '#user-center-like'

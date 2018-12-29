@@ -1,31 +1,31 @@
-const { sequelize, picture } = require('../../../db/mysqldb/index')
-const { sign_resJson, admin_resJson } = require('../../utils/res_data')
+const {sequelize, picture} = require('../../../db/mysqldb/index')
+const {sign_resJson, admin_resJson} = require('../../utils/res_data')
 const moment = require('moment')
 const {
-  tools: { encrypt }
+  tools: {encrypt}
 } = require('../../utils/index')
 const config = require('../../../config')
-const { create_admin_system_log } = require('./admin_system_log')
+const {create_admin_system_log} = require('./admin_system_log')
 
-function err_mess(message) {
+function err_mess (message) {
   this.message = message
   this.name = 'UserException'
 }
 
 class Picture {
-  constructor() {}
+  constructor () {}
 
   /**
    * -----------------------------------权限操作--------------------------------
    * 创建标签
    * @param   {obejct} ctx 上下文对象
    */
-  static async create_picture(ctx) {
+  static async create_picture (ctx) {
     const req_data = ctx.request.body
 
     try {
       let find_picture_title = await picture.findOne({
-        where: { picture_title: req_data.picture_title }
+        where: {picture_title: req_data.picture_title}
       })
       if (find_picture_title) {
         throw new err_mess('图片标题名已存在!')
@@ -33,6 +33,29 @@ class Picture {
       if (!req_data.picture_url) {
         throw new err_mess('请上传图片!')
       }
+
+      await picture
+        .create({
+          picture_title: req_data.picture_title,
+          picture_url: req_data.picture_url
+            ? req_data.picture_url[0].response.data.filename
+            : '',
+          description: req_data.description,
+          enable: req_data.enable
+        })
+        .then(function (p) {
+          admin_resJson(ctx, {
+            state: 'success',
+            message: '图片创建成功'
+          })
+        })
+        .catch(function (err) {
+          admin_resJson(ctx, {
+            state: 'error',
+            message: '图片创建出错'
+          })
+        })
+
     } catch (err) {
       admin_resJson(ctx, {
         state: 'error',
@@ -41,43 +64,20 @@ class Picture {
       return false
     }
 
-    await picture
-      .create({
-        picture_title: req_data.picture_title,
-        picture_url: req_data.picture_url
-          ? req_data.picture_url[0].response.data.filename
-          : '',
-        picture_type: req_data.picture_type,
-        enable: req_data.enable
-      })
-      .then(function(p) {
-        console.log('created.' + JSON.stringify(p))
-        admin_resJson(ctx, {
-          state: 'success',
-          message: '图片创建成功'
-        })
-      })
-      .catch(function(err) {
-        console.log('failed: ' + err)
-        admin_resJson(ctx, {
-          state: 'error',
-          message: '图片创建出错'
-        })
-      })
   }
 
   /**
    * 获取标签列表操作
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_picture_list(ctx) {
-    const { page = 1, pageSize = 10 } = ctx.query
-    let { count, rows } = await picture.findAndCountAll({
+  static async get_picture_list (ctx) {
+    const {page = 1, pageSize = 10} = ctx.query
+    let {count, rows} = await picture.findAndCountAll({
       attributes: [
         'picture_id',
         'picture_title',
         'picture_url',
-        'picture_type',
+        'description',
         'enable'
       ],
       where: '', //为空，获取全部，也可以自己添加条件
@@ -98,7 +98,7 @@ class Picture {
    * 更新标签
    * @param   {obejct} ctx 上下文对象
    */
-  static async update_picture(ctx) {
+  static async update_picture (ctx) {
     const req_data = ctx.request.body
     await picture
       .update(
@@ -107,7 +107,7 @@ class Picture {
           picture_url: req_data.picture_url[0].response
             ? req_data.picture_url[0].response.data.filename
             : req_data.picture_url,
-          picture_type: req_data.picture_type,
+          description: req_data.description,
           enable: req_data.enable
         },
         {
@@ -116,13 +116,13 @@ class Picture {
           }
         }
       )
-      .then(function(p) {
+      .then(function (p) {
         admin_resJson(ctx, {
           state: 'success',
           message: '更新图片成功'
         })
       })
-      .catch(function(err) {
+      .catch(function (err) {
         admin_resJson(ctx, {
           state: 'error',
           message: '更新图片失败'
@@ -133,18 +133,18 @@ class Picture {
   /**
    * 删除标签
    */
-  static async delete_picture(ctx) {
-    const { picture_id } = ctx.request.body
+  static async delete_picture (ctx) {
+    const {picture_id} = ctx.request.body
 
     await picture
-      .destroy({ where: { picture_id } })
-      .then(function(p) {
+      .destroy({where: {picture_id}})
+      .then(function (p) {
         admin_resJson(ctx, {
           state: 'success',
           message: '删除图片成功'
         })
       })
-      .catch(function(err) {
+      .catch(function (err) {
         admin_resJson(ctx, {
           state: 'error',
           message: '删除图片失败'

@@ -35,9 +35,14 @@ class ArticleColumn extends React.Component {
     this.state = {
       columns: [
         {
-          title: 'article_column_id',
-          dataIndex: 'article_column_id',
-          key: 'article_column_id'
+          title: '序号',
+          dataIndex: 'index',
+          key: 'index',
+          render: (text, record, index) => (
+            <span style={{
+              'width': '20px',
+              'display': 'block'
+            }}>{Number((this.state.pagination.current - 1) * 10) + index + 1}</span>)
         },
         {
           title: '专栏名',
@@ -48,6 +53,32 @@ class ArticleColumn extends React.Component {
           title: '专栏图标',
           dataIndex: 'article_column_icon',
           key: 'article_column_icon'
+        },
+        {
+          title: '专栏图标类型',
+          dataIndex: 'article_column_icon_type',
+          key: 'article_column_icon_type',
+          render: (value, record) => {
+            return (
+              <div className="type">
+                {this.state.menu_text[record.article_column_icon_type]}
+              </div>
+            )
+          }
+        },
+        {
+          title: '专栏图标演示',
+          dataIndex: 'article_column_icon',
+          key: 'article_column_icon_demo',
+          render: (value, record) => {
+            return (
+              <div className="type">
+                {Number(record.article_column_icon_type) === 1 ?
+                  <img className="tag-img-icon" src={record.article_column_icon} alt=""/> :
+                  <i className={`tag-font-icon iconfont ${record.article_column_icon}`}></i>}
+              </div>
+            )
+          }
         },
         {
           title: '下属专题',
@@ -97,7 +128,7 @@ class ArticleColumn extends React.Component {
           key: 'action',
           render: (text, record) => {
             return (
-              <div className="table-right-btn">
+              <div className="table--btn">
                 <Button onClick={() => { this._edit(record) }} size="small"
                         type="primary"
                 >修改</Button>
@@ -111,7 +142,9 @@ class ArticleColumn extends React.Component {
             )
           }
         }],
-      pagination: {},
+      pagination: {
+        current: 1
+      },
       loading: false,
       confirmDirty: false,
       modal_visible_edit: false,
@@ -270,15 +303,6 @@ class ArticleColumn extends React.Component {
     const {loading, is_create} = this.state
     const {getFieldDecorator} = this.props.form
 
-    const prefixSelector = getFieldDecorator('prefix', {
-      initialValue: '86'
-    })(
-      <Select style={{width: 70}}>
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
-      </Select>
-    )
-
     const formItemLayout = {
       labelCol: {
         xs: {span: 24},
@@ -307,7 +331,7 @@ class ArticleColumn extends React.Component {
       <div className="layout-main">
 
         <div className="layout-main-title">
-          <Icon type="user"/> <em>权限菜单</em>
+          <Icon type="user"/> <em>文章专栏</em>
         </div>
 
         <div className="layout-nav-btn">
@@ -352,17 +376,6 @@ class ArticleColumn extends React.Component {
 
               <FormItem
                 {...formItemLayout}
-                label="专栏名图标"
-              >
-                {getFieldDecorator('article_column_icon', {
-                  rules: [{required: true, message: '请输入专栏名图标！', whitespace: true}]
-                })(
-                  <Input placeholder="专栏名图标"/>
-                )}
-              </FormItem>
-
-              <FormItem
-                {...formItemLayout}
                 hasFeedback
                 label="专栏图标类型"
               >
@@ -375,6 +388,17 @@ class ArticleColumn extends React.Component {
                     <Option key="1">图片</Option>
                     <Option key="2">字体图标</Option>
                   </Select>
+                )}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="专栏名图标"
+              >
+                {getFieldDecorator('article_column_icon', {
+                  rules: [{required: true, message: '请输入专栏名图标！', whitespace: true}]
+                })(
+                  <Input placeholder="专栏名图标"/>
                 )}
               </FormItem>
 

@@ -40,48 +40,41 @@
 
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-md-8">
-
-                <% if (data.current_page === 'index'){ %>
-
-                <div class="bannerBox clearfix">
-                    <div class="bannerBox-img">
-                        <a href="//www.imooc.com/article/268019" target="_blank">
-                            <img src="//img3.mukewang.com/5c19a63f0001380305200332.jpg">
+                <% if (data.column_id==='index'){ %>
+                <div class="bannerBox clearfix" v-if="banner.length">
+                    <div class="bannerBox-img" v-for="item in banner">
+                        <a :href="item.article_url" target="_blank" v-if="item.id">
+                            <img :src="item.img_url">
                             <div class="bannerDescription">
-                                <span>多线程基础知识总结</span>
+                                <span v-text="item.title"></span>
                             </div>
                         </a>
-                    </div>
-                    <div class="bannerBox-img">
-                        <a href="//www.imooc.com/article/23266" target="_blank">
-                            <img src="//img4.mukewang.com/5c19a6750001002b06000338.jpg">
-
+                        <a :href="'/article/'+item.aid" target="_blank" v-else>
+                            <img :src="item.cover_img?item.cover_img:'/default/img/default_banner.jpg'">
                             <div class="bannerDescription">
-                                <span>Android中如何使用代码打开各种类型的文件</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="bannerBox-img">
-                        <a href="//www.imooc.com/article/23266" target="_blank">
-                            <img src="//img4.mukewang.com/5c19a6750001002b06000338.jpg">
-
-                            <div class="bannerDescription">
-                                <span>Android中如何使用代码打开各种类型的文件</span>
+                                <span v-text="item.title"></span>
                             </div>
                         </a>
                     </div>
                 </div>
+
                 <% }else { %>
 
                 <div class="main-top clearfix">
                     <div class="main-top-img">
-                        <img src="/upload/web/user_avatar/2018/12/1545033093539.jpg" alt="">
+                        <%if(data.current_column.article_column_icon_type==='1'){%>
+                        <div class="column-img-icon"
+                             style="background-image: url('<%= data.current_column.article_column_icon %>'); background-size: contain;"></div>
+                        <%}else{%>
+                        <div class="column-font-icon"><i
+                                class="iconfont <%= data.current_column.article_column_icon %>"></i></div>
+                        <%}%>
                     </div>
                     <div class="main-top-view">
                         <h3>
-                            <%= data.current_page %>
+                            <%= data.current_column.article_column_name %>
                         </h3>
-                        <p class="info">别再最该拼搏的年纪选择安逸{{message}}</p>
+                        <p class="info"><%= data.current_column.article_column_description %></p>
                     </div>
                 </div>
 
@@ -92,14 +85,16 @@
 
                     <nav class="list-nav">
                         <ul class="nav-list left">
-                            <li class="nav-item active"><a href="/timeline?sort=popular">热门</a></li>
-                            <li class="nav-item"><a href="/timeline?sort=newest">最新</a></li>
-                            <li class="nav-item"><a href="/timeline?sort=comment">评论</a></li>
+                            <li class="nav-item active"><a href="/column/<%= data.column_id %>?sort=popular">热门</a></li>
+                            <li class="nav-item"><a href="/column/<%= data.column_id %>?sort=newest">最新</a></li>
+                            <li class="nav-item"><a href="/column/<%= data.column_id %>?sort=comment">评论</a></li>
                         </ul>
                         <ul class="nav-list right">
-                            <li class="nav-item"><a href="/timeline?sort=hottest">全部</a></li>
-                            <li class="nav-item"><a href="/timeline?sort=weeklyHottest">本周最热</a></li>
-                            <li class="nav-item"><a href="/timeline?sort=monthlyHottest">本月最热</a></li>
+                            <li class="nav-item"><a href="/column/<%= data.column_id %>?sort=hottest">全部</a></li>
+                            <li class="nav-item"><a href="/column/<%= data.column_id %>?sort=weeklyHottest">本周最热</a>
+                            </li>
+                            <li class="nav-item"><a href="/column/<%= data.column_id %>?sort=monthlyHottest">本月最热</a>
+                            </li>
                         </ul>
                     </nav>
 
@@ -172,33 +167,27 @@
                                 <div class="info-box">
 
                                     <div class="info-row title-row">
-                                        <a :href="article_href(item.aid)" class="title" target="_blank">{{ item.title
-                                            }}</a>
-                                    </div>
-
-                                    <div class="content-text">
-                                        {{item.excerpt}}
+                                        <a :href="article_href(item.aid)" class="title" target="_blank" v-text="item.title"></a>
                                     </div>
 
                                     <div class="info-row meta-row">
                                         <ul class="meta-list">
                                             <li class="item username clickable">
-                                                <a href="">{{ item.user.nickname }}</a>
+                                                <a href="" v-text="item.user.nickname"></a>
                                             </li>
                                             <li class="item item-icon like-article">
                                                 <i class="iconfont icon-love"></i>
-                                                <strong>{{ item.like_count }}</strong>
+                                                <strong v-text="item.like_count"></strong>
                                             </li>
                                             <li class="item item-icon comment-count">
                                                 <i class="iconfont icon-pinglun"></i>
-                                                <strong>{{ item.comment_count }}</strong>
+                                                <strong v-text="item.comment_count"></strong>
                                             </li>
-                                            <li class="item">{{ item.create_at }}</li>
+                                            <li class="item" v-text="item.create_at"></li>
                                             <li class="item" v-if="item.tag_ids">
                                                 <a v-for="item_article_tag in article_tag_filter(item.tag_ids)"
                                                    class="tag-class frontend"
-                                                   :href="tag_href(item_article_tag.article_tag_id)">
-                                                    {{item_article_tag.article_tag_name}}
+                                                   :href="tag_href(item_article_tag.article_tag_id)" v-text="item_article_tag.article_tag_name">
                                                 </a>
                                             </li>
                                         </ul>
@@ -243,18 +232,22 @@
       page: 2,
       pageSize: 25,
       column_id: '<%= data.column_id %>',
+      sort: '<%= data.sort %>',
       tag_all: '',
       article_list: [],
-      loading_btn: Number('<%= data.count %>') >= 25
+      loading_btn: Number('<%= data.count %>') >= 25,
+      banner: []
     },
     created: function () {
       /* this.get_index_article_list()*/
+      this.get_home_banner()
     },
     methods: {
       get_index_article_list: function () {
         var params = {
           page: this.page,
-          column_id: this.column_id
+          column_id: this.column_id,
+          sort: this.sort,
         }
         var that = this
         _server.get_index_article_list(params).then(function (res) {
@@ -270,7 +263,6 @@
             that.article_tag = res.data.article_tag
             that.page = Number(res.data.page) + 1
           })
-          console.log('this.article_list', this.article_list)
         })
       },
       article_href: function (val) {
@@ -288,6 +280,15 @@
         })
         console.log(_arr)
         return _arr
+      },
+      get_home_banner: function () {
+        var that = this
+        _server.get_home_banner().then(function (res) {
+          console.log('res', res)
+          that.banner = res.data.banner
+        }).catch(function (err) {
+
+        })
       }
     }
   })

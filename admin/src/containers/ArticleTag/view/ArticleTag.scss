@@ -1,9 +1,11 @@
 .article-tag {
+
   .table-right-btn {
     button {
       margin-left: 5px;
     }
   }
+
   .table-is-login {
     padding-left: 5px;
     .anticon-check-circle {
@@ -12,6 +14,15 @@
     .anticon-close-circle {
       color: #f46e65;
     }
+  }
+
+  .tag-img-icon {
+    width: 150px;
+    height: 80px;
+  }
+
+  .tag-font-icon {
+    font-size: 20px;
   }
 
   .article-tag-user-create-btn {

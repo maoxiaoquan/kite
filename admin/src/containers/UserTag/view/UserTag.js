@@ -33,9 +33,14 @@ class UserTag extends React.Component {
     this.state = {
       columns: [
         {
-          title: 'user_tag_id',
-          dataIndex: 'user_tag_id',
-          key: 'user_tag_id'
+          title: '序号',
+          dataIndex: 'index',
+          key: 'index',
+          render: (text, record, index) => (
+            <span style={{
+              'width': '20px',
+              'display': 'block'
+            }}>{Number((this.state.pagination.current - 1) * 10) + index + 1}</span>)
         },
         {
           title: '标签名',
@@ -50,11 +55,51 @@ class UserTag extends React.Component {
           key: 'user_tag_icon'
         },
         {
+          title: '标签类型',
+          dataIndex: 'user_tag_icon_type',
+          key: 'user_tag_icon_type',
+          render: (value, record) => {
+            return (
+              <div className="type">
+                {this.state.menu_text[record.user_tag_icon_type]}
+              </div>
+            )
+          }
+        },
+        {
+          title: '标签图标演示',
+          dataIndex: 'user_tag_icon',
+          key: 'user_tag_icon_demo',
+          render: (value, record) => {
+            return (
+              <div className="type">
+                {Number(record.user_tag_icon_type) === 1 ?
+                  <img className="tag-img-icon" src={record.user_tag_icon} alt=""/> :
+                  <i className={`tag-font-icon iconfont ${record.user_tag_icon}`}></i>}
+              </div>
+            )
+          }
+        },
+        {
+          title: '是否可以用',
+          dataIndex: 'enable',
+          key: 'enable',
+          render: (value, record) => {
+            return (
+              <div className="table-enable">
+                {
+                  value ? (<Icon type="check-circle"/>) : (<Icon type="close-circle"/>)
+                }
+              </div>
+            )
+          }
+        },
+        {
           title: '操作',
           key: 'action',
           render: (text, record) => {
             return (
-              <div className="table-right-btn">
+              <div className="table--btn">
                 <Button onClick={() => { this._edit(record) }} size="small"
                         type="primary"
                 >修改</Button>
@@ -68,7 +113,9 @@ class UserTag extends React.Component {
             )
           }
         }],
-      pagination: {},
+      pagination: {
+        current: 1
+      },
       loading: false,
       confirmDirty: false,
       modal_visible_edit: false,
@@ -287,18 +334,6 @@ class UserTag extends React.Component {
                 )}
               </FormItem>
 
-
-              <FormItem
-                {...formItemLayout}
-                label="标签名图标"
-              >
-                {getFieldDecorator('user_tag_icon', {
-                  rules: [{required: true, message: '请输入标签名图标！', whitespace: true}]
-                })(
-                  <Input placeholder="标签名图标"/>
-                )}
-              </FormItem>
-
               <FormItem
                 {...formItemLayout}
                 hasFeedback
@@ -313,6 +348,17 @@ class UserTag extends React.Component {
                     <Option value="1">图片</Option>
                     <Option value="2">字体图标</Option>
                   </Select>
+                )}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="标签名图标"
+              >
+                {getFieldDecorator('user_tag_icon', {
+                  rules: [{required: true, message: '请输入标签名图标！', whitespace: true}]
+                })(
+                  <Input placeholder="标签名图标"/>
                 )}
               </FormItem>
 

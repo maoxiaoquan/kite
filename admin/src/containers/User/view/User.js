@@ -35,28 +35,19 @@ class User extends React.Component {
     this.state = {
       columns: [
         {
+          title: '序号',
+          dataIndex: 'index',
+          key: 'index',
+          render: (text, record, index) => (
+            <span style={{
+              'width': '20px',
+              'display': 'block'
+            }}>{Number((this.state.pagination.current - 1) * 10) + index + 1}</span>)
+        },
+        {
           title: '昵称',
           dataIndex: 'nickname',
           key: 'nickname'
-        },
-        {
-          title: '邮箱',
-          dataIndex: 'email',
-          key: 'email'
-        },
-        {
-          title: '手机',
-          dataIndex: 'phone',
-          key: 'phone',
-          render: (value, record) => {
-            return (
-              <div>
-                {
-                  value ? value : '无'
-                }
-              </div>
-            )
-          }
         },
         {
           title: '拥有的角色标签',
@@ -89,7 +80,7 @@ class User extends React.Component {
           key: 'enable',
           render: (value, record) => {
             return (
-              <div className="table-is-login">
+              <div className="table-enable">
                 {
                   value ? (<Icon type="check-circle"/>) : (<Icon type="close-circle"/>)
                 }
@@ -102,7 +93,7 @@ class User extends React.Component {
           key: 'action',
           render: (text, record) => {
             return (
-              <div className="table-right-btn">
+              <div className="table--btn">
                 <Button onClick={() => {
                   this.editUser(record)
                 }} size="small"
@@ -118,7 +109,9 @@ class User extends React.Component {
             )
           }
         }],
-      pagination: {},
+      pagination: {
+        current: 1
+      },
       modal_visible_edit: false,
       loading: false,
       user_tag_all: []
@@ -262,7 +255,7 @@ class User extends React.Component {
       <div className="layout-main">
 
         <div className="layout-main-title">
-          <Icon type="user"/> <em>标签管理</em>
+          <Icon type="user"/> <em>用户管理</em>
         </div>
 
         <div className="layout-nav-btn">
@@ -286,7 +279,6 @@ class User extends React.Component {
               onSubmit={this.handleSubmit.bind(this)}
             >
 
-
               <FormItem
                 {...formItemLayout}
                 label="昵称"
@@ -298,17 +290,16 @@ class User extends React.Component {
                 )}
               </FormItem>
 
-
               <FormItem
                 {...formItemLayout}
                 label="用户角色标签"
               >
                 {getFieldDecorator('user_tag_ids', {
                   rules: [
-                    {required: false, message: '请选择文章专栏下属专题!', type: 'array'}
+                    {required: false, message: '请选择用户角色标签!', type: 'array'}
                   ]
                 })(
-                  <Select mode="multiple" placeholder="请选择文章专栏下属专题">
+                  <Select mode="multiple" placeholder="请选择用户角色标签">
                     {
                       this.state.user_tag_all.map((item) =>
                         <Option key={item.user_tag_id}>{item.user_tag_name}</Option>)

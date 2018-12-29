@@ -207,7 +207,7 @@ class Init {
 
     let create_admin_user = await admin_user.create({
       account: req_data.account,
-      avatar: 'http://oq33egsog.bkt.clouddn.com/avatar1.jpg',
+      avatar: '/default/img/default_avatar.jpg',
       nickname: req_data.nickname,
       password: encrypt(req_data.password, config.encrypt_key),
       // reg_ip: ctx.request.ip,

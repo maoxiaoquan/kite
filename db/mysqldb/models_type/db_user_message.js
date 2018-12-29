@@ -55,20 +55,6 @@ module.exports = {
       comment: 'comment_id',
       field: 'comment_id'
     },
-    create_date: {
-      // 创建时间
-      type: Seq.DATE,
-      comment: '创建时间',
-      field: 'create_date',
-      defaultValue: time.TimeNow.time /*时间*/
-    },
-    create_date_timestamp: {
-      // 创建时间戳
-      type: Seq.BIGINT(30),
-      comment: '创建时间戳',
-      field: 'create_date_timestamp',
-      defaultValue: time.TimeNow.timestamp /*时间戳 */
-    },
     is_system: {
       // 是否为系统消息
       type: Seq.BOOLEAN,
@@ -82,6 +68,7 @@ module.exports = {
       comment: '是否被阅读',
       field: 'is_read',
       defaultValue: false
-    }
+    },
+    ...time.create_date
   }
 }

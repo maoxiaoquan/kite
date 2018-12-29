@@ -83,8 +83,8 @@
 </ul>
 
 <script>
-  window.onload = function () {
 
+  addLoadEvent(!function () {
     var subscribe_btn = document.getElementsByClassName('user-follow-button')[0]
 
     if (!subscribe_btn) {
@@ -104,5 +104,6 @@
         console.log('错误')
       })
     }
-  }
+  }())
+
 </script>

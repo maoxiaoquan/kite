@@ -16,20 +16,20 @@ module.exports = {
     },
     article_tag_name: {
       // 标签名字
-      type: Seq.STRING(20),
+      type: Seq.STRING(50),
       comment: '标签名字',
       field: 'article_tag_name'
     },
     article_tag_us_name: {
       // 标签英文名字
-      type: Seq.STRING(20),
+      type: Seq.STRING(100),
       comment: '标签英文名字',
       field: 'article_tag_us_name'
     },
     article_tag_icon: {
-      // 标签图标
-      type: Seq.STRING(20),
-      comment: '标签',
+      // 标签图标地址
+      type: Seq.STRING(160),
+      comment: '标签图标地址',
       field: 'article_tag_icon'
     },
     article_tag_icon_type: {
@@ -44,25 +44,12 @@ module.exports = {
       comment: '标签描述',
       field: 'article_tag_description'
     },
-    create_date: {
-      // 创建时间
-      type: Seq.DATE,
-      comment: '创建时间',
-      field: 'create_date',
-      defaultValue: time.TimeNow.time /*时间*/
-    },
-    create_date_timestamp: {
-      // 创建时间戳
-      type: Seq.BIGINT(30),
-      comment: '创建时间戳',
-      field: 'create_date_timestamp',
-      defaultValue: time.TimeNow.timestamp /*时间戳 */
-    },
     enable: {
       // 是否可以显示
       type: Seq.BOOLEAN,
       comment: '是否可以显示',
       field: 'enable'
-    }
+    },
+    ...time.create_date
   }
 }

@@ -52,7 +52,7 @@ class Upload {
 
     home_resJson(ctx, {
       state: 'success',
-      message: '修改用户头像成功',
+      message: '文章图片上传成功',
       data: {
         img: `${destination + '/' + filename}`
       }

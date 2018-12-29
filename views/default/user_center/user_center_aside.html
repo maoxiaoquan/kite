@@ -16,7 +16,7 @@
         <% if(data.current_user.introduction){ %>
         <%= data.current_user.introduction %>
         <% }else{ %>
-        暂无简介，请前往设置中修改
+        暂无简介
         <% } %>
     </div>
 </div>
@@ -24,15 +24,15 @@
 <script>
 
   var user_tag_template =
-    '<ul class="list user-dynamic">' +
-  '    <li class="badge-icon" v-for="item in user_tag_item">' +
-  '        <a target="_blank" href="/mobile/club">' +
-  '            <img width="20" heigth="20"' +
-  '                 src="//upload.jianshu.io/user_badge/22d8d123-271c-4d80-9c59-6990844a9e37"' +
-  '                 alt="22d8d123 271c 4d80 9c59 6990844a9e37"> {{item.user_tag_name}}' +
-  '        </a> ' +
-  '    </li> ' +
-  '</ul> '
+    '<ul class="list user-dynamic" v-if="user_tag_item.length">' +
+    '    <li class="badge-icon" v-for="item in user_tag_item">' +
+    '        <a target="_blank" href="/mobile/club">' +
+    '            <img v-if="Number(item.user_tag_icon_type)===1" width="20" heigth="20"' +
+    '                 :src="item.user_tag_icon"' +
+    '                 alt="22d8d123 271c 4d80 9c59 6990844a9e37"> <i v-else class="user-font-icon iconfont" :class="item.user_tag_icon"></i> {{item.user_tag_name}}' +
+    '        </a> ' +
+    '    </li> ' +
+    '</ul> '
 
   Vue.component('user-tag', {
     data: function () {
@@ -56,7 +56,7 @@
       },
       get_user_info: function () {
         var that = this
-        _server.get_user_info({uid:<%= data.current_user.uid %>}).then(function (res) {
+        _server.get_user_info({uid: '<%= data.current_user.uid %>'}).then(function (res) {
           that.user = res.data.user
           that.curr_user_tag = res.data.user.user_tag_ids.split(',')
           that.user_tag_filter()
@@ -69,7 +69,7 @@
             that.user_tag_item.push(item)
           }
         })
-        console.log('that.user_tag_item',that.user_tag_item)
+        console.log('that.user_tag_item', that.user_tag_item)
       }
     },
     template: user_tag_template

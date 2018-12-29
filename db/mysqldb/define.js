@@ -14,7 +14,12 @@ module.exports = function define (sequelize) {
     user: sequelize.define(
       require('./models_type/db_user').NAME,
       require('./models_type/db_user').TABLE,
-      SEQ_PARAMETER
+      {
+        ...SEQ_PARAMETER,
+        ...{
+          initialAutoIncrement: 10000
+        }
+      },
     ),
     /*前台用户关注用户表*/
     user_attention: sequelize.define(
@@ -50,7 +55,12 @@ module.exports = function define (sequelize) {
     article: sequelize.define(
       require('./models_type/db_article').NAME,
       require('./models_type/db_article').TABLE,
-      SEQ_PARAMETER
+      {
+        ...SEQ_PARAMETER,
+        ...{
+          initialAutoIncrement: 10000
+        }
+      },
     ),
     /*前台文章官方标签表*/
     article_tag: sequelize.define(

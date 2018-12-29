@@ -33,6 +33,16 @@ class ArticleTag extends React.Component {
     this.state = {
       columns: [
         {
+          title: '序号',
+          dataIndex: 'index',
+          key: 'index',
+          render: (text, record, index) => (
+            <span style={{
+              'width': '20px',
+              'display': 'block'
+            }}>{Number((this.state.pagination.current - 1) * 10) + index + 1}</span>)
+        },
+        {
           title: '标签名',
           dataIndex: 'article_tag_name',
           key: 'article_tag_name'
@@ -43,9 +53,35 @@ class ArticleTag extends React.Component {
           key: 'article_tag_us_name'
         },
         {
-          title: '标签图标',
+          title: '标签图标地址',
           dataIndex: 'article_tag_icon',
           key: 'article_tag_icon'
+        },
+        {
+          title: '标签类型',
+          dataIndex: 'article_tag_icon_type',
+          key: 'article_tag_icon_type',
+          render: (value, record) => {
+            return (
+              <div className="type">
+                {this.state.menu_text[record.article_tag_icon_type]}
+              </div>
+            )
+          }
+        },
+        {
+          title: '标签演示',
+          dataIndex: 'article_tag_icon',
+          key: 'article_tag_demo',
+          render: (value, record) => {
+            return (
+              <div className="type">
+                {Number(record.article_tag_icon_type) === 1 ?
+                  <img className="tag-img-icon" src={record.article_tag_icon} alt=""/> :
+                  <i className={`tag-font-icon iconfont ${record.article_tag_icon}`}></i>}
+              </div>
+            )
+          }
         },
         {
           title: '备注',
@@ -85,7 +121,9 @@ class ArticleTag extends React.Component {
             )
           }
         }],
-      pagination: {},
+      pagination: {
+        current: 1
+      },
       loading: false,
       confirmDirty: false,
       modal_visible_edit: false,
@@ -273,7 +311,7 @@ class ArticleTag extends React.Component {
       <div className="layout-main">
 
         <div className="layout-main-title">
-          <Icon type="user"/> <em>标签管理</em>
+          <Icon type="user"/> <em>文章标签</em>
         </div>
 
         <div className="layout-nav-btn">
@@ -318,20 +356,9 @@ class ArticleTag extends React.Component {
                 label="标签名单词"
               >
                 {getFieldDecorator('article_tag_us_name', {
-                  rules: [{required: true, message: '请输入标签名单词！', whitespace: true}]
+                  rules: [{required: true, message: '请输入标签单词！', whitespace: true}]
                 })(
-                  <Input placeholder="标签名单词"/>
-                )}
-              </FormItem>
-
-              <FormItem
-                {...formItemLayout}
-                label="标签名图标"
-              >
-                {getFieldDecorator('article_tag_icon', {
-                  rules: [{required: true, message: '请输入标签名图标！', whitespace: true}]
-                })(
-                  <Input placeholder="标签名图标"/>
+                  <Input placeholder="标签单词"/>
                 )}
               </FormItem>
 
@@ -351,6 +378,18 @@ class ArticleTag extends React.Component {
                   </Select>
                 )}
               </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="标签图标地址"
+              >
+                {getFieldDecorator('article_tag_icon', {
+                  rules: [{required: true, message: '请输入标签图标！', whitespace: true}]
+                })(
+                  <Input placeholder="标签图标地址"/>
+                )}
+              </FormItem>
+
 
               <FormItem
                 {...formItemLayout}

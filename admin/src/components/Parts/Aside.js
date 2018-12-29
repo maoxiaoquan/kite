@@ -40,11 +40,11 @@ class Aside extends Component {
             key: 'article',
             link: '/manager/article'
           },
-          {
+          /*{
             title: '文章审核',
             key: 'article_review',
             link: '/manager/article_review'
-          },
+          },*/
           {
             title: '文章标签',
             key: 'article_tag',
@@ -73,11 +73,6 @@ class Aside extends Component {
             link: '/manager/user_tag'
           },
           {
-            title: '图片管理',
-            key: 'picture',
-            link: '/manager/picture'
-          },
-          {
             title: '评论管理',
             key: 'comment',
             link: '/manager/comment'
@@ -87,13 +82,18 @@ class Aside extends Component {
       {
         title: '网站管理',
         key: 'web',
-        icon: 'file-text',
+        icon: 'desktop',
         children: [
           {
             title: 'Banner管理',
             key: 'Banner',
             link: '/manager/banner'
-          }
+          },
+          {
+            title: '图库',
+            key: 'picture',
+            link: '/manager/picture'
+          },
         ]
       },
       {

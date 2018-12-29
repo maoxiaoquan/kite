@@ -7,12 +7,12 @@ module.exports = {
   TABLE: {
     /*表结构*/
     aid: {
-      // 文章id
-      type: Seq.STRING(20),
+      // 用户ID
+      type: Seq.INTEGER(10),
       primaryKey: true, // 定义主键
-      comment: '文章id',
-      field: 'aid',
-      defaultValue: shortid.generate
+      autoIncrement: true, // 自动递增
+      comment: 'aid 主键，自增',
+      field: 'aid' //  相应的字段名称
     },
     uid: {
       // 作者id
@@ -47,7 +47,7 @@ module.exports = {
     source: {
       // 来源 （1原创 2转载）
       type: Seq.STRING(20),
-      comment: '来源 （1原创 2转载）',
+      comment: '来源 （0原创 1转载）',
       field: 'source'
     },
     status: {
@@ -59,22 +59,8 @@ module.exports = {
     type: {
       // 类型 （1文章 2说说 3视频 4公告 ）
       type: Seq.STRING(20),
-      comment: '类型 （1:文章; 2:说说 ;3:视频;4: 公告 ）',
+      comment: '类型 （0:提问 ；1:文章; ）',
       field: 'type'
-    },
-    create_date: {
-      // 创建时间
-      type: Seq.DATE,
-      comment: '创建时间',
-      field: 'create_date',
-      defaultValue: time.TimeNow.time /*时间*/
-    },
-    create_date_timestamp: {
-      // 创建时间戳
-      type: Seq.BIGINT(30),
-      comment: '创建时间戳',
-      field: 'create_date_timestamp',
-      defaultValue: time.TimeNow.timestamp /*时间戳 */
     },
     cover_img: {
       type: Seq.STRING(150),
@@ -113,6 +99,19 @@ module.exports = {
       type: Seq.STRING(100),
       comment: '文章所属的标签id',
       field: 'article_tag_ids'
-    }
+    },
+    update_date: {
+      // 更新时间
+      type: Seq.DATE,
+      comment: '更新时间',
+      field: 'update_date',
+    },
+    update_date_timestamp: {
+      // 更新时间戳
+      type: Seq.BIGINT(30),
+      comment: '更新时间戳',
+      field: 'update_date_timestamp',
+    },
+    ...time.create_date
   }
 }

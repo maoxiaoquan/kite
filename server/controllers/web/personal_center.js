@@ -86,30 +86,13 @@ class Personal_center {
         limit: pageSize, //每页限制返回的数据条数
         order: [['create_date_timestamp', 'desc']]
       })
-      .then(res => {
-        res.rows.map((item, key) => {
-          item.create_at = moment(item.create_date).format('YYYY-MM-DD')
-          return item
-        })
-        return res
-      })
 
-    for (let item in rows) {
-      // 循环取用户
-      await (async i => {
-        rows[i].user = {}
-        let data = await models.user
-          .findOne({
-            where: { uid: rows[i].uid },
-            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-          })
-          .then(res => {
-            return JSON.parse(JSON.stringify(res))
-          })
-        if (data) {
-          rows[i].user = data
-        }
-      })(item)
+    for (let item in rows) {// 循环取用户 render 渲染必须用这种方法 与 ajax 有区别
+      rows[item].create_at = await moment(rows[item].create_date).format('YYYY-MM-DD H:m:s')
+      rows[item].user = await models.user.findOne({
+        where: {uid: rows[item].uid},
+        attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+      })
     }
 
     let user_article_topic_all = await models.user_article_topic.findAll({
@@ -307,30 +290,13 @@ class Personal_center {
         limit: pageSize, //每页限制返回的数据条数
         order: [['create_date_timestamp', 'desc']]
       })
-      .then(res => {
-        res.rows.map((item, key) => {
-          item.create_at = moment(item.create_date).format('YYYY-MM-DD')
-          return item
-        })
-        return res
-      })
 
-    for (let item in rows) {
-      // 循环取用户
-      await (async i => {
-        rows[i].user = {}
-        let data = await models.user
-          .findOne({
-            where: { uid: rows[i].uid },
-            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-          })
-          .then(res => {
-            return JSON.parse(JSON.stringify(res))
-          })
-        if (data) {
-          rows[i].user = data
-        }
-      })(item)
+    for (let item in rows) {// 循环取用户 render 渲染必须用这种方法 与 ajax 有区别
+      rows[item].create_at = await moment(rows[item].create_date).format('YYYY-MM-DD H:m:s')
+      rows[item].user = await models.user.findOne({
+        where: {uid: rows[item].uid},
+        attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+      })
     }
 
     /*所有文章专题*/

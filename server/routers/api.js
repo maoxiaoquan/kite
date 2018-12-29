@@ -28,7 +28,7 @@ router.post('/edit_user', tokens.verifyToken, users.edit_user)
 router.post('/delete_user', tokens.verifyToken, users.delete_user)
 
 /* 文章管理 */
-router.get('/get_article_list', tokens.verifyToken, articles.get_article_list)
+router.post('/get_article_list', tokens.verifyToken, articles.get_article_list)
 //更新用户
 router.post('/edit_article', tokens.verifyToken, articles.edit_article)
 //删除用户
@@ -80,7 +80,7 @@ router.post('/delete_picture', tokens.verifyToken, picture.delete_picture)
 
 // 评论模块
 // 评论分页列表
-router.get('/get_comment_list', tokens.verifyToken, comment.get_comment_list)
+router.post('/get_comment_list', tokens.verifyToken, comment.get_comment_list)
 // 评论数据更新
 router.post('/update_comment', tokens.verifyToken, comment.update_comment)
 // 评论数据删除
@@ -168,6 +168,10 @@ router.post('/set_admin_role_authority', tokens.verifyToken, role_authority.set_
 router.get('/banner_list', tokens.verifyToken, banner.get_banner_list)
 //设置banner
 router.post('/create_banner', tokens.verifyToken, banner.create_banner)
+// 更新 banner
+router.post('/update_banner', tokens.verifyToken, banner.update_banner)
+//删除 banner
+router.post('/delete_banner', tokens.verifyToken, banner.delete_banner)
 
 /**
  * 后台系统日志

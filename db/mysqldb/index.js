@@ -18,7 +18,7 @@ const sequelize = new Seq(
     },
     host: config.database.HOST, // 数据库服务器ip
     port: config.database.MYSQL_PORT, // 数据库服务器端口
-    timezone: '+8:00',// 设置东八区
+    timezone: '+08:00',// 设置东八区
     define: {
       // 字段以下划线（_）来分割（默认是驼峰命名风格）
       underscored: true
@@ -37,7 +37,7 @@ sequelize
 
 const define = require('./define')(sequelize)
 
-/* 表关联 已遗弃*/
+/* 表关联 暂不用*/
 /*user.hasMany(comment, {foreignKey: 'uid',as:'user'})*/
 /*comment.belongsTo(user, {foreignKey: 'uid',as:'user'})
 user_message.belongsTo(user, {foreignKey: 'other_uid',as:'other_user'})

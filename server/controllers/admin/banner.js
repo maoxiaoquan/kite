@@ -97,29 +97,109 @@ class Banner {
   static async get_banner_list (ctx) {
     const {page = 1, pageSize = 10, type} = ctx.query
 
-    let {count, rows} = await models.banner.findAndCountAll({
-      attributes: [
-        'id',
-        'title',
-        'article_url',
-        'img_url',
-        'sort',
-        'description',
-        'type',
-        'enable'
-      ],
-      where: type ? {type} : '', //为空，获取全部，也可以自己添加条件
-      offset: (page - 1) * Number(pageSize), //开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-      limit: Number(pageSize) //每页限制返回的数据条数
-    })
-    admin_resJson(ctx, {
-      state: 'success',
-      message: '返回banner成功',
-      data: {
-        count: count,
-        list: rows
-      }
-    })
+    try {
+      let {count, rows} = await models.banner.findAndCountAll({
+        attributes: [
+          'id',
+          'title',
+          'article_url',
+          'img_url',
+          'sort',
+          'description',
+          'type',
+          'enable'
+        ],
+        where: type ? {type} : '', //为空，获取全部，也可以自己添加条件
+        offset: (page - 1) * Number(pageSize), //开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: Number(pageSize) //每页限制返回的数据条数
+      })
+      admin_resJson(ctx, {
+        state: 'success',
+        message: '返回banner成功',
+        data: {
+          count: count,
+          list: rows
+        }
+      })
+    } catch (err) {
+      admin_resJson(ctx, {
+        state: 'error',
+        message: err.message
+      })
+      return false
+    }
+  }
+
+  /**
+   * 更新Banner
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async update_banner (ctx) {
+    const {id, title, article_url, img_url, type, sort, description, enable} = ctx.request.body
+    try {
+      await models.banner
+        .update(
+          {
+            title, article_url, img_url, type, sort, description, enable
+          },
+          {
+            where: {
+              id: id //查询条件
+            }
+          }
+        )
+        .then(function (p) {
+          admin_resJson(ctx, {
+            state: 'success',
+            message: '更新Banner成功'
+          })
+        })
+        .catch(function (err) {
+          admin_resJson(ctx, {
+            state: 'error',
+            message: '更新Banner失败'
+          })
+        })
+    } catch (err) {
+      admin_resJson(ctx, {
+        state: 'error',
+        message: err.message
+      })
+      return false
+    }
+  }
+
+  /**
+   * 删除Banner
+   * @param   {obejct} ctx 上下文对象
+   */
+  static async delete_banner (ctx) {
+    const {id} = ctx.request.body
+
+    try {
+
+      await models.banner
+        .destroy({where: {id}})
+        .then(data => {
+          admin_resJson(ctx, {
+            state: 'success',
+            message: '删除Banner成功'
+          })
+        })
+        .catch(err => {
+          admin_resJson(ctx, {
+            state: 'error',
+            message: '删除Banner失败'
+          })
+        })
+
+    } catch (err) {
+      admin_resJson(ctx, {
+        state: 'error',
+        message: err.message
+      })
+      return false
+    }
   }
 
 }

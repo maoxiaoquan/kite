@@ -19,18 +19,18 @@ export const create_banner = (data, callback) => {
   }
 }
 
-export const update_article_tag = (data, callback) => {
+export const update_banner = (data, callback) => {
   return () => {
-    http.post('/api/update_article_tag', data).then((res) => {
+    http.post('/api/update_banner', data).then((res) => {
       if (callback)
         callback(res)
     })
   }
 }
 
-export const delete_article_tag = (data, callback) => {
+export const delete_banner = (data, callback) => {
   return () => {
-    http.post('/api/delete_article_tag', data).then((res) => {
+    http.post('/api/delete_banner', data).then((res) => {
       if (callback)
         callback(res)
     })

@@ -35,9 +35,14 @@ class AdminUser extends React.Component {
     this.state = {
       columns: [
         {
-          title: 'id',
-          dataIndex: 'uid',
-          key: 'uid'
+          title: '序号',
+          dataIndex: 'index',
+          key: 'index',
+          render: (text, record, index) => (
+            <span style={{
+              'width': '20px',
+              'display': 'block'
+            }}>{Number((this.state.pagination.current - 1) * 10) + index + 1}</span>)
         },
         {
           title: '账户',
@@ -134,7 +139,9 @@ class AdminUser extends React.Component {
             )
           }
         }],
-      pagination: {},
+      pagination: {
+        current: 1
+      },
       loading: false,
       confirmDirty: false,
       modal_visible_register: false,
