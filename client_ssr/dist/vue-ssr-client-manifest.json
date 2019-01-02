@@ -1,0 +1,50 @@
+{
+  "publicPath": "/",
+  "all": [
+    "static\\js\\1.6bc9158e569144c06fc4.js",
+    "static\\js\\2.09adb8a6034e7f7d6aa3.js",
+    "static\\js\\main.4f9e38d9ed330ac7c524.js"
+  ],
+  "initial": [
+    "static\\js\\main.4f9e38d9ed330ac7c524.js"
+  ],
+  "async": [
+    "static\\js\\1.6bc9158e569144c06fc4.js",
+    "static\\js\\2.09adb8a6034e7f7d6aa3.js"
+  ],
+  "modules": {
+    "645c459f": [
+      2
+    ],
+    "27b001d3": [
+      2
+    ],
+    "f0d3362e": [
+      0
+    ],
+    "86ea90aa": [
+      1
+    ],
+    "3a8260d8": [
+      2
+    ],
+    "5a74d937": [
+      2
+    ],
+    "71db6dad": [
+      2
+    ],
+    "0878b424": [
+      2
+    ],
+    "2f55c11e": [
+      2
+    ],
+    "4ddbc482": [
+      2
+    ],
+    "4d66a524": [
+      2
+    ]
+  }
+}
