@@ -30,12 +30,12 @@ const router = new Router()
 
 let renderer
 const templatePath = path.resolve(__dirname, './index.template.html')
-
 // 第 2步：根据环境变量生成不同BundleRenderer实例
 if (process.env.NODE_ENV === 'production') {
   // 获取客户端、服务器端打包生成的json文件
-  const serverBundle = require('../dist/vue-ssr-server-bundle.json')
-  const clientManifest = require('../dist/vue-ssr-client-manifest.json')
+  console.log('pro')
+  const serverBundle = require('../../static/dist_ssr/vue-ssr-server-bundle.json')
+  const clientManifest = require('../../static/dist_ssr/vue-ssr-client-manifest.json')
   // 赋值
   renderer = createBundleRenderer(serverBundle, {
     runInNewContext: false,
@@ -43,9 +43,9 @@ if (process.env.NODE_ENV === 'production') {
     clientManifest
   })
   // 静态资源
-  router.get('/static/*', async (ctx, next) => {
+/*  router.get('/static/!*', async (ctx, next) => {
     await send(ctx, ctx.path, {root: __dirname + '/../dist'})
-  })
+  })*/
 } else {
   // 开发环境
   setupDevServer(app, templatePath, (bundle, options) => {

@@ -11,7 +11,7 @@ const routers = require('./routers/index')
 
 const session = require('koa-session-minimal')
 const MysqlStore = require('koa-mysql-session')
-const {lowdb} = require('../db/lowdb')
+const { lowdb } = require('../db/lowdb')
 
 const cli = lowdb
   .read()
@@ -58,7 +58,7 @@ app.use(koaStatic(path.join(__dirname, '../static')))
 // 配置服务端模板渲染引擎中间件
 app.use(
   views(path.join(__dirname, '../views'), {
-    map: {html: 'ejs'}
+    map: { html: 'ejs' }
   })
 )
 

@@ -1,6 +1,5 @@
 const path = require('path')
 const config = require('../config')
-const packageConfig = require('../package.json')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 // 返回文件绝对路径
@@ -89,7 +88,7 @@ exports.createNotifierCallback = () => {
     const filename = error.file && error.file.split('!').pop()
 
     notifier.notify({
-      title: packageConfig.name,
+      title: 'kite',
       message: severity + ': ' + error.name,
       subtitle: filename || '',
     })
