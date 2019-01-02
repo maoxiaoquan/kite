@@ -14,6 +14,11 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   entry: {
     'app': path.join(__dirname, '../src/entry-client.js')
   },
+  output: {
+    path: config.dev.assetsRoot,
+    filename: utils.assetsPath('js/[name].js'),
+    chunkFilename: utils.assetsPath('js/[id].js')
+  },
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.dev.cssSourceMap,

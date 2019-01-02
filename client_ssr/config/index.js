@@ -3,8 +3,9 @@ const path = require('path')
 module.exports = {
   dev: {
     // Paths
+    assetsRoot: path.resolve(__dirname, '../../static/dist_ssr'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: 'dist_ssr/',
     proxyTable: {}, // 可以配置跨域请求
     // Dev Server settings
     host: '0.0.0.0', // 0.0.0.0可以进行移动端测试
@@ -25,7 +26,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../../static/dist_ssr'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: 'dist_ssr',
+    assetsPublicPath: 'dist_ssr/',
     productionSourceMap: false,
     devtool: '#source-map',
   }

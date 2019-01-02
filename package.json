@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "mysql": "node ./db/mysqldb/create.js",
     "ssr-build": "cross-env NODE_ENV=production npm run ssr-build:client && npm run ssr-build:server",
-    "ssr-build:client": "webpack --config client_ssr/build/webpack.prod.conf.js",
+    "ssr-build:client": "webpack --config client_ssr/build/webpack.dev.conf.js",
     "ssr-build:server": "webpack --config client_ssr/build/webpack.server.conf.js",
     "server-pro": "cross-env NODE_ENV=production nodemon ./server/app.js --config _nodemon.json",
     "server-dev": "nodemon ./server/app.js --config _nodemon.json",
