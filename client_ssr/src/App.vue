@@ -3,6 +3,7 @@
     <router-view/>
     <router-link :to="{ name: 'A' }" v-text="'to A'"/>
     <router-link :to="{ name: 'B' }" v-text="'to B'"/>
+    <router-link :to="{ name: 'Home' }" v-text="'to Home'"/>
     <div class="store-example">
       <h1>h2</h1>
       <button @click="update">updateCount</button>

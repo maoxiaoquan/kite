@@ -1,9 +1,11 @@
-var webpack = require('webpack')
-var WebpackDevServer = require('webpack-dev-server')
-var config = require('./webpack.dev')
+const webpack = require('webpack')
+const WebpackDevServer = require('webpack-dev-server')
 const path = require('path')
 
-new WebpackDevServer(webpack(config), {
+const config = require('../../config')
+const webpack_option = require('./webpack.dev')
+
+new WebpackDevServer(webpack(webpack_option), {
   contentBase: path.join(__dirname, '../dist'),
   hot: true,
   historyApiFallback: true,
@@ -20,17 +22,16 @@ new WebpackDevServer(webpack(config), {
     hash: false,
     timings: false,
     chunks: false,
-    chunkModules: false
+    chunkModules: false,
   },
   proxy: {
     '/': {
-      target: 'http://localhost:8086/'
-    }
-  }
-}).listen(3000, 'localhost', function (err) {
+      target: `http://localhost:${config.port.product}/`,
+    },
+  },
+}).listen(config.port.admin_dev, 'localhost', (err) => {
+  console.log(`Listening at localhost:${config.port.admin_dev}`)
   if (err) {
     console.log(err)
   }
-
-  console.log('Listening at localhost:3000')
 })

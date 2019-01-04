@@ -18,19 +18,18 @@ import App from './routers/router'
 const middlewares = [thunk]
 
 const store = createStore(
-  combineReducers({routing: routerReducer, ...rootReducer}),
-  composeWithDevTools(applyMiddleware(...middlewares))
+  combineReducers({ routing: routerReducer, ...rootReducer }),
+  composeWithDevTools(applyMiddleware(...middlewares)),
 )
 
-const render = Component =>
-  ReactDOM.render(
-    <AppContainer>
-      <Provider store={store}>
-        <Component/>
-      </Provider>
-    </AppContainer>,
-    document.getElementById('app')
-  )
+const render = Component => ReactDOM.render(
+  <AppContainer>
+    <Provider store={store}>
+      <Component/>
+    </Provider>
+  </AppContainer>,
+  document.getElementById('app'),
+)
 
 render(App)
 

@@ -497,7 +497,7 @@ a:focus {
   }
 }
 
-.table-enable{
+.table-enable {
   padding-left: 5px;
   .anticon-check-circle {
     color: #28a745;
@@ -609,3 +609,7 @@ a:focus {
   }
 }
 
+/* reset */
+.ant-drawer-body {
+  padding: 0 !important;
+}

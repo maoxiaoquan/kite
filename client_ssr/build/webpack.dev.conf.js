@@ -1,7 +1,7 @@
 const path = require('path')
 const utils = require('./utils')
 const webpack = require('webpack')
-const config = require('../config')
+const config = require('./config')
 const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.conf')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
@@ -15,15 +15,19 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     'app': path.join(__dirname, '../src/entry-client.js')
   },
   output: {
-    path: config.build.assetsRoot,
-    filename: '[name].js',
-    publicPath: config.dev.assetsPublicPath
+    path: config.dev.assetsRoot,
+    filename: '[name].js'
   },
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.dev.cssSourceMap,
       usePostCSS: true
     })
+  },
+  resolve: {
+    alias: {
+      'request-config': '../request/request_client.js'
+    }
   },
   devtool: config.dev.devtool, //  cheap-module-eval-source-map编译更快
   plugins: [

@@ -4,6 +4,7 @@ const merge = require('webpack-merge')
 const nodeExternals = require('webpack-node-externals')
 const baseWebpackConfig = require('./webpack.base.conf')
 const VueServerPlugin = require('vue-server-renderer/server-plugin')
+const config = require('./config')
 
 module.exports = merge(baseWebpackConfig, {
   mode: 'production',
@@ -11,8 +12,14 @@ module.exports = merge(baseWebpackConfig, {
   devtool: 'source-map',
   entry: path.join(__dirname, '../src/entry-server.js'),
   output: {
-    libraryTarget: 'commonjs2',
+    path: process.env.NODE_ENV === 'production' ? config.server.assetsRoot : config.dev.assetsRoot,
     filename: 'server-bundle.js',
+    libraryTarget: 'commonjs2',
+  },
+  resolve: {
+    alias: {
+      'request-config': '../request/request_server.js',
+    }
   },
   externals: nodeExternals({
     whitelist: /\.css$/

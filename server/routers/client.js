@@ -1,23 +1,23 @@
 const router = require('koa-router')()
-const {Check_Session, ajaxCheck_Session} = require('../utils/check_session')
-const index = require('../controllers/web/index')// 主页
-const user = require('../controllers/web/user')// 注册
-const personal_center = require('../controllers/web/personal_center') // 用户个人中心
-const article = require('../controllers/web/article') // 文章内容页
-const subscribe = require('../controllers/web/subscribe')// 订阅
-const user_article_topic = require('../controllers/web/user_article_topic')// 用户文章专题
-const banner = require('../controllers/web/banner')// banner
-const comment = require('../controllers/web/comment')// 评论
-const upload = require('../controllers/web/upload')// 上传
+const { Check_Session, ajaxCheck_Session } = require('../utils/check_session')
+const index = require('../controllers/client/index')// 主页
+const user = require('../controllers/client/user')// 注册
+const personal_center = require('../controllers/client/personal_center') // 用户个人中心
+const article = require('../controllers/client/article') // 文章内容页
+const subscribe = require('../controllers/client/subscribe')// 订阅
+const user_article_topic = require('../controllers/client/user_article_topic')// 用户文章专题
+const banner = require('../controllers/client/banner')// banner
+const comment = require('../controllers/client/comment')// 评论
+const upload = require('../controllers/client/upload')// 上传
 
-/*工具类*/
+/* 工具类 */
 const util_upload = require('../utils/upload') // 上传工具类
 /**
  * 获取标签列表操作
  * @param   {String} TYPE 当前router 作用类型 AJAX:ajax传递数据 RENDER:render渲染页面或者 post form提交数据
  */
 
-/*PAGE RENDER*/
+/* PAGE RENDER */
 
 router.get('/', index.render_get_index) // 主页 page
 
@@ -53,25 +53,27 @@ router.get('esc_sign_in', user.esc_sign_in) // 退出登录
 
 router.get('reset_password', user.render_reset_password) // 重置密码
 
-/*FORM*/
+/* FORM */
 
 router.post('sign_in', user.form_sign_in) // 登录数据 post TYPE:RENDER
 
 router.get('search', article.form_search_article) // 搜索
 
-/*AJAX*/
+/* AJAX */
 
 router.get('get_index_article', index.get_index) // 首页文章 get
 
 router.get('get_article', article.get_article) // 根据aid获取文章 get
 
-router.get('user_info', user.get_user_info) // 根据uid 获取用户相应信息 get
+router.get('/user_info', user.get_user_info) // 根据uid 获取用户相应信息 get
 
-router.get('home_banner', banner.get_home_banner) // 获取首页头部 banner
+router.get('/home_banner', banner.get_home_banner) // 获取首页头部 banner
 
-router.post('upload_user_avatar', ajaxCheck_Session, util_upload('user_avatar').single('file'), upload.upload_user_avatar) // 用户修改头像 post
+router.post('upload_user_avatar', ajaxCheck_Session, util_upload('user_avatar')
+  .single('file'), upload.upload_user_avatar) // 用户修改头像 post
 
-router.post('upload_article_picture', ajaxCheck_Session, util_upload('article_picture').single('file'), upload.upload_article_picture) // 文章图片上传
+router.post('upload_article_picture', ajaxCheck_Session, util_upload('article_picture')
+  .single('file'), upload.upload_article_picture) // 文章图片上传
 
 router.post('update_user_info', ajaxCheck_Session, user.post_update_user_info) // 根据uid 更新用户相应信息 post
 

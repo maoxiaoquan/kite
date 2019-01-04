@@ -2,13 +2,15 @@ import Vue from 'vue'
 import { createApp } from './app'
 
 Vue.mixin({
-  beforeRouteUpdate (to, from, next) {
+  beforeRouteUpdate(to, from, next) {
     const { asyncData } = this.$options
     if (asyncData) {
       asyncData({
         store: this.$store,
         route: to
-      }).then(next).catch(next)
+      })
+        .then(next)
+        .catch(next)
     } else {
       next()
     }
@@ -39,12 +41,17 @@ router.onReady(() => {
     // 这里如果有加载指示器(loading indicator)，就触发
     Promise.all(activated.map(c => {
       if (c.asyncData) {
-        return c.asyncData({ store, route: to })
+        return c.asyncData({
+          store,
+          route: to
+        })
       }
-    })).then(() => {
-      // 停止加载指示器(loading indicator)
-      next()
-    }).catch(next)
+    }))
+      .then(() => {
+        // 停止加载指示器(loading indicator)
+        next()
+      })
+      .catch(next)
   })
 
   app.$mount('#app')

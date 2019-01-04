@@ -3,73 +3,69 @@ import {
   Route,
   Redirect,
   HashRouter,
-  BrowserRouter
+  BrowserRouter,
 } from 'react-router-dom'
 
+import Loadable from 'react-loadable'
 import routerConfig from '../config/router.config'
 
-import Loadable from 'react-loadable'
 
-const LoadingComponent = ({isLoading, error}) => {
+const LoadingComponent = ({ isLoading, error }) => {
   // Handle the loading state
   if (isLoading) {
     return <div>Loading...</div>
   }
   // Handle the error state
-  else if (error) {
+  if (error) {
     return <div>Sorry, there was a problem loading the page.</div>
   }
-  else {
-    return null
-  }
+  return null
 }
-class RouteConfig extends PureComponent {
 
-  render () {
+class RouteConfig extends PureComponent {
+  render() {
     return (
       <HashRouter>
         <Fragment>
           {
-            routerConfig.map((item, key) => {
-              return (
-                !item.routes ?
+            routerConfig.map((item, key) => (
+              !item.routes
+                ? (
                   <Route
                     component={
                       Loadable({
                         loader: item.component,
-                        loading: LoadingComponent
+                        loading: LoadingComponent,
                       })}
                     key={key}
-                    path={item.path}
-                  />
-                  :
-                  <Route render={() =>
-                    <item.component>
-                      {
-                        item.routes.map((children_item, children_key) => {
-                          return (
+                    path={item.path}/>
+                )
+                : (
+                  <Route
+                    render={() => (
+                      <item.component>
+                        {
+                          item.routes.map((children_item, children_key) => (
                             <Route
                               component={
                                 Loadable({
                                   loader: children_item.component,
-                                  loading: LoadingComponent
+                                  loading: LoadingComponent,
                                 })}
                               key={children_key}
-                              path={children_item.path}
-                            />
-                          )
-                        })
-                      }
-                    </item.component>
-                  } key={key} path={item.path}/>
-              )
-            })
+                              path={children_item.path}/>
+                          ))
+                        }
+                      </item.component>
+                    )}
+                    key={key}
+                    path={item.path}/>
+                )))
           }
           <Route
             exact
             path="/"
-            render={() => <Redirect to="/manager/index"/>}
-          />
+            render={() => <Redirect to="/manager/index"/>}/>
         </Fragment>
       </HashRouter>
     )

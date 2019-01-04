@@ -49,6 +49,7 @@ module.exports = function setupDevServer(app, templatePath, cb) {
 
   // 编译clinetWebpack 插入Koa中间件
   const clientCompiler = webpack(clientConfig)
+
   const devMiddleware = webpackDevMiddleware(clientCompiler, {
     publicPath: clientConfig.output.publicPath,
     noInfo: true

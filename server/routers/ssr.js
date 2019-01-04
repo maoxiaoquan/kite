@@ -1,4 +1,4 @@
 const router = require('koa-router')()
-const ssr = require('../../client_ssr/server')
+const render = require('../../client_ssr/server/render')
 
-module.exports = router.get('*', ssr)
+module.exports = router.get('*', render)

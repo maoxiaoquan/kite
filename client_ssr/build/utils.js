@@ -1,5 +1,5 @@
 const path = require('path')
-const config = require('../config')
+const config = require('./config')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 // 返回文件绝对路径

@@ -1,6 +1,6 @@
 const path = require('path')
 const utils = require('./utils')
-const config = require('../config')
+const config = require('./config')
 // vue-loader v15版本需要引入此插件
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 // 服务端渲染用到的插件、默认生成JSON
@@ -26,7 +26,7 @@ const createLintingRule = () => ({
 module.exports = {
   entry: resolve('src/entry-client.js'),
   output: {
-    path: config.build.assetsRoot,
+    path: process.env.NODE_ENV === 'production' ? config.build.assetsRoot : config.dev.assetsRoot,
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
@@ -36,7 +36,9 @@ module.exports = {
     extensions: ['.js', '.vue'],
     alias: {
       'components': resolve('src/components'),
-      'assets': resolve('src/assets')
+      '@views': resolve('src/views'),
+      'assets': resolve('src/assets'),
+      '@request': resolve('src/request')
     }
   },
   module: {
@@ -65,8 +67,8 @@ module.exports = {
           !/\.vue\.js/.test(file)
         ),
         options: {
-          "plugins": [
-            "@babel/plugin-syntax-dynamic-import"
+          'plugins': [
+            '@babel/plugin-syntax-dynamic-import'
           ]
         }
       },

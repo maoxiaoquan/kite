@@ -1,26 +1,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import actions from './actions'
+import mutations from './mutations'
 
 Vue.use(Vuex)
 
-export function createStore () {
+export function createStore() {
   return new Vuex.Store({
     state: {
-      movie: {}
+      movie: {},
+      user_info: {}
     },
-    actions: {
-      fetchMovie ({ commit }, id) {
-        return new Promise((resolve, reject) => {
-          resolve({ id })
-        }).then(res => {
-          commit('setMoive', { res })
-        })
-      }
-    },
-    mutations: {
-      setMoive (state, { res }) {
-        Vue.set(state, 'movie', res)
-      }
-    }
+    actions,
+    mutations
   })
 }

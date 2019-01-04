@@ -6,19 +6,24 @@ const LRU = require('lru-cache')
 const send = require('koa-send')
 const Router = require('koa-router')
 const setupDevServer = require('../build/setup-dev-server')
-const {createBundleRenderer, createRenderer} = require('vue-server-renderer')
-
+const { createBundleRenderer, createRenderer } = require('vue-server-renderer')
+const config = require('../../config')
 // 缓存
 const microCache = new LRU({
   max: 100,
   maxAge: 1000 * 60 // 重要提示：条目在 1 秒后过期。
 })
 
+
+const cacheable_list = [ // 添加缓存页面
+  '/b'
+]
+
 const isCacheable = ctx => {
   // 实现逻辑为，检查请求是否是用户特定(user-specific)。
   // 只有非用户特定(non-user-specific)页面才会缓存
   console.log(ctx.url)
-  if (ctx.url === '/b') {
+  if (~cacheable_list.indexOf(ctx.url)) {
     return true
   }
   return false
@@ -28,35 +33,35 @@ const isCacheable = ctx => {
 const app = new Koa()
 const router = new Router()
 
+const proxy = require('http-proxy-middleware')
+
+app.use(async (ctx, next) => { // 接口进行拦截，并进行代理
+  if (ctx.url.startsWith('/client')) {
+    ctx.respond = false
+    return proxy({
+      target: `http://localhost:${config.port.product}`, // 服务器地址
+      changeOrigin: true,
+      secure: false,
+      pathRewrite: {
+        '^/client': '/client'
+      }
+    })(ctx.req, ctx.res, next)
+  }
+  return next()
+})
+
 let renderer
 const templatePath = path.resolve(__dirname, './index.template.html')
-// 第 2步：根据环境变量生成不同BundleRenderer实例
-if (process.env.NODE_ENV === 'production') {
-  // 获取客户端、服务器端打包生成的json文件
-  console.log('pro')
-  const serverBundle = require('../../static/dist_ssr/vue-ssr-server-bundle.json')
-  const clientManifest = require('../../static/dist_ssr/vue-ssr-client-manifest.json')
-  // 赋值
-  renderer = createBundleRenderer(serverBundle, {
-    runInNewContext: false,
-    template: fs.readFileSync(templatePath, 'utf-8'),
-    clientManifest
-  })
-  // 静态资源
-/*  router.get('/static/!*', async (ctx, next) => {
-    await send(ctx, ctx.path, {root: __dirname + '/../dist'})
-  })*/
-} else {
-  // 开发环境
-  setupDevServer(app, templatePath, (bundle, options) => {
-      console.log('重新bundle~~~~~')
-      const option = Object.assign({
-        runInNewContext: false
-      }, options)
-      renderer = createBundleRenderer(bundle, option)
-    }
-  )
-}
+
+setupDevServer(app, templatePath, (bundle, options) => {
+    console.log('bundle success ~~~~~~')
+    const option = Object.assign({
+      runInNewContext: false
+    }, options)
+    renderer = createBundleRenderer(bundle, option)
+  }
+)
+
 
 const render = async (ctx, next) => {
   ctx.set('Content-Type', 'text/html')
@@ -100,4 +105,17 @@ const render = async (ctx, next) => {
 
 }
 
-module.exports = render
+router.get('*', render)
+
+app
+  .use(router.routes())
+  .use(router.allowedMethods())
+
+const port = config.port.client_dev
+
+
+app.listen(port, () => {
+  console.log(chalk.green(`server started at localhost:${port}`))
+})
+
+/*module.exports = render*/
