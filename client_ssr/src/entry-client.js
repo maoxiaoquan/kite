@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import { createApp } from './app'
+import Components from './components'
+const { app, router, store } = createApp()
+
 
 Vue.mixin({
   beforeRouteUpdate(to, from, next) {
@@ -17,7 +20,7 @@ Vue.mixin({
   }
 })
 
-const { app, router, store } = createApp()
+Vue.component('Dialog',Components.Dialog)
 
 if (window.__INITIAL_STATE__) {
   store.replaceState(window.__INITIAL_STATE__)

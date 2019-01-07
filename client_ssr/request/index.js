@@ -11,8 +11,6 @@ let axios_config = {}
 
 const api = requestConfig()
 
-console.log('api', api)
-
 axios_config.baseURL = api.url
 
 const logRequests = true || !!process.env.DEBUG_API

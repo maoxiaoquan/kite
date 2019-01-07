@@ -1,4 +1,4 @@
-import { fetch } from '../../request'
+import { fetch } from '@request'
 
 export default {
   fetchMovie({ commit }, id) {

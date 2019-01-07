@@ -26,7 +26,6 @@ module.exports = function setupDevServer(app, templatePath, cb) {
   let template
   let clientManifest
 
-
   // 监听改变后更新函数
   const update = () => {
     if (bundle && clientManifest) {

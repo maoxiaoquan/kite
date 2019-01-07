@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const utils = require('./utils')
 const merge = require('webpack-merge')
 const nodeExternals = require('webpack-node-externals')
 const baseWebpackConfig = require('./webpack.base.conf')
@@ -15,6 +16,14 @@ module.exports = merge(baseWebpackConfig, {
     path: process.env.NODE_ENV === 'production' ? config.server.assetsRoot : config.dev.assetsRoot,
     filename: 'server-bundle.js',
     libraryTarget: 'commonjs2',
+  },
+  module: {
+    rules: utils.styleLoaders({
+      sourceMap: config.build.productionSourceMap,
+      // 将css样式单独提取出文件
+      extract: false, // 使用 vue-style-loader 处理css
+      usePostCSS: true
+    })
   },
   resolve: {
     alias: {

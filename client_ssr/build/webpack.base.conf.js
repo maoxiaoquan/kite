@@ -38,7 +38,7 @@ module.exports = {
       'components': resolve('src/components'),
       '@views': resolve('src/views'),
       'assets': resolve('src/assets'),
-      '@request': resolve('src/request')
+      '@request': resolve('request')
     }
   },
   module: {

@@ -39,7 +39,7 @@ const render = async (ctx, next) => {
   const handleError = err => {
     if (err.code === 404) {
       ctx.status = 404
-      ctx.body = '404 页面未找到'
+      ctx.body = '404 Page Not Found'
     } else {
       ctx.status = 500
       ctx.body = '500 Internal Server Error'

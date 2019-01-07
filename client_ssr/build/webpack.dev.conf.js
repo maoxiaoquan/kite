@@ -19,6 +19,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     filename: '[name].js'
   },
   module: {
+    // 使用 vue-style-loader 处理css
     rules: utils.styleLoaders({
       sourceMap: config.dev.cssSourceMap,
       usePostCSS: true

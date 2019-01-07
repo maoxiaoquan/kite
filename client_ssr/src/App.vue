@@ -1,24 +1,29 @@
 <template>
-  <div>
+  <div class="app">
+    <Header/> <!--公共头部-->
     <router-view/>
-    <router-link :to="{ name: 'A' }" v-text="'to A'"/>
-    <router-link :to="{ name: 'B' }" v-text="'to B'"/>
-    <router-link :to="{ name: 'Home' }" v-text="'to Home'"/>
-    <div class="store-example">
-      <h1>h2</h1>
-      <button @click="update">updateCount</button>
-    </div>
+    <GlobalAlert/> <!--公共弹窗-->
   </div>
 </template>
 
 <script>
-export default {
-  name: 'App',
-  methods: {
-    update () {
-      /* eslint-disable */
-      alert('hi')
+
+  import Header from '@views/Parts/Header'
+  import GlobalAlert from '@views/Parts/GlobalAlert'
+
+  export default {
+    name: 'App',
+    methods: {
+      update() {
+        /* eslint-disable */
+        alert('hi')
+      }
+    },
+    computed: {
+    },
+    components: {
+      Header,
+      GlobalAlert
     }
   }
-}
 </script>

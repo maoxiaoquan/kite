@@ -1,11 +1,10 @@
 # Kite
 
-koa+react+mongodb blog
+koa+react+mysql blog
 
-设计
 
-专栏不与文章直接关联，专栏与文章标签关联，标签与文章关联
+vue ssr 是对 https://github.com/lhz960904/webpack-vue-ssr 此项目的改造而来，谢谢作者
 
-专题与文章关联 专题由用户创建，属于个人
+react 后台项目处了打包部分有参考外，其余所有都是自己所写
 
-未创建 talk 说说， 关注 页面
+所有开发涉及如有借鉴都会备注，除非是没注意
