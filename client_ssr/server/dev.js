@@ -8,6 +8,7 @@ const Router = require('koa-router')
 const setupDevServer = require('../build/setup-dev-server')
 const { createBundleRenderer, createRenderer } = require('vue-server-renderer')
 const config = require('../../config')
+const koaStatic = require('koa-static')
 // 缓存
 const microCache = new LRU({
   max: 100,
@@ -104,6 +105,10 @@ const render = async (ctx, next) => {
   }
 
 }
+
+// 配置静态资源加载中间件
+app.use(koaStatic(path.join(__dirname, '../../static')))
+
 
 router.get('*', render)
 

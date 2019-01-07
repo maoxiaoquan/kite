@@ -41,7 +41,7 @@
               class="iconfont icon-xiezuo"></i></a></li>
             <li class="nav-item dropdown">
               <a class="dropdown-toggle" href="javascript:;">
-                <div class="avatar-img" style="background-image:url('<%= user_info.avatar %>') "></div>
+                <div class="avatar-img" style="background-image:url('/default/img/default_avatar.jpg') "></div>
               </a>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="/user/<%= user_info.uid %>/article/all">我的主页</a>

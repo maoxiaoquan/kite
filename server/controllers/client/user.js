@@ -3,7 +3,7 @@ const {
   checkEmail,
   checkPhoneNum,
   checkUrl,
-  checkPwd,
+  checkPwd
 } = require('../../utils/validators')
 const moment = require('moment')
 const { render, home_resJson } = require('../../utils/res_data')
@@ -22,12 +22,12 @@ function err_mess(message) {
 class User {
   constructor() {
     this.sign_up_state = {
-      title: 'sign',
+      title: 'sign'
     }
   }
 
   static async render_sign_in(ctx) {
-    /* router to sign_in.html */
+    /*router to sign_in.html*/
     const title = 'sign_in'
 
     if (ctx.session.islogin) {
@@ -39,8 +39,8 @@ class User {
         meaasge: '',
         data: {
           account: '',
-          password: '',
-        },
+          password: ''
+        }
       })
     }
   }
@@ -53,7 +53,7 @@ class User {
   static async form_sign_in(ctx) {
     const title = 'sign_in'
 
-    const formData = ctx.request.body
+    let formData = ctx.request.body
 
     try {
       if (!formData.account) {
@@ -65,32 +65,32 @@ class User {
       }
     } catch (err) {
       await ctx.render('default/sign_in', {
-        title,
+        title: title,
         state: 'error',
         message: err.message,
         data: {
           account: formData.account,
-          password: formData.password,
-        },
+          password: formData.password
+        }
       })
       return false
     }
 
     if (checkEmail(formData.account)) {
-      /* 邮箱登录 */
+      /*邮箱登录*/
 
       try {
-        const sql_data_user = await models.user.findOne({
+        let sql_data_user = await models.user.findOne({
           where: {
-            email: formData.account,
-          },
+            email: formData.account
+          }
         })
         if (sql_data_user) {
           if (
-            tools.encrypt(formData.password, config.encrypt_key)
-            === sql_data_user.dataValues.password
+            tools.encrypt(formData.password, config.encrypt_key) ===
+            sql_data_user.dataValues.password
           ) {
-            const session = ctx.session
+            let session = ctx.session
             session.islogin = true
             session.uid = sql_data_user.dataValues.uid
             session.avatar = sql_data_user.dataValues.avatar
@@ -98,64 +98,64 @@ class User {
             ctx.redirect('/')
           } else {
             await ctx.render('default/sign_in', {
-              title,
+              title: title,
               state: 'error',
               message: '密码错误',
               data: {
                 account: formData.account,
-                password: formData.password,
-              },
+                password: formData.password
+              }
             })
           }
         } else {
           await ctx.render('default/sign_in', {
-            title,
+            title: title,
             state: 'error',
             message: '账户不存在',
             data: {
               account: formData.account,
-              password: formData.password,
-            },
+              password: formData.password
+            }
           })
         }
       } catch (err) {
         await ctx.render('default/sign_in', {
-          title,
+          title: title,
           state: 'error',
           message: err,
           data: {
             account: formData.account,
-            password: formData.password,
-          },
+            password: formData.password
+          }
         })
       }
     } else if (checkPhoneNum(formData.account)) {
-      /* 手机号码登录 */
+      /* 手机号码登录*/
 
       await ctx.render('default/sign_in', {
-        title,
+        title: title,
         state: 'error',
         message: '暂时未开放手机号码登录',
         data: {
           account: formData.account,
-          password: formData.password,
-        },
+          password: formData.password
+        }
       })
     } else {
-      /* 非手机号码非邮箱 */
+      /* 非手机号码非邮箱*/
       await ctx.render('default/sign_in', {
-        title,
+        title: title,
         state: 'error',
         message: '请输入正确的手机号码或者邮箱',
         data: {
           account: formData.account,
-          password: formData.password,
-        },
+          password: formData.password
+        }
       })
     }
   }
 
-  /* get_sign_up start */
+  /* get_sign_up start*/
 
   static async render_sign_up(ctx) {
     // get 页面
@@ -166,10 +166,10 @@ class User {
       ctx.redirect('/')
     } else {
       await ctx.render('default/sign_up', {
-        title,
+        title: title,
         state: 'success',
         message: '',
-        data: {},
+        data: {}
       })
     }
   }
@@ -177,18 +177,18 @@ class User {
   // 注册验证码发送
 
   static async post_sign_up_code(ctx) {
-    const req_data = ctx.request.body
+    let req_data = ctx.request.body
     if (checkEmail(req_data.account)) {
-      /* 邮箱注册验证码 */
+      /*邮箱注册验证码*/
 
       try {
-        const email = await models.user.findOne({
+        let email = await models.user.findOne({
           where: {
-            email: req_data.account,
-          },
+            email: req_data.account
+          }
         })
         if (!email) {
-          const random = random_number(true, 6, 6)
+          let random = random_number(true, 6, 6)
 
           await models.verify_code
             .create({
@@ -203,46 +203,46 @@ class User {
               create_date: moment()
                 .utc()
                 .utcOffset(+8)
-                .format(), /* 时间 */
+                .format() /*时间*/
             })
-            .then((data) => {
+            .then(function (data) {
               send_verify_code_mail(req_data.account, '注册验证码', random)
               ctx.body = {
                 state: 'success',
-                message: '验证码已发送到邮箱',
+                message: '验证码已发送到邮箱'
               }
             })
-            .catch((err) => {
+            .catch(function (err) {
               ctx.body = {
                 state: 'error',
-                message: err,
+                message: err
               }
             })
         } else {
           ctx.body = {
             state: 'error',
-            message: '邮箱已存在',
+            message: '邮箱已存在'
           }
         }
       } catch (err) {
         ctx.body = {
           state: 'error',
           type: 'ERROR_IN_SAVE_DATA',
-          message: err,
+          message: err
         }
       }
     } else if (checkPhoneNum(req_data.account)) {
-      /* 手机号码注册 */
+      /* 手机号码注册*/
 
       ctx.body = {
         state: 'error',
-        message: '暂时未开放手机号码注册',
+        message: '暂时未开放手机号码注册'
       }
     } else {
-      /* 非手机号码非邮箱 */
+      /* 非手机号码非邮箱*/
       ctx.body = {
         state: 'error',
-        message: '请输入正确的手机号码或者邮箱',
+        message: '请输入正确的手机号码或者邮箱'
       }
     }
   }
@@ -253,7 +253,7 @@ class User {
    */
   static async post_sign_up(ctx) {
     // post 数据
-    const req_data = ctx.request.body
+    let req_data = ctx.request.body
 
     try {
       if (!req_data.nickname) {
@@ -281,65 +281,66 @@ class User {
       ctx.body = {
         state: 'error',
         message: err.message,
-        data: {},
+        data: {}
       }
       return false
     }
 
     if (checkEmail(req_data.account)) {
-      /* 邮箱注册 */
+      /*邮箱注册*/
 
       try {
-        const nickname_date = await models.user.findOne({
+        let nickname_date = await models.user.findOne({
           where: {
-            nickname: req_data.nickname,
-          },
+            nickname: req_data.nickname
+          }
         })
 
         if (nickname_date) {
           ctx.body = {
             state: 'error',
-            message: '用户昵称已存在，请重新输入',
+            message: '用户昵称已存在，请重新输入'
           }
           return false
         }
 
-        const email = await models.user.findOne({
+        let email = await models.user.findOne({
           where: {
-            email: req_data.account,
-          },
+            email: req_data.account
+          }
         })
 
         try {
           if (!email) {
-            await query_user_verify_code(req_data.account).then((data) => {
-              /* 注册验证码验证 */
-              if (data.length > 0) {
-                const time_num = moment()
-                  .utc()
-                  .utcOffset(+8)
-                  .format('X')
-                if (req_data.code === data[0].verify_code) {
-                  if (
-                    Number(time_num) - Number(data[0].expire_time)
-                    > 30 * 60
-                  ) {
-                    throw new err_mess('验证码已过时，请再次发送')
+            await query_user_verify_code(req_data.account)
+              .then(data => {
+                /*注册验证码验证*/
+                if (data.length > 0) {
+                  let time_num = moment()
+                    .utc()
+                    .utcOffset(+8)
+                    .format('X')
+                  if (req_data.code === data[0].verify_code) {
+                    if (
+                      Number(time_num) - Number(data[0].expire_time) >
+                      30 * 60
+                    ) {
+                      throw new err_mess('验证码已过时，请再次发送')
+                    }
+                  } else {
+                    throw new err_mess('验证码错误')
                   }
                 } else {
-                  throw new err_mess('验证码错误')
+                  throw new err_mess('请发送验证码')
                 }
-              } else {
-                throw new err_mess('请发送验证码')
-              }
-            })
+              })
 
-            const user_count = await models.user.count() || 0
+            let user_count = await models.user.count() || 0
 
             await models.sequelize
-              .transaction(transaction => (
+              .transaction(function (transaction) {
                 // 在事务中执行操作
-                 models.user
+                return models.user
                   .create({
                     /*注册写入数据库操作*/
                     avatar: '/default/img/default_avatar.jpg',
@@ -352,85 +353,62 @@ class User {
                     sex: 0,
                     reg_ip: ctx.request.ip
                   })
-                  .then(function(user) {
+                  .then(function (user) {
                     return models.user_info.create({
                       /*注册写入数据库操作*/
                       uid: user.uid
                     })
                   })
-                     )
-                    )
-                                                               )
-                    )
-                   )
-              )
-             )
-                )
-                    )
-            )
-                                  )
-            )
-               )
-              )
-                                                        )
-            )
-                                                    )
-            )
-                                            )
-            )
-                      )
-                     )
-                            )
-              )
-              .then((data) => ( {
+              })
+              .then(function (data) {
                 sendMail(
                   req_data.account,
                   `${req_data.nickname}，您好，注册成功`,
-                  `<h2>${req_data.nickname}</h2><p>账户已注册成功</p>`,
+                  `<h2>${req_data.nickname}</h2><p>账户已注册成功</p>`
                 )
                 ctx.body = {
                   state: 'success',
-                  message: '注册成功，跳往登录页',
+                  message: '注册成功，跳往登录页'
                 }
               })
-              .catch((err) => ( {
+              .catch(function (err) {
                 ctx.body = {
                   state: 'error',
-                  message: err,
+                  message: err
                 }
               })
           } else {
             ctx.body = {
               state: 'error',
-              message: '邮箱已存在',
+              message: '邮箱已存在'
             }
           }
         } catch (err) {
           ctx.body = {
             state: 'error',
             type: 'ERROR_IN_SAVE_DATA',
-            message: err.message,
+            message: err.message
           }
         }
       } catch (err) {
         ctx.body = {
           state: 'error',
           type: 'ERROR_IN_SAVE_DATA',
-          message: err,
+          message: err
         }
       }
     } else if (checkPhoneNum(req_data.account)) {
-      /* 手机号码注册 */
+      /* 手机号码注册*/
 
       ctx.body = {
         state: 'error',
-        message: '暂时未开放手机号码注册',
+        message: '暂时未开放手机号码注册'
       }
     } else {
-      /* 非手机号码非邮箱 */
+      /* 非手机号码非邮箱*/
       ctx.body = {
         state: 'error',
-        message: '请输入正确的手机号码或者邮箱',
+        message: '请输入正确的手机号码或者邮箱'
       }
     }
   }
@@ -440,7 +418,7 @@ class User {
    * @param   {obejct} ctx 上下文对象
    */
   static async get_user_info(ctx) {
-    const uid = ctx.query.uid
+    let uid = ctx.query.uid
 
     try {
       if (!uid) {
@@ -449,13 +427,13 @@ class User {
     } catch (err) {
       home_resJson(ctx, {
         state: 'error',
-        message: err.message,
+        message: err.message
       })
       return false
     }
 
-    const findOne_user = await models.user.findOne({
-      // 获取用户信息
+    let findOne_user = await models.user.findOne({
+      //获取用户信息
       where: { uid },
       attributes: [
         'uid',
@@ -463,39 +441,51 @@ class User {
         'nickname',
         'sex',
         'introduction',
-        'user_tag_ids',
-      ],
+        'user_tag_ids'
+      ]
     })
 
-    const findOne_user_info = await models.user_info.findOne({
-      // 获取用户信息
-      where: { uid },
+    let findOne_user_info = await models.user_info.findOne({
+      //获取用户信息
+      where: { uid }
     })
 
-    const user_attention_uid_arr = await models.user_attention
+    let user_attention_uid_arr = await models.user_attention
       .findAll({ where: { uid } })
-      .then(res => ( res.map((attention_item, key) => ( attention_item.attention_uid))
+      .then(res => {
+        return res.map((attention_item, key) => {
+          return attention_item.attention_uid
+        })
+      })
 
-    const user_like_article_arr = await models.user_like_article
+    let user_like_article_arr = await models.user_like_article
       .findAll({ where: { uid } })
-      .then(res => ( res.map((user_like_article_item, key) => ( user_like_article_item.aid))
+      .then(res => {
+        return res.map((user_like_article_item, key) => {
+          return user_like_article_item.aid
+        })
+      })
 
-    const subscribe_article_tag_arr = await models.subscribe_article_tag
+    let subscribe_article_tag_arr = await models.subscribe_article_tag
       .findAll({ where: { uid } })
-      .then(res => ( res.map((subscribe_article_tag_item, key) => ( subscribe_article_tag_item.article_tag_id))
+      .then(res => {
+        return res.map((subscribe_article_tag_item, key) => {
+          return subscribe_article_tag_item.article_tag_id
+        })
+      })
 
-    const other_user_attention_count = await models.user_attention.count({
+    let other_user_attention_count = await models.user_attention.count({
       // 多少人关注了
       where: {
-        attention_uid: uid,
-      },
+        attention_uid: uid
+      }
     })
 
-    const user_article_count = await models.article.count({
+    let user_article_count = await models.article.count({
       // 他有多少文章
       where: {
-        uid,
-      },
+        uid
+      }
     })
 
     home_resJson(ctx, {
@@ -508,8 +498,8 @@ class User {
         user_like_aid_arr: user_like_article_arr,
         subscribe_article_tag_id_arr: subscribe_article_tag_arr,
         other_user_attention_count,
-        user_article_count,
-      },
+        user_article_count
+      }
     })
   }
 
@@ -519,15 +509,15 @@ class User {
    */
 
   static async post_update_user_info(ctx) {
-    const req_data = ctx.request.body
+    let req_data = ctx.request.body
 
-    const nickname_date = await models.user.findOne({
+    let nickname_date = await models.user.findOne({
       where: {
         nickname: req_data.nickname,
         uid: {
-          [Op.ne]: ctx.session.uid,
-        },
-      },
+          [Op.ne]: ctx.session.uid
+        }
+      }
     })
 
     try {
@@ -557,35 +547,35 @@ class User {
     } catch (err) {
       home_resJson(ctx, {
         state: 'error',
-        message: err.message,
+        message: err.message
       })
       return false
     }
 
-    const update_user = await models.user.update(
+    let update_user = await models.user.update(
       {
         sex: req_data.sex || '',
         nickname: req_data.nickname || '',
-        introduction: req_data.introduction || '',
+        introduction: req_data.introduction || ''
       },
       {
         where: {
-          uid: ctx.session.uid, // 查询条件
-        },
-      },
+          uid: ctx.session.uid //查询条件
+        }
+      }
     )
 
-    const update_user_info = await models.user_info.update(
+    let update_user_info = await models.user_info.update(
       {
         profession: req_data.profession || '',
         company: req_data.company || '',
-        home_page: req_data.home_page || '',
+        home_page: req_data.home_page || ''
       },
       {
         where: {
-          uid: ctx.session.uid, // 查询条件
-        },
-      },
+          uid: ctx.session.uid //查询条件
+        }
+      }
     )
 
     home_resJson(ctx, {
@@ -593,8 +583,8 @@ class User {
       message: '修改用户信息成功',
       data: {
         user: update_user,
-        user_info: update_user_info,
-      },
+        user_info: update_user_info
+      }
     })
   }
 
@@ -604,12 +594,12 @@ class User {
    */
 
   static async post_update_user_password(ctx) {
-    const req_data = ctx.request.body
+    let req_data = ctx.request.body
 
-    const user = await models.user.findOne({
+    let user = await models.user.findOne({
       where: {
-        uid: ctx.session.uid,
-      },
+        uid: ctx.session.uid
+      }
     })
 
     if (
@@ -638,7 +628,7 @@ class User {
       } catch (err) {
         home_resJson(ctx, {
           state: 'error',
-          message: err.message,
+          message: err.message
         })
         return false
       }
@@ -646,30 +636,30 @@ class User {
       await models.user
         .update(
           {
-            password: tools.encrypt(req_data.new_password, config.encrypt_key),
+            password: tools.encrypt(req_data.new_password, config.encrypt_key)
           },
           {
             where: {
-              uid: ctx.session.uid, // 查询条件
-            },
-          },
+              uid: ctx.session.uid //查询条件
+            }
+          }
         )
-        .then(() => ( {
+        .then(() => {
           home_resJson(ctx, {
             state: 'success',
-            message: '修改用户密码成功',
+            message: '修改用户密码成功'
           })
         })
-        .catch(() => ( {
+        .catch(() => {
           home_resJson(ctx, {
             state: 'error',
-            message: '修改密码失败。请再次尝试',
+            message: '修改密码失败。请再次尝试'
           })
         })
     } else {
       home_resJson(ctx, {
         state: 'error',
-        message: '旧密码错误，请重新输入',
+        message: '旧密码错误，请重新输入'
       })
     }
   }
@@ -679,19 +669,19 @@ class User {
    * @param   {obejct} ctx 上下文对象
    */
   static async get_unread_message_count(ctx) {
-    const unread_message_count = await models.user_message.count({
+    let unread_message_count = await models.user_message.count({
       where: {
         uid: ctx.session.uid,
-        is_read: false,
-      },
+        is_read: false
+      }
     })
 
     home_resJson(ctx, {
       state: 'success',
       message: '数据返回成功',
       data: {
-        unread_message_count,
-      },
+        unread_message_count: unread_message_count
+      }
     })
   }
 
@@ -700,41 +690,49 @@ class User {
    * @param   {obejct} ctx 上下文对象
    */
   static async get_user_message(ctx) {
-    const page = ctx.query.page || 1
-    const pageSize = ctx.query.pageSize || 10
+    let page = ctx.query.page || 1
+    let pageSize = ctx.query.pageSize || 10
 
-    const unread_user_message_id = await models.user_message
+    let unread_user_message_id = await models.user_message
       .findAll({
         // 获取所有未读消息id
         where: {
           is_system: false,
-          is_read: false,
-        },
+          is_read: false
+        }
       })
-      .then(res => ( res.map((item, key) => ( item.id))
+      .then(res => {
+        return res.map((item, key) => {
+          return item.id
+        })
+      })
 
-    const { count, rows } = await models.user_message
+    let { count, rows } = await models.user_message
       .findAndCountAll({
         where: {
           uid: ctx.session.uid,
-          is_system: false,
+          is_system: false
         }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, // 每页限制返回的数据条数
-        order: [['create_date_timestamp', 'desc']],
+        order: [['create_date_timestamp', 'desc']]
       })
-      .then(res => ( JSON.parse(JSON.stringify(res)))
+      .then(res => {
+        return JSON.parse(JSON.stringify(res))
+      })
 
-    for (const item in rows) {
+    for (let item in rows) {
       // 循环取用户
-      await (async (i) => ( {
+      await (async i => {
         rows[i].other_user = {}
-        const data = await models.user
+        let data = await models.user
           .findOne({
             where: { uid: rows[i].other_uid },
-            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction'],
+            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
           })
-          .then(res => ( JSON.parse(JSON.stringify(res)))
+          .then(res => {
+            return JSON.parse(JSON.stringify(res))
+          })
         if (data) {
           rows[i].other_user = data
         }
@@ -745,14 +743,14 @@ class User {
       // 修改未读为已读
       await models.user_message.update(
         {
-          is_read: true,
+          is_read: true
         },
         {
           where: {
             id: { in: unread_user_message_id },
-            uid: ctx.session.uid,
-          },
-        },
+            uid: ctx.session.uid
+          }
+        }
       )
     }
 
@@ -763,8 +761,8 @@ class User {
         count,
         user_message_list: rows,
         page,
-        pageSize,
-      },
+        pageSize
+      }
     })
   }
 
@@ -773,25 +771,25 @@ class User {
    * @param   {obejct} ctx 上下文对象
    */
   static async post_delete_user_message(ctx) {
-    const formData = ctx.request.body
+    let formData = ctx.request.body
 
     await models.user_message
       .destroy({
         where: {
           id: formData.user_message_id,
-          uid: ctx.session.uid,
-        },
+          uid: ctx.session.uid
+        }
       })
-      .then((data) => ( {
+      .then(data => {
         home_resJson(ctx, {
           state: 'success',
-          message: '删除用户消息成功',
+          message: '删除用户消息成功'
         })
       })
-      .catch((err) => ( {
+      .catch(err => {
         home_resJson(ctx, {
           state: 'error',
-          message: '删除用户消息失败',
+          message: '删除用户消息失败'
         })
       })
   }
@@ -810,8 +808,8 @@ class User {
       state: 'success',
       message: 'user_settings_profile',
       data: {
-        router_name: 'profile',
-      },
+        router_name: 'profile'
+      }
     })
   }
 
@@ -829,8 +827,8 @@ class User {
       state: 'success',
       message: 'user_settings_profile',
       data: {
-        router_name: 'password',
-      },
+        router_name: 'password'
+      }
     })
   }
 
@@ -845,7 +843,7 @@ class User {
       title: '重置密码',
       view_url: 'default/reset_password',
       state: 'success',
-      message: 'reset_password',
+      message: 'reset_password'
     })
   }
 
@@ -855,9 +853,9 @@ class User {
    */
 
   static async post_reset_password_code(ctx) {
-    const req_data = ctx.request.body
+    let req_data = ctx.request.body
     if (req_data.type === 'email') {
-      /* 邮箱注册验证码 */
+      /*邮箱注册验证码*/
 
       try {
         if (!req_data.email) {
@@ -869,19 +867,19 @@ class User {
       } catch (err) {
         home_resJson(ctx, {
           state: 'error',
-          message: err.message,
+          message: err.message
         })
         return false
       }
 
       try {
-        const email = await models.user.findOne({
+        let email = await models.user.findOne({
           where: {
-            email: req_data.email,
-          },
+            email: req_data.email
+          }
         })
         if (email) {
-          const random = random_number(true, 6, 6)
+          let random = random_number(true, 6, 6)
 
           await models.verify_code
             .create({
@@ -896,44 +894,44 @@ class User {
               create_date: moment()
                 .utc()
                 .utcOffset(+8)
-                .format(), /* 时间 */
+                .format() /*时间*/
             })
-            .then((data) => ( {
+            .then(function (data) {
               send_verify_code_mail(req_data.email, '重置密码验证码', random)
               home_resJson(ctx, {
                 state: 'success',
-                message: '验证码已发送到邮箱',
+                message: '验证码已发送到邮箱'
               })
             })
-            .catch((err) => ( {
+            .catch(function (err) {
               home_resJson(ctx, {
                 state: 'error',
-                message: err,
+                message: err
               })
             })
         } else {
           home_resJson(ctx, {
             state: 'error',
-            message: '邮箱不存在',
+            message: '邮箱不存在'
           })
         }
       } catch (err) {
         home_resJson(ctx, {
           state: 'error',
-          message: err,
+          message: err
         })
       }
     } else if (req_data.type === 'phone') {
-      /* 手机号码 */
+      /* 手机号码*/
       home_resJson(ctx, {
         state: 'error',
-        message: '暂时未开放手机号码修改密码',
+        message: '暂时未开放手机号码修改密码'
       })
     } else {
-      /* 非手机号码非邮箱 */
+      /* 非手机号码非邮箱*/
       home_resJson(ctx, {
         state: 'error',
-        message: '请输入正确的手机号码或者邮箱',
+        message: '请输入正确的手机号码或者邮箱'
       })
     }
   }
@@ -944,7 +942,7 @@ class User {
    */
 
   static async post_reset_password(ctx) {
-    const req_data = ctx.request.body
+    let req_data = ctx.request.body
     try {
       if (!req_data.email) {
         throw new err_mess('邮箱不存在')
@@ -967,7 +965,7 @@ class User {
     } catch (err) {
       home_resJson(ctx, {
         state: 'error',
-        message: err.message,
+        message: err.message
       })
       return false
     }
@@ -976,78 +974,78 @@ class User {
       /* 邮箱注册 */
 
       try {
-        const email = await models.user.findOne({
+        let email = await models.user.findOne({
           where: {
-            email: req_data.email,
-          },
+            email: req_data.email
+          }
         })
 
         try {
           if (email) {
-            await query_user_verify_code(req_data.email).then((data) => ( {
-              /* 重置密码验证码验证 */
-              if (data.length > 0) {
-                const time_num = moment()
-                  .utc()
-                  .utcOffset(+8)
-                  .format('X')
-                if (req_data.code === data[0].verify_code) {
-                  if (
-                    Number(time_num) - Number(data[0].expire_time)
-                    > 30 * 60
-                  ) {
-                    throw new err_mess('验证码已过时，请再次发送')
+            await query_user_verify_code(req_data.email)
+              .then(data => {
+                /* 重置密码验证码验证 */
+                if (data.length > 0) {
+                  let time_num = moment()
+                    .utc()
+                    .utcOffset(+8)
+                    .format('X')
+                  if (req_data.code === data[0].verify_code) {
+                    if (
+                      Number(time_num) - Number(data[0].expire_time) > 30 * 60
+                    ) {
+                      throw new err_mess('验证码已过时，请再次发送')
+                    }
+                  } else {
+                    throw new err_mess('验证码错误')
                   }
                 } else {
-                  throw new err_mess('验证码错误')
+                  throw new err_mess('请发送验证码')
                 }
-              } else {
-                throw new err_mess('请发送验证码')
-              }
-            })
+              })
 
             await models.user
               .update(
                 {
                   password: tools.encrypt(
                     req_data.new_password,
-                    config.encrypt_key,
-                  ),
+                    config.encrypt_key
+                  )
                 },
                 {
                   where: {
-                    email: req_data.email, // 查询条件
-                  },
-                },
+                    email: req_data.email //查询条件
+                  }
+                }
               )
-              .then(() => ( {
+              .then(() => {
                 home_resJson(ctx, {
                   state: 'success',
-                  message: '修改用户密码成功',
+                  message: '修改用户密码成功'
                 })
               })
-              .catch(() => ( {
+              .catch(() => {
                 home_resJson(ctx, {
                   state: 'error',
-                  message: '修改密码失败。请再次尝试',
+                  message: '修改密码失败。请再次尝试'
                 })
               })
           } else {
             home_resJson(ctx, {
               state: 'error',
-              message: '邮箱不存在',
+              message: '邮箱不存在'
             })
           }
         } catch (err) {
           home_resJson(ctx, {
             state: 'error',
-            message: err.message,
+            message: err.message
           })
         }
       } catch (err) {
         home_resJson(ctx, {
           state: 'error',
-          message: err,
+          message: err
         })
       }
     } else if (req_data.type === 'phone') {
@@ -1055,13 +1053,13 @@ class User {
 
       home_resJson(ctx, {
         state: 'error',
-        message: '暂时未开放手机号码重置密码',
+        message: '暂时未开放手机号码重置密码'
       })
     } else {
-      /* 非手机号码非邮箱 */
+      /* 非手机号码非邮箱*/
       home_resJson(ctx, {
         state: 'error',
-        message: '请输入正确的手机号码或者邮箱',
+        message: '请输入正确的手机号码或者邮箱'
       })
     }
   }
@@ -1073,13 +1071,13 @@ class User {
   static async get_user_tag_all(ctx) {
     // get 页面
 
-    const user_tag_all = await models.user_tag.findAll()
+    let user_tag_all = await models.user_tag.findAll()
     home_resJson(ctx, {
       state: 'success',
       message: '获取成功',
       data: {
-        user_tag_all,
-      },
+        user_tag_all
+      }
     })
   }
 }
