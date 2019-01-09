@@ -22,7 +22,7 @@
                   <a class="nav-link" href="/user/<%= user_info.uid %>/message">
                     <i style="color: #FE385F;" class="iconfont icon-icon-test"></i>
                     消息
-                    <span ></span>
+                    <span></span>
                   </a>
                 </li>
               </ul>
@@ -49,9 +49,10 @@
                 <a class="dropdown-item" href="/esc_sign_in">退出</a>
               </div>
             </li>
-            <li class="nav-item"><a class="btn btn-info btn-sm sign-btn btn-block" href="/sign_in">登录</a></li>
-            <li class="nav-item"><a class="btn btn-danger btn-sm sign-btn btn-outline-warning"
-                                    href="/sign_up">注册语雀</a>
+            <li class="nav-item" @click="show_login"><a class="btn btn-info btn-sm sign-btn btn-block"
+                                                        href="javascript:;">登录</a></li>
+            <li class="nav-item" @click="show_register"><a class="btn btn-danger btn-sm sign-btn btn-outline-warning"
+                                                           href="javascript:;">注册语雀</a>
             </li>
           </ul>
         </div>
@@ -63,7 +64,15 @@
 
 <script>
   export default {
-    name: 'Header'
+    name: 'Header',
+    methods: {
+      show_login() {
+        this.$store.commit('SET_IS_LOGIN', true)
+      },
+      show_register() {
+        this.$store.commit('SET_IS_REGISTER', true)
+      }
+    }
   }
 </script>
 

@@ -1,14 +1,14 @@
 import { fetch } from '@request'
 
 export default {
-  fetchMovie({ commit }, id) {
+  fetchMovie: ({ commit }, id) => {
     return new Promise((resolve, reject) => {
       resolve({ id })
     }).then(res => {
       commit('setMoive', { res })
     })
   },
-  getUserInfo({ commit }) {
+  getUserInfo: ({ commit }) => {
     return fetch({
       url: '/client/user_info',
       method: 'get'
@@ -17,7 +17,7 @@ export default {
         commit('setUserInfo', res)
       })
   },
-  getUser({ commit }, id) {
+  getUser: ({ commit }, id) => {
     return new Promise((resolve, reject) => {
       resolve({ id })
     }).then(res => {

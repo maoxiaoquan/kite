@@ -9,9 +9,9 @@ const moment = require('moment')
 const { render, home_resJson } = require('../../utils/res_data')
 const { sendMail, send_verify_code_mail } = require('../../utils/send_email')
 const { random_number, tools } = require('../../utils/index')
-const config = require('../../../config')
+const config = require('../../../config/config')
 const Op = require('sequelize').Op
-
+let date = new Date()
 const { query_user_verify_code } = require('../../sql/query')
 
 function err_mess(message) {
@@ -27,7 +27,7 @@ class User {
   }
 
   static async render_sign_in(ctx) {
-    /*router to sign_in.html*/
+    /* router to sign_in.html */
     const title = 'sign_in'
 
     if (ctx.session.islogin) {
@@ -77,7 +77,7 @@ class User {
     }
 
     if (checkEmail(formData.account)) {
-      /*邮箱登录*/
+      /* 邮箱登录 */
 
       try {
         let sql_data_user = await models.user.findOne({
@@ -130,7 +130,7 @@ class User {
         })
       }
     } else if (checkPhoneNum(formData.account)) {
-      /* 手机号码登录*/
+      /* 手机号码登录 */
 
       await ctx.render('default/sign_in', {
         title: title,
@@ -142,7 +142,7 @@ class User {
         }
       })
     } else {
-      /* 非手机号码非邮箱*/
+      /* 非手机号码非邮箱 */
       await ctx.render('default/sign_in', {
         title: title,
         state: 'error',
@@ -155,7 +155,7 @@ class User {
     }
   }
 
-  /* get_sign_up start*/
+  /* get_sign_up start */
 
   static async render_sign_up(ctx) {
     // get 页面
@@ -178,13 +178,13 @@ class User {
 
   static async post_sign_up_code(ctx) {
     let req_data = ctx.request.body
-    if (checkEmail(req_data.account)) {
-      /*邮箱注册验证码*/
+    if (req_data.email) {
+      /* 邮箱注册验证码 */
 
       try {
         let email = await models.user.findOne({
           where: {
-            email: req_data.account
+            email: req_data.email
           }
         })
         if (!email) {
@@ -192,18 +192,9 @@ class User {
 
           await models.verify_code
             .create({
-              phone: '',
               email: req_data.account,
               verify_code: random,
-              type: 'sign_up',
-              expire_time: moment()
-                .utc()
-                .utcOffset(+8)
-                .format('X'),
-              create_date: moment()
-                .utc()
-                .utcOffset(+8)
-                .format() /*时间*/
+              type: 'register'
             })
             .then(function (data) {
               send_verify_code_mail(req_data.account, '注册验证码', random)
@@ -231,15 +222,15 @@ class User {
           message: err
         }
       }
-    } else if (checkPhoneNum(req_data.account)) {
-      /* 手机号码注册*/
+    } else if (req_data.phone) {
+      /* 手机号码注册 */
 
       ctx.body = {
         state: 'error',
         message: '暂时未开放手机号码注册'
       }
     } else {
-      /* 非手机号码非邮箱*/
+      /* 非手机号码非邮箱 */
       ctx.body = {
         state: 'error',
         message: '请输入正确的手机号码或者邮箱'
@@ -278,16 +269,15 @@ class User {
         throw new err_mess('验证码不存在')
       }
     } catch (err) {
-      ctx.body = {
+      home_resJson(ctx, {
         state: 'error',
-        message: err.message,
-        data: {}
-      }
+        message: err.message
+      })
       return false
     }
 
-    if (checkEmail(req_data.account)) {
-      /*邮箱注册*/
+    if (req_data.email) {
+      /* 邮箱注册 */
 
       try {
         let nickname_date = await models.user.findOne({
@@ -314,15 +304,12 @@ class User {
           if (!email) {
             await query_user_verify_code(req_data.account)
               .then(data => {
-                /*注册验证码验证*/
+                /* 注册验证码验证 */
                 if (data.length > 0) {
-                  let time_num = moment()
-                    .utc()
-                    .utcOffset(+8)
-                    .format('X')
+                  let time_num = moment(date.setHours(date.getHours())).format('X')
                   if (req_data.code === data[0].verify_code) {
                     if (
-                      Number(time_num) - Number(data[0].expire_time) >
+                      Number(time_num) - Number(data[0].create_date_timestamp) >
                       30 * 60
                     ) {
                       throw new err_mess('验证码已过时，请再次发送')
@@ -338,24 +325,24 @@ class User {
             let user_count = await models.user.count() || 0
 
             await models.sequelize
-              .transaction(function (transaction) {
+              .transaction((transaction) => {
                 // 在事务中执行操作
                 return models.user
                   .create({
-                    /*注册写入数据库操作*/
+                    /* 注册写入数据库操作 */
                     avatar: '/default/img/default_avatar.jpg',
                     nickname: req_data.nickname,
                     password: tools.encrypt(
                       req_data.password,
                       config.encrypt_key
                     ),
-                    email: req_data.account,
+                    email: req_data.email,
                     sex: 0,
                     reg_ip: ctx.request.ip
                   })
-                  .then(function (user) {
+                  .then((user) => {
                     return models.user_info.create({
-                      /*注册写入数据库操作*/
+                      /* 注册写入数据库操作 */
                       uid: user.uid
                     })
                   })
@@ -397,15 +384,15 @@ class User {
           message: err
         }
       }
-    } else if (checkPhoneNum(req_data.account)) {
-      /* 手机号码注册*/
+    } else if (req_data.phone) {
+      /* 手机号码注册 */
 
       ctx.body = {
         state: 'error',
         message: '暂时未开放手机号码注册'
       }
     } else {
-      /* 非手机号码非邮箱*/
+      /* 非手机号码非邮箱 */
       ctx.body = {
         state: 'error',
         message: '请输入正确的手机号码或者邮箱'
@@ -433,7 +420,7 @@ class User {
     }
 
     let findOne_user = await models.user.findOne({
-      //获取用户信息
+      // 获取用户信息
       where: { uid },
       attributes: [
         'uid',
@@ -446,7 +433,7 @@ class User {
     })
 
     let findOne_user_info = await models.user_info.findOne({
-      //获取用户信息
+      // 获取用户信息
       where: { uid }
     })
 
@@ -560,7 +547,7 @@ class User {
       },
       {
         where: {
-          uid: ctx.session.uid //查询条件
+          uid: ctx.session.uid // 查询条件
         }
       }
     )
@@ -573,7 +560,7 @@ class User {
       },
       {
         where: {
-          uid: ctx.session.uid //查询条件
+          uid: ctx.session.uid // 查询条件
         }
       }
     )
@@ -640,7 +627,7 @@ class User {
           },
           {
             where: {
-              uid: ctx.session.uid //查询条件
+              uid: ctx.session.uid // 查询条件
             }
           }
         )
@@ -855,7 +842,7 @@ class User {
   static async post_reset_password_code(ctx) {
     let req_data = ctx.request.body
     if (req_data.type === 'email') {
-      /*邮箱注册验证码*/
+      /* 邮箱注册验证码 */
 
       try {
         if (!req_data.email) {
@@ -894,7 +881,7 @@ class User {
               create_date: moment()
                 .utc()
                 .utcOffset(+8)
-                .format() /*时间*/
+                .format() /* 时间 */
             })
             .then(function (data) {
               send_verify_code_mail(req_data.email, '重置密码验证码', random)
@@ -922,13 +909,13 @@ class User {
         })
       }
     } else if (req_data.type === 'phone') {
-      /* 手机号码*/
+      /* 手机号码 */
       home_resJson(ctx, {
         state: 'error',
         message: '暂时未开放手机号码修改密码'
       })
     } else {
-      /* 非手机号码非邮箱*/
+      /* 非手机号码非邮箱 */
       home_resJson(ctx, {
         state: 'error',
         message: '请输入正确的手机号码或者邮箱'
@@ -1014,7 +1001,7 @@ class User {
                 },
                 {
                   where: {
-                    email: req_data.email //查询条件
+                    email: req_data.email // 查询条件
                   }
                 }
               )
@@ -1056,7 +1043,7 @@ class User {
         message: '暂时未开放手机号码重置密码'
       })
     } else {
-      /* 非手机号码非邮箱*/
+      /* 非手机号码非邮箱 */
       home_resJson(ctx, {
         state: 'error',
         message: '请输入正确的手机号码或者邮箱'

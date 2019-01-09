@@ -1,20 +1,17 @@
-const fs = require('fs')
 const Koa = require('koa')
 const path = require('path')
 const chalk = require('chalk')
 const LRU = require('lru-cache')
-const send = require('koa-send')
 const Router = require('koa-router')
 const setupDevServer = require('../build/setup-dev-server')
-const { createBundleRenderer, createRenderer } = require('vue-server-renderer')
-const config = require('../../config')
+const { createBundleRenderer } = require('vue-server-renderer')
+const ports = require('../../config/ports')
 const koaStatic = require('koa-static')
 // 缓存
 const microCache = new LRU({
   max: 100,
   maxAge: 1000 * 60 // 重要提示：条目在 1 秒后过期。
 })
-
 
 const cacheable_list = [ // 添加缓存页面
   '/b'
@@ -40,7 +37,7 @@ app.use(async (ctx, next) => { // 接口进行拦截，并进行代理
   if (ctx.url.startsWith('/client')) {
     ctx.respond = false
     return proxy({
-      target: `http://localhost:${config.port.product}`, // 服务器地址
+      target: `http://localhost:${ports.product}`, // 服务器地址
       changeOrigin: true,
       secure: false,
       pathRewrite: {
@@ -55,14 +52,12 @@ let renderer
 const templatePath = path.resolve(__dirname, './index.template.html')
 
 setupDevServer(app, templatePath, (bundle, options) => {
-    console.log('bundle success ~~~~~~')
-    const option = Object.assign({
-      runInNewContext: false
-    }, options)
-    renderer = createBundleRenderer(bundle, option)
-  }
-)
-
+  console.log('bundle success ~~~~~~')
+  const option = Object.assign({
+    runInNewContext: false
+  }, options)
+  renderer = createBundleRenderer(bundle, option)
+})
 
 const render = async (ctx, next) => {
   ctx.set('Content-Type', 'text/html')
@@ -103,12 +98,10 @@ const render = async (ctx, next) => {
   } catch (error) {
     handleError(error)
   }
-
 }
 
 // 配置静态资源加载中间件
 app.use(koaStatic(path.join(__dirname, '../../static')))
-
 
 router.get('*', render)
 
@@ -116,11 +109,8 @@ app
   .use(router.routes())
   .use(router.allowedMethods())
 
-const port = config.port.client_dev
-
+const port = ports.client_dev
 
 app.listen(port, () => {
   console.log(chalk.green(`server started at localhost:${port}`))
 })
-
-/*module.exports = render*/

@@ -20,5 +20,5 @@ if (!lowdb.has('email').value()) {
 }
 
 module.exports = {
-  lowdb
+  lowdb,
 }

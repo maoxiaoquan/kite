@@ -82,6 +82,4 @@ module.exports = function setupDevServer(app, templatePath, cb) {
     bundle = JSON.parse(readFile(mfs, 'vue-ssr-server-bundle.json'))
     update()
   })
-
 }
-

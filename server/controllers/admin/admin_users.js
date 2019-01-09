@@ -4,7 +4,7 @@ const {checkUserName, checkPwd, checkEmail} = require('../../utils/validators')
 const {
   tools: {encrypt}
 } = require('../../utils/index')
-const config = require('../../../config')
+const config = require('../../../config/config')
 const {sequelize, admin_user, admin_user_role} = require('../../../db/mysqldb/index')
 const moment = require('moment')
 const {create_admin_system_log} = require('./admin_system_log')

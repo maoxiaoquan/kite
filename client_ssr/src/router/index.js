@@ -9,25 +9,37 @@ export function createRouter() {
     linkActiveClass: 'active',
     linkExactActiveClass: 'exact-active',
     routes: [
-      {
+      /*{
         path: '/',
         redirect: '/home'
-      },
+      },*/
       {
+        path: '/',
+        name: 'client',
+        component: () => import('@views/Client'),
+        children: [
+          {
+            path: '/',
+            name: 'home',
+            component: () => import('@views/Home/home')
+          },
+        ]
+      },
+      /*{
         path: '/home',
         name: 'home',
         component: () => import('@views/Home/home')
-      },
-     /* {
-        path: '/sign-in',
-        name: 'signin',
-        component: () => import('@views/Sign/SignIn')
-      },
-      {
-        path: '/sign-up',
-        name: 'signup',
-        component: () => import('@views/Sign/SignUp')
       },*/
+      /* {
+         path: '/sign-in',
+         name: 'signin',
+         component: () => import('@views/Sign/SignIn')
+       },
+       {
+         path: '/sign-up',
+         name: 'signup',
+         component: () => import('@views/Sign/SignUp')
+       },*/
     ]
   })
 }

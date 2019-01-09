@@ -3,7 +3,7 @@ const { home_resJson } = require('../../utils/res_data')
 const {
   tools: { encrypt }
 } = require('../../utils/index')
-const config = require('../../../config')
+const config = require('../../../config/config')
 const moment = require('moment')
 
 function err_mess(message) {

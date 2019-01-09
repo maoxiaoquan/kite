@@ -6,7 +6,7 @@ const nodeExternals = require('webpack-node-externals')
 const baseWebpackConfig = require('./webpack.base.conf')
 const VueServerPlugin = require('vue-server-renderer/server-plugin')
 const config = require('./config')
-
+const SWPrecachePlugin = require('sw-precache-webpack-plugin')
 module.exports = merge(baseWebpackConfig, {
   mode: 'production',
   target: 'node',

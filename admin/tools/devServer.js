@@ -2,7 +2,7 @@ const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 const path = require('path')
 
-const config = require('../../config')
+const ports = require('../../config/ports')
 const webpack_option = require('./webpack.dev')
 
 new WebpackDevServer(webpack(webpack_option), {
@@ -26,11 +26,11 @@ new WebpackDevServer(webpack(webpack_option), {
   },
   proxy: {
     '/': {
-      target: `http://localhost:${config.port.product}/`,
+      target: `http://localhost:${ports.product}/`,
     },
   },
-}).listen(config.port.admin_dev, 'localhost', (err) => {
-  console.log(`Listening at localhost:${config.port.admin_dev}`)
+}).listen(ports.admin_dev, 'localhost', (err) => {
+  console.log(`Listening at localhost:${ports.admin_dev}`)
   if (err) {
     console.log(err)
   }

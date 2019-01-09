@@ -2,11 +2,11 @@ const Seq = require('sequelize')
 const shortid = require('shortid')
 const time = require('../time')
 module.exports = {
-  NAME: 'admin_authority' /*表名*/,
+  NAME: 'admin_authority' /* 表名 */,
   TABLE: {
-    /*表结构*/
+    /* 表结构 */
     a_id: {
-      //ID
+      // ID
       type: Seq.INTEGER(10),
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增

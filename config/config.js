@@ -1,4 +1,4 @@
-const { lowdb } = require('./db/lowdb')
+const { lowdb } = require('../db/lowdb/index')
 
 const config = lowdb.read()
   .value()

@@ -1,8 +1,8 @@
 const Seq = require('sequelize')
 // const config = require('../../config')
-const config = require('../../config')
+const config = require('../../config/config')
 
-/*表字段*/
+/* 表字段 */
 
 const sequelize = new Seq(
   config.database.DATABASE, // 数据库名

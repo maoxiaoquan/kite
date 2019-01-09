@@ -10,7 +10,7 @@ const {
   tools: {encrypt}
 } = require('../../utils/index')
 
-const config = require('../../../config')
+const config = require('../../../config/config')
 
 function err_mess (message) {
   this.message = message

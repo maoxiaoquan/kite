@@ -79,9 +79,9 @@ router.post('update_user_info', ajaxCheck_Session, user.post_update_user_info) /
 
 router.post('update_user_password', ajaxCheck_Session, user.post_update_user_password) // 根据uid 更新用户登录密码
 
-router.post('sign_up', user.post_sign_up) // 注册数据 post TYPE:AJAX post
+router.post('/sign_up', user.post_sign_up) // 注册数据 post TYPE:AJAX post
 
-router.post('sign_up_code', user.post_sign_up_code) // 注册数据 post TYPE:AJAX post
+router.post('/sign_up_code', user.post_sign_up_code) // 注册数据  发送注册 验证码 post TYPE:AJAX post
 
 router.post('article_writer', ajaxCheck_Session, article.post_create_writer) // 编写文章post TYPE:AJAX post
 

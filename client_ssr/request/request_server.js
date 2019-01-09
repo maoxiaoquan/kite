@@ -1,7 +1,7 @@
 import LRU from 'lru-cache'
 
-const config = require('../../config')
-let baseURL = `http://localhost:${process.env.NODE_ENV === 'production' ? config.port.product : config.port.client_dev}`
+const ports = require('../../config/ports')
+let baseURL = `http://localhost:${process.env.NODE_ENV === 'production' ? ports.product : ports.client_dev}`
 
 export function requestConfig() {
   let _c = {}

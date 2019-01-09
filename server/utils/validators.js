@@ -2,40 +2,42 @@ const validator = require('validator')
 
 module.exports = {
 
-  validateWords (str) {
-    let pattern = new RegExp('[<>#$%^*+*]')
+  validateWords(str) {
+    const pattern = new RegExp('[<>#$%^*+*]')
     let newParams = ''
     for (let i = 0; i < str.length; i++) {
-      newParams += str.substr(i, 1).replace(pattern, '')
+      newParams += str.substr(i, 1)
+        .replace(pattern, '')
     }
     return newParams
   },
   // 校验用户名
-  checkUserName (str) {
+  checkUserName(str) {
     return /^[a-zA-Z][a-zA-Z0-9_]{4,11}$/.test(str)
   },
   // 校验中文GBK
-  checkName (str, min = 2, max = 6) {
+  checkName(str, min = 2, max = 6) {
     return str && validator.isLength(str, min, max) && /[\u4e00-\u9fa5]/.test(str)
   },
   // 校验密码
-  checkPwd (str, min = 6, max = 32) {
-    return str && validator.isLength(str, 5, max) && /(?!^\\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{6,}/.test(str)
+  checkPwd(str, min = 6, max = 32) {
+    return str && validator.isLength(str, 5, max) && /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,32}$/.test(str)
   },
   // 校验邮箱
-  checkEmail (str) {
+  checkEmail(str) {
     return str && validator.isEmail(str)
   },
   // 校验手机号
-  checkPhoneNum (str) {
+  checkPhoneNum(str) {
     return str && validator.isMobilePhone(str.toString(), 'zh-CN')
   },
   // 校验QQ号
-  checkQqNum (str) {
-    return RegExp(/^[1-9][0-9]{4,9}$/).test(str)
+  checkQqNum(str) {
+    return RegExp(/^[1-9][0-9]{4,9}$/)
+      .test(str)
   },
-  checkUrl (str) {
+  checkUrl(str) {
     return str && validator.isURL(str)
-  }
+  },
 
 }

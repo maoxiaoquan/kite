@@ -4,7 +4,7 @@ const moment = require('moment')
 const {
   tools: {encrypt}
 } = require('../../utils/index')
-const config = require('../../../config')
+const config = require('../../../config/config')
 const {create_admin_system_log} = require('./admin_system_log')
 
 function err_mess (message) {

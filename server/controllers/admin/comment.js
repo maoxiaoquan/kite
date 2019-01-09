@@ -3,7 +3,7 @@ const {sign_resJson, admin_resJson} = require('../../utils/res_data')
 const {
   tools: {encrypt}
 } = require('../../utils/index')
-const config = require('../../../config')
+const config = require('../../../config/config')
 const moment = require('moment')
 const {create_admin_system_log} = require('./admin_system_log')
 const Op = require('sequelize').Op

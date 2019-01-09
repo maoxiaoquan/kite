@@ -8,7 +8,8 @@ const koaLogger = require('koa-logger')
 const session = require('koa-session-minimal')
 const MysqlStore = require('koa-mysql-session')
 const app = require('./app')
-const config = require('../config')
+const config = require('../config/config')
+const ports = require('../config/ports')
 const routers = require('./routers/index')
 const { lowdb } = require('../db/lowdb')
 
@@ -64,6 +65,6 @@ app.use(routers.routes())
   .use(routers.allowedMethods())
 
 // 监听启动端口
-app.listen(config.port.product)
+app.listen(ports.product)
 
-console.log(`the server is start at port ${config.port.product}`)
+console.log(`the server is start at port ${ports.product}`)

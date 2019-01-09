@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import { createApp } from './app'
-import Components from './components'
+import { Dialog } from '@components'
+
 const { app, router, store } = createApp()
 
-
 Vue.mixin({
-  beforeRouteUpdate(to, from, next) {
+  beforeRouteUpdate: (to, from, next) => {
     const { asyncData } = this.$options
     if (asyncData) {
       asyncData({
@@ -20,7 +20,7 @@ Vue.mixin({
   }
 })
 
-Vue.component('Dialog',Components.Dialog)
+Vue.component('Dialog', Dialog)
 
 if (window.__INITIAL_STATE__) {
   store.replaceState(window.__INITIAL_STATE__)

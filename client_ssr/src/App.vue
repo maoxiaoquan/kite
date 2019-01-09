@@ -19,8 +19,7 @@
         alert('hi')
       }
     },
-    computed: {
-    },
+    computed: {},
     components: {
       Header,
       GlobalAlert
