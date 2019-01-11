@@ -5,7 +5,7 @@ import { Dialog } from '@components'
 const { app, router, store } = createApp()
 
 Vue.mixin({
-  beforeRouteUpdate: (to, from, next) => {
+  beforeRouteUpdate (to, from, next) {
     const { asyncData } = this.$options
     if (asyncData) {
       asyncData({

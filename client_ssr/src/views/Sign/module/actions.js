@@ -5,14 +5,21 @@ export default {
     return fetch({
       url: '/client/sign_up_code',
       method: 'post',
-      data: { email }
+      parameter: { email }
     })
   },
-  REGISTER: ({ commit, dispatch, state }, data) => { // 注册 post
+  LOGIN: ({ commit, dispatch, state }, parameter) => { // 登录 post
+    return fetch({
+      url: '/client/sign_in',
+      method: 'post',
+      parameter
+    })
+  },
+  REGISTER: ({ commit, dispatch, state }, parameter) => { // 注册 post
     return fetch({
       url: '/client/sign_up',
       method: 'post',
-      data
+      parameter
     })
   }
 }

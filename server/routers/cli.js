@@ -4,7 +4,7 @@ const init = require('../controllers/cli/init') // init
 
 const RouterLimit = require('../utils/cli_router_limit')
 
-/*PAGE RENDER*/
+/* PAGE RENDER */
 
 router.get('/', index.render_get_index) // 主页 page
 

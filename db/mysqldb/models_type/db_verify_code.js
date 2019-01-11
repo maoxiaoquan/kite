@@ -2,9 +2,9 @@ const Seq = require('sequelize')
 const time = require('../time')
 
 module.exports = {
-  NAME: 'verify_code' /*表名*/,
+  NAME: 'verify_code' /* 表名 */,
   TABLE: {
-    /*表结构*/
+    /* 表结构 */
     id: {
       // 自增ID
       type: Seq.BIGINT(20),
@@ -36,12 +36,6 @@ module.exports = {
       type: Seq.STRING(20),
       comment: '验证码类型',
       field: 'type'
-    },
-    expire_time: {
-      // 验证码过期时间
-      type: Seq.BIGINT(50),
-      comment: '过期时间',
-      field: 'expire_time'
     },
     ...time.create_date
   }

@@ -145,12 +145,7 @@ class ArticleTag extends React.Component {
     })
     this.props.dispatch({type: 'SET_ARTICLE_TAG_INFO', data: data})
     this.props.form.setFieldsValue({
-      article_tag_name: data.article_tag_name,
-      article_tag_us_name: data.article_tag_us_name,
-      article_tag_icon: data.article_tag_icon,
-      article_tag_icon_type: data.article_tag_icon_type,
-      article_tag_description: data.article_tag_description,
-      enable: data.enable
+      ...data
     })
   }
 
@@ -274,15 +269,6 @@ class ArticleTag extends React.Component {
     const {state_article_tag} = this.props
     const {loading, is_create} = this.state
     const {getFieldDecorator} = this.props.form
-
-    const prefixSelector = getFieldDecorator('prefix', {
-      initialValue: '86'
-    })(
-      <Select style={{width: 70}}>
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
-      </Select>
-    )
 
     const formItemLayout = {
       labelCol: {

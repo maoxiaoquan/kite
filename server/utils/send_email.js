@@ -27,11 +27,8 @@ smtpTransport = nodemailer.createTransport(smtpTransport({
  * @param {String} html 发送的html内容
  */
 
-
 const sendMail = function (recipient, subject, html) {
-
   smtpTransport.sendMail({
-
     from: config.email.user,
     to: recipient,
     subject: subject,
@@ -46,13 +43,12 @@ const sendMail = function (recipient, subject, html) {
 }
 
 const send_verify_code_mail = function (recipient, subject, code) {
-
-  smtpTransport.sendMail({
-
-    from: config.email.user,
-    to: recipient,
-    subject: subject,
-    html: `
+  return new Promise((resolve, reject) => {
+    smtpTransport.sendMail({
+      from: config.email.user,
+      to: recipient,
+      subject: subject,
+      html: `
         <div class="juejin-reset" style="
             width: 600px;
             margin-left: auto;
@@ -105,11 +101,18 @@ const send_verify_code_mail = function (recipient, subject, code) {
         >希望您来到这里可以得到你想要</p>
         `
 
-  }, function (error, response) {
-    if (error) {
-      console.log(error)
-    }
-    console.log('发送成功')
+    }, function (error, response) {
+      if (error) {
+        reject({
+          state: 'error',
+          message: error.response
+        })
+      }
+      resolve({
+        state: 'success',
+        message: '发送成功'
+      })
+    })
   })
 }
 

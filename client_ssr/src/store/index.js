@@ -5,14 +5,17 @@ import mutations from './mutations'
 
 Vue.use(Vuex)
 
-export function createStore() {
+export function createStore () {
   return new Vuex.Store({
     state: {
       is_login_show: false, // 登录弹窗是否显示
       is_register_show: false, // 注册弹窗是否显示
       is_reset_password_show: false, // 找回密码弹窗是否显示
-      movie: {},
-      user_info: {}
+      personal_info: {}, // 登录后的用户个人信息
+      article_column: [], // 获取文章专栏
+      c_column_us_name: '', // 当前 文章专栏
+      home_banner: [], // home banner
+      article_tag: [] // 获取文章标签
     },
     actions,
     mutations

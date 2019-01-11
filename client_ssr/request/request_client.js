@@ -1,5 +1,8 @@
+import { cookie } from '../../server/utils/cookie'
+
 export function requestConfig() {
   return {
-    url: ''
+    url: '',
+    accessToken: cookie.get('accessToken')
   }
 }

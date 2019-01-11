@@ -36,6 +36,8 @@ renderer = createBundleRenderer(serverBundle, {
 const render = async (ctx, next) => {
   ctx.set('Content-Type', 'text/html')
 
+  let accessToken = ctx.cookies.get('accessToken')
+
   const handleError = err => {
     if (err.code === 404) {
       ctx.status = 404
@@ -49,7 +51,8 @@ const render = async (ctx, next) => {
   }
 
   const context = {
-    url: ctx.url
+    url: ctx.url,
+    accessToken: accessToken
   }
 
   // 判断是否可缓存，可缓存并且缓存中有则直接返回
@@ -74,6 +77,5 @@ const render = async (ctx, next) => {
   }
 
 }
-
 
 module.exports = render

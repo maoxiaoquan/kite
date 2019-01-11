@@ -3,9 +3,9 @@ const shortid = require('shortid')
 const time = require('../time')
 
 module.exports = {
-  NAME: 'article' /*表名*/,
+  NAME: 'article' /* 表名 */,
   TABLE: {
-    /*表结构*/
+    /* 表结构 */
     aid: {
       // 用户ID
       type: Seq.INTEGER(10),

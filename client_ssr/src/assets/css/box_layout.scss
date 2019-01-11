@@ -79,15 +79,6 @@ hr {
   overflow: visible;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-}
-
-p {
-  margin-top: 0;
-  margin-bottom: 1rem;
-}
 
 abbr[title],
 abbr[data-original-title] {
@@ -98,18 +89,6 @@ abbr[data-original-title] {
   border-bottom: 0;
 }
 
-address {
-  margin-bottom: 1rem;
-  font-style: normal;
-  line-height: inherit;
-}
-
-ol,
-ul,
-dl {
-  margin-top: 0;
-  margin-bottom: 1rem;
-}
 
 ol ol,
 ul ul,
@@ -120,15 +99,6 @@ ul ol {
 
 dt {
   font-weight: 700;
-}
-
-dd {
-  margin-bottom: .5rem;
-  margin-left: 0;
-}
-
-blockquote {
-  margin: 0 0 1rem;
 }
 
 dfn {
@@ -181,25 +151,6 @@ a:not([href]):not([tabindex]):focus {
   outline: 0;
 }
 
-pre,
-code,
-kbd,
-samp {
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 1em;
-}
-
-pre {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  overflow: auto;
-  -ms-overflow-style: scrollbar;
-}
-
-figure {
-  margin: 0 0 1rem;
-}
-
 img {
   vertical-align: middle;
   border-style: none;
@@ -213,22 +164,10 @@ table {
   border-collapse: collapse;
 }
 
-caption {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
-  color: #6c757d;
-  text-align: left;
-  caption-side: bottom;
-}
-
 th {
   text-align: inherit;
 }
 
-label {
-  display: inline-block;
-  margin-bottom: 0.5rem;
-}
 
 button {
   border-radius: 0;
@@ -353,38 +292,7 @@ template {
   display: none !important;
 }
 
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
-  margin-bottom: 0.5rem;
-  font-family: inherit;
-  font-weight: 500;
-  line-height: 1.2;
-  color: inherit;
-}
 
-h1, .h1 {
-  font-size: 2.5rem;
-}
-
-h2, .h2 {
-  font-size: 2rem;
-}
-
-h3, .h3 {
-  font-size: 1.75rem;
-}
-
-h4, .h4 {
-  font-size: 1.5rem;
-}
-
-h5, .h5 {
-  font-size: 1.25rem;
-}
-
-h6, .h6 {
-  font-size: 1rem;
-}
 
 .container,
 .index-container,

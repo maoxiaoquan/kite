@@ -50,6 +50,11 @@ class ArticleColumn extends React.Component {
           key: 'article_column_name'
         },
         {
+          title: '专栏单词',
+          dataIndex: 'article_column_us_name',
+          key: 'article_column_us_name'
+        },
+        {
           title: '专栏图标',
           dataIndex: 'article_column_icon',
           key: 'article_column_icon'
@@ -173,12 +178,8 @@ class ArticleColumn extends React.Component {
     })
     this.props.dispatch({type: 'SET_ARTICLE_COLUMN_INFO', data: data})
     this.props.form.setFieldsValue({
-      article_column_name: data.article_column_name,
-      article_column_icon: data.article_column_icon,
-      article_column_icon_type: data.article_column_icon_type,
+      ...data,
       article_column_tags: data.article_column_tags.split(','),
-      article_column_description: data.article_column_description,
-      enable: data.enable
     })
   }
 
@@ -371,6 +372,17 @@ class ArticleColumn extends React.Component {
                   rules: [{required: true, message: '请输入专栏名！', whitespace: true}]
                 })(
                   <Input placeholder="专栏名"/>
+                )}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label="专栏名单词"
+              >
+                {getFieldDecorator('article_column_us_name', {
+                  rules: [{required: true, message: '请输入专栏名单词！', whitespace: true}]
+                })(
+                  <Input placeholder="专栏名单词"/>
                 )}
               </FormItem>
 

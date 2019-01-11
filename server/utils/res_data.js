@@ -1,5 +1,5 @@
 class Format {
-  constructor () {
+  constructor() {
     // super()
   }
 
@@ -13,7 +13,7 @@ class Format {
    * @param  {Boolean} is_login  是否登录
    */
 
-  async sign_resJson (ctx, {state, message, token, date}, is_login = true) {
+  async sign_resJson(ctx, { state, message, token, date }, is_login = true) {
     ctx.body = {
       state,
       message,
@@ -32,7 +32,7 @@ class Format {
    * @param  {Boolean} is_login  是否登录
    */
 
-  async admin_resJson (ctx, {state, message, data = {}}, is_login = true) {
+  async admin_resJson(ctx, { state, message, data = {} }, is_login = true) {
     ctx.body = {
       state,
       message,
@@ -41,12 +41,11 @@ class Format {
     }
   }
 
-
   /**
    * 前台页面数据返回
    */
 
-  async home_resJson (ctx, {state, message, data = {}}) {
+  async home_resJson(ctx, { state, message, data = {} }) {
     ctx.body = {
       state,
       message,
@@ -54,7 +53,7 @@ class Format {
     }
   }
 
-  async render (ctx, {title, view_url, state, message, data = {}}) {
+  async render(ctx, { title, view_url, state, message, data = {} }) {
     await ctx.render(view_url, {
       title,
       state,
@@ -67,7 +66,6 @@ class Format {
       }
     })
   }
-
 }
 
 module.exports = new Format()

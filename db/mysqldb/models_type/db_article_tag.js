@@ -5,9 +5,9 @@ const time = require('../time')
 module.exports = {
   NAME: 'article_tag' /*表名*/,
   TABLE: {
-    /*表结构*/
+    /* 表结构 */
     article_tag_id: {
-      //标签ID
+      // 标签ID
       type: Seq.INTEGER(10),
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增

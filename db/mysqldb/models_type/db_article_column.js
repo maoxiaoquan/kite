@@ -3,11 +3,11 @@ const shortid = require('shortid')
 const time = require('../time')
 
 module.exports = {
-  NAME: 'article_column' /*表名*/,
+  NAME: 'article_column' /* 表名 */,
   TABLE: {
-    /*表结构*/
+    /* 表结构 */
     article_column_id: {
-      //专栏ID
+      // 专栏ID
       type: Seq.INTEGER(10),
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增
@@ -20,8 +20,14 @@ module.exports = {
       comment: '专栏名字',
       field: 'article_column_name'
     },
+    article_column_us_name: {
+      // 标签英文名字
+      type: Seq.STRING(100),
+      comment: '专栏英文名字',
+      field: 'article_column_us_name'
+    },
     article_column_icon: {
-      // 专栏地址
+      // 专栏图标
       type: Seq.STRING(160),
       comment: '专栏地址',
       field: 'article_column_icon'

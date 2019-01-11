@@ -18,7 +18,7 @@ const sequelize = new Seq(
     },
     host: config.database.HOST, // 数据库服务器ip
     port: config.database.MYSQL_PORT, // 数据库服务器端口
-    timezone: '+08:00',// 设置东八区
+    timezone: '+08:00', // 设置东八区
     define: {
       // 字段以下划线（_）来分割（默认是驼峰命名风格）
       underscored: true

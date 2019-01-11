@@ -5,7 +5,7 @@
                 注册
             </div>
             <div class="js-sign-in-container">
-                <form id="sign-up" accept-charset="UTF-8" method="post">
+                <form id="sign-up" accept-charset="UTF-8" method="post" ref="register">
 
                     <div class="input-prepend restyle js-normal">
                         <input v-model="form_data.nickname" type="text" class="nickname" placeholder="你的昵称">
@@ -99,15 +99,18 @@
         this.$store.dispatch('sign/REGISTER', this.form_data)
           .then(res => {
             if (res.state === 'success') {
-
+              alert(res.message)
+              this.$refs.register.reset();
+              this.$store.commit('SET_IS_REGISTER', false)
+              this.$store.commit('SET_IS_LOGIN', true)
             } else {
               alert(res.message)
             }
           })
       },
       tap_sign() {
-        this.$store.commit('SET_IS_LOGIN', true)
         this.$store.commit('SET_IS_REGISTER', false)
+        this.$store.commit('SET_IS_LOGIN', true)
       }
     },
     components: {

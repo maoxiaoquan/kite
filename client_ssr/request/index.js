@@ -7,15 +7,16 @@
 import { requestConfig } from 'request-config'
 import axios from 'axios'
 
-let axios_config = {}
-
 const api = requestConfig()
-
-axios_config.baseURL = api.url
 
 const logRequests = true || !!process.env.DEBUG_API
 
-const service = axios.create(axios_config)
+const service = axios.create({
+  baseURL: api.url,
+  headers: {
+    'access-token': api.accessToken || ''
+  }
+})
 
 // warm the front page cache every 15 min
 // make sure to do this only once across all requests
@@ -28,7 +29,8 @@ function warmCache() {
   setTimeout(warmCache, 1000 * 60 * 15)
 }
 
-export function fetch({ url, method, data }) {
+// 可缓存请求
+export function Cachefetch({ url, method, parameter }) {
   logRequests && console.log(`fetching ${url}...`)
   const cache = api.cachedItems
   if (cache && cache.has(url)) {
@@ -36,7 +38,7 @@ export function fetch({ url, method, data }) {
     return Promise.resolve(cache.get(url))
   } else {
     return new Promise((resolve, reject) => {
-      service[method](url, data)
+      service[method](url, parameter)
         .then(res => {
           const val = res.data
           if (val) val.__lastUpdated = Date.now()
@@ -49,3 +51,16 @@ export function fetch({ url, method, data }) {
   }
 }
 
+// 不缓存请求
+export function fetch({ url, method, parameter }) {
+  logRequests && console.log(`fetching ${url}...`)
+  return new Promise((resolve, reject) => {
+    service[method](url, parameter)
+      .then(res => {
+        const val = res.data
+        logRequests && console.log(`fetched ${url}.`)
+        resolve(val)
+      }, reject)
+      .catch(reject)
+  })
+}

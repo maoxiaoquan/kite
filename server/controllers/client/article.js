@@ -1,6 +1,6 @@
 const models = require('../../../db/mysqldb/index')
 const moment = require('moment')
-const {render, home_resJson} = require('../../utils/res_data')
+const { render, home_resJson } = require('../../utils/res_data')
 const Op = require('sequelize').Op
 const trimHtml = require('trim-html')
 const cheerio = require('cheerio')
@@ -13,22 +13,22 @@ function err_mess (message) {
 
 function getNoMarkupStr (markupStr) {
   /* markupStr 源码</> */
-  //console.log(markupStr);
+  // console.log(markupStr);
   let noMarkupStr = markupStr
   /* 得到可视文本(不含图片),将&nbsp;&lt;&gt;转为空字符串和<和>显示,同时去掉了换行,文本单行显示 */
-  //console.log("1--S" + noMarkupStr + "E--");
+  // console.log("1--S" + noMarkupStr + "E--");
   noMarkupStr = noMarkupStr.replace(/(\r\n|\n|\r)/gm, '')
   /* 去掉可视文本中的换行,(没有用,上一步已经自动处理) */
-  //console.log("2--S" + noMarkupStr + "E--");
+  // console.log("2--S" + noMarkupStr + "E--");
   noMarkupStr = noMarkupStr.replace(/^\s+/g, '')
   /* 替换开始位置一个或多个空格为一个空字符串 */
-  //console.log("3--S" + noMarkupStr + "E--");
+  // console.log("3--S" + noMarkupStr + "E--");
   noMarkupStr = noMarkupStr.replace(/\s+$/g, '')
   /* 替换结束位置一个或多个空格为一个空字符串 */
-  //console.log("4--S" + noMarkupStr + "E--");
+  // console.log("4--S" + noMarkupStr + "E--");
   noMarkupStr = noMarkupStr.replace(/\s+/g, ' ')
   /* 替换中间位置一个或多个空格为一个空格 */
-  //console.log("5--S" + noMarkupStr + "E--");
+  // console.log("5--S" + noMarkupStr + "E--");
   return noMarkupStr
 }
 
@@ -68,7 +68,8 @@ class Article {
         }
       })
       .then(res => {
-        res.create_at = moment(res.create_date).format('YYYY-MM-DD')
+        res.create_at = moment(res.create_date)
+          .format('YYYY-MM-DD')
         return res
       })
 
@@ -83,7 +84,7 @@ class Article {
         read_count: Number(sql_article.read_count) + 1
       },
       {
-        where: {aid} //为空，获取全部，也可以自己添加条件
+        where: { aid } // 为空，获取全部，也可以自己添加条件
       }
     )
 
@@ -161,9 +162,9 @@ class Article {
           uid: ctx.session.uid,
           author: '',
           title: formData.title,
-          excerpt: getSubStr(getNoMarkupStr($.text())) /*摘记*/,
-          content: formData.content /*主内容*/,
-          origin_content: formData.origin_content /*源内容*/,
+          excerpt: getSubStr(getNoMarkupStr($.text())) /* 摘记 */,
+          content: formData.content /* 主内容 */,
+          origin_content: formData.origin_content /* 源内容 */,
           source: formData.source, // 来源 （1原创 2转载）
           cover_img: result ? result[2] : '',
           status: 1, // '状态(0:草稿;1:审核中;2:审核通过;3:回收站)'
@@ -208,30 +209,31 @@ class Article {
       }
     })
     if (find_article_tag) {
-      let {count, rows} = await models.article
+      let { count, rows } = await models.article
         .findAndCountAll({
           where: {
-            article_tag_ids: {[Op.like]: `%${article_tag_id}%`},
+            article_tag_ids: { [Op.like]: `%${article_tag_id}%` },
             ...web_where.article // web 表示前台  公共文章限制文件
-          }, //为空，获取全部，也可以自己添加条件
-          offset: (page - 1) * pageSize, //开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-          limit: pageSize, //每页限制返回的数据条数
+          }, // 为空，获取全部，也可以自己添加条件
+          offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+          limit: pageSize, // 每页限制返回的数据条数
           order: [['create_date_timestamp', 'desc']]
         })
 
-      for (let item in rows) {// 循环取用户 render 渲染必须用这种方法 与 ajax 有区别
-        rows[item].create_at = await moment(rows[item].create_date).format('YYYY-MM-DD H:m:s')
+      for (let item in rows) { // 循环取用户 render 渲染必须用这种方法 与 ajax 有区别
+        rows[item].create_at = await moment(rows[item].create_date)
+          .format('YYYY-MM-DD H:m:s')
         rows[item].user = await models.user.findOne({
-          where: {uid: rows[item].uid},
+          where: { uid: rows[item].uid },
           attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
         })
       }
 
       let subscribe_count = await models.subscribe_article_tag.count({
-        where: {article_tag_id}
+        where: { article_tag_id }
       })
 
-      /*所有文章专题*/
+      /* 所有文章专题 */
       let article_tag_all = await models.article_tag.findAll({
         attributes: ['article_tag_id', 'article_tag_name']
       })
@@ -264,7 +266,7 @@ class Article {
   static async get_article_tag_all (ctx) {
     let article_tag_all = await models.article_tag.findAll({
       attributes: ['article_tag_id', 'article_tag_name'],
-      where: {enable: true} //为空，获取全部，也可以自己添加条件
+      where: { enable: true } // 为空，获取全部，也可以自己添加条件
     })
     home_resJson(ctx, {
       state: 'success',
@@ -283,7 +285,7 @@ class Article {
     let aid = ctx.query.aid
 
     let article = await models.article.findOne({
-      where: {aid}
+      where: { aid }
     })
 
     if (article) {
@@ -312,26 +314,27 @@ class Article {
     let pageSize = ctx.query.pageSize || 25
     let search = ctx.query.search
 
-    let {count, rows} = await models.article
+    let { count, rows } = await models.article
       .findAndCountAll({
         where: {
-          title: {[Op.like]: `%${search}%`},
+          title: { [Op.like]: `%${search}%` },
           ...web_where.article // web 表示前台  公共文章限制文件
-        }, //为空，获取全部，也可以自己添加条件 // status: 2 限制只有 审核通过的显示
-        offset: (page - 1) * pageSize, //开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-        limit: pageSize, //每页限制返回的数据条数
+        }, // 为空，获取全部，也可以自己添加条件 // status: 2 限制只有 审核通过的显示
+        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: pageSize, // 每页限制返回的数据条数
         order: [['create_date_timestamp', 'desc']]
       })
 
-    for (let item in rows) {// 循环取用户 render 渲染必须用这种方法 与 ajax 有区别
-      rows[item].create_at = await moment(rows[item].create_date).format('YYYY-MM-DD H:m:s')
+    for (let item in rows) { // 循环取用户 render 渲染必须用这种方法 与 ajax 有区别
+      rows[item].create_at = await moment(rows[item].create_date)
+        .format('YYYY-MM-DD H:m:s')
       rows[item].user = await models.user.findOne({
-        where: {uid: rows[item].uid},
+        where: { uid: rows[item].uid },
         attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
       })
     }
 
-    /*所有文章专题*/
+    /* 所有文章专题 */
     let article_tag_all = await models.article_tag.findAll({
       attributes: ['article_tag_id', 'article_tag_name']
     })
@@ -348,6 +351,34 @@ class Article {
         search,
         tag_all: article_tag_all,
         article_list: rows
+      }
+    })
+  }
+
+  /**
+   * 获取文章专栏
+   * @param   {obejct} ctx 上下文对象
+   */
+
+  static async get_article_column (ctx) {
+    let article_tag_all = await models.article_column.findAll({
+      attributes: [
+        'article_column_id',
+        'article_column_name',
+        'article_column_us_name',
+        'article_column_icon',
+        'article_column_subscribe',
+        'article_column_icon_type',
+        'article_column_tags',
+        'article_column_description'
+      ],
+      where: { enable: true } // 为空，获取全部，也可以自己添加条件
+    })
+    home_resJson(ctx, {
+      state: 'success',
+      message: '获取所有文章专栏成功',
+      data: {
+        list: article_tag_all
       }
     })
   }

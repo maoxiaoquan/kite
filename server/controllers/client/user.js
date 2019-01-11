@@ -12,171 +12,106 @@ const { random_number, tools } = require('../../utils/index')
 const config = require('../../../config/config')
 const Op = require('sequelize').Op
 let date = new Date()
+const tokens = require('../../utils/tokens')
+
 const { query_user_verify_code } = require('../../sql/query')
 
-function err_mess(message) {
+function errMess (message) {
   this.message = message
   this.name = 'UserException'
 }
 
 class User {
-  constructor() {
-    this.sign_up_state = {
-      title: 'sign'
-    }
+  constructor () {
   }
 
-  static async render_sign_in(ctx) {
-    /* router to sign_in.html */
-    const title = 'sign_in'
-
-    if (ctx.session.islogin) {
-      ctx.redirect('/')
-    } else {
-      await ctx.render('default/sign_in', {
-        title,
-        state: 'success',
-        meaasge: '',
-        data: {
-          account: '',
-          password: ''
-        }
-      })
-    }
-  }
-
-  static async esc_sign_in(ctx) {
+  static async esc_sign_in (ctx) {
     ctx.session = null
     ctx.redirect('/sign_in')
   }
 
-  static async form_sign_in(ctx) {
-    const title = 'sign_in'
+  static async post_sign_in (ctx) {
 
-    let formData = ctx.request.body
+    let reqDate = ctx.request.body
 
     try {
-      if (!formData.account) {
-        console.log('req_data', formData)
-        throw new err_mess('请输入账户')
+      if (!reqDate.email) {
+        throw new errMess('请输入账户')
       }
-      if (!formData.password) {
-        throw new err_mess('请输入密码')
+      if (!reqDate.password) {
+        throw new errMess('请输入密码')
       }
     } catch (err) {
-      await ctx.render('default/sign_in', {
-        title: title,
+      home_resJson(ctx, {
         state: 'error',
-        message: err.message,
-        data: {
-          account: formData.account,
-          password: formData.password
-        }
+        message: err.message
       })
       return false
     }
 
-    if (checkEmail(formData.account)) {
+    if (reqDate.email) {
       /* 邮箱登录 */
 
       try {
         let sql_data_user = await models.user.findOne({
           where: {
-            email: formData.account
+            email: reqDate.email
           }
         })
         if (sql_data_user) {
           if (
-            tools.encrypt(formData.password, config.encrypt_key) ===
+            tools.encrypt(reqDate.password, config.encrypt_key) ===
             sql_data_user.dataValues.password
           ) {
-            let session = ctx.session
-            session.islogin = true
-            session.uid = sql_data_user.dataValues.uid
-            session.avatar = sql_data_user.dataValues.avatar
+            let user_info = {
+              uid: sql_data_user.uid
+            }
 
-            ctx.redirect('/')
-          } else {
-            await ctx.render('default/sign_in', {
-              title: title,
-              state: 'error',
-              message: '密码错误',
+            let token = tokens.ClientSetToken(30000, user_info)
+
+            await home_resJson(ctx, {
+              state: 'success',
+              message: '登录成功',
               data: {
-                account: formData.account,
-                password: formData.password
+                token
               }
+            })
+          } else {
+            home_resJson(ctx, {
+              state: 'error',
+              message: '密码错误'
             })
           }
         } else {
-          await ctx.render('default/sign_in', {
-            title: title,
+          home_resJson(ctx, {
             state: 'error',
-            message: '账户不存在',
-            data: {
-              account: formData.account,
-              password: formData.password
-            }
+            message: '账户不存在'
           })
         }
       } catch (err) {
-        await ctx.render('default/sign_in', {
-          title: title,
+        home_resJson(ctx, {
           state: 'error',
-          message: err,
-          data: {
-            account: formData.account,
-            password: formData.password
-          }
+          message: err
         })
       }
-    } else if (checkPhoneNum(formData.account)) {
+    } else if (reqDate.phone) {
       /* 手机号码登录 */
 
-      await ctx.render('default/sign_in', {
-        title: title,
+      home_resJson(ctx, {
         state: 'error',
-        message: '暂时未开放手机号码登录',
-        data: {
-          account: formData.account,
-          password: formData.password
-        }
+        message: '暂时未开放手机号码登录'
       })
     } else {
       /* 非手机号码非邮箱 */
-      await ctx.render('default/sign_in', {
-        title: title,
+      home_resJson(ctx, {
         state: 'error',
-        message: '请输入正确的手机号码或者邮箱',
-        data: {
-          account: formData.account,
-          password: formData.password
-        }
-      })
-    }
-  }
-
-  /* get_sign_up start */
-
-  static async render_sign_up(ctx) {
-    // get 页面
-
-    const title = 'sign_up'
-
-    if (ctx.session.islogin) {
-      ctx.redirect('/')
-    } else {
-      await ctx.render('default/sign_up', {
-        title: title,
-        state: 'success',
-        message: '',
-        data: {}
+        message: '请输入正确的手机号码或者邮箱'
       })
     }
   }
 
   // 注册验证码发送
-
-  static async post_sign_up_code(ctx) {
+  static async post_sign_up_code (ctx) {
     let req_data = ctx.request.body
     if (req_data.email) {
       /* 邮箱注册验证码 */
@@ -187,27 +122,43 @@ class User {
             email: req_data.email
           }
         })
+
+        if (req_data.email) {
+          if (!checkEmail(req_data.email)) {
+            throw new errMess('请输入正确的邮箱地址')
+          }
+        }
+        if (req_data.phone) {
+          if (!checkPhoneNum(req_data.phone)) {
+            throw new errMess('请输入正确的手机号码')
+          }
+        }
+
         if (!email) {
           let random = random_number(true, 6, 6)
-
-          await models.verify_code
-            .create({
-              email: req_data.account,
-              verify_code: random,
-              type: 'register'
+          await send_verify_code_mail(req_data.email, '注册验证码', random)
+            .then(async res => {
+              await models.verify_code
+                .create({
+                  email: req_data.email,
+                  verify_code: random,
+                  type: 'register'
+                })
+                .then(function (data) {
+                  ctx.body = {
+                    state: 'success',
+                    message: '验证码已发送到邮箱'
+                  }
+                })
+                .catch(function (err) {
+                  ctx.body = {
+                    state: 'error',
+                    message: err
+                  }
+                })
             })
-            .then(function (data) {
-              send_verify_code_mail(req_data.account, '注册验证码', random)
-              ctx.body = {
-                state: 'success',
-                message: '验证码已发送到邮箱'
-              }
-            })
-            .catch(function (err) {
-              ctx.body = {
-                state: 'error',
-                message: err
-              }
+            .catch(err => {
+              throw new errMess('发送邮件失败，请联系网站管理者')
             })
         } else {
           ctx.body = {
@@ -219,7 +170,7 @@ class User {
         ctx.body = {
           state: 'error',
           type: 'ERROR_IN_SAVE_DATA',
-          message: err
+          message: err.message
         }
       }
     } else if (req_data.phone) {
@@ -242,31 +193,38 @@ class User {
    * 用户注册post
    * @param   {obejct} ctx 上下文对象
    */
-  static async post_sign_up(ctx) {
+  static async post_sign_up (ctx) {
     // post 数据
     let req_data = ctx.request.body
 
     try {
       if (!req_data.nickname) {
-        throw new err_mess('昵称不存在')
+        throw new errMess('昵称不存在')
       }
       if (req_data.nickname.length > 20) {
-        throw new err_mess('昵称过长')
+        throw new errMess('昵称过长')
       }
-      if (!req_data.account) {
-        throw new err_mess('账户不存在')
+      if (req_data.email) {
+        if (!checkEmail(req_data.email)) {
+          throw new errMess('请输入正确的邮箱地址')
+        }
+      }
+      if (req_data.phone) {
+        if (!checkPhoneNum(req_data.phone)) {
+          throw new errMess('请输入正确的手机号码')
+        }
       }
       if (!req_data.password) {
-        throw new err_mess('密码不存在')
+        throw new errMess('密码不存在')
       }
       if (!checkPwd(req_data.password)) {
-        throw new err_mess('密码格式输入有误!')
+        throw new errMess('密码格式输入有误，请输入字母与数字的组合!')
       }
       if (req_data.password !== req_data.double_password) {
-        throw new err_mess('两次输入密码不一致')
+        throw new errMess('两次输入密码不一致')
       }
       if (!req_data.code) {
-        throw new err_mess('验证码不存在')
+        throw new errMess('验证码不存在')
       }
     } catch (err) {
       home_resJson(ctx, {
@@ -287,42 +245,41 @@ class User {
         })
 
         if (nickname_date) {
-          ctx.body = {
+          home_resJson(ctx, {
             state: 'error',
             message: '用户昵称已存在，请重新输入'
-          }
+          })
           return false
         }
 
         let email = await models.user.findOne({
           where: {
-            email: req_data.account
+            email: req_data.email
           }
         })
 
         try {
           if (!email) {
-            await query_user_verify_code(req_data.account)
+            await query_user_verify_code(req_data.email)
               .then(data => {
                 /* 注册验证码验证 */
                 if (data.length > 0) {
-                  let time_num = moment(date.setHours(date.getHours())).format('X')
+                  let time_num = moment(date.setHours(date.getHours()))
+                    .format('X')
                   if (req_data.code === data[0].verify_code) {
                     if (
                       Number(time_num) - Number(data[0].create_date_timestamp) >
                       30 * 60
                     ) {
-                      throw new err_mess('验证码已过时，请再次发送')
+                      throw new errMess('验证码已过时，请再次发送')
                     }
                   } else {
-                    throw new err_mess('验证码错误')
+                    throw new errMess('验证码错误')
                   }
                 } else {
-                  throw new err_mess('请发送验证码')
+                  throw new errMess('请发送验证码')
                 }
               })
-
-            let user_count = await models.user.count() || 0
 
             await models.sequelize
               .transaction((transaction) => {
@@ -353,10 +310,10 @@ class User {
                   `${req_data.nickname}，您好，注册成功`,
                   `<h2>${req_data.nickname}</h2><p>账户已注册成功</p>`
                 )
-                ctx.body = {
+                home_resJson(ctx, {
                   state: 'success',
                   message: '注册成功，跳往登录页'
-                }
+                })
               })
               .catch(function (err) {
                 ctx.body = {
@@ -401,15 +358,41 @@ class User {
   }
 
   /**
+   * 获取个人信息get 并且知道用户是否登录，不需要任何参数
+   */
+  static async personal_info (ctx) {
+    let { islogin = '', user = '' } = ctx.request
+    let find_user = await models.user.findOne({
+      where: { uid: user.uid },
+      attributes: [
+        'uid',
+        'avatar',
+        'nickname',
+        'sex',
+        'introduction',
+        'user_tag_ids'
+      ]
+    })
+    await home_resJson(ctx, {
+      state: 'success',
+      message: '获取成功',
+      data: {
+        islogin,
+        user: find_user
+      }
+    })
+  }
+
+  /**
    * 获取用户信息get
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_user_info(ctx) {
+  static async get_user_info (ctx) {
     let uid = ctx.query.uid
 
     try {
       if (!uid) {
-        throw new err_mess('uid为空')
+        throw new errMess('uid为空')
       }
     } catch (err) {
       home_resJson(ctx, {
@@ -495,7 +478,7 @@ class User {
    * @param   {obejct} ctx 上下文对象
    */
 
-  static async post_update_user_info(ctx) {
+  static async post_update_user_info (ctx) {
     let req_data = ctx.request.body
 
     let nickname_date = await models.user.findOne({
@@ -509,27 +492,27 @@ class User {
 
     try {
       if (req_data.nickname && req_data.nickname.length > 20) {
-        throw new err_mess('昵称过长')
+        throw new errMess('昵称过长')
       }
 
       if (nickname_date) {
-        throw new err_mess('用户昵称已存在，请重新输入')
+        throw new errMess('用户昵称已存在，请重新输入')
       }
 
       if (req_data.introduction && req_data.introduction.length > 50) {
-        throw new err_mess('个人介绍过长')
+        throw new errMess('个人介绍过长')
       }
 
       if (req_data.profession && req_data.profession.length > 20) {
-        throw new err_mess('职位名输入过长')
+        throw new errMess('职位名输入过长')
       }
 
       if (req_data.company && req_data.company.length > 20) {
-        throw new err_mess('公司名字输入过长')
+        throw new errMess('公司名字输入过长')
       }
 
       if (req_data.home_page && !checkUrl(req_data.home_page)) {
-        throw new err_mess('请输入正确的个人网址')
+        throw new errMess('请输入正确的个人网址')
       }
     } catch (err) {
       home_resJson(ctx, {
@@ -580,7 +563,7 @@ class User {
    * @param   {obejct} ctx 上下文对象
    */
 
-  static async post_update_user_password(ctx) {
+  static async post_update_user_password (ctx) {
     let req_data = ctx.request.body
 
     let user = await models.user.findOne({
@@ -594,23 +577,23 @@ class User {
     ) {
       try {
         if (!req_data.old_password) {
-          throw new err_mess('请输入旧密码')
+          throw new errMess('请输入旧密码')
         }
 
         if (!req_data.new_password) {
-          throw new err_mess('请输入新密码')
+          throw new errMess('请输入新密码')
         }
 
         if (!checkPwd(req_data.new_password)) {
-          throw new err_mess('密码格式输入有误!')
+          throw new errMess('密码格式输入有误!')
         }
 
         if (!req_data.repeat_new_password) {
-          throw new err_mess('请重复输入新密码')
+          throw new errMess('请重复输入新密码')
         }
 
         if (req_data.repeat_new_password !== req_data.new_password) {
-          throw new err_mess('两次输入密码不相同')
+          throw new errMess('两次输入密码不相同')
         }
       } catch (err) {
         home_resJson(ctx, {
@@ -655,7 +638,7 @@ class User {
    * 获取未读用户消息数量
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_unread_message_count(ctx) {
+  static async get_unread_message_count (ctx) {
     let unread_message_count = await models.user_message.count({
       where: {
         uid: ctx.session.uid,
@@ -676,7 +659,7 @@ class User {
    * 获取用户消息
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_user_message(ctx) {
+  static async get_user_message (ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10
 
@@ -757,7 +740,7 @@ class User {
    * 删除用户消息
    * @param   {obejct} ctx 上下文对象
    */
-  static async post_delete_user_message(ctx) {
+  static async post_delete_user_message (ctx) {
     let formData = ctx.request.body
 
     await models.user_message
@@ -786,7 +769,7 @@ class User {
    * @param   {obejct} ctx 上下文对象
    */
 
-  static async render_user_settings_profile(ctx) {
+  static async render_user_settings_profile (ctx) {
     // get 页面
 
     await render(ctx, {
@@ -805,7 +788,7 @@ class User {
    * @param   {obejct} ctx 上下文对象
    */
 
-  static async render_user_settings_password(ctx) {
+  static async render_user_settings_password (ctx) {
     // get 页面
 
     await render(ctx, {
@@ -823,7 +806,7 @@ class User {
    * 渲染user reset password
    * @param   {obejct} ctx 上下文对象
    */
-  static async render_reset_password(ctx) {
+  static async render_reset_password (ctx) {
     // get 页面
 
     await render(ctx, {
@@ -839,17 +822,17 @@ class User {
    * @param   {obejct} ctx 上下文对象
    */
 
-  static async post_reset_password_code(ctx) {
+  static async post_reset_password_code (ctx) {
     let req_data = ctx.request.body
     if (req_data.type === 'email') {
       /* 邮箱注册验证码 */
 
       try {
         if (!req_data.email) {
-          throw new err_mess('邮箱不存在')
+          throw new errMess('邮箱不存在')
         }
         if (!checkEmail(req_data.email)) {
-          throw new err_mess('邮箱格式输入有误')
+          throw new errMess('邮箱格式输入有误')
         }
       } catch (err) {
         home_resJson(ctx, {
@@ -928,26 +911,26 @@ class User {
    * @param   {obejct} ctx 上下文对象
    */
 
-  static async post_reset_password(ctx) {
+  static async post_reset_password (ctx) {
     let req_data = ctx.request.body
     try {
       if (!req_data.email) {
-        throw new err_mess('邮箱不存在')
+        throw new errMess('邮箱不存在')
       }
       if (!checkEmail(req_data.email)) {
-        throw new err_mess('邮箱格式输入有误')
+        throw new errMess('邮箱格式输入有误')
       }
       if (!req_data.code) {
-        throw new err_mess('验证码不存在')
+        throw new errMess('验证码不存在')
       }
       if (!req_data.new_password) {
-        throw new err_mess('密码不存在')
+        throw new errMess('密码不存在')
       }
       if (!checkPwd(req_data.new_password)) {
-        throw new err_mess('密码格式输入有误!')
+        throw new errMess('密码格式输入有误!')
       }
       if (req_data.new_password !== req_data.repeat_new_password) {
-        throw new err_mess('两次输入密码不一致')
+        throw new errMess('两次输入密码不一致')
       }
     } catch (err) {
       home_resJson(ctx, {
@@ -981,13 +964,13 @@ class User {
                     if (
                       Number(time_num) - Number(data[0].expire_time) > 30 * 60
                     ) {
-                      throw new err_mess('验证码已过时，请再次发送')
+                      throw new errMess('验证码已过时，请再次发送')
                     }
                   } else {
-                    throw new err_mess('验证码错误')
+                    throw new errMess('验证码错误')
                   }
                 } else {
-                  throw new err_mess('请发送验证码')
+                  throw new errMess('请发送验证码')
                 }
               })
 
@@ -1055,7 +1038,7 @@ class User {
    *  获取所有用户角色标签
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_user_tag_all(ctx) {
+  static async get_user_tag_all (ctx) {
     // get 页面
 
     let user_tag_all = await models.user_tag.findAll()

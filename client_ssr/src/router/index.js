@@ -3,43 +3,34 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-export function createRouter() {
+export function createRouter () {
   return new Router({
     mode: 'history',
-    linkActiveClass: 'active',
+    linkActiveClass: 'current-active',
     linkExactActiveClass: 'exact-active',
     routes: [
-      /*{
-        path: '/',
-        redirect: '/home'
-      },*/
       {
         path: '/',
-        name: 'client',
-        component: () => import('@views/Client'),
+        name: 'main',
+        component: () => import('@views/Main'), // main
         children: [
           {
-            path: '/',
+            path: '',
             name: 'home',
-            component: () => import('@views/Home/home')
+            component: () => import('@views/Home/Home') // 主页
           },
+          {
+            path: 'column/:column_us_name',
+            name: 'column',
+            component: () => import('@views/Home/Home') // 专栏
+          }
         ]
       },
-      /*{
-        path: '/home',
-        name: 'home',
-        component: () => import('@views/Home/home')
-      },*/
-      /* {
-         path: '/sign-in',
-         name: 'signin',
-         component: () => import('@views/Sign/SignIn')
-       },
-       {
-         path: '/sign-up',
-         name: 'signup',
-         component: () => import('@views/Sign/SignUp')
-       },*/
+      {
+        path: '/writer',
+        name: 'writer',
+        component: () => import('@views/Writer/Writer') // 文章编写
+      }
     ]
   })
 }

@@ -1,27 +1,46 @@
 import { fetch } from '@request'
 
 export default {
-  fetchMovie: ({ commit }, id) => {
-    return new Promise((resolve, reject) => {
-      resolve({ id })
-    }).then(res => {
-      commit('setMoive', { res })
-    })
-  },
-  getUserInfo: ({ commit }) => {
+  PERSONAL_INFO ({ commit, dispatch, state }, parameter = {}) { // 注册
     return fetch({
-      url: '/client/user_info',
-      method: 'get'
+      url: '/client/personal/info',
+      method: 'post',
+      parameter: {
+        accessToken: parameter.accessToken
+      }
     })
-      .then((res) => {
-        commit('setUserInfo', res)
+      .then(res => {
+        commit('SET_PERSONAL_INFO', res.data)
       })
   },
-  getUser: ({ commit }, id) => {
-    return new Promise((resolve, reject) => {
-      resolve({ id })
-    }).then(res => {
-      commit('setMoive', { res })
+  GET_ARTICLE_COLUMN ({ commit, dispatch, state }) { // 获取文章专栏
+    return fetch({
+      url: '/client/article/column',
+      method: 'get',
+      parameter: ''
     })
+      .then(res => {
+        commit('SET_ARTICLE_COLUMN', res.data)
+      })
+  },
+  GET_HOME_BANNER ({ commit, dispatch, state }) { // 获取HOME BANNER
+    return fetch({
+      url: '/client/home_banner',
+      method: 'get',
+      parameter: ''
+    })
+      .then(res => {
+        commit('SET_HOME_BANNER', res.data)
+      })
+  },
+  GET_ARTICLE_TAG ({ commit, dispatch, state }) { // 获取文章标签
+    return fetch({
+      url: '/client/article/tag',
+      method: 'get',
+      parameter: ''
+    })
+      .then(res => {
+        commit('ARTICLE_TAG', res.data)
+      })
   }
 }
