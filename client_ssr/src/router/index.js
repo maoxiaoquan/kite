@@ -15,14 +15,14 @@ export function createRouter () {
         component: () => import('@views/Main'), // main
         children: [
           {
-            path: '',
+            path: '/home',
             name: 'home',
             component: () => import('@views/Home/Home') // 主页
           },
           {
             path: 'column/:column_us_name',
             name: 'column',
-            component: () => import('@views/Home/Home') // 专栏
+            component: () => import('@views/Home/Column') // 专栏
           }
         ]
       },

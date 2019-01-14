@@ -77,6 +77,7 @@
               this.$refs.login.reset()
               cookie.set('accessToken', res.data.token, 1)
               this.$store.commit('SET_IS_LOGIN', false)
+              window.location.reload()
             } else {
               alert(res.message)
             }

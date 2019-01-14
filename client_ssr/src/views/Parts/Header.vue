@@ -11,9 +11,9 @@
                             </div>
                             <ul class="navbar-menu" :class="{show:is_navbar_menu}">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/">
+                                    <router-link :to='{name:"home"}' class="nav-link">
                                         <i class="iconfont icon-zhuye" style="color: #00D0B2;"></i>主页
-                                    </a>
+                                    </router-link>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/user/<%= user_info.uid %>/message">

@@ -28,22 +28,27 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-md-8">
 
-                    <div class="bannerBox clearfix">
-                        <div class="bannerBox-img" v-for="item in home_banner">
-                            <a :href="item.article_url" target="_blank" v-if="item.id">
-                                <img :src="item.img_url">
-                                <div class="bannerDescription">
-                                    <span v-text="item.title"></span>
+                    <div class="main-top clearfix">
+                        <template v-for="column_item in article_column"
+                                  v-if="column_item.article_column_us_name===c_column_us_name">
+                            <div class="main-top-img">
+                                <div class="column-img-icon"
+                                     v-if="column_item.article_column_icon_type==='1'"
+                                     :style="{'background-image':`url(${column_item.article_column_icon})`}"
+                                ></div>
+                                <div class="column-font-icon" v-else>
+                                    <i class="iconfont" :class="column_item.article_column_icon"></i>
                                 </div>
-                            </a>
-                            <a :href="'/article/'+item.aid" target="_blank" v-else>
-                                <img :src="item.cover_img?item.cover_img:'/default/img/default_banner.jpg'">
-                                <div class="bannerDescription">
-                                    <span v-text="item.title"></span>
-                                </div>
-                            </a>
-                        </div>
+                            </div>
+                            <div class="main-top-view">
+                                <h3>
+                                    {{column_item.article_column_name}}
+                                </h3>
+                                <p class="info">{{column_item.article_column_description}}</p>
+                            </div>
+                        </template>
                     </div>
+
 
                     <!--home-lay layout-content start-->
                     <section class="layout-content ">
@@ -139,7 +144,8 @@
 
   export default {
     async asyncData ({ store, route, accessToken = '' }) {
-      await store.commit('SET_CURRENT_ARTICLE_COLUMN', '')
+      // 触发 action 后，会返回 Promise
+      await store.commit('SET_CURRENT_ARTICLE_COLUMN', route.params.column_us_name || '')
       return Promise.all([
         store.dispatch('GET_ARTICLE_COLUMN'),
         store.dispatch('GET_HOME_BANNER')
