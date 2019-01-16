@@ -37,7 +37,7 @@
                         </li>
                         <template v-if="personal_info.islogin">
                             <li class="nav-item">
-                                <router-link :to='{name:"writer"}' class="btn btn-sm btn-outline-warning xiezuo">
+                                <router-link :to='{name:"editor"}' class="btn btn-sm btn-outline-warning xiezuo">
                                     <i class="iconfont icon-xiezuo"></i>
                                 </router-link>
                             </li>

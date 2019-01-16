@@ -1,7 +1,4 @@
 <template>
-
-
-    <!--writer-lay layout-content start-->
     <section class="writer-lay layout-content" :class="{'full-screen':!edit_full_screen}" id="writer">
 
         <!--writer-header start-->
@@ -12,7 +9,11 @@
                     <li><a class="btn btn-primary" href="javascript:;" id="save-article-draft">保存为草稿</a></li>
                     <li><a class="btn btn-primary" href="javascript:;" id="issue-article-model"
                            @click="create_show_modal=true">发布文章</a></li>
-                    <li><a class="btn btn-outline-primary" href="/"><i class="iconfont icon-zhuye"></i></a></li>
+                    <li>
+                        <router-link class="btn btn-primary" :to='{name:"home"}'>
+                            <i class="iconfont icon-zhuye"></i>
+                        </router-link>
+                    </li>
                 </ul>
             </div>
 
@@ -79,7 +80,7 @@
 
 
         <!-- use the modal component, pass in the prop -->
-        <Dialog :show.sync="create_show_modal">
+        <Dialog :show.sync="create_show_modal" width="500px">
             <h3 slot="header">发布文章</h3>
             <div class="writer-submit-view">
                 <div class="clearfix">
@@ -140,10 +141,11 @@
                     </div>
                     <p class="search-result js-search-result" v-show="search_result_show">相关“<span
                             class="js-search-text">{{search_article_tag}}</span>”的搜索
-                        <span class="js-search-num">{{article_tag_all.length}}</span> 个</p>
+                        <span class="js-search-num">{{search_article_tag_all.length}}</span> 个</p>
                     <div class="tag-list-view js-tag-nano has-scrollbar" style="height: 160px;">
                         <div class="clearfix js-tag-list">
-                            <span class="tag-item" v-for="item in article_tag_all" @click="add_article_tag(item)">{{item.article_tag_name}}</span>
+                            <span class="tag-item" v-for="item in search_article_tag_all"
+                                  @click="add_article_tag(item)">{{item.article_tag_name}}</span>
                         </div>
                     </div>
                 </div>
@@ -167,8 +169,18 @@
 </template>
 
 <script>
+  import editor from './module' // sign 模块
+  import marked from 'marked'
+
   export default {
-    name: 'Writer',
+    async asyncData ({ store, route, accessToken = '' }) {
+      // 触发 action 后，会返回 Promise
+      return Promise.all([
+        store.dispatch('PERSONAL_INFO', { accessToken }),
+        store.dispatch('GET_ARTICLE_TAG')
+      ])
+    },
+    name: 'Editor',
     data () {
       return {
         upload_article_modal_show: false, // upload picture 上传图片模态窗口
@@ -199,36 +211,40 @@
           text: '请选择'
         },
         article_type_list_show: false,
-        source_article_tag_all: [],
-        article_tag_all: [],
+        source_article_tag_all: [], // 源全部的文章标题
+        search_article_tag_all: [], // 搜索栏内呈现的文章标题
+        current_article_tag_arr: [], // 用户选中的文章标签
         user_article_topic_all: [],
         search_article_tag: '',
         search_box_width: '100%',
-        current_article_tag_arr: [],
         search_result_show: false,
         upload_img_url: '', // 图片上传url
       }
     },
-
+    beforeCreate () {
+      this.$store.registerModule('editor', editor) // sign Module 需要长期存在，所以不注销
+      // 特别注释 目前试了下，服务端渲染里执行的registerModule的module除了state,其他的都不会被客户端渲染的共享.
+      // 所以部分vuex Module 放在  beforeCreate 中惰性注册
+    },
     created () {
-      /*this.get_article_tag_all()
-      this.get_user_article_topic_all()*/
+      this.init_article_tag_all()
+      this.get_user_article_topic_all()
     },
     watch: {
-      article_content: function (val) {
+      article_content (val) {
         document.getElementById('mark-text').innerHTML =
           marked(val, { breaks: true })
       },
-      search_article_tag: function (val) {
-        var that = this
-        var _arr = []
-        for (var item in that.source_article_tag_all) {
+      search_article_tag (val) {
+        let that = this
+        let _arr = []
+        for (let item in that.source_article_tag_all) {
           if ((that.source_article_tag_all[item].article_tag_name).toLowerCase()
             .indexOf(that.search_article_tag.toLowerCase()) >= 0) {
             _arr.push(that.source_article_tag_all[item])
           }
         }
-        that.article_tag_all = _arr
+        that.search_article_tag_all = _arr
         if (that.search_article_tag.length === 0) {
           that.search_result_show = false
         } else {
@@ -237,38 +253,33 @@
       }
     },
     methods: {
-      get_article_tag_all: function () {
-        var that = this
-        _server.get_article_tag_all()
-          .then(function (res) {
-            that.source_article_tag_all = res.data.list
-            that.article_tag_all = res.data.list
+      init_article_tag_all () {
+        this.source_article_tag_all = this.article_tag
+        this.search_article_tag_all = this.article_tag
+      },
+      get_user_article_topic_all () {
+        if (!this.$store.state.personal_info.islogin) {
+          alert('当前用户未登陆，请前往首页登陆后尝试')
+        }
+        this.$store.dispatch('editor/GET_USER_TOPIC', { uid: this.$store.state.personal_info.user.uid })
+          .then(res => {
+            this.user_article_topic_all = res.data.list
           })
       },
-      get_user_article_topic_all: function () {
-        var that = this
-        _server.get_user_article_topic_all()
-          .then(function (res) {
-            that.user_article_topic_all = res.data.list
-          })
-      },
-      save_create_topic: function () {
-        var that = this
-        _server.create_user_article_topic({
-          topic_name: that.topic_name
-        })
-          .then(function (res) {
+      save_create_topic () {
+        this.$store.dispatch('editor/CREATE_ARTICLE_TOPIC', { topic_name: this.topic_name })
+          .then(res => {
             if (res.state === 'success') {
               alert('创建成功')
-              that.topic_name = ''
-              that.get_user_article_topic_all()
-              that.create_topic_show = false
+              this.topic_name = ''
+              this.get_user_article_topic_all()
+              this.create_topic_show = false
             } else {
               alert(res.message)
             }
           })
       },
-      add_article_tag: function (val) {
+      add_article_tag (val) {
         var that = this
         that.search_article_tag = ''
         let _arr = []
@@ -289,20 +300,20 @@
         }
         that.render_current_article_tag()
       },
-      render_current_article_tag: function () {
+      render_current_article_tag () {
         var that = this
         that.$nextTick(function () {
           that.search_box_width = (that.$refs.search_box.offsetWidth - that.$refs.js_chosen_tags.offsetWidth - 15) + 'px'
         })
       },
-      getObjectValues: function (object) {
+      getObjectValues (object) {
         var values = []
         for (var property in object) {
           values.push(object[property].article_tag_id)
         }
         return values
       },
-      save_upload: function () { // 图片上传保存写入marked
+      save_upload () { // 图片上传保存写入marked
         var that = this
         if (!that.upload_img_url) {
           alert('请填写插入的图片地址')
@@ -311,7 +322,7 @@
         that.article_content += '![Alt text](' + that.upload_img_url + ')'
         that.upload_article_modal_show = false
       },
-      save_article: function () {
+      save_article () {
         var that = this
         var params = {
           title: that.article_title,//文章的标题
@@ -324,11 +335,10 @@
             .join(',')
         }
 
-        _server.post_article_writer(params)
-          .then(function (res) {
+        this.$store.dispatch('editor/SAVE_ARTICLE', params)
+          .then((res) => {
             if (res.state === 'success') {
               this.create_show_modal = false
-              window.location.href = '/user/<%= user_info.uid %>/article/all'
             } else {
               alert(res.message)
             }
@@ -337,12 +347,12 @@
 
           })
       },
-      post_upload_article_picture: function () {
+      post_upload_article_picture () {
         var that = this
         var data = new FormData()//重点在这里 如果使用 var data = {}; data.inputfile=... 这样的方式不能正常上传
         data.append('file', this.file, this.file.name)
-        _server.post_upload_article_picture(data)
-          .then(function (res) {
+        this.$store.dispatch('editor/UPLOAD_ARTICLE_PICTURE', data)
+          .then((res) => {
             that.$nextTick(function () {
               if (res.state === 'success') {
                 alert('上传文章图片成功')
@@ -354,14 +364,22 @@
             })
           })
       },
-      change_file: function (event) {
+      change_file (event) {
         var that = this
         this.file = event.target.files[0]
         setTimeout(function () {
           that.post_upload_article_picture()
         }, 200)
       },
-    }
+    },
+    computed: {
+      article_tag () {
+        return this.$store.state.article_tag
+      }
+    },
+    destroyed () {
+      this.$store.unregisterModule('editor')
+    },
   }
 </script>
 
@@ -411,7 +429,7 @@
             right: 50px;
             bottom: 30px;
             overflow: hidden;
-            box-shadow: 0 8px 16px 0 rgba(28, 31, 33, 0.1);
+            box-shadow: 0 5px 16px 0 rgba(28, 31, 33, 0.1);
             border-radius: 12px;
             background-color: #fff;
             .writer-box,

@@ -2,31 +2,32 @@ const models = require('../../../db/mysqldb/index')
 const { home_resJson } = require('../../utils/res_data')
 const moment = require('moment')
 
-function err_mess(message) {
+function err_mess (message) {
   this.message = message
   this.name = 'UserException'
 }
 
 class UserArticleTopic {
-  constructor() {}
+  constructor () {}
 
   /**
    * 获取所有文章专题get
    * @param   {obejct} ctx 上下文对象
    */
-  static async get_user_article_topic_all(ctx) {
-    /*获取所有文章专题*/
-    let article_tag_all = await models.user_article_topic.findAll({
+  static async get_user_article_topic_all (ctx) {
+    /* 获取所有文章专题 */
+    let { uid } = ctx.query
+    let user_topic = await models.user_article_topic.findAll({
       attributes: ['topic_id', 'topic_name', 'topic_description'],
       where: {
-        uid: ctx.session.uid
+        uid
       }
     })
     home_resJson(ctx, {
       state: 'success',
       message: '获取当前用户个人专题成功',
       data: {
-        list: article_tag_all
+        list: user_topic
       }
     })
   }
@@ -35,48 +36,40 @@ class UserArticleTopic {
    * 创建用户专题
    * @param   {obejct} ctx 上下文对象
    */
-  static async create_user_article_topic(ctx) {
-    /*创建用户专题*/
-    let formData = ctx.request.body
+  static async create_user_article_topic (ctx) {
+    /* 创建用户专题 */
+    let { topic_name, topic_description, enable } = ctx.request.body
+    let { user = '' } = ctx.request
     try {
-      if (formData.topic_name.length === 0) {
+      if (topic_name.length === 0) {
         throw new err_mess('请输入文章专题名字')
       }
 
       let find_user_article_topic = await models.user_article_topic.findOne({
         where: {
-          uid: ctx.session.uid,
-          topic_name: formData.topic_name
+          uid: user.uid,
+          topic_name
         }
       })
 
       if (find_user_article_topic) {
         throw new err_mess('不能创建自己已有的专题')
       }
-    } catch (err) {
-      console.log('formData', err.message)
-      home_resJson(ctx, {
-        state: 'error',
-        message: err.message
-      })
-      return false
-    }
 
-    try {
       await models.user_article_topic
         .create({
-          topic_name: formData.topic_name,
-          topic_description: formData.topic_description,
-          uid: ctx.session.uid,
-          enable: formData.enable || false
+          topic_name,
+          topic_description,
+          uid: user.uid,
+          enable: enable || false
         })
-        .then(function(data) {
+        .then(function (data) {
           home_resJson(ctx, {
             state: 'success',
             message: '文章专题创建成功'
           })
         })
-        .catch(function(err) {
+        .catch(function (err) {
           home_resJson(ctx, {
             state: 'error',
             message: err
@@ -94,7 +87,7 @@ class UserArticleTopic {
    * 更新用户专题
    * @param   {obejct} ctx 上下文对象
    */
-  static async update_user_article_topic(ctx) {
+  static async update_user_article_topic (ctx) {
     const res_data = ctx.request.body
     await models.user_article_topic
       .update(
@@ -109,13 +102,13 @@ class UserArticleTopic {
           }
         }
       )
-      .then(function(p) {
+      .then(function (p) {
         home_resJson(ctx, {
           state: 'success',
           message: '更新成功'
         })
       })
-      .catch(function(err) {
+      .catch(function (err) {
         home_resJson(ctx, {
           state: 'error',
           message: '更新失败'
@@ -128,7 +121,7 @@ class UserArticleTopic {
    * @param   {obejct} ctx 上下文对象
    */
 
-  static async delete_user_article_topic(ctx) {
+  static async delete_user_article_topic (ctx) {
     const res_data = ctx.request.body
 
     await models.user_article_topic
@@ -138,13 +131,13 @@ class UserArticleTopic {
           uid: ctx.session.uid
         }
       })
-      .then(function(p) {
+      .then(function (p) {
         home_resJson(ctx, {
           state: 'success',
           message: '删除用户文章成功'
         })
       })
-      .catch(function(err) {
+      .catch(function (err) {
         home_resJson(ctx, {
           state: 'error',
           message: '删除用户文章失败'

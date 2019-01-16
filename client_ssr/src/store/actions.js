@@ -33,14 +33,14 @@ export default {
         commit('SET_HOME_BANNER', res.data)
       })
   },
-  GET_ARTICLE_TAG ({ commit, dispatch, state }) { // 获取文章标签
+  GET_ARTICLE_TAG ({ commit, dispatch, state }) { // 获取全部文章标签
     return fetch({
       url: '/client/article/tag',
       method: 'get',
       parameter: ''
     })
       .then(res => {
-        commit('ARTICLE_TAG', res.data)
+        commit('SET_ARTICLE_TAG', res.data)
       })
   }
 }

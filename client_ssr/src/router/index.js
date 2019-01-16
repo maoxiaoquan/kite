@@ -14,8 +14,9 @@ export function createRouter () {
         name: 'main',
         component: () => import('@views/Main'), // main
         children: [
+          { path: '', redirect: { name: 'home' }},
           {
-            path: '/home',
+            path: '/index',
             name: 'home',
             component: () => import('@views/Home/Home') // 主页
           },
@@ -27,9 +28,9 @@ export function createRouter () {
         ]
       },
       {
-        path: '/writer',
-        name: 'writer',
-        component: () => import('@views/Writer/Writer') // 文章编写
+        path: '/editor',
+        name: 'editor',
+        component: () => import('@views/Editor/Editor') // 文章编写
       }
     ]
   })

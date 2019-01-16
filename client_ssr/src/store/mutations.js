@@ -16,13 +16,13 @@ export default {
   SET_ARTICLE_COLUMN (state, data) { // 设置获取的文章专栏
     state.article_column = data.list
   },
-  SET_CURRENT_ARTICLE_COLUMN (state, data) { // 设置当前文章专栏
+  SET_CURRENT_ARTICLE_COLUMN (state, data) { // 设置当前切换的文章专栏
     state.c_column_us_name = data
   },
   SET_HOME_BANNER (state, data) { // home banner
     state.home_banner = data.banner
   },
-  SET_ARTICLE_TAG (state, data) { // 设置文章标签
-    state.article_tag = data
+  SET_ARTICLE_TAG (state, data) { // 设置获取的文章标签
+    state.article_tag = data.list
   }
 }

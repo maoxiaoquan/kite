@@ -61,12 +61,26 @@ router.post('/sign_up_code', user.post_sign_up_code) // 注册数据  发送注�
 /**
  * 个人信息类 需登录鉴权的接口
  */
+
 router.post('/personal/info', tokens.ClientVerifyToken, user.personal_info)
+
+router.post('/personal/create_article_topic', tokens.ClientVerifyToken, user_article_topic.create_user_article_topic) // 用户文章专题 TYPE:AJAX post
 
 /**
  * 用户信息类 无需登录鉴权的接口
  */
 router.get('/user/info', user.get_user_info) // 根据uid 获取用户相应信息 get
+
+router.get('/user/topic_all', user_article_topic.get_user_article_topic_all) // 获取用户所有文章专题 TYPE:AJAX get
+
+/**
+ * 文章相关的接口
+ */
+
+router.post('/article/upload_article_picture', tokens.ClientVerifyToken, util_upload('article_picture')
+  .single('file'), upload.upload_article_picture) // 文章图片上传
+
+router.post('/article/create', tokens.ClientVerifyToken, article.post_create_writer) // 编写文章post TYPE:AJAX post
 
 router.get('/index_article', index.get_index) // 首页文章 get
 
@@ -81,18 +95,12 @@ router.get('/home_banner', banner.get_home_banner) // 获取首页头部 banner
 router.post('/upload_user_avatar', ajaxCheck_Session, util_upload('user_avatar')
   .single('file'), upload.upload_user_avatar) // 用户修改头像 post
 
-router.post('/upload_article_picture', ajaxCheck_Session, util_upload('article_picture')
-  .single('file'), upload.upload_article_picture) // 文章图片上传
-
 router.post('/update_user_info', ajaxCheck_Session, user.post_update_user_info) // 根据uid 更新用户相应信息 post
 
 router.post('/update_user_password', ajaxCheck_Session, user.post_update_user_password) // 根据uid 更新用户登录密码
 
-router.post('/article_writer', ajaxCheck_Session, article.post_create_writer) // 编写文章post TYPE:AJAX post
 
 router.get('/get_article_tag_all', ajaxCheck_Session, article.get_article_tag_all) // 获取所有文章标签 TYPE:AJAX get
-
-router.get('/get_article_topic_all', ajaxCheck_Session, user_article_topic.get_user_article_topic_all) // 获取用户所有文章专题 TYPE:AJAX get
 
 router.post('/update_user_article_topic', ajaxCheck_Session, user_article_topic.update_user_article_topic) // 更新用户所有文章专题 TYPE:AJAX get
 
@@ -104,7 +112,6 @@ router.post('/post_subscribe_tag', ajaxCheck_Session, subscribe.post_subscribe_t
 
 router.post('/user_like_article', ajaxCheck_Session, personal_center.post_user_like_article) // 用户like文章 TYPE:AJAX post
 
-router.post('/create_user_article_topic', ajaxCheck_Session, user_article_topic.create_user_article_topic) // 用户文章专题 TYPE:AJAX post
 
 router.get('/get_comment', comment.get_comment) // 获取用户发表的评论 TYPE:AJAX get
 

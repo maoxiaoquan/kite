@@ -5,10 +5,8 @@ import { createRouter } from './router'
 import { createStore } from './store'
 import { sync } from 'vuex-router-sync'
 
-
 import './assets/css/reset.scss'
 import './assets/css/box_layout.scss'
-
 
 Vue.mixin(TitleMixin)
 
