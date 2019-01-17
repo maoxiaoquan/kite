@@ -34,7 +34,7 @@ const router = new Router()
 const proxy = require('http-proxy-middleware')
 
 app.use(async (ctx, next) => { // 接口进行拦截，并进行代理
-  if (ctx.url.startsWith('/client')) {
+  if (ctx.url.startsWith('/client/api/v1')) {
     ctx.respond = false
     return proxy({
       target: `http://localhost:${ports.product}`, // 服务器地址

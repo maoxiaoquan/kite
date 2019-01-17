@@ -2,7 +2,7 @@ import http from '../../../utils/http'
 
 export const create_admin_role = (data, func) => {
   return (dispatch) => {
-    http.post('/api/create_admin_role', data).then((res) => {
+    http.post('/create_admin_role', data).then((res) => {
       if (func)
         func(res)
     })
@@ -11,7 +11,7 @@ export const create_admin_role = (data, func) => {
 
 export const get_admin_role_list = (data, func) => {
   return (dispatch) => {
-    http.get('/api/get_admin_role_list', data).then((res) => {
+    http.get('/get_admin_role_list', data).then((res) => {
       if (func)
         func(res)
       return dispatch({type: 'GET_ADMIN_ROLE_LIST', data: res})
@@ -21,7 +21,7 @@ export const get_admin_role_list = (data, func) => {
 
 export const edit_admin_role = (data, func) => {
   return (dispatch) => {
-    http.post('/api/edit_admin_role', data).then((res) => {
+    http.post('/edit_admin_role', data).then((res) => {
       if (func)
         func(res)
     })
@@ -30,7 +30,7 @@ export const edit_admin_role = (data, func) => {
 
 export const set_admin_role_authority = (data, func) => {
   return (dispatch) => {
-    http.post('/api/set_admin_role_authority', data).then((res) => {
+    http.post('/set_admin_role_authority', data).then((res) => {
       if (func)
         func(res)
     })
@@ -40,7 +40,7 @@ export const set_admin_role_authority = (data, func) => {
 
 export const get_admin_role_authority = (data, func) => {
   return (dispatch) => {
-    http.get('/api/get_admin_role_authority', data).then((res) => {
+    http.get('/get_admin_role_authority', data).then((res) => {
       if (func)
         func(res)
     })
@@ -50,7 +50,7 @@ export const get_admin_role_authority = (data, func) => {
 /* 删除角色 */
 export const delete_admin_role = (data, func) => {
   return (dispatch) => {
-    http.post('/api/delete_admin_role', data).then((res) => {
+    http.post('/delete_admin_role', data).then((res) => {
       if (func)
         func(res)
     })
@@ -60,7 +60,7 @@ export const delete_admin_role = (data, func) => {
 /* 删除角色权限关联 */
 export const delete_admin_role_authority = (data, func) => {
   return (dispatch) => {
-    http.post('/api/delete_admin_role_authority', data).then((res) => {
+    http.post('/delete_admin_role_authority', data).then((res) => {
       if (func)
         func(res)
     })

@@ -7,9 +7,8 @@ const config = require('../../../config/config')
 const moment = require('moment')
 const { create_admin_system_log } = require('./admin_system_log')
 
-
 class AdminIndex {
-  static async admin_index_statistics(ctx) {
+  static async admin_index_statistics (ctx) {
     const admin_user_count = await models.admin_user.count() // 后台用户统计
     const user_count = await models.user.count() // 前台用户统计
     const article_count = await models.article.count() // 文章统计
@@ -18,17 +17,17 @@ class AdminIndex {
     const new_user = await models.user.findAll({
       limit: 10, // 每页限制返回的数据条数
       attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction'],
-      order: [['create_date_timestamp', 'desc']],
+      order: [['create_date_timestamp', 'desc']]
     })
 
     const new_article = await models.article.findAll({
       limit: 10, // 每页限制返回的数据条数
-      order: [['create_date_timestamp', 'desc']],
+      order: [['create_date_timestamp', 'desc']]
     })
 
     const new_comment = await models.comment.findAll({
       limit: 10, // 每页限制返回的数据条数
-      order: [['create_date_timestamp', 'desc']],
+      order: [['create_date_timestamp', 'desc']]
     })
 
     for (const i in new_article) {

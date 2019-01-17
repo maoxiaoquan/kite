@@ -1,9 +1,9 @@
 import LRU from 'lru-cache'
 
 const ports = require('../../config/ports')
-let baseURL = `http://localhost:${process.env.NODE_ENV === 'production' ? ports.product : ports.client_dev}`
+let baseURL = `http://localhost:${process.env.NODE_ENV === 'production' ? ports.product : ports.client_dev}/client/api/v1`
 
-export function requestConfig() {
+export function requestConfig () {
   let _c = {}
   _c.onServer = true
   _c.cachedItems = new LRU({

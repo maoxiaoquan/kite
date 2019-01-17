@@ -27,13 +27,13 @@ if (api.onServer) {
   warmCache()
 }
 
-function warmCache() {
+function warmCache () {
   // fetchItems((api.cachedIds.top || []).slice(0, 30))
   setTimeout(warmCache, 1000 * 60 * 15)
 }
 
 // 可缓存请求
-export function Cachefetch({ url, method, parameter }) {
+export function Cachefetch ({ url, method, parameter }) {
   logRequests && console.log(`fetching ${url}...`)
   const cache = api.cachedItems
   if (cache && cache.has(url)) {
@@ -55,7 +55,7 @@ export function Cachefetch({ url, method, parameter }) {
 }
 
 // 不缓存请求
-export function fetch({ url, method, parameter }) {
+export function fetch ({ url, method, parameter }) {
   logRequests && console.log(`fetching ${url}...`)
   return new Promise((resolve, reject) => {
     service[method](url, parameter)

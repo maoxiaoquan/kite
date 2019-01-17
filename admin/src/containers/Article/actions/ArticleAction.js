@@ -2,7 +2,7 @@ import http from '../../../utils/http'
 
 export const get_article_list = (data, callback) => {
   return (dispatch) => {
-    http.post('/api/get_article_list', data).then((res) => {
+    http.post('/get_article_list', data).then((res) => {
       if (callback)
         callback(res)
       return dispatch({ type: 'GET_ARTICLE_LIST', data: res })
@@ -12,7 +12,7 @@ export const get_article_list = (data, callback) => {
 
 export const edit_user = (data, callback) => {
   return () => {
-    http.post('/api/edit_article', data).then((res) => {
+    http.post('/edit_article', data).then((res) => {
       if (callback)
         callback(res)
     })
@@ -21,7 +21,7 @@ export const edit_user = (data, callback) => {
 
 export const delete_article = (data, callback) => {
   return () => {
-    http.post('/api/delete_article', data).then((res) => {
+    http.post('/delete_article', data).then((res) => {
       if (callback)
         callback(res)
     })

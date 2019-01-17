@@ -335,7 +335,7 @@ class AdminAuthority extends React.Component {
                       {getFieldDecorator('authority_url', {
                         rules: [{required: true, message: '请输入权限路径'}]
                       })(
-                        <Input addonBefore="/api" placeholder="请输入权限路径" type="text"/>
+                        <Input addonBefore="/admin/api/v1" placeholder="请输入权限路径" type="text"/>
                       )}
                     </FormItem>
                   )

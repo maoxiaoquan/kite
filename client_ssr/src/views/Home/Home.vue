@@ -164,12 +164,6 @@
             })
           })
       },
-      article_href: function (val) {
-        return '/article/' + val + ''
-      },
-      tag_href: function (val) {
-        return '/tag/' + val + ''
-      },
       article_tag_filter: function (val) {
         var _arr = []
         this.article_tag.map(function (item, key) {
@@ -178,7 +172,6 @@
             _arr.push(item)
           }
         })
-        console.log(_arr)
         return _arr
       },
       get_home_banner: function () {

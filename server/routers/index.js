@@ -13,8 +13,8 @@ if (cli.is_success) { // 项目未进行初始化时 router 是无法载入需�
   const api = require('./api')
   const ssr = require('./ssr')
 
-  router.use('/client', client.routes(), client.allowedMethods())
-  router.use('/api', api.routes(), api.allowedMethods())
+  router.use('/client/api/v1', client.routes(), client.allowedMethods())
+  router.use('/admin/api/v1', api.routes(), api.allowedMethods())
   router.use('/admin', admins.routes(), admins.allowedMethods())
   router.use('*', ssr.routes(), ssr.allowedMethods())
 } else {

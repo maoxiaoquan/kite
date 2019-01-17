@@ -119,7 +119,7 @@ class Article {
    */
   static async post_create_writer (ctx) {
     let formData = ctx.request.body
-
+    let { islogin = '', user = '' } = ctx.request
     try {
       if (!formData.title) {
         throw new err_mess('请输入文章标题')
@@ -159,7 +159,7 @@ class Article {
     try {
       await models.article
         .create({
-          uid: ctx.session.uid,
+          uid: user.uid,
           author: '',
           title: formData.title,
           excerpt: getSubStr(getNoMarkupStr($.text())) /* 摘记 */,

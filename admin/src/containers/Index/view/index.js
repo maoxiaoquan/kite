@@ -12,7 +12,7 @@ const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
 
 class Index extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       sex_arr: {
@@ -23,15 +23,15 @@ class Index extends React.Component {
     }
   }
 
-  componentWillMount() {
+  componentWillMount () {
     this.props.dispatch(get_admin_index_statistics())
   }
 
-  render() {
+  render () {
     const {
       state_index: {
-        count = {}, new_article = [], new_user = [], new_comment = [],
-      },
+        count = {}, new_article = [], new_user = [], new_comment = []
+      }
     } = this.props
     const { sex_arr } = this.state
     return (

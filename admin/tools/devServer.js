@@ -26,9 +26,9 @@ new WebpackDevServer(webpack(webpack_option), {
   },
   proxy: {
     '/': {
-      target: `http://localhost:${ports.product}/`,
-    },
-  },
+      target: `http://localhost:${ports.product}/`
+    }
+  }
 }).listen(ports.admin_dev, 'localhost', (err) => {
   console.log(`Listening at localhost:${ports.admin_dev}`)
   if (err) {

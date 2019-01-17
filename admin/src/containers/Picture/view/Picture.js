@@ -114,7 +114,7 @@ class Picture extends React.Component {
       menu_text: ['', '首页轮播图', '首页广告'],
       upload_prop: {
         name: 'file',
-        action: '/api/upload_picture',
+        action: '/admin/api/v1/upload_picture',
         headers: {
           'x-access-token': localStorage.box_tokens
         },

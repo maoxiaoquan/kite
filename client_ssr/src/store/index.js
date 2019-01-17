@@ -15,7 +15,10 @@ export function createStore () {
       article_column: [], // 获取文章专栏
       c_column_us_name: '', // 当前 文章专栏
       home_banner: [], // home banner
-      article_tag: [] // 获取文章标签
+      article_tag: [], // 获取文章标签
+      articleList: { // 所有文章列表
+        indexArticleList: [] // 首页 专栏页 文章列表
+      }
     },
     actions,
     mutations

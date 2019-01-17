@@ -5,7 +5,7 @@ import alerts from './alert'
 // const CSRFToken = getCSRFToken() /sdf www.xilongx.com/sdf
 
 const http = axios.create({
-  baseURL: '/',
+  baseURL: '/admin/api/v1',
   headers: {
     'x-requested-with': 'XMLHttpRequest'
   }

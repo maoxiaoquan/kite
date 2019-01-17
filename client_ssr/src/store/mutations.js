@@ -24,5 +24,8 @@ export default {
   },
   SET_ARTICLE_TAG (state, data) { // 设置获取的文章标签
     state.article_tag = data.list
+  },
+  SET_INDEX_ARTICLE_LIST (state, data) { // 首页 专栏页 文章列表
+    state.articleList.indexArticleList = data
   }
 }

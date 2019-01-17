@@ -6,12 +6,13 @@
 // Important modules this config uses
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const {HashedModuleIdsPlugin} = require('webpack')
+const { HashedModuleIdsPlugin } = require('webpack')
 const TerserPlugin = require('terser-webpack-plugin')
 const optimizeCss = require('optimize-css-assets-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const webpack = require('webpack')
 const config = require('./config')
+const ports = require('../../config/ports')
 module.exports = require('./webpack.base.config')({
   mode: 'development',
 
@@ -19,11 +20,11 @@ module.exports = require('./webpack.base.config')({
   /* entry: [
      require.resolve('react-app-polyfill/ie11'),
      path.resolve(__dirname, '../src/app.js')
-   ],*/
+   ], */
 
   entry: [
     require.resolve('react-app-polyfill/ie11'),
-    'webpack-dev-server/client?http://localhost:3000',
+    `webpack-dev-server/client?http://localhost:${ports.admin_dev}`,
     'webpack/hot/only-dev-server',
     'react-hot-loader/patch',
     path.resolve(__dirname, '../src/app.js')

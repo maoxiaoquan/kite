@@ -77,20 +77,25 @@ router.get('/user/topic_all', user_article_topic.get_user_article_topic_all) // 
  * 文章相关的接口
  */
 
+router.get('/article', article.get_article) // 根据aid获取文章 get
+
 router.post('/article/upload_article_picture', tokens.ClientVerifyToken, util_upload('article_picture')
   .single('file'), upload.upload_article_picture) // 文章图片上传
 
 router.post('/article/create', tokens.ClientVerifyToken, article.post_create_writer) // 编写文章post TYPE:AJAX post
 
-router.get('/index_article', index.get_index) // 首页文章 get
-
-router.get('/article', article.get_article) // 根据aid获取文章 get
+router.get('/article/index', index.get_index) // 首页文章 get
 
 router.get('/article/column', article.get_article_column) // 获取文章专栏
 
 router.get('/article/tag', article.get_article_tag_all) // 获取文章标签
 
-router.get('/home_banner', banner.get_home_banner) // 获取首页头部 banner
+
+/**
+ * banner相关的接口
+ */
+
+router.get('/banner/home', banner.get_home_banner) // 获取首页头部 banner
 
 router.post('/upload_user_avatar', ajaxCheck_Session, util_upload('user_avatar')
   .single('file'), upload.upload_user_avatar) // 用户修改头像 post
@@ -98,7 +103,6 @@ router.post('/upload_user_avatar', ajaxCheck_Session, util_upload('user_avatar')
 router.post('/update_user_info', ajaxCheck_Session, user.post_update_user_info) // 根据uid 更新用户相应信息 post
 
 router.post('/update_user_password', ajaxCheck_Session, user.post_update_user_password) // 根据uid 更新用户登录密码
-
 
 router.get('/get_article_tag_all', ajaxCheck_Session, article.get_article_tag_all) // 获取所有文章标签 TYPE:AJAX get
 
@@ -111,7 +115,6 @@ router.post('/post_user_attention', ajaxCheck_Session, personal_center.post_user
 router.post('/post_subscribe_tag', ajaxCheck_Session, subscribe.post_subscribe_tag) // 用户订阅标签 TYPE:AJAX post
 
 router.post('/user_like_article', ajaxCheck_Session, personal_center.post_user_like_article) // 用户like文章 TYPE:AJAX post
-
 
 router.get('/get_comment', comment.get_comment) // 获取用户发表的评论 TYPE:AJAX get
 
