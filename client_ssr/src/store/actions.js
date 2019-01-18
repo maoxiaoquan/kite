@@ -43,14 +43,14 @@ export default {
         commit('SET_ARTICLE_TAG', res.data)
       })
   },
-  GET_INDEX_ARTICLE_LIST ({ commit, dispatch, state }) { // 获取首页 专栏页 文章列表
+  GET_INDEX_ARTICLE_LIST ({ commit, dispatch, state }, parameter = {}) { // 获取首页 专栏页 文章列表
     return fetch({
-      url: '/article/tag',
+      url: '/article/index',
       method: 'get',
       parameter: ''
     })
       .then(res => {
-        commit('SET_INDEX_ARTICLE_LIST', res.data)
+        commit('SET_INDEX_ARTICLE_LIST', res.data.article_list)
       })
   }
 }

@@ -11,7 +11,7 @@ class Index {
   static async get_index(ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 25
-    let column_id = ctx.query.column_id || 'all'
+    let column_id = ctx.query.column_id || ''
     let sort = ctx.query.sort || 'all'
     let where_params = {} // 查询参数
     let order_params = [] // 排序参数
@@ -26,16 +26,12 @@ class Index {
       ],
       where: { article_column_id: column_id } // 为空，获取全部，也可以自己添加条件
     })
-    let article_tag_all = await models.article_tag.findAll({
-      attributes: ['article_tag_id', 'article_tag_name']
-    })
-
     where_params = {
       ...web_where.article
     }
     // where
     // 判断专栏下方是否有专题
-    find_article_column && (where_params['article_tag_ids'] = {
+    column_id && (where_params['article_tag_ids'] = {
       [Op.regexp]: `^[${find_article_column.article_column_tags.split(',')
         .join('|')}]`
     })
@@ -79,8 +75,7 @@ class Index {
           pageSize,
           column_id,
           article_list: rows,
-          sort,
-          article_tag: article_tag_all
+          sort
         }
       })
     } else {

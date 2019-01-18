@@ -28,8 +28,6 @@ router.get('user/:uid/like', personal_center.verify_user, personal_center.render
 
 router.get('user/:uid/message', personal_center.verify_user, personal_center.render_user_center_message) // 用户个人中心动态
 
-router.get('subscribe/tag', subscribe.render_subscribe_tag) // 订阅
-
 router.get('tag/:article_tag_id', article.render_get_tag) // 文章标签
 
 router.get('article/:aid', article.render_article) // 文章内容页 page
@@ -90,12 +88,16 @@ router.get('/article/column', article.get_article_column) // 获取文章专栏
 
 router.get('/article/tag', article.get_article_tag_all) // 获取文章标签
 
-
 /**
  * banner相关的接口
  */
 
 router.get('/banner/home', banner.get_home_banner) // 获取首页头部 banner
+
+/**
+ * 文章标签相关的接口
+ */
+router.get('/article/tag/list', subscribe.render_subscribe_tag) // 获取用户订阅标签列表
 
 router.post('/upload_user_avatar', ajaxCheck_Session, util_upload('user_avatar')
   .single('file'), upload.upload_user_avatar) // 用户修改头像 post

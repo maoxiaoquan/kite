@@ -15,7 +15,10 @@
     name: 'Main',
     asyncData ({ store, route, accessToken = '' }) {
       // 触发 action 后，会返回 Promise
-      return store.dispatch('PERSONAL_INFO', { accessToken })
+      return Promise.all([
+        store.dispatch('GET_ARTICLE_TAG'),
+        store.dispatch('PERSONAL_INFO', { accessToken })
+      ])
     },
     beforeCreate () {
       this.$store.registerModule('sign', sign) // sign Module 需要长期存在，所以不注销

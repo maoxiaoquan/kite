@@ -51,50 +51,11 @@
                         </nav>
 
 
-                        <ul class="article-list">
-                            <li v-for="item in article_list">
-                                <!--第一页之后ajax渲染-->
-                                <article class="content-box content-box-index">
-                                    <div class="info-box">
-
-                                        <div class="info-row title-row">
-                                            <a :href="article_href(item.aid)" class="title" target="_blank"
-                                               v-text="item.title"></a>
-                                        </div>
-
-                                        <div class="info-row meta-row">
-                                            <ul class="meta-list">
-                                                <li class="item username clickable">
-                                                    <a href="" v-text="item.user.nickname"></a>
-                                                </li>
-                                                <li class="item item-icon like-article">
-                                                    <i class="iconfont icon-love"></i>
-                                                    <strong v-text="item.like_count"></strong>
-                                                </li>
-                                                <li class="item item-icon comment-count">
-                                                    <i class="iconfont icon-pinglun"></i>
-                                                    <strong v-text="item.comment_count"></strong>
-                                                </li>
-                                                <li class="item" v-text="item.create_at"></li>
-                                                <li class="item" v-if="item.tag_ids">
-                                                    <a v-for="item_article_tag in article_tag_filter(item.tag_ids)"
-                                                       class="tag-class frontend"
-                                                       :href="tag_href(item_article_tag.article_tag_id)"
-                                                       v-text="item_article_tag.article_tag_name">
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-
-
-                                    </div>
-                                    <div class="lazy thumb thumb loaded" v-if="item.cover_img"
-                                         style="background-size: cover;"
-                                         :style="{'background-image':'url('+item.cover_img+')'}">
-                                    </div>
-                                </article>
-                            </li>
-                        </ul>
+                        <div class="article-view">
+                            <div class="article-item" v-for="item in indexArticleList">
+                                <ArticleItem :articleItem="item"/>
+                            </div>
+                        </div>
 
 
                         <div class="article-footer">
@@ -122,6 +83,7 @@
 
   import HomeAside from '@views/Home/HomeAside'
   import NavHeader from '@views/Home/NavHeader'
+  import ArticleItem from '@views/Article/ArticleItem'
 
   export default {
     async asyncData ({ store, route, accessToken = '' }) {
@@ -129,7 +91,8 @@
       await store.commit('SET_CURRENT_ARTICLE_COLUMN', route.params.column_us_name || '')
       return Promise.all([
         store.dispatch('GET_ARTICLE_COLUMN'),
-        store.dispatch('GET_HOME_BANNER')
+        store.dispatch('GET_HOME_BANNER'),
+        store.dispatch('GET_INDEX_ARTICLE_LIST')
       ])
     },
     name: 'Home',
@@ -200,6 +163,9 @@
       }
     },
     computed: {
+      indexArticleList () { // 首页的文章列表
+        return this.$store.state.articleList.indexArticleList
+      },
       article_column () { // 文章的专栏
         return this.$store.state.article_column
       },
@@ -212,7 +178,8 @@
     },
     components: {
       HomeAside,
-      NavHeader
+      NavHeader,
+      ArticleItem
     }
   }
 </script>
@@ -384,8 +351,8 @@
                     }
                 }
             }
-            .article-list {
-                > li {
+            .article-view {
+                > .article-item {
                     padding: 0 24px;
                     border-bottom: 1px solid rgba(178, 186, 194, 0.15);
                     &:hover {

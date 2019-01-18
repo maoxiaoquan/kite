@@ -27,7 +27,7 @@
     name: 'NavHeader',
     props: {
       navItem: Array,
-    }
+    },
   }
 </script>
 

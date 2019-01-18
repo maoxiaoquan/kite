@@ -3,7 +3,7 @@
         <div class="info-box">
 
             <div class="info-row title-row">
-                <a :href="article_href(articleItem.aid)" class="title" target="_blank" v-text="articleItem.title"></a>
+                <a class="title" target="_blank" v-text="articleItem.title"></a>
             </div>
 
             <div class="info-row meta-row">
@@ -21,9 +21,9 @@
                     </li>
                     <li class="item" v-text="articleItem.create_at"></li>
                     <li class="item" v-if="articleItem.tag_ids">
-                        <a v-for="item_article_tag in article_tag_filter(article.tag_ids)"
+                        <a v-for="item_article_tag in article_tag_filter(articleItem.tag_ids)"
                            class="tag-class frontend"
-                           :href="tag_href(item_article_tag.article_tag_id)" v-text="item_article_tag.article_tag_name">
+                           v-text="item_article_tag.article_tag_name">
                         </a>
                     </li>
                 </ul>
@@ -43,6 +43,23 @@
     props: {
       articleItem: {
         type: Object
+      },
+    },
+    methods: {
+      article_tag_filter: function (val) {
+        var _arr = []
+        this.article_tag.map(function (item, key) {
+          if (val.split(',')
+            .indexOf(String(item.article_tag_id)) !== -1) {
+            _arr.push(item)
+          }
+        })
+        return _arr
+      },
+    },
+    computed: {
+      article_tag () {
+        return this.$store.state.article_tag
       },
     }
   }

@@ -4,26 +4,27 @@
 
     var main_header = document.querySelector('.main-header')
     var navbar = main_header.querySelector('#header-view')
-    var nav_header = document.querySelector('.nav-header')
+
 
     function getScrollTop () {
       return document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
     }
 
-    var scrollTop_type_b = 0, scrollTop_type_t = 0
+    var scrollTop_type_b = 0,
+      scrollTop_type_t = 0
 
     window.onscroll = function () {
 
       scrollTop_type_b = getScrollTop()
 
-      if (scrollTop_type_t <= scrollTop_type_b) {//下滚
+      if (scrollTop_type_t <= scrollTop_type_b) { // 下滚
         if (scrollTop_type_b > 100) {
           navbar && navbar.classList.remove('navbar-visible')
-          nav_header && nav_header.classList.add('top')
+
         } else {
         }
       }
-      else { //上滚
+      else { // 上滚
         if (scrollTop_type_b > 100) {
           navbar && navbar.classList.add('navbar-visible')
           nav_header && nav_header.classList.remove('top')
@@ -51,13 +52,14 @@
     methods: {
       get_unread_message_count: function () {// 获取当前登录用户信息
         var that = this
-        _server.get_unread_message_count().then(function (res) {
-          that.$nextTick(function () {
-            if (res.state === 'success') {
-              that.unread_message_count = res.data.unread_message_count
-            }
+        _server.get_unread_message_count()
+          .then(function (res) {
+            that.$nextTick(function () {
+              if (res.state === 'success') {
+                that.unread_message_count = res.data.unread_message_count
+              }
+            })
           })
-        })
       },
     }
   })
@@ -66,36 +68,6 @@
     return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector)
   }
 
-  window.onload = function () {
-
-    header_nav_Scroll() // 头部滑动
-
-
-    if (document.querySelector('.recommend-collection') && document.querySelectorAll('.recommend-collection .active').length === 0) {
-      document.querySelectorAll('.recommend-collection .collection')[0].classList.add('active')
-    }
-
-    if (document.querySelector('.navbar-toggler')) {
-      document.querySelector('.navbar-toggler').onclick = function () {
-        if (matches(document.querySelector('.navbar-menu'), '.show')) {
-          document.querySelector('.navbar-menu').classList.remove('show')
-        } else {
-          document.querySelector('.navbar-menu').classList.add('show')
-        }
-      }
-    }
-
-    if (document.querySelector('.dropdown-toggle')) {
-      document.querySelector('.dropdown-toggle').onclick = function () {
-        if (matches(document.querySelector('.dropdown-menu'), '.show')) {
-          document.querySelector('.dropdown-menu').classList.remove('show')
-        } else {
-          document.querySelector('.dropdown-menu').classList.add('show')
-        }
-      }
-    }
-
-  }
 
 
 </script>

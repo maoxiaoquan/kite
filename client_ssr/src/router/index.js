@@ -24,6 +24,16 @@ export function createRouter () {
             path: 'column/:column_us_name',
             name: 'column',
             component: () => import('@views/Home/Column') // 专栏
+          },
+          {
+            path: 'column/:column_us_name',
+            name: 'column',
+            component: () => import('@views/ArticleTag/SubscribeTag') // 文章标签订阅页
+          },
+          {
+            path: 'column/:column_us_name',
+            name: 'column',
+            component: () => import('@views/ArticleTag/ArticleTag') // 文章标签内容页
           }
         ]
       },

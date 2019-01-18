@@ -79,6 +79,40 @@
         is_dropdown_menu: false, // 个人下拉菜单栏是否显示
       }
     },
+    /*mounted () {
+      var main_header = document.querySelector('.main-header')
+      var navbar = main_header.querySelector('#header-view')
+      var nav_header = document.querySelector('.nav-header')
+
+      function getScrollTop () {
+        return document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
+      }
+
+      var scrollTop_type_b = 0,
+        scrollTop_type_t = 0
+
+      window.onscroll = function () {
+
+        scrollTop_type_b = getScrollTop()
+
+        if (scrollTop_type_t <= scrollTop_type_b) { // 下滚
+          if (scrollTop_type_b > 100) {
+            navbar && navbar.classList.remove('navbar-visible')
+            nav_header && nav_header.classList.add('top')
+          } else {
+          }
+        }
+        else { // 上滚
+          if (scrollTop_type_b > 100) {
+            navbar && navbar.classList.add('navbar-visible')
+            nav_header && nav_header.classList.remove('top')
+          } else {
+
+          }
+        }
+        var _settime = setTimeout(function () { scrollTop_type_t = scrollTop_type_b}, 0)
+      }
+    },*/
     methods: {
       show_login () { // 显示登录
         this.$store.commit('SET_IS_LOGIN', true)

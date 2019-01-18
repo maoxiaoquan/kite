@@ -4,10 +4,9 @@ const models = require('../../../db/mysqldb/index')
 const Op = require('sequelize').Op
 
 class Subscribe {
-  constructor() {}
+  constructor () {}
 
-  static async render_subscribe_tag(ctx) {
-    const title = 'tag'
+  static async render_subscribe_tag (ctx) {
 
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 25
@@ -18,35 +17,38 @@ class Subscribe {
 
     let find_subscribe_article_tag = ctx.session.uid
       ? await models.subscribe_article_tag
-          .findAll({ where: { uid: ctx.session.uid } })
-          .then(res => {
-            return res.map((tag_item, tag_key) => {
-              return tag_item.article_tag_id
-            })
+        .findAll({ where: { uid: ctx.session.uid } })
+        .then(res => {
+          return res.map((tag_item, tag_key) => {
+            return tag_item.article_tag_id
           })
+        })
       : []
 
     let find_where
 
     if (Number(is_subscribe) === 1) {
-      /*all 的标签*/
+      /* all 的标签 */
       find_where = tag_name // 通过判断tag_name有无，是否是搜索
-        ? { enable: 1, article_tag_name: { [Op.like]: `%${tag_name}%` } }
+        ? {
+          enable: 1,
+          article_tag_name: { [Op.like]: `%${tag_name}%` }
+        }
         : { enable: 1 }
     } else {
-      /*自己的 的标签*/
+      /* 自己的的标签 */
       find_where = tag_name
         ? {
-            enable: 1,
-            article_tag_name: {
-              [Op.like]: `%${tag_name}%`
-            },
-            article_tag_id: { in: find_subscribe_article_tag }
-          }
+          enable: 1,
+          article_tag_name: {
+            [Op.like]: `%${tag_name}%`
+          },
+          article_tag_id: { in: find_subscribe_article_tag }
+        }
         : {
-            enable: 1,
-            article_tag_id: { in: find_subscribe_article_tag }
-          }
+          enable: 1,
+          article_tag_id: { in: find_subscribe_article_tag }
+        }
     }
 
     let { count, rows } = await models.article_tag
@@ -59,9 +61,9 @@ class Subscribe {
           'article_tag_icon_type',
           'article_tag_description'
         ],
-        where: find_where, //为空，获取全部，也可以自己添加条件
-        offset: (page - 1) * pageSize, //开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-        limit: pageSize //每页限制返回的数据条数
+        where: find_where, // 为空，获取全部，也可以自己添加条件
+        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: pageSize // 每页限制返回的数据条数
       })
       .then(res => {
         res.rows.map(async (item, key) => {
@@ -80,9 +82,7 @@ class Subscribe {
         return res
       })
 
-    await render(ctx, {
-      title: title,
-      view_url: 'default/subscribe_tag',
+    await home_resJson(ctx, {
       state: 'success',
       message: 'subscribe',
       data: {
@@ -97,7 +97,7 @@ class Subscribe {
     })
   }
 
-  static async post_subscribe_tag(ctx) {
+  static async post_subscribe_tag (ctx) {
     const { article_tag_id } = ctx.request.body
 
     let findone_subscribe_article_tag = await models.subscribe_article_tag.findOne(
@@ -110,7 +110,7 @@ class Subscribe {
     )
 
     if (findone_subscribe_article_tag) {
-      /*判断是否关注了，是则取消，否则添加*/
+      /* 判断是否关注了，是则取消，否则添加 */
 
       await models.subscribe_article_tag
         .destroy({
