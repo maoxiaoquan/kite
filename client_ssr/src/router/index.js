@@ -26,13 +26,13 @@ export function createRouter () {
             component: () => import('@views/Home/Column') // 专栏
           },
           {
-            path: 'column/:column_us_name',
-            name: 'column',
+            path: 'subscribe/:type',
+            name: 'subscribe_tag',
             component: () => import('@views/ArticleTag/SubscribeTag') // 文章标签订阅页
           },
           {
-            path: 'column/:column_us_name',
-            name: 'column',
+            path: 'tag/:article_tag_id',
+            name: 'article_tag',
             component: () => import('@views/ArticleTag/ArticleTag') // 文章标签内容页
           }
         ]

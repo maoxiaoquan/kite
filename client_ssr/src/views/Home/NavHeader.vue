@@ -12,11 +12,11 @@
                 </router-link>
             </li>
             <li class="nav-item">
-                <a class="collection" href="/subscribe/tag">
+                <router-link :to='{name:"subscribe_tag",params:{type:"all"}}'>
                     <span class="collection-name">
                       更多...
                     </span>
-                </a>
+                </router-link>
             </li>
         </ul>
     </nav>

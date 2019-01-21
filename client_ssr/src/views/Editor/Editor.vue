@@ -169,7 +169,6 @@
 </template>
 
 <script>
-  import editor from './module' // sign 模块
   import marked from 'marked'
 
   export default {
@@ -177,7 +176,7 @@
       // 触发 action 后，会返回 Promise
       return Promise.all([
         store.dispatch('PERSONAL_INFO', { accessToken }),
-        store.dispatch('GET_ARTICLE_TAG')
+        store.dispatch('article_tag/GET_ARTICLE_TAG_ALL')
       ])
     },
     name: 'Editor',
@@ -221,12 +220,7 @@
         upload_img_url: '', // 图片上传url
       }
     },
-    beforeCreate () {
-      this.$store.registerModule('editor', editor) // sign Module 需要长期存在，所以不注销
-      // 特别注释 目前试了下，服务端渲染里执行的registerModule的module除了state,其他的都不会被客户端渲染的共享.
-      // 所以部分vuex Module 放在  beforeCreate 中惰性注册
-    },
-    created () {
+    mounted () {
       this.init_article_tag_all()
       this.get_user_article_topic_all()
     },
@@ -254,12 +248,13 @@
     },
     methods: {
       init_article_tag_all () {
-        this.source_article_tag_all = this.article_tag
-        this.search_article_tag_all = this.article_tag
+        this.source_article_tag_all = this.article_tag_all
+        this.search_article_tag_all = this.article_tag_all
       },
       get_user_article_topic_all () {
         if (!this.$store.state.personal_info.islogin) {
           alert('当前用户未登陆，请前往首页登陆后尝试')
+          return false
         }
         this.$store.dispatch('editor/GET_USER_TOPIC', { uid: this.$store.state.personal_info.user.uid })
           .then(res => {
@@ -373,13 +368,10 @@
       },
     },
     computed: {
-      article_tag () {
-        return this.$store.state.article_tag
+      article_tag_all () {
+        return this.$store.state.article_tag.article_tag_all
       }
-    },
-    destroyed () {
-      this.$store.unregisterModule('editor')
-    },
+    }
   }
 </script>
 

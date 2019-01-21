@@ -7,7 +7,6 @@
 </template>
 
 <script>
-  import sign from '@views/Sign/module' // sign 模块
   import Header from '@views/Parts/Header'
   import GlobalAlert from '@views/Parts/GlobalAlert'
 
@@ -16,24 +15,13 @@
     asyncData ({ store, route, accessToken = '' }) {
       // 触发 action 后，会返回 Promise
       return Promise.all([
-        store.dispatch('GET_ARTICLE_TAG'),
-        store.dispatch('PERSONAL_INFO', { accessToken })
+        store.dispatch('PERSONAL_INFO', { accessToken }),
+        store.dispatch('article_tag/GET_ARTICLE_TAG_ALL')
       ])
-    },
-    beforeCreate () {
-      this.$store.registerModule('sign', sign) // sign Module 需要长期存在，所以不注销
-      // 特别注释 目前试了下，服务端渲染里执行的registerModule的module除了state,其他的都不会被客户端渲染的共享.
-      // 所以部分vuex Module 放在  beforeCreate 中惰性注册
     },
     components: {
       Header,
       GlobalAlert
-    },
-    destroyed () {
-      this.$store.unregisterModule('sign')
-    },
+    }
   }
 </script>
-<style scoped>
-
-</style>

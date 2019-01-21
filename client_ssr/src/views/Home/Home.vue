@@ -78,11 +78,12 @@
 
   import HomeAside from '@views/Home/HomeAside'
   import NavHeader from '@views/Home/NavHeader'
-  import ArticleItem from '@views/Article/ArticleItem'
+  import ArticleItem from '@views/Article/component/ArticleItem'
 
   export default {
     async asyncData ({ store, route, accessToken = '' }) {
       await store.commit('SET_CURRENT_ARTICLE_COLUMN', '')
+      await store.commit('SET_INDEX_ARTICLE_LIST_NO')
       return Promise.all([
         store.dispatch('GET_ARTICLE_COLUMN'),
         store.dispatch('GET_HOME_BANNER'),

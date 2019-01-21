@@ -28,7 +28,6 @@ router.get('user/:uid/like', personal_center.verify_user, personal_center.render
 
 router.get('user/:uid/message', personal_center.verify_user, personal_center.render_user_center_message) // 用户个人中心动态
 
-router.get('tag/:article_tag_id', article.render_get_tag) // 文章标签
 
 router.get('article/:aid', article.render_article) // 文章内容页 page
 
@@ -85,9 +84,6 @@ router.post('/article/create', tokens.ClientVerifyToken, article.post_create_wri
 router.get('/article/index', index.get_index) // 首页文章 get
 
 router.get('/article/column', article.get_article_column) // 获取文章专栏
-
-router.get('/article/tag', article.get_article_tag_all) // 获取文章标签
-
 /**
  * banner相关的接口
  */
@@ -97,7 +93,16 @@ router.get('/banner/home', banner.get_home_banner) // 获取首页头部 banner
 /**
  * 文章标签相关的接口
  */
-router.get('/article/tag/list', subscribe.render_subscribe_tag) // 获取用户订阅标签列表
+
+router.get('/article/tag', article.get_article_tag) // 文章标签
+
+router.get('/article/tag/all', article.get_article_tag_all) // 获取文章标签 获取全部的
+
+router.get('/article/tag/list', subscribe.get_article_tag_list) // 获取用户订阅标签列表 根据搜索和分页获取
+
+router.post('/subscribe/tag', tokens.ClientVerifyToken, subscribe.post_subscribe_tag) // 用户订阅标签 TYPE:AJAX post
+
+router.get('/subscribe/tag/my', tokens.ClientVerifyToken, subscribe.get_subscribe_tag_my) // 获取文章标签 获取全部的
 
 router.post('/upload_user_avatar', ajaxCheck_Session, util_upload('user_avatar')
   .single('file'), upload.upload_user_avatar) // 用户修改头像 post
@@ -113,8 +118,6 @@ router.post('/update_user_article_topic', ajaxCheck_Session, user_article_topic.
 router.post('/delete_user_article_topic', ajaxCheck_Session, user_article_topic.delete_user_article_topic) // 删除用户所有文章专题 TYPE:AJAX get
 
 router.post('/post_user_attention', ajaxCheck_Session, personal_center.post_user_attention) // 用户关注用户 TYPE:AJAX post
-
-router.post('/post_subscribe_tag', ajaxCheck_Session, subscribe.post_subscribe_tag) // 用户订阅标签 TYPE:AJAX post
 
 router.post('/user_like_article', ajaxCheck_Session, personal_center.post_user_like_article) // 用户like文章 TYPE:AJAX post
 

@@ -6,83 +6,76 @@
             <header class="list-header">
                 <nav role="navigation" class="list-nav">
                     <ul class="nav-list">
-                        <li class="nav-item <% if(Number(data.is_subscribe) === 1){ %>active <% } %>"><a
-                                href="/subscribe/tag?is_subscribe=1">全部</a></li>
+                        <li class="nav-item" :class="{'active':$route.params.type==='all'}">
+                            <router-link :to='{name:"subscribe_tag",params:{type:"all"}}'>
+                                <span class="collection-name">全部</span>
+                            </router-link>
+                        </li>
                         <!--class active-->
-                        <%if(user_info.islogin){%>
-                        <li class="nav-item <% if(Number(data.is_subscribe) === 2){ %>active <% } %>"><a
-                                href="/subscribe/tag?is_subscribe=2">已关注</a></li>
-                        <%}%>
-                        <li class="nav-item search">
-                            <form role="search" class="search-tag-from" method="get" action="/subscribe/tag">
-                                <input maxlength="32" placeholder="搜索标签" required="true" name="tag_name"
+                        <li class="nav-item" :class="{'active':$route.params.type==='subscribe'}" v-if="islogin">
+                            <router-link :to='{name:"subscribe_tag",params:{type:"subscribe"}}'>
+                                <span class="collection-name">已关注</span>
+                            </router-link>
+                        </li>
+
+                        <li class="nav-item search" v-if="$route.params.type!=='subscribe'">
+                            <form role="search" class="search-tag-from">
+                                <input maxlength="32" placeholder="搜索标签" required="true" v-model="tag_name"
                                        class="search-tag-input">
-                                <button class="search-tag-btn"><i class="iconfont icon-search"></i></button>
+                                <button class="search-tag-btn" type="button" @click="get_article_tag_list"><i
+                                        class="iconfont icon-search"></i></button>
                             </form>
                         </li>
                     </ul>
                 </nav>
-                <% if(data.tag_name){ %>
-                <p>搜索文章标签:
-                    <%= data.tag_name %> 结果有
-                    <%= data.count %> 条</p>
-                <% } %>
             </header>
 
             <ul class="row tag-list">
-                <% data.article_tag_list.forEach(function (item, key) { %>
-                <li class="item  col-xs-12 col-sm-3 col-md-3 ">
-                    <div class="tag">
-                        <div class="info-box">
-                            <a href="/tag/<%= item.article_tag_id %>" rel="">
-                                <%if(item.article_tag_icon_type==='1'){%>
-                                <div class="lazy thumb thumb loaded"
-                                     style="background-image: url('<%= item.article_tag_icon %>'); background-size: contain;"></div>
-                                <%}else{%>
-                                <div class="tag-icon"><i class="iconfont <%= item.article_tag_icon %>"></i></div>
-                                <%}%>
-                                <div class="title">
-                                    <%= item.article_tag_name %>
-                                </div>
-                            </a>
-                            <div class="meta-box">
-                                <div class="meta article">
-                                    <%=item.article_count%> 篇文章
-                                </div>
-                                <div class="meta subscribe">
-                                    <%=item.subscribe_count%> 人关注
-                                </div>
-                            </div>
-                        </div>
-                        <% if(user_info.islogin){ %>
-                        <div class="action-box">
-
-                            <% if(data.subscribe_article_tag.indexOf(item.article_tag_id) === -1){ %>
-                            <button data-tag-id="<%= item.article_tag_id %>" class="subscribe-btn not-subscribe">关注
-                            </button>
-                            <% }else { %>
-                            <button data-tag-id="<%= item.article_tag_id %>" class="subscribe-btn already-subscribe">已关注
-                            </button>
-                            <% } %>
-
-                        </div>
-                        <% } %>
-                    </div>
+                <li class="item  col-xs-12 col-sm-3 col-md-3 " v-for="item in article_tag_list">
+                    <articleTagItem :articleTagItem="item"/>
                 </li>
-                <% }) %>
             </ul>
 
-            <!--PAGE.html start-->
-            <% include pages/subscribe_page.html %>
-            <!--PAGE.html end-->
         </div>
     </section>
     <!--article-list-lay layout-content end-->
 </template>
 
 <script>
+  import ArticleTagItem from '@views/ArticleTag/component/ArticleTagItem'
+
   export default {
-    name: 'SubscribeTag'
+    name: 'SubscribeTag',
+    async beforeCreate () {
+      // 特别注释 目前试了下，服务端渲染里执行的registerModule的module除了state,其他的都不会被客户端渲染的共享.
+      // 所以部分vuex Module 放在  beforeCreate 中惰性注册
+      await this.$store.dispatch('article_tag/GET_ARTICLE_TAG_LIST')
+      await this.$store.dispatch('article_tag/MY_SUBSCRIBE_TAG_LIST')
+    },
+    data () {
+      return {
+        tag_name: ''
+      }
+    },
+    methods: {
+      get_article_tag_list () {
+        this.$store.dispatch('article_tag/GET_ARTICLE_TAG_LIST', { tag_name: this.tag_name })
+      }
+    },
+    computed: {
+      article_tag_list () {
+        return this.$store.state.article_tag.subscribe.article_tag_list || []
+      },
+      count () {
+        return this.$store.state.article_tag.subscribe.count || 0
+      },
+      islogin () {
+        return this.$store.state.personal_info.islogin
+      }
+    },
+    components: {
+      ArticleTagItem
+    }
   }
 </script>
 
@@ -159,70 +152,6 @@
                 margin-bottom: 1.3rem;
                 padding: 0 0.7rem;
                 box-sizing: border-box;
-                .tag {
-                    width: 100%;
-                    background-color: #fff;
-                    border: 1px solid #f1f1f1;
-                    transition: border-color 0.3s;
-                    text-align: center;
-                    padding: 15px 0 30px;
-                    .thumb {
-                        width: 100%;
-                        height: 32px;
-                        margin: 10px auto 15px;
-                        background-color: #fff;
-                        background-position: 50%;
-                        background-repeat: no-repeat;
-                    }
-                    .tag-icon {
-                        width: 100%;
-                        height: 32px;
-                        margin: 10px auto 15px;
-                        i {
-                            font-size: 28px;
-                        }
-                    }
-                    .title {
-                        font-size: 1.2rem;
-                        line-height: 1.5rem;
-                        color: #333;
-                    }
-                    .meta-box {
-                        display: -webkit-box;
-                        display: -ms-flexbox;
-                        display: flex;
-                        -webkit-box-pack: center;
-                        -ms-flex-pack: center;
-                        justify-content: center;
-                        -webkit-box-align: center;
-                        -ms-flex-align: center;
-                        align-items: center;
-                        font-size: 0.8rem;
-                        color: #909090;
-                        .meta {
-                            display: inline-block;
-                            margin: 10px 5px 0;
-                        }
-                    }
-                    .subscribe-btn {
-                        margin: 1rem auto 0;
-                        font-size: 0.8rem;
-                        background-color: #fff;
-                        border-radius: 2px;
-                        padding: 0.4rem 1rem;
-                        outline: none;
-                        transition: background-color 0.3s, color 0.3s;
-                        cursor: pointer;
-                        &.not-subscribe {
-                            border: 1px solid #37c700;
-                            color: #37c700;
-                        }
-                        &.already-subscribe {
-                            border: 1px solid #cccccc;
-                            color: #999999;
-                        }
-                    }
-                }
             }
         }
     }

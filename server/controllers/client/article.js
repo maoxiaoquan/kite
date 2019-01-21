@@ -197,8 +197,8 @@ class Article {
    * @param   {obejct} ctx 上下文对象
    */
 
-  static async render_get_tag (ctx) {
-    let article_tag_id = ctx.params.article_tag_id
+  static async get_article_tag (ctx) {
+    let article_tag_id = ctx.query.article_tag_id
 
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 25
@@ -220,13 +220,13 @@ class Article {
           order: [['create_date_timestamp', 'desc']]
         })
 
-      for (let item in rows) { // 循环取用户 render 渲染必须用这种方法 与 ajax 有区别
-        rows[item].create_at = await moment(rows[item].create_date)
-          .format('YYYY-MM-DD H:m:s')
-        rows[item].user = await models.user.findOne({
-          where: { uid: rows[item].uid },
+      for (let i in rows) {
+        rows[i].setDataValue('create_at', await moment(rows[i].create_date)
+          .format('YYYY-MM-DD'))
+        rows[i].setDataValue('user', await models.user.findOne({
+          where: { uid: rows[i].uid },
           attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-        })
+        }))
       }
 
       let subscribe_count = await models.subscribe_article_tag.count({
@@ -238,9 +238,7 @@ class Article {
         attributes: ['article_tag_id', 'article_tag_name']
       })
 
-      await render(ctx, {
-        title: 'tag',
-        view_url: 'default/tag',
+      await home_resJson(ctx, {
         state: 'success',
         message: 'user',
         data: {
@@ -255,7 +253,10 @@ class Article {
         }
       })
     } else {
-      ctx.redirect('/404')
+      await home_resJson(ctx, {
+        state: 'error',
+        message: '当前文章标签不存在'
+      })
     }
   }
 

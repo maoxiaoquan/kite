@@ -7,23 +7,23 @@
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="article-list">
                         <div class="main-top">
-
-                            <%if(data.article_tag.article_tag_icon_type==='1'){%>
-                            <div class="tag-img-icon"
-                                 style="background-image: url('<%= data.article_tag.article_tag_icon %>'); background-size: contain;"></div>
-                            <%}else{%>
-                            <div class="tag-font-icon"><i class="iconfont <%= data.article_tag.article_tag_icon %>"></i>
+                            <div class="lazy thumb loaded"
+                                 v-if="article_tag.article_tag_icon_type==='1'"
+                                 :style="{'background-image':`url(${article_tag.article_tag_icon})`}">
                             </div>
-                            <%}%>
+
+                            <div class="tag-icon" v-else>
+                                <i class="iconfont" :class="article_tag.article_tag_icon"></i>
+                            </div>
 
                             <div class="title">
                                 <a class="name" href="/c/e048f1a72e3d">
-                                    <%=data.article_tag.article_tag_name%></a>
+                                    {{article_tag.article_tag_name}}</a>
                             </div>
                             <div class="info">
                                 收录了
-                                <%=data.count%> 篇文章 ·
-                                <%=data.subscribe_count%> 人关注
+                                {{count}} 篇文章 ·
+                                {{subscribe_count}} 人关注
                             </div>
                         </div>
                         <ul class="trigger-menu">
@@ -32,65 +32,11 @@
                             <!-- <li class=""><a href="/"><i class="iconfont ic-hot"></i> 热门</a></li>-->
                         </ul>
                         <div class="list-container">
-                            <ul>
-                                <% data.article_list.forEach(function (item, key) { %>
-                                <li>
-                                    <article class="content-box article-list">
-                                        <div class="info-box">
-                                            <div class="info-row title-row">
-                                                <a href="/article/<%= item.aid %>" class="title" target="_blank">
-                                                    <%= item.title %></a>
-                                            </div>
-                                            <div class="content-text">
-                                                <%- item.excerpt %>
-                                            </div>
-                                            <div class="info-row meta-row">
-                                                <ul class="meta-list">
-                                                    <li class="item username clickable">
-                                                        <a href="/user/<%=item.uid%>/article/all">
-                                                            <%= item.user.nickname %></a>
-                                                    </li>
-                                                    <li class="item">
-                                                        <%= item.create_at %>
-                                                    </li>
-                                                    <li class="item">
-                                                        <%= item.like_count %> 喜欢
-                                                    </li>
-                                                    <li class="item">
-                                                        <%= item.comment_count %> 评论
-                                                    </li>
-                                                    <% if(item.tag_ids){ %>
-                                                    <li class="item">
-                                                        <% item.tag_ids.split(',').forEach(function (item, key) { %>
-                                                        <%
-                                                        data.tag_all.forEach(function (tag_all_item, tag_all_key) {
-                                                        if (tag_all_item.article_tag_id == item) {
-                                                        %>
-                                                        <a class="tag-class frontend" href="">
-                                                            <%= tag_all_item.article_tag_name %>
-                                                        </a>
-                                                        <%
-                                                        }}) %>
-                                                        <% }) %>
-                                                    </li>
-                                                    <% } %>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <% if(item.cover_img){ %>
-                                        <div class="lazy thumb thumb loaded"
-                                             style="background-image: url('<%= item.cover_img %>'); background-size: cover;">
-                                        </div>
-                                        <% } %>
-                                    </article>
-                                </li>
-                                <% }) %>
-                            </ul>
-
-
-                            <!--PAGE.html start-->
-                            <% include pages/tag_page.html %>
-                            <!--PAGE.html end-->
+                            <div class="article-view">
+                                <div class="article-item" v-for="item in article_list">
+                                    <ArticleItem :articleItem="item"/>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -102,8 +48,32 @@
 </template>
 
 <script>
+  import ArticleItem from '@views/Article/component/ArticleItem'
+
   export default {
-    name: 'ArticleTag'
+    name: 'ArticleTag',
+    async beforeCreate () {
+      // 特别注释 目前试了下，服务端渲染里执行的registerModule的module除了state,其他的都不会被客户端渲染的共享.
+      // 所以部分vuex Module 放在  beforeCreate 中惰性注册
+      await this.$store.dispatch('article_tag/GET_ARTICLE_TAG', { article_tag_id: this.$route.params.article_tag_id })
+    },
+    computed: {
+      count () {
+        return this.$store.state.article_tag.tag.count
+      },
+      subscribe_count () {
+        return this.$store.state.article_tag.tag.subscribe_count
+      },
+      article_tag () {
+        return this.$store.state.article_tag.tag.article_tag
+      },
+      article_list () {
+        return this.$store.state.article_tag.tag.article_list
+      },
+    },
+    components: {
+      ArticleItem
+    }
   }
 </script>
 
@@ -115,6 +85,14 @@
             margin-bottom: 10px;
             text-align: center;
 
+            .thumb {
+                width: 100px;
+                height: 100px;
+                margin: 0 auto;
+                background-position: 50%;
+                background-repeat: no-repeat;
+                background-size: contain;
+            }
             .tag-img-icon {
                 width: 80px;
                 height: 80px;
@@ -171,11 +149,11 @@
             }
         }
         .list-container {
-            > ul {
-                > li {
+            .article-view {
+                > .article-item {
                     border-bottom: 1px solid rgba(178, 186, 194, 0.15);
-                    &:last-child {
-                        border-bottom: none;
+                    &:hover {
+                        background: #f9f9f9;
                     }
                 }
             }

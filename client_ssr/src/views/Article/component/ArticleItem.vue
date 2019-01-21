@@ -48,7 +48,7 @@
     methods: {
       article_tag_filter: function (val) {
         var _arr = []
-        this.article_tag.map(function (item, key) {
+        this.article_tag_all.map(function (item, key) {
           if (val.split(',')
             .indexOf(String(item.article_tag_id)) !== -1) {
             _arr.push(item)
@@ -58,8 +58,8 @@
       },
     },
     computed: {
-      article_tag () {
-        return this.$store.state.article_tag
+      article_tag_all () {
+        return this.$store.state.article_tag.article_tag_all
       },
     }
   }

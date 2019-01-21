@@ -1,6 +1,6 @@
 import Dialog from './Dialog'
 import sendCode from './sendCode'
-import ArticleItem from '../views/Article/ArticleItem'
+import ArticleItem from '../views/Article/component/ArticleItem'
 
 export {
   Dialog, // 弹窗

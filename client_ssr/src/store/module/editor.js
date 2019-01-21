@@ -1,6 +1,10 @@
 import { fetch } from '@request'
 
-export default {
+const state = () => ({})
+
+const mutations = {}
+
+const actions = {
   GET_USER_TOPIC: ({ commit, dispatch, state }, { uid }) => { // 注册发送验证码
     return fetch({
       url: '/user/topic_all',
@@ -29,4 +33,11 @@ export default {
       parameter: data
     })
   }
+}
+
+export default {
+  namespaced: true,
+  state,
+  mutations,
+  actions
 }

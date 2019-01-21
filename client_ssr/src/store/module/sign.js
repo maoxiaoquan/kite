@@ -1,6 +1,12 @@
 import { fetch } from '@request'
 
-export default {
+const state = () => ({
+  count: 0
+})
+
+const mutations = {}
+
+const actions = {
   SIGN_SEND_CODE: ({ commit, dispatch, state }, { email }) => { // 注册发送验证码
     return fetch({
       url: '/sign_up_code',
@@ -22,4 +28,11 @@ export default {
       parameter
     })
   }
+}
+
+export default {
+  namespaced: true,
+  state,
+  mutations,
+  actions
 }

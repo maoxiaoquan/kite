@@ -5,9 +5,7 @@ export default {
     return fetch({
       url: '/personal/info',
       method: 'post',
-      parameter: {
-        accessToken: parameter.accessToken
-      }
+      parameter: parameter
     })
       .then(res => {
         commit('SET_PERSONAL_INFO', res.data)
@@ -31,16 +29,6 @@ export default {
     })
       .then(res => {
         commit('SET_HOME_BANNER', res.data)
-      })
-  },
-  GET_ARTICLE_TAG ({ commit, dispatch, state }) { // 获取全部文章标签
-    return fetch({
-      url: '/article/tag',
-      method: 'get',
-      parameter: ''
-    })
-      .then(res => {
-        commit('SET_ARTICLE_TAG', res.data)
       })
   },
   GET_INDEX_ARTICLE_LIST ({ commit, dispatch, state }, parameter = {}) { // 获取首页 专栏页 文章列表
