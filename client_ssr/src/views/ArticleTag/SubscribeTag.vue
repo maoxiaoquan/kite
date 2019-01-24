@@ -30,8 +30,14 @@
                 </nav>
             </header>
 
-            <ul class="row tag-list">
+            <ul class="row tag-list" v-if="$route.params.type==='all'">
                 <li class="item  col-xs-12 col-sm-3 col-md-3 " v-for="item in article_tag_list">
+                    <articleTagItem :articleTagItem="item"/>
+                </li>
+            </ul>
+
+            <ul class="row tag-list" v-else>
+                <li class="item  col-xs-12 col-sm-3 col-md-3 " v-for="item in article_tag_all" v-if="~user_article_tag.indexOf(item.article_tag_id)">
                     <articleTagItem :articleTagItem="item"/>
                 </li>
             </ul>
@@ -66,8 +72,11 @@
       article_tag_list () {
         return this.$store.state.article_tag.subscribe.article_tag_list || []
       },
-      count () {
-        return this.$store.state.article_tag.subscribe.count || 0
+      article_tag_all () {
+        return this.$store.state.article_tag.article_tag_all || []
+      },
+      user_article_tag () {
+        return this.$store.getters['article_tag/user_article_tag'] || []
       },
       islogin () {
         return this.$store.state.personal_info.islogin

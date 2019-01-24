@@ -3,7 +3,7 @@
         <div class="info-box">
 
             <div class="info-row title-row">
-                <a class="title" target="_blank" v-text="articleItem.title"></a>
+                <router-link class="title" :to="{name:'article',params:{aid:articleItem.aid}}"> {{articleItem.title}}</router-link>
             </div>
 
             <div class="info-row meta-row">
@@ -21,10 +21,12 @@
                     </li>
                     <li class="item" v-text="articleItem.create_at"></li>
                     <li class="item" v-if="articleItem.tag_ids">
-                        <a v-for="item_article_tag in article_tag_filter(articleItem.tag_ids)"
-                           class="tag-class frontend"
-                           v-text="item_article_tag.article_tag_name">
-                        </a>
+                        <router-link
+                                v-for="item_article_tag in article_tag_filter(articleItem.tag_ids)"
+                                class="tag-class frontend"
+                                :to='{name:"article_tag",params:{article_tag_id:item_article_tag.article_tag_id}}'>
+                            {{item_article_tag.article_tag_name}}
+                        </router-link>
                     </li>
                 </ul>
             </div>
@@ -97,7 +99,7 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 .title {
-                    font-size: 17px;
+                    font-size: 16px;
                     letter-spacing: 1px;
                     font-weight: 600;
                     line-height: 1.2;

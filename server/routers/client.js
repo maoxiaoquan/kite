@@ -28,7 +28,6 @@ router.get('user/:uid/like', personal_center.verify_user, personal_center.render
 
 router.get('user/:uid/message', personal_center.verify_user, personal_center.render_user_center_message) // 用户个人中心动态
 
-
 router.get('article/:aid', article.render_article) // 文章内容页 page
 
 router.get('user/settings/profile', Check_Session, user.render_user_settings_profile) // 个人设置 资料
@@ -56,7 +55,7 @@ router.post('/sign_up', user.post_sign_up) // 注册数据 post TYPE:AJAX post
 router.post('/sign_up_code', user.post_sign_up_code) // 注册数据  发送注册 验证码 post TYPE:AJAX post
 
 /**
- * 个人信息类 需登录鉴权的接口
+ * 个人信息类
  */
 
 router.post('/personal/info', tokens.ClientVerifyToken, user.personal_info)
@@ -64,11 +63,13 @@ router.post('/personal/info', tokens.ClientVerifyToken, user.personal_info)
 router.post('/personal/create_article_topic', tokens.ClientVerifyToken, user_article_topic.create_user_article_topic) // 用户文章专题 TYPE:AJAX post
 
 /**
- * 用户信息类 无需登录鉴权的接口
+ * 用户信息类
  */
 router.get('/user/info', user.get_user_info) // 根据uid 获取用户相应信息 get
 
 router.get('/user/topic_all', user_article_topic.get_user_article_topic_all) // 获取用户所有文章专题 TYPE:AJAX get
+
+router.post('/user/attention', tokens.ClientVerifyToken, personal_center.post_user_attention) // 用户关注用户 TYPE:AJAX post
 
 /**
  * 文章相关的接口
@@ -116,8 +117,6 @@ router.get('/get_article_tag_all', ajaxCheck_Session, article.get_article_tag_al
 router.post('/update_user_article_topic', ajaxCheck_Session, user_article_topic.update_user_article_topic) // 更新用户所有文章专题 TYPE:AJAX get
 
 router.post('/delete_user_article_topic', ajaxCheck_Session, user_article_topic.delete_user_article_topic) // 删除用户所有文章专题 TYPE:AJAX get
-
-router.post('/post_user_attention', ajaxCheck_Session, personal_center.post_user_attention) // 用户关注用户 TYPE:AJAX post
 
 router.post('/user_like_article', ajaxCheck_Session, personal_center.post_user_like_article) // 用户like文章 TYPE:AJAX post
 

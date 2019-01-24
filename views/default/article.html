@@ -290,7 +290,7 @@
             })
           })
         },
-        get_article_user_info: function () {// 获取当前文章用户信息
+        get_article_user_info: function () { // 获取当前文章用户信息
           var that = this
           _server.get_user_info({ uid: this.article_uid }).then(function (res) {
             that.$nextTick(function () {

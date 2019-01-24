@@ -84,9 +84,18 @@ const actions = {
   }
 }
 
+const getters = {
+  user_article_tag: (state) => {
+    return state.user_article_tag ? state.user_article_tag.map(result => {
+      return result.article_tag_id
+    }) : []
+  }
+}
+
 export default {
   namespaced: true,
   state,
   mutations,
-  actions
+  actions,
+  getters
 }

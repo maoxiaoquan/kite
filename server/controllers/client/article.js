@@ -266,9 +266,28 @@ class Article {
    */
   static async get_article_tag_all (ctx) {
     let article_tag_all = await models.article_tag.findAll({
-      attributes: ['article_tag_id', 'article_tag_name'],
+      attributes: ['article_tag_id',
+        'article_tag_name',
+        'article_tag_us_name',
+        'article_tag_icon',
+        'article_tag_icon_type',
+        'article_tag_description'],
       where: { enable: true } // 为空，获取全部，也可以自己添加条件
     })
+
+    for (let i in article_tag_all) {
+      article_tag_all[i].setDataValue('subscribe_count', await models.subscribe_article_tag.count({
+        where: { article_tag_id: article_tag_all[i].article_tag_id }
+      }))
+      article_tag_all[i].setDataValue('article_count', await models.article.count({
+        where: {
+          article_tag_ids: {
+            [Op.like]: `%${article_tag_all[i].article_tag_id}%`
+          }
+        }
+      }))
+    }
+
     home_resJson(ctx, {
       state: 'success',
       message: '获取所有文章标签成功',
@@ -288,6 +307,20 @@ class Article {
     let article = await models.article.findOne({
       where: { aid }
     })
+
+    await models.article.update(
+      {
+        read_count: Number(article.read_count) + 1
+      },
+      {
+        where: { aid } // 为空，获取全部，也可以自己添加条件
+      }
+    )
+
+    article.setDataValue('user', await models.user.findOne({
+      where: { uid: article.uid },
+      attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+    }))
 
     if (article) {
       home_resJson(ctx, {

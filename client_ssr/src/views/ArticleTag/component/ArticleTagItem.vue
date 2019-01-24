@@ -14,10 +14,10 @@
             </router-link>
             <div class="meta-box">
                 <div class="meta article">
-                    {{articleTagItem.article_count}} 篇文章
+                    {{article_count}} 篇文章
                 </div>
                 <div class="meta subscribe">
-                    {{articleTagItem.subscribe_count}} 人关注
+                    {{subscribe_count}} 人关注
                 </div>
             </div>
         </div>
@@ -38,26 +38,41 @@
 <script>
   export default {
     name: 'ArticleTagItem',
+    created () {
+      this.article_count = this.articleTagItem.article_count // 替换为组件内的 data
+      this.subscribe_count = this.articleTagItem.subscribe_count
+    },
+    data () {
+      return {
+        article_count: 0,
+        subscribe_count: 0,
+      }
+    },
     props: {
       articleTagItem: {
         type: Object
       },
     },
     methods: {
-      async subscribe_tag () {
+      async subscribe_tag () { // 订阅标签
         await this.$store.dispatch('article_tag/SUBSCRIBE_TAG', { article_tag_id: this.articleTagItem.article_tag_id })
           .then(res => {
             console.log('res', res)
-            this.$store.dispatch('PERSONAL_INFO')
+            this.$store.dispatch('article_tag/MY_SUBSCRIBE_TAG_LIST')
             if (res.state === 'success') {
-              alert('订阅文章成功')
+              if (res.data.type === 'attention') {
+                this.subscribe_count += 1
+              } else {
+                this.subscribe_count -= 1
+              }
+              alert(res.message)
             }
           })
       }
     },
     computed: {
       user_article_tag () {
-        return this.$store.state.article_tag.user_article_tag
+        return this.$store.getters['article_tag/user_article_tag'] || []
       },
       islogin () {
         return this.$store.state.personal_info.islogin

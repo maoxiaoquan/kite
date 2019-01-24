@@ -14,7 +14,10 @@ export function createRouter () {
         name: 'main',
         component: () => import('@views/Main'), // main
         children: [
-          { path: '', redirect: { name: 'home' }},
+          {
+            path: '',
+            redirect: { name: 'home' }
+          },
           {
             path: '/index',
             name: 'home',
@@ -24,6 +27,11 @@ export function createRouter () {
             path: 'column/:column_us_name',
             name: 'column',
             component: () => import('@views/Home/Column') // 专栏
+          },
+          {
+            path: 'article/:aid',
+            name: 'article',
+            component: () => import('@views/Article/Article') // 文章内容页
           },
           {
             path: 'subscribe/:type',
