@@ -46,7 +46,7 @@ v0.10.2
 
 5.包重建，减少包下载速度
 
-[版本更新历史记录](https://github.com/maoxiaoquan/kite/docs/VERSION.md 'version')
+[版本更新历史记录](https://github.com/maoxiaoquan/kite/blob/master/docs/VERSION.md 'version')
 
 ## Build
 
