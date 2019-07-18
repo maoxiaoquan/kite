@@ -9,7 +9,7 @@ function ProcessCwd (val) {
 }
 
 module.exports = {
-  version: '0.1',
+  version: '0.10.2',
   theme: {
     'font-family': 'Microsoft YaHei'
   },

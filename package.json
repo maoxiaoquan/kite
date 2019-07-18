@@ -1,10 +1,9 @@
 {
-  "name": "Kite",
-  "version": "1.0.0",
+  "name": "kite",
+  "version": "1.0.1",
   "description": "blog cms",
   "main": "index.js",
   "scripts": {
-    "mysql": "node ./db/mysqldb/create.js",
     "client-build": "rimraf ./static/_client && npm run client-build:client && npm run client-build:server",
     "client-build:client": "cross-env NODE_ENV=production  webpack --config client/tools/webpack.client.config.js --color -p --progress --hide-modules --display-optimization-bailout",
     "client-build:server": "cross-env NODE_ENV=production  webpack --config client/tools/webpack.server.config.js --color -p --progress --hide-modules --display-optimization-bailout",
