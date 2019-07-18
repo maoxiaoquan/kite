@@ -1,0 +1,24 @@
+# dependencies
+/node_modules
+/.vscode
+
+
+# public
+.DS_Store
+npm-debug.log*
+/static/upload/
+/db/lowdb/db.json
+/.idea
+.idea
+yarn.lock
+/log
+yarn.error.log
+yarn-error.log
+package-lock.json
+
+# client
+
+/static/_admin/
+/static/_client/
+
+# static

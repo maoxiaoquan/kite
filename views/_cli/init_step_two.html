@@ -1,0 +1,283 @@
+<!--header.html start-->
+<% include parts/header.html %>
+<!--header.html end-->
+
+<body class="black-theme">
+  <!--header_view.html start-->
+  <% include parts/header_view.html %>
+  <!--header_view.html end-->
+
+  <div id="init-step-two">
+    <div class="container box-container">
+      <div class="box-content">
+        <h2 class="title">创建后台超级管理员账号</h2>
+        <p class="info">请牢记你所填写的密码</p>
+      </div>
+
+      <div class="box-content input-enter">
+        <div class="form-field">
+          <label class="label-title" for="">账号</label>
+          <div class="input-wrapper">
+            <input type="text" v-model="account" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="label-title" for="">昵称</label>
+          <div class="input-wrapper">
+            <input type="text" v-model="nickname" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="label-title" for="">密码</label>
+          <div class="input-wrapper">
+            <input type="password" v-model="password" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="label-title" for="">重复密码</label>
+          <div class="input-wrapper">
+            <input type="password" v-model="confirm" />
+          </div>
+        </div>
+
+        <p class="info">
+          以下是分割线，下方的邮箱用来前台用户注册时发送邮件给对方的邮箱（如果填写错误，可以使用上方注册的管理员账号，前往后台修改）
+          请务必开启POP3/SMTP 设置获取密码，否则，前台用户注册时无法发送成功邮件
+        </p>
+
+        <div class="form-field">
+          <label class="label-title" for="">邮箱类型</label>
+          <div class="input-wrapper">
+            <select name="" id="" v-model="email_type">
+              <option value="">请选择</option>
+              <option value="company">企业</option>
+              <option value="personal">个人</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="label-title" for="">邮箱</label>
+          <div class="input-wrapper">
+            <input type="text" v-model="email" />
+          </div>
+        </div>
+        <template v-if="email_type==='personal'">
+          <div class="form-field">
+            <label class="label-title" for="">邮箱服务商后缀（无需输入，根据上方自动填写）</label>
+            <div class="input-wrapper">
+              <input type="text" disabled v-model="email_suffix" />
+            </div>
+          </div>
+        </template>
+        <template v-else-if="email_type==='company'">
+          <div class="form-field">
+            <label class="label-title" for="">企业邮箱发送邮件服务器（host）</label>
+            <div class="input-wrapper">
+              <input type="text" v-model="email_host" />
+            </div>
+          </div>
+          <div class="form-field">
+            <label class="label-title" for="">企业邮箱发送邮件端口（port）</label>
+            <div class="input-wrapper">
+              <input type="text" v-model="email_port" />
+            </div>
+          </div>
+        </template>
+        <div class="form-field">
+          <label class="label-title" for="">邮箱密码</label>
+          <div class="input-wrapper">
+            <input type="password" v-model="email_password" />
+          </div>
+        </div>
+
+        <p class="info">
+          后台管理界面访问地址:只要不是中文即可，最好是数字、字母+字符（重要）
+        </p>
+        <p class="info">
+          如要修改，或者前往后台修改，修改完成后务必重启服务（重要）
+        </p>
+        <p class="info">填写后请牢记</p>
+
+        <div class="form-field">
+          <label class="label-title" for="">后台管理界面访问地址</label>
+          <div class="input-wrapper">
+            <input type="text" v-model="admin_url" />
+          </div>
+        </div>
+
+        <p class="info">
+          以下是分割线，域名和网站名，多个地方可能会用到，比如title
+          以及网站的SEO等等（如果填写错误，可以使用上方注册的管理员账号，前往后台修改）
+        </p>
+
+        <div class="form-field">
+          <label class="label-title" for="">网站名</label>
+          <div class="input-wrapper">
+            <input type="text" v-model="website_name" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="label-title" for="">是否开启登录</label>
+          <div class="input-wrapper">
+            <select name="" id="" v-model="on_login">
+              <option value="yes">开启</option>
+              <option value="no">关闭</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="label-title" for="">是否开启注册</label>
+          <div class="input-wrapper">
+            <select name="" id="" v-model="on_register">
+              <option value="yes">开启</option>
+              <option value="no">关闭</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="label-title" for="">是否开启评论模块</label>
+          <div class="input-wrapper">
+            <select name="" id="" v-model="on_comment">
+              <option value="yes">开启</option>
+              <option value="no">关闭</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="label-title" for="">域名（本地开发填写为localhost即可）</label>
+          <div class="input-wrapper">
+            <input type="text" v-model="domain_name" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="label-title" for="">网站介绍</label>
+          <div class="input-wrapper">
+            <input type="text" v-model="introduction" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="label-title" for="">网站关键词</label>
+          <div class="input-wrapper">
+            <input type="text" v-model="keywords" />
+          </div>
+        </div>
+
+
+        <div class="form-field">
+          <label class="label-title" for="">网站描述</label>
+          <div class="input-wrapper">
+            <input type="text" v-model="description" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box-content-footer">
+      <div class="container">
+        <div class="clearfix center">
+          <button class="box-btn big" @click="step_submit">
+            创建超级管理员账号 <i class="iconfont icon-more"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#init-step-two',
+      data: {
+        account: '',
+        nickname: '',
+        password: '',
+        confirm: '',
+        email_suffix: '',
+        email: '',
+        email_password: '',
+        email_type: '',
+        email_host: '',
+        email_port: '',
+        website_name: '', // 网站名
+        domain_name: '', // 域名
+        introduction: '', // 网站介绍
+        keywords: '', // 网站关键词
+        description: '', // 网站描述
+        admin_url: '', // 后台访问地址
+        on_register: 'yes', // 是否开启登录
+        on_login: 'yes', // 是否开启注册
+        on_comment: 'yes' // 是否开启注册
+      },
+      watch: {
+        email: function (val) {
+          if (val.split('@')) {
+            let tail_com = val.split('@')[1]
+            if (tail_com) {
+              this.email_suffix = tail_com.split('.')[0]
+            }
+          }
+        }
+      },
+      methods: {
+        step_submit: function (val) {
+          const loading = this.$loading({
+            lock: true,
+            text: 'Loading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
+          var that = this
+          var params = {
+            account: this.account,
+            nickname: this.nickname,
+            password: this.password,
+            confirm: this.confirm,
+            email_suffix: this.email_suffix,
+            email: this.email,
+            email_password: this.email_password,
+            email_type: this.email_type,
+            email_host: this.email_host,
+            email_port: this.email_port,
+            website_name: this.website_name, // 网站名
+            domain_name: this.domain_name, // 域名
+            keywords: this.keywords, // 网站关键词
+            introduction: this.introduction, // 网站介绍
+            description: this.description, // 网站描述
+            admin_url: this.admin_url, // 后台访问地址
+            on_register: this.on_register, // 是否开启登录
+            on_login: this.on_login, // 是否开启注册
+            on_comment: this.on_comment // 是否开启评论模块
+          }
+          _server.post_create_admin_user(params).then(function (res) {
+            loading.close()
+            that.$nextTick(function () {
+              if (res.state === 'success') {
+                that.$message({
+                  message: '账户创建成功,正在前往下一步',
+                  type: 'success'
+                })
+                window.location.reload()
+              } else {
+                that.$message({
+                  message: res.message,
+                  type: 'error'
+                })
+              }
+            })
+          })
+        }
+      }
+    })
+  </script>
+</body>
+
+<% include parts/footer.html %>

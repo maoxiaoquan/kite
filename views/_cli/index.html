@@ -1,0 +1,73 @@
+<!--header.html start-->
+<% include parts/header.html %>
+<!--header.html end-->
+
+<body class="black-theme">
+  <!--header_view.html start-->
+  <% include parts/header_view.html %>
+  <!--header_view.html end-->
+
+  <div id="index">
+    <div class="container box-container">
+      <div class="box-content">
+        <h2 class="title">项目初始化成功</h2>
+      </div>
+
+      <div class="box-content">
+        <p class="info">您的网站已经初始化完成</p>
+        <p class="info">
+          现在请点击下方按钮关闭cli(或者手动 ctrl + c 强制退出 <_<)
+        </p>
+        <p class="info">可以进行两种操作</p>
+        <p class="info">pro1.生产环境</p>
+        <p class="info">pro1.1 在cmd 中输入 npm run server 即可进入程序</p>
+        <p class="info">pro1.2 (url或者ip)+ :8086端口即可看到客户端主页</p>
+        <p class="info">
+          pro1.3 (url或者ip)+ :8086/admin端口即可看到客户端后台页面
+          admin(是默认的，就是在上一步没有填写的时候)
+        </p>
+        <p class="info">dev1.本地开发环境</p>
+        <p class="info">
+          dev1.1 在cmd 中输入 npm run server-dev 即可进开启接口服务
+        </p>
+        <p class="info">
+          dev1.2 在cmd 中输入 npm run admin-dev
+          即可进入后台开发预览（地址为：localhost:8083）
+        </p>
+        <p class="info">
+          dev1.3 在cmd 中输入 npm run client-dev
+          即可进入前台开发预览（地址为：localhost:8081）
+        </p>
+        <p class="info">
+          dev1.4 开发环境下 一定要先运行dev1.1的情况下再运行 dev1.2 或者 dev1.3
+        </p>
+        <p class="info">dev1.5 打包后台界面 npm run admin-build</p>
+        <p class="info">dev1.6 打包前台界面 npm run client-build</p>
+        <p class="info">
+          目前cli部分代码写的比较乱，等后期有时间再继续优化，哈哈
+        </p>
+      </div>
+
+      <div class="box-content-footer">
+        <div class="container">
+          <button class="box-btn big" @click="restart_project">
+            点我关闭cli
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#index',
+      methods: {
+        restart_project: function() {
+          _server.post_restart_project()
+        }
+      }
+    })
+  </script>
+</body>
+
+<% include parts/footer.html %>

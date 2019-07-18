@@ -1,0 +1,215 @@
+<template>
+  <div class="home-lay index-box-container" id="index">
+    <div class="index-container">
+      <div class="row">
+        <div class="home-col-left col-xs-12 col-sm-8 col-md-8">
+          <!--home-lay layout-content start-->
+          <section class="layout-content">
+            <NavHeader :navItem="article_column.home_column" />
+
+            <NavSort @navTap="navTap" ref="navSort"></NavSort>
+
+            <div class="article-view" id="article-view">
+              <scroll-loading
+                @scroll-loading="infiniteHandler"
+                :isLoading="isLoading"
+                :isMore="isMore"
+              >
+                <div
+                  class="article-item"
+                  v-for="(item,key) in home.article.article_list"
+                  :key="key"
+                >
+                  <ArticleItem :articleItem="item" />
+                </div>
+              </scroll-loading>
+            </div>
+          </section>
+          <!--home-lay layout-content end-->
+        </div>
+        <div class="home-col-right col-xs-12 col-sm-4 col-md-4">
+          <!--aside.html start-->
+          <HomeAside />
+          <!--aside.html end-->
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import HomeAside from "@views/Home/HomeAside";
+import NavHeader from "@views/Home/NavHeader";
+import NavSort from "@views/Home/NavSort";
+import ArticleItem from "@views/Article/component/ArticleItem";
+import { mapState } from "vuex";
+import { ScrollLoading } from "@components";
+
+export default {
+  name: "column",
+  metaInfo() {
+    return {
+      title: this.website.meta.website_name,
+      titleTemplate: `%s - ${this.website.meta.introduction}`,
+      meta: [
+        {
+          // set meta
+          name: "description",
+          content: `${this.website.meta.website_name} - ${this.website.meta.introduction}`
+        }
+      ],
+      htmlAttrs: {
+        lang: "zh"
+      }
+    };
+  },
+  async asyncData({ store, route, accessToken = "" }) {
+    // 触发 action 后，会返回 Promise
+    return Promise.all([
+      store.commit(
+        "article_column/SET_CURRENT_ARTICLE_COLUMN",
+        route.params.article_column_en_name || ""
+      ),
+      store.commit("home/SET_INIT_INDEX_ARTICLE_LIST"), // 重置文章列表数据
+      store.dispatch("article_column/GET_ARTICLE_COLUMN"),
+      store.dispatch("home/GET_INDEX_ARTICLE_LIST", {
+        column_en_name: route.params.article_column_en_name || ""
+      })
+    ]);
+  },
+  data() {
+    return {
+      page: 2,
+      sort: "",
+      isLoading: false,
+      isMore: true
+    };
+  },
+  beforeRouteUpdate(to, from, next) {
+    // 在当前路由改变，但是该组件被复用时调用
+    // this.initHomeDate()
+    this.$refs.navSort.dafauleNav();
+    this.isMore = true;
+    next();
+  },
+  created() {
+    this.$store.dispatch("home/GET_POPULAR_ARTICLE_TAG"); // 获取热门文章标签
+  },
+  methods: {
+    navTap(val) {
+      this.sort = val;
+      this.initHomeDate();
+    },
+    initHomeDate() {
+      this.$store.commit("home/SET_INIT_INDEX_ARTICLE_LIST"); // 重置文章列表数据
+      this.isMore = true;
+      this.page = 1;
+      this.infiniteHandler();
+    },
+    infiniteHandler() {
+      this.isLoading = true;
+      this.$store
+        .dispatch("home/GET_INDEX_ARTICLE_LIST", {
+          column_en_name: this.$route.params.article_column_en_name,
+          sort: this.sort,
+          page: this.page
+        })
+        .then(result => {
+          this.isLoading = false;
+          console.log('result.data.article_list.length',result.data.article_list.length)
+          if (result.data.article_list.length === 10) {
+            this.page += 1;
+          } else {
+            this.isMore = false;
+          }
+        })
+        .catch(err => {
+          this.isMore = false;
+        });
+    }
+  },
+  computed: {
+    ...mapState(["home", "article_column", "website"]) // home:主页  article_column:文章的专栏
+  },
+  components: {
+    HomeAside,
+    NavHeader,
+    NavSort,
+    ArticleItem,
+    ScrollLoading
+  }
+};
+</script>
+
+<style scoped lang="scss">
+.home-lay {
+  .home-col-left {
+    padding-right: 38px;
+  }
+  .home-col-right {
+    padding-left: 38px;
+  }
+  .main-top {
+    width: 100%;
+    padding: 15px 20px;
+    background: #fff;
+    margin-bottom: 15px;
+    box-shadow: 0 1px 3px rgba(27, 95, 160, 0.1);
+    .main-top-img {
+      width: 50px;
+      height: 50px;
+      margin-right: 15px;
+      border-radius: 10px;
+      float: left;
+      overflow: hidden;
+      .column-img-icon {
+        width: 100%;
+        height: 50px;
+        background-color: #fff;
+        background-position: 50%;
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+      .column-font-icon {
+        text-align: center;
+        line-height: 50px;
+        i {
+          font-size: 28px;
+        }
+      }
+    }
+    .main-top-view {
+      padding-left: 70px;
+      > h3 {
+        font-weight: bold;
+      }
+      .info {
+        color: #999;
+        font-size: 14px;
+      }
+    }
+  }
+  .layout-content {
+    position: relative;
+    background: #fff;
+    border-radius: 2px;
+    .article-view {
+      /deep/ .article-item {
+        border-bottom: 1px solid rgba(178, 186, 194, 0.15);
+      }
+    }
+  }
+}
+
+@media (max-width: 575px) {
+  .home-lay {
+    .home-col-left {
+      padding-right: 15px;
+    }
+    .home-col-right {
+      padding-left: 15px;
+    }
+  }
+}
+</style>
+

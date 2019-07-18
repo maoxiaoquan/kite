@@ -1,0 +1,21 @@
+{
+  "apps": {
+    "name": "kite",
+    "script": "./server/index.js",
+    "min_uptime": "60s",
+    "max_restarts": 30,
+    "exec_mode": "fork_mode",
+    "error_file": "./log/pm2_err.log",
+    "out_file": "./log/pm2_out.log",
+    "pid_file": "./log/pm2_test.pid",
+    "watch": false,
+    "ignore_watch": [
+      "node_modules",
+      "log",
+      "static/upload",
+      "src",
+      "build",
+      "public"
+    ]
+  }
+}

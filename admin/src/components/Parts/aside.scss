@@ -1,0 +1,32 @@
+
+.admin-aside-menu {
+  position: relative;
+  z-index: 101;
+  box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+  .admin-aside-menu-view {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    .admin-aside-header {
+      height: 70px;
+      text-align: center;
+      line-height: 70px;
+      background: #002140;
+      overflow: hidden;
+      a {
+        font-size: 25px;
+        color: #FFFFFF;
+      }
+    }
+    .admin-aside-content {
+      height: calc(100vh - 70px);
+      overflow-x: hidden;
+      -ms-flex: 1 1;
+      flex: 1 1;
+      padding: 24px 0;
+    }
+  }
+}

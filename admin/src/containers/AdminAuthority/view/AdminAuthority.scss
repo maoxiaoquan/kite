@@ -1,0 +1,23 @@
+.admin-authority{
+  .admin-authority-create-btn {
+    margin-bottom: 15px;
+  }
+  .ant-tree{
+    font-size: 14px;
+  }
+  .ant-tree-node-content-wrapper{
+    width: 100%;
+  }
+  .box-tree-title{
+    .pull-right{
+      padding-left: 25px;
+      padding-right: 50px;
+      i{
+        padding-left: 18px;
+        &:hover{
+          color: #ea6f5a;
+        }
+      }
+    }
+  }
+}
