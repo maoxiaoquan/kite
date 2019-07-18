@@ -9,7 +9,7 @@
 <a href="https://github.com/maoxiaoquan/kite/network"><img src="https://camo.githubusercontent.com/be451bca89325c1fbf2a5efd1271ebbff022de56/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f666f726b732f6d616f7869616f7175616e2f6b6974652e7376673f7374796c653d706f706f75742d737175617265" alt="GitHub forks" data-canonical-src="https://img.shields.io/github/forks/maoxiaoquan/kite.svg?style=popout-square" style="max-width:100%;"></a>
 </p>
 
-## kite
+## ✨ kite
 
 前台演示网站地址： [小随笔 https://www.xiaosuibi.com/](https://www.xiaosuibi.com/ 'xiaosuibi')
 
@@ -19,7 +19,7 @@
 
 兼容方面会兼容大部分浏览器，过于古老的将放弃
 
-## 备注
+## ☂️ 备注
 
 备注：因为项目是一直在写的，周期比较长，改了又改，有意见的，直接提意见，发出来的目的，就是希望大家多提建议
 然后我再来改，代码方面我会一直优化的！！！！！！
@@ -30,7 +30,7 @@
 前台的注册目前只有邮箱，因为手机短信验证码需要 money，哈哈
 后续会开放
 
-## 最新版本更新记录
+## 💼 最新版本更新记录
 
 2019.7.18 2:00:00
 
@@ -48,7 +48,7 @@ v0.10.2
 
 [版本更新历史记录](https://github.com/maoxiaoquan/kite/blob/master/docs/VERSION.md 'version')
 
-## Build
+## 📦 Install
 
 ```bash
 
@@ -60,7 +60,7 @@ v0.10.2
 
 ```
 
-## Start
+## ⌨️ Start
 
 ```bash
 
@@ -99,7 +99,7 @@ cli 的邮箱一定要填写完成，否则前台无法发送注册的邮件
 
 ```
 
-## 目录结构
+## 📁 目录结构
 
 ```
 kite/
@@ -124,8 +124,6 @@ kite/
    ├──static/                    * 静态资源目录
    |
    ├──views/                     * cli 模版目录
-   │
-   │──plugins/                   * 第三方组件 + 自有js库 + 其他插件性质的脚本
    │
    │──static/                    * 不经编译器处理的静态资源
    │
