@@ -13,7 +13,7 @@ import state_article_column from '../../containers/ArticleColumn/reducer/Article
 import state_picture from '../../containers/Picture/reducer/PictureReducer'
 import state_admin_user from '../../containers/AdminUser/reducer/AdminUserReducer'
 import state_system_config from '../../containers/SystemConfig/reducer/SystemConfigReducer'
-import state_admin_role from '../../containers/AdminRole/reducer/adminRoleReducers'
+import state_admin_role from '../../containers/AdminRole/reducer/AdminRoleReducers'
 import state_admin_authority from '../../containers/AdminAuthority/reducer/AdminAuthorityReducer'
 import state_admin_system_log from '../../containers/AdminSystemLog/reducer/AdminSystemLogReducer'
 import state_website_config from '../../containers/WebsiteConfig/reducer/WebsiteConfigReducer'

@@ -157,6 +157,9 @@ export default {
       border-radius: 10px;
       font-size: 14px;
       color: #393939;
+      p{
+        font-size: 14px;
+      }
     }
     .delete-message {
       opacity: 0;

@@ -11,7 +11,7 @@ import {
   edit_admin_role,
   set_admin_role_authority,
   delete_admin_role
-} from '../actions/adminRoleAction'
+} from '../actions/AdminRoleAction'
 
 const TreeNode = Tree.TreeNode
 const FormItem = Form.Item
