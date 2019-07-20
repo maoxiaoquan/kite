@@ -20,12 +20,13 @@
 兼容方面会兼容大部分浏览器，过于古老的将放弃
 
 
-## 前后台界面
+## 😊 前后台界面
 
-<p align="center">
+<figure class="half">
   <img alt="client" style="width:50%" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi.png">
   <img alt="admin" style="width:50%" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi_admin.png">
-</p>
+</figure>
+
 
 ## ☂️ 备注
 
