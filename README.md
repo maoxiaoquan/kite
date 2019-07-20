@@ -20,19 +20,9 @@
 兼容方面会兼容大部分浏览器，过于古老的将放弃
 
 
-<<<<<<< HEAD
-## 😊 前后台界面
-
-<figure class="half">
-  <img alt="client" style="width:50%" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi.png">
-  <img alt="admin" style="width:50%" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi_admin.png">
-</figure>
-
-=======
 ## 😊 前台界面
 
-<img alt="client" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi.jpg">
->>>>>>> develop
+<img alt="client" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi.png">
 
 ## ☂️ 备注
 
@@ -116,7 +106,7 @@ cli 的邮箱一定要填写完成，否则前台无法发送注册的邮件
 
 ## 😊 前后台界面
 
-<img alt="admin" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibiadmin.jpg">
+<img alt="admin" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi_admin.png">
 
 ## 🔨 初始化
 
