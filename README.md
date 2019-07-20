@@ -22,10 +22,14 @@
 
 ## 😊 前后台界面
 
-<figure class="half">
-  <img alt="client" style="width:50%" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi.png">
-  <img alt="admin" style="width:50%" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi_admin.png">
-</figure>
+<div style="float:none;clear:both;">
+   <div style="float:left;width:50%">
+      <img alt="client" style="width:50%" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi.png">
+   </div>
+   <div style="float:left;width:50%">
+      <img alt="admin" style="width:50%" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi_admin.png">
+   </div>
+</div>
 
 ## ☂️ 备注
 
