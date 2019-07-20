@@ -88,7 +88,7 @@
               <span
                 class="comment-reply"
                 v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===5"
-                @click="reply_btn('@'+childCommentItem.user.nickname+' ')"
+                @click="reply_btn(childCommentItem.uid)"
               >回复</span>
               <span
                 class="comment-delete"
@@ -135,7 +135,7 @@ export default {
   methods: {
     reply_btn(val) {
       this.children_comment_input = true;
-      this.reply_uid = this.commentItem.uid;
+      this.reply_uid = val;
     },
     commentChange(res) {
       if (res.state === "success") {
@@ -146,6 +146,7 @@ export default {
       } else {
         this.$message.warning(res.message);
       }
+      this.children_comment_input = false
     },
     delete_comment(id) {
       this.$store
@@ -153,7 +154,7 @@ export default {
           aid: this.article.aid,
           comment_id: id
         })
-        .then(function(res) {
+        .then(res=> {
           if (res.state === "success") {
             document.querySelector("#comment" + id + "").style.display = "none";
             this.$message.success(res.message);

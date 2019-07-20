@@ -1,6 +1,6 @@
 <h1 align="center" style="margin: 30px 0 35px;">Kite</h3>
 
-<h3 align="center" style="margin: 30px 0 35px;">This is a vue + react project</h3>
+<h3 align="center" style="margin: 30px 0 35px;">这是一个前台 vue ssr 服务端渲染  + 后台 react spa + 接口层 node koa 的项目</h3>
 
 <p align="center">
 <a href="https://github.com/maoxiaoquan/kite/stargazers">
@@ -19,6 +19,14 @@
 
 兼容方面会兼容大部分浏览器，过于古老的将放弃
 
+
+## 前台后台用户界面
+
+<p align="center">
+  <img alt="client" style="width:50%" src="https://github.com/maoxiaoquan/kite/blob/official/docs/img/xiaosuibi.png">
+  <img alt="admin" style="width:50%" src="https://github.com/maoxiaoquan/kite/blob/official/docs/img/xiaosuibi_admin.png">
+</p>
+
 ## ☂️ 备注
 
 备注：因为项目是一直在写的，周期比较长，改了又改，有意见的，直接提意见，发出来的目的，就是希望大家多提建议
@@ -32,19 +40,19 @@
 
 ## 💼 最新版本更新记录
 
-2019.7.18 2:00:00
+2019.7.21 0:20:00
 
-v0.10.2
+v0.10.3
 
-1.优化评论样式
+1.优化评论回复
 
-2.优化消息显示
+2.修改用户评论消息显示的字体为14px
 
-3.SEO 增加关键字和描述字段
+3.修改登录cookie的失效性为7天
 
-4.修复 bug
+4.前台多角色权限判断优化
 
-5.包重建，减少包下载速度
+5.首页移动端样式微调，移动端隐藏封面图片
 
 [版本更新历史记录](https://github.com/maoxiaoquan/kite/blob/master/docs/VERSION.md 'version')
 
@@ -145,19 +153,11 @@ kite/
 
 <img alt="admin" src="https://github.com/maoxiaoquan/kite/blob/official/docs/img/init.png">
 
-## 前台用户界面
-
-<img alt="admin" src="https://github.com/maoxiaoquan/kite/blob/official/docs/img/client.png">
-
-## 后台管理界面
-
-<img alt="admin" src="https://github.com/maoxiaoquan/kite/blob/official/docs/img/admin.png">
-
 ## 说明
 
 使用的技术栈：
 
-前台方面：vue + vuex + vue-router + vue-server-renderer
+前台方面：vue服务端渲染 + vuex + vue-router + vue-server-renderer
 
 后台方面：react + redux + react-redux + react-router
 

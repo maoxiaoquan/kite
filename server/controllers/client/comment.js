@@ -186,6 +186,14 @@ class Comment {
             children: [],
             user: user_info
           }
+
+          if (formData.reply_uid && formData.reply_uid !== 0 && formData.reply_uid !== formData.uid) {
+            _data.reply_user = await models.user.findOne({
+              where: { uid: formData.reply_uid },
+              attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+            })
+          }
+
           await models.user_message.create({
             // 用户行为记录
             uid: formData.article_uid,

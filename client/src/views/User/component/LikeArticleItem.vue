@@ -320,5 +320,12 @@ export default {
       border-radius: 10px;
     }
   }
+   @media (max-width: 767px) {
+    &.content-box-index {
+      .thumb {
+        display: none;
+      }
+    }
+  }
 }
 </style>

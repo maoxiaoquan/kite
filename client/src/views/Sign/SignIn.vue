@@ -87,7 +87,7 @@ export default {
           if (res.state === 'success') {
             this.$message.success(res.message)
             this.$refs.login.reset()
-            cookie.set('accessToken', res.data.token, 1)
+            cookie.set('accessToken', res.data.token, 7)
             this.$store.commit('SET_IS_LOGIN', false)
             window.location.reload()
           } else {

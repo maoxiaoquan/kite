@@ -57,7 +57,7 @@ class Admin_users {
         account,
         role_id: admin_user_info ? admin_user_info.admin_role_ids : ''
       }
-      let token = tokens.AdminSetToken(30000, datas)
+      let token = tokens.AdminSetToken(60 * 60 * 24 * 7, datas)
       sign_resJson(ctx, {
         state: 'success',
         message: '登录成功',

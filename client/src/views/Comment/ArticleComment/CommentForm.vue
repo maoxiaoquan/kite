@@ -49,8 +49,7 @@ export default {
     return {
       comment_content: '', // 顶级输入框
       faceVisible: false,
-      isCommentSubmit: false,
-      visible2: false
+      isCommentSubmit: false
     }
   },
   props: {

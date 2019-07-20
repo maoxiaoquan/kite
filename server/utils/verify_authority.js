@@ -3,7 +3,7 @@ const models = require('../../db/mysqldb/index')
 const config = require('../config')
 const Op = require('sequelize').Op
 
-function ErrorMessage (message) {
+function ErrorMessage(message) {
   this.message = message
   this.name = 'UserException'
 }
@@ -11,7 +11,7 @@ function ErrorMessage (message) {
 const noLimit = ['/admin-index/statistics', '/admin-user/info']
 
 class VerifyAuthority {
-  static async ClientCheck (ctx, next) {
+  static async ClientCheck(ctx, next) {
     const { url, user = {} } = ctx.request
     const { user_role_ids } = user
     try {
@@ -32,16 +32,15 @@ class VerifyAuthority {
           let find_role_all = await models.user_role.findAll({
             where: {
               user_role_id: {
-                [Op.or]: user_role_ids.split(',')
+                [Op.in]: user_role_ids.split(',')
+              },
+              user_authority_ids: {
+                [Op.like]: `%${find_user_authority.authority_id}%`
               },
               user_role_type: 1 // 用户角色类型1是默认角色
             }
           })
-          let user_authority_ids = ''
-          find_role_all.map(roleItem => {
-            user_authority_ids += roleItem.user_authority_ids + ','
-          })
-          if (~user_authority_ids.indexOf(find_user_authority.authority_id)) {
+          if (find_role_all && find_role_all.length > 0) {
             await next()
           } else {
             throw new ErrorMessage(
@@ -66,7 +65,7 @@ class VerifyAuthority {
     }
   }
 
-  static async AdminCheck (ctx, next) {
+  static async AdminCheck(ctx, next) {
     const { url, userInfo = {} } = ctx.request
     const { role_id } = userInfo
     if (role_id && role_id !== config.SUPER_ROLE_ID) {
