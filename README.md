@@ -20,16 +20,9 @@
 兼容方面会兼容大部分浏览器，过于古老的将放弃
 
 
-## 😊 前后台界面
+## 😊 前台界面
 
-<div style="float:none;clear:both;">
-   <div style="float:left;width:50%">
-      <img alt="client" style="width:50%" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi.png">
-   </div>
-   <div style="float:left;width:50%">
-      <img alt="admin" style="width:50%" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi_admin.png">
-   </div>
-</div>
+<img alt="client" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi.jpg">
 
 ## ☂️ 备注
 
@@ -111,6 +104,15 @@ cli 的邮箱一定要填写完成，否则前台无法发送注册的邮件
 
 ```
 
+## 😊 前后台界面
+
+<img alt="admin" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibiadmin.jpg">
+
+## 🔨 初始化
+
+<img alt="admin" src="https://github.com/maoxiaoquan/kite/blob/official/docs/img/init.png">
+
+
 ## 📁 目录结构
 
 ```
@@ -152,10 +154,6 @@ kite/
    └──pm2.json                   * pm2配置
 
 ```
-
-## 🔨 初始化
-
-<img alt="admin" src="https://github.com/maoxiaoquan/kite/blob/official/docs/img/init.png">
 
 ## 👓 说明
 
