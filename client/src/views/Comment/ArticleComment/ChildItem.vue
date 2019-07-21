@@ -1,64 +1,56 @@
 <template>
-  <div class="comment-item" :id="'comment'+commentItem.id" ref="comment_list">
+  <div class="comment-item" :id="'comment'+childCommentItem.id">
     <div class="avatar">
-      <el-image :src="commentItem.user.avatar" lazy></el-image>
+      <el-image :src="childCommentItem.user.avatar" lazy></el-image>
     </div>
     <div class="comment-body">
       <div class="comment-main">
         <h4>
           <router-link
             class="user-info"
-            :to="{name:'user',params:{uid:commentItem.user.uid}}"
-          >{{commentItem.user.nickname}}</router-link>
+            :to="{name:'user',params:{uid:childCommentItem.user.uid}}"
+          >{{childCommentItem.user.nickname}}</router-link>
+          <template v-if="childCommentItem.reply_user">
+            <i class="middle-text">回复</i>
+            <router-link
+              class="user-info"
+              :to="{name:'user',params:{uid:childCommentItem.reply_user.uid}}"
+            >{{childCommentItem.reply_user.nickname}}</router-link>
+          </template>
         </h4>
         <div
           class="comment-text"
-          v-if="Number(commentItem.status)===2||Number(commentItem.status)===5"
-          v-html="commentRender(commentItem.content)"
+          v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===5"
+          v-html="commentRender(childCommentItem.content)"
         ></div>
         <div
           class="comment-text"
-          v-else-if="Number(commentItem.status)===1"
+          v-else-if="Number(childCommentItem.status)===1"
           style="color:#f96b84;"
         >当前用户评论需要管理员审核才能可见</div>
         <div
           class="comment-text"
-          v-else-if="Number(commentItem.status)===3"
+          v-else-if="Number(childCommentItem.status)===3"
           style="color:#f96b84;"
         >当前用户评论违规</div>
       </div>
       <div class="comment-foot clearfix">
-        <span>{{commentItem.create_at}}</span>
+        <span>{{childCommentItem.create_at}}</span>
         <span
           class="comment-reply"
-          v-if="Number(commentItem.status)===2||Number(commentItem.status)===5"
-          @click="isComment=!isComment"
+          v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===5"
+          @click="isComment=!isComment;reply_uid=childCommentItem.uid"
         >{{isComment?'取消回复':'回复'}}</span>
         <span
           class="comment-delete"
-          v-if="personal_info.user.uid===commentItem.uid"
-          @click="delete_comment(commentItem.id)"
+          v-if="personal_info.user.uid===childCommentItem.uid"
+          @click="delete_comment(childCommentItem.id)"
         >删除</span>
       </div>
-
-      <div class="comment-form-view" v-if="isComment" :id="'comment-reply'+commentItem.id">
-        <CommentForm
-          :reply_uid="reply_uid"
-          :child_comment_id="commentItem.id"
-          @commentChange="commentChange"
-        />
-      </div>
     </div>
-    <div class="comment-item-children" v-if="commentItem.children.length>0||isComment">
-      <div class="comment-item-children-view" v-if="commentItem.children.length>0">
-        <ChildItem
-          v-for="(childCommentItem,key) in commentItem.children"
-          :key="key"
-          :p_id="commentItem.id"
-          :childCommentItem="childCommentItem"
-          @ChildCommentChange="commentChange"
-        />
-      </div>
+
+    <div class="comment-form-view" v-if="isComment" :id="'comment-reply'+childCommentItem.id">
+      <CommentForm :reply_uid="reply_uid" :child_comment_id="p_id" @commentChange="commentChange" />
     </div>
   </div>
 </template>
@@ -66,32 +58,20 @@
 <script>
 import CommentForm from "./CommentForm";
 import faceqq from "./face/qq";
-import ChildItem from "./ChildItem";
 
 export default {
-  name: "index",
-  props: ["commentItem"],
+  name: "childrenItem",
+  props: ["childCommentItem", "p_id"],
   data: function() {
     return {
       isComment: false,
-      parent_id: "",
       reply_uid: ""
     };
   },
-  created() {
-    this.parent_id = this.commentItem.id;
-  },
   methods: {
     commentChange(res) {
-      if (res.state === "success") {
-        this.$message.success(res.message);
-        this.$nextTick(function() {
-          this.commentItem.children.push(res.data);
-        });
-      } else {
-        this.$message.warning(res.message);
-      }
       this.isComment = false;
+      this.$emit("ChildCommentChange", res);
     },
     delete_comment(id) {
       this.$store
@@ -132,8 +112,7 @@ export default {
     }
   },
   components: {
-    CommentForm,
-    ChildItem
+    CommentForm
   }
 };
 </script>

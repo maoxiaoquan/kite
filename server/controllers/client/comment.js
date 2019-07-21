@@ -187,12 +187,16 @@ class Comment {
             user: user_info
           }
 
-          if (formData.reply_uid && formData.reply_uid !== 0 && formData.reply_uid !== formData.uid) {
+          if (formData.reply_uid && formData.reply_uid !== 0 && formData.reply_uid !== user.uid) {
             _data.reply_user = await models.user.findOne({
               where: { uid: formData.reply_uid },
               attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
             })
           }
+
+          _data['create_at'] = await moment(_data.create_date).format(
+            'YYYY-MM-DD H:m:s'
+          )
 
           await models.user_message.create({
             // 用户行为记录

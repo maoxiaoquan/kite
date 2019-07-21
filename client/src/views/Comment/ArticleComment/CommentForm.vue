@@ -68,7 +68,6 @@ export default {
     getParams () {
       return {
         aid: this.article.aid,
-        article_uid: this.article.uid,
         content: this.comment_content,
         reply_uid: this.reply_uid,
         parent_id: this.child_comment_id,
