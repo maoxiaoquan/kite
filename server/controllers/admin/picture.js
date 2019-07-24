@@ -17,7 +17,7 @@ class Picture {
    * 创建标签
    * @param   {object} ctx 上下文对象
    */
-  static async create_picture (ctx) {
+  static async createPicture (ctx) {
     const req_data = ctx.request.body
 
     try {
@@ -56,7 +56,7 @@ class Picture {
    * 获取标签列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async get_picture_list (ctx) {
+  static async getPictureList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
       let { count, rows } = await picture.findAndCountAll({
@@ -92,7 +92,7 @@ class Picture {
    * 更新标签
    * @param   {object} ctx 上下文对象
    */
-  static async update_picture (ctx) {
+  static async updatePicture (ctx) {
     const req_data = ctx.request.body
     try {
       await picture.update(
@@ -126,7 +126,7 @@ class Picture {
   /**
    * 删除标签
    */
-  static async delete_picture (ctx) {
+  static async deletePicture (ctx) {
     const { picture_id } = ctx.request.body
     try {
       await picture.destroy({ where: { picture_id } })

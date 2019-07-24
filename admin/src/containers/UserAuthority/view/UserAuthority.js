@@ -16,10 +16,10 @@ import alert from '../../../utils/alert'
 import { isEmpty } from '../../../utils/tools'
 import './UserAuthority.scss'
 import {
-  create_user_authority,
-  get_user_authority_list,
-  delete_user_authority,
-  update_user_authority
+  createUserAuthority,
+  getUserAuthorityList,
+  deleteUserAuthority,
+  updateUserAuthority
 } from '../action/UserAuthorityAction'
 
 const TreeNode = Tree.TreeNode
@@ -131,13 +131,13 @@ class UserAuthority extends React.Component {
   }
 
   fetch_user_authority_list = () => {
-    this.props.dispatch(get_user_authority_list())
+    this.props.dispatch(getUserAuthorityList())
   }
 
   fetch_user_authority_create = async values => {
     /* 创建权限 */
     await this.props.dispatch(
-      create_user_authority(
+      createUserAuthority(
         {
           authority_name: values.authority_name,
           authority_type: values.authority_type,
@@ -162,7 +162,7 @@ class UserAuthority extends React.Component {
   fetch_user_authority_update = async values => {
     /* 更新权限 */
     await this.props.dispatch(
-      update_user_authority(
+      updateUserAuthority(
         {
           authority_id: this.props.state_user_authority.current_authority_info
             .authority_id,
@@ -188,7 +188,7 @@ class UserAuthority extends React.Component {
     /* 删除权限 */
     let id_arr = await this.traversal_delete(data)
     this.props.dispatch(
-      delete_user_authority({ authority_id_arr: id_arr }, () => {
+      deleteUserAuthority({ authority_id_arr: id_arr }, () => {
         this.fetch_user_authority_list()
         alert.message_success('删除成功')
       })

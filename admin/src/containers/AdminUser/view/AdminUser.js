@@ -15,12 +15,12 @@ import { Link } from 'react-router-dom'
 
 import './AdminUser.scss'
 import {
-  get_admin_user_list,
-  create_admin_user,
-  edit_admin_user,
-  delete_admin_user,
-  get_admin_role_all,
-  create_admin_user_role
+  getAdminUserList,
+  createAdminUser,
+  editAdminUser,
+  deleteAdminUser,
+  getAdminRoleAll,
+  createAdminUserRole
 } from '../actions/AdminUserAction'
 import alert from '../../../utils/alert'
 
@@ -187,7 +187,7 @@ class AdminUser extends React.Component {
     /*初始化获取所有列表*/
     await this.fetch_admin_user_list()
     /*管理员用户列表*/
-    await this.props.dispatch(get_admin_role_all())
+    await this.props.dispatch(getAdminRoleAll())
     /*所有角色列表*/
   }
 
@@ -301,7 +301,7 @@ class AdminUser extends React.Component {
   handleSubmitAuthority = () => {
     if (this.state.role_id) {
       this.props.dispatch(
-        create_admin_user_role(
+        createAdminUserRole(
           {
             /*创建管理员用户角色*/
             role_id: this.state.role_id,
@@ -332,7 +332,7 @@ class AdminUser extends React.Component {
   fetch_admin_user_create = values => {
     /*创建管理员用户*/
     this.props.dispatch(
-      create_admin_user(values, res => {
+      createAdminUser(values, res => {
         alert.message_success('创建成功')
         this.fetch_admin_user_list()
         this.setState({
@@ -345,7 +345,7 @@ class AdminUser extends React.Component {
   fetch_admin_user_edit = values => {
     /*修改管理员用户账户*/
     this.props.dispatch(
-      edit_admin_user(
+      editAdminUser(
         { uid: this.props.state_admin_user.current_user_info.uid, ...values },
         res => {
           alert.message_success('修改用户成功')
@@ -361,7 +361,7 @@ class AdminUser extends React.Component {
   fetch_admin_user_delete = values => {
     /*删除管理员用户*/
     this.props.dispatch(
-      delete_admin_user(values, res => {
+      deleteAdminUser(values, res => {
         alert.message_success('删除用户成功')
         this.fetch_admin_user_list()
       })
@@ -376,7 +376,7 @@ class AdminUser extends React.Component {
       pagination: { current }
     } = this.state
     this.props.dispatch(
-      get_admin_user_list({ params: { page: current } }, res => {
+      getAdminUserList({ params: { page: current } }, res => {
         let pagination = { ...that.state.pagination }
         pagination.total = res.count
         pagination.current = current

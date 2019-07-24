@@ -9,7 +9,7 @@ const {
 } = require('../../utils/index')
 const config = require('../../config')
 const moment = require('moment')
-const { create_admin_system_log } = require('./admin_system_log')
+const { create_admin_system_log } = require('./adminSystemLog')
 const Op = require('sequelize').Op
 
 function ErrorMessage (message) {
@@ -23,7 +23,7 @@ class UserRole {
    * 创建角色
    * @param   {object} ctx 上下文对象
    */
-  static async create_user_role (ctx) {
+  static async createUserRole (ctx) {
     const req_data = ctx.request.body
 
     try {
@@ -65,7 +65,7 @@ class UserRole {
    * 获取所有角色操作
    * @param   {object} ctx 上下文对象
    */
-  static async get_user_role_all (ctx) {
+  static async getUserRoleAll (ctx) {
     try {
       let user_role_all = await user_role.findAll({
         attributes: [
@@ -98,7 +98,7 @@ class UserRole {
    * 获取角色列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async get_user_role_list (ctx) {
+  static async getUserRoleList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
       let { count, rows } = await user_role.findAndCountAll({
@@ -136,7 +136,7 @@ class UserRole {
    * 更新角色
    * @param   {object} ctx 上下文对象
    */
-  static async update_user_role (ctx) {
+  static async updateUserRole (ctx) {
     const req_data = ctx.request.body
     try {
       await user_role.update(
@@ -169,7 +169,7 @@ class UserRole {
   /**
    * 删除角色
    */
-  static async delete_user_role (ctx) {
+  static async deleteUserRole (ctx) {
     const { user_role_id } = ctx.request.body
     try {
       if (config.USER_ROLE.default_id === user_role_id) {
@@ -206,7 +206,7 @@ class UserRole {
    * 创建权限
    * @param   {object} ctx 上下文对象
    */
-  static async create_user_authority (ctx) {
+  static async createUserAuthority (ctx) {
     const req_data = ctx.request.body
 
     try {
@@ -241,7 +241,7 @@ class UserRole {
    * 获取权限列表
    * @param   {object} ctx 上下文对象
    */
-  static async get_user_authority_list (ctx) {
+  static async getUserAuthorityList (ctx) {
     try {
       let user_authority_findAll = await user_authority.findAll()
 
@@ -262,7 +262,7 @@ class UserRole {
    * 修改权限
    * @param   {object} ctx 上下文对象
    */
-  static async update_user_authority (ctx) {
+  static async updateUserAuthority (ctx) {
     const req_data = ctx.request.body
     try {
       await user_authority.update(
@@ -296,7 +296,7 @@ class UserRole {
    * 删除权限列表
    * @param   {object} ctx 上下文对象
    */
-  static async delete_user_authority (ctx) {
+  static async deleteUserAuthority (ctx) {
     const { authority_id_arr } = ctx.request.body
     try {
       await user_authority.destroy({
@@ -319,7 +319,7 @@ class UserRole {
    * @param   {object} ctx 上下文对象
    */
 
-  static async set_user_role_authority (ctx) {
+  static async setUserRoleAuthority (ctx) {
     const req_data = ctx.request.body
     try {
       await user_role.update(

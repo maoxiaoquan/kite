@@ -49,10 +49,10 @@ export default {
     };
   },
   created () {
-    this.get_comment_list(); // 获取用户的评论
+    this.getCommentList(); // 获取用户的评论
   },
   methods: {
-    get_comment_list () {
+    getCommentList () {
       // 获取评论列表
       this.isLoadingComment = true;
       var that = this;

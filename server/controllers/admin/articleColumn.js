@@ -5,7 +5,7 @@ const {
 } = require('../../utils/index')
 const config = require('../../config')
 const moment = require('moment')
-const { create_admin_system_log } = require('./admin_system_log')
+const { create_admin_system_log } = require('./adminSystemLog')
 
 function ErrorMessage (message) {
   this.message = message
@@ -18,7 +18,7 @@ class Article_Column {
    * 创建标签
    * @param   {object} ctx 上下文对象
    */
-  static async create_article_column (ctx) {
+  static async createArticleColumn (ctx) {
     const req_data = ctx.request.body
 
     try {
@@ -64,7 +64,7 @@ class Article_Column {
    * 获取标签列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async get_article_column_list (ctx) {
+  static async getArticleColumnList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
       let { count, rows } = await article_column.findAndCountAll({
@@ -107,7 +107,7 @@ class Article_Column {
    * 更新标签
    * @param   {object} ctx 上下文对象
    */
-  static async update_article_column (ctx) {
+  static async updateArticleColumn (ctx) {
     const req_data = ctx.request.body
     try {
       await article_column.update(
@@ -137,7 +137,7 @@ class Article_Column {
   /**
    * 删除标签
    */
-  static async delete_article_column (ctx) {
+  static async deleteArticleColumn (ctx) {
     const { article_column_id } = ctx.request.body
 
     await article_column

@@ -317,7 +317,7 @@ class Article {
    * 获取所有文章标签get
    * @param   {object} ctx 上下文对象
    */
-  static async get_article_tag_all(ctx) {
+  static async getArticleTagAll (ctx) {
     try {
       let article_tag_all = await models.article_tag.findAll({
         attributes: [
@@ -609,7 +609,7 @@ class Article {
    * 无关联则直接删除文章，有关联则开启事务同时删除与文章的关联
    * 前台用户删除文章并不是真的删除，只是置为了删除态
    */
-  static async delete_article(ctx) {
+  static async deleteArticle (ctx) {
     const { aid } = ctx.query
     let { islogin = '', user = '' } = ctx.request
 
@@ -761,7 +761,7 @@ class Article {
    * @param   {object} ctx 上下文对象
    */
 
-  static async get_article_column_list(ctx) {
+  static async getArticleColumnList (ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 25
 

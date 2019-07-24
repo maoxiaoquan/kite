@@ -14,14 +14,14 @@ import {
 
 import './User.scss'
 import {
-  get_user_list,
-  edit_user,
-  delete_user,
+  getUserList,
+  editUser,
+  deleteUser,
   banUser
 } from '../actions/UserAction'
 import alert from '../../../utils/alert'
 
-import { get_user_role_all } from '../../UserRole/actions/UserRoleAction'
+import { getUserRoleAll } from '../../UserRole/actions/UserRoleAction'
 
 const Option = Select.Option
 const FormItem = Form.Item
@@ -313,7 +313,7 @@ class User extends React.Component {
 
   fetch_user_role_all() {
     this.props.dispatch(
-      get_user_role_all('', res => {
+      getUserRoleAll('', res => {
         this.setState({
           user_role_all: res.user_role_all ? res.user_role_all : []
         })
@@ -324,7 +324,7 @@ class User extends React.Component {
   fetch_user_delete(values) {
     /*删除用户*/
     this.props.dispatch(
-      delete_user(values, res => {
+      deleteUser(values, res => {
         alert.message_success('删除用户成功')
         this.fetch_user_list()
       })
@@ -339,7 +339,7 @@ class User extends React.Component {
       pagination: { current }
     } = this.state
     this.props.dispatch(
-      get_user_list({ params: { page: current } }, res => {
+      getUserList({ params: { page: current } }, res => {
         let pagination = { ...that.state.pagination }
         pagination.total = res.count
         pagination.current = current
@@ -354,7 +354,7 @@ class User extends React.Component {
   fetch_user_edit = values => {
     /*修改用户*/
     this.props.dispatch(
-      edit_user(
+      editUser(
         { uid: this.props.state_user.current_user_info.uid, ...values },
         res => {
           alert.message_success('修改用户成功')

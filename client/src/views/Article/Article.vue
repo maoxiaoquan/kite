@@ -138,7 +138,7 @@ export default {
     if (this.article.aid) {
       this.getCurrUserInfo(); // 获取当前登录用户信息
       this.getArticleUserInfo(); // 获取当前文章用户信息
-      /*this.get_comment_list()*/ // 获取用户的评论
+      /*this.getCommentList()*/ // 获取用户的评论
     }
   },
   methods: {

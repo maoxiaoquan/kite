@@ -17,7 +17,7 @@ class Comment {
    * 获取标分页评论列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async get_comment_list (ctx) {
+  static async getCommentList (ctx) {
     const { page = 1, pageSize = 10, content, status } = ctx.request.body
     try {
       let where_params = {} // 定义查询条件
@@ -65,7 +65,7 @@ class Comment {
    * 更新评论
    * @param   {object} ctx 上下文对象
    */
-  static async update_comment (ctx) {
+  static async updateComment (ctx) {
     const req_data = ctx.request.body
     try {
       await await models.comment.update(
@@ -93,7 +93,7 @@ class Comment {
   /**
    * 删除评论
    */
-  static async delete_comment (ctx) {
+  static async deleteComment (ctx) {
     const { id } = ctx.request.body
     try {
       let find_comment = await models.comment.findOne({ where: { id } })

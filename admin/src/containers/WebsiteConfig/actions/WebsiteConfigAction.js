@@ -1,6 +1,6 @@
 import http from '../../../utils/http'
 
-export const GetOptionsList = (data, callback) => {
+export const getOptionsList = (data, callback) => {
   return dispatch => {
     http.get('/options/list', { params: { ...data } }).then(res => {
       if (callback) {
@@ -17,7 +17,7 @@ export const GetOptionsList = (data, callback) => {
   }
 }
 
-export const CreateOptions = (data, callback) => {
+export const createOptions = (data, callback) => {
   return dispatch => {
     http.post('/options/create', data).then(res => {
       if (callback) {
@@ -27,7 +27,7 @@ export const CreateOptions = (data, callback) => {
   }
 }
 
-export const UpdateOptions = (data, callback) => {
+export const updateOptions = (data, callback) => {
   return dispatch => {
     http.post('/options/update', data).then(res => {
       if (callback) {
@@ -37,7 +37,7 @@ export const UpdateOptions = (data, callback) => {
   }
 }
 
-export const DeleteOptions = (data, callback) => {
+export const deleteOptions = (data, callback) => {
   return dispatch => {
     http.post('/options/delete', data).then(res => {
       if (callback) {

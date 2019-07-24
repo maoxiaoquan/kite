@@ -1,15 +1,15 @@
 const router = require('koa-router')()
 const index = require('../controllers/client/index') // 主页
 const user = require('../controllers/client/user') // 注册
-const personal_center = require('../controllers/client/personal_center') // 用户个人中心
+const personalCenter = require('../controllers/client/personalCenter') // 用户个人中心
 const article = require('../controllers/client/article') // 文章内容页
 const subscribe = require('../controllers/client/subscribe') // 订阅
-const user_article_topic = require('../controllers/client/user_article_topic') // 用户文章专题
+const userArticleTopic = require('../controllers/client/userArticleTopic') // 用户文章专题
 const comment = require('../controllers/client/comment') // 评论
 const upload = require('../controllers/client/upload') // 上传
 const website = require('../controllers/client/website') // 上传
 const tokens = require('../utils/tokens') // 登录tokens
-const verifyAuthority = require('../utils/verify_authority') // 权限验证
+const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
 
 /**
  * 获取标签列表操作
@@ -37,19 +37,19 @@ router.post('/personal/info', tokens.ClientVerifyToken, user.personal_info)
 router.post(
   '/personal/create_article_topic',
   tokens.ClientVerifyToken,
-  user_article_topic.create_user_article_topic
+  userArticleTopic.create_user_article_topic
 ) // 用户文章专题 TYPE:AJAX post
 
 router.post(
   '/personal/update-article-topic',
   tokens.ClientVerifyToken,
-  user_article_topic.update_user_article_topic
+  userArticleTopic.update_user_article_topic
 ) // 更新用户所有文章专题 TYPE:AJAX get
 
 router.post(
   '/personal/delete-article-topic',
   tokens.ClientVerifyToken,
-  user_article_topic.delete_user_article_topic
+  userArticleTopic.delete_user_article_topic
 ) // 删除用户所有文章专题 TYPE:AJAX get
 
 router.get(
@@ -93,27 +93,27 @@ router.put(
  */
 router.get('/user/info', user.get_user_info) // 根据uid 获取用户相应信息 get
 
-router.get('/user/topic-all', user_article_topic.get_user_article_topic_all) // 获取用户所有文章专题 TYPE:AJAX get
+router.get('/user/topic-all', userArticleTopic.get_user_article_topic_all) // 获取用户所有文章专题 TYPE:AJAX get
 
 router.post(
   '/user/attention',
   tokens.ClientVerifyToken,
-  personal_center.post_user_attention
+  personalCenter.post_user_attention
 ) // 用户关注用户 TYPE:AJAX post
 
-router.get('/user/attention-list', personal_center.user_center_attention) // 获取用户个人中心关注列表
+router.get('/user/attention-list', personalCenter.user_center_attention) // 获取用户个人中心关注列表
 
 router.post(
   '/user/like-article',
   tokens.ClientVerifyToken,
-  personal_center.post_user_like_article
+  personalCenter.post_user_like_article
 ) // 用户like文章 TYPE:AJAX post
 
-router.get('/user/like-article-list', personal_center.user_center_like) // 用户个人中心喜欢
+router.get('/user/like-article-list', personalCenter.user_center_like) // 用户个人中心喜欢
 
-router.get('/user/my-article', personal_center.user_center_article) // 用户个人中心专题页
+router.get('/user/my-article', personalCenter.user_center_article) // 用户个人中心专题页
 
-router.get('/user/role-all', user.get_user_role_all) // 获取所有用户角色标签
+router.get('/user/role-all', user.getUserRoleAll) // 获取所有用户角色标签
 
 /**
  * 文章相关的接口
@@ -143,7 +143,7 @@ router.put('/article/update', tokens.ClientVerifyToken, article.update_article) 
 router.delete(
   '/article/delete',
   tokens.ClientVerifyToken,
-  article.delete_article
+  article.deleteArticle
 ) // 删除文章 delete
 
 router.get('/article/search', article.search_article) // 搜索
@@ -154,7 +154,7 @@ router.get('/article/search', article.search_article) // 搜索
 
 router.get('/article/column', article.get_article_column) // 获取文章专栏
 
-router.get('/article-column/list', article.get_article_column_list) // 获取文章专栏列表
+router.get('/article-column/list', article.getArticleColumnList) // 获取文章专栏列表
 
 /**
  * 文章标签相关的接口
@@ -162,7 +162,7 @@ router.get('/article-column/list', article.get_article_column_list) // 获取文
 
 router.get('/article-tag', article.get_article_tag) // 文章标签
 
-router.get('/article-tag/all', article.get_article_tag_all) // 获取文章标签 获取全部的
+router.get('/article-tag/all', article.getArticleTagAll) // 获取文章标签 获取全部的
 
 router.post(
   '/subscribe/tag',
@@ -170,7 +170,7 @@ router.post(
   subscribe.post_subscribe_tag
 ) // 用户订阅标签 TYPE:AJAX post
 
-router.get('/article-tag/list', subscribe.get_article_tag_list) // 获取用户订阅标签列表 根据搜索和分页获取
+router.get('/article-tag/list', subscribe.getArticleTagList) // 获取用户订阅标签列表 根据搜索和分页获取
 
 router.get('/article-tag/popular-list', article.get_popular_article_tag) // 获取热门文章标签
 

@@ -11,13 +11,13 @@ import {
 import { Link } from 'react-router-dom'
 
 import {
-  get_system_config_info,
-  update_system_config_info
+  getSystemConfigInfo,
+  updateSystemConfigInfo
 } from '../actions'
 import alert from '../../../utils/alert'
 
 import {
-  get_user_role_all
+  getUserRoleAll
 } from '../../UserRole/actions/UserRoleAction'
 
 const Option = Select.Option
@@ -45,7 +45,7 @@ class SystemConfig extends React.Component {
   }
 
   async system_config_info () {
-    await this.props.dispatch(get_system_config_info({}, result => {
+    await this.props.dispatch(getSystemConfigInfo({}, result => {
       this.setState({
         type: result.email.type
       })
@@ -59,7 +59,7 @@ class SystemConfig extends React.Component {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.props.dispatch(update_system_config_info({
+        this.props.dispatch(updateSystemConfigInfo({
           type: 'email',
           email: {
             ...values

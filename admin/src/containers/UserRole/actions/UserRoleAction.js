@@ -1,6 +1,6 @@
 import http from '../../../utils/http'
 
-export const get_user_role_list = (data, callback) => {
+export const getUserRoleList = (data, callback) => {
   return (dispatch) => {
     http.get('/user-role/list', data)
       .then((res) => {
@@ -15,7 +15,7 @@ export const get_user_role_list = (data, callback) => {
   }
 }
 
-export const get_user_role_all = (data, callback) => {
+export const getUserRoleAll = (data, callback) => {
   return (dispatch) => {
     http.get('/user-role/all', data)
       .then((res) => {
@@ -26,7 +26,7 @@ export const get_user_role_all = (data, callback) => {
   }
 }
 
-export const create_user_role = (data, callback) => {
+export const createUserRole = (data, callback) => {
   return (dispatch) => {
     http.post('/user-role/create', data)
       .then((res) => {
@@ -37,7 +37,7 @@ export const create_user_role = (data, callback) => {
   }
 }
 
-export const update_user_role = (data, callback) => {
+export const updateUserRole = (data, callback) => {
   return () => {
     http.post('/user-role/update', data)
       .then((res) => {
@@ -48,7 +48,7 @@ export const update_user_role = (data, callback) => {
   }
 }
 
-export const delete_user_role = (data, callback) => {
+export const deleteUserRole = (data, callback) => {
   return () => {
     http.post('/user-role/delete', data)
       .then((res) => {
@@ -59,7 +59,7 @@ export const delete_user_role = (data, callback) => {
   }
 }
 
-export const set_user_role_authority = (data, func) => {
+export const setUserRoleAuthority = (data, func) => {
   return (dispatch) => {
     http.post('/user-role-authority/set', data)
       .then((res) => {

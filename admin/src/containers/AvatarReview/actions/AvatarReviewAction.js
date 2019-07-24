@@ -1,6 +1,6 @@
 import http from '../../../utils/http'
 
-export const get_avatar_review_list = (data, callback) => {
+export const getAvatarReviewList = (data, callback) => {
   return (dispatch) => {
     http.get('/user/avatar-review-list', data)
       .then((res) => {
@@ -15,7 +15,7 @@ export const get_avatar_review_list = (data, callback) => {
   }
 }
 
-export const edit_avatar_review = (data, callback) => {
+export const editAvatarReview = (data, callback) => {
   return () => {
     http.post('/user/avatar-review-set', data)
       .then((res) => {

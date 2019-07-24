@@ -13,7 +13,7 @@ import {
   Layout
 } from 'antd'
 import './header.scss'
-import { get_admin_index_statistics } from '../../containers/Index/actions'
+import { getAdminIndexStatistics } from '../../containers/Index/actions'
 import state_title from '../../stores/reducers/title'
 
 const SubMenu = Menu.SubMenu

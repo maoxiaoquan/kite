@@ -17,7 +17,7 @@ class Articles {
    * 获取用户列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async get_article_list (ctx) {
+  static async getArticleList (ctx) {
     const {
       page = 1,
       pageSize = 10,
@@ -93,7 +93,7 @@ class Articles {
    * 更新文章
    * @param   {object} ctx 上下文对象
    */
-  static async edit_article (ctx) {
+  static async editArticle (ctx) {
     const { aid, status, type, source, rejection_reason } = ctx.request.body
     try {
       await article.update(
@@ -127,7 +127,7 @@ class Articles {
    * 删除文章判断是否有文章
    * 无关联则直接删除文章，有关联则开启事务同时删除与文章的关联
    */
-  static async delete_article (ctx) {
+  static async deleteArticle (ctx) {
     const { aid } = ctx.request.body
     try {
       let find_article = await article.findOne({ where: { aid } })

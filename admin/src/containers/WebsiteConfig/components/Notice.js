@@ -15,10 +15,10 @@ import {
 } from 'antd'
 
 import {
-  GetOptionsList,
-  CreateOptions,
-  UpdateOptions,
-  DeleteOptions
+  getOptionsList,
+  createOptions,
+  updateOptions,
+  deleteOptions
 } from '../actions/WebsiteConfigAction'
 
 const Option = Select.Option
@@ -135,10 +135,10 @@ class _Notice extends React.Component {
   }
 
   componentDidMount() {
-    this._GetOptionsList()
+    this._getOptionsList()
   }
-  _GetOptionsList = () => {
-    this.props.dispatch(GetOptionsList({ option_key: 'notice' }))
+  _getOptionsList = () => {
+    this.props.dispatch(getOptionsList({ option_key: 'notice' }))
   }
 
   _edit = data => {
@@ -173,26 +173,26 @@ class _Notice extends React.Component {
         console.log('Received values of form: ', values)
         if (!is_create) {
           this.props.dispatch(
-            CreateOptions(
+            createOptions(
               {
                 option_key: 'notice',
                 option_value: JSON.stringify(values)
               },
               () => {
-                this._GetOptionsList()
+                this._getOptionsList()
               }
             )
           )
         } else {
           this.props.dispatch(
-            UpdateOptions(
+            updateOptions(
               {
                 option_id: this.state.option_id,
                 option_key: 'notice',
                 option_value: JSON.stringify(values)
               },
               () => {
-                this._GetOptionsList()
+                this._getOptionsList()
               }
             )
           )
@@ -213,8 +213,8 @@ class _Notice extends React.Component {
       cancelText: 'No',
       onOk: () => {
         this.props.dispatch(
-          DeleteOptions({ option_id: value.option_id }, () => {
-            this._GetOptionsList()
+          deleteOptions({ option_id: value.option_id }, () => {
+            this._getOptionsList()
           })
         )
         /*删除此条公告吗*/

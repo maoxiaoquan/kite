@@ -18,8 +18,8 @@ import { withRouter } from 'react-router-dom'
 
 import './AvatarReview.scss'
 import {
-  get_avatar_review_list,
-  edit_avatar_review
+  getAvatarReviewList,
+  editAvatarReview
 } from '../actions/AvatarReviewAction'
 import alert from '../../../utils/alert'
 
@@ -160,7 +160,7 @@ class AvatarReview extends React.Component {
       pagination: { current }
     } = this.state
     this.props.dispatch(
-      get_avatar_review_list({ params: { page: current, ...params } }, res => {
+      getAvatarReviewList({ params: { page: current, ...params } }, res => {
         let pagination = { ...that.state.pagination }
         pagination.total = res.count
         pagination.current = current
@@ -175,7 +175,7 @@ class AvatarReview extends React.Component {
   fetch_user_edit = values => {
     /*修改文章*/
     this.props.dispatch(
-      edit_avatar_review(
+      editAvatarReview(
         {
           uid: this.props.state_user_avatar_review.current_info.uid,
           ...values

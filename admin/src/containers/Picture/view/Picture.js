@@ -15,10 +15,10 @@ import {
 
 import './Picture.scss'
 import {
-  get_picture_list,
-  create_picture,
-  update_picture,
-  delete_picture
+  getPictureList,
+  createPicture,
+  updatePicture,
+  deletePicture
 } from '../actions/PictureAction'
 import alert from '../../../utils/alert'
 
@@ -277,7 +277,7 @@ class Picture extends React.Component {
   fetch_create_picture = values => {
     /*创建图片*/
     this.props.dispatch(
-      create_picture(values, res => {
+      createPicture(values, res => {
         alert.message_success('创建图片成功')
         this.fetch_picture_list()
         this.setState({
@@ -290,7 +290,7 @@ class Picture extends React.Component {
   fetch_update_picture = values => {
     /*修改图片*/
     this.props.dispatch(
-      update_picture(
+      updatePicture(
         {
           picture_id: this.props.state_picture.current_info.picture_id,
           ...values
@@ -309,7 +309,7 @@ class Picture extends React.Component {
   fetch_delete_picture = values => {
     /*删除图片*/
     this.props.dispatch(
-      delete_picture(values, res => {
+      deletePicture(values, res => {
         alert.message_success('删除图片成功')
         this.fetch_picture_list()
       })
@@ -324,7 +324,7 @@ class Picture extends React.Component {
       pagination: { current }
     } = this.state
     this.props.dispatch(
-      get_picture_list({ params: { page: current } }, res => {
+      getPictureList({ params: { page: current } }, res => {
         let pagination = { ...that.state.pagination }
         pagination.total = res.count
         pagination.current = current

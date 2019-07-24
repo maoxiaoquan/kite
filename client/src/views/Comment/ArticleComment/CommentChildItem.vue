@@ -33,7 +33,7 @@
               @click="isComment=!isComment;reply_uid=childCommentItem.uid">{{isComment?'取消回复':'回复'}}</span>
         <span class="comment-delete"
               v-if="personalInfo.user.uid===childCommentItem.uid"
-              @click="delete_comment(childCommentItem.id)">删除</span>
+              @click="deleteComment(childCommentItem.id)">删除</span>
       </div>
     </div>
 
@@ -65,7 +65,7 @@ export default {
       this.isComment = false;
       this.$emit("ChildCommentChange", res);
     },
-    delete_comment (id) {
+    deleteComment (id) {
       this.$store
         .dispatch("comment/ARTICLE_COMMENT_DELETE", {
           aid: this.article.aid,

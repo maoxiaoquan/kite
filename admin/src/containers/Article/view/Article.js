@@ -18,9 +18,9 @@ import { withRouter } from 'react-router-dom'
 
 import './Article.scss'
 import {
-  get_article_list,
-  edit_user,
-  delete_article
+  getArticleList,
+  editArticle,
+  deleteArticle
 } from '../actions/ArticleAction'
 import alert from '../../../utils/alert'
 
@@ -253,7 +253,7 @@ class Article extends React.Component {
   fetch_article_delete = values => {
     /*删除文章*/
     this.props.dispatch(
-      delete_article(values, res => {
+      deleteArticle(values, res => {
         alert.message_success('删除文章成功')
         this.fetch_article_list()
       })
@@ -280,7 +280,7 @@ class Article extends React.Component {
     } = this.state
 
     this.props.dispatch(
-      get_article_list({ page: current, ...params }, res => {
+      getArticleList({ page: current, ...params }, res => {
         let pagination = { ...that.state.pagination }
         pagination.total = res.count
         pagination.current = current
@@ -295,7 +295,7 @@ class Article extends React.Component {
   fetch_user_edit = values => {
     /*修改文章*/
     this.props.dispatch(
-      edit_user(
+      editArticle(
         { aid: this.props.state_article.current_info.aid, ...values },
         res => {
           alert.message_success('修改文章成功')

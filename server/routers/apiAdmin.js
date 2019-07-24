@@ -1,20 +1,20 @@
 const router = require('koa-router')()
-const admin_users = require('../controllers/admin/admin_users') // 后台用户
+const adminUser = require('../controllers/admin/adminUsers') // 后台用户
 const users = require('../controllers/admin/users') // 前台用户
-const user_role_authority = require('../controllers/admin/user_role_authority') // 前台用户角色权限
+const userRoleAuthority = require('../controllers/admin/userRoleAuthority') // 前台用户角色权限
 const articles = require('../controllers/admin/articles') // 文章
-const article_tag = require('../controllers/admin/article_tag') // 文章标签
-const article_column = require('../controllers/admin/article_column') // 文章专栏 （专栏为官方）
+const articleTag = require('../controllers/admin/articleTag') // 文章标签
+const articleColumn = require('../controllers/admin/articleColumn') // 文章专栏 （专栏为官方）
 const picture = require('../controllers/admin/picture') // 图片管理
 const upload = require('../controllers/admin/upload') // 上传
-const role_authority = require('../controllers/admin/admin_role_authority') // 后台角色权限
+const adminRoleAuthority = require('../controllers/admin/adminRoleAuthority') // 后台角色权限
 const comment = require('../controllers/admin/comment') // 评论
-const admin_system_log = require('../controllers/admin/admin_system_log') // 系统日志
+const adminSystemLog = require('../controllers/admin/adminSystemLog') // 系统日志
 const system = require('../controllers/admin/system') // 系统配置
-const admin_index = require('../controllers/admin/admin_index') // 登录tokens
+const adminIndex = require('../controllers/admin/adminIndex') // 登录tokens
 const tokens = require('../utils/tokens') // 登录tokens
 const options = require('../controllers/admin/options') // options 可增加选项栏
-const verifyAuthority = require('../utils/verify_authority') // 权限验证
+const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
 
 // 此文件所有接口都是后台管理员操作前后台数据所用
 
@@ -24,21 +24,21 @@ router.get(
   '/user/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  users.get_user_list
+  users.getUserList
 )
 // 更新用户资料
 router.post(
   '/user/edit',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  users.edit_user
+  users.editUser
 )
 // 删除用户
 router.post(
   '/user/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  users.delete_user
+  users.deleteUser
 )
 // 待审核用户头像列表
 router.get(
@@ -67,21 +67,21 @@ router.post(
   '/article/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  articles.get_article_list
+  articles.getArticleList
 )
 // 更新用户
 router.post(
   '/article/edit',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  articles.edit_article
+  articles.editArticle
 )
 // 删除用户
 router.post(
   '/article/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  articles.delete_article
+  articles.deleteArticle
 )
 
 /* 文章标签管理 */
@@ -90,35 +90,35 @@ router.get(
   '/article-tag/all',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  article_tag.get_article_tag_all
+  articleTag.getArticleTagAll
 )
 /* 根据分页获取标签 */
 router.get(
   '/article-tag/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  article_tag.get_article_tag_list
+  articleTag.getArticleTagList
 )
 /* 文章创建标签 */
 router.post(
   '/article-tag/create',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  article_tag.create_article_tag
+  articleTag.createArticleTag
 )
 /* 文章更新标签 */
 router.post(
   '/article-tag/update',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  article_tag.update_article_tag
+  articleTag.updateArticleTag
 )
 /* 文章删除标签 */
 router.post(
   '/article-tag/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  article_tag.delete_article_tag
+  articleTag.deleteArticleTag
 )
 
 /* 文章专栏管理 （专栏为官方） */
@@ -126,28 +126,28 @@ router.get(
   '/article-column/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  article_column.get_article_column_list
+  articleColumn.getArticleColumnList
 )
 /* 文章创建专栏 */
 router.post(
   '/article-column/create',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  article_column.create_article_column
+  articleColumn.createArticleColumn
 )
 /* 文章更新专栏 */
 router.post(
   '/article-column/update',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  article_column.update_article_column
+  articleColumn.updateArticleColumn
 )
 /* 文章删除专栏 */
 router.post(
   '/article-column/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  article_column.delete_article_column
+  articleColumn.deleteArticleColumn
 )
 
 /* 文章专题管理 （专题为个人） */
@@ -158,35 +158,35 @@ router.get(
   '/user-role/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  user_role_authority.get_user_role_list
+  userRoleAuthority.getUserRoleList
 )
 // 获取所有用户角色
 router.get(
   '/user-role/all',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  user_role_authority.get_user_role_all
+  userRoleAuthority.getUserRoleAll
 )
 // 创建用户角色
 router.post(
   '/user-role/create',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  user_role_authority.create_user_role
+  userRoleAuthority.createUserRole
 )
 /* 用户更新用户角色 */
 router.post(
   '/user-role/update',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  user_role_authority.update_user_role
+  userRoleAuthority.updateUserRole
 )
 /* 用户删除用户角色 */
 router.post(
   '/user-role/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  user_role_authority.delete_user_role
+  userRoleAuthority.deleteUserRole
 )
 
 // 获取用户权限列表
@@ -194,35 +194,35 @@ router.get(
   '/user-authority/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  user_role_authority.get_user_authority_list
+  userRoleAuthority.getUserAuthorityList
 )
 // 创建用户权限
 router.post(
   '/user-authority/create',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  user_role_authority.create_user_authority
+  userRoleAuthority.createUserAuthority
 )
 // 更新用户权限
 router.post(
   '/user-authority/update',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  user_role_authority.update_user_authority
+  userRoleAuthority.updateUserAuthority
 )
 // 删除用户权限
 router.post(
   '/user-authority/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  user_role_authority.delete_user_authority
+  userRoleAuthority.deleteUserAuthority
 )
 // 设置用户角色权限
 router.post(
   '/user-role-authority/set',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  user_role_authority.set_user_role_authority
+  userRoleAuthority.setUserRoleAuthority
 )
 
 /* 图片管理 */
@@ -230,28 +230,28 @@ router.get(
   '/picture/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  picture.get_picture_list
+  picture.getPictureList
 )
 /* 图片创建 */
 router.post(
   '/picture/create',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  picture.create_picture
+  picture.createPicture
 )
 /* 图片更新 */
 router.post(
   '/picture/update',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  picture.update_picture
+  picture.updatePicture
 )
 /* 图片删除 */
 router.post(
   '/picture/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  picture.delete_picture
+  picture.deletePicture
 )
 
 // 评论模块
@@ -260,21 +260,21 @@ router.post(
   '/comment/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  comment.get_comment_list
+  comment.getCommentList
 )
 // 评论数据更新
 router.post(
   '/comment/update',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  comment.update_comment
+  comment.updateComment
 )
 // 评论数据删除
 router.post(
   '/comment/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  comment.delete_comment
+  comment.deleteComment
 )
 
 /**
@@ -296,47 +296,47 @@ router.get(
   '/admin-index/statistics',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  admin_index.admin_index_statistics
+  adminIndex.admin_index_statistics
 )
 
 /**
  * 管理员用户
  */
 // 登录
-router.post('/sign_in', admin_users.admin_sign_in)
+router.post('/sign_in', adminUser.admin_sign_in)
 // 创建管理员用户
 router.post(
   '/admin-user/create',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  admin_users.create_admin_user
+  adminUser.createAdminUser
 )
 // 更新管理员用户
 router.post(
   '/admin-user/edit',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  admin_users.edit_admin_user
+  adminUser.editAdminUser
 )
 // 删除管理员用户
 router.post(
   '/admin-user/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  admin_users.delete_admin_user
+  adminUser.deleteAdminUser
 )
 // 获取管理员用户信息
 router.post(
   '/admin-user/info',
   tokens.AdminVerifyToken,
-  admin_users.get_admin_user_info
+  adminUser.get_admin_user_info
 )
 // 获取管理员用户列表
 router.get(
   '/admin-user/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  admin_users.get_admin_user_list
+  adminUser.getAdminUserList
 )
 
 /**
@@ -347,35 +347,35 @@ router.get(
   '/admin-role/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.getAdminRoleList
+  adminRoleAuthority.getAdminRoleList
 )
 // 获取全部角色
 router.get(
   '/admin-role/all',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.get_admin_role_all
+  adminRoleAuthority.getAdminRoleAll
 )
 // 创建角色
 router.post(
   '/admin-role/create',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.createAdminRole
+  adminRoleAuthority.createAdminRole
 )
 // 删除角色
 router.post(
   '/admin-role/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.deleteAdminRole
+  adminRoleAuthority.deleteAdminRole
 )
 // 更新角色
 router.post(
   '/admin-role/edit',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.editAdminRole
+  adminRoleAuthority.editAdminRole
 )
 
 /**
@@ -387,7 +387,7 @@ router.post(
   '/admin-user-role/create',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.create_admin_user_role
+  adminRoleAuthority.createAdminUserRole
 )
 /**
  * 后台权限
@@ -398,28 +398,28 @@ router.get(
   '/admin-authority/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.getAdminAuthorityList
+  adminRoleAuthority.getAdminAuthorityList
 )
 // 创建权限
 router.post(
   '/admin-authority/create',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.createAdminAuthority
+  adminRoleAuthority.createAdminAuthority
 )
 // 更新权限
 router.post(
   '/admin-authority/update',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.updateAdminAuthority
+  adminRoleAuthority.updateAdminAuthority
 )
 // 删除权限
 router.post(
   '/admin-authority/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.deleteAdminAuthority
+  adminRoleAuthority.deleteAdminAuthority
 )
 
 /**
@@ -431,7 +431,7 @@ router.post(
   '/admin-role-authority/set',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.setAdminRoleAuthority
+  adminRoleAuthority.setAdminRoleAuthority
 )
 
 /**
@@ -443,7 +443,7 @@ router.get(
   '/admin-system-log/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  admin_system_log.get_admin_system_log_list
+  adminSystemLog.getAdminSystemLogList
 )
 // 获取系统配置
 router.get(
@@ -464,7 +464,7 @@ router.post(
   '/admin-system-log/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  admin_system_log.delete_admin_system_log
+  adminSystemLog.deleteAdminSystemLog
 )
 
 // 获取网站配置项列表

@@ -5,7 +5,7 @@ const {
   admin_authority
 } = require('../../../db/mysqldb/index')
 const { isEmpty } = require('../../utils/tools')
-const { create_admin_system_log } = require('./admin_system_log')
+const { create_admin_system_log } = require('./adminSystemLog')
 const Op = require('sequelize').Op
 
 function ErrorMessage (message) {
@@ -158,7 +158,7 @@ class role_authority {
    * 获取全部角色
    * @param   {object} ctx 上下文对象
    */
-  static async get_admin_role_all (ctx) {
+  static async getAdminRoleAll (ctx) {
     try {
       let admin_role_findAll = await admin_role.findAll()
       admin_resJson(ctx, {
@@ -311,7 +311,7 @@ class role_authority {
    * 创建用户角色关联
    * @param   {object} ctx 上下文对象
    */
-  static async create_admin_user_role (ctx) {
+  static async createAdminUserRole (ctx) {
     const req_data = ctx.request.body
     try {
       await admin_user.update(

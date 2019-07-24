@@ -13,10 +13,10 @@ import {
 } from 'antd'
 import { Link } from 'react-router-dom'
 
-import { get_system_config_info, update_system_config_info } from '../actions'
+import { getSystemConfigInfo, updateSystemConfigInfo } from '../actions'
 import alert from '../../../utils/alert'
 
-import { get_user_role_all } from '../../UserRole/actions/UserRoleAction'
+import { getUserRoleAll } from '../../UserRole/actions/UserRoleAction'
 
 const Option = Select.Option
 const FormItem = Form.Item
@@ -43,7 +43,7 @@ class SystemConfig extends React.Component {
 
   async system_config_info() {
     await this.props.dispatch(
-      get_system_config_info({}, result => {
+      getSystemConfigInfo({}, result => {
         this.props.form.setFieldsValue({
           ...result.config
         })
@@ -57,7 +57,7 @@ class SystemConfig extends React.Component {
       if (!err) {
         let { on_login, on_register, on_comment, admin_url } = values
         this.props.dispatch(
-          update_system_config_info(
+          updateSystemConfigInfo(
             {
               type: 'config',
               config: {

@@ -15,9 +15,9 @@ import { Link } from 'react-router-dom'
 
 import './Comment.scss'
 import {
-  get_comment_list,
-  update_comment,
-  delete_comment
+  getCommentList,
+  updateComment,
+  deleteComment
 } from '../actions/CommentAction'
 import alert from '../../../utils/alert'
 import state_comment from '../reducer/CommentReducer'
@@ -197,7 +197,7 @@ class Comment extends React.Component {
   fetch_update_comment = values => {
     /*修改用户评论*/
     this.props.dispatch(
-      update_comment(
+      updateComment(
         { id: this.props.state_comment.current_info.id, ...values },
         res => {
           alert.message_success('修改用户评论成功')
@@ -235,7 +235,7 @@ class Comment extends React.Component {
   fetch_delete_comment = values => {
     /*删除用户评论*/
     this.props.dispatch(
-      delete_comment(values, res => {
+      deleteComment(values, res => {
         alert.message_success('删除用户评论成功')
         this.fetch_comment_list()
       })
@@ -251,7 +251,7 @@ class Comment extends React.Component {
       pagination: { current }
     } = this.state
     this.props.dispatch(
-      get_comment_list({ page: current, ...params }, res => {
+      getCommentList({ page: current, ...params }, res => {
         let pagination = { ...that.state.pagination }
         pagination.total = res.count
         pagination.current = current

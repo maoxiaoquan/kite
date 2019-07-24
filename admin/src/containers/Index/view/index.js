@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {
-  Layout, Menu, Breadcrumb, Icon, Table, Card, Button, List, Avatar, Row, Col, Timeline,
+  Layout, Menu
 } from 'antd'
 import { Link } from 'react-router-dom'
 import './index.scss'
 import state_index from '../reducer/IndexReducer'
-import { get_admin_index_statistics } from '../actions'
+import { getAdminIndexStatistics } from '../actions'
 
 const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
@@ -24,7 +24,7 @@ class Index extends React.Component {
   }
 
   componentWillMount () {
-    this.props.dispatch(get_admin_index_statistics())
+    this.props.dispatch(getAdminIndexStatistics())
   }
 
   render () {

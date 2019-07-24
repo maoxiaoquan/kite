@@ -15,8 +15,8 @@ import { Link } from 'react-router-dom'
 
 import './AdminSystemLog.scss'
 import {
-  get_admin_system_log_list,
-  delete_admin_system_log
+  getAdminSystemLogList,
+  deleteAdminSystemLog
 } from '../actions/AdminSystemLogAction'
 import alert from '../../../utils/alert'
 
@@ -126,7 +126,7 @@ class AdminSystemLog extends React.Component {
   }
 
   fetch_delete_admin_system_log = (values) => { /*删除系统日志*/
-    this.props.dispatch(delete_admin_system_log(values, (res) => {
+    this.props.dispatch(deleteAdminSystemLog(values, (res) => {
       alert.message_success('删除系统日志成功')
       this.fetch_admin_system_log_list()
     }))
@@ -136,7 +136,7 @@ class AdminSystemLog extends React.Component {
     const that = this
     this.setState({loading: true})
     const {pagination: {current}} = this.state
-    this.props.dispatch(get_admin_system_log_list({params: {page: current}}, (res) => {
+    this.props.dispatch(getAdminSystemLogList({params: {page: current}}, (res) => {
       let pagination = {...that.state.pagination}
       pagination.total = res.count
       pagination.current = current

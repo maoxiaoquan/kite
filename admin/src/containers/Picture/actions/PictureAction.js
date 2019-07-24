@@ -1,6 +1,6 @@
 import http from '../../../utils/http'
 
-export const get_picture_list = (data, callback) => {
+export const getPictureList = (data, callback) => {
   return (dispatch) => {
     http.get('/picture/list', data)
       .then((res) => {
@@ -15,7 +15,7 @@ export const get_picture_list = (data, callback) => {
   }
 }
 
-export const create_picture = (data, callback) => {
+export const createPicture = (data, callback) => {
   return (dispatch) => {
     http.post('/picture/create', data)
       .then((res) => {
@@ -26,7 +26,7 @@ export const create_picture = (data, callback) => {
   }
 }
 
-export const update_picture = (data, callback) => {
+export const updatePicture = (data, callback) => {
   return () => {
     http.post('/picture/update', data)
       .then((res) => {
@@ -37,7 +37,7 @@ export const update_picture = (data, callback) => {
   }
 }
 
-export const delete_picture = (data, callback) => {
+export const deletePicture = (data, callback) => {
   return () => {
     http.post('/picture/delete', data)
       .then((res) => {

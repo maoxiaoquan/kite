@@ -1,6 +1,6 @@
 import http from '../../../utils/http'
 
-export const get_system_config_info = (data, callback) => {
+export const getSystemConfigInfo = (data, callback) => {
   return (dispatch) => {
     http.get('/system-config/info', data)
       .then(result => {
@@ -15,7 +15,7 @@ export const get_system_config_info = (data, callback) => {
   }
 }
 
-export const update_system_config_info = (data, callback) => {
+export const updateSystemConfigInfo = (data, callback) => {
   return (dispatch) => {
     http.post('/system-config/update', data)
       .then(result => {

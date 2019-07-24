@@ -1,6 +1,6 @@
 import http from '../../../utils/http'
 
-export const get_comment_list = (data, callback) => {
+export const getCommentList = (data, callback) => {
   return (dispatch) => {
     http.post('/comment/list', data)
       .then((res) => {
@@ -15,7 +15,7 @@ export const get_comment_list = (data, callback) => {
   }
 }
 
-export const update_comment = (data, callback) => {
+export const updateComment = (data, callback) => {
   return () => {
     http.post('/comment/update', data)
       .then((res) => {
@@ -26,7 +26,7 @@ export const update_comment = (data, callback) => {
   }
 }
 
-export const delete_comment = (data, callback) => {
+export const deleteComment = (data, callback) => {
   return () => {
     http.post('/comment/delete', data)
       .then((res) => {

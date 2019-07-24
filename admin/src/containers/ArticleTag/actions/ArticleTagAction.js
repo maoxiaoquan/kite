@@ -1,6 +1,6 @@
 import http from '../../../utils/http'
 
-export const get_article_tag_list = (data, callback) => {
+export const getArticleTagList = (data, callback) => {
   return (dispatch) => {
     http.get('/article-tag/list', data)
       .then((res) => {
@@ -15,7 +15,7 @@ export const get_article_tag_list = (data, callback) => {
   }
 }
 
-export const create_article_tag = (data, callback) => {
+export const createArticleTag = (data, callback) => {
   return (dispatch) => {
     http.post('/article-tag/create', data)
       .then((res) => {
@@ -26,7 +26,7 @@ export const create_article_tag = (data, callback) => {
   }
 }
 
-export const update_article_tag = (data, callback) => {
+export const updateArticleTag = (data, callback) => {
   return () => {
     http.post('/article-tag/update', data)
       .then((res) => {
@@ -37,7 +37,7 @@ export const update_article_tag = (data, callback) => {
   }
 }
 
-export const delete_article_tag = (data, callback) => {
+export const deleteArticleTag = (data, callback) => {
   return () => {
     http.post('/article-tag/delete', data)
       .then((res) => {

@@ -30,7 +30,7 @@ class AdminSystemLog {
    * 获取后台系统日志操作
    * @param   {object} ctx 上下文对象
    */
-  static async get_admin_system_log_list (ctx) {
+  static async getAdminSystemLogList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
       let { count, rows } = await models.admin_system_log.findAndCountAll({
@@ -72,7 +72,7 @@ class AdminSystemLog {
   /**
    * 删除后台系统日志
    */
-  static async delete_admin_system_log (ctx) {
+  static async deleteAdminSystemLog (ctx) {
     const { id } = ctx.request.body
     try {
       await models.admin_system_log.destroy({ where: { id } })

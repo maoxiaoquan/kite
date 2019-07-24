@@ -6,7 +6,7 @@ const {
 const config = require('../../config')
 const moment = require('moment')
 
-const { create_admin_system_log } = require('./admin_system_log')
+const { create_admin_system_log } = require('./adminSystemLog')
 
 function ErrorMessage (message) {
   this.message = message
@@ -19,7 +19,7 @@ class Article_Tag {
    * 创建标签
    * @param   {object} ctx 上下文对象
    */
-  static async create_article_tag (ctx) {
+  static async createArticleTag (ctx) {
     const req_data = ctx.request.body
 
     try {
@@ -67,7 +67,7 @@ class Article_Tag {
    * 获取标签列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async get_article_tag_list (ctx) {
+  static async getArticleTagList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
       let { count, rows } = await models.article_tag.findAndCountAll({
@@ -104,7 +104,7 @@ class Article_Tag {
    * 获取所有标签操作
    * @param   {object} ctx 上下文对象
    */
-  static async get_article_tag_all (ctx) {
+  static async getArticleTagAll (ctx) {
     try {
       let article_tag_all = await models.article_tag.findAll({
         attributes: [
@@ -137,7 +137,7 @@ class Article_Tag {
    * 更新标签
    * @param   {object} ctx 上下文对象
    */
-  static async update_article_tag (ctx) {
+  static async updateArticleTag (ctx) {
     const req_data = ctx.request.body
     try {
       await models.article_tag.update(
@@ -179,7 +179,7 @@ class Article_Tag {
   /**
    * 删除标签
    */
-  static async delete_article_tag (ctx) {
+  static async deleteArticleTag (ctx) {
     const { article_tag_id } = ctx.request.body
     try {
       let find_article_tag = await models.article_tag.findOne({

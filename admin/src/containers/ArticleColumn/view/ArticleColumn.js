@@ -17,11 +17,11 @@ import { Link } from 'react-router-dom'
 
 import './ArticleColumn.scss'
 import {
-  get_article_tag_all,
-  get_article_column_list,
-  create_article_column,
-  update_article_column,
-  delete_article_column
+  getArticleTagAll,
+  getArticleColumnList,
+  createArticleColumn,
+  updateArticleColumn,
+  deleteArticleColumn
 } from '../actions/ArticleColumnAction'
 import alert from '../../../utils/alert'
 
@@ -196,7 +196,7 @@ class ArticleColumn extends React.Component {
   componentDidMount() {
     this.fetch_article_column_list()
     this.props.dispatch(
-      get_article_tag_all('', res => {
+      getArticleTagAll('', res => {
         console.log('res', res)
         this.setState({
           article_tag_all: res.article_tag_all
@@ -302,7 +302,7 @@ class ArticleColumn extends React.Component {
   fetch_create_article_column = values => {
     /*创建专栏*/
     this.props.dispatch(
-      create_article_column(values, res => {
+      createArticleColumn(values, res => {
         alert.message_success('创建专栏成功')
         this.fetch_article_column_list()
         this.setState({
@@ -315,7 +315,7 @@ class ArticleColumn extends React.Component {
   fetch_update_article_column = values => {
     /*修改专栏*/
     this.props.dispatch(
-      update_article_column(
+      updateArticleColumn(
         {
           article_column_id: this.props.state_article_column.current_info
             .article_column_id,
@@ -335,7 +335,7 @@ class ArticleColumn extends React.Component {
   fetch_delete_article_column = values => {
     /*删除管理员用户*/
     this.props.dispatch(
-      delete_article_column(values, res => {
+      deleteArticleColumn(values, res => {
         alert.message_success('删除专栏成功')
         this.fetch_article_column_list()
       })
@@ -350,7 +350,7 @@ class ArticleColumn extends React.Component {
       pagination: { current }
     } = this.state
     this.props.dispatch(
-      get_article_column_list({ params: { page: current } }, res => {
+      getArticleColumnList({ params: { page: current } }, res => {
         let pagination = { ...that.state.pagination }
         pagination.total = res.count
         pagination.current = current

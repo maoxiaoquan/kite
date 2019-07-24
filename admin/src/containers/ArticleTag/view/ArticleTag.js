@@ -15,10 +15,10 @@ import { Link } from 'react-router-dom'
 
 import './ArticleTag.scss'
 import {
-  get_article_tag_list,
-  create_article_tag,
-  update_article_tag,
-  delete_article_tag
+  getArticleTagList,
+  createArticleTag,
+  updateArticleTag,
+  deleteArticleTag
 } from '../actions/ArticleTagAction'
 import alert from '../../../utils/alert'
 
@@ -237,7 +237,7 @@ class ArticleTag extends React.Component {
   fetch_create_article_tag = values => {
     /*创建标签*/
     this.props.dispatch(
-      create_article_tag(values, res => {
+      createArticleTag(values, res => {
         alert.message_success('创建标签成功')
         this.fetch_article_tag_list()
         this.setState({
@@ -250,7 +250,7 @@ class ArticleTag extends React.Component {
   fetch_update_article_tag = values => {
     /*修改标签*/
     this.props.dispatch(
-      update_article_tag(
+      updateArticleTag(
         {
           article_tag_id: this.props.state_article_tag.current_info
             .article_tag_id,
@@ -270,7 +270,7 @@ class ArticleTag extends React.Component {
   fetch_delete_article_tag = values => {
     /*删除管理员用户*/
     this.props.dispatch(
-      delete_article_tag(values, res => {
+      deleteArticleTag(values, res => {
         alert.message_success('删除标签成功')
         this.fetch_article_tag_list()
       })
@@ -285,7 +285,7 @@ class ArticleTag extends React.Component {
       pagination: { current }
     } = this.state
     this.props.dispatch(
-      get_article_tag_list({ params: { page: current } }, res => {
+      getArticleTagList({ params: { page: current } }, res => {
         let pagination = { ...that.state.pagination }
         pagination.total = res.count
         pagination.current = current

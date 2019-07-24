@@ -15,7 +15,7 @@ class Users {
    * 获取用户列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async get_user_list (ctx) {
+  static async getUserList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
       let { count, rows } = await user.findAndCountAll({
@@ -69,7 +69,7 @@ class Users {
    * 更新用户
    * @param   {object} ctx 上下文对象
    */
-  static async edit_user (ctx) {
+  static async editUser (ctx) {
     const { uid, nickname, user_role_ids, enable } = ctx.request.body
     try {
       await user.update(
@@ -103,7 +103,7 @@ class Users {
    * 无关联则直接删除用户，有关联则开启事务同时删除用户所含有的文章
    * 管理员对角色是一多一的关系
    */
-  static async delete_user (ctx) {
+  static async deleteUser (ctx) {
     const { uid } = ctx.request.body
     try {
       let find_article = await article.findOne({ where: { uid } })

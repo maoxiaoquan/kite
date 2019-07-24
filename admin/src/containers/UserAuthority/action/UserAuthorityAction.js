@@ -1,6 +1,6 @@
 import http from '../../../utils/http'
 
-export const create_user_authority = (data, callback) => {
+export const createUserAuthority = (data, callback) => {
   return (dispatch) => {
     http.post('/user-authority/create', data)
       .then((res) => {
@@ -22,7 +22,7 @@ function filterArray (result, pid) {
   return _array
 }
 
-export const get_user_authority_list = (data, callback) => {
+export const getUserAuthorityList = (data, callback) => {
   return (dispatch) => {
     http.get('/user-authority/list', data)
       .then((res) => {
@@ -37,7 +37,7 @@ export const get_user_authority_list = (data, callback) => {
   }
 }
 
-export const delete_user_authority = (data, callback) => {
+export const deleteUserAuthority = (data, callback) => {
   return (dispatch) => {
     http.post('/user-authority/delete', data)
       .then((res) => {
@@ -48,7 +48,7 @@ export const delete_user_authority = (data, callback) => {
   }
 }
 
-export const update_user_authority = (data, callback) => {
+export const updateUserAuthority = (data, callback) => {
   return (dispatch) => {
     http.post('/user-authority/update', data)
       .then((res) => {

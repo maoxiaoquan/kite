@@ -5,7 +5,7 @@ const Op = require('sequelize').Op
 const clientWhere = require('../../utils/client_where')
 
 class Subscribe {
-  static async get_article_tag_list (ctx) {
+  static async getArticleTagList (ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 24
     let tag_name = ctx.query.tag_name

@@ -1,6 +1,6 @@
 import http from '../../../utils/http'
 
-export const get_article_list = (data, callback) => {
+export const getArticleList = (data, callback) => {
   return (dispatch) => {
     http.post('/article/list', data)
       .then((res) => {
@@ -15,7 +15,7 @@ export const get_article_list = (data, callback) => {
   }
 }
 
-export const edit_user = (data, callback) => {
+export const editArticle = (data, callback) => {
   return () => {
     http.post('/article/edit', data)
       .then((res) => {
@@ -26,7 +26,7 @@ export const edit_user = (data, callback) => {
   }
 }
 
-export const delete_article = (data, callback) => {
+export const deleteArticle = (data, callback) => {
   return () => {
     http.post('/article/delete', data)
       .then((res) => {

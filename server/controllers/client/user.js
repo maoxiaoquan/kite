@@ -951,7 +951,7 @@ class User {
    *  获取所有用户角色标签
    * @param   {object} ctx 上下文对象
    */
-  static async get_user_role_all (ctx) {
+  static async getUserRoleAll (ctx) {
     // get 页面
     try {
       let user_role_all = await models.user_role.findAll({

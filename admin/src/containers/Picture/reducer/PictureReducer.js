@@ -4,7 +4,7 @@ const initState = {
   current_info: {}
 }
 
-function reducer(state = initState, action) {
+function reducer (state = initState, action) {
   switch (action.type) {
     case 'GET_PICTURE_LIST':
       return {

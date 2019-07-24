@@ -1,7 +1,7 @@
 import http from '../../../utils/http'
 import axios from 'axios'
 
-export const get_admin_user_list = (data, callback) => {
+export const getAdminUserList = (data, callback) => {
   return dispatch => {
     http.get('/admin-user/list', data).then(res => {
       if (callback) {
@@ -15,7 +15,7 @@ export const get_admin_user_list = (data, callback) => {
   }
 }
 
-export const create_admin_user = (data, callback) => {
+export const createAdminUser = (data, callback) => {
   return () => {
     http.post('/admin-user/create', data).then(res => {
       if (callback) {
@@ -25,7 +25,7 @@ export const create_admin_user = (data, callback) => {
   }
 }
 
-export const edit_admin_user = (data, callback) => {
+export const editAdminUser = (data, callback) => {
   return () => {
     http.post('/admin-user/edit', data).then(res => {
       if (callback) {
@@ -35,7 +35,7 @@ export const edit_admin_user = (data, callback) => {
   }
 }
 
-export const delete_admin_user = (data, callback) => {
+export const deleteAdminUser = (data, callback) => {
   return () => {
     http.post('/admin-user/delete', data).then(res => {
       if (callback) {
@@ -45,7 +45,7 @@ export const delete_admin_user = (data, callback) => {
   }
 }
 
-export const get_admin_role_all = (data, callback) => {
+export const getAdminRoleAll = (data, callback) => {
   return dispatch => {
     http.get('/admin-role/all', data).then(res => {
       if (callback) {
@@ -59,7 +59,7 @@ export const get_admin_role_all = (data, callback) => {
   }
 }
 
-export const create_admin_user_role = (data, callback) => {
+export const createAdminUserRole = (data, callback) => {
   return dispatch => {
     http.post('/admin-user-role/create', data).then(res => {
       if (callback) {

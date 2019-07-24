@@ -12,7 +12,7 @@ const config = require('../../config')
 const models = require('../../../db/mysqldb/index')
 const { admin_user } = require('../../../db/mysqldb/index')
 const moment = require('moment')
-const { create_admin_system_log } = require('./admin_system_log')
+const { create_admin_system_log } = require('./adminSystemLog')
 const Op = require('sequelize').Op
 const { lowdb } = require('../../../db/lowdb/index')
 
@@ -80,7 +80,7 @@ class Admin_users {
    * 注册操作
    * @param   {object} ctx 上下文对象
    */
-  static async create_admin_user (ctx) {
+  static async createAdminUser (ctx) {
     const req_data = ctx.request.body
 
     try {
@@ -141,7 +141,7 @@ class Admin_users {
    * 更新管理员用户
    * @param   {object} ctx 上下文对象
    */
-  static async edit_admin_user (ctx) {
+  static async editAdminUser (ctx) {
     const res_data = ctx.request.body
     try {
       await admin_user.update(
@@ -176,7 +176,7 @@ class Admin_users {
    * 获取用户列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async get_admin_user_list (ctx) {
+  static async getAdminUserList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
       let { count, rows } = await admin_user.findAndCountAll({
@@ -284,7 +284,7 @@ class Admin_users {
    * 无关联则直接管理员删除，有关联则开启事务同时删除管理员角色关联表中关联
    * 管理员对角色是一对一的关系
    */
-  static async delete_admin_user (ctx) {
+  static async deleteAdminUser (ctx) {
     const { uid } = ctx.request.body
     /* 无关联 */
     try {

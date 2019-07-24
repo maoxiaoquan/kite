@@ -4,7 +4,7 @@ import { Form, Input, Icon, Checkbox, Button } from 'antd'
 
 import alert from '../../../utils/alert'
 
-import { sign_in } from '../actions/index'
+import { signIn } from '../actions/index'
 
 import './signin.scss'
 
@@ -16,7 +16,7 @@ class NormalLoginForm extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.dispatch(
-          sign_in(values, res => {
+          signIn(values, res => {
             if (res.state === 'success') {
               localStorage.box_tokens = res.token
               this.props.history.push('/')

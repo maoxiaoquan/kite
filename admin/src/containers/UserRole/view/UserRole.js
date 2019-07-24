@@ -16,14 +16,14 @@ import { Link } from 'react-router-dom'
 
 import './UserRole.scss'
 import {
-  get_user_role_list,
-  create_user_role,
-  update_user_role,
-  delete_user_role
+  getUserRoleList,
+  createUserRole,
+  updateUserRole,
+  deleteUserRole
 } from '../actions/UserRoleAction'
 import alert from '../../../utils/alert'
-import { get_user_authority_list } from '../../UserAuthority/action/UserAuthorityAction'
-import { set_user_role_authority } from '../actions/UserRoleAction'
+import { getUserAuthorityList } from '../../UserAuthority/action/UserAuthorityAction'
+import { setUserRoleAuthority } from '../actions/UserRoleAction'
 
 const TreeNode = Tree.TreeNode
 const Option = Select.Option
@@ -203,7 +203,7 @@ class UserRole extends React.Component {
   componentDidMount() {
     this.fetch_user_role_list()
     /*获取后台权限所有*/
-    this.props.dispatch(get_user_authority_list())
+    this.props.dispatch(getUserAuthorityList())
   }
 
   _edit = data => {
@@ -318,7 +318,7 @@ class UserRole extends React.Component {
   fetch_create_user_role = values => {
     /*创建角色*/
     this.props.dispatch(
-      create_user_role(values, res => {
+      createUserRole(values, res => {
         alert.message_success('创建角色成功')
         this.fetch_user_role_list()
         this.setState({
@@ -331,7 +331,7 @@ class UserRole extends React.Component {
   fetch_update_user_role = values => {
     /*修改角色*/
     this.props.dispatch(
-      update_user_role(
+      updateUserRole(
         {
           user_role_id: this.props.state_user_role.current_info.user_role_id,
           ...values
@@ -350,7 +350,7 @@ class UserRole extends React.Component {
   fetch_delete_user_role = values => {
     /*删除管理员用户*/
     this.props.dispatch(
-      delete_user_role(values, res => {
+      deleteUserRole(values, res => {
         alert.message_success('删除角色成功')
         this.fetch_user_role_list()
       })
@@ -365,7 +365,7 @@ class UserRole extends React.Component {
       pagination: { current }
     } = this.state
     this.props.dispatch(
-      get_user_role_list({ params: { page: current } }, res => {
+      getUserRoleList({ params: { page: current } }, res => {
         let pagination = { ...that.state.pagination }
         pagination.total = res.count
         pagination.current = current
@@ -384,7 +384,7 @@ class UserRole extends React.Component {
       role_authority_list_all
     } = this.props.state_user_role
     this.props.dispatch(
-      set_user_role_authority(
+      setUserRoleAuthority(
         {
           ...current_role_info,
           role_authority_list_all
