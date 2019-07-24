@@ -23,29 +23,6 @@
 
 <img alt="client" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi.png">
 
-## ☂️ 开发规范（以主文件夹开始）
-
-```
-
-vue以及react 开始时涉及的页面级文件夹、无状态组件文件夹、有状态组件文件夹、无状态组件、有状态组件、组件内部的类名、
-文件夹内组件（只要是涉及 react 和 vue 的可用组件或者页面级组件） ----- 帕斯卡命名法 或者是 小驼峰 主要是为了提高辨识度
-
-所有页面内变量名、组件内类的方法、文件内类的方法、函数、不属于上面的文件
-其他文件夹 例如 src、admin、client、utils 都以小驼峰命名
-不太清楚的就都以小驼峰来命名
-
-涉及到以及数据库内查询出来的数据都以下划线分隔 _
-
-index.js、index.vue、index.jsx、index.css、index.scss以 index.* 的文件都是小写单词
-
-vuex action 都以大写开始下划线分隔例如：ARTICLE_COMMENT
-
-admin 文件夹和 server 文件夹 变量多为下划线居多，主要是与mysql直接交互的多，mysql存储字段大部分都为下划线
-
-以后的维护以及改版、开发规范都是如此，
-
-```
-
 ## 💼 最新版本更新记录
 
 2019.7.21 0:20:00
@@ -63,6 +40,30 @@ v0.10.3
 5.首页移动端样式微调，移动端隐藏封面图片
 
 [版本更新历史记录](https://github.com/maoxiaoquan/kite/blob/master/docs/VERSION.md 'version')
+
+
+## ☂️ 开发规范（以主文件夹开始）
+
+```
+
+vue以及react 开始时涉及的页面级文件夹、无状态组件文件夹、有状态组件文件夹、无状态组件、有状态组件、组件内部的类名、
+文件夹内组件（只要是涉及 react 和 vue 的可用组件或者页面级组件） ----- 帕斯卡命名法 或者是 小驼峰 主要是为了提高辨识度
+
+所有页面内变量名、组件内类的方法、文件内类的方法、函数、不属于上面的文件
+其他文件夹 例如 src、admin、client、utils 都以小驼峰命名
+不太清楚的就都以小驼峰来命名
+
+涉及到以及数据库操作的都以下划线分隔 _
+
+index.js、index.vue、index.jsx、index.css、index.scss以 index.* 的文件都是小写单词
+
+vuex action 都以大写开始下划线分隔例如：ARTICLE_COMMENT
+
+admin 文件夹和 server 文件夹 变量多为下划线居多，主要是与mysql直接交互的多，mysql存储字段大部分都为下划线
+
+以后的维护以及改版、开发规范都是如此，
+
+```
 
 ## 📦 Install
 
