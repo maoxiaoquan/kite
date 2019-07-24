@@ -6,7 +6,8 @@ const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.config')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const SWPrecachePlugin = require('sw-precache-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin
 
 const pordWebpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
@@ -26,7 +27,7 @@ const pordWebpackConfig = merge(baseWebpackConfig, {
   },
   resolve: {
     alias: {
-      'request-config': '../request/request_client.js'
+      'request-config': '../request/requestClient.js'
     }
   },
   devtool: false,

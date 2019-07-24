@@ -35,14 +35,14 @@ export default {
   },
   methods: {
     switch_nav (val) {
-      console.log('val',val)
+      console.log('val', val)
       this.$router.push(val)
     }
   },
   computed: {
     c_column_en_name () {
       // 当前的专栏
-      return this.$store.state.article_column.c_column_en_name
+      return this.$store.state.articleColumn.c_column_en_name
     }
   }
 }

@@ -52,8 +52,8 @@ export default {
     },
   },
   computed: {
-    personal_info () { // 登录后的个人信息
-      return this.$store.state.personal_info || {}
+    personalInfo () { // 登录后的个人信息
+      return this.$store.state.personalInfo || {}
     },
     user_info () { // 登录后的个人信息
       return this.$store.state.user.user_info || {}

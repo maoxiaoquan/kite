@@ -1,39 +1,44 @@
 <template>
   <!--article-list-lay layout-content start-->
-  <section class="subscribe-lay layout-content" id="subscribe-lay">
+  <section class="subscribe-lay layout-content"
+           id="subscribe-lay">
     <div class="container box-container">
       <nav class="switch-list-nav">
         <div class="nav-list">
-          <router-link class="nav-item" :to="{name:'columnAll'}">专栏</router-link>
-          <router-link class="nav-item" :to="{name:'subscribe_tag',params:{type:'all'}}">全部标签</router-link>
+          <router-link class="nav-item"
+                       :to="{name:'columnAll'}">专栏</router-link>
+          <router-link class="nav-item"
+                       :to="{name:'subscribe_tag',params:{type:'all'}}">全部标签</router-link>
         </div>
       </nav>
 
       <header class="list-header">
-        <nav role="navigation" class="list-nav">
+        <nav role="navigation"
+             class="list-nav">
           <ul class="nav-list">
-            <li class="nav-item" :class="{'active':$route.params.type==='all'}">
+            <li class="nav-item"
+                :class="{'active':$route.params.type==='all'}">
               <router-link :to="{name:'subscribe_tag',params:{type:'all'}}">全部</router-link>
             </li>
             <!--class active-->
-            <li
-              class="nav-item"
-              :class="{'active':$route.params.type==='my'}"
-              v-if="personal_info.islogin"
-            >
+            <li class="nav-item"
+                :class="{'active':$route.params.type==='my'}"
+                v-if="personalInfo.islogin">
               <router-link :to="{name:'subscribe_tag',params:{type:'my'}}">已关注</router-link>
             </li>
 
-            <li class="nav-item search" v-if="$route.params.type!=='my'">
-              <form role="search" class="search-tag-from">
-                <input
-                  maxlength="32"
-                  placeholder="搜索标签"
-                  required="true"
-                  v-model="tag_name"
-                  class="search-tag-input"
-                />
-                <button class="search-tag-btn" type="button" @click="get_article_tag_list">
+            <li class="nav-item search"
+                v-if="$route.params.type!=='my'">
+              <form role="search"
+                    class="search-tag-from">
+                <input maxlength="32"
+                       placeholder="搜索标签"
+                       required="true"
+                       v-model="tag_name"
+                       class="search-tag-input" />
+                <button class="search-tag-btn"
+                        type="button"
+                        @click="getArticleTagList">
                   <i class="iconfont icon-search"></i>
                 </button>
               </form>
@@ -43,12 +48,15 @@
       </header>
 
       <div class="row tag-list">
-        <div class="item col-xs-12 col-sm-3 col-md-3" v-for="item in subscribe.article_tag_list">
+        <div class="item col-xs-12 col-sm-3 col-md-3"
+             v-for="item in subscribe.article_tag_list">
           <articleTagItem :articleTagItem="item" />
         </div>
       </div>
 
-      <Page :count="pagination" :page="Number($route.query.page)||1" @pageChange="pageChange"></Page>
+      <Page :count="pagination"
+            :page="Number($route.query.page)||1"
+            @pageChange="pageChange"></Page>
     </div>
   </section>
   <!--article-list-lay layout-content end-->
@@ -61,7 +69,7 @@ import { mapState } from "vuex";
 
 export default {
   name: "SubscribeTag",
-  metaInfo() {
+  metaInfo () {
     return {
       title: "订阅",
       titleTemplate: `%s - ${this.website.meta.website_name}`,
@@ -77,10 +85,10 @@ export default {
       }
     };
   },
-  async asyncData({ store, route, accessToken = "" }) {
+  async asyncData ({ store, route, accessToken = "" }) {
     return Promise.all([
-      store.dispatch("article_tag/MY_SUBSCRIBE_TAG_LIST", { accessToken }),
-      store.dispatch("article_tag/GET_ARTICLE_TAG_LIST", {
+      store.dispatch("articleTag/MY_SUBSCRIBE_TAG_LIST", { accessToken }),
+      store.dispatch("articleTag/GET_ARTICLE_TAG_LIST", {
         tag_name: route.query.tag_name,
         tag_type: route.params.type,
         page: route.query.page || 1,
@@ -88,13 +96,13 @@ export default {
       })
     ]);
   },
-  data() {
+  data () {
     return {
       tag_name: ""
     };
   },
   methods: {
-    pageChange(val) {
+    pageChange (val) {
       this.$router.push({
         name: "subscribe_tag",
         params: { type: this.$route.params.type },
@@ -102,16 +110,16 @@ export default {
           tag_name: this.$route.query.tag_name,
           tag_type: this.$route.params.type,
           page: val,
-          uid: this.personal_info.user.uid
+          uid: this.personalInfo.user.uid
         }
       });
     },
-    get_article_tag_list() {
+    getArticleTagList () {
       if (!this.tag_name) {
         this.$message.warning("请输入搜索内容");
         return false
       }
-      this.$store.dispatch("article_tag/GET_ARTICLE_TAG_LIST", {
+      this.$store.dispatch("articleTag/GET_ARTICLE_TAG_LIST", {
         tag_name: this.tag_name,
         tag_type: this.$route.params.type,
         page: this.$route.query.page || 1
@@ -120,15 +128,15 @@ export default {
   },
   computed: {
     ...mapState(["website"]),
-    pagination() {
+    pagination () {
       // 分页
       return Math.ceil(this.subscribe.count / this.subscribe.pageSize);
     },
-    subscribe() {
-      return this.$store.state.article_tag.subscribe || [];
+    subscribe () {
+      return this.$store.state.articleTag.subscribe || [];
     },
-    personal_info() {
-      return this.$store.state.personal_info;
+    personalInfo () {
+      return this.$store.state.personalInfo;
     }
   },
   components: {

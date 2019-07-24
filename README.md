@@ -19,21 +19,30 @@
 
 兼容方面会兼容大部分浏览器，过于古老的将放弃
 
-
 ## 😊 前台界面
 
 <img alt="client" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi.png">
 
-## ☂️ 备注
+## ☂️ 开发规范（以主文件夹开始）
 
-备注：因为项目是一直在写的，周期比较长，改了又改，有意见的，直接提意见，发出来的目的，就是希望大家多提建议
-然后我再来改，代码方面我会一直优化的！！！！！！
-关于项目的维护，会一直维护下去的
+```
 
-项目可以说是两个项目，但是代码写在一起，所以包比较多
+vue以及react 开始时涉及的页面级文件夹、无状态组件文件夹、有状态组件文件夹、无状态组件、有状态组件、组件内部的类名、
+文件夹内组件（只要是涉及 react 和 vue 的可用组件或者页面级组件） ----- 帕斯卡命名法 或者是 小驼峰 主要是为了提高辨识度
 
-前台的注册目前只有邮箱，因为手机短信验证码需要 money，哈哈
-后续会开放
+所有页面内变量名、组件内类的方法、文件内类的方法、函数、不属于上面的文件
+其他文件夹 例如 src、admin、client、utils 都以小驼峰命名
+不太清楚的就都以小驼峰来命名
+
+涉及到以及数据库内查询出来的数据都以下划线分隔 _
+
+index.js、index.vue、index.jsx、index.css、index.scss以 index.* 的文件都是小写单词
+
+vuex action 都以大写开始下划线分隔例如：ARTICLE_COMMENT
+
+以后的维护以及改版、开发规范都是如此，
+
+```
 
 ## 💼 最新版本更新记录
 
@@ -43,9 +52,9 @@ v0.10.3
 
 1.优化评论回复
 
-2.修改用户评论消息显示的字体为14px
+2.修改用户评论消息显示的字体为 14px
 
-3.修改登录cookie的失效性为7天
+3.修改登录 cookie 的失效性为 7 天
 
 4.前台多角色权限判断优化
 
@@ -112,7 +121,6 @@ cli 的邮箱一定要填写完成，否则前台无法发送注册的邮件
 
 <img alt="admin" src="https://github.com/maoxiaoquan/kite/blob/official/docs/img/init.png">
 
-
 ## 📁 目录结构
 
 ```
@@ -159,7 +167,7 @@ kite/
 
 使用的技术栈：
 
-前台方面：vue服务端渲染 + vuex + vue-router + vue-server-renderer
+前台方面：vue 服务端渲染 + vuex + vue-router + vue-server-renderer
 
 后台方面：react + redux + react-redux + react-router
 

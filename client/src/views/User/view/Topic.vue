@@ -18,7 +18,7 @@
           </router-link>
         </li>
 
-        <template v-if="personal_info.user.uid===user_info.user.uid">
+        <template v-if="personalInfo.user.uid===user_info.user.uid">
           <li>
             <a class="btn btn-green"
                @click="create_show_modal=true"
@@ -174,7 +174,7 @@ export default {
         })
     },
     async get_user_article_topic_list () {
-      await this.$store.dispatch('user/GET_USER_ARTICLE_TOPIC', { uid: this.$route.params.uid})
+      await this.$store.dispatch('user/GET_USER_ARTICLE_TOPIC', { uid: this.$route.params.uid })
     },
     pageChange (val) {
       this.$router.push({
@@ -187,8 +187,8 @@ export default {
     }
   },
   computed: {
-    personal_info () { // 登录后的个人信息
-      return this.$store.state.personal_info || {}
+    personalInfo () { // 登录后的个人信息
+      return this.$store.state.personalInfo || {}
     },
     user_info () { // 登录后的个人信息
       return this.$store.state.user.user_info || {}

@@ -22,7 +22,7 @@
                   <div class="meta">
                     <span class="publish-time">{{article.create_at }}</span>
                     <span class="views-count">阅读 {{article.read_count}}</span>
-                    <span class="comments-count">评论 {{article_comment.count}}</span>
+                    <span class="comments-count">评论 {{articleComment.count}}</span>
                     <span class="likes-count">喜欢 {{article.like_count}}</span>
                     <span class="source">{{typeList[article.type]}}</span>
                   </div>
@@ -44,9 +44,9 @@
                        alt />
                 </router-link>
                 <a class="btn btn-success follow attention-article"
-                   v-if="personal_info.user.uid !== article.uid"
-                   :class="{'active':curr_user_info.attention_uid_arr.indexOf(article.uid)!==-1}"
-                   @click="post_user_attention"
+                   v-if="personalInfo.user.uid !== article.uid"
+                   :class="{'active':currUserInfo.attention_uid_arr.indexOf(article.uid)!==-1}"
+                   @click="onUserAttention"
                    href="javascript:;">
                   <i class="iconfont icon-tianjia"></i>
                   <span>关注</span>
@@ -54,18 +54,19 @@
                 <router-link :to="{name:'user',params:{uid:article.user.uid}}"
                              class="title">{{article.user.nickname }}</router-link>
                 <p>
-                  一共有 {{article_user_info.user_article_count}} 篇文章 ，被
-                  {{article_user_info.other_user_attention_count}} 人关注
+                  一共有 {{articleUserInfo.user_article_count}} 篇文章 ，被
+                  {{articleUserInfo.other_user_attention_count}} 人关注
                 </p>
               </div>
-              <div class="signature" v-if="article.user.introduction">{{article.user.introduction }}</div>
+              <div class="signature"
+                   v-if="article.user.introduction">{{article.user.introduction }}</div>
             </div>
 
             <div class="meta-bottom clearfix">
               <div class="like">
                 <div class="btn like-group"
-                     :class="{'active':~curr_user_info.user_like_aid_arr.indexOf(String(article.aid))}"
-                     @click="post_user_like_article">
+                     :class="{'active':~currUserInfo.user_like_aid_arr.indexOf(String(article.aid))}"
+                     @click="onUserLikeArticle">
                   <div class="btn-like">
                     <a href="javascript:;">
                       <i class="iconfont icon-xin"></i>喜欢
@@ -123,11 +124,11 @@ export default {
   data () {
     return {
       typeList: ["", "原创", "转载"],
-      curr_user_info: {
+      currUserInfo: {
         attention_uid_arr: [],
         user_like_aid_arr: []
       },
-      article_user_info: {
+      articleUserInfo: {
         attention_uid_arr: [],
         user_like_aid_arr: []
       }
@@ -135,28 +136,28 @@ export default {
   },
   created () {
     if (this.article.aid) {
-      this.get_curr_user_info(); // 获取当前登录用户信息
-      this.get_article_user_info(); // 获取当前文章用户信息
+      this.getCurrUserInfo(); // 获取当前登录用户信息
+      this.getArticleUserInfo(); // 获取当前文章用户信息
       /*this.get_comment_list()*/ // 获取用户的评论
     }
   },
   methods: {
-    get_curr_user_info () {
+    getCurrUserInfo () {
       // 获取当前登录用户信息
       var that = this;
       this.$store
         .dispatch("article/GET_USER_INFO_ALL", {
-          uid: this.personal_info.user.uid
+          uid: this.personalInfo.user.uid
         })
         .then(function (res) {
           that.$nextTick(function () {
             if (res.state === "success") {
-              that.curr_user_info = res.data;
+              that.currUserInfo = res.data;
             }
           });
         });
     },
-    get_article_user_info () {
+    getArticleUserInfo () {
       // 获取当前文章用户信息
       var that = this;
       this.$store
@@ -164,12 +165,12 @@ export default {
         .then(function (res) {
           that.$nextTick(function () {
             if (res.state === "success") {
-              that.article_user_info = res.data;
+              that.articleUserInfo = res.data;
             }
           });
         });
     },
-    post_user_attention () {
+    onUserAttention () {
       /*用户关注用户*/
       this.$store
         .dispatch("user/USER_ATTENTION", {
@@ -177,8 +178,8 @@ export default {
         })
         .then(res => {
           if (res.state === "success") {
-            this.get_curr_user_info();
-            this.get_article_user_info();
+            this.getCurrUserInfo();
+            this.getArticleUserInfo();
             /*获取当前文章用户信息*/
           } else {
             this.$message.warning(res.message);
@@ -188,7 +189,7 @@ export default {
           console.log(err);
         });
     },
-    post_user_like_article () {
+    onUserLikeArticle () {
       /*用户like 文章*/
       var that = this;
       this.$store
@@ -198,7 +199,7 @@ export default {
         })
         .then(res => {
           if (res.state === "success") {
-            that.get_curr_user_info();
+            that.getCurrUserInfo();
             this.$store.dispatch("article/GET_ARTICLE", {
               aid: this.article.aid
             });
@@ -215,12 +216,12 @@ export default {
     article () {
       return this.$store.state.article.article || {};
     },
-    article_comment () {
+    articleComment () {
       return this.$store.state.comment.article_comment || {};
     },
-    personal_info () {
+    personalInfo () {
       // 登录后的个人信息
-      return this.$store.state.personal_info || {};
+      return this.$store.state.personalInfo || {};
     }
   },
   components: {
@@ -289,7 +290,7 @@ export default {
               span {
                 padding-right: 5px;
               }
-              .source{
+              .source {
                 background: #ea6f5a;
                 padding: 1px 5px;
                 border-radius: 3px;

@@ -2,19 +2,15 @@
   <article class="content-box content-box-index">
     <div class="info-box">
       <div class="info-row title-row">
-        <router-link
-          class="title"
-          :to="{name:'article',params:{aid:articleItem.aid}}"
-        >{{articleItem.title}}</router-link>
+        <router-link class="title"
+                     :to="{name:'article',params:{aid:articleItem.aid}}">{{articleItem.title}}</router-link>
       </div>
 
       <div class="info-row meta-row">
         <ul class="meta-list">
           <li class="item username clickable">
-            <router-link
-              :to="{name:'user',params:{uid:articleItem.user.uid}}"
-              class="name"
-            >{{articleItem.user.nickname}}</router-link>
+            <router-link :to="{name:'user',params:{uid:articleItem.user.uid}}"
+                         class="name">{{articleItem.user.nickname}}</router-link>
           </li>
           <li class="item item-icon read-count">
             <i class="el-icon-reading"></i>
@@ -28,42 +24,40 @@
             <i class="el-icon-chat-dot-round"></i>
             <strong v-text="articleItem.comment_count"></strong>
           </li>
-          <li class="item" v-text="articleItem.create_at"></li>
-          <li class="item" v-if="articleItem.article_tag_ids">
-            <router-link
-              v-for="(item_article_tag,key) in article_tag_filter(articleItem.article_tag_ids)"
-              class="tag-class frontend"
-              :key="key"
-              :to="{name:'article_tag',params:{article_tag_en_name:item_article_tag.article_tag_en_name}}"
-            >{{item_article_tag.article_tag_name}}</router-link>
+          <li class="item"
+              v-text="articleItem.create_at"></li>
+          <li class="item"
+              v-if="articleItem.article_tag_ids">
+            <router-link v-for="(item_article_tag,key) in article_tag_filter(articleItem.article_tag_ids)"
+                         class="tag-class frontend"
+                         :key="key"
+                         :to="{name:'article_tag',params:{article_tag_en_name:item_article_tag.article_tag_en_name}}">{{item_article_tag.article_tag_name}}</router-link>
           </li>
-          <li
-            class="item operat-view"
-            v-if="personal_info.islogin&&personal_info.user.uid===user_info.user.uid"
-          >
-            <el-dropdown trigger="click" @command="commandChange">
+          <li class="item operat-view"
+              v-if="personalInfo.islogin&&personalInfo.user.uid===user_info.user.uid">
+            <el-dropdown trigger="click"
+                         @command="commandChange">
               <div class="el-dropdown-link">
                 <i class="el-icon-more"></i>
               </div>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item
-                  icon="el-icon-edit"
-                  :command="{name:'editor',params:{editor_type:articleItem.aid}}"
-                >修改</el-dropdown-item>
-                <el-dropdown-item icon="el-icon-delete" :command="{name:'delete'}">删除</el-dropdown-item>
+                <el-dropdown-item icon="el-icon-edit"
+                                  :command="{name:'editor',params:{editor_type:articleItem.aid}}">修改</el-dropdown-item>
+                <el-dropdown-item icon="el-icon-delete"
+                                  :command="{name:'delete'}">删除</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </li>
-          <li
-            class="item"
-            style="color:#F07178"
-            v-if="~[3,4,5].indexOf(articleItem.status)"
-          >{{status_list[articleItem.status]}}:{{articleItem.rejection_reason}}</li>
+          <li class="item"
+              style="color:#F07178"
+              v-if="~[3,4,5].indexOf(articleItem.status)">{{status_list[articleItem.status]}}:{{articleItem.rejection_reason}}</li>
         </ul>
       </div>
     </div>
-    <div class="lazy thumb thumb loaded" v-if="articleItem.cover_img">
-      <el-image :src="articleItem.cover_img" lazy></el-image>
+    <div class="lazy thumb thumb loaded"
+         v-if="articleItem.cover_img">
+      <el-image :src="articleItem.cover_img"
+                lazy></el-image>
     </div>
   </article>
 </template>
@@ -76,7 +70,7 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
       is_operating: false,
       status_list: [
@@ -90,7 +84,7 @@ export default {
     };
   },
   methods: {
-    delete_article() {
+    delete_article () {
       this.$confirm("此操作将永久删除该文章, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -116,16 +110,16 @@ export default {
           });
         });
     },
-    commandChange(val) {
+    commandChange (val) {
       if (val.name !== "delete") {
         this.$router.push(val);
       } else {
         this.delete_article();
       }
     },
-    article_tag_filter: function(val) {
+    article_tag_filter: function (val) {
       var _arr = [];
-      this.article_tag_all.map(function(item, key) {
+      this.article_tag_all.map(function (item, key) {
         if (val.split(",").indexOf(String(item.article_tag_id)) !== -1) {
           _arr.push(item);
         }
@@ -134,14 +128,14 @@ export default {
     }
   },
   computed: {
-    article_tag_all() {
-      return this.$store.state.article_tag.article_tag_all;
+    article_tag_all () {
+      return this.$store.state.articleTag.article_tag_all;
     },
-    personal_info() {
+    personalInfo () {
       // 登录后的个人信息
-      return this.$store.state.personal_info || {};
+      return this.$store.state.personalInfo || {};
     },
-    user_info() {
+    user_info () {
       // 登录后的个人信息
       return this.$store.state.user.user_info || {};
     }
@@ -311,7 +305,7 @@ export default {
       }
     }
   }
-   @media (max-width: 767px) {
+  @media (max-width: 767px) {
     &.content-box-index {
       .thumb {
         display: none;

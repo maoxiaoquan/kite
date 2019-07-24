@@ -27,7 +27,7 @@
     </ul>
 
     <ul class="list user-dynamic"
-        v-if="personal_info.islogin&&personal_info.user.uid===user_info.user.uid">
+        v-if="personalInfo.islogin&&personalInfo.user.uid===user_info.user.uid">
       <li>
         <router-link :to='{name:"subscribe_tag",params:{type:"my"}}'>
           <span class="collection-name">我关注的文章标签</span>
@@ -64,8 +64,8 @@ export default {
     this.$store.dispatch('user/GET_USER_ROLE_ALL')
   },
   computed: {
-    personal_info () { // 登录后的个人信息
-      return this.$store.state.personal_info || {}
+    personalInfo () { // 登录后的个人信息
+      return this.$store.state.personalInfo || {}
     },
     user_aside () { // user 侧栏信息
       return this.$store.state.user.user_aside || {}

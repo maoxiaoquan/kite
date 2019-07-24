@@ -56,9 +56,9 @@ export default {
   },
   methods: {
     async subscribe_tag () { // 订阅标签
-      await this.$store.dispatch('article_tag/SUBSCRIBE_TAG', { article_tag_id: this.articleTagItem.article_tag_id })
+      await this.$store.dispatch('articleTag/SUBSCRIBE_TAG', { article_tag_id: this.articleTagItem.article_tag_id })
         .then(res => {
-          this.$store.dispatch('article_tag/MY_SUBSCRIBE_TAG_LIST')
+          this.$store.dispatch('articleTag/MY_SUBSCRIBE_TAG_LIST')
           if (res.state === 'success') {
             if (res.data.type === 'attention') {
               this.subscribe_count += 1
@@ -72,10 +72,10 @@ export default {
   },
   computed: {
     user_article_tag () {
-      return this.$store.getters['article_tag/user_article_tag'] || []
+      return this.$store.getters['articleTag/user_article_tag'] || []
     },
     islogin () {
-      return this.$store.state.personal_info.islogin
+      return this.$store.state.personalInfo.islogin
     }
   }
 }

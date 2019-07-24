@@ -1,25 +1,27 @@
 <template>
   <div class="box-comment">
-    <div class="box-comment-part" v-if="website.config.on_comment==='yes'">
+    <div class="box-comment-part"
+         v-if="website.config.on_comment==='yes'">
       <div class="box-comment-part-title">
         <span>发表评论</span>
         <small>
           已发布评论
-          <em>{{article_comment.count}}</em> 条
+          <em>{{articleComment.count}}</em> 条
         </small>
-        <router-link class="comment-rule" :to="{'name':'comment_rule'}">《点我查看评论规范》</router-link>
+        <router-link class="comment-rule"
+                     :to="{'name':'comment_rule'}">《点我查看评论规范》</router-link>
       </div>
-      <CommentForm @commentChange="commentChange" />
-      <div class="comment-list" v-loading="isLoadingComment">
+      <comment-form @commentChange="commentChange" />
+      <div class="comment-list"
+           v-loading="isLoadingComment">
         <div id="commentlist">
-          <comment-list
-            :comment-item="item"
-            v-for="(item,key) in article_comment.comment_list"
-            :key="key"
-          />
+          <comment-item :comment-item="item"
+                        v-for="(item,key) in articleComment.comment_list"
+                        :key="key" />
         </div>
 
-        <Page :count="pagination" @pageChange="pageChange"></Page>
+        <Page :count="pagination"
+              @pageChange="pageChange"></Page>
       </div>
     </div>
     <div v-else>
@@ -29,13 +31,13 @@
 </template>
 
 <script>
-import commentList from "./item";
+import commentItem from "./CommentItem";
 import { Page } from "@components";
-import CommentForm from "./CommentForm";
+import commentForm from "./CommentForm";
 import { mapState } from "vuex";
 export default {
   name: "index",
-  data() {
+  data () {
     return {
       comment_page: 1,
       comment_pageSize: 10,
@@ -46,11 +48,11 @@ export default {
       isLoadingComment: false
     };
   },
-  created() {
+  created () {
     this.get_comment_list(); // 获取用户的评论
   },
   methods: {
-    get_comment_list() {
+    get_comment_list () {
       // 获取评论列表
       this.isLoadingComment = true;
       var that = this;
@@ -67,7 +69,7 @@ export default {
           this.isLoadingComment = false;
         });
     },
-    pageChange(val) {
+    pageChange (val) {
       this.isLoadingComment = true;
       this.$store
         .dispatch("comment/ARTICLE_COMMENT_LIST", {
@@ -82,7 +84,7 @@ export default {
           this.isLoadingComment = false;
         });
     },
-    commentChange(res) {
+    commentChange (res) {
       if (res.state === "success") {
         this.$message.success(res.message);
         this.comment_content = ""; // 评论输入框为空
@@ -95,27 +97,27 @@ export default {
   },
   computed: {
     ...mapState(["website"]),
-    personal_info() {
+    personalInfo () {
       // 登录后的个人信息
-      return this.$store.state.personal_info || {};
+      return this.$store.state.personalInfo || {};
     },
-    article() {
+    article () {
       return this.$store.state.article.article || {};
     },
-    pagination() {
+    pagination () {
       // 分页
       return Math.ceil(
-        this.article_comment.count / this.article_comment.pageSize
+        this.articleComment.count / this.articleComment.pageSize
       );
     },
-    article_comment() {
+    articleComment () {
       // 文章的评论
       return this.$store.state.comment.article_comment || {};
     }
   },
   components: {
-    "comment-list": commentList,
-    CommentForm,
+    "comment-item": commentItem,
+    'comment-form': commentForm,
     Page
   }
 };
@@ -151,7 +153,7 @@ export default {
           font-size: 18px;
         }
       }
-      .comment-rule{
+      .comment-rule {
         font-size: 14px;
         display: inline-block;
         color: red;

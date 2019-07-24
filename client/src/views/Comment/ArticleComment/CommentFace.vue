@@ -2,15 +2,17 @@
   <div class="face">
     <div class="face-switch">
       <span class="face-switch-item"
-            v-for="item in faceSwitchList"
+            v-for="(item,key) in faceSwitchList"
             :class="{'active':item.key===currfaceSwitch}"
+            :key="key"
             @click="currfaceSwitch=item.key">{{item.title}}</span>
     </div>
     <div class="face-view">
       <ul class="face-view-item clearfix">
         <li class="qq-item"
-            v-for="item in faceqq"
-            @click="changeFace(item)">
+            v-for="(item,key) in faceqq"
+            @click="changeFace(item)"
+            :key="key">
           <img :src="item.face_url"
                :alt="item.face_text">
         </li>

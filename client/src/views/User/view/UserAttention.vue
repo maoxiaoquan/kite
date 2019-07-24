@@ -1,49 +1,44 @@
 <template>
   <div class="user-attention">
     <div class="user-article-attention-any">
-      <router-link
-        :to="{name:'userAttention',query:{any:'me'}}"
-        :class="{'active':$route.query.any==='me'||!$route.query.any}"
-      >{{personal_info.user.uid===$route.params.uid?'我':'他'}}关注的</router-link>
-      <router-link
-        :to="{name:'userAttention',query:{any:'other'}}"
-        :class="{'active':$route.query.any==='other'}"
-      >关注{{personal_info.user.uid===$route.params.uid?'我':'他'}}的</router-link>
+      <router-link :to="{name:'userAttention',query:{any:'me'}}"
+                   :class="{'active':$route.query.any==='me'||!$route.query.any}">{{personalInfo.user.uid===$route.params.uid?'我':'他'}}关注的</router-link>
+      <router-link :to="{name:'userAttention',query:{any:'other'}}"
+                   :class="{'active':$route.query.any==='other'}">关注{{personalInfo.user.uid===$route.params.uid?'我':'他'}}的</router-link>
     </div>
 
     <ul class="user-article-attention-view">
-      <li class="item" v-for="item in user_attention.user_list">
+      <li class="item"
+          v-for="(item,key) in user_attention.user_list"
+          :key="key">
         <div class="user">
-          <div
-            class="lazy avatar avatar loaded"
-            title
-            :style="{'background-image':'url('+item.avatar+')'}"
-          ></div>
+          <div class="lazy avatar avatar loaded"
+               title
+               :style="{'background-image':'url('+item.avatar+')'}"></div>
           <div class="info-box">
             <div class="username">
-              <router-link :to="{name:'user',params:{uid:item.uid}}" class="link">{{item.nickname }}</router-link>
+              <router-link :to="{name:'user',params:{uid:item.uid}}"
+                           class="link">{{item.nickname }}</router-link>
             </div>
             <div class="detail">{{item.introduction }}</div>
           </div>
-          <button
-            class="follow-btn active"
-            v-if="$route.query.any==='me'||!$route.query.any"
-            v-show="item.uid!==personal_info.user.uid"
-            @click="post_user_attention(item.uid,~user_attention.other_attention.indexOf(item.uid))"
-          >{{~user_attention.other_attention.indexOf(item.uid)?'互相关注':'关注'}}</button>
+          <button class="follow-btn active"
+                  v-if="$route.query.any==='me'||!$route.query.any"
+                  v-show="item.uid!==personalInfo.user.uid"
+                  @click="post_user_attention(item.uid,~user_attention.other_attention.indexOf(item.uid))">{{~user_attention.other_attention.indexOf(item.uid)?'互相关注':'关注'}}</button>
 
-          <button
-            class="follow-btn active"
-            v-show="item.uid!==personal_info.user.uid"
-            v-else
-            @click="post_user_attention(item.uid,~user_attention.me_attention.indexOf(item.uid))"
-          >{{~user_attention.me_attention.indexOf(item.uid)?'互相关注':'关注'}}</button>
+          <button class="follow-btn active"
+                  v-show="item.uid!==personalInfo.user.uid"
+                  v-else
+                  @click="post_user_attention(item.uid,~user_attention.me_attention.indexOf(item.uid))">{{~user_attention.me_attention.indexOf(item.uid)?'互相关注':'关注'}}</button>
         </div>
       </li>
     </ul>
 
     <div class="pagination">
-      <Page :count="pagination" :page="Number($route.query.page)||1" @pageChange="pageChange"></Page>
+      <Page :count="pagination"
+            :page="Number($route.query.page)||1"
+            @pageChange="pageChange"></Page>
     </div>
   </div>
 </template>
@@ -53,7 +48,7 @@ import { Page } from "@components";
 
 export default {
   name: "UserAttention",
-  metaInfo() {
+  metaInfo () {
     return {
       title: "个人关注",
       htmlAttrs: {
@@ -61,7 +56,7 @@ export default {
       }
     };
   },
-  async asyncData({ store, route }) {
+  async asyncData ({ store, route }) {
     return store.dispatch("user/GET_USER_ATTENTION_LIST", {
       uid: route.params.uid,
       page: route.query.page || 1,
@@ -70,7 +65,7 @@ export default {
     });
   },
   methods: {
-    pageChange(val) {
+    pageChange (val) {
       this.$router.push({
         name: "userAttention",
         query: {
@@ -79,7 +74,7 @@ export default {
         }
       });
     },
-    post_user_attention(attention_uid, type) {
+    post_user_attention (attention_uid, type) {
       this.$store
         .dispatch("user/USER_ATTENTION", {
           attention_uid: attention_uid,
@@ -91,27 +86,27 @@ export default {
           });
           this.$message.warning(result.message);
         })
-        .catch(function(err) {
+        .catch(function (err) {
           this.$message.warning(err);
         });
     }
   },
   computed: {
-    personal_info() {
+    personalInfo () {
       // 登录后的个人信息
-      return this.$store.state.personal_info || {};
+      return this.$store.state.personalInfo || {};
     },
-    user_info() {
+    user_info () {
       // 登录后的个人信息
       return this.$store.state.user.user_info || {};
     },
-    pagination() {
+    pagination () {
       // 分页
       return Math.ceil(
         this.user_attention.count / this.user_attention.pageSize
       );
     },
-    user_attention() {
+    user_attention () {
       // 用户个人的文章
       return this.$store.state.user.user_attention || {};
     }

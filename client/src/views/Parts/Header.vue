@@ -1,39 +1,48 @@
 <template>
-  <div class="main-header" id="main-header">
-    <header class="navbar navbar-visible" id="header-view">
+  <div class="main-header"
+       id="main-header">
+    <header class="navbar navbar-visible"
+            id="header-view">
       <div class="navbar-view-re">
         <div class="container navbar-view">
-          <router-link :to="{name:'home'}" class="navbar-brand logo-img" v-if="website.meta.logo" :style="{'background-image':'url('+website.meta.logo+')'}"></router-link>
-          <router-link :to="{name:'home'}" class="navbar-brand logo-text" v-else>{{website.meta.website_name}}</router-link>
+          <router-link :to="{name:'home'}"
+                       class="navbar-brand logo-img"
+                       v-if="website.meta.logo"
+                       :style="{'background-image':'url('+website.meta.logo+')'}"></router-link>
+          <router-link :to="{name:'home'}"
+                       class="navbar-brand logo-text"
+                       v-else>{{website.meta.website_name}}</router-link>
           <div class="collapse navbar-collapse">
             <ul class="navbar-item-content mr-auto">
               <li class="navbar-menu-content active">
-                <div class="navbar-toggler" @click="is_navbar_menu=!is_navbar_menu">
-                  <el-dropdown trigger="click" @command="commandChange">
+                <div class="navbar-toggler"
+                     @click="is_navbar_menu=!is_navbar_menu">
+                  <el-dropdown trigger="click"
+                               @command="commandChange">
                     <div class="el-dropdown-link">
                       <i class="iconfont icon-viewgallery"></i>
                     </div>
                     <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item icon="el-icon-s-home" :command="{name:'home'}">主页</el-dropdown-item>
-                      <el-dropdown-item
-                        icon="el-icon-chat-line-square"
-                        v-if="personal_info.islogin"
-                        :command="{name:'userMessage',params:{uid:personal_info.user.uid}}"
-                      >消息</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-s-home"
+                                        :command="{name:'home'}">主页</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-chat-line-square"
+                                        v-if="personalInfo.islogin"
+                                        :command="{name:'userMessage',params:{uid:personalInfo.user.uid}}">消息</el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
                 </div>
-                <ul class="navbar-menu" :class="{show:is_navbar_menu}">
+                <ul class="navbar-menu"
+                    :class="{show:is_navbar_menu}">
                   <li class="nav-item">
-                    <router-link :to="{name:'home'}" class="nav-link">主页</router-link>
+                    <router-link :to="{name:'home'}"
+                                 class="nav-link">主页</router-link>
                   </li>
-                  <li class="nav-item" v-if="personal_info.islogin">
-                    <router-link :to="{name:'userMessage',params:{uid:personal_info.user.uid}}">
+                  <li class="nav-item"
+                      v-if="personalInfo.islogin">
+                    <router-link :to="{name:'userMessage',params:{uid:personalInfo.user.uid}}">
                       消息
-                      <span
-                        v-if="unread_message_count.count>0"
-                        class="unread-message-count"
-                      >{{unread_message_count.count}}</span>
+                      <span v-if="unread_message_count.count>0"
+                            class="unread-message-count">{{unread_message_count.count}}</span>
                     </router-link>
                   </li>
                 </ul>
@@ -41,60 +50,58 @@
               <!--  <li class="nav-item"><a class="nav-link" href="/">说说</a></li>-->
               <li class="nav-item search">
                 <div class="form-search form-inline mr-lg-5">
-                  <input
-                    class="form-control form-search-view"
-                    type="text"
-                    required="true"
-                    v-model="search_val"
-                    name="search"
-                    placeholder="搜索文章"
-                    aria-label="Search"
-                  />
-                  <button class="search-btn" @click="search">
+                  <input class="form-control form-search-view"
+                         type="text"
+                         required="true"
+                         v-model="search_val"
+                         name="search"
+                         placeholder="搜索文章"
+                         aria-label="Search" />
+                  <button class="search-btn"
+                          @click="search">
                     <i class="iconfont icon-search"></i>
                   </button>
                 </div>
               </li>
-              <template v-if="personal_info.islogin">
+              <template v-if="personalInfo.islogin">
                 <li class="nav-item">
-                  <router-link
-                    :to="{name:'editor',params:{editor_type:'create'}}"
-                    class="btn btn-sm btn-outline-warning xiezuo"
-                  >
+                  <router-link :to="{name:'editor',params:{editor_type:'create'}}"
+                               class="btn btn-sm btn-outline-warning xiezuo">
                     <i class="iconfont icon-xiezuo"></i>
                   </router-link>
                 </li>
                 <li class="nav-item dropdown">
-                  <el-dropdown trigger="click" @command="commandChange">
+                  <el-dropdown trigger="click"
+                               @command="commandChange">
                     <div class="el-dropdown-link">
                       <div class="avatar-img">
-                        <el-image :src="personal_info.user.avatar" lazy></el-image>
+                        <el-image :src="personalInfo.user.avatar"
+                                  lazy></el-image>
                       </div>
                     </div>
                     <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item
-                        icon="el-icon-user"
-                        :command="{name:'user',params:{uid:personal_info.user.uid}}"
-                      >我的主页</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-setting" :command="{name:'setting'}">设置</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-right" :command="{name:'esc'}">退出</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-user"
+                                        :command="{name:'user',params:{uid:personalInfo.user.uid}}">我的主页</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-setting"
+                                        :command="{name:'setting'}">设置</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-right"
+                                        :command="{name:'esc'}">退出</el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
                 </li>
               </template>
               <template v-else>
-                <li class="nav-item" @click="show_login" v-if="website.config.on_login==='yes'">
-                  <a class="btn btn-sm sign-btn btn-block" href="javascript:;">登录</a>
+                <li class="nav-item"
+                    @click="show_login"
+                    v-if="website.config.on_login==='yes'">
+                  <a class="btn btn-sm sign-btn btn-block"
+                     href="javascript:;">登录</a>
                 </li>
-                <li
-                  class="nav-item"
-                  @click="show_register"
-                  v-if="website.config.on_register==='yes'"
-                >
-                  <a
-                    class="btn btn-danger btn-sm sign-btn btn-outline-warning"
-                    href="javascript:;"
-                  >注册</a>
+                <li class="nav-item"
+                    @click="show_register"
+                    v-if="website.config.on_register==='yes'">
+                  <a class="btn btn-danger btn-sm sign-btn btn-outline-warning"
+                     href="javascript:;">注册</a>
                 </li>
               </template>
             </ul>
@@ -111,7 +118,7 @@ import { cookie } from "../../../../server/utils/cookie";
 import { mapState } from "vuex";
 export default {
   name: "Header",
-  data() {
+  data () {
     return {
       is_navbar_menu: false, // 主菜单栏是否显示
       is_dropdown_menu: false, // 个人下拉菜单栏是否显示
@@ -119,7 +126,7 @@ export default {
     };
   },
   methods: {
-    search() {
+    search () {
       if (!this.search_val) {
         this.$message.warning("请输入搜索内容");
         return false;
@@ -129,27 +136,27 @@ export default {
         query: { query: this.search_val }
       });
     },
-    show_login() {
+    show_login () {
       // 显示登录
       this.$store.commit("SET_IS_LOGIN", true);
     },
-    commandChange(val) {
+    commandChange (val) {
       if (val.name !== "esc") {
         this.$router.push(val);
       } else {
         this.escLogin();
       }
     },
-    dropdown_menu_route(val, type) {
+    dropdown_menu_route (val, type) {
       // dropdown_menu 导航事件
       this[type] = false;
       this.$router.push(val);
     },
-    show_register() {
+    show_register () {
       // 显示注册
       this.$store.commit("SET_IS_REGISTER", true);
     },
-    escLogin() {
+    escLogin () {
       this.$message.warning("已退出当前账户，请重新登录");
       cookie.delete("accessToken");
       window.location.reload();
@@ -157,11 +164,11 @@ export default {
   },
   computed: {
     ...mapState(["website"]), // home:主页  article_column:文章的专栏
-    personal_info() {
+    personalInfo () {
       // 登录后的个人信息
-      return this.$store.state.personal_info;
+      return this.$store.state.personalInfo;
     },
-    unread_message_count() {
+    unread_message_count () {
       // 登录后的个人信息
       return this.$store.state.user.unread_message_count;
     }
@@ -224,7 +231,7 @@ export default {
         margin-right: 30px;
         &.logo-text {
           font-size: 25px;
-          color: #E67E7E;
+          color: #e67e7e;
         }
         &.logo-img {
           background-size: 100% 100%;

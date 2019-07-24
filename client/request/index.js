@@ -1,6 +1,6 @@
 // 通过webpack 打包时判断客户端请求和服务端请求的不同
-// request_client 客户端会打包这个 中url为空所以不会添加url前缀
-// request_server 服务端会打包这个 中url --
+// requestClient 客户端会打包这个 中url为空所以不会添加url前缀
+// requestServer 服务端会打包这个 中url --
 // process.env.NODE_ENV === 'production' 添加开发时的url client_dev 端口前缀
 // 或者 生产环境的 product 端口前缀
 
@@ -11,7 +11,8 @@ import axios from 'axios'
 
 const api = requestConfig()
 
-const logRequests = process.env.NODE_ENV === 'development' || !!process.env.DEBUG_API
+const logRequests =
+  process.env.NODE_ENV === 'development' || !!process.env.DEBUG_API
 
 const service = axios.create({
   baseURL: api.url,
@@ -26,13 +27,13 @@ if (api.onServer) {
   warmCache()
 }
 
-function warmCache() {
+function warmCache () {
   // fetchItems((api.cachedIds.top || []).slice(0, 30))
   setTimeout(warmCache, 1000 * 60 * 15)
 }
 
 // 可缓存请求
-export function Cachefetch({ url, method, parameter, moreConfig = {} }) {
+export function Cachefetch ({ url, method, parameter, moreConfig = {} }) {
   logRequests && console.log(`fetching ${url}...`)
   const cache = api.cachedItems
   if (cache && cache.has(url)) {
@@ -54,7 +55,7 @@ export function Cachefetch({ url, method, parameter, moreConfig = {} }) {
 }
 
 // 不缓存请求
-export function fetch({ url, method, parameter, moreConfig = {} }) {
+export function fetch ({ url, method, parameter, moreConfig = {} }) {
   logRequests && console.log(`fetching ${url}...`)
   return new Promise((resolve, reject) => {
     service[method](url, parameter, moreConfig)

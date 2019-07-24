@@ -1,79 +1,86 @@
 <template>
-  <div class="comment-item" :id="'comment'+childCommentItem.id">
+  <div class="comment-item"
+       :id="'comment'+commentItem.id"
+       ref="comment_list">
     <div class="avatar">
-      <el-image :src="childCommentItem.user.avatar" lazy></el-image>
+      <el-image :src="commentItem.user.avatar"
+                lazy></el-image>
     </div>
     <div class="comment-body">
       <div class="comment-main">
         <h4>
-          <router-link
-            class="user-info"
-            :to="{name:'user',params:{uid:childCommentItem.user.uid}}"
-          >{{childCommentItem.user.nickname}}</router-link>
-          <template v-if="childCommentItem.reply_user">
-            <i class="middle-text">回复</i>
-            <router-link
-              class="user-info"
-              :to="{name:'user',params:{uid:childCommentItem.reply_user.uid}}"
-            >{{childCommentItem.reply_user.nickname}}</router-link>
-          </template>
+          <router-link class="user-info"
+                       :to="{name:'user',params:{uid:commentItem.user.uid}}">{{commentItem.user.nickname}}</router-link>
         </h4>
-        <div
-          class="comment-text"
-          v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===5"
-          v-html="commentRender(childCommentItem.content)"
-        ></div>
-        <div
-          class="comment-text"
-          v-else-if="Number(childCommentItem.status)===1"
-          style="color:#f96b84;"
-        >当前用户评论需要管理员审核才能可见</div>
-        <div
-          class="comment-text"
-          v-else-if="Number(childCommentItem.status)===3"
-          style="color:#f96b84;"
-        >当前用户评论违规</div>
+        <div class="comment-text"
+             v-if="Number(commentItem.status)===2||Number(commentItem.status)===5"
+             v-html="commentRender(commentItem.content)"></div>
+        <div class="comment-text"
+             v-else-if="Number(commentItem.status)===1"
+             style="color:#f96b84;">当前用户评论需要管理员审核才能可见</div>
+        <div class="comment-text"
+             v-else-if="Number(commentItem.status)===3"
+             style="color:#f96b84;">当前用户评论违规</div>
       </div>
       <div class="comment-foot clearfix">
-        <span>{{childCommentItem.create_at}}</span>
-        <span
-          class="comment-reply"
-          v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===5"
-          @click="isComment=!isComment;reply_uid=childCommentItem.uid"
-        >{{isComment?'取消回复':'回复'}}</span>
-        <span
-          class="comment-delete"
-          v-if="personal_info.user.uid===childCommentItem.uid"
-          @click="delete_comment(childCommentItem.id)"
-        >删除</span>
+        <span>{{commentItem.create_at}}</span>
+        <span class="comment-reply"
+              v-if="Number(commentItem.status)===2||Number(commentItem.status)===5"
+              @click="isComment=!isComment">{{isComment?'取消回复':'回复'}}</span>
+        <span class="comment-delete"
+              v-if="personalInfo.user.uid===commentItem.uid"
+              @click="deleteComment(commentItem.id)">删除</span>
+      </div>
+
+      <div class="comment-form-view"
+           v-if="isComment"
+           :id="'comment-reply'+commentItem.id">
+        <comment-form reply_uid=""
+                      :child_comment_id="commentItem.id"
+                      @commentChange="commentChange" />
       </div>
     </div>
-
-    <div class="comment-form-view" v-if="isComment" :id="'comment-reply'+childCommentItem.id">
-      <CommentForm :reply_uid="reply_uid" :child_comment_id="p_id" @commentChange="commentChange" />
+    <div class="comment-item-children"
+         v-if="commentItem.children.length>0||isComment">
+      <div class="comment-item-children-view"
+           v-if="commentItem.children.length>0">
+        <comment-child-item v-for="(childCommentItem,key) in commentItem.children"
+                            :key="key"
+                            :p_id="commentItem.id"
+                            :childCommentItem="childCommentItem"
+                            @ChildCommentChange="commentChange" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import CommentForm from "./CommentForm";
+
+import commentForm from "./CommentForm";
 import faceqq from "./face/qq";
+import commentChildItem from "./CommentChildItem";
 
 export default {
-  name: "childrenItem",
-  props: ["childCommentItem", "p_id"],
-  data: function() {
+  name: "index",
+  props: ["commentItem"],
+  data: function () {
     return {
-      isComment: false,
-      reply_uid: ""
+      isComment: false
     };
   },
   methods: {
-    commentChange(res) {
+    commentChange (res) {
+      if (res.state === "success") {
+        this.$message.success(res.message);
+        this.$nextTick(function () {
+          this.commentItem.children.push(res.data);
+        });
+      } else {
+        this.$message.warning(res.message);
+      }
       this.isComment = false;
-      this.$emit("ChildCommentChange", res);
     },
-    delete_comment(id) {
+    deleteComment (id) {
       this.$store
         .dispatch("comment/ARTICLE_COMMENT_DELETE", {
           aid: this.article.aid,
@@ -87,11 +94,11 @@ export default {
             this.$message.warning(res.message);
           }
         })
-        .catch(function(err) {
+        .catch(function (err) {
           console.log(err);
         });
     },
-    commentRender(val) {
+    commentRender (val) {
       let newComment = val;
       faceqq.map(faceItem => {
         newComment = newComment.replace(
@@ -103,16 +110,17 @@ export default {
     }
   },
   computed: {
-    article() {
+    article () {
       return this.$store.state.article.article || {};
     },
-    personal_info() {
+    personalInfo () {
       // 登录后的个人信息
-      return this.$store.state.personal_info || {};
+      return this.$store.state.personalInfo || {};
     }
   },
   components: {
-    CommentForm
+    'comment-form': commentForm,
+    'comment-child-item': commentChildItem
   }
 };
 </script>

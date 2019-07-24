@@ -24,7 +24,7 @@ const createLintingRule = () => ({
 }) */
 
 module.exports = {
-  entry: resolve('src/entry-client.js'),
+  entry: resolve('src/entryClient.js'),
   output: {
     path: config.client.assetsRoot,
     filename: '[name].js',
@@ -35,7 +35,7 @@ module.exports = {
     alias: {
       '@components': resolve('src/components'),
       '@views': resolve('src/views'),
-      'assets': resolve('src/assets'),
+      assets: resolve('src/assets'),
       '@request': resolve('request')
     }
   },
@@ -60,19 +60,16 @@ module.exports = {
       {
         test: /\.js$/, // 利用babel-loader编译js，使用更高的特性，排除npm下载的.vue组件
         loader: 'babel-loader',
-        exclude: file => (
-          /node_modules/.test(file) &&
-          !/\.vue\.js/.test(file)
-        ),
+        exclude: file => /node_modules/.test(file) && !/\.vue\.js/.test(file),
         options: {
-          'plugins': [
+          plugins: [
             '@babel/plugin-syntax-dynamic-import',
             'transform-vue-jsx',
             [
               'component',
               {
-                'libraryName': 'element-ui',
-                'styleLibraryName': 'theme-chalk'
+                libraryName: 'element-ui',
+                styleLibraryName: 'theme-chalk'
               }
             ]
           ]
@@ -100,8 +97,5 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new VueLoaderPlugin(),
-    new VueSSRClientPlugin()
-  ]
+  plugins: [new VueLoaderPlugin(), new VueSSRClientPlugin()]
 }

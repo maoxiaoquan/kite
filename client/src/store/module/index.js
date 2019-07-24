@@ -3,8 +3,8 @@ import user from './user'
 import home from './home'
 import editor from './editor'
 import article from './article'
-import article_tag from './article_tag'
-import article_column from './article_column'
+import articleTag from './articleTag'
+import articleColumn from './articleColumn'
 import comment from './comment'
 import setting from './setting'
 import search from './search'
@@ -15,8 +15,8 @@ export default {
   user,
   editor,
   article,
-  article_tag,
-  article_column,
+  articleTag,
+  articleColumn,
   comment,
   setting,
   search,

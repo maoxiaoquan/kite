@@ -11,7 +11,7 @@ module.exports = merge(baseWebpackConfig, {
   mode: 'production',
   target: 'node',
   devtool: 'source-map',
-  entry: path.join(__dirname, '../src/entry-server.js'),
+  entry: path.join(__dirname, '../src/entryServer.js'),
   output: {
     path: config.client.assetsRoot,
     filename: 'server-bundle.js',
@@ -27,7 +27,7 @@ module.exports = merge(baseWebpackConfig, {
   },
   resolve: {
     alias: {
-      'request-config': '../request/request_server.js'
+      'request-config': '../request/requestServer.js'
     }
   },
   externals: nodeExternals({

@@ -46,13 +46,13 @@ export default {
     }
   },
   created () {
-    if (!this.personal_info.islogin) {
+    if (!this.personalInfo.islogin) {
       this.$router.push({ name: 'home' })
     }
   },
   computed: {
-    personal_info () { // 登录后的个人信息
-      return this.$store.state.personal_info || {}
+    personalInfo () { // 登录后的个人信息
+      return this.$store.state.personalInfo || {}
     }
   }
 }

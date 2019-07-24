@@ -1,25 +1,24 @@
 <template>
-  <div class="home-lay index-box-container" id="index">
+  <div class="home-lay index-box-container"
+       id="index">
     <div class="index-container">
       <div class="row">
         <div class="home-col-left col-xs-12 col-sm-8 col-md-8">
           <!--home-lay layout-content start-->
           <section class="layout-content">
-            <NavHeader :navItem="article_column.home_column" />
+            <NavHeader :navItem="articleColumn.home_column" />
 
-            <NavSort @navTap="navTap" ref="navSort"></NavSort>
+            <NavSort @navTap="navTap"
+                     ref="navSort"></NavSort>
 
-            <div class="article-view" id="article-view">
-              <scroll-loading
-                @scroll-loading="infiniteHandler"
-                :isLoading="isLoading"
-                :isMore="isMore"
-              >
-                <div
-                  class="article-item"
-                  v-for="(item,key) in home.article.article_list"
-                  :key="key"
-                >
+            <div class="article-view"
+                 id="article-view">
+              <scroll-loading @scroll-loading="infiniteHandler"
+                              :isLoading="isLoading"
+                              :isMore="isMore">
+                <div class="article-item"
+                     v-for="(item,key) in home.article.article_list"
+                     :key="key">
                   <ArticleItem :articleItem="item" />
                 </div>
               </scroll-loading>
@@ -47,7 +46,7 @@ import { ScrollLoading } from "@components";
 
 export default {
   name: "column",
-  metaInfo() {
+  metaInfo () {
     return {
       title: this.website.meta.website_name,
       titleTemplate: `%s - ${this.website.meta.introduction}`,
@@ -63,21 +62,21 @@ export default {
       }
     };
   },
-  async asyncData({ store, route, accessToken = "" }) {
+  async asyncData ({ store, route, accessToken = "" }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
       store.commit(
-        "article_column/SET_CURRENT_ARTICLE_COLUMN",
+        "articleColumn/SET_CURRENT_ARTICLE_COLUMN",
         route.params.article_column_en_name || ""
       ),
       store.commit("home/SET_INIT_INDEX_ARTICLE_LIST"), // 重置文章列表数据
-      store.dispatch("article_column/GET_ARTICLE_COLUMN"),
+      store.dispatch("articleColumn/GET_ARTICLE_COLUMN"),
       store.dispatch("home/GET_INDEX_ARTICLE_LIST", {
         column_en_name: route.params.article_column_en_name || ""
       })
     ]);
   },
-  data() {
+  data () {
     return {
       page: 2,
       sort: "",
@@ -85,28 +84,28 @@ export default {
       isMore: true
     };
   },
-  beforeRouteUpdate(to, from, next) {
+  beforeRouteUpdate (to, from, next) {
     // 在当前路由改变，但是该组件被复用时调用
     // this.initHomeDate()
     this.$refs.navSort.dafauleNav();
     this.isMore = true;
     next();
   },
-  created() {
+  created () {
     this.$store.dispatch("home/GET_POPULAR_ARTICLE_TAG"); // 获取热门文章标签
   },
   methods: {
-    navTap(val) {
+    navTap (val) {
       this.sort = val;
       this.initHomeDate();
     },
-    initHomeDate() {
+    initHomeDate () {
       this.$store.commit("home/SET_INIT_INDEX_ARTICLE_LIST"); // 重置文章列表数据
       this.isMore = true;
       this.page = 1;
       this.infiniteHandler();
     },
-    infiniteHandler() {
+    infiniteHandler () {
       this.isLoading = true;
       this.$store
         .dispatch("home/GET_INDEX_ARTICLE_LIST", {
@@ -116,7 +115,7 @@ export default {
         })
         .then(result => {
           this.isLoading = false;
-          console.log('result.data.article_list.length',result.data.article_list.length)
+          console.log('result.data.article_list.length', result.data.article_list.length)
           if (result.data.article_list.length === 10) {
             this.page += 1;
           } else {
@@ -129,7 +128,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["home", "article_column", "website"]) // home:主页  article_column:文章的专栏
+    ...mapState(["home", "articleColumn", "website"]) // home:主页  articleColumn:文章的专栏
   },
   components: {
     HomeAside,

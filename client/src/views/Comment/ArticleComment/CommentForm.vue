@@ -2,8 +2,8 @@
   <div class="comment-form"
        id="comment_form">
     <div class="comment-avatar">
-      <el-image v-if="personal_info.islogin"
-                :src="personal_info.user.avatar"
+      <el-image v-if="personalInfo.islogin"
+                :src="personalInfo.user.avatar"
                 lazy></el-image>
       <el-image v-else
                 src="/default/img/avatar.jpeg"
@@ -15,7 +15,7 @@
          v-loading="isCommentSubmit">
       <div class="input-view">
         <textarea name="comment"
-                  v-model="comment_content"
+                  v-model="commentContent"
                   class="txt long-txt textarea "></textarea>
       </div>
 
@@ -24,8 +24,8 @@
           <el-popover placement="top-start"
                       width="500"
                       v-model="faceVisible">
-            <Face @changeFace="changeFace"
-                  v-if="faceVisible" />
+            <comment-face @changeFace="changeFace"
+                          v-if="faceVisible" />
             <i slot="reference"
                class="iconfont icon-biaoqing"></i>
           </el-popover>
@@ -33,7 +33,7 @@
         <div class="right-view">
           <button type="submit"
                   class="form-btn"
-                  @click="submit_comment">提交评论</button>
+                  @click="submitComment">提交评论</button>
         </div>
       </div>
     </div>
@@ -41,13 +41,13 @@
 </template>
 
 <script>
-import Face from './Face'
+import commentFace from './CommentFace'
 
 export default {
   name: 'CommentForm',
   data () {
     return {
-      comment_content: '', // 顶级输入框
+      commentContent: '', // 顶级输入框
       faceVisible: false,
       isCommentSubmit: false
     }
@@ -68,26 +68,26 @@ export default {
     getParams () {
       return {
         aid: this.article.aid,
-        content: this.comment_content,
+        content: this.commentContent,
         reply_uid: this.reply_uid,
         parent_id: this.child_comment_id,
       }
     },
     changeFace (val) {
       this.faceVisible = false
-      this.comment_content = this.comment_content + val.face_text
+      this.commentContent = this.commentContent + val.face_text
     },
-    submit_comment () { // 提交评论
+    submitComment () { // 提交评论
       var params = this.getParams()
       this.isCommentSubmit = true
       this.$store.dispatch('comment/ARTICLE_COMMENT_CREATE', params)
         .then(result => {
-          this.comment_content = ''
+          this.commentContent = ''
           this.isCommentSubmit = false
           this.$emit('commentChange', result)
         })
         .catch(err => {
-          this.comment_content = ''
+          this.commentContent = ''
           this.isCommentSubmit = false
         })
     }
@@ -96,12 +96,12 @@ export default {
     article () {
       return this.$store.state.article.article || {}
     },
-    personal_info () { // 登录后的个人信息
-      return this.$store.state.personal_info || {}
+    personalInfo () { // 登录后的个人信息
+      return this.$store.state.personalInfo || {}
     }
   },
   components: {
-    Face
+    'comment-face': commentFace
   }
 }
 </script>

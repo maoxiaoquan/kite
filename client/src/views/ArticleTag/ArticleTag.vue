@@ -6,22 +6,22 @@
 
         <div class="col-xs-12 col-sm-12 col-md-12">
           <div class="article-list"
-               v-if="article_tag">
+               v-if="articleTag">
             <div class="main-top">
               <div class="thumb">
-                <el-image :src="article_tag.article_tag_icon"
+                <el-image :src="articleTag.article_tag_icon"
                           lazy></el-image>
               </div>
 
               <div class="title">
                 <a class="name"
                    href="javascript:;">
-                  {{article_tag.article_tag_name}}</a>
+                  {{articleTag.article_tag_name}}</a>
               </div>
               <div class="info">
                 收录了
                 {{count}} 篇文章 ·
-                {{subscribe_count}} 人关注
+                {{subscribeCount}} 人关注
               </div>
             </div>
             <ul class="trigger-menu">
@@ -32,7 +32,8 @@
             <div class="list-container">
               <div class="article-view">
                 <div class="article-item"
-                     v-for="(item,key) in article_list">
+                     v-for="(item,key) in articleList"
+                     :key="key">
                   <ArticleItem :articleItem="item"
                                :key="key" />
                 </div>
@@ -74,7 +75,7 @@ export default {
     }
   },
   async asyncData ({ store, route }) {
-    return store.dispatch('article_tag/GET_ARTICLE_TAG',
+    return store.dispatch('articleTag/GET_ARTICLE_TAG',
       {
         article_tag_en_name: route.params.article_tag_en_name,
         page: route.query.page || 1,
@@ -97,22 +98,22 @@ export default {
   computed: {
     ...mapState(['website']),
     count () {
-      return this.$store.state.article_tag.tag.count
+      return this.$store.state.articleTag.tag.count
     },
-    subscribe_count () {
-      return this.$store.state.article_tag.tag.subscribe_count
+    subscribeCount () {
+      return this.$store.state.articleTag.tag.subscribe_count
     },
     pagination () { // 分页
       return Math.ceil(this.tag.count / this.tag.pageSize)
     },
     tag () {
-      return this.$store.state.article_tag.tag
+      return this.$store.state.articleTag.tag
     },
-    article_tag () {
-      return this.$store.state.article_tag.tag.article_tag
+    articleTag () {
+      return this.$store.state.articleTag.tag.article_tag
     },
-    article_list () {
-      return this.$store.state.article_tag.tag.article_list
+    articleList () {
+      return this.$store.state.articleTag.tag.article_list
     },
   },
   components: {

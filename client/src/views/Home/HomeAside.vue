@@ -97,7 +97,7 @@ export default {
   name: 'HomeAside',
   methods: {
     switch_router () {
-      if (!this.$store.state.personal_info.islogin) {
+      if (!this.$store.state.personalInfo.islogin) {
         this.$store.commit('SET_IS_LOGIN', true)
       } else {
         this.$router.push({

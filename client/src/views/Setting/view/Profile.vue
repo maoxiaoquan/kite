@@ -135,7 +135,7 @@ export default {
   },
   methods: {
     get_curr_user_info () {// 获取当前登录用户信息
-      this.$store.dispatch('setting/GET_USER_INFO_ALL', { uid: this.personal_info.user.uid })
+      this.$store.dispatch('setting/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
         .then(result => {
           this.$nextTick(() => {
             if (result.state === 'success') {
@@ -176,8 +176,8 @@ export default {
     },
   },
   computed: {
-    personal_info () { // 登录后的个人信息
-      return this.$store.state.personal_info || {}
+    personalInfo () { // 登录后的个人信息
+      return this.$store.state.personalInfo || {}
     }
   },
   components: {

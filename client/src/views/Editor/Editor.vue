@@ -1,20 +1,22 @@
 <template>
-  <section class="writer-lay layout-content" :class="{'full-screen':!edit_full_screen}" id="writer">
+  <section class="writer-lay layout-content"
+           :class="{'full-screen':!edit_full_screen}"
+           id="writer">
     <!--writer-header start-->
-    <div class="writer-header" id="writer-header">
+    <div class="writer-header"
+         id="writer-header">
       <div class="writer-header-view clearfix">
         <ul class="writer-right">
           <!--   <li><a class="btn btn-primary" href="javascript:;" id="save-article-draft">保存为草稿</a></li>-->
           <li>
-            <a
-              class="btn btn-primary"
-              href="javascript:;"
-              id="issue-article-model"
-              @click="send_article"
-            >发布文章</a>
+            <a class="btn btn-primary"
+               href="javascript:;"
+               id="issue-article-model"
+               @click="send_article">发布文章</a>
           </li>
           <li>
-            <router-link class="btn btn-primary" :to="{name:'home'}">
+            <router-link class="btn btn-primary"
+                         :to="{name:'home'}">
               <i class="iconfont icon-zhuye"></i>
             </router-link>
           </li>
@@ -26,62 +28,59 @@
     <!--writer-content start-->
     <div class="writer-content">
       <div class="writer-box">
-        <input
-          class="writer-input"
-          style="display: block"
-          v-model="article_title"
-          type="text"
-          id="article-title"
-          placeholder="请输入文章标题"
-        />
+        <input class="writer-input"
+               style="display: block"
+               v-model="article_title"
+               type="text"
+               id="article-title"
+               placeholder="请输入文章标题" />
         <ul class="writer-nav">
           <li @click="upload_article_modal_show=true;upload_img_url = '';">
             <i class="iconfont icon-tupian"></i>
           </li>
           <li>
-            <a href="http://www.markdown.cn" target="_blank">
+            <a href="http://www.markdown.cn"
+               target="_blank">
               <i class="iconfont icon-md"></i>
             </a>
           </li>
           <li @click="edit_full_screen=!edit_full_screen">
-            <i
-              class="iconfont"
-              :class="{'icon-quanping':!edit_full_screen,'icon-suoping':edit_full_screen}"
-            ></i>
+            <i class="iconfont"
+               :class="{'icon-quanping':!edit_full_screen,'icon-suoping':edit_full_screen}"></i>
           </li>
           <li>
-            <router-link class="article-rule" :to="{'name':'article_rule'}">《点我查看文章编写规范》</router-link>
+            <router-link class="article-rule"
+                         :to="{'name':'article_rule'}">《点我查看文章编写规范》</router-link>
           </li>
         </ul>
-        <textarea
-          class="write-textarea"
-          name
-          id="write-textarea"
-          v-model="article_content"
-          cols="30"
-          rows="10"
-          wrap="hard"
-        ></textarea>
+        <textarea class="write-textarea"
+                  name
+                  id="write-textarea"
+                  v-model="article_content"
+                  cols="30"
+                  rows="10"
+                  wrap="hard"></textarea>
       </div>
-      <div class="content-preview" v-show="edit_full_screen">
+      <div class="content-preview"
+           v-show="edit_full_screen">
         <h2 class="title">{{article_title}}</h2>
-        <div id="mark-text" class="box-article-view"></div>
+        <div id="mark-text"
+             class="box-article-view"></div>
       </div>
     </div>
     <!--writer-content end-->
 
     <!-- use the modal component, pass in the prop -->
-    <el-dialog :visible.sync="upload_article_modal_show" width="500px">
+    <el-dialog :visible.sync="upload_article_modal_show"
+               width="500px">
       <h3 slot="header">插入图片</h3>
       <div class="upload-pic-view">
         <p class="info">请直接填写图片URL：</p>
         <div class="input-view">
-          <input
-            v-model="upload_img_url"
-            type="text"
-            class="form-control"
-            placeholder="http://example.com/image.jpg"
-          />
+          <input v-model="upload_img_url"
+                 type="text"
+                 class="form-control"
+                 placeholder="http://example.com/image.jpg" />
         </div>
         <p class="info">或者：</p>
         <div class="upload-local">
@@ -90,69 +89,68 @@
       </div>
       <div slot="footer">
         <div class="writer-submit-view-footer">
-          <button type="button" class="btn btn-primary writer-modal-create" @click="save_upload">确定</button>
-          <button
-            type="button"
-            class="btn btn-secondary writer-modal-cancel"
-            @click="upload_article_modal_show = false"
-          >取消</button>
+          <button type="button"
+                  class="btn btn-primary writer-modal-create"
+                  @click="save_upload">确定</button>
+          <button type="button"
+                  class="btn btn-secondary writer-modal-cancel"
+                  @click="upload_article_modal_show = false">取消</button>
         </div>
       </div>
     </el-dialog>
 
     <!-- use the modal component, pass in the prop -->
-    <el-dialog :visible.sync="create_show_modal" width="550px">
+    <el-dialog :visible.sync="create_show_modal"
+               width="550px">
       <h3 slot="header">发布文章</h3>
       <div class="writer-submit-view">
         <div class="clearfix">
           <div class="topic-warp topic-warp-topic">
             <p class="common-title">个人专题</p>
             <div class="common-select-box topic-box js-topic-box">
-              <span
-                class="common-select-name"
-                @click="topic_ul_list_show=!topic_ul_list_show"
-              >{{current_topic.topic_name?current_topic.topic_name:'请选择需要投递的栏目'}}</span>
-              <i class="iconfont icon-moreunfold" @click="topic_ul_list_show=!topic_ul_list_show"></i>
-              <ul class="common-select-ul" v-show="topic_ul_list_show">
-                <li class="active" @click="current_topic={};topic_ul_list_show=false">请选择需要投递的栏目</li>
-                <li
-                  v-for="item in user_article_topic_all"
-                  @click="current_topic=item;topic_ul_list_show=false"
-                >{{item.topic_name}}</li>
+              <span class="common-select-name"
+                    @click="topic_ul_list_show=!topic_ul_list_show">{{current_topic.topic_name?current_topic.topic_name:'请选择需要投递的栏目'}}</span>
+              <i class="iconfont icon-moreunfold"
+                 @click="topic_ul_list_show=!topic_ul_list_show"></i>
+              <ul class="common-select-ul"
+                  v-show="topic_ul_list_show">
+                <li class="active"
+                    @click="current_topic={};topic_ul_list_show=false">请选择需要投递的栏目</li>
+                <li v-for="item in user_article_topic_all"
+                    @click="current_topic=item;topic_ul_list_show=false">{{item.topic_name}}</li>
               </ul>
             </div>
           </div>
           <div class="create-topic">
-            <div class="create-topic-view" v-show="create_topic_show">
-              <input class="create-topic-input" v-model="topic_name" type="text" />
-              <button class="btn btn-primary btn-sm" @click="save_create_topic">保存</button>
-              <button class="btn btn-primary btn-sm" @click="create_topic_show=false">取消</button>
+            <div class="create-topic-view"
+                 v-show="create_topic_show">
+              <input class="create-topic-input"
+                     v-model="topic_name"
+                     type="text" />
+              <button class="btn btn-primary btn-sm"
+                      @click="save_create_topic">保存</button>
+              <button class="btn btn-primary btn-sm"
+                      @click="create_topic_show=false">取消</button>
             </div>
-            <button
-              class="btn btn-primary btn-sm"
-              v-show="!create_topic_show"
-              @click="create_topic_show=true"
-            >创建新专题</button>
+            <button class="btn btn-primary btn-sm"
+                    v-show="!create_topic_show"
+                    @click="create_topic_show=true">创建新专题</button>
           </div>
         </div>
 
         <div class="clearfix">
           <div class="topic-warp topic-warp-topic">
             <p class="common-title">文章形式</p>
-            <div class="common-select-box topic-box js-topic-box" style="width: 130px">
-              <span
-                class="common-select-name"
-                @click="article_type_list_show=!article_type_list_show"
-              >{{current_article_type.text}}</span>
-              <i
-                class="iconfont icon-moreunfold"
-                @click="article_type_list_show=!article_type_list_show"
-              ></i>
-              <ul class="common-select-ul" v-show="article_type_list_show">
-                <li
-                  v-for="item in article_type_list"
-                  @click="current_article_type=item;article_type_list_show=false"
-                >{{item.text}}</li>
+            <div class="common-select-box topic-box js-topic-box"
+                 style="width: 130px">
+              <span class="common-select-name"
+                    @click="article_type_list_show=!article_type_list_show">{{current_article_type.text}}</span>
+              <i class="iconfont icon-moreunfold"
+                 @click="article_type_list_show=!article_type_list_show"></i>
+              <ul class="common-select-ul"
+                  v-show="article_type_list_show">
+                <li v-for="item in article_type_list"
+                    @click="current_article_type=item;article_type_list_show=false">{{item.text}}</li>
               </ul>
             </div>
           </div>
@@ -165,50 +163,45 @@
               <em id="chosen_tag_num">{{current_article_tag_arr.length}}</em>/3
             </span>
           </p>
-          <div class="search-box clearfix" ref="search_box">
-            <div
-              class="clearfix js-chosen-tags"
-              ref="js_chosen_tags"
-              v-show="current_article_tag_arr.length>0"
-            >
-              <span
-                class="tag-item"
-                v-for="item in current_article_tag_arr"
-                @click="delete_current_article_tag(item)"
-              >{{item.article_tag_name}}</span>
+          <div class="search-box clearfix"
+               ref="search_box">
+            <div class="clearfix js-chosen-tags"
+                 ref="js_chosen_tags"
+                 v-show="current_article_tag_arr.length>0">
+              <span class="tag-item"
+                    v-for="item in current_article_tag_arr"
+                    @click="delete_current_article_tag(item)">{{item.article_tag_name}}</span>
             </div>
-            <input
-              class="search-input"
-              v-show="current_article_tag_arr.length<3"
-              placeholder="选择下列热门标签或输入关键词检索标签"
-              :style="{'width':search_box_width}"
-              v-model="search_article_tag"
-            />
+            <input class="search-input"
+                   v-show="current_article_tag_arr.length<3"
+                   placeholder="选择下列热门标签或输入关键词检索标签"
+                   :style="{'width':search_box_width}"
+                   v-model="search_article_tag" />
           </div>
-          <p class="search-result js-search-result" v-show="search_result_show">
+          <p class="search-result js-search-result"
+             v-show="search_result_show">
             相关“
             <span class="js-search-text">{{search_article_tag}}</span>”的搜索
             <span class="js-search-num">{{search_article_tag_all.length}}</span> 个
           </p>
-          <div class="tag-list-view js-tag-nano has-scrollbar" style="height: 160px;">
+          <div class="tag-list-view js-tag-nano has-scrollbar"
+               style="height: 160px;">
             <div class="clearfix js-tag-list">
-              <span
-                class="tag-item"
-                v-for="item in search_article_tag_all"
-                @click="add_article_tag(item)"
-              >{{item.article_tag_name}}</span>
+              <span class="tag-item"
+                    v-for="item in search_article_tag_all"
+                    @click="add_article_tag(item)">{{item.article_tag_name}}</span>
             </div>
           </div>
         </div>
       </div>
       <div slot="footer">
         <div class="writer-submit-view-footer">
-          <button type="button" class="btn btn-primary writer-modal-create" @click="save_article">保存</button>
-          <button
-            type="button"
-            class="btn btn-secondary writer-modal-cancel"
-            @click="create_show_modal = false"
-          >取消</button>
+          <button type="button"
+                  class="btn btn-primary writer-modal-create"
+                  @click="save_article">保存</button>
+          <button type="button"
+                  class="btn btn-secondary writer-modal-cancel"
+                  @click="create_show_modal = false">取消</button>
         </div>
       </div>
     </el-dialog>
@@ -220,7 +213,7 @@
 import marked from "marked";
 import { UploadImage } from "@components";
 export default {
-  metaInfo() {
+  metaInfo () {
     return {
       title: "文章编辑",
       htmlAttrs: {
@@ -228,15 +221,15 @@ export default {
       }
     };
   },
-  async asyncData({ store, route, accessToken = "" }) {
+  async asyncData ({ store, route, accessToken = "" }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
       store.dispatch("PERSONAL_INFO", { accessToken }),
-      store.dispatch("article_tag/GET_ARTICLE_TAG_ALL")
+      store.dispatch("articleTag/GET_ARTICLE_TAG_ALL")
     ]);
   },
   name: "Editor",
-  data() {
+  data () {
     return {
       upload_article_modal_show: false, // upload picture 上传图片模态窗口
       edit_full_screen: false, // edit is full screen 编辑器是否全屏显示
@@ -279,7 +272,7 @@ export default {
       upload_img_url: "" // 图片上传url
     };
   },
-  created() {
+  created () {
     if (this.$route.params.editor_type !== "create") {
       // 判断是不是创建，不是则是修改，同时赋值
       this.$store
@@ -293,17 +286,17 @@ export default {
         });
     }
   },
-  mounted() {
+  mounted () {
     this.init_article_tag_all();
     this.get_user_article_topic_all();
   },
   watch: {
-    article_content(val) {
+    article_content (val) {
       document.getElementById("mark-text").innerHTML = marked(val, {
         breaks: true
       });
     },
-    search_article_tag(val) {
+    search_article_tag (val) {
       let that = this;
       let _arr = [];
       for (let item in that.source_article_tag_all) {
@@ -324,25 +317,25 @@ export default {
     }
   },
   methods: {
-    init_article_tag_all() {
+    init_article_tag_all () {
       this.source_article_tag_all = this.article_tag_all;
       this.search_article_tag_all = this.article_tag_all;
     },
-    get_user_article_topic_all() {
-      if (!this.$store.state.personal_info.islogin) {
+    get_user_article_topic_all () {
+      if (!this.$store.state.personalInfo.islogin) {
         this.$message.warning("当前用户未登陆，请前往首页登陆后尝试");
         this.$router.push({ name: "home" });
         return false;
       }
       this.$store
         .dispatch("editor/GET_USER_TOPIC", {
-          uid: this.$store.state.personal_info.user.uid
+          uid: this.$store.state.personalInfo.user.uid
         })
         .then(res => {
           this.user_article_topic_all = res.data.list;
         });
     },
-    save_create_topic() {
+    save_create_topic () {
       this.$store
         .dispatch("editor/CREATE_ARTICLE_TOPIC", {
           topic_name: this.topic_name
@@ -358,7 +351,7 @@ export default {
           }
         });
     },
-    add_article_tag(val) {
+    add_article_tag (val) {
       var that = this;
       that.search_article_tag = "";
       let _arr = [];
@@ -373,7 +366,7 @@ export default {
       }
       that.render_current_article_tag();
     },
-    delete_current_article_tag(val) {
+    delete_current_article_tag (val) {
       var that = this;
       for (var item in that.current_article_tag_arr) {
         if (
@@ -385,7 +378,7 @@ export default {
       }
       that.render_current_article_tag();
     },
-    render_current_article_tag() {
+    render_current_article_tag () {
       var that = this;
       that.$nextTick(() => {
         that.search_box_width =
@@ -395,14 +388,14 @@ export default {
           "px";
       });
     },
-    getObjectValues(object) {
+    getObjectValues (object) {
       var values = [];
       for (var property in object) {
         values.push(object[property].article_tag_id);
       }
       return values;
     },
-    save_upload() {
+    save_upload () {
       // 图片上传保存写入marked
       var that = this;
       if (!that.upload_img_url) {
@@ -412,7 +405,7 @@ export default {
       that.article_content += "![Alt text](" + that.upload_img_url + ")";
       that.upload_article_modal_show = false;
     },
-    send_article() {
+    send_article () {
       this.create_show_modal = true;
       if (this.$route.params.editor_type !== "create") {
         // 判断是不是创建，不是则是修改，同时赋值
@@ -441,7 +434,7 @@ export default {
         this.render_current_article_tag();
       }
     },
-    save_article() {
+    save_article () {
       var that = this;
       var params = {
         title: that.article_title, //文章的标题
@@ -469,7 +462,7 @@ export default {
             this.create_show_modal = false;
             this.$router.push({
               name: "userTopic",
-              params: { uid: this.personal_info.user.uid }
+              params: { uid: this.personalInfo.user.uid }
             });
             if (this.$route.params.editor_type === "create") {
               this.$message.warning(
@@ -484,11 +477,11 @@ export default {
             this.$message.warning(res.message);
           }
         })
-        .catch(function(err) {
+        .catch(function (err) {
           this.$message.warning("出现错误：" + err);
         });
     },
-    changeFile({ formData, config }) {
+    changeFile ({ formData, config }) {
       this.$store
         .dispatch("editor/UPLOAD_ARTICLE_PICTURE", formData)
         .then(res => {
@@ -505,12 +498,12 @@ export default {
     }
   },
   computed: {
-    article_tag_all() {
-      return this.$store.state.article_tag.article_tag_all;
+    article_tag_all () {
+      return this.$store.state.articleTag.article_tag_all;
     },
-    personal_info() {
+    personalInfo () {
       // 登录后的个人信息
-      return this.$store.state.personal_info;
+      return this.$store.state.personalInfo;
     }
   },
   components: {

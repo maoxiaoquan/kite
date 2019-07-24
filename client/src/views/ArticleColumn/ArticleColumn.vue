@@ -16,12 +16,14 @@
 
         <div class="column-view">
           <div class="column-item"
-               v-for="(item_column,key) in article_column.column_list.list">
+               v-for="(item_column,key) in articleColumn.column_list.list"
+               :key="key">
             <div class="column-item-box">
               <h2 class="title">{{item_column.article_column_name}}</h2>
               <ul class="tag-body">
                 <li class="tag-popup"
-                    v-for="(item_tag,key) in item_column.tag">
+                    v-for="(item_tag,key) in item_column.tag"
+                    :key="key">
                   <router-link class="tag"
                                :to="{name:'article_tag',params:{article_tag_en_name:item_tag.article_tag_en_name}}">
                     {{item_tag.article_tag_name}}
@@ -64,7 +66,7 @@ export default {
   },
   async asyncData ({ store, route, accessToken = '' }) {
     return Promise.all([
-      store.dispatch('article_column/GET_ARTICLE_COLUMN_LIST', {
+      store.dispatch('articleColumn/GET_ARTICLE_COLUMN_LIST', {
         page: route.query.page || 1
       })
     ])
@@ -80,9 +82,9 @@ export default {
     },
   },
   computed: {
-    ...mapState(['article_column', 'website']),
+    ...mapState(['articleColumn', 'website']),
     pagination () { // 分页
-      return Math.ceil(this.article_column.column_list.count / this.article_column.column_list.pageSize)
+      return Math.ceil(this.articleColumn.column_list.count / this.articleColumn.column_list.pageSize)
     },
   },
   components: {

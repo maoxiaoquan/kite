@@ -1,20 +1,17 @@
 <template>
   <article class="content-box content-box-index">
-    <div class="info-box" v-if="articleItem.aid">
+    <div class="info-box"
+         v-if="articleItem.aid">
       <div class="info-row title-row">
-        <router-link
-          class="title"
-          :to="{name:'article',params:{aid:articleItem.aid}}"
-        >{{articleItem.title}}</router-link>
+        <router-link class="title"
+                     :to="{name:'article',params:{aid:articleItem.aid}}">{{articleItem.title}}</router-link>
       </div>
 
       <div class="info-row meta-row">
         <ul class="meta-list">
           <li class="item username clickable">
-            <router-link
-              :to="{name:'user',params:{uid:articleItem.user.uid}}"
-              class="name"
-            >{{articleItem.user.nickname}}</router-link>
+            <router-link :to="{name:'user',params:{uid:articleItem.user.uid}}"
+                         class="name">{{articleItem.user.nickname}}</router-link>
           </li>
           <li class="item item-icon read-count">
             <i class="el-icon-reading"></i>
@@ -28,20 +25,22 @@
             <i class="el-icon-chat-dot-round"></i>
             <strong v-text="articleItem.comment_count"></strong>
           </li>
-          <li class="item" v-text="articleItem.create_at"></li>
-          <li class="item" v-if="articleItem.article_tag_ids">
-            <router-link
-              v-for="(item_article_tag,key) in article_tag_filter(articleItem.article_tag_ids)"
-              class="tag-class frontend"
-              :key="key"
-              :to="{name:'article_tag',params:{article_tag_en_name:item_article_tag.article_tag_en_name}}"
-            >{{item_article_tag.article_tag_name}}</router-link>
+          <li class="item"
+              v-text="articleItem.create_at"></li>
+          <li class="item"
+              v-if="articleItem.article_tag_ids">
+            <router-link v-for="(item_article_tag,key) in articleTagFilter(articleItem.article_tag_ids)"
+                         class="tag-class frontend"
+                         :key="key"
+                         :to="{name:'article_tag',params:{article_tag_en_name:item_article_tag.article_tag_en_name}}">{{item_article_tag.article_tag_name}}</router-link>
           </li>
         </ul>
       </div>
     </div>
-    <div class="thumb" v-if="articleItem.cover_img">
-      <el-image :src="articleItem.cover_img" lazy></el-image>
+    <div class="thumb"
+         v-if="articleItem.cover_img">
+      <el-image :src="articleItem.cover_img"
+                lazy></el-image>
     </div>
   </article>
 </template>
@@ -56,9 +55,9 @@ export default {
     }
   },
   methods: {
-    article_tag_filter(val) {
+    articleTagFilter (val) {
       var _arr = [];
-      this.article_tag_all.map((item, key) => {
+      this.articleTagAll.map((item, key) => {
         if (val.split(",").indexOf(String(item.article_tag_id)) !== -1) {
           _arr.push(item);
         }
@@ -67,8 +66,8 @@ export default {
     }
   },
   computed: {
-    article_tag_all() {
-      return this.$store.state.article_tag.article_tag_all;
+    articleTagAll () {
+      return this.$store.state.articleTag.article_tag_all;
     }
   }
 };

@@ -22,12 +22,12 @@
               </router-link>
             </div>
 
-            <button v-if="(user.user_info.user.uid !== personal_info.user.uid)&&personal_info.islogin"
+            <button v-if="(user.user_info.user.uid !== personalInfo.user.uid)&&personalInfo.islogin"
                     class="user-follow-button"
-                    @click="post_user_attention($route.params.uid,~user.user_attention.other_attention.indexOf(personal_info.user.uid||''))"
-                    :class="~user.user_attention.other_attention.indexOf(personal_info.user.uid||'')?'has':'no'">
+                    @click="post_user_attention($route.params.uid,~user.user_attention.other_attention.indexOf(personalInfo.user.uid||''))"
+                    :class="~user.user_attention.other_attention.indexOf(personalInfo.user.uid||'')?'has':'no'">
               <i class="iconfont"></i>
-              <span v-if="~user.user_attention.other_attention.indexOf(personal_info.user.uid||'')">已关注</span>
+              <span v-if="~user.user_attention.other_attention.indexOf(personalInfo.user.uid||'')">已关注</span>
               <span v-else>关注</span>
             </button>
 
@@ -38,7 +38,7 @@
                     <router-link :to='{name:"userAttention",query:{any:"me"}}'>
                       <p>{{user.user_info.user_attention_other_count}}</p>
                       <strong>
-                        {{user.user_info.user.uid === personal_info.user.uid?'我关注的人':'他关注的人'}}
+                        {{user.user_info.user.uid === personalInfo.user.uid?'我关注的人':'他关注的人'}}
                       </strong>
                     </router-link>
                   </div>
@@ -81,7 +81,7 @@
             </li>
 
             <li :class="{'active':$route.name==='userMessage'}"
-                v-if="personal_info.islogin&&personal_info.user.uid===user.user_info.user.uid">
+                v-if="personalInfo.islogin&&personalInfo.user.uid===user.user_info.user.uid">
               <router-link :to='{name:"userMessage"}'>
                 消息
               </router-link>
@@ -152,7 +152,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(['personal_info', 'user']),  // personal_info:个人信息  user:登录后的个人信息当前用户
+    ...mapState(['personalInfo', 'user']),  // personalInfo:个人信息  user:登录后的个人信息当前用户
   },
   components: {
     UserAside

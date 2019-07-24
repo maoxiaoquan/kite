@@ -9,7 +9,7 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const devWebpackConfig = merge(baseWebpackConfig, {
   mode: 'development',
   entry: {
-    'app': path.join(__dirname, '../src/entry-client.js')
+    app: path.join(__dirname, '../src/entryClient.js')
   },
   output: {
     path: config.client.assetsRoot,
@@ -24,7 +24,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   },
   resolve: {
     alias: {
-      'request-config': '../request/request_client.js'
+      'request-config': '../request/requestClient.js'
     }
   },
   devtool: config.client.devtool, //  cheap-module-eval-source-map编译更快
