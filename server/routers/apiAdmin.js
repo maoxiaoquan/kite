@@ -347,7 +347,7 @@ router.get(
   '/admin-role/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.get_admin_role_list
+  role_authority.getAdminRoleList
 )
 // 获取全部角色
 router.get(
@@ -361,21 +361,21 @@ router.post(
   '/admin-role/create',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.create_admin_role
+  role_authority.createAdminRole
 )
 // 删除角色
 router.post(
   '/admin-role/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.delete_admin_role
+  role_authority.deleteAdminRole
 )
 // 更新角色
 router.post(
   '/admin-role/edit',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.edit_admin_role
+  role_authority.editAdminRole
 )
 
 /**
@@ -398,28 +398,28 @@ router.get(
   '/admin-authority/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.get_admin_authority_list
+  role_authority.getAdminAuthorityList
 )
 // 创建权限
 router.post(
   '/admin-authority/create',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.create_admin_authority
+  role_authority.createAdminAuthority
 )
 // 更新权限
 router.post(
   '/admin-authority/update',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.update_admin_authority
+  role_authority.updateAdminAuthority
 )
 // 删除权限
 router.post(
   '/admin-authority/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.delete_admin_authority
+  role_authority.deleteAdminAuthority
 )
 
 /**
@@ -431,7 +431,7 @@ router.post(
   '/admin-role-authority/set',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  role_authority.set_admin_role_authority
+  role_authority.setAdminRoleAuthority
 )
 
 /**

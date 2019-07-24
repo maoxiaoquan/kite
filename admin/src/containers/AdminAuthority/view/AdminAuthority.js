@@ -16,10 +16,10 @@ import alert from '../../../utils/alert'
 import { isEmpty } from '../../../utils/tools'
 import './AdminAuthority.scss'
 import {
-  create_admin_authority,
-  get_admin_authority_list,
-  delete_admin_authority,
-  update_admin_authority
+  createAdminAuthority,
+  getAdminAuthorityList,
+  deleteAdminAuthority,
+  updateAdminAuthority
 } from '../action/AdminAuthorityAction'
 
 const TreeNode = Tree.TreeNode
@@ -41,7 +41,7 @@ class AdminAuthority extends React.Component {
   }
 
   componentDidMount() {
-    this.fetch_admin_authority_list()
+    this.fetchAdminAuthorityList()
   }
 
   showCreateModal = async value => {
@@ -90,7 +90,7 @@ class AdminAuthority extends React.Component {
     })
   }
 
-  authority_type_Change = value => {
+  authorityTypeChange = value => {
     this.setState({
       authority_type_select: value
     })
@@ -105,39 +105,37 @@ class AdminAuthority extends React.Component {
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         if (this.state.is_create) {
-          await this.fetch_admin_authority_create(values)
+          await this.fetchAdminAuthorityCreate(values)
         } else {
-          await this.fetch_admin_authority_update(values)
+          await this.fetchAdminAuthorityUpdate(values)
         }
       }
     })
   }
 
-  handle_delete_authority = data => {
+  handleDeleteAuthority = data => {
     const that = this
     confirm({
       title: '你确认要删除当前权限吗',
-      content: `${
-        data.authority_name
-      }，删除权限后，所有与之关联的角色将失去此权限！`,
+      content: `${data.authority_name}，删除权限后，所有与之关联的角色将失去此权限！`,
       okText: 'YES',
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        that.fetch_admin_authority_delete(data)
+        that.fetchAdminAuthorityDelete(data)
       },
       onCancel() {}
     })
   }
 
-  fetch_admin_authority_list = () => {
-    this.props.dispatch(get_admin_authority_list())
+  fetchAdminAuthorityList = () => {
+    this.props.dispatch(getAdminAuthorityList())
   }
 
-  fetch_admin_authority_create = async values => {
+  fetchAdminAuthorityCreate = async values => {
     /* 创建权限 */
     await this.props.dispatch(
-      create_admin_authority(
+      createAdminAuthority(
         {
           authority_name: values.authority_name,
           authority_type: values.authority_type,
@@ -152,17 +150,17 @@ class AdminAuthority extends React.Component {
           this.setState({
             visible: false
           })
-          this.fetch_admin_authority_list()
+          this.fetchAdminAuthorityList()
           alert.message_success('权限创建成功')
         }
       )
     )
   }
 
-  fetch_admin_authority_update = async values => {
+  fetchAdminAuthorityUpdate = async values => {
     /* 更新权限 */
     await this.props.dispatch(
-      update_admin_authority(
+      updateAdminAuthority(
         {
           authority_id: this.props.state_admin_authority.current_authority_info
             .authority_id,
@@ -177,25 +175,25 @@ class AdminAuthority extends React.Component {
           this.setState({
             visible: false
           })
-          this.fetch_admin_authority_list()
+          this.fetchAdminAuthorityList()
           alert.message_success('权限更新成功')
         }
       )
     )
   }
 
-  fetch_admin_authority_delete = async data => {
+  fetchAdminAuthorityDelete = async data => {
     /* 删除权限 */
-    let id_arr = await this.traversal_delete(data)
+    let id_arr = await this.traversalDelete(data)
     this.props.dispatch(
-      delete_admin_authority({ authority_id_arr: id_arr }, () => {
-        this.fetch_admin_authority_list()
+      deleteAdminAuthority({ authority_id_arr: id_arr }, () => {
+        this.fetchAdminAuthorityList()
         alert.message_success('删除成功')
       })
     )
   }
 
-  traversal_delete = val => {
+  traversalDelete = val => {
     let _arr = []
 
     function id_arr(data) {
@@ -249,7 +247,7 @@ class AdminAuthority extends React.Component {
               type="edit"
             />
             <Icon
-              onClick={() => this.handle_delete_authority(data)}
+              onClick={() => this.handleDeleteAuthority(data)}
               type="delete"
             />
           </div>
@@ -350,7 +348,7 @@ class AdminAuthority extends React.Component {
                   ]
                 })(
                   <Select
-                    onChange={this.authority_type_Change}
+                    onChange={this.authorityTypeChange}
                     placeholder="请选择权限类型！"
                   >
                     <Option value="1">基础菜单</Option>

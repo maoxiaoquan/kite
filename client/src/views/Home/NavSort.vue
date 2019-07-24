@@ -1,24 +1,22 @@
 <template>
   <nav class="list-nav">
     <ul class="nav-list left">
-      <li
-        class="nav-item"
-        v-for="item in nav_list"
-        @click="_navTap(item.name)"
-        v-if="item.type==='left'"
-        :class="{'active':current_nav===item.name}"
-      >
+      <li class="nav-item"
+          v-for="(item,key) in navList"
+          :key="key"
+          @click="_navTap(item.name)"
+          v-if="item.type==='left'"
+          :class="{'active':current_nav===item.name}">
         <a href="javascript:;">{{item.text}}</a>
       </li>
     </ul>
     <ul class="nav-list right">
-      <li
-        class="nav-item"
-        v-for="item in nav_list"
-        @click="_navTap(item.name)"
-        v-if="item.type==='right'"
-        :class="{'active':current_nav===item.name}"
-      >
+      <li class="nav-item"
+          v-for="(item,key) in navList"
+          @click="_navTap(item.name)"
+          :key="key"
+          v-if="item.type==='right'"
+          :class="{'active':current_nav===item.name}">
         <a href="javascript:;">{{item.text}}</a>
       </li>
     </ul>
@@ -28,9 +26,9 @@
 <script>
 export default {
   name: "NavSort",
-  data() {
+  data () {
     return {
-      nav_list: [
+      navList: [
         {
           type: "left",
           name: "newest",
@@ -51,10 +49,10 @@ export default {
     };
   },
   methods: {
-    dafauleNav() {
+    dafauleNav () {
       this.current_nav = "newest";
     },
-    _navTap(val) {
+    _navTap (val) {
       this.$emit("navTap", val);
       this.current_nav = val;
     }

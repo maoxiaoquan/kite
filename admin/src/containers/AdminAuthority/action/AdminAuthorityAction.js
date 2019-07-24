@@ -1,6 +1,6 @@
 import http from '../../../utils/http'
 
-export const create_admin_authority = (data, callback) => {
+export const createAdminAuthority = (data, callback) => {
   return dispatch => {
     http.post('/admin-authority/create', data).then(res => {
       if (callback) {
@@ -21,7 +21,7 @@ function filterArray (result, pid) {
   return _array
 }
 
-export const get_admin_authority_list = (data, callback) => {
+export const getAdminAuthorityList = (data, callback) => {
   return dispatch => {
     http.get('/admin-authority/list', data).then(res => {
       if (callback) {
@@ -35,7 +35,7 @@ export const get_admin_authority_list = (data, callback) => {
   }
 }
 
-export const delete_admin_authority = (data, callback) => {
+export const deleteAdminAuthority = (data, callback) => {
   return dispatch => {
     http.post('/admin-authority/delete', data).then(res => {
       if (callback) {
@@ -45,7 +45,7 @@ export const delete_admin_authority = (data, callback) => {
   }
 }
 
-export const update_admin_authority = (data, callback) => {
+export const updateAdminAuthority = (data, callback) => {
   return dispatch => {
     http.post('/admin-authority/update', data).then(res => {
       if (callback) {

@@ -10,14 +10,14 @@
           <span class="title">头像</span>
           <div class="avatar-uploader avatar-uploader">
             <div class="avatar">
-              <el-image :src="(form_data.avatar_review_status===1||form_data.avatar_review_status===3)?form_data.avatar_review:form_data.avatar"
+              <el-image :src="(formData.avatar_review_status===1||formData.avatar_review_status===3)?formData.avatar_review:formData.avatar"
                         lazy></el-image>
             </div>
             <div class="action-box">
               <div class="hint">支持 jpg、png 格式大小 1M 以内的图片
                 <span class="hint-review"
-                      v-if="form_data.avatar_review_status===1||form_data.avatar_review_status===3">
-                  ({{form_data.avatar_review_status===1?'新头像正在审核中，审核通过则显示，否则将换回原头像':'头像审核失败，请重新上传'}})
+                      v-if="formData.avatar_review_status===1||formData.avatar_review_status===3">
+                  ({{formData.avatar_review_status===1?'新头像正在审核中，审核通过则显示，否则将换回原头像':'头像审核失败，请重新上传'}})
                 </span>
               </div>
               <UploadImage @changeUpload="changeAvatar" />
@@ -29,7 +29,7 @@
 
           <span class="title">昵称</span>
           <div class="input-box profile-input profile-input">
-            <input v-model="form_data.nickname"
+            <input v-model="formData.nickname"
                    placeholder="填写你的昵称"
                    class="input">
           </div>
@@ -42,15 +42,15 @@
             <input type="radio"
                    name="sex"
                    value="1"
-                   v-model="form_data.sex"><span>男</span>
+                   v-model="formData.sex"><span>男</span>
             <input type="radio"
                    name="sex"
                    value="2"
-                   v-model="form_data.sex"><span>女</span>
+                   v-model="formData.sex"><span>女</span>
             <input type="radio"
                    name="sex"
                    value="0"
-                   v-model="form_data.sex"><span>保密</span>
+                   v-model="formData.sex"><span>保密</span>
           </div>
         </li>
         <li class="item-view">
@@ -58,7 +58,7 @@
           <span class="title">职业</span>
           <div class="input-box profile-input profile-input">
             <input placeholder="填写你的职业"
-                   v-model="form_data.profession"
+                   v-model="formData.profession"
                    class="input">
           </div>
 
@@ -68,7 +68,7 @@
           <span class="title">公司</span>
           <div class="input-box profile-input profile-input">
             <input placeholder="填写你的公司"
-                   v-model="form_data.company"
+                   v-model="formData.company"
                    class="input">
           </div>
 
@@ -77,7 +77,7 @@
 
           <span class="title">个人介绍</span>
           <div class="input-box profile-input profile-input">
-            <input v-model="form_data.introduction"
+            <input v-model="formData.introduction"
                    placeholder="填写职业技能、擅长的事情、喜欢的事情等"
                    class="input">
           </div>
@@ -88,7 +88,7 @@
           <span class="title">个人主页</span>
           <div class="input-box profile-input profile-input">
             <input placeholder="填写你的个人主页"
-                   v-model="form_data.home_page"
+                   v-model="formData.home_page"
                    class="input">
           </div>
 
@@ -97,7 +97,7 @@
 
       <div class="footer-view">
         <button class="button button-save"
-                @click="post_update_user_info">保存
+                @click="updateUserInfo">保存
         </button>
       </div>
 
@@ -116,7 +116,7 @@ export default {
   data: function () {
     return {
       user_info: '',
-      form_data: {
+      formData: {
         nickname: '',
         sex: '',
         profession: '',
@@ -131,16 +131,16 @@ export default {
     }
   },
   created () {
-    this.get_curr_user_info()
+    this.getCurrUserInfo()
   },
   methods: {
-    get_curr_user_info () {// 获取当前登录用户信息
+    getCurrUserInfo () {// 获取当前登录用户信息
       this.$store.dispatch('setting/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
         .then(result => {
           this.$nextTick(() => {
             if (result.state === 'success') {
               this.user_info = result.data
-              this.form_data = {
+              this.formData = {
                 ...result.data.user,
                 ...result.data.user_info
               }
@@ -148,13 +148,13 @@ export default {
           })
         })
     },
-    post_update_user_info () {
-      this.$store.dispatch('setting/PERSONAL_UPLOAD_INFO', this.form_data)
+    updateUserInfo () {
+      this.$store.dispatch('setting/PERSONAL_UPLOAD_INFO', this.formData)
         .then(result => {
           this.$nextTick(() => {
             if (result.state === 'success') {
               this.$message.success('保存成功')
-              this.get_curr_user_info()
+              this.getCurrUserInfo()
             } else {
               this.$message.warning(result.message)
             }
@@ -167,7 +167,7 @@ export default {
           this.$nextTick(function () {
             if (result.state === 'success') {
               this.$message.success('上传用户头像成功，头像正在审核中')
-              this.get_curr_user_info()
+              this.getCurrUserInfo()
             } else {
               this.$message.warning(result.message)
             }

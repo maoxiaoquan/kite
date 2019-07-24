@@ -24,7 +24,7 @@
 
             <button v-if="(user.user_info.user.uid !== personalInfo.user.uid)&&personalInfo.islogin"
                     class="user-follow-button"
-                    @click="post_user_attention($route.params.uid,~user.user_attention.other_attention.indexOf(personalInfo.user.uid||''))"
+                    @click="onUserAttention($route.params.uid,~user.user_attention.other_attention.indexOf(personalInfo.user.uid||''))"
                     :class="~user.user_attention.other_attention.indexOf(personalInfo.user.uid||'')?'has':'no'">
               <i class="iconfont"></i>
               <span v-if="~user.user_attention.other_attention.indexOf(personalInfo.user.uid||'')">已关注</span>
@@ -123,7 +123,7 @@ export default {
     ])
   },
   methods: {
-    post_user_attention (attention_uid, type) { /*用户关注用户*/
+    onUserAttention (attention_uid, type) { /*用户关注用户*/
       this.$confirm(type ? '是否取消关注?' : '是否关注?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

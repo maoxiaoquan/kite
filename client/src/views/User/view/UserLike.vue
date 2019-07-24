@@ -2,7 +2,7 @@
   <div class="user-article-like">
 
     <ul class="user-article-like-view">
-      <li v-for="(item,key) in user_like_article.article_list"
+      <li v-for="(item,key) in userLikeArticle.article_list"
           :key="key">
         <LikeArticleItem :articleItem="item"
                          :Key="key" />
@@ -51,13 +51,13 @@ export default {
     personalInfo () { // 登录后的个人信息
       return this.$store.state.personalInfo || {}
     },
-    user_info () { // 登录后的个人信息
+    userInfo () { // 登录后的个人信息
       return this.$store.state.user.user_info || {}
     },
     pagination () { // 分页
-      return Math.ceil(this.user_like_article.count / this.user_like_article.pageSize)
+      return Math.ceil(this.userLikeArticle.count / this.userLikeArticle.pageSize)
     },
-    user_like_article () { // 用户的like
+    userLikeArticle () { // 用户的like
       return this.$store.state.user.user_like_article || {}
     },
   },

@@ -29,14 +29,14 @@
               v-text="articleItem.create_at"></li>
           <li class="item"
               v-if="articleItem.article_tag_ids">
-            <router-link v-for="(item_article_tag,key) in article_tag_filter(articleItem.article_tag_ids)"
+            <router-link v-for="(item_article_tag,key) in articleTagFilter(articleItem.article_tag_ids)"
                          class="tag-class frontend"
                          :key="key"
                          :to="{name:'article_tag',params:{article_tag_en_name:item_article_tag.article_tag_en_name}}">{{item_article_tag.article_tag_name}}</router-link>
           </li>
           <li class="item operat-view"
-              @click="is_operating=!is_operating"
-              v-if="personalInfo.islogin&&personalInfo.user.uid===user_info.user.uid">
+              @click="isOperating=!isOperating"
+              v-if="personalInfo.islogin&&personalInfo.user.uid===userInfo.user.uid">
             <el-dropdown trigger="click"
                          @command="commandChange">
               <div class="el-dropdown-link">
@@ -68,7 +68,7 @@ export default {
   },
   data () {
     return {
-      is_operating: false
+      isOperating: false
     };
   },
   methods: {
@@ -88,12 +88,12 @@ export default {
           type: "warning"
         })
           .then(() => {
-            this.post_user_like_article();
+            this.userLikeArticle();
           })
           .catch(() => { });
       }
     },
-    post_user_like_article () {
+    userLikeArticle () {
       /*用户like 文章*/
       var that = this;
       this.$store
@@ -109,9 +109,9 @@ export default {
           console.log(err);
         });
     },
-    article_tag_filter: function (val) {
+    articleTagFilter: function (val) {
       var _arr = [];
-      this.article_tag_all.map(function (item, key) {
+      this.articleTagAll.map(function (item, key) {
         if (val.split(",").indexOf(String(item.article_tag_id)) !== -1) {
           _arr.push(item);
         }
@@ -120,14 +120,14 @@ export default {
     }
   },
   computed: {
-    article_tag_all () {
+    articleTagAll () {
       return this.$store.state.articleTag.article_tag_all;
     },
     personalInfo () {
       // 登录后的个人信息
       return this.$store.state.personalInfo || {};
     },
-    user_info () {
+    userInfo () {
       // 登录后的个人信息
       return this.$store.state.user.user_info || {};
     }

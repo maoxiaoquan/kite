@@ -11,7 +11,7 @@
           <div class="input-prepend restyle js-normal">
             <input placeholder="邮箱"
                    type="text"
-                   v-model="form_data.email"
+                   v-model="formData.email"
                    value="">
             <i class="iconfont icon-account"></i>
           </div>
@@ -19,7 +19,7 @@
           <div class="input-prepend">
             <input placeholder="密码"
                    type="password"
-                   v-model="form_data.password"
+                   v-model="formData.password"
                    name="password"
                    value="">
             <i class="iconfont icon-mima"></i>
@@ -28,11 +28,11 @@
           <div class="remember-btn clearfix">
             <div class="pull-left">
               没有账号？ <em class="reg-btn"
-                  @click="tap_register">注册</em>
+                  @click="tapRegister">注册</em>
             </div>
             <div class="pull-right">
               <a href="javascript:;"
-                 @click="tap_reset_password">忘记密码</a>
+                 @click="tapResetPassword">忘记密码</a>
             </div>
           </div>
 
@@ -72,7 +72,7 @@ export default {
   name: 'SignIn',
   data () {
     return {
-      form_data: {
+      formData: {
         email: '',
         phone: '',
         type: 'email',
@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     login () {
-      this.$store.dispatch('sign/LOGIN', this.form_data)
+      this.$store.dispatch('sign/LOGIN', this.formData)
         .then(res => {
           if (res.state === 'success') {
             this.$message.success(res.message)
@@ -95,11 +95,11 @@ export default {
           }
         })
     },
-    tap_register () {
+    tapRegister () {
       this.$store.commit('SET_IS_LOGIN', false)
       this.$store.commit('SET_IS_REGISTER', true)
     },
-    tap_reset_password () {
+    tapResetPassword () {
       this.$store.commit('SET_IS_LOGIN', false)
       this.$store.commit('SET_IS_RESET_PASSWORD', true)
     }

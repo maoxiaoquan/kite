@@ -9,7 +9,7 @@
 
     <ul class="user-article-attention-view">
       <li class="item"
-          v-for="(item,key) in user_attention.user_list"
+          v-for="(item,key) in userAttention.user_list"
           :key="key">
         <div class="user">
           <div class="lazy avatar avatar loaded"
@@ -25,12 +25,12 @@
           <button class="follow-btn active"
                   v-if="$route.query.any==='me'||!$route.query.any"
                   v-show="item.uid!==personalInfo.user.uid"
-                  @click="post_user_attention(item.uid,~user_attention.other_attention.indexOf(item.uid))">{{~user_attention.other_attention.indexOf(item.uid)?'互相关注':'关注'}}</button>
+                  @click="onUserAttention(item.uid,~userAttention.other_attention.indexOf(item.uid))">{{~userAttention.other_attention.indexOf(item.uid)?'互相关注':'关注'}}</button>
 
           <button class="follow-btn active"
                   v-show="item.uid!==personalInfo.user.uid"
                   v-else
-                  @click="post_user_attention(item.uid,~user_attention.me_attention.indexOf(item.uid))">{{~user_attention.me_attention.indexOf(item.uid)?'互相关注':'关注'}}</button>
+                  @click="onUserAttention(item.uid,~userAttention.me_attention.indexOf(item.uid))">{{~userAttention.me_attention.indexOf(item.uid)?'互相关注':'关注'}}</button>
         </div>
       </li>
     </ul>
@@ -74,7 +74,7 @@ export default {
         }
       });
     },
-    post_user_attention (attention_uid, type) {
+    onUserAttention (attention_uid, type) {
       this.$store
         .dispatch("user/USER_ATTENTION", {
           attention_uid: attention_uid,
@@ -96,17 +96,17 @@ export default {
       // 登录后的个人信息
       return this.$store.state.personalInfo || {};
     },
-    user_info () {
+    userInfo () {
       // 登录后的个人信息
       return this.$store.state.user.user_info || {};
     },
     pagination () {
       // 分页
       return Math.ceil(
-        this.user_attention.count / this.user_attention.pageSize
+        this.userAttention.count / this.userAttention.pageSize
       );
     },
-    user_attention () {
+    userAttention () {
       // 用户个人的文章
       return this.$store.state.user.user_attention || {};
     }

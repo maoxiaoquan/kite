@@ -13,7 +13,7 @@
               </div>
               <div class="info">
                 一共有
-                {{search_article.count}} 条结果
+                {{searchArticle.count}} 条结果
               </div>
             </div>
             <ul class="trigger-menu">
@@ -24,7 +24,7 @@
             <div class="list-container">
               <div class="article-view">
                 <div class="article-item"
-                     v-for="(item,key) in search_article.article_list">
+                     v-for="(item,key) in searchArticle.article_list">
                   <ArticleItem :articleItem="item"
                                :key="key" />
                 </div>
@@ -52,7 +52,8 @@
                  v-if="website.advertise.length>0">
               <div class="advertise-item"
                    v-for="(advertiseItem,key) in website.advertise"
-                   v-if="advertiseItem.enable">
+                   v-if="advertiseItem.enable"
+                   :key="key">
                 <a class="advertise-img"
                    :href="advertiseItem.link||'javascript:;'"
                    v-if="advertiseItem.img_url">
@@ -113,9 +114,9 @@ export default {
   computed: {
     ...mapState(['home', 'website']),
     pagination () { // 分页
-      return Math.ceil(this.search_article.count / this.search_article.pageSize)
+      return Math.ceil(this.searchArticle.count / this.searchArticle.pageSize)
     },
-    search_article () {
+    searchArticle () {
       return this.$store.state.search.search_article
     },
   },

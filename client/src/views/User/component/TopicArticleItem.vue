@@ -28,10 +28,10 @@
               v-text="articleItem.create_at"></li>
           <li class="item"
               v-if="articleItem.article_tag_ids">
-            <router-link v-for="(item_article_tag,key) in article_tag_filter(articleItem.article_tag_ids)"
+            <router-link v-for="(itemArticleTag,key) in articleTagFilter(articleItem.article_tag_ids)"
                          class="tag-class frontend"
                          :key="key"
-                         :to="{name:'article_tag',params:{article_tag_en_name:item_article_tag.article_tag_en_name}}">{{item_article_tag.article_tag_name}}</router-link>
+                         :to="{name:'article_tag',params:{article_tag_en_name:itemArticleTag.article_tag_en_name}}">{{itemArticleTag.article_tag_name}}</router-link>
           </li>
           <li class="item operat-view"
               v-if="personalInfo.islogin&&personalInfo.user.uid===user_info.user.uid">
@@ -50,7 +50,7 @@
           </li>
           <li class="item"
               style="color:#F07178"
-              v-if="~[3,4,5].indexOf(articleItem.status)">{{status_list[articleItem.status]}}:{{articleItem.rejection_reason}}</li>
+              v-if="~[3,4,5].indexOf(articleItem.status)">{{statusList[articleItem.status]}}:{{articleItem.rejection_reason}}</li>
         </ul>
       </div>
     </div>
@@ -72,8 +72,7 @@ export default {
   },
   data () {
     return {
-      is_operating: false,
-      status_list: [
+      statusList: [
         "草稿",
         "审核中",
         "审核通过",
@@ -84,7 +83,7 @@ export default {
     };
   },
   methods: {
-    delete_article () {
+    deleteArticle () {
       this.$confirm("此操作将永久删除该文章, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -114,12 +113,12 @@ export default {
       if (val.name !== "delete") {
         this.$router.push(val);
       } else {
-        this.delete_article();
+        this.deleteArticle();
       }
     },
-    article_tag_filter: function (val) {
+    articleTagFilter: function (val) {
       var _arr = [];
-      this.article_tag_all.map(function (item, key) {
+      this.articleTagAll.map(function (item, key) {
         if (val.split(",").indexOf(String(item.article_tag_id)) !== -1) {
           _arr.push(item);
         }
@@ -128,7 +127,7 @@ export default {
     }
   },
   computed: {
-    article_tag_all () {
+    articleTagAll () {
       return this.$store.state.articleTag.article_tag_all;
     },
     personalInfo () {

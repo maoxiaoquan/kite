@@ -23,11 +23,11 @@
     <div class="action-box"
          v-if="islogin">
 
-      <button @click="subscribe_tag"
-              v-if="~user_article_tag.indexOf(articleTagItem.article_tag_id)"
+      <button @click="subscribeTag"
+              v-if="~userArticleTag.indexOf(articleTagItem.article_tag_id)"
               class="subscribe-btn already-subscribe">已关注
       </button>
-      <button @click="subscribe_tag"
+      <button @click="subscribeTag"
               v-else
               class="subscribe-btn not-subscribe">关注
       </button>
@@ -55,7 +55,7 @@ export default {
     },
   },
   methods: {
-    async subscribe_tag () { // 订阅标签
+    async subscribeTag () { // 订阅标签
       await this.$store.dispatch('articleTag/SUBSCRIBE_TAG', { article_tag_id: this.articleTagItem.article_tag_id })
         .then(res => {
           this.$store.dispatch('articleTag/MY_SUBSCRIBE_TAG_LIST')
@@ -71,8 +71,8 @@ export default {
     }
   },
   computed: {
-    user_article_tag () {
-      return this.$store.getters['articleTag/user_article_tag'] || []
+    userArticleTag () {
+      return this.$store.getters['articleTag/userArticleTag'] || []
     },
     islogin () {
       return this.$store.state.personalInfo.islogin

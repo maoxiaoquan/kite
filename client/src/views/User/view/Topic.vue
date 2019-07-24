@@ -1,7 +1,7 @@
 <template>
 
   <div class="user-center-article-view">
-    <div v-if="topic_article_show">
+    <div v-if="isTopicListShow">
       <ul class="topic-list">
         <li class="title">个人专题：</li>
         <li :class="{'current':!$route.query.topic_id||$route.query.topic_id==='all'}">
@@ -10,7 +10,7 @@
           </router-link>
         </li>
 
-        <li v-for="item in user_article_topic_all"
+        <li v-for="item in userArticleTopicAll"
             :class="{'current':item.topic_id==$route.query.topic_id}">
           <router-link :to='{name:"userTopic",query:{topic_id:item.topic_id}}'
                        class="avatar">
@@ -18,22 +18,22 @@
           </router-link>
         </li>
 
-        <template v-if="personalInfo.user.uid===user_info.user.uid">
+        <template v-if="personalInfo.user.uid===userInfo.user.uid">
           <li>
             <a class="btn btn-green"
-               @click="create_show_modal=true"
+               @click="isCreateTopicShow=true"
                href="javascript:;">创建新专题</a>
           </li>
           <li>
             <a class="btn btn-info"
                href="javascript:;"
-               @click="topic_article_show=false">编辑专题</a>
+               @click="isTopicListShow=false">编辑专题</a>
           </li>
         </template>
       </ul>
 
       <!-- use the modal component, pass in the prop -->
-      <el-dialog :visible.sync="create_show_modal"
+      <el-dialog :visible.sync="isCreateTopicShow"
                  width="300px">
         <div class="topic-modal">
           <div class="form-group">
@@ -55,10 +55,10 @@
           <div class="footer-view">
             <button type="button"
                     class="btn btn-primary topic-modal-create"
-                    @click="create_new_user_topic">创建
+                    @click="createNewUserTopic">创建
             </button>
             <button type="button"
-                    @click="create_show_modal=false"
+                    @click="isCreateTopicShow=false"
                     class="btn btn-secondary topic-modal-cancel">取消
             </button>
           </div>
@@ -69,9 +69,9 @@
         <!-- 文章列表模块 -->
         <div class="article-view">
           <div class="article-item"
-               v-for="(item,key) in my_article.article_list"
+               v-for="(item,key) in myArticle.article_list"
                :key="key">
-            <TopicArticleItem @delete-change="update_article_list"
+            <TopicArticleItem @delete-change="updateArticleList"
                               :articleItem="item" />
           </div>
         </div>
@@ -81,10 +81,10 @@
       </div>
     </div>
 
-    <div v-else="topic_article_show"
+    <div v-else="isTopicListShow"
          id="user-article-topic-view">
       <button type="button"
-              @click="topic_article_show=true"
+              @click="isTopicListShow=true"
               class="btn btn-secondary btn-sm">返回</button>
 
       <div class="user-article-topic-table">
@@ -100,9 +100,9 @@
           </div>
         </div>
         <TopicList :item="item"
-                   v-for="(item,key) in user_article_topic_all"
+                   v-for="(item,key) in userArticleTopicAll"
                    :key="key"
-                   @update-list="get_user_article_topic_list" />
+                   @update-list="getUserArticleTopicList" />
 
       </div>
     </div>
@@ -136,18 +136,18 @@ export default {
   },
   data () {
     return {
-      create_show_modal: false,
-      topic_article_show: true,
+      isCreateTopicShow: false,
+      isTopicListShow: true,
       topic_name: '',
       topic_description: '',
       topic_list: [],
     }
   },
   created () {
-    this.get_user_article_topic_list()
+    this.getUserArticleTopicList()
   },
   methods: {
-    update_article_list () {
+    updateArticleList () {
       this.$store.dispatch('user/USER_MY_ARTICLE', {
         uid: this.$route.params.uid,
         topic_id: this.$route.query.topic_id || 'all',
@@ -155,7 +155,7 @@ export default {
         pageSize: this.$route.query.pageSize || 10,
       })
     },
-    create_new_user_topic () {
+    createNewUserTopic () {
       var that = this
       this.$store.dispatch('user/CREATE_ARTICLE_TOPIC', {
         topic_name: that.topic_name,
@@ -163,24 +163,24 @@ export default {
       })
         .then(res => {
           if (res.state === 'success') {
-            that.create_show_modal = false
+            that.isCreateTopicShow = false
             that.topic_name = ''
             that.topic_description = ''
             this.$message.success('创建成功')
-            this.get_user_article_topic_list()
+            this.getUserArticleTopicList()
           } else {
             this.$message.warning(res.message)
           }
         })
     },
-    async get_user_article_topic_list () {
+    async getUserArticleTopicList () {
       await this.$store.dispatch('user/GET_USER_ARTICLE_TOPIC', { uid: this.$route.params.uid })
     },
     pageChange (val) {
       this.$router.push({
         name: 'userTopic',
         query: {
-          topic_id: this.current_topic_id,
+          topic_id: this.currentTopicId,
           page: val
         }
       })
@@ -190,19 +190,19 @@ export default {
     personalInfo () { // 登录后的个人信息
       return this.$store.state.personalInfo || {}
     },
-    user_info () { // 登录后的个人信息
+    userInfo () { // 登录后的个人信息
       return this.$store.state.user.user_info || {}
     },
     pagination () { // 分页
-      return Math.ceil(this.my_article.count / this.my_article.pageSize)
+      return Math.ceil(this.myArticle.count / this.myArticle.pageSize)
     },
-    my_article () { // 用户个人的文章
+    myArticle () { // 用户个人的文章
       return this.$store.state.user.my_article || {}
     },
-    current_topic_id () {
+    currentTopicId () {
       return this.$route.query.topic_id || 'all'
     },
-    user_article_topic_all () { // 个人所有专栏
+    userArticleTopicAll () { // 个人所有专栏
       return this.$store.state.user.user_article_topic || []
     },
   },

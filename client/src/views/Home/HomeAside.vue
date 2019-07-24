@@ -14,7 +14,7 @@
       <h3>写下你想说的</h3>
       <div class="issue-btn">
         <a href="javascript:;"
-           @click="switch_router"
+           @click="switchRouter"
            class="btn-note"
            id="js-btn-note">
           <i class="iconfont icon-xiezuo"></i>写文章
@@ -28,7 +28,8 @@
          v-if="website.advertise.length>0">
       <div class="advertise-item"
            v-for="(advertiseItem,key) in website.advertise"
-           v-if="advertiseItem.enable">
+           v-if="advertiseItem.enable"
+           :key="key">
         <a class="advertise-img"
            :href="advertiseItem.link||'javascript:;'"
            v-if="advertiseItem.img_url">
@@ -57,7 +58,8 @@
         </div>
       </header>
       <ul class="tags xzl-tags-list hot-sidebar-items hot-tags-sidebar tags--light">
-        <li v-for="item in home.popular_article_tag">
+        <li v-for="(item,key) in home.popular_article_tag"
+            :key="key">
           <router-link class="link xzl-link-color"
                        :to="{name:'article_tag',params:{article_tag_en_name:item.article_tag_en_name}}">
             {{item.article_tag_name}}
@@ -96,7 +98,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'HomeAside',
   methods: {
-    switch_router () {
+    switchRouter () {
       if (!this.$store.state.personalInfo.islogin) {
         this.$store.commit('SET_IS_LOGIN', true)
       } else {

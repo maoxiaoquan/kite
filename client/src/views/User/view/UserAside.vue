@@ -1,10 +1,11 @@
 <template>
   <div class="user-aside-view">
     <ul class="list user-dynamic"
-        v-if="user_info.user.user_role_ids">
+        v-if="userInfo.user.user_role_ids">
       <li class="badge-icon"
-          v-for="item in user_aside.user_role_all"
-          v-if="~user_info.user.user_role_ids.split(',')
+          v-for="(item,key) in userAside.user_role_all"
+          :key="key"
+          v-if="~userInfo.user.user_role_ids.split(',')
             .indexOf(String(item.user_role_id))&&item.is_show">
         <a target="_blank"
            href="javascript:;">
@@ -27,7 +28,7 @@
     </ul>
 
     <ul class="list user-dynamic"
-        v-if="personalInfo.islogin&&personalInfo.user.uid===user_info.user.uid">
+        v-if="personalInfo.islogin&&personalInfo.user.uid===userInfo.user.uid">
       <li>
         <router-link :to='{name:"subscribe_tag",params:{type:"my"}}'>
           <span class="collection-name">我关注的文章标签</span>
@@ -38,8 +39,8 @@
     <div class="title">个人介绍</div>
     <div class="description">
       <div class="js-intro">
-        <template v-if="user_info.user.introduction">
-          {{user_info.user.introduction}}
+        <template v-if="userInfo.user.introduction">
+          {{userInfo.user.introduction}}
         </template>
         <template v-else>
           暂无简介
@@ -67,10 +68,10 @@ export default {
     personalInfo () { // 登录后的个人信息
       return this.$store.state.personalInfo || {}
     },
-    user_aside () { // user 侧栏信息
+    userAside () { // user 侧栏信息
       return this.$store.state.user.user_aside || {}
     },
-    user_info () { // 登录后的个人信息
+    userInfo () { // 登录后的个人信息
       return this.$store.state.user.user_info || {}
     },
   },

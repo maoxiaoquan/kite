@@ -1,7 +1,7 @@
 <template>
   <div id="global-alert">
 
-    <el-dialog :visible.sync="is_login_show"
+    <el-dialog :visible.sync="isLoginShow"
                :close-on-click-modal="false"
                width="350px">
       <SignIn v-if="website.config.on_login==='yes'" />
@@ -9,7 +9,7 @@
          v-else>登录未开启，请联系管理员开启</p>
     </el-dialog>
 
-    <el-dialog :visible.sync="is_register_show"
+    <el-dialog :visible.sync="isRegisterShow"
                :close-on-click-modal="false"
                width="350px">
       <SignUp v-if="website.config.on_register==='yes'" />
@@ -17,7 +17,7 @@
          v-else>注册未开启，请联系管理员开启</p>
     </el-dialog>
 
-    <el-dialog :visible.sync="is_reset_password_show"
+    <el-dialog :visible.sync="isResetPasswordShow"
                :close-on-click-modal="false"
                width="350px">
       <ResetPassword />
@@ -34,41 +34,41 @@ import { mapState } from 'vuex'
 export default {
   name: 'GlobalAlert',
   methods: {
-    close_login (none) { // 关闭登录弹窗
+    closeLogin (none) { // 关闭登录弹窗
       this.$store.commit('SET_IS_LOGIN', false)
       none()
     },
-    close_register () { // 关闭注册弹窗
+    closeRegister () { // 关闭注册弹窗
       this.$store.commit('SET_IS_REGISTER', false)
     },
-    close_reset_password () { // 关闭找回密码弹窗
+    closeResetPassword () { // 关闭找回密码弹窗
       this.$store.commit('SET_IS_RESET_PASSWORD', false)
     }
   },
   computed: {
     ...mapState(['website']),  // home:主页  article_column:文章的专栏
-    is_login_show: { // 登录弹窗的状态
+    isLoginShow: { // 登录弹窗的状态
       get () {
-        return this.$store.state.is_login_show
+        return this.$store.state.isLoginShow
       },
       set (val) {
-        this.$store.state.is_login_show = val
+        this.$store.state.isLoginShow = val
       },
     },
-    is_register_show: { // 注册弹窗的状态
+    isRegisterShow: { // 注册弹窗的状态
       get () {
-        return this.$store.state.is_register_show
+        return this.$store.state.isRegisterShow
       },
       set (val) {
-        this.$store.state.is_register_show = val
+        this.$store.state.isRegisterShow = val
       },
     },
-    is_reset_password_show: { // 找回密码
+    isResetPasswordShow: { // 找回密码
       get () {
-        return this.$store.state.is_reset_password_show
+        return this.$store.state.isResetPasswordShow
       },
       set (val) {
-        this.$store.state.is_reset_password_show = val
+        this.$store.state.isResetPasswordShow = val
       },
     }
   },

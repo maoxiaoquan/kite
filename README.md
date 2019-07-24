@@ -40,6 +40,8 @@ index.js、index.vue、index.jsx、index.css、index.scss以 index.* 的文件�
 
 vuex action 都以大写开始下划线分隔例如：ARTICLE_COMMENT
 
+admin 文件夹和 server 文件夹 变量多为下划线居多，主要是与mysql直接交互的多，mysql存储字段大部分都为下划线
+
 以后的维护以及改版、开发规范都是如此，
 
 ```

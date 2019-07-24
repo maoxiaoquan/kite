@@ -8,7 +8,7 @@ const state = () => ({
     page: 1,
     pageSize: 25
   },
-  c_column_en_name: '' // 当前 文章专栏
+  currColumnEnName: '' // 当前 文章专栏
 })
 
 const mutations = {
@@ -18,7 +18,7 @@ const mutations = {
   },
   SET_CURRENT_ARTICLE_COLUMN (state, data) {
     // 设置当前切换的文章专栏
-    state.c_column_en_name = data
+    state.currColumnEnName = data
   },
   SET_ARTICLE_COLUMN_LIST (state, data) {
     // 设置文章专栏列表

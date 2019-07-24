@@ -1,7 +1,7 @@
 <template>
   <div class="user-message">
     <div class="user-message-view">
-      <UserMessageItem v-for="(item,key) in user_message.user_message_list"
+      <UserMessageItem v-for="(item,key) in userMessage.user_message_list"
                        :MessageItem="item"
                        :key="key"
                        @delete-change="deleteChange" />
@@ -55,13 +55,13 @@ export default {
     personalInfo () { // 登录后的个人信息
       return this.$store.state.personalInfo || {}
     },
-    user_info () { // 登录后的个人信息
+    userInfo () { // 登录后的个人信息
       return this.$store.state.user.user_info || {}
     },
     pagination () { // 分页
-      return Math.ceil(this.user_message.count / this.user_message.pageSize)
+      return Math.ceil(this.userMessage.count / this.userMessage.pageSize)
     },
-    user_message () { // 用户的消息
+    userMessage () { // 用户的消息
       return this.$store.state.user.user_message || {}
     },
   },

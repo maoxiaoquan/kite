@@ -1,6 +1,6 @@
 import http from '../../../utils/http'
 
-export const create_admin_role = (data, func) => {
+export const createAdminRole = (data, func) => {
   return dispatch => {
     http.post('/admin-role/create', data).then(res => {
       if (func) {
@@ -10,7 +10,7 @@ export const create_admin_role = (data, func) => {
   }
 }
 
-export const get_admin_role_list = (data, func) => {
+export const getAdminRoleList = (data, func) => {
   return dispatch => {
     http.get('/admin-role/list', data).then(res => {
       if (func) {
@@ -24,7 +24,7 @@ export const get_admin_role_list = (data, func) => {
   }
 }
 
-export const edit_admin_role = (data, func) => {
+export const editAdminRole = (data, func) => {
   return dispatch => {
     http.post('/admin-role/edit', data).then(res => {
       if (func) {
@@ -34,7 +34,7 @@ export const edit_admin_role = (data, func) => {
   }
 }
 
-export const set_admin_role_authority = (data, func) => {
+export const setAdminRoleAuthority = (data, func) => {
   return dispatch => {
     http.post('/admin-role-authority/set', data).then(res => {
       if (func) {
@@ -45,7 +45,7 @@ export const set_admin_role_authority = (data, func) => {
 }
 
 /* 删除角色 */
-export const delete_admin_role = (data, func) => {
+export const deleteAdminRole = (data, func) => {
   return dispatch => {
     http.post('/admin-role/delete', data).then(res => {
       if (func) {

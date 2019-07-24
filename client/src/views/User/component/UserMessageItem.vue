@@ -1,61 +1,71 @@
 <template>
-  <div class="user-center-message-item" ref="user_message_list">
+  <div class="user-center-message-item"
+       ref="user_message_list">
     <div class="title">{{MessageItem.title}}</div>
 
-    <div class="main clearfix" v-if="Number(MessageItem.type)===5">
-      <router-link class="user-info" :to="{name:'user',params:{uid:MessageItem.other_user.uid}}">
-        <img class="avatar" :src="MessageItem.other_user.avatar" alt />
+    <div class="main clearfix"
+         v-if="Number(MessageItem.type)===5">
+      <router-link class="user-info"
+                   :to="{name:'user',params:{uid:MessageItem.other_user.uid}}">
+        <img class="avatar"
+             :src="MessageItem.other_user.avatar"
+             alt />
         <span class="nickname">{{MessageItem.other_user.nickname}}</span>
       </router-link>
       <div class="content">
-        <router-link
-          style="color:#df5858"
-          :to="{name:'article',params:{aid:MessageItem.article.aid}}"
-        >{{MessageItem.article.title}}</router-link>
+        <router-link style="color:#df5858"
+                     :to="{name:'article',params:{aid:MessageItem.article.aid}}">{{MessageItem.article.title}}</router-link>
         中{{typeList[MessageItem.type]}}：
       </div>
       <div class="content-text">
         <template v-if="MessageItem.comment">
-          <p
-            v-html="commentRender(MessageItem.comment.content||'评论被用户删除')"
-            v-if="Number(MessageItem.comment.status)===2||Number(MessageItem.comment.status)===5"
-          ></p>
-          <p
-            v-else-if="Number(MessageItem.comment.status)===1"
-            style="color:#f96b84;"
-          >当前用户评论需要管理员审核才能可见</p>
-          <p v-else-if="Number(MessageItem.comment.status)===4" style="color:#f96b84;">评论被删除</p>
-          <p v-else-if="Number(MessageItem.comment.status)===3" style="color:#f96b84;">当前用户评论违规</p>
+          <p v-html="commentRender(MessageItem.comment.content||'评论被用户删除')"
+             v-if="Number(MessageItem.comment.status)===2||Number(MessageItem.comment.status)===5"></p>
+          <p v-else-if="Number(MessageItem.comment.status)===1"
+             style="color:#f96b84;">当前用户评论需要管理员审核才能可见</p>
+          <p v-else-if="Number(MessageItem.comment.status)===4"
+             style="color:#f96b84;">评论被删除</p>
+          <p v-else-if="Number(MessageItem.comment.status)===3"
+             style="color:#f96b84;">当前用户评论违规</p>
         </template>
         <template v-else>
           <p style="color:#f96b84;">评论被删除</p>
         </template>
       </div>
-      <span class="delete-message" @click="delete_user_message(MessageItem.id)">删除</span>
+      <span class="delete-message"
+            @click="deleteUserMessage(MessageItem.id)">删除</span>
     </div>
 
-    <div class="main clearfix" v-else-if="Number(MessageItem.type)===4">
-      <router-link class="user-info" :to="{name:'user',params:{uid:MessageItem.other_user.uid}}">
-        <img class="avatar" :src="MessageItem.other_user.avatar" alt />
+    <div class="main clearfix"
+         v-else-if="Number(MessageItem.type)===4">
+      <router-link class="user-info"
+                   :to="{name:'user',params:{uid:MessageItem.other_user.uid}}">
+        <img class="avatar"
+             :src="MessageItem.other_user.avatar"
+             alt />
         <span class="nickname">{{MessageItem.other_user.nickname}}</span>
       </router-link>
       <div class="content">{{typeList[MessageItem.type]}}</div>
-      <span class="delete-message" @click="delete_user_message(MessageItem.id)">删除</span>
+      <span class="delete-message"
+            @click="deleteUserMessage(MessageItem.id)">删除</span>
     </div>
 
-    <div class="main clearfix" v-else-if="Number(MessageItem.type)===2">
-      <router-link class="user-info" :to="{name:'user',params:{uid:MessageItem.other_user.uid}}">
-        <img class="avatar" :src="MessageItem.other_user.avatar" alt />
+    <div class="main clearfix"
+         v-else-if="Number(MessageItem.type)===2">
+      <router-link class="user-info"
+                   :to="{name:'user',params:{uid:MessageItem.other_user.uid}}">
+        <img class="avatar"
+             :src="MessageItem.other_user.avatar"
+             alt />
         <span class="nickname">{{MessageItem.other_user.nickname}}</span>
       </router-link>
       <div class="content">
         {{typeList[MessageItem.type]}}
-        <router-link
-          style="color:#df5858"
-          :to="{name:'article',params:{aid:MessageItem.article.aid}}"
-        >{{MessageItem.article.title}}</router-link>
+        <router-link style="color:#df5858"
+                     :to="{name:'article',params:{aid:MessageItem.article.aid}}">{{MessageItem.article.title}}</router-link>
       </div>
-      <span class="delete-message" @click="delete_user_message(MessageItem.id)">删除</span>
+      <span class="delete-message"
+            @click="deleteUserMessage(MessageItem.id)">删除</span>
     </div>
   </div>
 </template>
@@ -69,13 +79,13 @@ export default {
       type: Object
     }
   },
-  data() {
+  data () {
     return {
       typeList: ["", "系统消息", "喜欢文章", "关注标签", "用户关注", "评论"]
     };
   },
   methods: {
-    delete_user_message(id) {
+    deleteUserMessage (id) {
       this.$confirm("此操作将永久该消息, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -83,7 +93,7 @@ export default {
       })
         .then(() => {
           this.$store
-            .dispatch("user/DELETE_USER_MESSAGE", {
+            .dispatch("user/deleteUserMessage", {
               user_message_id: id
             })
             .then(result => {
@@ -98,9 +108,9 @@ export default {
               console.log(err);
             });
         })
-        .catch(() => {});
+        .catch(() => { });
     },
-    commentRender(val) {
+    commentRender (val) {
       let newComment = val;
       faceqq.map(faceItem => {
         newComment = newComment.replace(
@@ -157,7 +167,7 @@ export default {
       border-radius: 10px;
       font-size: 14px;
       color: #393939;
-      p{
+      p {
         font-size: 14px;
       }
     }

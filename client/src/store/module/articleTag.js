@@ -108,7 +108,7 @@ const actions = {
 }
 
 const getters = {
-  user_article_tag: state => {
+  userArticleTag: state => {
     return state.user_article_tag
       ? state.user_article_tag.map(result => {
         return result.article_tag_id

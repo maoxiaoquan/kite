@@ -4,13 +4,13 @@ import { Icon, Table, Button, Modal, Form, Input, Select, Tree } from 'antd'
 import { Link } from 'react-router-dom'
 import alert from '../../../utils/alert'
 import './AdminRole.scss'
-import { get_admin_authority_list } from '../../AdminAuthority/action/AdminAuthorityAction'
+import { getAdminAuthorityList } from '../../AdminAuthority/action/AdminAuthorityAction'
 import {
-  create_admin_role,
-  get_admin_role_list,
-  edit_admin_role,
-  set_admin_role_authority,
-  delete_admin_role
+  createAdminRole,
+  getAdminRoleList,
+  editAdminRole,
+  setAdminRoleAuthority,
+  deleteAdminRole
 } from '../actions/AdminRoleAction'
 
 const TreeNode = Tree.TreeNode
@@ -125,7 +125,7 @@ class AdminRole extends React.Component {
     /*获取后台角色分页列表*/
     this.fetch_admin_role_list()
     /*获取后台权限所有*/
-    this.props.dispatch(get_admin_authority_list())
+    this.props.dispatch(getAdminAuthorityList())
   }
 
   showModal = () => {
@@ -180,7 +180,7 @@ class AdminRole extends React.Component {
       cancelText: '否',
       onOk: async () => {
         await this.props.dispatch(
-          delete_admin_role({ role_id: current_role_info.role_id }, res => {
+          deleteAdminRole({ role_id: current_role_info.role_id }, res => {
             /*获取后台角色分页列表*/
             this.fetch_admin_role_list()
           })
@@ -222,7 +222,7 @@ class AdminRole extends React.Component {
   fetch_admin_edit_role = () => {
     /*修改角色*/
     this.props.dispatch(
-      edit_admin_role(
+      editAdminRole(
         {
           role_id: this.props.state_admin_role.current_role_info.role_id,
           role_name: this.state.role_name,
@@ -245,7 +245,7 @@ class AdminRole extends React.Component {
       role_description: this.state.role_description
     }
     this.props.dispatch(
-      create_admin_role(params, () => {
+      createAdminRole(params, () => {
         alert.message_success('角色创建成功')
         this.fetch_admin_role_list()
         this.setState({
@@ -262,7 +262,7 @@ class AdminRole extends React.Component {
       role_authority_list_all
     } = this.props.state_admin_role
     this.props.dispatch(
-      set_admin_role_authority(
+      setAdminRoleAuthority(
         {
           ...current_role_info,
           role_authority_list_all
@@ -286,7 +286,7 @@ class AdminRole extends React.Component {
       pagination: { current }
     } = this.state
     this.props.dispatch(
-      get_admin_role_list({ params: { page: current } }, res => {
+      getAdminRoleList({ params: { page: current } }, res => {
         let pagination = { ...that.state.pagination }
         pagination.total = res.count
         pagination.current = current

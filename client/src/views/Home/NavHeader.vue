@@ -2,24 +2,24 @@
   <nav class="nav-header recommend-collection">
     <ul class="nav-item-view">
       <li class="nav-item"
-          :class="{'active':c_column_en_name===''}">
+          :class="{'active':currColumnEnName===''}">
         <a href="javascript:;"
            class="collection-name"
-           @click="switch_nav({name:'home'})">
+           @click="switchNav({name:'home'})">
           热门
         </a>
       </li>
       <li class="nav-item"
           v-for="column_item in navItem"
           :key="column_item.article_column_id"
-          @click="switch_nav({name:'column',params:{article_column_en_name:column_item.article_column_en_name}})"
-          :class="{'active':c_column_en_name===column_item.article_column_en_name}">
+          @click="switchNav({name:'column',params:{article_column_en_name:column_item.article_column_en_name}})"
+          :class="{'active':currColumnEnName===column_item.article_column_en_name}">
         <span class="collection-name">{{column_item.article_column_name}}</span>
       </li>
       <li class="nav-item more">
         <a href="javascript:;"
            class="collection-name"
-           @click="switch_nav({name:'columnAll'})">
+           @click="switchNav({name:'columnAll'})">
           更多...
         </a>
       </li>
@@ -34,15 +34,15 @@ export default {
     navItem: Array
   },
   methods: {
-    switch_nav (val) {
+    switchNav (val) {
       console.log('val', val)
       this.$router.push(val)
     }
   },
   computed: {
-    c_column_en_name () {
+    currColumnEnName () {
       // 当前的专栏
-      return this.$store.state.articleColumn.c_column_en_name
+      return this.$store.state.articleColumn.currColumnEnName
     }
   }
 }

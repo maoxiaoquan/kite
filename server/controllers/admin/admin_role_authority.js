@@ -19,7 +19,7 @@ class role_authority {
    * 创建角色
    * @param   {object} ctx 上下文对象
    */
-  static async create_admin_role (ctx) {
+  static async createAdminRole (ctx) {
     const { role_name, role_description } = ctx.request.body
     try {
       if (!role_name) {
@@ -62,7 +62,7 @@ class role_authority {
    * 修改角色
    * @param   {object} ctx 上下文对象
    */
-  static async edit_admin_role (ctx) {
+  static async editAdminRole (ctx) {
     const req_data = ctx.request.body
     try {
       await admin_role.update(
@@ -81,9 +81,7 @@ class role_authority {
         // 写入日志
         uid: ctx.request.userInfo.uid,
         type: 1,
-        content: `成功更新了id为‘${req_data.role_id}’的角色为‘${
-          req_data.role_name
-        }’`
+        content: `成功更新了id为‘${req_data.role_id}’的角色为‘${req_data.role_name}’`
       })
 
       await admin_resJson(ctx, {
@@ -103,7 +101,7 @@ class role_authority {
    * 删除角色
    * @param   {object} ctx 上下文对象
    */
-  static async delete_admin_role (ctx) {
+  static async deleteAdminRole (ctx) {
     const { role_id } = ctx.request.body
     /* 角色与用户权限无关联的时候 */
     try {
@@ -125,7 +123,7 @@ class role_authority {
    * 获取角色列表
    * @param   {object} ctx 上下文对象
    */
-  static async get_admin_role_list (ctx) {
+  static async getAdminRoleList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
       let { count, rows } = await admin_role.findAndCountAll({
@@ -182,7 +180,7 @@ class role_authority {
    * 创建权限
    * @param   {object} ctx 上下文对象
    */
-  static async create_admin_authority (ctx) {
+  static async createAdminAuthority (ctx) {
     const req_data = ctx.request.body
 
     try {
@@ -226,7 +224,7 @@ class role_authority {
    * 获取权限列表
    * @param   {object} ctx 上下文对象
    */
-  static async get_admin_authority_list (ctx) {
+  static async getAdminAuthorityList (ctx) {
     try {
       let admin_authority_findAll = await admin_authority.findAll()
 
@@ -248,7 +246,7 @@ class role_authority {
    * 修改权限
    * @param   {object} ctx 上下文对象
    */
-  static async update_admin_authority (ctx) {
+  static async updateAdminAuthority (ctx) {
     const req_data = ctx.request.body
     try {
       await admin_authority.update(
@@ -270,9 +268,7 @@ class role_authority {
         // 写入日志
         uid: ctx.request.userInfo.uid,
         type: 1,
-        content: `成功更新了id为‘${req_data.authority_id}’的权限为‘${
-          req_data.authority_name
-        }’`
+        content: `成功更新了id为‘${req_data.authority_id}’的权限为‘${req_data.authority_name}’`
       })
 
       admin_resJson(ctx, {
@@ -292,7 +288,7 @@ class role_authority {
    * 删除权限列表
    * @param   {object} ctx 上下文对象
    */
-  static async delete_admin_authority (ctx) {
+  static async deleteAdminAuthority (ctx) {
     const { authority_id_arr } = ctx.request.body
     try {
       await admin_authority.destroy({
@@ -346,7 +342,7 @@ class role_authority {
    * @param   {object} ctx 上下文对象
    */
 
-  static async set_admin_role_authority (ctx) {
+  static async setAdminRoleAuthority (ctx) {
     const req_data = ctx.request.body
     try {
       await admin_role.update(
