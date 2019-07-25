@@ -9,7 +9,7 @@ class Format {
    * @param  {Boolean} is_login  是否登录
    */
 
-  async sign_resJson (ctx, { state, message, token, date }, is_login = true) {
+  async resSignJson (ctx, { state, message, token, date }, is_login = true) {
     ctx.body = {
       state,
       message,
@@ -28,7 +28,7 @@ class Format {
    * @param  {Boolean} is_login  是否登录
    */
 
-  async admin_resJson (ctx, { state, message, data = {} }, is_login = true) {
+  async resAdminJson (ctx, { state, message, data = {} }, is_login = true) {
     ctx.body = {
       state,
       message,
@@ -41,7 +41,7 @@ class Format {
    * 前台页面数据返回
    */
 
-  async client_resJson (ctx, { state, message, data = {} }) {
+  async resClientJson (ctx, { state, message, data = {} }) {
     ctx.body = {
       state,
       message,

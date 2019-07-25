@@ -142,7 +142,7 @@ class Picture extends React.Component {
   }
 
   componentDidMount() {
-    this.fetch_picture_list()
+    this.fetchPictureList()
   }
 
   _edit = data => {
@@ -179,8 +179,8 @@ class Picture extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_delete_picture({
-          picture_id: this.props.state_picture.current_info.picture_id
+        this.fetchDeletePicture({
+          picture_id: this.props.statePicture.current_info.picture_id
         })
         /*删除标签*/
       },
@@ -225,7 +225,7 @@ class Picture extends React.Component {
         current: pages.current
       }
     })
-    this.fetch_picture_list(pages)
+    this.fetchPictureList(pages)
   }
 
   showModal = () => {
@@ -246,9 +246,9 @@ class Picture extends React.Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (is_create) {
-          this.fetch_create_picture(values)
+          this.fetchCreatePicture(values)
         } else {
-          this.fetch_update_picture(values)
+          this.fetchUpdatePicture(values)
         }
       }
     })
@@ -274,12 +274,12 @@ class Picture extends React.Component {
     callback()
   }
 
-  fetch_create_picture = values => {
+  fetchCreatePicture = values => {
     /*创建图片*/
     this.props.dispatch(
       createPicture(values, res => {
         alert.message_success('创建图片成功')
-        this.fetch_picture_list()
+        this.fetchPictureList()
         this.setState({
           modal_visible_edit: false
         })
@@ -287,17 +287,17 @@ class Picture extends React.Component {
     )
   }
 
-  fetch_update_picture = values => {
+  fetchUpdatePicture = values => {
     /*修改图片*/
     this.props.dispatch(
       updatePicture(
         {
-          picture_id: this.props.state_picture.current_info.picture_id,
+          picture_id: this.props.statePicture.current_info.picture_id,
           ...values
         },
         res => {
           alert.message_success('修改图片成功')
-          this.fetch_picture_list()
+          this.fetchPictureList()
           this.setState({
             modal_visible_edit: false
           })
@@ -306,17 +306,17 @@ class Picture extends React.Component {
     )
   }
 
-  fetch_delete_picture = values => {
+  fetchDeletePicture = values => {
     /*删除图片*/
     this.props.dispatch(
       deletePicture(values, res => {
         alert.message_success('删除图片成功')
-        this.fetch_picture_list()
+        this.fetchPictureList()
       })
     )
   }
 
-  fetch_picture_list = () => {
+  fetchPictureList = () => {
     /*获取管理员用户带分页的列表*/
     const that = this
     this.setState({ loading: true })
@@ -337,7 +337,7 @@ class Picture extends React.Component {
   }
 
   render() {
-    const { state_picture } = this.props
+    const { statePicture } = this.props
     const { loading, is_create } = this.state
     const { getFieldDecorator } = this.props.form
 
@@ -450,7 +450,7 @@ class Picture extends React.Component {
           <div className="layout-table">
             <Table
               columns={this.state.columns}
-              dataSource={state_picture.list}
+              dataSource={statePicture.list}
               loading={loading}
               onChange={this.TablePageChange.bind(this)}
               pagination={this.state.pagination}
@@ -465,8 +465,8 @@ class Picture extends React.Component {
 
 const PictureForm = Form.create()(Picture)
 
-export default connect(({ state_picture }) => {
+export default connect(({ statePicture }) => {
   return {
-    state_picture
+    statePicture
   }
 })(PictureForm)

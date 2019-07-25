@@ -8,14 +8,13 @@ import WebConfig from '../components/WebConfig'
 
 import './SystemConfig.scss'
 
-@connect(({ state_system_config }) => {
+@connect(({ stateSystemConfig }) => {
   return {
-    state_system_config
+    stateSystemConfig
   }
 })
-
 class SystemConfig extends React.Component {
-  render () {
+  render() {
     return (
       <div className="layout-main" id="system-config">
         <div className="layout-main-title">

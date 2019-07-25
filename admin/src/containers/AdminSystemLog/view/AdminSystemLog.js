@@ -23,10 +23,10 @@ import alert from '../../../utils/alert'
 const Option = Select.Option
 const FormItem = Form.Item
 const confirm = Modal.confirm
-const {TextArea} = Input
+const { TextArea } = Input
 
 class AdminSystemLog extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       columns: [
@@ -35,10 +35,15 @@ class AdminSystemLog extends React.Component {
           dataIndex: 'index',
           key: 'index',
           render: (text, record, index) => (
-            <span style={{
-              'width': '20px',
-              'display': 'block'
-            }}>{Number((this.state.pagination.current - 1) * 10) + index + 1}</span>)
+            <span
+              style={{
+                width: '20px',
+                display: 'block'
+              }}
+            >
+              {Number((this.state.pagination.current - 1) * 10) + index + 1}
+            </span>
+          )
         },
         {
           title: '操作时间',
@@ -50,9 +55,7 @@ class AdminSystemLog extends React.Component {
           dataIndex: 'admin_user',
           key: 'admin_user',
           render: (text, record) => {
-            return (
-              record.admin_user.nickname
-            )
+            return record.admin_user.nickname
           }
         },
         {
@@ -60,7 +63,10 @@ class AdminSystemLog extends React.Component {
           dataIndex: 'type',
           key: 'type',
           render: (text, record) => (
-            <Tag className="table-article-tag-list" color="orange">{this.state.type[record.type]}</Tag>)
+            <Tag className="table-article-tag-list" color="orange">
+              {this.state.type[record.type]}
+            </Tag>
+          )
         },
         {
           title: '内容',
@@ -73,16 +79,20 @@ class AdminSystemLog extends React.Component {
           render: (text, record) => {
             return (
               <div className="table-right-btn">
-                <Button className="box-btn-red"
-                        onClick={() => {
-                          this._delete(record)
-                        }}
-                        size="small"
-                >删除</Button>
+                <Button
+                  className="box-btn-red"
+                  onClick={() => {
+                    this._delete(record)
+                  }}
+                  size="small"
+                >
+                  删除
+                </Button>
               </div>
             )
           }
-        }],
+        }
+      ],
       pagination: {
         current: 1
       },
@@ -92,12 +102,12 @@ class AdminSystemLog extends React.Component {
     }
   }
 
-  componentDidMount () {
-    this.fetch_admin_system_log_list()
+  componentDidMount() {
+    this.fetchAdminSystemLogList()
   }
 
-  _delete = (value) => {
-    this.props.dispatch({type: 'SET_ADMIN_SYSTEM_LOG_INFO', data: value})
+  _delete = value => {
+    this.props.dispatch({ type: 'SET_ADMIN_SYSTEM_LOG_INFO', data: value })
     confirm({
       title: '确认要删除此系统日志吗？',
       content: '此操作不可逆转',
@@ -105,16 +115,18 @@ class AdminSystemLog extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_delete_admin_system_log({id: this.props.state_admin_system_log.current_info.id})
+        this.fetchDeleteAdminSystemLog({
+          id: this.props.stateAdminSystemLog.current_info.id
+        })
         /*删除系统日志*/
       },
-      onCancel () {
+      onCancel() {
         console.log('Cancel')
       }
     })
   }
 
-  TablePageChange = async (pages) => {
+  TablePageChange = async pages => {
     let pagination = {}
     pagination.current = pages.current
     await this.setState({
@@ -122,48 +134,54 @@ class AdminSystemLog extends React.Component {
         current: pages.current
       }
     })
-    this.fetch_admin_system_log_list(pages)
+    this.fetchAdminSystemLogList(pages)
   }
 
-  fetch_delete_admin_system_log = (values) => { /*删除系统日志*/
-    this.props.dispatch(deleteAdminSystemLog(values, (res) => {
-      alert.message_success('删除系统日志成功')
-      this.fetch_admin_system_log_list()
-    }))
-  }
-
-  fetch_admin_system_log_list = () => {  /*获取系统日志带分页的列表*/
-    const that = this
-    this.setState({loading: true})
-    const {pagination: {current}} = this.state
-    this.props.dispatch(getAdminSystemLogList({params: {page: current}}, (res) => {
-      let pagination = {...that.state.pagination}
-      pagination.total = res.count
-      pagination.current = current
-      that.setState({
-        loading: false,
-        pagination
+  fetchDeleteAdminSystemLog = values => {
+    /*删除系统日志*/
+    this.props.dispatch(
+      deleteAdminSystemLog(values, res => {
+        alert.message_success('删除系统日志成功')
+        this.fetchAdminSystemLogList()
       })
-    }))
+    )
   }
 
-  render () {
-    const {state_admin_system_log} = this.props
-    const {loading} = this.state
+  fetchAdminSystemLogList = () => {
+    /*获取系统日志带分页的列表*/
+    const that = this
+    this.setState({ loading: true })
+    const {
+      pagination: { current }
+    } = this.state
+    this.props.dispatch(
+      getAdminSystemLogList({ params: { page: current } }, res => {
+        let pagination = { ...that.state.pagination }
+        pagination.total = res.count
+        pagination.current = current
+        that.setState({
+          loading: false,
+          pagination
+        })
+      })
+    )
+  }
+
+  render() {
+    const { stateAdminSystemLog } = this.props
+    const { loading } = this.state
 
     return (
       <div className="layout-main">
-
         <div className="layout-main-title">
-          <Icon type="setting"/> <em>系统日志</em>
+          <Icon type="setting" /> <em>系统日志</em>
         </div>
 
         <div className="admin-system-tag">
-
           <div className="layout-table">
             <Table
               columns={this.state.columns}
-              dataSource={state_admin_system_log.list}
+              dataSource={stateAdminSystemLog.list}
               loading={loading}
               onChange={this.TablePageChange.bind(this)}
               pagination={this.state.pagination}
@@ -178,9 +196,8 @@ class AdminSystemLog extends React.Component {
 
 const AdminSystemLogForm = Form.create()(AdminSystemLog)
 
-export default connect(({state_admin_system_log}) => {
+export default connect(({ stateAdminSystemLog }) => {
   return {
-    state_admin_system_log
+    stateAdminSystemLog
   }
 })(AdminSystemLogForm)
-

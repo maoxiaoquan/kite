@@ -5,9 +5,9 @@ import Notice from '../components/Notice'
 import Advertise from '../components/Advertise'
 import './WebsiteConfig.scss'
 
-@connect(({ state_website_config }) => {
+@connect(({ stateWebsiteConfig }) => {
   return {
-    state_website_config
+    stateWebsiteConfig
   }
 })
 class WebsiteConfig extends React.Component {

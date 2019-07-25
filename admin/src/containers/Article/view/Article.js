@@ -29,7 +29,7 @@ const FormItem = Form.Item
 const confirm = Modal.confirm
 
 @withRouter
-@connect(({ state_article }) => ({ state_article }))
+@connect(({ stateArticle }) => ({ stateArticle }))
 class Article extends React.Component {
   constructor(props) {
     super(props)
@@ -182,8 +182,8 @@ class Article extends React.Component {
       '无需审核',
       '草稿'
     ],
-    type_list: ['','文章', '提问','说说'],
-    source_list: ['','原创', '转载'],
+    type_list: ['', '文章', '提问', '说说'],
+    source_list: ['', '原创', '转载'],
     title_val: '',
     status_val: '',
     type_val: '',
@@ -192,7 +192,7 @@ class Article extends React.Component {
   }
 
   componentDidMount() {
-    this.fetch_article_list()
+    this.fetchArticleList()
   }
 
   editUser(val) {
@@ -219,8 +219,8 @@ class Article extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_article_delete({
-          aid: this.props.state_article.current_info.aid
+        this.fetchArticleDelete({
+          aid: this.props.stateArticle.current_info.aid
         })
         /*删除文章*/
       },
@@ -238,24 +238,24 @@ class Article extends React.Component {
         current: pages.current
       }
     })
-    this.fetch_article_list(pages)
+    this.fetchArticleList(pages)
   }
 
   handleSubmit = e => {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.fetch_user_edit(values)
+        this.fetchUserEdit(values)
       }
     })
   }
 
-  fetch_article_delete = values => {
+  fetchArticleDelete = values => {
     /*删除文章*/
     this.props.dispatch(
       deleteArticle(values, res => {
         alert.message_success('删除文章成功')
-        this.fetch_article_list()
+        this.fetchArticleList()
       })
     )
   }
@@ -270,7 +270,7 @@ class Article extends React.Component {
     }
   }
 
-  fetch_article_list = () => {
+  fetchArticleList = () => {
     /*获取文章带分页的列表*/
     let params = this.getParams()
     const that = this
@@ -292,14 +292,14 @@ class Article extends React.Component {
     )
   }
 
-  fetch_user_edit = values => {
+  fetchUserEdit = values => {
     /*修改文章*/
     this.props.dispatch(
       editArticle(
-        { aid: this.props.state_article.current_info.aid, ...values },
+        { aid: this.props.stateArticle.current_info.aid, ...values },
         res => {
           alert.message_success('修改文章成功')
-          this.fetch_article_list()
+          this.fetchArticleList()
           this.setState({
             modal_visible_edit: false
           })
@@ -308,7 +308,7 @@ class Article extends React.Component {
     )
   }
 
-  reset_bar_from = () => {
+  resetBarFrom = () => {
     this.setState(
       {
         title_val: '',
@@ -317,12 +317,12 @@ class Article extends React.Component {
         type_val: ''
       },
       () => {
-        this.fetch_article_list()
+        this.fetchArticleList()
       }
     )
   }
 
-  change_val = (val, type) => {
+  changeVal = (val, type) => {
     let data = {}
     data[type] = val
     this.setState(data)
@@ -340,7 +340,7 @@ class Article extends React.Component {
       source_val,
       edit_status_val
     } = this.state
-    const { state_article = {} } = this.props
+    const { stateArticle = {} } = this.props
     const { getFieldDecorator } = this.props.form
 
     const formItemLayout = {
@@ -378,7 +378,7 @@ class Article extends React.Component {
                 <Input
                   value={title_val}
                   onChange={e => {
-                    this.change_val(e.target.value, 'title_val')
+                    this.changeVal(e.target.value, 'title_val')
                   }}
                 />
               </FormItem>
@@ -387,15 +387,19 @@ class Article extends React.Component {
                   className="select-view"
                   value={status_val}
                   onChange={value => {
-                    this.change_val(value, 'status_val')
+                    this.changeVal(value, 'status_val')
                   }}
                 >
                   <Option value="">全部</Option>
-                  {status_list.map((item, key) => (
-                    item?<Option value={key} key={key}>
-                      {item}
-                    </Option>:''
-                  ))}
+                  {status_list.map((item, key) =>
+                    item ? (
+                      <Option value={key} key={key}>
+                        {item}
+                      </Option>
+                    ) : (
+                      ''
+                    )
+                  )}
                 </Select>
               </FormItem>
               <FormItem label="类型">
@@ -403,15 +407,19 @@ class Article extends React.Component {
                   className="select-view"
                   value={type_val}
                   onChange={value => {
-                    this.change_val(value, 'type_val')
+                    this.changeVal(value, 'type_val')
                   }}
                 >
                   <Option value="">全部</Option>
-                  {type_list.map((item, key) => (
-                    item?<Option value={key} key={key}>
-                      {item}
-                    </Option>:''
-                  ))}
+                  {type_list.map((item, key) =>
+                    item ? (
+                      <Option value={key} key={key}>
+                        {item}
+                      </Option>
+                    ) : (
+                      ''
+                    )
+                  )}
                 </Select>
               </FormItem>
               <FormItem label="来源：">
@@ -419,29 +427,33 @@ class Article extends React.Component {
                   className="select-view"
                   value={source_val}
                   onChange={value => {
-                    this.change_val(value, 'source_val')
+                    this.changeVal(value, 'source_val')
                   }}
                 >
                   <Option value="">全部</Option>
-                  {source_list.map((item, key) => (
-                    item?<Option value={key} key={key}>
-                      {item}
-                    </Option>:''
-                  ))}
+                  {source_list.map((item, key) =>
+                    item ? (
+                      <Option value={key} key={key}>
+                        {item}
+                      </Option>
+                    ) : (
+                      ''
+                    )
+                  )}
                 </Select>
               </FormItem>
               <Form.Item>
                 <Button
                   type="primary"
                   htmlType="submit"
-                  onClick={this.fetch_article_list}
+                  onClick={this.fetchArticleList}
                 >
                   搜索
                 </Button>
                 <Button
                   type="primary"
                   htmlType="submit"
-                  onClick={this.reset_bar_from}
+                  onClick={this.resetBarFrom}
                 >
                   重置
                 </Button>
@@ -472,9 +484,9 @@ class Article extends React.Component {
                       })
                     }}
                   >
-                    {this.state.status_list.map((item, key) => (
-                      item?<Option key={key}>{item}</Option>:''
-                    ))}
+                    {this.state.status_list.map((item, key) =>
+                      item ? <Option key={key}>{item}</Option> : ''
+                    )}
                   </Select>
                 )}
               </FormItem>
@@ -500,9 +512,9 @@ class Article extends React.Component {
                   rules: [{ required: true, message: '请选择类型！' }]
                 })(
                   <Select placeholder="类型">
-                    {this.state.type_list.map((item, key) => (
-                      item?<Option key={key}>{item}</Option>:''
-                    ))}
+                    {this.state.type_list.map((item, key) =>
+                      item ? <Option key={key}>{item}</Option> : ''
+                    )}
                   </Select>
                 )}
               </FormItem>
@@ -511,12 +523,10 @@ class Article extends React.Component {
                 {getFieldDecorator('source', {
                   rules: [{ required: true, message: '请选择来源！' }]
                 })(
-                  <Select placeholder="来源"> 
-                   {source_list.map((item, key) => (
-                    item?<Option key={key}>
-                      {item}
-                    </Option>:''
-                  ))}
+                  <Select placeholder="来源">
+                    {source_list.map((item, key) =>
+                      item ? <Option key={key}>{item}</Option> : ''
+                    )}
                   </Select>
                 )}
               </FormItem>
@@ -535,7 +545,7 @@ class Article extends React.Component {
 
           <Table
             columns={this.state.columns}
-            dataSource={state_article.list}
+            dataSource={stateArticle.list}
             loading={loading}
             onChange={this.TablePageChange.bind(this)}
             pagination={this.state.pagination}

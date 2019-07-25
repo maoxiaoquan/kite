@@ -9,7 +9,7 @@ function title (state = initState, action) {
     case 'SET_ASIDE_LIST':
       return {
         ...state,
-        asideList: action.AuthorityNameId
+        asideList: action.all_authority_name_id
       }
     case 'SET_CURRENT_USER_INFO':
       return {

@@ -41,7 +41,7 @@ class UserAuthority extends React.Component {
   }
 
   componentDidMount() {
-    this.fetch_user_authority_list()
+    this.fetchUserAuthorityList()
   }
 
   showCreateModal = async value => {
@@ -54,8 +54,7 @@ class UserAuthority extends React.Component {
     if (!value) {
       this.props.form.setFields({
         authority_sort: {
-          value: await this.props.state_user_authority.user_authority_list
-            .length
+          value: await this.props.stateUserAuthority.user_authority_list.length
         }
       })
     } else {
@@ -105,36 +104,34 @@ class UserAuthority extends React.Component {
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         if (this.state.is_create) {
-          await this.fetch_user_authority_create(values)
+          await this.fetchUserAuthorityCreate(values)
         } else {
-          await this.fetch_user_authority_update(values)
+          await this.fetchUserAuthorityUpdate(values)
         }
       }
     })
   }
 
-  handle_delete_authority = data => {
+  handleDeleteAuthority = data => {
     const that = this
     confirm({
       title: '你确认要删除当前权限吗',
-      content: `${
-        data.authority_name
-      }，删除权限后，所有与之关联的角色将失去此权限！`,
+      content: `${data.authority_name}，删除权限后，所有与之关联的角色将失去此权限！`,
       okText: 'YES',
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        that.fetch_user_authority_delete(data)
+        that.fetchUserAuthorityDelete(data)
       },
       onCancel() {}
     })
   }
 
-  fetch_user_authority_list = () => {
+  fetchUserAuthorityList = () => {
     this.props.dispatch(getUserAuthorityList())
   }
 
-  fetch_user_authority_create = async values => {
+  fetchUserAuthorityCreate = async values => {
     /* 创建权限 */
     await this.props.dispatch(
       createUserAuthority(
@@ -152,19 +149,19 @@ class UserAuthority extends React.Component {
           this.setState({
             visible: false
           })
-          this.fetch_user_authority_list()
+          this.fetchUserAuthorityList()
           alert.message_success('权限创建成功')
         }
       )
     )
   }
 
-  fetch_user_authority_update = async values => {
+  fetchUserAuthorityUpdate = async values => {
     /* 更新权限 */
     await this.props.dispatch(
       updateUserAuthority(
         {
-          authority_id: this.props.state_user_authority.current_authority_info
+          authority_id: this.props.stateUserAuthority.current_authority_info
             .authority_id,
           authority_name: values.authority_name,
           authority_type: values.authority_type,
@@ -177,25 +174,25 @@ class UserAuthority extends React.Component {
           this.setState({
             visible: false
           })
-          this.fetch_user_authority_list()
+          this.fetchUserAuthorityList()
           alert.message_success('权限更新成功')
         }
       )
     )
   }
 
-  fetch_user_authority_delete = async data => {
+  fetchUserAuthorityDelete = async data => {
     /* 删除权限 */
-    let id_arr = await this.traversal_delete(data)
+    let id_arr = await this.traversalDelete(data)
     this.props.dispatch(
       deleteUserAuthority({ authority_id_arr: id_arr }, () => {
-        this.fetch_user_authority_list()
+        this.fetchUserAuthorityList()
         alert.message_success('删除成功')
       })
     )
   }
 
-  traversal_delete = val => {
+  traversalDelete = val => {
     let _arr = []
 
     function id_arr(data) {
@@ -215,7 +212,7 @@ class UserAuthority extends React.Component {
   }
 
   render() {
-    const { state_user_authority } = this.props
+    const { stateUserAuthority } = this.props
     const { getFieldDecorator } = this.props.form
     const { authority_type_select, authority_parent_name } = this.state
 
@@ -249,7 +246,7 @@ class UserAuthority extends React.Component {
               type="edit"
             />
             <Icon
-              onClick={() => this.handle_delete_authority(data)}
+              onClick={() => this.handleDeleteAuthority(data)}
               type="delete"
             />
           </div>
@@ -429,7 +426,7 @@ class UserAuthority extends React.Component {
 
           <div className="layout-card-view">
             <Tree defaultExpandAll={true} showLine ref="tree">
-              {state_user_authority.user_authority_list.map(item => {
+              {stateUserAuthority.user_authority_list.map(item => {
                 return (
                   <TreeNode key={item.authority_id} title={customLabel(item)}>
                     {TreeNodeTree(item.children)}
@@ -446,8 +443,8 @@ class UserAuthority extends React.Component {
 
 const UserAuthorityForm = Form.create()(UserAuthority)
 
-export default connect(({ state_user_authority }) => {
+export default connect(({ stateUserAuthority }) => {
   return {
-    state_user_authority
+    stateUserAuthority
   }
 })(UserAuthorityForm)

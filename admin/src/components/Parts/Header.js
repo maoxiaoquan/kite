@@ -14,7 +14,6 @@ import {
 } from 'antd'
 import './header.scss'
 import { getAdminIndexStatistics } from '../../containers/Index/actions'
-import state_title from '../../stores/reducers/title'
 
 const SubMenu = Menu.SubMenu
 const MenuItemGroup = Menu.ItemGroup
@@ -39,9 +38,9 @@ const menu = (
 )
 
 @withRouter
-@connect(({ state_title, state_mange }) => ({
-  state_title,
-  state_mange
+@connect(({ stateTitle, stateMange }) => ({
+  stateTitle,
+  stateMange
 }))
 class Header extends Component {
   state = {
@@ -63,7 +62,7 @@ class Header extends Component {
     const {
       collapsed,
       onCollapseChange,
-      state_mange: { user = {} }
+      stateMange: { user = {} }
     } = this.props
     return (
       <Layout.Header

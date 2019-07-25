@@ -2,26 +2,26 @@ const router = require('koa-router')()
 const index = require('../controllers/cli/index') // 主页
 const init = require('../controllers/cli/init') // init
 
-const RouterLimit = require('../utils/cli_router_limit')
+const RouterLimit = require('../utils/cliRouterLimit')
 
 /* PAGE RENDER */
 
-router.get('/', index.render_get_index) // 主页 page
+router.get('/', index.renderGetIndex) // 主页 page
 
-router.get('init', RouterLimit.Step, init.render_init) // init
+router.get('init', RouterLimit.Step, init.cliInit) // init
 
-router.get('init_step_one', RouterLimit.Step, init.render_init_step_one) // init one
+router.get('init_step_one', RouterLimit.Step, init.cliInitStepOne) // init one
 
-router.get('init_step_two', RouterLimit.Step, init.render_init_step_two) // init two
+router.get('init_step_two', RouterLimit.Step, init.cliInitStepTwo) // init two
 
-router.get('init_step_three', RouterLimit.Step, init.render_init_step_three) // init three
+router.get('init_step_three', RouterLimit.Step, init.cliInitStepThree) // init three
 
-router.post('set_step', init.post_set_step) // 设置步骤
+router.post('set_step', init.cliSetStep) // 设置步骤
 
-router.post('set_mysql', init.post_set_mysql) // set mysql
+router.post('set_mysql', init.cliSetMysql) // set mysql
 
-router.post('create_admin_user', init.post_create_admin_user) // set mysql
+router.post('create_admin_user', init.cliCreateAdminUser) // set mysql
 
-router.post('restart_project', init.post_restart_project) // restart project
+router.post('restart_project', init.cliRestartProject) // restart project
 
 module.exports = router

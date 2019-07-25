@@ -288,7 +288,7 @@ export default {
   },
   mounted () {
     this.init_article_tag_all();
-    this.get_user_article_topic_all();
+    this.getUserArticleTopicAll();
   },
   watch: {
     article_content (val) {
@@ -321,7 +321,7 @@ export default {
       this.source_article_tag_all = this.article_tag_all;
       this.search_article_tag_all = this.article_tag_all;
     },
-    get_user_article_topic_all () {
+    getUserArticleTopicAll () {
       if (!this.$store.state.personalInfo.islogin) {
         this.$message.warning("当前用户未登陆，请前往首页登陆后尝试");
         this.$router.push({ name: "home" });
@@ -344,7 +344,7 @@ export default {
           if (res.state === "success") {
             this.$message.success("创建文章专题成功");
             this.topic_name = "";
-            this.get_user_article_topic_all();
+            this.getUserArticleTopicAll();
             this.create_topic_show = false;
           } else {
             this.$message.warning(res.message);

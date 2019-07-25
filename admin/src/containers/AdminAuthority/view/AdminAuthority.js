@@ -54,7 +54,7 @@ class AdminAuthority extends React.Component {
     if (!value) {
       this.props.form.setFields({
         authority_sort: {
-          value: await this.props.state_admin_authority.admin_authority_list
+          value: await this.props.stateAdminAuthority.admin_authority_list
             .length
         }
       })
@@ -162,7 +162,7 @@ class AdminAuthority extends React.Component {
     await this.props.dispatch(
       updateAdminAuthority(
         {
-          authority_id: this.props.state_admin_authority.current_authority_info
+          authority_id: this.props.stateAdminAuthority.current_authority_info
             .authority_id,
           authority_name: values.authority_name,
           authority_type: values.authority_type,
@@ -213,7 +213,7 @@ class AdminAuthority extends React.Component {
   }
 
   render() {
-    const { state_admin_authority } = this.props
+    const { stateAdminAuthority } = this.props
     const { getFieldDecorator } = this.props.form
     const { authority_type_select, authority_parent_name } = this.state
 
@@ -428,7 +428,7 @@ class AdminAuthority extends React.Component {
 
           <div className="layout-card-view">
             <Tree defaultExpandAll={true} showLine ref="tree">
-              {state_admin_authority.admin_authority_list.map(item => {
+              {stateAdminAuthority.admin_authority_list.map(item => {
                 return (
                   <TreeNode key={item.authority_id} title={customLabel(item)}>
                     {TreeNodeTree(item.children)}
@@ -445,8 +445,8 @@ class AdminAuthority extends React.Component {
 
 const AdminAuthorityForm = Form.create()(AdminAuthority)
 
-export default connect(({ state_admin_authority }) => {
+export default connect(({ stateAdminAuthority }) => {
   return {
-    state_admin_authority
+    stateAdminAuthority
   }
 })(AdminAuthorityForm)

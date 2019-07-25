@@ -26,9 +26,9 @@ const FormItem = Form.Item
 const confirm = Modal.confirm
 const { TextArea } = Input
 
-@connect(({ state_website_config }) => {
+@connect(({ stateWebsiteConfig }) => {
   return {
-    state_website_config
+    stateWebsiteConfig
   }
 })
 class _Advertise extends React.Component {
@@ -226,7 +226,7 @@ class _Advertise extends React.Component {
   }
 
   render() {
-    const { state_website_config } = this.props
+    const { stateWebsiteConfig } = this.props
     const { loading, is_create } = this.state
     const { getFieldDecorator } = this.props.form
 
@@ -322,7 +322,7 @@ class _Advertise extends React.Component {
 
         <Table
           columns={this.state.columns}
-          dataSource={state_website_config.advertise}
+          dataSource={stateWebsiteConfig.advertise}
           loading={loading}
           rowKey="option_id"
         />

@@ -1,10 +1,9 @@
-const multer = require('koa-multer')// 加载koa-multer模块
-const path = require('path')
-const { client_resJson } = require('./res_data')
+const multer = require('koa-multer') // 加载koa-multer模块
+
 // 文件上传
 
 // 加载配置
-module.exports = (type) => {
+module.exports = type => {
   const date = new Date()
   const year = date.getFullYear()
   const month = date.getMonth() + 1
@@ -31,7 +30,7 @@ module.exports = (type) => {
     destination: destination_url[type],
     // 修改文件名称
     filename: function (req, file, callback) {
-      let fileFormat = (file.mimetype).split('/')
+      let fileFormat = file.mimetype.split('/')
       callback(null, Date.now() + '.' + fileFormat[fileFormat.length - 1])
     }
   })

@@ -1,4 +1,4 @@
-const { sign_resJson, admin_resJson } = require('../../utils/res_data')
+const { resSignJson, resAdminJson } = require('../../utils/resData')
 const tokens = require('../../utils/tokens')
 const {
   checkUserName,
@@ -10,9 +10,8 @@ const {
 } = require('../../utils/index')
 const config = require('../../config')
 const models = require('../../../db/mysqldb/index')
-const { admin_user } = require('../../../db/mysqldb/index')
 const moment = require('moment')
-const { create_admin_system_log } = require('./adminSystemLog')
+const { createAdminSystemLog } = require('./adminSystemLog')
 const Op = require('sequelize').Op
 const { lowdb } = require('../../../db/lowdb/index')
 
@@ -21,15 +20,17 @@ function ErrorMessage (message) {
   this.name = 'UserException'
 }
 
-class Admin_users {
+class AdminUsers {
   /**
    * 登录操作
    * @param  {object} ctx 上下文对象
    */
-  static async admin_sign_in (ctx) {
-    let { account, password, uid } = ctx.request.body
-    let admin_user_info = {}
+  static async adminSignIn (ctx) {
+    let { account, password } = ctx.request.body
     try {
+      const oneAdminUser = await models.adminUser.findOne({
+        where: { account }
+      })
       if (!account) {
         throw new ErrorMessage('请输入账户!')
       }
@@ -39,32 +40,30 @@ class Admin_users {
       if (!password) {
         throw new ErrorMessage('请输入密码!')
       }
-      admin_user_info = await admin_user.findOne({ where: { account } })
-      if (!admin_user_info) {
+
+      if (!oneAdminUser) {
         throw new ErrorMessage('用户不存在!')
       }
-      if (
-        !(encrypt(password, config.encrypt_key) === admin_user_info.password)
-      ) {
+      if (!(encrypt(password, config.ENCRYPT_KEY) === oneAdminUser.password)) {
         throw new ErrorMessage('密码错误!')
       }
-      if (!admin_user_info.enable) {
+      if (!oneAdminUser.enable) {
         throw new ErrorMessage('您已被限制登录!')
       }
 
       let datas = {
-        uid: admin_user_info.uid,
+        uid: oneAdminUser.uid,
         account,
-        role_id: admin_user_info ? admin_user_info.admin_role_ids : ''
+        role_id: oneAdminUser ? oneAdminUser.admin_role_ids : ''
       }
       let token = tokens.AdminSetToken(60 * 60 * 24 * 7, datas)
-      sign_resJson(ctx, {
+      resSignJson(ctx, {
         state: 'success',
         message: '登录成功',
         token
       })
     } catch (err) {
-      sign_resJson(
+      resSignJson(
         ctx,
         {
           state: 'error',
@@ -81,55 +80,55 @@ class Admin_users {
    * @param   {object} ctx 上下文对象
    */
   static async createAdminUser (ctx) {
-    const req_data = ctx.request.body
+    const reqData = ctx.request.body
 
     try {
-      if (!req_data.account) {
+      if (!reqData.account) {
         throw new ErrorMessage('请输入账户!')
       }
-      if (!req_data.nickname) {
+      if (!reqData.nickname) {
         throw new ErrorMessage('请输入昵称!')
       }
-      if (!checkUserName(req_data.account)) {
+      if (!checkUserName(reqData.account)) {
         throw new ErrorMessage('账户须5-22个英文字符!')
       }
-      if (!req_data.password) {
+      if (!reqData.password) {
         throw new ErrorMessage('请输入密码!')
       }
-      if (!checkPwd(req_data.password)) {
+      if (!checkPwd(reqData.password)) {
         throw new ErrorMessage('密码格式输入有误!')
       }
-      if (!checkEmail(req_data.email)) {
+      if (!checkEmail(reqData.email)) {
         throw new ErrorMessage('邮箱格式输入有误!')
       }
-      let admin_user_findOne = await admin_user.findOne({
-        where: { account: req_data.account }
+      let oneAdminUser = await models.adminUser.findOne({
+        where: { account: reqData.account }
       })
 
-      if (admin_user_findOne) {
+      if (oneAdminUser) {
         throw new ErrorMessage('账户已存在!')
       }
 
-      await admin_user.create({
-        account: req_data.account,
+      await models.adminUser.create({
+        account: reqData.account,
         avatar: config.default_avatar,
-        nickname: req_data.nickname,
-        password: encrypt(req_data.password, config.encrypt_key),
-        email: req_data.email,
-        phone: req_data.phone,
+        nickname: reqData.nickname,
+        password: encrypt(reqData.password, config.ENCRYPT_KEY),
+        email: reqData.email,
+        phone: reqData.phone,
         reg_time: moment()
           .utc()
           .utcOffset(+8)
           .format('X'),
         reg_ip: ctx.request.ip,
-        enable: req_data.enable || false
+        enable: reqData.enable || false
       })
-      await admin_resJson(ctx, {
+      await resAdminJson(ctx, {
         state: 'success',
         message: '注册成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -142,29 +141,29 @@ class Admin_users {
    * @param   {object} ctx 上下文对象
    */
   static async editAdminUser (ctx) {
-    const res_data = ctx.request.body
+    const reqData = ctx.request.body
     try {
-      await admin_user.update(
+      await models.adminUser.update(
         {
-          account: res_data.account,
-          nickname: res_data.nickname,
-          password: encrypt(res_data.password, config.encrypt_key),
-          email: res_data.email,
-          phone: res_data.phone,
-          enable: res_data.enable || false
+          account: reqData.account,
+          nickname: reqData.nickname,
+          password: encrypt(reqData.password, config.ENCRYPT_KEY),
+          email: reqData.email,
+          phone: reqData.phone,
+          enable: reqData.enable || false
         },
         {
           where: {
-            uid: res_data.uid // 查询条件
+            uid: reqData.uid // 查询条件
           }
         }
       )
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '更新成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -179,7 +178,7 @@ class Admin_users {
   static async getAdminUserList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
-      let { count, rows } = await admin_user.findAndCountAll({
+      let { count, rows } = await models.adminUser.findAndCountAll({
         attributes: [
           'uid',
           'account',
@@ -195,7 +194,7 @@ class Admin_users {
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize) // 每页限制返回的数据条数
       })
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -204,7 +203,7 @@ class Admin_users {
         }
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -216,7 +215,7 @@ class Admin_users {
    * 获取后台用户信息
    * @param   {object} ctx 上下文对象
    */
-  static async get_admin_user_info (ctx) {
+  static async getAdminUserInfo (ctx) {
     const { userInfo = {} } = ctx.request
     try {
       const { role_id } = userInfo
@@ -226,7 +225,7 @@ class Admin_users {
         .get('website')
         .value()
 
-      let userAllRole = await models.admin_role.findOne({
+      let oneAdminRole = await models.adminRole.findOne({
         where: {
           role_id
         }
@@ -234,18 +233,18 @@ class Admin_users {
       let whereParmams = { authority_type: '1' }
       role_id !== config.SUPER_ROLE_ID &&
         (whereParmams['authority_id'] = {
-          [Op.in]: userAllRole.admin_authority_ids.split(',')
+          [Op.in]: oneAdminRole.admin_authority_ids.split(',')
         })
-      let AllAuthorityName = await models.admin_authority.findAll({
+      let AllAuthorityName = await models.adminAuthority.findAll({
         where: whereParmams
       })
 
-      let AuthorityNameId = []
+      let allAuthorityNameId = []
       for (let i in AllAuthorityName) {
-        AuthorityNameId.push(AllAuthorityName[i].authority_url)
+        allAuthorityNameId.push(AllAuthorityName[i].authority_url)
       }
 
-      let fint_user_info = await admin_user.findOne({
+      let oneAdminUser = await await models.adminUser.findOne({
         attributes: [
           'uid',
           'avatar',
@@ -259,17 +258,17 @@ class Admin_users {
         ]
       })
 
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '返回成功',
         data: {
-          admin_user_info: fint_user_info,
-          AuthorityNameId,
+          admin_user_info: oneAdminUser,
+          all_authority_name_id: allAuthorityNameId,
           website
         }
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: err.message
       })
@@ -288,20 +287,20 @@ class Admin_users {
     const { uid } = ctx.request.body
     /* 无关联 */
     try {
-      await admin_user.destroy({ where: { uid } })
-      await create_admin_system_log({
+      await models.adminUser.destroy({ where: { uid } })
+      await createAdminSystemLog({
         // 写入日志
         uid: ctx.request.userInfo.uid,
         type: 3,
         content: `成功删了了id为‘${uid}’的管理员`
       })
 
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '删除管理员用户成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: err.message
       })
@@ -310,4 +309,4 @@ class Admin_users {
   }
 }
 
-module.exports = Admin_users
+module.exports = AdminUsers

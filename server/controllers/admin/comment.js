@@ -1,16 +1,7 @@
 const models = require('../../../db/mysqldb/index')
-const { sign_resJson, admin_resJson } = require('../../utils/res_data')
-const {
-  tools: { encrypt }
-} = require('../../utils/index')
-const config = require('../../config')
+const { resAdminJson } = require('../../utils/resData')
 const moment = require('moment')
 const Op = require('sequelize').Op
-
-function err_mess (message) {
-  this.message = message
-  this.name = 'UserException'
-}
 
 class Comment {
   /**
@@ -20,13 +11,13 @@ class Comment {
   static async getCommentList (ctx) {
     const { page = 1, pageSize = 10, content, status } = ctx.request.body
     try {
-      let where_params = {} // 定义查询条件
+      let whereParams = {} // 定义查询条件
 
-      content && (where_params['content'] = { [Op.like]: `%${content}%` })
-      status && (where_params['status'] = status)
+      content && (whereParams['content'] = { [Op.like]: `%${content}%` })
+      status && (whereParams['status'] = status)
 
       let { count, rows } = await models.comment.findAndCountAll({
-        where: where_params, // 为空，获取全部，也可以自己添加条件
+        where: whereParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize) // 每页限制返回的数据条数
       })
@@ -45,7 +36,7 @@ class Comment {
         )
       }
 
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -54,7 +45,7 @@ class Comment {
         }
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -66,24 +57,24 @@ class Comment {
    * @param   {object} ctx 上下文对象
    */
   static async updateComment (ctx) {
-    const req_data = ctx.request.body
+    const reqData = ctx.request.body
     try {
       await await models.comment.update(
         {
-          status: req_data.status
+          status: reqData.status
         },
         {
           where: {
-            id: req_data.id // 查询条件
+            id: reqData.id // 查询条件
           }
         }
       )
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '更新评论成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -96,27 +87,27 @@ class Comment {
   static async deleteComment (ctx) {
     const { id } = ctx.request.body
     try {
-      let find_comment = await models.comment.findOne({ where: { id } })
+      let oneComment = await models.comment.findOne({ where: { id } })
       await models.comment.destroy({ where: { id } })
       await models.article.update(
         {
           // 更新文章评论数
           comment_count: await models.comment.count({
             where: {
-              aid: find_comment.aid,
+              aid: oneComment.aid,
               parent_id: 0
             }
           })
         },
-        { where: { aid: find_comment.aid } }
+        { where: { aid: oneComment.aid } }
       )
 
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '删除用户评论成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })

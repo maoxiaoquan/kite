@@ -1,21 +1,19 @@
 const models = require('../../../db/mysqldb/index')
 const moment = require('moment')
-const { client_resJson } = require('../../utils/res_data')
+const { resClientJson } = require('../../utils/resData')
 const Op = require('sequelize').Op
-const trimHtml = require('trim-html')
 const cheerio = require('cheerio')
-const client_where = require('../../utils/client_where')
-const Seq = require('sequelize')
+const clientWhere = require('../../utils/clientWhere')
 const xss = require('xss')
 const config = require('../../config')
 const { lowdb } = require('../../../db/lowdb/index')
 
-function ErrorMessage(message) {
+function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
 }
 
-function getNoMarkupStr(markupStr) {
+function getNoMarkupStr (markupStr) {
   /* markupStr 源码</> */
   // console.log(markupStr);
   let noMarkupStr = markupStr
@@ -36,7 +34,7 @@ function getNoMarkupStr(markupStr) {
   return noMarkupStr
 }
 
-function getSubStr(string) {
+function getSubStr (string) {
   let str = ''
   let len = 0
   for (var i = 0; i < string.length; i++) {
@@ -60,31 +58,31 @@ class Article {
    * 新建文章post提交
    * @param   {object} ctx 上下文对象
    */
-  static async post_create_writer(ctx) {
-    let formData = ctx.request.body
+  static async createArticle (ctx) {
+    let reqData = ctx.request.body
     let { user = '' } = ctx.request
     try {
-      if (!formData.title) {
+      if (!reqData.title) {
         throw new ErrorMessage('请输入文章标题')
       }
 
-      if (formData.title.length > 150) {
+      if (reqData.title.length > 150) {
         throw new ErrorMessage('文章标题过长，请小于150个字符')
       }
 
-      if (!formData.content) {
+      if (!reqData.content) {
         throw new ErrorMessage('请输入文章内容')
       }
 
-      if (!formData.user_topic_ids) {
+      if (!reqData.user_topic_ids) {
         throw new ErrorMessage('请选择个人专题')
       }
 
-      if (formData.source.length === 0 || formData.source === null) {
+      if (reqData.source.length === 0 || reqData.source === null) {
         throw new ErrorMessage('请选择文章来源类型')
       }
 
-      if (!formData.article_tag_ids) {
+      if (!reqData.article_tag_ids) {
         throw new ErrorMessage('请选择文章标签')
       }
 
@@ -103,9 +101,9 @@ class Article {
         )
       }
 
-      let findOneArticleTag = await models.article_tag.findOne({
+      let oneArticleTag = await models.articleTag.findOne({
         where: {
-          article_tag_id: config.ARTICLE_TAG.official_exclusive
+          article_tag_id: config.ARTICLE_TAG.dfOfficialExclusive
         }
       })
       const website = lowdb
@@ -113,21 +111,19 @@ class Article {
         .get('website')
         .value()
       if (
-        ~formData.article_tag_ids.indexOf(config.ARTICLE_TAG.official_exclusive)
+        ~reqData.article_tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)
       ) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.management_team)) {
           throw new ErrorMessage(
-            `${findOneArticleTag.article_tag_name}只有${
-            website.website_name
-            }管理团队才能发布文章`
+            `${oneArticleTag.article_tag_name}只有${website.website_name}管理团队才能发布文章`
           )
         }
       }
 
-      const result = formData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
-      let $ = cheerio.load(formData.content)
+      const result = reqData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
+      let $ = cheerio.load(reqData.content)
 
-      let find_role_all = await models.user_role.findAll({
+      let userRoleALL = await models.userRole.findAll({
         where: {
           user_role_id: {
             [Op.or]: user.user_role_ids.split(',')
@@ -136,37 +132,37 @@ class Article {
         }
       })
 
-      let user_authority_ids = ''
-      find_role_all.map(roleItem => {
-        user_authority_ids += roleItem.user_authority_ids + ','
+      let userAuthorityIds = ''
+      userRoleALL.map(roleItem => {
+        userAuthorityIds += roleItem.user_authority_ids + ','
       })
 
-      let status = ~user_authority_ids.indexOf(
-        config.USER_AUTHORITY.article_review_authority_id
+      let status = ~userAuthorityIds.indexOf(
+        config.USER_AUTHORITY.dfArticleNoReviewId
       )
         ? 6
         : 1
 
       await models.article.create({
         uid: user.uid,
-        title: xss(formData.title),
+        title: xss(reqData.title),
         excerpt: getSubStr(getNoMarkupStr($.text())) /* 摘记 */,
-        content: xss(formData.content) /* 主内容 */,
-        origin_content: formData.origin_content /* 源内容 */,
-        source: formData.source, // 来源 （1原创 2转载）
+        content: xss(reqData.content) /* 主内容 */,
+        origin_content: reqData.origin_content /* 源内容 */,
+        source: reqData.source, // 来源 （1原创 2转载）
         cover_img: result ? result[2] : '',
         status, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败;4:回收站;5:已删除;6:无需审核)'
-        type: formData.type, // 类型 （1文章 2说说 3视频 4公告 ）
-        user_topic_ids: formData.user_topic_ids,
-        article_tag_ids: formData.article_tag_ids
+        type: reqData.type, // 类型 （1文章 2说说 3视频 4公告 ）
+        user_topic_ids: reqData.user_topic_ids,
+        article_tag_ids: reqData.article_tag_ids
       })
 
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'success',
         message: '文章创建成功'
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -179,25 +175,25 @@ class Article {
    * @param   {object} ctx 上下文对象
    */
 
-  static async get_article_tag(ctx) {
-    let article_tag_en_name = ctx.query.article_tag_en_name
+  static async getArticleTag (ctx) {
+    let qyData = ctx.query
 
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 25
 
     try {
-      let find_article_tag = await models.article_tag.findOne({
+      let oneArticleTag = await models.articleTag.findOne({
         where: {
-          article_tag_en_name: article_tag_en_name
+          article_tag_en_name: qyData.article_tag_en_name
         }
       })
-      if (find_article_tag) {
+      if (oneArticleTag) {
         let { count, rows } = await models.article.findAndCountAll({
           where: {
             article_tag_ids: {
-              [Op.like]: `%${find_article_tag.article_tag_id}%`
+              [Op.like]: `%${oneArticleTag.article_tag_id}%`
             },
-            ...client_where.article.otherList // web 表示前台  公共文章限制文件
+            ...clientWhere.article.otherList // web 表示前台  公共文章限制文件
           }, // 为空，获取全部，也可以自己添加条件
           offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
           limit: pageSize, // 每页限制返回的数据条数
@@ -218,12 +214,12 @@ class Article {
           )
         }
 
-        let subscribe_count = await models.subscribe_article_tag.count({
-          where: { article_tag_id: find_article_tag.article_tag_id }
+        let subscribeArticleTagCount = await models.subscribeArticleTag.count({
+          where: { article_tag_id: oneArticleTag.article_tag_id }
         })
 
         /* 所有文章专题 */
-        let article_tag_all = await models.article_tag.findAll({
+        let articleTagAll = await models.articleTag.findAll({
           attributes: [
             'article_tag_id',
             'article_tag_name',
@@ -231,17 +227,17 @@ class Article {
           ]
         })
 
-        await client_resJson(ctx, {
+        await resClientJson(ctx, {
           state: 'success',
           message: 'user',
           data: {
             page,
             count,
             pageSize,
-            article_tag_en_name,
-            subscribe_count,
-            article_tag: find_article_tag,
-            tag_all: article_tag_all,
+            article_tag_en_name: qyData.article_tag_en_name,
+            subscribe_count: subscribeArticleTagCount,
+            article_tag: oneArticleTag,
+            tag_all: articleTagAll,
             article_list: rows
           }
         })
@@ -249,7 +245,7 @@ class Article {
         throw new ErrorMessage('当前文章标签不存在')
       }
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -261,9 +257,9 @@ class Article {
    * 获取热门文章标签
    * @param   {object} ctx 上下文对象
    */
-  static async get_popular_article_tag(ctx) {
+  static async getPopularArticleTag (ctx) {
     try {
-      let article_tag_all = await models.article_tag.findAll({
+      let articleTagAll = await models.articleTag.findAll({
         attributes: [
           'article_tag_id',
           'article_tag_name',
@@ -278,34 +274,34 @@ class Article {
         ]
       })
 
-      for (let i in article_tag_all) {
-        article_tag_all[i].setDataValue(
+      for (let i in articleTagAll) {
+        articleTagAll[i].setDataValue(
           'subscribe_count',
-          await models.subscribe_article_tag.count({
-            where: { article_tag_id: article_tag_all[i].article_tag_id }
+          await models.subscribeArticleTag.count({
+            where: { article_tag_id: articleTagAll[i].article_tag_id }
           })
         )
-        article_tag_all[i].setDataValue(
+        articleTagAll[i].setDataValue(
           'article_count',
           await models.article.count({
             where: {
               article_tag_ids: {
-                [Op.like]: `%${article_tag_all[i].article_tag_id}%`
+                [Op.like]: `%${articleTagAll[i].article_tag_id}%`
               }
             }
           })
         )
       }
 
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'success',
         message: '获取所有文章标签成功',
         data: {
-          list: article_tag_all
+          list: articleTagAll
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -319,7 +315,7 @@ class Article {
    */
   static async getArticleTagAll (ctx) {
     try {
-      let article_tag_all = await models.article_tag.findAll({
+      let articleTagAll = await models.articleTag.findAll({
         attributes: [
           'article_tag_id',
           'article_tag_name',
@@ -330,34 +326,34 @@ class Article {
         where: { enable: true } // 为空，获取全部，也可以自己添加条件
       })
 
-      for (let i in article_tag_all) {
-        article_tag_all[i].setDataValue(
+      for (let i in articleTagAll) {
+        articleTagAll[i].setDataValue(
           'subscribe_count',
-          await models.subscribe_article_tag.count({
-            where: { article_tag_id: article_tag_all[i].article_tag_id }
+          await models.subscribeArticleTag.count({
+            where: { article_tag_id: articleTagAll[i].article_tag_id }
           })
         )
-        article_tag_all[i].setDataValue(
+        articleTagAll[i].setDataValue(
           'article_count',
           await models.article.count({
             where: {
               article_tag_ids: {
-                [Op.like]: `%${article_tag_all[i].article_tag_id}%`
+                [Op.like]: `%${articleTagAll[i].article_tag_id}%`
               }
             }
           })
         )
       }
 
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'success',
         message: '获取所有文章标签成功',
         data: {
-          list: article_tag_all
+          list: articleTagAll
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -369,11 +365,11 @@ class Article {
    * ajax 查询一篇文章
    * @param   {object} ctx 上下文对象
    */
-  static async get_article(ctx) {
-    let aid = ctx.query.aid
+  static async getArticle (ctx) {
+    let { aid } = ctx.query
     try {
       let article = await models.article.findOne({
-        where: { aid, ...client_where.article.otherView }
+        where: { aid, ...clientWhere.article.otherView }
       })
 
       if (article) {
@@ -391,13 +387,13 @@ class Article {
         )
 
         if (article) {
-          client_resJson(ctx, {
+          resClientJson(ctx, {
             state: 'success',
             message: '获取文章成功',
             data: { article }
           })
         } else {
-          client_resJson(ctx, {
+          resClientJson(ctx, {
             state: 'error',
             message: '获取文章失败'
           })
@@ -406,7 +402,7 @@ class Article {
         throw new ErrorMessage('获取文章失败')
       }
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -418,8 +414,8 @@ class Article {
    * ajax 获取用户自己的一篇文章
    * @param   {object} ctx 上下文对象
    */
-  static async getUserArticle(ctx) {
-    let aid = ctx.query.aid
+  static async getUserArticle (ctx) {
+    let { aid } = ctx.query
     let { user = '' } = ctx.request
     try {
       let article = await models.article.findOne({
@@ -436,13 +432,13 @@ class Article {
         )
 
         if (article) {
-          client_resJson(ctx, {
+          resClientJson(ctx, {
             state: 'success',
             message: '获取当前用户文章成功',
             data: { article }
           })
         } else {
-          client_resJson(ctx, {
+          resClientJson(ctx, {
             state: 'error',
             message: '获取当前用户文章失败'
           })
@@ -451,7 +447,7 @@ class Article {
         throw new ErrorMessage('获取当前用户文章失败')
       }
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -463,43 +459,43 @@ class Article {
    * 更新文章
    * @param   {object} ctx 上下文对象
    */
-  static async update_article(ctx) {
-    let formData = ctx.request.body
+  static async updateArticle (ctx) {
+    let reqData = ctx.request.body
 
     let { user = '' } = ctx.request
     try {
-      let FindOneArticle = await models.article.findOne({
+      let oneArticle = await models.article.findOne({
         where: {
-          aid: formData.aid,
+          aid: reqData.aid,
           uid: user.uid // 查询条件
         }
       })
 
-      if (!FindOneArticle) {
+      if (!oneArticle) {
         throw new ErrorMessage('非法操作')
       }
 
-      if (!formData.title) {
+      if (!reqData.title) {
         throw new ErrorMessage('请输入文章标题')
       }
 
-      if (formData.title.length > 150) {
+      if (reqData.title.length > 150) {
         throw new ErrorMessage('文章标题过长，请小于150个字符')
       }
 
-      if (!formData.content) {
+      if (!reqData.content) {
         throw new ErrorMessage('请输入文章内容')
       }
 
-      if (!formData.user_topic_ids) {
+      if (!reqData.user_topic_ids) {
         throw new ErrorMessage('请选择个人专题')
       }
 
-      if (formData.source.length === 0 || formData.source === null) {
+      if (reqData.source.length === 0 || reqData.source === null) {
         throw new ErrorMessage('请选择文章来源类型')
       }
 
-      if (!formData.article_tag_ids) {
+      if (!reqData.article_tag_ids) {
         throw new ErrorMessage('请选择文章标签')
       }
 
@@ -518,9 +514,9 @@ class Article {
         )
       }
 
-      let findOneArticleTag = await models.article_tag.findOne({
+      let oneArticleTag = await models.articleTag.findOne({
         where: {
-          article_tag_id: config.ARTICLE_TAG.official_exclusive
+          article_tag_id: config.ARTICLE_TAG.dfOfficialExclusive
         }
       })
       const website = lowdb
@@ -528,22 +524,20 @@ class Article {
         .get('website')
         .value()
       if (
-        ~formData.article_tag_ids.indexOf(config.ARTICLE_TAG.official_exclusive)
+        ~reqData.article_tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)
       ) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.management_team)) {
           throw new ErrorMessage(
-            `${findOneArticleTag.article_tag_name}只有${
-            website.website_name
-            }管理团队才能更新文章`
+            `${oneArticleTag.article_tag_name}只有${website.website_name}管理团队才能更新文章`
           )
         }
       }
 
-      const result = formData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
+      const result = reqData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
 
-      let $ = cheerio.load(formData.content)
+      let $ = cheerio.load(reqData.content)
 
-      let find_role_all = await models.user_role.findAll({
+      let userRoleAll = await models.userRole.findAll({
         where: {
           user_role_id: {
             [Op.or]: user.user_role_ids.split(',')
@@ -551,13 +545,13 @@ class Article {
           user_role_type: 1 // 用户角色类型1是默认角色
         }
       })
-      let user_authority_ids = ''
-      find_role_all.map(roleItem => {
-        user_authority_ids += roleItem.user_authority_ids + ','
+      let userAuthorityIds = ''
+      userRoleAll.map(roleItem => {
+        userAuthorityIds += roleItem.user_authority_ids + ','
       })
 
-      let status = ~user_authority_ids.indexOf(
-        config.USER_AUTHORITY.article_review_authority_id
+      let status = ~userAuthorityIds.indexOf(
+        config.USER_AUTHORITY.dfArticleNoReviewId
       )
         ? 6
         : 1
@@ -565,16 +559,16 @@ class Article {
       await models.article.update(
         {
           uid: user.uid,
-          title: formData.title,
+          title: reqData.title,
           excerpt: getSubStr(getNoMarkupStr($.text())) /* 摘记 */,
-          content: formData.content /* 主内容 */,
-          origin_content: formData.origin_content /* 源内容 */,
-          source: formData.source, // 来源 （1原创 2转载）
+          content: reqData.content /* 主内容 */,
+          origin_content: reqData.origin_content /* 源内容 */,
+          source: reqData.source, // 来源 （1原创 2转载）
           cover_img: result ? result[2] : '',
           status, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败;4:回收站;5:已删除;6:无需审核)'
-          type: formData.type, // 类型 （1文章 2说说 3视频 4公告 ）
-          user_topic_ids: formData.user_topic_ids,
-          article_tag_ids: formData.article_tag_ids,
+          type: reqData.type, // 类型 （1文章 2说说 3视频 4公告 ）
+          user_topic_ids: reqData.user_topic_ids,
+          article_tag_ids: reqData.article_tag_ids,
           update_date: moment(date.setHours(date.getHours())).format(
             'YYYY-MM-DD HH:mm:ss'
           ) /* 时间 */,
@@ -584,17 +578,17 @@ class Article {
         },
         {
           where: {
-            aid: formData.aid,
+            aid: reqData.aid,
             uid: user.uid // 查询条件
           }
         }
       )
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'success',
         message: '文章更新成功'
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -614,14 +608,14 @@ class Article {
     let { islogin = '', user = '' } = ctx.request
 
     try {
-      let find_article = await models.article.findOne({
+      let oneArticle = await models.article.findOne({
         where: {
           aid,
           uid: user.uid // 查询条件
         }
       })
 
-      if (!find_article) {
+      if (!oneArticle) {
         throw new ErrorMessage('文章不存在')
       }
 
@@ -629,7 +623,7 @@ class Article {
         throw new ErrorMessage('请登录后尝试')
       }
 
-      if (user.uid !== find_article.uid) {
+      if (user.uid !== oneArticle.uid) {
         throw new ErrorMessage('非法操作已禁止')
       }
 
@@ -644,12 +638,12 @@ class Article {
           }
         }
       )
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'success',
         message: '删除文章成功'
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -661,7 +655,7 @@ class Article {
    * 搜索
    * @param   {object} ctx 上下文对象
    */
-  static async search_article(ctx) {
+  static async searchArticle (ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 25
     let search = ctx.query.search
@@ -669,7 +663,7 @@ class Article {
       let { count, rows } = await models.article.findAndCountAll({
         where: {
           title: { [Op.like]: `%${search}%` },
-          ...client_where.article.otherList // web 表示前台  公共文章限制文件
+          ...clientWhere.article.otherList // web 表示前台  公共文章限制文件
         }, // 为空，获取全部，也可以自己添加条件 // status: 2 限制只有 审核通过的显示
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, // 每页限制返回的数据条数
@@ -691,11 +685,11 @@ class Article {
       }
 
       /* 所有文章专题 */
-      let article_tag_all = await models.article_tag.findAll({
+      let allArticleTag = await models.articleTag.findAll({
         attributes: ['article_tag_id', 'article_tag_name']
       })
 
-      await client_resJson(ctx, {
+      await resClientJson(ctx, {
         state: 'success',
         message: 'search',
         data: {
@@ -703,12 +697,12 @@ class Article {
           count,
           pageSize,
           search,
-          tag_all: article_tag_all,
+          tag_all: allArticleTag,
           article_list: rows
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -721,9 +715,9 @@ class Article {
    * @param   {object} ctx 上下文对象
    */
 
-  static async get_article_column(ctx) {
+  static async getArticleColumn (ctx) {
     try {
-      let article_tag_all = await models.article_column.findAll({
+      let allArticleColumn = await models.articleColumn.findAll({
         attributes: [
           'article_column_id',
           'article_column_name',
@@ -740,15 +734,15 @@ class Article {
           ['sort', 'ASC'] // asc
         ]
       })
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'success',
         message: '获取所有文章专栏成功',
         data: {
-          list: article_tag_all
+          list: allArticleColumn
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -765,11 +759,11 @@ class Article {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 25
 
-    let where_params = {
+    let whereParams = {
       enable: 1
     }
     try {
-      let { count, rows } = await models.article_column.findAndCountAll({
+      let { count, rows } = await models.articleColumn.findAndCountAll({
         attributes: [
           'article_column_id',
           'article_column_name',
@@ -778,7 +772,7 @@ class Article {
           'article_tag_ids',
           'article_column_description'
         ],
-        where: where_params, // 为空，获取全部，也可以自己添加条件
+        where: whereParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize // 每页限制返回的数据条数
       })
@@ -790,13 +784,13 @@ class Article {
             : { [Op.in]: rows[i].article_tag_ids.split(',') }
         rows[i].setDataValue(
           'tag',
-          await models.article_tag.findAll({
+          await models.articleTag.findAll({
             where: { article_tag_id }
           })
         )
       }
 
-      await client_resJson(ctx, {
+      await resClientJson(ctx, {
         state: 'success',
         message: 'column',
         data: {
@@ -807,7 +801,7 @@ class Article {
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })

@@ -1,10 +1,5 @@
 const models = require('../../../db/mysqldb')
-const { admin_resJson } = require('../../utils/res_data')
-const {
-  tools: { encrypt }
-} = require('../../utils/index')
-const config = require('../../config')
-const moment = require('moment')
+const { resAdminJson } = require('../../utils/resData')
 function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
@@ -14,27 +9,27 @@ class Options {
   /* 创建配置项 */
   static async createOptions (ctx) {
     // 公共创建配置项
-    const req_data = ctx.request.body
+    const reqData = ctx.request.body
 
     try {
-      if (!req_data.option_key) {
+      if (!reqData.option_key) {
         throw new ErrorMessage('请输入键名!')
       }
 
-      if (!req_data.option_value) {
+      if (!reqData.option_value) {
         throw new ErrorMessage('请输入值!')
       }
 
       await models.options.create({
-        option_key: req_data.option_key, // 键名
-        option_value: req_data.option_value //  值
+        option_key: reqData.option_key, // 键名
+        option_value: reqData.option_value //  值
       })
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '配置创建成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -55,19 +50,19 @@ class Options {
         }
       })
       if (optionsAll) {
-        admin_resJson(ctx, {
+        resAdminJson(ctx, {
           state: 'success',
           message: '获取配置项成功',
           data: optionsAll
         })
       } else {
-        admin_resJson(ctx, {
+        resAdminJson(ctx, {
           state: 'error',
           message: '配置项为空'
         })
       }
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -100,12 +95,12 @@ class Options {
           }
         }
       )
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '更新配置项成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -119,17 +114,17 @@ class Options {
   static async deleteOptions (ctx) {
     const { option_id } = ctx.request.body
     try {
-      let findOption = await models.options.findOne({ where: { option_id } })
-      if (!findOption) {
+      let oneOptions = await models.options.findOne({ where: { option_id } })
+      if (!oneOptions) {
         throw new ErrorMessage('删除项不存在!')
       }
       await models.options.destroy({ where: { option_id } })
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '删除配置项成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })

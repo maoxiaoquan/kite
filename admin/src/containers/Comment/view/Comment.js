@@ -20,7 +20,7 @@ import {
   deleteComment
 } from '../actions/CommentAction'
 import alert from '../../../utils/alert'
-import state_comment from '../reducer/CommentReducer'
+import stateComment from '../reducer/CommentReducer'
 import faceqq from './qq'
 const Option = Select.Option
 const FormItem = Form.Item
@@ -127,7 +127,7 @@ class Comment extends React.Component {
   }
 
   componentDidMount() {
-    this.fetch_comment_list()
+    this.fetchCommentList()
   }
 
   _edit = data => {
@@ -150,8 +150,8 @@ class Comment extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_delete_comment({
-          id: this.props.state_comment.current_info.id
+        this.fetchDeleteComment({
+          id: this.props.stateComment.current_info.id
         })
         /*删除用户评论*/
       },
@@ -181,7 +181,7 @@ class Comment extends React.Component {
         current: pages.current
       }
     })
-    this.fetch_comment_list(pages)
+    this.fetchCommentList(pages)
   }
 
   handleSubmit = e => {
@@ -189,19 +189,19 @@ class Comment extends React.Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values)
-        this.fetch_update_comment(values)
+        this.fetchUpdateComment(values)
       }
     })
   }
 
-  fetch_update_comment = values => {
+  fetchUpdateComment = values => {
     /*修改用户评论*/
     this.props.dispatch(
       updateComment(
-        { id: this.props.state_comment.current_info.id, ...values },
+        { id: this.props.stateComment.current_info.id, ...values },
         res => {
           alert.message_success('修改用户评论成功')
-          this.fetch_comment_list()
+          this.fetchCommentList()
           this.setState({
             modal_visible_edit: false
           })
@@ -218,13 +218,13 @@ class Comment extends React.Component {
     }
   }
 
-  change_val = (val, type) => {
+  changeVal = (val, type) => {
     let data = {}
     data[type] = val
     this.setState(data)
   }
 
-  reset_bar_from = () => {
+  resetBarFrom = () => {
     const data = {
       content_val: '',
       status_val: ''
@@ -232,17 +232,17 @@ class Comment extends React.Component {
     this.setState(data)
   }
 
-  fetch_delete_comment = values => {
+  fetchDeleteComment = values => {
     /*删除用户评论*/
     this.props.dispatch(
       deleteComment(values, res => {
         alert.message_success('删除用户评论成功')
-        this.fetch_comment_list()
+        this.fetchCommentList()
       })
     )
   }
 
-  fetch_comment_list = () => {
+  fetchCommentList = () => {
     /*获取用户评论带分页的列表*/
     let params = this.getParams()
     const that = this
@@ -264,7 +264,7 @@ class Comment extends React.Component {
   }
 
   render() {
-    const { state_comment } = this.props
+    const { stateComment } = this.props
     const { loading, content_val, status_val } = this.state
     const { getFieldDecorator } = this.props.form
 
@@ -304,7 +304,7 @@ class Comment extends React.Component {
                 <Input
                   value={content_val}
                   onChange={e => {
-                    this.change_val(e.target.value, 'content_val')
+                    this.changeVal(e.target.value, 'content_val')
                   }}
                 />
               </FormItem>
@@ -313,7 +313,7 @@ class Comment extends React.Component {
                   className="select-view"
                   value={status_val}
                   onChange={value => {
-                    this.change_val(value, 'status_val')
+                    this.changeVal(value, 'status_val')
                   }}
                 >
                   <Option value="">全部</Option>
@@ -326,14 +326,14 @@ class Comment extends React.Component {
                 <Button
                   type="primary"
                   htmlType="submit"
-                  onClick={this.fetch_comment_list}
+                  onClick={this.fetchCommentList}
                 >
                   搜索
                 </Button>
                 <Button
                   type="primary"
                   htmlType="submit"
-                  onClick={this.reset_bar_from}
+                  onClick={this.resetBarFrom}
                 >
                   重置
                 </Button>
@@ -343,7 +343,7 @@ class Comment extends React.Component {
 
           <Table
             columns={this.state.columns}
-            dataSource={state_comment.list}
+            dataSource={stateComment.list}
             loading={loading}
             onChange={this.TablePageChange.bind(this)}
             pagination={this.state.pagination}
@@ -388,8 +388,8 @@ class Comment extends React.Component {
 
 const CommentForm = Form.create()(Comment)
 
-export default connect(({ state_comment }) => {
+export default connect(({ stateComment }) => {
   return {
-    state_comment
+    stateComment
   }
 })(CommentForm)

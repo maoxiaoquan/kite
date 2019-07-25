@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { client_resJson, admin_resJson } = require('./res_data')
+const { resClientJson, resAdminJson } = require('./resData')
 const models = require('../../db/mysqldb')
 class Tokens {
   static async ClientVerifyToken (ctx, next) {
@@ -13,7 +13,7 @@ class Tokens {
       // 存在token，解析token
       await jwt.verify(token, 'client', async (err, decoded) => {
         if (err) {
-          await client_resJson(ctx, {
+          await resClientJson(ctx, {
             state: 'error',
             message: '当前用户未登陆，请登陆后再次尝试',
             data: {
@@ -30,7 +30,7 @@ class Tokens {
         }
       })
     } else {
-      await client_resJson(ctx, {
+      await resClientJson(ctx, {
         state: 'error',
         message: '当前用户未登陆，请登陆后再次尝试',
         data: {
@@ -51,7 +51,7 @@ class Tokens {
         ctx.request.userInfo = await jwt.verify(token, 'admin')
         await next()
       } catch (err) {
-        admin_resJson(
+        resAdminJson(
           ctx,
           {
             state: 'error',
@@ -61,7 +61,7 @@ class Tokens {
         )
       }
     } else {
-      admin_resJson(
+      resAdminJson(
         ctx,
         {
           state: 'error',

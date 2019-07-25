@@ -1,6 +1,6 @@
 import http from '../../utils/http'
 
-export const get_admin_user_info = (data, callback) => {
+export const getAdminUserInfo = (data, callback) => {
   return dispatch => {
     http.post('/admin-user/info', data).then(result => {
       if (callback) {
@@ -13,7 +13,7 @@ export const get_admin_user_info = (data, callback) => {
       })
       return dispatch({
         type: 'SET_ASIDE_LIST',
-        AuthorityNameId: result.AuthorityNameId
+        all_authority_name_id: result.all_authority_name_id
       })
     })
   }

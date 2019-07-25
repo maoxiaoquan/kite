@@ -1,14 +1,5 @@
-const {
-  sequelize,
-  user,
-  article,
-  user_info
-} = require('../../../db/mysqldb/index')
-const { sign_resJson, admin_resJson } = require('../../utils/res_data')
-const {
-  tools: { encrypt }
-} = require('../../utils/index')
-const config = require('../../config')
+const models = require('../../../db/mysqldb/index')
+const { resAdminJson } = require('../../utils/resData')
 const moment = require('moment')
 class Users {
   /**
@@ -18,7 +9,7 @@ class Users {
   static async getUserList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
-      let { count, rows } = await user.findAndCountAll({
+      let { count, rows } = await models.user.findAndCountAll({
         attributes: [
           'uid',
           'nickname',
@@ -49,7 +40,7 @@ class Users {
         )
       }
 
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -58,7 +49,7 @@ class Users {
         }
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -72,7 +63,7 @@ class Users {
   static async editUser (ctx) {
     const { uid, nickname, user_role_ids, enable } = ctx.request.body
     try {
-      await user.update(
+      await models.user.update(
         {
           nickname: nickname,
           user_role_ids: user_role_ids ? user_role_ids.join(',') : '',
@@ -84,12 +75,12 @@ class Users {
           }
         }
       )
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '更新成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -106,33 +97,36 @@ class Users {
   static async deleteUser (ctx) {
     const { uid } = ctx.request.body
     try {
-      let find_article = await article.findOne({ where: { uid } })
+      let oneArticle = await models.article.findOne({ where: { uid } })
 
-      if (!find_article) {
+      if (!oneArticle) {
         /* 无关联 */
-        await user.destroy({ where: { uid } })
-        admin_resJson(ctx, {
+        await models.user.destroy({ where: { uid } })
+        resAdminJson(ctx, {
           state: 'success',
           message: '删除用户成功'
         })
       } else {
         /* 有关联 */
         // 创建事务
-        await sequelize.transaction(function (transaction) {
+        await models.sequelize.transaction(transaction => {
           // 在事务中执行操作
-          return user
+          return models.user
             .destroy({ where: { uid } }, { transaction })
-            .then(function (delete_admin_user) {
-              return article.destroy({ where: { uid } }, { ...transaction })
+            .then(deleteAdminUser => {
+              return models.article.destroy(
+                { where: { uid } },
+                { ...transaction }
+              )
             })
         })
-        admin_resJson(ctx, {
+        resAdminJson(ctx, {
           state: 'success',
           message: '删除用户成功,同时删除用户所有文章'
         })
       }
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -143,10 +137,10 @@ class Users {
    * 获取需要审核的头像
    * @param   {object} ctx 上下文对象
    */
-  static async get_avatar_review (ctx) {
+  static async getAvatarReview (ctx) {
     const { page = 1, pageSize = 10, status = 1 } = ctx.query
     try {
-      let { count, rows } = await user_info.findAndCountAll({
+      let { count, rows } = await models.userInfo.findAndCountAll({
         where: {
           avatar_review_status: status
         }, // 为空，获取全部，也可以自己添加条件
@@ -157,14 +151,14 @@ class Users {
       for (let i in rows) {
         rows[i].setDataValue(
           'user',
-          await user.findOne({
+          await models.user.findOne({
             where: { uid: rows[i].uid },
             attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
           })
         )
       }
 
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -173,7 +167,7 @@ class Users {
         }
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -187,16 +181,16 @@ class Users {
   static async set_avatar_review (ctx) {
     try {
       const { uid, status } = ctx.request.body
-      let sq_userInfo = await user_info.findOne({
+      let oneUserInfo = await models.userInfo.findOne({
         where: {
           uid: uid // 查询条件
         }
       })
       if (status === '2') {
         // 审核成功
-        await user.update(
+        await models.user.update(
           {
-            avatar: sq_userInfo.avatar_review
+            avatar: oneUserInfo.avatar_review
           },
           {
             where: {
@@ -204,7 +198,7 @@ class Users {
             }
           }
         )
-        await user_info.update(
+        await models.userInfo.update(
           {
             avatar_review_status: status
           },
@@ -214,13 +208,13 @@ class Users {
             }
           }
         )
-        admin_resJson(ctx, {
+        resAdminJson(ctx, {
           state: 'success',
           message: '更新成功'
         })
       } else if (status === '3' || status === '1') {
         // 审核失败或者其他
-        await user_info.update(
+        await models.userInfo.update(
           {
             avatar_review_status: status
           },
@@ -230,13 +224,13 @@ class Users {
             }
           }
         )
-        admin_resJson(ctx, {
+        resAdminJson(ctx, {
           state: 'success',
           message: '更新成功'
         })
       }
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -255,7 +249,7 @@ class Users {
       article_ban_dt && (setUpdate['article_ban_dt'] = new Date(article_ban_dt))
       comment_ban_dt && (setUpdate['comment_ban_dt'] = new Date(comment_ban_dt))
       // 审核成功
-      await user.update(
+      await models.user.update(
         {
           ...setUpdate
         },
@@ -266,12 +260,12 @@ class Users {
         }
       )
 
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '更新成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })

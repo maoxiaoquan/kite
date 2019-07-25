@@ -1,25 +1,25 @@
 const models = require('../../../db/mysqldb/index')
 const moment = require('moment')
-const { render, client_resJson } = require('../../utils/res_data')
+const { render, resClientJson } = require('../../utils/resData')
 const Op = require('sequelize').Op
-const clientWhere = require('../../utils/client_where')
+const clientWhere = require('../../utils/clientWhere')
 function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
 }
 
-class Personal_center {
+class PersonalCenter {
   /**
    * 用户个人中心个人文章列表render
    * @param   {object} ctx 上下文对象
    */
-  static async user_center_article (ctx) {
+  static async userMyArticle (ctx) {
     let uid = ctx.query.uid
     let topic_id = ctx.query.topic_id || 'all'
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
     try {
-      let where_params =
+      let whereParams =
         topic_id === 'all'
           ? { uid, ...clientWhere.article.me }
           : {
@@ -28,7 +28,7 @@ class Personal_center {
             ...clientWhere.article.me
           }
       let { count, rows } = await models.article.findAndCountAll({
-        where: where_params, // 为空，获取全部，也可以自己添加条件
+        where: whereParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, // 每页限制返回的数据条数
         order: [['create_timestamp', 'desc']]
@@ -57,7 +57,7 @@ class Personal_center {
         )
       }
 
-      await client_resJson(ctx, {
+      await resClientJson(ctx, {
         state: 'success',
         message: 'home',
         data: {
@@ -69,7 +69,7 @@ class Personal_center {
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -81,22 +81,22 @@ class Personal_center {
    * 用户个人中心用户关注用户render
    * @param   {object} ctx 上下文对象
    */
-  static async user_center_attention (ctx) {
+  static async getUserAttentionList (ctx) {
     let uid = ctx.query.uid
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
     let any = ctx.query.any || 'me'
 
-    let user_attention_uid_arr
+    let userAttentionUidArr
     try {
-      let me_attention = await models.user_attention
+      let meAttention = await models.userAttention
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((attention_item, tag_key) => {
             return attention_item.attention_uid
           })
         })
-      let other_attention = await models.user_attention
+      let otherAttention = await models.userAttention
         .findAll({ where: { attention_uid: uid } })
         .then(res => {
           return res.map((attention_item, tag_key) => {
@@ -105,13 +105,13 @@ class Personal_center {
         })
 
       if (any === 'me') {
-        user_attention_uid_arr = me_attention
+        userAttentionUidArr = meAttention
       } else {
-        user_attention_uid_arr = other_attention
+        userAttentionUidArr = otherAttention
       }
 
       let { count, rows } = await models.user.findAndCountAll({
-        where: { uid: { [Op.in]: user_attention_uid_arr } }, // 为空，获取全部，也可以自己添加条件
+        where: { uid: { [Op.in]: userAttentionUidArr } }, // 为空，获取全部，也可以自己添加条件
         attributes: [
           'uid',
           'avatar',
@@ -125,7 +125,7 @@ class Personal_center {
         order: [['create_timestamp', 'desc']]
       })
 
-      await client_resJson(ctx, {
+      await resClientJson(ctx, {
         state: 'success',
         message: 'home',
         data: {
@@ -133,13 +133,13 @@ class Personal_center {
           page,
           pageSize,
           user_list: rows,
-          me_attention,
-          other_attention,
+          me_attention: meAttention,
+          other_attention: otherAttention,
           any
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -151,7 +151,7 @@ class Personal_center {
    * 用户关注用户post
    * @param   {object} ctx 上下文对象
    */
-  static async post_user_attention (ctx) {
+  static async setUserAttention (ctx) {
     const { attention_uid } = ctx.request.body
     let { user = '' } = ctx.request
 
@@ -159,32 +159,32 @@ class Personal_center {
       if (attention_uid === user.uid) {
         throw new ErrorMessage('关注用户失败，自己不能关注自己')
       }
-      let findone_user_attention = await models.user_attention.findOne({
+      let oneUserAttention = await models.userAttention.findOne({
         where: {
           uid: user.uid,
           attention_uid
         }
       })
 
-      if (findone_user_attention) {
+      if (oneUserAttention) {
         /* 判断是否关注了，是则取消，否则添加 */
 
-        await models.user_attention.destroy({
+        await models.userAttention.destroy({
           where: {
             uid: user.uid,
             attention_uid
           }
         })
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'success',
           message: '取消关注用户成功'
         })
       } else {
-        await models.user_attention.create({
+        await models.userAttention.create({
           uid: user.uid,
           attention_uid
         })
-        await models.user_message.create({
+        await models.userMessage.create({
           // 用户行为记录
           uid: attention_uid,
           type: 4, // 1:系统消息 2:喜欢文章  3:关注标签 4:用户关注 5:评论
@@ -194,13 +194,13 @@ class Personal_center {
           })
         })
 
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'success',
           message: '关注用户成功'
         })
       }
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -212,20 +212,20 @@ class Personal_center {
    * 用户like文章render
    * @param   {object} ctx 上下文对象
    */
-  static async user_center_like (ctx) {
+  static async getUserLikeArticleList (ctx) {
     let uid = ctx.query.uid
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
     try {
-      let user_like_article_arr = await models.user_like_article
+      let allUserLikeArticle = await models.userLikeArticle
         .findAll({ where: { uid } })
         .then(res => {
-          return res.map((user_like_article_item, key) => {
-            return user_like_article_item.aid
+          return res.map((item, key) => {
+            return item.aid
           })
         })
 
-      let where_params = { aid: { [Op.in]: user_like_article_arr } }
+      let where_params = { aid: { [Op.in]: allUserLikeArticle } }
 
       let { count, rows } = await models.article.findAndCountAll({
         where: where_params, // 为空，获取全部，也可以自己添加条件
@@ -248,7 +248,7 @@ class Personal_center {
         )
       }
 
-      await client_resJson(ctx, {
+      await resClientJson(ctx, {
         state: 'success',
         message: 'home',
         data: {
@@ -259,7 +259,7 @@ class Personal_center {
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -271,23 +271,23 @@ class Personal_center {
    * 用户like文章post
    * @param   {object} ctx 上下文对象
    */
-  static async post_user_like_article (ctx) {
+  static async setUserLikeArticle (ctx) {
     const { aid, uid } = ctx.request.body
     let { user = '' } = ctx.request
     try {
-      let findone_user_attention = await models.user_like_article.findOne({
+      let oneUserLikeArticle = await models.userLikeArticle.findOne({
         where: {
           uid: user.uid,
           aid
         }
       })
 
-      if (findone_user_attention) {
+      if (oneUserLikeArticle) {
         /* 判断是否like文章，是则取消，否则添加 */
 
         await models.sequelize.transaction(function (transaction) {
           // 在事务中执行操作
-          return models.user_like_article
+          return models.userLikeArticle
             .destroy(
               {
                 where: {
@@ -298,7 +298,7 @@ class Personal_center {
               { ...transaction }
             ) /* 删除user article关联 */
             .then(function (user_like_article_destroy) {
-              return models.user_like_article.count(
+              return models.userLikeArticle.count(
                 {
                   where: {
                     aid
@@ -319,14 +319,14 @@ class Personal_center {
               /* 修改文章like数 */
             })
         })
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'success',
           message: '取消like文章成功'
         })
       } else {
         await models.sequelize.transaction(function (transaction) {
           // 在事务中执行操作
-          return models.user_like_article
+          return models.userLikeArticle
             .create(
               {
                 uid: user.uid,
@@ -335,7 +335,7 @@ class Personal_center {
               { ...transaction }
             ) /* 添加user article关联 */
             .then(function (user_like_article_destroy) {
-              return models.user_like_article.count(
+              return models.userLikeArticle.count(
                 {
                   where: {
                     aid
@@ -356,7 +356,7 @@ class Personal_center {
               /* 修改文章like数 */
             })
         })
-        await models.user_message.create({
+        await models.userMessage.create({
           // 用户行为记录
           uid: uid,
           type: 2, // 1:系统消息 2:喜欢文章  3:关注标签 4:用户关注 5:评论
@@ -366,13 +366,13 @@ class Personal_center {
             title: '文章有新的喜欢'
           })
         })
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'success',
           message: 'like文章成功'
         })
       }
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -381,4 +381,4 @@ class Personal_center {
   }
 }
 
-module.exports = Personal_center
+module.exports = PersonalCenter

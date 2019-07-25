@@ -1,13 +1,13 @@
 const models = require('../../../db/mysqldb/index')
 const moment = require('moment')
-const { client_resJson } = require('../../utils/res_data')
+const { resClientJson } = require('../../utils/resData')
 const Op = require('sequelize').Op
 const trimHtml = require('trim-html')
 const xss = require('xss')
-const client_where = require('../../utils/client_where')
+const clientWhere = require('../../utils/clientWhere')
 const config = require('../../config')
 
-function ErrorMessage(message) {
+function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
 }
@@ -15,7 +15,7 @@ function ErrorMessage(message) {
 /* 评论模块 */
 
 class Comment {
-  static async get_comment(ctx) {
+  static async getArticleComment (ctx) {
     let aid = ctx.query.aid
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10
@@ -26,7 +26,7 @@ class Comment {
         where: {
           aid,
           parent_id: 0,
-          ...client_where.comment
+          ...clientWhere.comment
         }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize), // 每页限制返回的数据条数
@@ -55,30 +55,34 @@ class Comment {
 
       for (let item in rows) {
         // 循环取子评论
-        let child_data = await models.comment.findAll({
-          where: { parent_id: rows[item].id, ...client_where.comment }
+        let childAllComment = await models.comment.findAll({
+          where: { parent_id: rows[item].id, ...clientWhere.comment }
         })
-        rows[item].setDataValue('children', child_data)
-        for (let child_item in child_data) {
+        rows[item].setDataValue('children', childAllComment)
+        for (let childCommentItem in childAllComment) {
           // 循环取用户  代码有待优化，层次过于复杂
-          child_data[child_item].setDataValue(
+          childAllComment[childCommentItem].setDataValue(
             'create_at',
-            await moment(child_data[child_item].create_date).format(
+            await moment(childAllComment[childCommentItem].create_date).format(
               'YYYY-MM-DD H:m:s'
             )
           )
-          child_data[child_item].setDataValue(
+          childAllComment[childCommentItem].setDataValue(
             'user',
             await models.user.findOne({
-              where: { uid: child_data[child_item].uid },
+              where: { uid: childAllComment[childCommentItem].uid },
               attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
             })
           )
-          if (child_data[child_item].reply_uid !== 0 && child_data[child_item].reply_uid !== child_data[child_item].uid) {
-            child_data[child_item].setDataValue(
+          if (
+            childAllComment[childCommentItem].reply_uid !== 0 &&
+            childAllComment[childCommentItem].reply_uid !==
+              childAllComment[childCommentItem].uid
+          ) {
+            childAllComment[childCommentItem].setDataValue(
               'reply_user',
               await models.user.findOne({
-                where: { uid: child_data[child_item].reply_uid },
+                where: { uid: childAllComment[childCommentItem].reply_uid },
                 attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
               })
             )
@@ -86,7 +90,7 @@ class Comment {
         }
       }
 
-      await client_resJson(ctx, {
+      await resClientJson(ctx, {
         state: 'success',
         message: '获取评论列表成功',
         data: {
@@ -97,7 +101,7 @@ class Comment {
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -109,12 +113,12 @@ class Comment {
    * 新建评论post提交
    * @param   {object} ctx 上下文对象
    */
-  static async post_create_comment(ctx) {
-    let formData = ctx.request.body
+  static async createArticleComment (ctx) {
+    let reqData = ctx.request.body
     let { user = '' } = ctx.request
 
     try {
-      if (!formData.content) {
+      if (!reqData.content) {
         throw new ErrorMessage('请输入评论内容')
       }
 
@@ -133,7 +137,7 @@ class Comment {
         )
       }
 
-      let find_role_all = await models.user_role.findAll({
+      let allUserRole = await models.userRole.findAll({
         where: {
           user_role_id: {
             [Op.or]: user.user_role_ids.split(',')
@@ -141,11 +145,11 @@ class Comment {
           user_role_type: 1 // 用户角色类型1是默认角色
         }
       })
-      let user_authority_ids = ''
-      find_role_all.map(roleItem => {
-        user_authority_ids += roleItem.user_authority_ids + ','
+      let userAuthorityIds = ''
+      allUserRole.map(roleItem => {
+        userAuthorityIds += roleItem.user_authority_ids + ','
       })
-      let status = ~user_authority_ids.indexOf(
+      let status = ~userAuthorityIds.indexOf(
         config.USER_AUTHORITY.comment_review_authority_id
       )
         ? 5
@@ -153,11 +157,11 @@ class Comment {
 
       await models.comment
         .create({
-          parent_id: formData.parent_id || 0,
-          aid: formData.aid,
+          parent_id: reqData.parent_id || 0,
+          aid: reqData.aid,
           uid: user.uid,
-          reply_uid: formData.reply_uid || 0,
-          content: xss(formData.content),
+          reply_uid: reqData.reply_uid || 0,
+          content: xss(reqData.content),
           status
         })
         .then(async data => {
@@ -166,15 +170,15 @@ class Comment {
               // 更新文章评论数
               comment_count: await models.comment.count({
                 where: {
-                  aid: formData.aid,
+                  aid: reqData.aid,
                   parent_id: 0
                 }
               })
             },
-            { where: { aid: formData.aid } }
+            { where: { aid: reqData.aid } }
           )
 
-          const user_info = await models.user.findOne({
+          const oneUser = await models.user.findOne({
             where: { uid: user.uid }
           }) // 查询当前评论用户的信息
 
@@ -184,12 +188,16 @@ class Comment {
               plain: true
             }),
             children: [],
-            user: user_info
+            user: oneUser
           }
 
-          if (formData.reply_uid && formData.reply_uid !== 0 && formData.reply_uid !== user.uid) {
+          if (
+            reqData.reply_uid &&
+            reqData.reply_uid !== 0 &&
+            reqData.reply_uid !== user.uid
+          ) {
             _data.reply_user = await models.user.findOne({
-              where: { uid: formData.reply_uid },
+              where: { uid: reqData.reply_uid },
               attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
             })
           }
@@ -198,33 +206,33 @@ class Comment {
             'YYYY-MM-DD H:m:s'
           )
 
-          await models.user_message.create({
+          await models.userMessage.create({
             // 用户行为记录
-            uid: formData.article_uid,
+            uid: reqData.article_uid,
             type: 5, // 1:系统 2:喜欢文章  3:关注标签 4:关注用户 5:评论
             content: JSON.stringify({
               other_uid: user.uid,
               comment_id: _data.id,
-              aid: formData.aid,
+              aid: reqData.aid,
               title: '文章有新的评论'
             })
           })
 
-          if (formData.reply_uid) {
-            await models.user_message.create({
+          if (reqData.reply_uid) {
+            await models.userMessage.create({
               // 用户行为记录
-              uid: formData.reply_uid,
+              uid: reqData.reply_uid,
               type: 5, // 类型 1:系统 2:喜欢文章  3:关注标签 4:用户关注 5:评论
               content: JSON.stringify({
                 other_uid: user.uid,
                 comment_id: _data.id,
-                aid: formData.aid,
+                aid: reqData.aid,
                 title: `你的评论有新的回复`
               })
             })
           }
 
-          client_resJson(ctx, {
+          resClientJson(ctx, {
             state: 'success',
             data: _data,
             message:
@@ -234,13 +242,13 @@ class Comment {
           })
         })
         .catch(err => {
-          client_resJson(ctx, {
+          resClientJson(ctx, {
             state: 'error',
             message: '回复失败:' + err
           })
         })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -252,24 +260,24 @@ class Comment {
    * 删除评论post提交
    * @param   {object} ctx 上下文对象
    */
-  static async post_delete_comment(ctx) {
-    let formData = ctx.request.body
+  static async deleteArticleComment (ctx) {
+    let reqData = ctx.request.body
     let { user = '' } = ctx.request
 
     try {
-      let find_children_comment_id = await models.comment
-        .findAll({ where: { parent_id: formData.comment_id } })
+      let allComment = await models.comment
+        .findAll({ where: { parent_id: reqData.comment_id } })
         .then(res => {
           return res.map((item, key) => {
             return item.id
           })
         })
 
-      if (find_children_comment_id.length > 0) {
+      if (allComment.length > 0) {
         // 判断当前评论下是否有子评论,有则删除子评论
         await models.comment.destroy({
           where: {
-            id: { [Op.in]: find_children_comment_id },
+            id: { [Op.in]: allComment },
             uid: user.uid
           }
         })
@@ -277,7 +285,7 @@ class Comment {
 
       await models.comment.destroy({
         where: {
-          id: formData.comment_id,
+          id: reqData.comment_id,
           uid: user.uid
         }
       })
@@ -287,20 +295,20 @@ class Comment {
           // 更新文章评论数
           comment_count: await models.comment.count({
             where: {
-              aid: formData.aid,
+              aid: reqData.aid,
               parent_id: 0
             }
           })
         },
-        { where: { aid: formData.aid } }
+        { where: { aid: reqData.aid } }
       )
 
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'success',
         message: '删除成功'
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })

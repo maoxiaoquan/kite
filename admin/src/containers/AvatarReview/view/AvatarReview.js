@@ -28,7 +28,7 @@ const FormItem = Form.Item
 const confirm = Modal.confirm
 
 @withRouter
-@connect(({ state_user_avatar_review }) => ({ state_user_avatar_review }))
+@connect(({ stateUserAvatarReview }) => ({ stateUserAvatarReview }))
 class AvatarReview extends React.Component {
   constructor(props) {
     super(props)
@@ -108,7 +108,7 @@ class AvatarReview extends React.Component {
   }
 
   componentDidMount() {
-    this.fetch_avatar_review_list()
+    this.fetchAvatarReviewList()
   }
 
   editUser(val) {
@@ -132,14 +132,14 @@ class AvatarReview extends React.Component {
         current: pages.current
       }
     })
-    this.fetch_avatar_review_list(pages)
+    this.fetchAvatarReviewList(pages)
   }
 
   handleSubmit = e => {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.fetch_user_edit(values)
+        this.fetchUserEdit(values)
       }
     })
   }
@@ -151,7 +151,7 @@ class AvatarReview extends React.Component {
     }
   }
 
-  fetch_avatar_review_list = () => {
+  fetchAvatarReviewList = () => {
     /*获取文章带分页的列表*/
     let params = this.getParams()
     const that = this
@@ -172,17 +172,17 @@ class AvatarReview extends React.Component {
     )
   }
 
-  fetch_user_edit = values => {
+  fetchUserEdit = values => {
     /*修改文章*/
     this.props.dispatch(
       editAvatarReview(
         {
-          uid: this.props.state_user_avatar_review.current_info.uid,
+          uid: this.props.stateUserAvatarReview.current_info.uid,
           ...values
         },
         res => {
           alert.message_success('修改头像成功')
-          this.fetch_avatar_review_list()
+          this.fetchAvatarReviewList()
           this.setState({
             modal_visible_edit: false
           })
@@ -191,14 +191,14 @@ class AvatarReview extends React.Component {
     )
   }
 
-  reset_bar_from = () => {
+  resetBarFrom = () => {
     const data = {
       status_val: ''
     }
     this.setState(data)
   }
 
-  change_val = (val, type) => {
+  changeVal = (val, type) => {
     let data = {}
     data[type] = val
     this.setState(data)
@@ -206,7 +206,7 @@ class AvatarReview extends React.Component {
 
   render() {
     const { loading, status_list, status_val } = this.state
-    const { state_user_avatar_review = {} } = this.props
+    const { stateUserAvatarReview = {} } = this.props
     const { getFieldDecorator } = this.props.form
 
     const formItemLayout = {
@@ -245,7 +245,7 @@ class AvatarReview extends React.Component {
                   className="select-view"
                   value={status_val}
                   onChange={value => {
-                    this.change_val(value, 'status_val')
+                    this.changeVal(value, 'status_val')
                   }}
                 >
                   {status_list.map((item, key) => (
@@ -259,14 +259,14 @@ class AvatarReview extends React.Component {
                 <Button
                   type="primary"
                   htmlType="submit"
-                  onClick={this.fetch_avatar_review_list}
+                  onClick={this.fetchAvatarReviewList}
                 >
                   搜索
                 </Button>
                 <Button
                   type="primary"
                   htmlType="submit"
-                  onClick={this.reset_bar_from}
+                  onClick={this.resetBarFrom}
                 >
                   重置
                 </Button>
@@ -316,7 +316,7 @@ class AvatarReview extends React.Component {
 
           <Table
             columns={this.state.columns}
-            dataSource={state_user_avatar_review.list}
+            dataSource={stateUserAvatarReview.list}
             loading={loading}
             onChange={this.TablePageChange.bind(this)}
             pagination={this.state.pagination}

@@ -22,9 +22,9 @@ const Option = Select.Option
 const FormItem = Form.Item
 const confirm = Modal.confirm
 
-@connect(({ state_system_config }) => {
+@connect(({ stateSystemConfig }) => {
   return {
-    state_system_config
+    stateSystemConfig
   }
 })
 class SystemConfig extends React.Component {

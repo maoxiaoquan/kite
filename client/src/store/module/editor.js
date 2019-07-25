@@ -22,7 +22,7 @@ const actions = {
   },
   UPLOAD_ARTICLE_PICTURE: ({ commit, dispatch, state }, data) => {
     return fetch({
-      url: '/article/upload_article_picture',
+      url: '/article/upload-article-picture',
       method: 'post',
       parameter: data
     })

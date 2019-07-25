@@ -1,7 +1,7 @@
 const config = require('../config')
-const admin_authority_list = require('./admin_authority_list')
+const dfAdminAuthorityList = require('./dfAdminAuthorityList')
 let operatingArr = []
-admin_authority_list.map(item => {
+dfAdminAuthorityList.map(item => {
   if (item.authority_type === '2') {
     operatingArr.push(item.authority_id)
   }

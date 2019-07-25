@@ -1,10 +1,5 @@
-const { sequelize, picture } = require('../../../db/mysqldb/index')
-const { sign_resJson, admin_resJson } = require('../../utils/res_data')
-const moment = require('moment')
-const {
-  tools: { encrypt }
-} = require('../../utils/index')
-const config = require('../../config')
+const models = require('../../../db/mysqldb/index')
+const { resAdminJson } = require('../../utils/resData')
 
 function ErrorMessage (message) {
   this.message = message
@@ -18,33 +13,33 @@ class Picture {
    * @param   {object} ctx 上下文对象
    */
   static async createPicture (ctx) {
-    const req_data = ctx.request.body
+    const reqData = ctx.request.body
 
     try {
-      let find_picture_title = await picture.findOne({
-        where: { picture_title: req_data.picture_title }
+      let onePicture = await models.picture.findOne({
+        where: { picture_title: reqData.picture_title }
       })
-      if (find_picture_title) {
+      if (onePicture) {
         throw new ErrorMessage('图片标题名已存在!')
       }
-      if (!req_data.picture_url) {
+      if (!reqData.picture_url) {
         throw new ErrorMessage('请上传图片!')
       }
 
-      await picture.create({
-        picture_title: req_data.picture_title,
-        picture_url: req_data.picture_url
-          ? req_data.picture_url[0].response.data.filename
+      await models.picture.create({
+        picture_title: reqData.picture_title,
+        picture_url: reqData.picture_url
+          ? reqData.picture_url[0].response.data.filename
           : '',
-        description: req_data.description,
-        enable: req_data.enable
+        description: reqData.description,
+        enable: reqData.enable
       })
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '图片创建成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -59,7 +54,7 @@ class Picture {
   static async getPictureList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
-      let { count, rows } = await picture.findAndCountAll({
+      let { count, rows } = await models.picture.findAndCountAll({
         attributes: [
           'picture_id',
           'picture_title',
@@ -71,7 +66,7 @@ class Picture {
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize) // 每页限制返回的数据条数
       })
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -80,7 +75,7 @@ class Picture {
         }
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -93,29 +88,29 @@ class Picture {
    * @param   {object} ctx 上下文对象
    */
   static async updatePicture (ctx) {
-    const req_data = ctx.request.body
+    const reqData = ctx.request.body
     try {
-      await picture.update(
+      await models.picture.update(
         {
-          picture_title: req_data.picture_title,
-          picture_url: req_data.picture_url[0].response
-            ? req_data.picture_url[0].response.data.filename
-            : req_data.picture_url,
-          description: req_data.description,
-          enable: req_data.enable
+          picture_title: reqData.picture_title,
+          picture_url: reqData.picture_url[0].response
+            ? reqData.picture_url[0].response.data.filename
+            : reqData.picture_url,
+          description: reqData.description,
+          enable: reqData.enable
         },
         {
           where: {
-            picture_id: req_data.picture_id // 查询条件
+            picture_id: reqData.picture_id // 查询条件
           }
         }
       )
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '更新图片成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -129,13 +124,13 @@ class Picture {
   static async deletePicture (ctx) {
     const { picture_id } = ctx.request.body
     try {
-      await picture.destroy({ where: { picture_id } })
-      admin_resJson(ctx, {
+      await models.picture.destroy({ where: { picture_id } })
+      resAdminJson(ctx, {
         state: 'success',
         message: '删除图片成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })

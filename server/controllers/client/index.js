@@ -1,12 +1,12 @@
 const models = require('../../../db/mysqldb/index')
 const moment = require('moment')
-const { client_resJson } = require('../../utils/res_data')
+const { resClientJson } = require('../../utils/resData')
 const Op = require('sequelize').Op
 const { TimeNow } = require('../../utils/time')
-const client_where = require('../../utils/client_where')
+const clientWhere = require('../../utils/clientWhere')
 
 class Index {
-  static async get_index (ctx) {
+  static async getIndex (ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10
     let column_en_name = ctx.query.column_en_name || ''
@@ -15,7 +15,7 @@ class Index {
     let orderParams = [] // 排序参数
 
     try {
-      let find_article_column = await models.article_column.findOne({
+      let oneArticleColumn = await models.articleColumn.findOne({
         attributes: [
           'article_column_id',
           'article_column_name',
@@ -25,14 +25,14 @@ class Index {
         where: { article_column_en_name: column_en_name } // 为空，获取全部，也可以自己添加条件
       })
       whereParams = {
-        ...client_where.article.otherList
+        ...clientWhere.article.otherList
       }
       // where
       // 判断专栏下方是否有专题
       column_en_name &&
-        find_article_column.article_tag_ids &&
+        oneArticleColumn.article_tag_ids &&
         (whereParams['article_tag_ids'] = {
-          [Op.regexp]: `${find_article_column.article_tag_ids
+          [Op.regexp]: `${oneArticleColumn.article_tag_ids
             .split(',')
             .join('|')}`
         })
@@ -85,7 +85,7 @@ class Index {
     } */
 
       if (rows) {
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'success',
           message: '数据返回成功',
           data: {
@@ -98,13 +98,13 @@ class Index {
           }
         })
       } else {
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'error',
           message: '数据返回错误，请再次刷新尝试'
         })
       }
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })

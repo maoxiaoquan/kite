@@ -6,15 +6,15 @@ const {
   checkPwd
 } = require('../../utils/validators')
 const moment = require('moment')
-const { client_resJson } = require('../../utils/res_data')
-const { send_verify_code_mail } = require('../../utils/send_email')
+const { resClientJson } = require('../../utils/resData')
+const { sendVerifyCodeMail } = require('../../utils/sendEmail')
 const { random_number, tools } = require('../../utils/index')
 const config = require('../../config')
 const Op = require('sequelize').Op
 const tokens = require('../../utils/tokens')
-const { query_user_verify_code } = require('../../sql/query')
+const { queryUserVerifyCode } = require('../../sql/query')
 const { lowdb } = require('../../../db/lowdb/index')
-const clientWhere = require('../../utils/client_where')
+const clientWhere = require('../../utils/clientWhere')
 
 function ErrorMessage (message) {
   this.message = message
@@ -22,7 +22,7 @@ function ErrorMessage (message) {
 }
 
 class User {
-  static async post_sign_in (ctx) {
+  static async userSignIn (ctx) {
     const { no_login } = lowdb
       .read()
       .get('config')
@@ -44,32 +44,32 @@ class User {
       if (reqDate.email) {
         /* 邮箱登录 */
 
-        let sqlUser = await models.user.findOne({
+        let oneUser = await models.user.findOne({
           where: {
             email: reqDate.email
           }
         })
 
-        if (!sqlUser) {
+        if (!oneUser) {
           throw new ErrorMessage('账户不存在')
         }
 
-        if (!sqlUser.enable) {
+        if (!oneUser.enable) {
           throw new ErrorMessage('当前用户已被限制登录，请联系管理员修改')
         }
 
-        if (sqlUser) {
+        if (oneUser) {
           if (
-            tools.encrypt(reqDate.password, config.encrypt_key) ===
-            sqlUser.dataValues.password
+            tools.encrypt(reqDate.password, config.ENCRYPT_KEY) ===
+            oneUser.dataValues.password
           ) {
             let user_info = {
-              uid: sqlUser.uid
+              uid: oneUser.uid
             }
 
             let token = tokens.ClientSetToken(60 * 60 * 24 * 7, user_info)
 
-            await client_resJson(ctx, {
+            await resClientJson(ctx, {
               state: 'success',
               message: '登录成功',
               data: {
@@ -77,13 +77,13 @@ class User {
               }
             })
           } else {
-            client_resJson(ctx, {
+            resClientJson(ctx, {
               state: 'error',
               message: '密码错误'
             })
           }
         } else {
-          client_resJson(ctx, {
+          resClientJson(ctx, {
             state: 'error',
             message: '账户不存在'
           })
@@ -91,19 +91,19 @@ class User {
       } else if (reqDate.phone) {
         /* 手机号码登录 */
 
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'error',
           message: '暂时未开放手机号码登录'
         })
       } else {
         /* 非手机号码非邮箱 */
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'error',
           message: '请输入正确的手机号码或者邮箱'
         })
       }
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -112,68 +112,68 @@ class User {
   }
 
   // 注册验证码发送
-  static async post_sign_up_code (ctx) {
-    let req_data = ctx.request.body
+  static async userSignUpCode (ctx) {
+    let reqData = ctx.request.body
     try {
       const { on_register } = lowdb
         .read()
         .get('config')
         .value()
-      if (req_data.email) {
+      if (reqData.email) {
         /* 邮箱注册验证码 */
 
-        let email = await models.user.findOne({
+        let oneUser = await models.user.findOne({
           where: {
-            email: req_data.email
+            email: reqData.email
           }
         })
         if (on_register === 'no') {
           throw new ErrorMessage('注册功能关闭，请联系管理员开启')
         }
-        if (req_data.email) {
-          if (!checkEmail(req_data.email)) {
+        if (reqData.email) {
+          if (!checkEmail(reqData.email)) {
             throw new ErrorMessage('请输入正确的邮箱地址')
           }
         }
-        if (req_data.phone) {
-          if (!checkPhoneNum(req_data.phone)) {
+        if (reqData.phone) {
+          if (!checkPhoneNum(reqData.phone)) {
             throw new ErrorMessage('请输入正确的手机号码')
           }
         }
 
-        if (!email) {
+        if (!oneUser) {
           let random = random_number(true, 6, 6)
-          await models.verify_code.create({
-            email: req_data.email,
+          await models.verifyCode.create({
+            email: reqData.email,
             verify_code: random,
             type: 'register'
           })
-          await send_verify_code_mail(req_data.email, '注册验证码', random)
-          client_resJson(ctx, {
+          await sendVerifyCodeMail(reqData.email, '注册验证码', random)
+          resClientJson(ctx, {
             state: 'success',
             message: '验证码已发送到邮箱'
           })
         } else {
-          client_resJson(ctx, {
+          resClientJson(ctx, {
             state: 'error',
             message: '邮箱已存在'
           })
         }
-      } else if (req_data.phone) {
+      } else if (reqData.phone) {
         /* 手机号码注册 */
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'error',
           message: '暂时未开放手机号码注册'
         })
       } else {
         /* 非手机号码非邮箱 */
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'error',
           message: '请输入正确的手机号码或者邮箱'
         })
       }
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -185,9 +185,9 @@ class User {
    * 用户注册post
    * @param   {object} ctx 上下文对象
    */
-  static async post_sign_up (ctx) {
+  static async userSignUp (ctx) {
     // post 数据
-    let req_data = ctx.request.body
+    let reqData = ctx.request.body
     let date = new Date()
     try {
       const { on_register } = lowdb
@@ -197,66 +197,66 @@ class User {
       if (on_register === 'no') {
         throw new ErrorMessage('注册功能关闭，请联系管理员开启')
       }
-      if (!req_data.nickname) {
+      if (!reqData.nickname) {
         throw new ErrorMessage('昵称不存在')
       }
-      if (req_data.nickname.length > 20) {
+      if (reqData.nickname.length > 20) {
         throw new ErrorMessage('昵称过长')
       }
-      if (req_data.email) {
-        if (!checkEmail(req_data.email)) {
+      if (reqData.email) {
+        if (!checkEmail(reqData.email)) {
           throw new ErrorMessage('请输入正确的邮箱地址')
         }
       }
-      if (req_data.phone) {
-        if (!checkPhoneNum(req_data.phone)) {
+      if (reqData.phone) {
+        if (!checkPhoneNum(reqData.phone)) {
           throw new ErrorMessage('请输入正确的手机号码')
         }
       }
-      if (!req_data.password) {
+      if (!reqData.password) {
         throw new ErrorMessage('密码不存在')
       }
-      if (!checkPwd(req_data.password)) {
+      if (!checkPwd(reqData.password)) {
         throw new ErrorMessage(
           '密码格式输入有误，请输入字母与数字的组合,长度为最小为6个字符!'
         )
       }
-      if (req_data.password !== req_data.double_password) {
+      if (reqData.password !== reqData.double_password) {
         throw new ErrorMessage('两次输入密码不一致')
       }
-      if (!req_data.code) {
+      if (!reqData.code) {
         throw new ErrorMessage('验证码不存在')
       }
 
-      if (req_data.email) {
+      if (reqData.email) {
         /* 邮箱注册 */
 
-        let nickname_date = await models.user.findOne({
+        let oneUserNickname = await models.user.findOne({
           where: {
-            nickname: req_data.nickname
+            nickname: reqData.nickname
           }
         })
 
-        if (nickname_date) {
-          client_resJson(ctx, {
+        if (oneUserNickname) {
+          resClientJson(ctx, {
             state: 'error',
             message: '用户昵称已存在，请重新输入'
           })
           return false
         }
 
-        let email = await models.user.findOne({
+        let oneUserEmail = await models.user.findOne({
           where: {
-            email: req_data.email
+            email: reqData.email
           }
         })
 
-        if (!email) {
-          await query_user_verify_code(req_data.email).then(data => {
+        if (!oneUserEmail) {
+          await queryUserVerifyCode(reqData.email).then(data => {
             /* 注册验证码验证 */
             if (data.length > 0) {
               let time_num = moment(date.setHours(date.getHours())).format('X')
-              if (req_data.code === data[0].verify_code) {
+              if (reqData.code === data[0].verify_code) {
                 if (
                   Number(time_num) - Number(data[0].create_timestamp) >
                   30 * 60
@@ -277,30 +277,30 @@ class User {
               .create({
                 /* 注册写入数据库操作 */
                 avatar: config.default_avatar,
-                nickname: req_data.nickname,
-                password: tools.encrypt(req_data.password, config.encrypt_key),
-                email: req_data.email,
-                user_role_ids: config.USER_ROLE.default_id,
+                nickname: reqData.nickname,
+                password: tools.encrypt(reqData.password, config.ENCRYPT_KEY),
+                email: reqData.email,
+                user_role_ids: config.USER_ROLE.dfId,
                 sex: 0,
                 reg_ip: ctx.request.ip,
                 enable: true
               })
               .then(user => {
-                return models.user_info.create({
+                return models.userInfo.create({
                   /* 注册写入数据库操作 */
                   uid: user.uid,
                   avatar_review_status: 2
                 })
               })
           })
-          client_resJson(ctx, {
+          resClientJson(ctx, {
             state: 'success',
             message: '注册成功，跳往登录页'
           })
         } else {
           throw new ErrorMessage('邮箱已存在')
         }
-      } else if (req_data.phone) {
+      } else if (reqData.phone) {
         /* 手机号码注册 */
         throw new ErrorMessage('暂时未开放手机号码注册')
       } else {
@@ -308,7 +308,7 @@ class User {
         throw new ErrorMessage('请输入正确的手机号码或者邮箱')
       }
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -319,10 +319,10 @@ class User {
   /**
    * 获取个人信息get 并且知道用户是否登录，不需要任何参数
    */
-  static async personal_info (ctx) {
+  static async userPersonalInfo (ctx) {
     let { islogin = '', user = '' } = ctx.request
     try {
-      let find_user = await models.user.findOne({
+      let oneUser = await models.user.findOne({
         where: { uid: user.uid },
         attributes: [
           'uid',
@@ -333,16 +333,16 @@ class User {
           'user_role_ids'
         ]
       })
-      await client_resJson(ctx, {
+      await resClientJson(ctx, {
         state: 'success',
         message: '获取成功',
         data: {
           islogin,
-          user: find_user
+          user: oneUser
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -351,10 +351,10 @@ class User {
   }
 
   /**
-   * 获取用户信息get
+   * 获取用户信息get 不需要登录
    * @param   {object} ctx 上下文对象
    */
-  static async get_user_info (ctx) {
+  static async getUserInfo (ctx) {
     let uid = ctx.query.uid
 
     try {
@@ -362,7 +362,7 @@ class User {
         throw new ErrorMessage('uid为空')
       }
 
-      let findOne_user = await models.user.findOne({
+      let oneUser = await models.user.findOne({
         // 获取用户信息
         where: { uid },
         attributes: [
@@ -375,12 +375,12 @@ class User {
         ]
       })
 
-      let findOne_user_info = await models.user_info.findOne({
+      let oneUserInfo = await models.userInfo.findOne({
         // 获取用户信息
         where: { uid }
       })
 
-      let user_attention_uid_arr = await models.user_attention
+      let allUserAttention = await models.userAttention
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((attention_item, key) => {
@@ -388,37 +388,37 @@ class User {
           })
         })
 
-      let user_attention_other_count = await models.user_attention.count({
+      let userAttentionCount = await models.userAttention.count({
         // 关注了多少人
         where: {
           uid
         }
       })
 
-      let user_like_article_arr = await models.user_like_article
+      let allUserLikeArticleAid = await models.userLikeArticle
         .findAll({ where: { uid } })
         .then(res => {
-          return res.map((user_like_article_item, key) => {
-            return user_like_article_item.aid
+          return res.map((item, key) => {
+            return item.aid
           })
         })
 
-      let subscribe_article_tag_arr = await models.subscribe_article_tag
+      let allSubscribeArticleTagId = await models.subscribeArticleTag
         .findAll({ where: { uid } })
         .then(res => {
-          return res.map((subscribe_article_tag_item, key) => {
-            return subscribe_article_tag_item.article_tag_id
+          return res.map((item, key) => {
+            return item.article_tag_id
           })
         })
 
-      let other_user_attention_count = await models.user_attention.count({
+      let otherUserAttentionCount = await models.userAttention.count({
         // 多少人关注了
         where: {
           attention_uid: uid
         }
       })
 
-      let user_article_count = await models.article.count({
+      let articleCount = await models.article.count({
         // 他有多少文章
         where: {
           uid,
@@ -426,22 +426,22 @@ class User {
         }
       })
 
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'success',
         message: '获取用户所有信息成功',
         data: {
-          user: findOne_user,
-          user_info: findOne_user_info,
-          attention_uid_arr: user_attention_uid_arr,
-          user_like_aid_arr: user_like_article_arr,
-          subscribe_article_tag_id_arr: subscribe_article_tag_arr,
-          other_user_attention_count,
-          user_attention_other_count,
-          user_article_count
+          user: oneUser,
+          user_info: oneUserInfo,
+          attention_uid_arr: allUserAttention,
+          user_like_aid_arr: allUserLikeArticleAid,
+          subscribe_article_tag_id_arr: allSubscribeArticleTagId,
+          other_user_attention_count: otherUserAttentionCount,
+          user_attention_other_count: userAttentionCount,
+          user_article_count: articleCount
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -454,12 +454,12 @@ class User {
    * @param   {object} ctx 上下文对象
    */
 
-  static async post_update_user_info (ctx) {
-    let req_data = ctx.request.body
+  static async updateUserInfo (ctx) {
+    let reqData = ctx.request.body
     let { user = '' } = ctx.request
-    let nickname_date = await models.user.findOne({
+    let oneUser = await models.user.findOne({
       where: {
-        nickname: req_data.nickname,
+        nickname: reqData.nickname,
         uid: {
           [Op.ne]: user.uid
         }
@@ -467,35 +467,35 @@ class User {
     })
 
     try {
-      if (req_data.nickname && req_data.nickname.length > 20) {
+      if (reqData.nickname && reqData.nickname.length > 20) {
         throw new ErrorMessage('昵称过长')
       }
 
-      if (nickname_date) {
+      if (oneUser) {
         throw new ErrorMessage('用户昵称已存在，请重新输入')
       }
 
-      if (req_data.introduction && req_data.introduction.length > 50) {
+      if (reqData.introduction && reqData.introduction.length > 50) {
         throw new ErrorMessage('个人介绍过长')
       }
 
-      if (req_data.profession && req_data.profession.length > 20) {
+      if (reqData.profession && reqData.profession.length > 20) {
         throw new ErrorMessage('职位名输入过长')
       }
 
-      if (req_data.company && req_data.company.length > 20) {
+      if (reqData.company && reqData.company.length > 20) {
         throw new ErrorMessage('公司名字输入过长')
       }
 
-      if (req_data.home_page && !checkUrl(req_data.home_page)) {
+      if (reqData.home_page && !checkUrl(reqData.home_page)) {
         throw new ErrorMessage('请输入正确的个人网址')
       }
 
-      let update_user = await models.user.update(
+      let updateUser = await models.user.update(
         {
-          sex: req_data.sex || '',
-          nickname: req_data.nickname || '',
-          introduction: req_data.introduction || ''
+          sex: reqData.sex || '',
+          nickname: reqData.nickname || '',
+          introduction: reqData.introduction || ''
         },
         {
           where: {
@@ -504,11 +504,11 @@ class User {
         }
       )
 
-      let update_user_info = await models.user_info.update(
+      let updateUserInfo = await models.userInfo.update(
         {
-          profession: req_data.profession || '',
-          company: req_data.company || '',
-          home_page: req_data.home_page || ''
+          profession: reqData.profession || '',
+          company: reqData.company || '',
+          home_page: reqData.home_page || ''
         },
         {
           where: {
@@ -517,16 +517,16 @@ class User {
         }
       )
 
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'success',
         message: '修改用户信息成功',
         data: {
-          user: update_user,
-          user_info: update_user_info
+          user: updateUser,
+          user_info: updateUserInfo
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -539,43 +539,43 @@ class User {
    * @param   {object} ctx 上下文对象
    */
 
-  static async post_update_user_password (ctx) {
-    let req_data = ctx.request.body
+  static async updateUserPassword (ctx) {
+    let reqData = ctx.request.body
     let { user = '' } = ctx.request
     try {
-      let findUser = await models.user.findOne({
+      let oneUser = await models.user.findOne({
         where: {
           uid: user.uid
         }
       })
 
       if (
-        tools.encrypt(req_data.old_password, config.encrypt_key) ===
-        findUser.password
+        tools.encrypt(reqData.old_password, config.ENCRYPT_KEY) ===
+        oneUser.password
       ) {
-        if (!req_data.old_password) {
+        if (!reqData.old_password) {
           throw new ErrorMessage('请输入旧密码')
         }
 
-        if (!req_data.new_password) {
+        if (!reqData.new_password) {
           throw new ErrorMessage('请输入新密码')
         }
 
-        if (!checkPwd(req_data.new_password)) {
+        if (!checkPwd(reqData.new_password)) {
           throw new ErrorMessage('密码格式输入有误!')
         }
 
-        if (!req_data.repeat_new_password) {
+        if (!reqData.repeat_new_password) {
           throw new ErrorMessage('请重复输入新密码')
         }
 
-        if (req_data.repeat_new_password !== req_data.new_password) {
+        if (reqData.repeat_new_password !== reqData.new_password) {
           throw new ErrorMessage('两次输入密码不相同')
         }
 
         await models.user.update(
           {
-            password: tools.encrypt(req_data.new_password, config.encrypt_key)
+            password: tools.encrypt(reqData.new_password, config.ENCRYPT_KEY)
           },
           {
             where: {
@@ -583,18 +583,18 @@ class User {
             }
           }
         )
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'success',
           message: '修改用户密码成功'
         })
       } else {
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'error',
           message: '旧密码错误，请重新输入'
         })
       }
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -606,17 +606,17 @@ class User {
    * 获取未读用户消息数量
    * @param   {object} ctx 上下文对象
    */
-  static async get_unread_message_count (ctx) {
+  static async getUnreadMessageCount (ctx) {
     let { user = '' } = ctx.request
     try {
-      let count = await models.user_message.count({
+      let count = await models.userMessage.count({
         where: {
           uid: user.uid,
           is_read: false
         }
       })
 
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'success',
         message: '数据返回成功',
         data: {
@@ -624,7 +624,7 @@ class User {
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -636,12 +636,12 @@ class User {
    * 获取用户消息
    * @param   {object} ctx 上下文对象
    */
-  static async get_user_message (ctx) {
+  static async getUserMessageList (ctx) {
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
     let { user = '' } = ctx.request
     try {
-      let unread_user_message_id = await models.user_message
+      let allUserMessage = await models.userMessage
         .findAll({
           // 获取所有未读消息id
           where: {
@@ -655,7 +655,7 @@ class User {
           })
         })
 
-      let { count, rows } = await models.user_message.findAndCountAll({
+      let { count, rows } = await models.userMessage.findAndCountAll({
         where: {
           uid: user.uid
         }, // 为空，获取全部，也可以自己添加条件
@@ -676,6 +676,7 @@ class User {
             attributes: ['uid', 'avatar', 'nickname']
           })
         )
+
         if (rows[i].type === 2) {
           rows[i].setDataValue(
             'article',
@@ -704,22 +705,22 @@ class User {
         rows[i].setDataValue('title', JSON.parse(rows[i].content).title)
       }
 
-      if (unread_user_message_id.length > 0) {
+      if (allUserMessage.length > 0) {
         // 修改未读为已读
-        await models.user_message.update(
+        await models.userMessage.update(
           {
             is_read: true
           },
           {
             where: {
-              id: { [Op.in]: unread_user_message_id },
+              id: { [Op.in]: allUserMessage },
               uid: user.uid
             }
           }
         )
       }
 
-      await client_resJson(ctx, {
+      await resClientJson(ctx, {
         state: 'success',
         message: '数据返回成功',
         data: {
@@ -730,7 +731,7 @@ class User {
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -742,32 +743,32 @@ class User {
    * 删除用户消息
    * @param   {object} ctx 上下文对象
    */
-  static async post_delete_user_message (ctx) {
-    let formData = ctx.query
+  static async deleteUserMessage (ctx) {
+    let reqData = ctx.query
     let { user = '' } = ctx.request
     try {
-      let findOneUserMessage = await models.user_message.findOne({
+      let oneUserMessage = await models.userMessage.findOne({
         where: {
-          id: formData.user_message_id,
+          id: reqData.user_message_id,
           uid: user.uid
         }
       })
-      if (findOneUserMessage) {
-        await models.user_message.destroy({
+      if (oneUserMessage) {
+        await models.userMessage.destroy({
           where: {
-            id: formData.user_message_id,
+            id: reqData.user_message_id,
             uid: user.uid
           }
         })
       } else {
         throw new ErrorMessage('非法操作')
       }
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'success',
         message: '删除用户消息成功'
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -780,30 +781,30 @@ class User {
    * @param   {object} ctx 上下文对象
    */
 
-  static async post_reset_password_code (ctx) {
-    let req_data = ctx.request.body
+  static async sendResetPasswordCode (ctx) {
+    let reqData = ctx.request.body
     try {
-      if (req_data.type === 'email') {
+      if (reqData.type === 'email') {
         /* 邮箱注册验证码 */
 
-        if (!req_data.email) {
+        if (!reqData.email) {
           throw new ErrorMessage('邮箱不存在')
         }
-        if (!checkEmail(req_data.email)) {
+        if (!checkEmail(reqData.email)) {
           throw new ErrorMessage('邮箱格式输入有误')
         }
 
         let email = await models.user.findOne({
           where: {
-            email: req_data.email
+            email: reqData.email
           }
         })
         if (email) {
           let random = random_number(true, 6, 6)
 
-          await models.verify_code.create({
+          await models.verifyCode.create({
             phone: '',
-            email: req_data.email,
+            email: reqData.email,
             type: 'reset_password',
             verify_code: random,
             expire_time: moment()
@@ -815,32 +816,32 @@ class User {
               .utcOffset(+8)
               .format() /* 时间 */
           })
-          send_verify_code_mail(req_data.email, '重置密码验证码', random)
-          client_resJson(ctx, {
+          sendVerifyCodeMail(reqData.email, '重置密码验证码', random)
+          resClientJson(ctx, {
             state: 'success',
             message: '验证码已发送到邮箱'
           })
         } else {
-          client_resJson(ctx, {
+          resClientJson(ctx, {
             state: 'error',
             message: '邮箱不存在'
           })
         }
-      } else if (req_data.type === 'phone') {
+      } else if (reqData.type === 'phone') {
         /* 手机号码 */
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'error',
           message: '暂时未开放手机号码修改密码'
         })
       } else {
         /* 非手机号码非邮箱 */
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'error',
           message: '请输入正确的手机号码或者邮箱'
         })
       }
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -849,51 +850,51 @@ class User {
   }
 
   /**
-   * 重置密码code发送
+   * 重置密码
    * @param   {object} ctx 上下文对象
    */
 
-  static async post_reset_password (ctx) {
-    let req_data = ctx.request.body
+  static async userResetPassword (ctx) {
+    let reqData = ctx.request.body
     try {
-      if (!req_data.email) {
+      if (!reqData.email) {
         throw new ErrorMessage('邮箱不存在')
       }
-      if (!checkEmail(req_data.email)) {
+      if (!checkEmail(reqData.email)) {
         throw new ErrorMessage('邮箱格式输入有误')
       }
-      if (!req_data.code) {
+      if (!reqData.code) {
         throw new ErrorMessage('验证码不存在')
       }
-      if (!req_data.new_password) {
+      if (!reqData.new_password) {
         throw new ErrorMessage('密码不存在')
       }
-      if (!checkPwd(req_data.new_password)) {
+      if (!checkPwd(reqData.new_password)) {
         throw new ErrorMessage('密码格式输入有误!')
       }
-      if (req_data.new_password !== req_data.repeat_new_password) {
+      if (reqData.new_password !== reqData.repeat_new_password) {
         throw new ErrorMessage('两次输入密码不一致')
       }
 
-      if (req_data.type === 'email') {
+      if (reqData.type === 'email') {
         /* 邮箱注册 */
 
         let email = await models.user.findOne({
           where: {
-            email: req_data.email
+            email: reqData.email
           }
         })
 
         if (email) {
-          await query_user_verify_code(req_data.email).then(data => {
+          await queryUserVerifyCode(reqData.email).then(data => {
             /* 重置密码验证码验证 */
             if (data.length > 0) {
-              let time_num = moment()
+              let timeNum = moment()
                 .utc()
                 .utcOffset(+8)
                 .format('X')
-              if (req_data.code === data[0].verify_code) {
-                if (Number(time_num) - Number(data[0].expire_time) > 30 * 60) {
+              if (reqData.code === data[0].verify_code) {
+                if (Number(timeNum) - Number(data[0].expire_time) > 30 * 60) {
                   throw new ErrorMessage('验证码已过时，请再次发送')
                 }
               } else {
@@ -906,40 +907,40 @@ class User {
 
           await models.user.update(
             {
-              password: tools.encrypt(req_data.new_password, config.encrypt_key)
+              password: tools.encrypt(reqData.new_password, config.ENCRYPT_KEY)
             },
             {
               where: {
-                email: req_data.email // 查询条件
+                email: reqData.email // 查询条件
               }
             }
           )
-          client_resJson(ctx, {
+          resClientJson(ctx, {
             state: 'success',
             message: '修改用户密码成功'
           })
         } else {
-          client_resJson(ctx, {
+          resClientJson(ctx, {
             state: 'error',
             message: '邮箱不存在'
           })
         }
-      } else if (req_data.type === 'phone') {
+      } else if (reqData.type === 'phone') {
         // 手机号码重置密码
 
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'error',
           message: '暂时未开放手机号码重置密码'
         })
       } else {
         /* 非手机号码非邮箱 */
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'error',
           message: '请输入正确的手机号码或者邮箱'
         })
       }
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -954,21 +955,21 @@ class User {
   static async getUserRoleAll (ctx) {
     // get 页面
     try {
-      let user_role_all = await models.user_role.findAll({
+      let allUserRole = await models.userRole.findAll({
         where: {
           enable: true,
           is_show: true
         }
       })
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'success',
         message: '获取成功',
         data: {
-          user_role_all
+          user_role_all: allUserRole
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })

@@ -87,7 +87,7 @@
             background: 'rgba(0, 0, 0, 0.7)'
           })
           var that = this
-          _server.post_set_step({ step: val }).then(function(res) {
+          _server.cliSetStep({ step: val }).then(function(res) {
             loading.close()
             that.$nextTick(function() {
               if (res.state === 'success') {
@@ -107,7 +107,7 @@
           })
           var that = this
           _server
-            .post_set_mysql({
+            .cliSetMysql({
               database: that.database,
               username: that.username,
               password: that.password,

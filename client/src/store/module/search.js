@@ -1,7 +1,7 @@
 import { fetch } from '@request'
 
 const state = () => ({
-  search_article: {
+  searchArticle: {
     article_list: [],
     count: 0,
     page: 1,
@@ -12,22 +12,23 @@ const state = () => ({
 })
 
 const mutations = {
-  SET_ARTICLE_SEARCH (state, data) { // 设置搜索的文章
-    state.search_article = data
+  SET_ARTICLE_SEARCH (state, data) {
+    // 设置搜索的文章
+    state.searchArticle = data
   }
 }
 
 const actions = {
-  GET_ARTICLE_SEARCH ({ commit, dispatch, state }, parameter) { // 获取搜索的文章
+  GET_ARTICLE_SEARCH ({ commit, dispatch, state }, parameter) {
+    // 获取搜索的文章
     return fetch({
       url: '/article/search',
       method: 'get',
       parameter: { params: parameter }
+    }).then(result => {
+      commit('SET_ARTICLE_SEARCH', result.data)
+      return result
     })
-      .then(result => {
-        commit('SET_ARTICLE_SEARCH', result.data)
-        return result
-      })
   }
 }
 

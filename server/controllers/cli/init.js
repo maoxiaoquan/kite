@@ -1,13 +1,13 @@
-const { render, client_resJson } = require('../../utils/cli_res_data')
+const { render, resClientJson } = require('../../utils/cliResData')
 const { lowdb } = require('../../../db/lowdb/index')
 const Seq = require('sequelize')
-const admin_authority_list = require('../../libs/admin_authority_list')
-const user_authority_list = require('../../libs/user_authority_list')
-const admin_role_list = require('../../libs/admin_role_list')
-const user_role_list = require('../../libs/user_role_list')
+const dfAdminAuthorityList = require('../../libs/dfAdminAuthorityList')
+const dfUserAuthorityList = require('../../libs/dfUserAuthorityList')
+const dfAdminRoleList = require('../../libs/dfAdminRoleList')
+const dfUserRoleList = require('../../libs/dfUserRoleList')
 
-const default_article_column_list = require('../../libs/default_article_column_list')
-const default_article_tag_list = require('../../libs/default_article_tag_list')
+const dfArticleColumnList = require('../../libs/dfArticleColumnList')
+const dfArticleTagList = require('../../libs/dfArticleTagList')
 const {
   checkUserName,
   checkPwd,
@@ -26,20 +26,20 @@ function ErrorMessage (message) {
 }
 
 class Init {
-  static async post_set_step (ctx) {
+  static async cliSetStep (ctx) {
     let formData = ctx.request.body
 
     await lowdb
       .set('cli.step', formData.step) // 通过set方法来对对象操作
       .write()
 
-    await client_resJson(ctx, {
+    await resClientJson(ctx, {
       state: 'success',
       message: 'step update success'
     })
   }
 
-  static async render_init (ctx) {
+  static async cliInit (ctx) {
     await render(ctx, {
       title: 'init project',
       view_url: '_cli/init',
@@ -48,7 +48,7 @@ class Init {
     })
   }
 
-  static async render_init_step_one (ctx) {
+  static async cliInitStepOne (ctx) {
     await render(ctx, {
       title: 'init project',
       view_url: '_cli/init_step_one',
@@ -57,7 +57,7 @@ class Init {
     })
   }
 
-  static async render_init_step_two (ctx) {
+  static async cliInitStepTwo (ctx) {
     await render(ctx, {
       title: 'init project',
       view_url: '_cli/init_step_two',
@@ -66,7 +66,7 @@ class Init {
     })
   }
 
-  static async render_init_step_three (ctx) {
+  static async cliInitStepThree (ctx) {
     await render(ctx, {
       title: 'init project',
       view_url: '_cli/init_step_three',
@@ -75,27 +75,27 @@ class Init {
     })
   }
 
-  static async post_set_mysql (ctx) {
+  static async cliSetMysql (ctx) {
     // set mysql 数据
     let formData = ctx.request.body
 
     try {
       await lowdb.set('mysql', { ...formData }).write()
 
-      const config_mysql = lowdb
+      const configMysql = lowdb
         .read()
         .get('mysql')
         .value()
       /* 表字段 */
 
-      const init_sequelize = new Seq(
-        config_mysql.database, // 数据库名
-        config_mysql.username, // 用户名
-        config_mysql.password, // 用户密码
+      const initSequelize = new Seq(
+        configMysql.database, // 数据库名
+        configMysql.username, // 用户名
+        configMysql.password, // 用户密码
         {
           dialect: 'mysql', // 数据库使用mysql
-          host: config_mysql.host, // 数据库服务器ip
-          port: config_mysql.mysql_port, // 数据库服务器端口
+          host: configMysql.host, // 数据库服务器ip
+          port: configMysql.mysql_port, // 数据库服务器端口
           define: {
             // 字段以下划线（_）来分割（默认是驼峰命名风格）
             underscored: true
@@ -103,18 +103,16 @@ class Init {
         }
       )
 
-      const { sequelize } = require('../../../db/mysqldb/define')(
-        init_sequelize
-      )
+      const { sequelize } = require('../../../db/mysqldb/define')(initSequelize)
 
       await sequelize.sync({ force: true })
 
-      await client_resJson(ctx, {
+      await resClientJson(ctx, {
         state: 'success',
         message: 'mysql table create success'
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -122,66 +120,66 @@ class Init {
     }
   }
 
-  static async post_create_admin_user (ctx) {
-    const req_data = ctx.request.body
-    const config_mysql = lowdb
+  static async cliCreateAdminUser (ctx) {
+    const reqData = ctx.request.body
+    const configMysql = lowdb
       .read()
       .get('mysql')
       .value()
     /* 表字段 */
 
     try {
-      if (!req_data.account) {
+      if (!reqData.account) {
         throw new ErrorMessage('请输入账户!')
       }
-      if (!req_data.nickname) {
+      if (!reqData.nickname) {
         throw new ErrorMessage('请输入昵称!')
       }
-      if (!checkUserName(req_data.account)) {
+      if (!checkUserName(reqData.account)) {
         throw new ErrorMessage('账户须5-22个英文字符!')
       }
-      if (!req_data.password) {
+      if (!reqData.password) {
         throw new ErrorMessage('请输入密码!')
       }
-      if (!checkPwd(req_data.password)) {
+      if (!checkPwd(reqData.password)) {
         throw new ErrorMessage(
           '密码格式输入有误，格式为字母与数字的组合，长度最小为6个字符!'
         )
       }
 
-      if (!req_data.email_type) {
+      if (!reqData.email_type) {
         throw new ErrorMessage('请选择邮箱类型')
       }
 
-      if (!req_data.email) {
+      if (!reqData.email) {
         throw new ErrorMessage('请填写邮箱地址!')
       }
 
-      if (!checkEmail(req_data.email)) {
+      if (!checkEmail(reqData.email)) {
         throw new ErrorMessage('邮箱格式输入有误')
       }
 
-      if (!req_data.email_password) {
+      if (!reqData.email_password) {
         throw new ErrorMessage('请填写邮箱密码!')
       }
 
-      if (req_data.email_type === 'company') {
-        if (!req_data.email_host) {
+      if (reqData.email_type === 'company') {
+        if (!reqData.email_host) {
           throw new ErrorMessage('请填写邮箱服务器地址!')
         }
-        if (!req_data.email_port) {
+        if (!reqData.email_port) {
           throw new ErrorMessage('请填写邮箱端口')
         }
       }
 
-      if (!req_data.admin_url) {
+      if (!reqData.admin_url) {
         throw new ErrorMessage('请填写后台管理访问地址!')
       }
 
-      const init_sequelize = new Seq(
-        config_mysql.database, // 数据库名
-        config_mysql.username, // 用户名
-        config_mysql.password, // 用户密码
+      const initSequelize = new Seq(
+        configMysql.database, // 数据库名
+        configMysql.username, // 用户名
+        configMysql.password, // 用户密码
         {
           dialect: 'mysql', // 数据库使用mysql
           dialectOptions: {
@@ -190,8 +188,8 @@ class Init {
             supportBigNumbers: true,
             bigNumberStrings: true
           },
-          host: config_mysql.host, // 数据库服务器ip
-          port: config_mysql.mysql_port, // 数据库服务器端口
+          host: configMysql.host, // 数据库服务器ip
+          port: configMysql.mysql_port, // 数据库服务器端口
           timezone: '+8:00', // 设置东八区
           define: {
             // 字段以下划线（_）来分割（默认是驼峰命名风格）
@@ -200,54 +198,46 @@ class Init {
         }
       )
 
-      const {
-        admin_user,
-        admin_role,
-        admin_authority,
-        user_authority,
-        user_role,
-        article_tag,
-        article_column
-      } = require('../../../db/mysqldb/define')(init_sequelize)
+      const models = require('../../../db/mysqldb/define')(initSequelize)
 
       await lowdb
         .set('email', {
-          service: req_data.email_suffix || '',
-          type: req_data.email_type || '',
-          host: req_data.email_host || '',
-          port: req_data.email_port || '',
-          user: req_data.email || '',
-          pass: req_data.email_password || ''
+          service: reqData.email_suffix || '',
+          type: reqData.email_type || '',
+          host: reqData.email_host || '',
+          port: reqData.email_port || '',
+          user: reqData.email || '',
+          pass: reqData.email_password || ''
         })
         .set('website', {
-          website_name: req_data.website_name || '',
-          domain_name: req_data.domain_name || '',
-          keywords: req_data.keywords || '',
-          introduction: req_data.introduction || '',
-          description: req_data.description || ''
+          website_name: reqData.website_name || '',
+          domain_name: reqData.domain_name || '',
+          keywords: reqData.keywords || '',
+          introduction: reqData.introduction || '',
+          description: reqData.description || ''
         })
         .set('config', {
-          admin_url: req_data.admin_url || 'admin',
-          on_register: req_data.on_register,
-          on_login: req_data.on_login,
-          on_comment: req_data.on_comment,
+          admin_url: reqData.admin_url || 'admin',
+          on_register: reqData.on_register,
+          on_login: reqData.on_login,
+          on_comment: reqData.on_comment,
           version: kiteConfig.version
         })
         .write()
 
-      await admin_authority.bulkCreate(admin_authority_list) // 导入默认后台管理员角色权限列表
-      await user_authority.bulkCreate(user_authority_list) // 导入默认用户角色权限列表
-      await admin_role.bulkCreate(admin_role_list)
-      await user_role.bulkCreate(user_role_list)
-      await article_tag.bulkCreate(default_article_tag_list)
-      await article_column.bulkCreate(default_article_column_list)
+      await models.adminAuthority.bulkCreate(dfAdminAuthorityList) // 导入默认后台管理员角色权限列表
+      await models.userAuthority.bulkCreate(dfUserAuthorityList) // 导入默认用户角色权限列表
+      await models.adminRole.bulkCreate(dfAdminRoleList)
+      await models.userRole.bulkCreate(dfUserRoleList)
+      await models.articleTag.bulkCreate(dfArticleTagList)
+      await models.articleColumn.bulkCreate(dfArticleColumnList)
 
-      await admin_user.create({
+      await models.adminUser.create({
         // 创建默认超管角色
-        account: req_data.account,
+        account: reqData.account,
         avatar: config.default_avatar,
-        nickname: req_data.nickname,
-        password: encrypt(req_data.password, config.encrypt_key),
+        nickname: reqData.nickname,
+        password: encrypt(reqData.password, config.ENCRYPT_KEY),
         admin_role_ids: config.SUPER_ROLE_ID,
         // reg_ip: ctx.request.ip,
         enable: true
@@ -260,12 +250,12 @@ class Init {
         })
         .write()
 
-      await client_resJson(ctx, {
+      await resClientJson(ctx, {
         state: 'success',
         message: '注册成功'
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -273,7 +263,7 @@ class Init {
     }
   }
 
-  static async post_restart_project (ctx) {
+  static async cliRestartProject (ctx) {
     // 项目初始化成功后重启
     const shell = require('./shell')
     shell.esc()

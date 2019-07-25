@@ -201,7 +201,7 @@ class UserRole extends React.Component {
   }
 
   componentDidMount() {
-    this.fetch_user_role_list()
+    this.fetchUserRoleList()
     /*获取后台权限所有*/
     this.props.dispatch(getUserAuthorityList())
   }
@@ -224,7 +224,7 @@ class UserRole extends React.Component {
   init_tree_data = val => {
     /* 初始化选中树 */
     let tree_arr = []
-    const { user_authority_source_list } = this.props.state_user_authority
+    const { user_authority_source_list } = this.props.stateUserAuthority
     user_authority_source_list.map(item => {
       if (
         Number(item.authority_type) === 2 &&
@@ -248,8 +248,8 @@ class UserRole extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_delete_user_role({
-          user_role_id: this.props.state_user_role.current_info.user_role_id
+        this.fetchDeleteUserRole({
+          user_role_id: this.props.stateUserRole.current_info.user_role_id
         })
         /*删除角色*/
       },
@@ -267,7 +267,7 @@ class UserRole extends React.Component {
         current: pages.current
       }
     })
-    this.fetch_user_role_list(pages)
+    this.fetchUserRoleList(pages)
   }
 
   showModal = () => {
@@ -288,9 +288,9 @@ class UserRole extends React.Component {
       if (!err) {
         console.log('Received values of form: ', values)
         if (is_create) {
-          this.fetch_create_user_role(values)
+          this.fetchCreateUserRole(values)
         } else {
-          this.fetch_update_user_role(values)
+          this.fetchUpdateUserRole(values)
         }
       }
     })
@@ -315,12 +315,12 @@ class UserRole extends React.Component {
     callback()
   }
 
-  fetch_create_user_role = values => {
+  fetchCreateUserRole = values => {
     /*创建角色*/
     this.props.dispatch(
       createUserRole(values, res => {
         alert.message_success('创建角色成功')
-        this.fetch_user_role_list()
+        this.fetchUserRoleList()
         this.setState({
           modal_visible_edit: false
         })
@@ -328,17 +328,17 @@ class UserRole extends React.Component {
     )
   }
 
-  fetch_update_user_role = values => {
+  fetchUpdateUserRole = values => {
     /*修改角色*/
     this.props.dispatch(
       updateUserRole(
         {
-          user_role_id: this.props.state_user_role.current_info.user_role_id,
+          user_role_id: this.props.stateUserRole.current_info.user_role_id,
           ...values
         },
         res => {
           alert.message_success('修改角色成功')
-          this.fetch_user_role_list()
+          this.fetchUserRoleList()
           this.setState({
             modal_visible_edit: false
           })
@@ -347,17 +347,17 @@ class UserRole extends React.Component {
     )
   }
 
-  fetch_delete_user_role = values => {
+  fetchDeleteUserRole = values => {
     /*删除管理员用户*/
     this.props.dispatch(
       deleteUserRole(values, res => {
         alert.message_success('删除角色成功')
-        this.fetch_user_role_list()
+        this.fetchUserRoleList()
       })
     )
   }
 
-  fetch_user_role_list = () => {
+  fetchUserRoleList = () => {
     /*获取管理员用户带分页的列表*/
     const that = this
     this.setState({ loading: true })
@@ -382,7 +382,7 @@ class UserRole extends React.Component {
     const {
       current_role_info,
       role_authority_list_all
-    } = this.props.state_user_role
+    } = this.props.stateUserRole
     this.props.dispatch(
       setUserRoleAuthority(
         {
@@ -391,7 +391,7 @@ class UserRole extends React.Component {
         },
         () => {
           alert.message_success('角色权限设置成功')
-          this.fetch_user_role_list()
+          this.fetchUserRoleList()
           this.setState({
             visible_set_authority_modal: false
           })
@@ -427,7 +427,7 @@ class UserRole extends React.Component {
   }
 
   render() {
-    const { state_user_role, state_user_authority } = this.props
+    const { stateUserRole, stateUserAuthority } = this.props
     const { loading, is_create, user_role_type_list } = this.state
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
@@ -577,7 +577,7 @@ class UserRole extends React.Component {
               ref="tree"
               showLine
             >
-              {this.renderTreeNodes(state_user_authority.user_authority_list)}
+              {this.renderTreeNodes(stateUserAuthority.user_authority_list)}
             </Tree>
             <div className="admin-role-foot">
               <Button
@@ -604,7 +604,7 @@ class UserRole extends React.Component {
           <div className="layout-table">
             <Table
               columns={this.state.columns}
-              dataSource={state_user_role.list}
+              dataSource={stateUserRole.list}
               loading={loading}
               onChange={this.TablePageChange.bind(this)}
               pagination={this.state.pagination}
@@ -619,9 +619,9 @@ class UserRole extends React.Component {
 
 const UserTagForm = Form.create()(UserRole)
 
-export default connect(({ state_user_role, state_user_authority }) => {
+export default connect(({ stateUserRole, stateUserAuthority }) => {
   return {
-    state_user_role,
-    state_user_authority
+    stateUserRole,
+    stateUserAuthority
   }
 })(UserTagForm)

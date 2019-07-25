@@ -117,7 +117,7 @@ export default {
       return Math.ceil(this.searchArticle.count / this.searchArticle.pageSize)
     },
     searchArticle () {
-      return this.$store.state.search.search_article
+      return this.$store.state.search.searchArticle
     },
   },
   components: {

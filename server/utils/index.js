@@ -1,2 +1,2 @@
-exports.random_number = require('./random_number')
+exports.random_number = require('./randomNumber')
 exports.tools = require('./tools')

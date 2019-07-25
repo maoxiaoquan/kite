@@ -4,7 +4,7 @@ import axios from 'axios'
 
 export const signIn = (data, func) => {
   return dispatch => {
-    axios.post('/api-admin/v1/sign_in', data).then(res => {
+    axios.post('/api-admin/v1/sign-in', data).then(res => {
       if (func) {
         func(res.data)
       }

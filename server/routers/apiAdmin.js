@@ -45,7 +45,7 @@ router.get(
   '/user/avatar-review-list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  users.get_avatar_review
+  users.getAvatarReview
 )
 // 审核用户头像
 router.post(
@@ -296,14 +296,14 @@ router.get(
   '/admin-index/statistics',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  adminIndex.admin_index_statistics
+  adminIndex.adminIndexStatistics
 )
 
 /**
  * 管理员用户
  */
 // 登录
-router.post('/sign_in', adminUser.admin_sign_in)
+router.post('/sign-in', adminUser.adminSignIn)
 // 创建管理员用户
 router.post(
   '/admin-user/create',
@@ -329,7 +329,7 @@ router.post(
 router.post(
   '/admin-user/info',
   tokens.AdminVerifyToken,
-  adminUser.get_admin_user_info
+  adminUser.getAdminUserInfo
 )
 // 获取管理员用户列表
 router.get(
@@ -450,14 +450,14 @@ router.get(
   '/system-config/info',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  system.get_system_info
+  system.getSystemInfo
 )
 // 更新系统配置
 router.post(
   '/system-config/update',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  system.update_system_info
+  system.updateSystemInfo
 )
 // 删除系统日志
 router.post(

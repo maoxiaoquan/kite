@@ -1,9 +1,5 @@
-const { user, article } = require('../../../db/mysqldb/index')
-const { admin_resJson } = require('../../utils/res_data')
-const {
-  tools: { encrypt }
-} = require('../../utils/index')
-const config = require('../../config')
+const models = require('../../../db/mysqldb/index')
+const { resAdminJson } = require('../../utils/resData')
 const moment = require('moment')
 const Op = require('sequelize').Op
 
@@ -27,16 +23,15 @@ class Articles {
       type
     } = ctx.request.body
 
-    let where_params = {} // 定义查询条件
+    let whereParams = {} // 定义查询条件
 
-    title && (where_params['title'] = { [Op.like]: `%${title}%` })
-    source && (where_params['source'] = source)
-    status && (where_params['status'] = status)
-    type && (where_params['type'] = type)
+    title && (whereParams['title'] = { [Op.like]: `%${title}%` })
+    source && (whereParams['source'] = source)
+    status && (whereParams['status'] = status)
+    type && (whereParams['type'] = type)
 
-    console.log('where_params', where_params)
     try {
-      let { count, rows } = await article.findAndCountAll({
+      let { count, rows } = await models.article.findAndCountAll({
         attributes: [
           'uid',
           'aid',
@@ -51,7 +46,7 @@ class Articles {
           'comment_count',
           'rejection_reason'
         ],
-        where: where_params, // 为空，获取全部，也可以自己添加条件
+        where: whereParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize), // 每页限制返回的数据条数
         order: [['create_timestamp', 'desc']]
@@ -66,14 +61,14 @@ class Articles {
         )
         rows[i].setDataValue(
           'user',
-          await user.findOne({
+          await models.user.findOne({
             where: { uid: rows[i].uid },
             attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
           })
         )
       }
 
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -82,7 +77,7 @@ class Articles {
         }
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -96,7 +91,7 @@ class Articles {
   static async editArticle (ctx) {
     const { aid, status, type, source, rejection_reason } = ctx.request.body
     try {
-      await article.update(
+      await models.article.update(
         {
           status,
           type,
@@ -109,12 +104,12 @@ class Articles {
           }
         }
       )
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '更新文章成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -130,10 +125,10 @@ class Articles {
   static async deleteArticle (ctx) {
     const { aid } = ctx.request.body
     try {
-      let find_article = await article.findOne({ where: { aid } })
-      if (find_article) {
-        await article.destroy({ where: { aid } })
-        admin_resJson(ctx, {
+      let oneArticle = await models.article.findOne({ where: { aid } })
+      if (oneArticle) {
+        await models.article.destroy({ where: { aid } })
+        resAdminJson(ctx, {
           state: 'success',
           message: '删除文章成功'
         })
@@ -141,7 +136,7 @@ class Articles {
         throw new ErrorMessage('删除文章失败!')
       }
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })

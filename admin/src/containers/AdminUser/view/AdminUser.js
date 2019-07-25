@@ -66,9 +66,9 @@ class AdminUser extends React.Component {
             return (
               <div className="table-right-btn">
                 {/* <Tag color="orange">超级管理员</Tag>*/}
-                {this.current_user_role(record) ? (
+                {this.currentUserRole(record) ? (
                   <Tag color="orange">
-                    {this.current_user_role(record).role_name}
+                    {this.currentUserRole(record).role_name}
                   </Tag>
                 ) : (
                   <Tag color="#666">无</Tag>
@@ -185,7 +185,7 @@ class AdminUser extends React.Component {
 
   async initAdminUserPage() {
     /*初始化获取所有列表*/
-    await this.fetch_admin_user_list()
+    await this.fetchAdminUserList()
     /*管理员用户列表*/
     await this.props.dispatch(getAdminRoleAll())
     /*所有角色列表*/
@@ -218,8 +218,8 @@ class AdminUser extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_admin_user_delete({
-          uid: this.props.state_admin_user.current_user_info.uid
+        this.fetchAdminUserDelete({
+          uid: this.props.stateAdminUser.current_user_info.uid
         })
         /*删除管理员用户*/
       },
@@ -229,10 +229,10 @@ class AdminUser extends React.Component {
     })
   }
 
-  current_user_role = value => {
+  currentUserRole = value => {
     /*获取当前管理员用户的角色*/
-    const { state_admin_user } = this.props
-    const { current_user_info, admin_role_all } = state_admin_user
+    const { stateAdminUser } = this.props
+    const { current_user_info, admin_role_all } = stateAdminUser
     let curr_info = value || current_user_info
     let curr_role = ''
     admin_role_all.map(item => {
@@ -251,7 +251,7 @@ class AdminUser extends React.Component {
         current: pages.current
       }
     })
-    this.fetch_admin_user_list(pages)
+    this.fetchAdminUserList(pages)
   }
 
   showModal = () => {
@@ -272,9 +272,9 @@ class AdminUser extends React.Component {
       if (!err) {
         console.log('Received values of form: ', values)
         if (is_create) {
-          this.fetch_admin_user_create(values)
+          this.fetchAdminUserCreate(values)
         } else {
-          this.fetch_admin_user_edit(values)
+          this.fetchAdminUserEdit(values)
         }
       }
     })
@@ -305,7 +305,7 @@ class AdminUser extends React.Component {
           {
             /*创建管理员用户角色*/
             role_id: this.state.role_id,
-            uid: this.props.state_admin_user.current_user_info.uid
+            uid: this.props.stateAdminUser.current_user_info.uid
           },
           () => {
             this.setState({
@@ -329,12 +329,12 @@ class AdminUser extends React.Component {
     callback()
   }
 
-  fetch_admin_user_create = values => {
+  fetchAdminUserCreate = values => {
     /*创建管理员用户*/
     this.props.dispatch(
       createAdminUser(values, res => {
         alert.message_success('创建成功')
-        this.fetch_admin_user_list()
+        this.fetchAdminUserList()
         this.setState({
           modal_visible_register: false
         })
@@ -342,14 +342,14 @@ class AdminUser extends React.Component {
     )
   }
 
-  fetch_admin_user_edit = values => {
+  fetchAdminUserEdit = values => {
     /*修改管理员用户账户*/
     this.props.dispatch(
       editAdminUser(
-        { uid: this.props.state_admin_user.current_user_info.uid, ...values },
+        { uid: this.props.stateAdminUser.current_user_info.uid, ...values },
         res => {
           alert.message_success('修改用户成功')
-          this.fetch_admin_user_list()
+          this.fetchAdminUserList()
           this.setState({
             modal_visible_register: false
           })
@@ -358,17 +358,17 @@ class AdminUser extends React.Component {
     )
   }
 
-  fetch_admin_user_delete = values => {
+  fetchAdminUserDelete = values => {
     /*删除管理员用户*/
     this.props.dispatch(
       deleteAdminUser(values, res => {
         alert.message_success('删除用户成功')
-        this.fetch_admin_user_list()
+        this.fetchAdminUserList()
       })
     )
   }
 
-  fetch_admin_user_list = () => {
+  fetchAdminUserList = () => {
     /*获取管理员用户带分页的列表*/
     const that = this
     this.setState({ loading: true })
@@ -389,8 +389,8 @@ class AdminUser extends React.Component {
   }
 
   render() {
-    const { state_admin_user } = this.props
-    const { admin_role_all = [] } = state_admin_user
+    const { stateAdminUser } = this.props
+    const { admin_role_all = [] } = stateAdminUser
     const { loading, is_create } = this.state
     const { getFieldDecorator } = this.props.form
 
@@ -571,7 +571,7 @@ class AdminUser extends React.Component {
               <Input
                 disabled={true}
                 type="text"
-                value={state_admin_user.current_user_info.account}
+                value={stateAdminUser.current_user_info.account}
               />
             </FormItem>
             <FormItem {...formItemLayout} label="角色类型">
@@ -599,7 +599,7 @@ class AdminUser extends React.Component {
           <div className="layout-table">
             <Table
               columns={this.state.columns}
-              dataSource={state_admin_user.admin_user_list}
+              dataSource={stateAdminUser.admin_user_list}
               loading={loading}
               onChange={this.TablePageChange.bind(this)}
               pagination={this.state.pagination}
@@ -614,8 +614,8 @@ class AdminUser extends React.Component {
 
 const AdminUserForm = Form.create()(AdminUser)
 
-export default connect(({ state_admin_user }) => {
+export default connect(({ stateAdminUser }) => {
   return {
-    state_admin_user
+    stateAdminUser
   }
 })(AdminUserForm)

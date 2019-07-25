@@ -1,7 +1,8 @@
 const crypto = require('crypto')
 
 module.exports = {
-  encrypt: function (data, key) { // 密码加密
+  encrypt: (data, key) => {
+    // 密码加密
     let cipher = crypto.createCipher('bf', key)
     let newPsd = ''
     newPsd += cipher.update(data, 'utf8', 'hex')
@@ -9,7 +10,8 @@ module.exports = {
     return newPsd
   },
 
-  decrypt: function (data, key) { // 密码解密
+  decrypt: (data, key) => {
+    // 密码解密
     let decipher = crypto.createDecipher('bf', key)
     let oldPsd = ''
     oldPsd += decipher.update(data, 'hex', 'utf8')
@@ -17,7 +19,7 @@ module.exports = {
     return oldPsd
   },
 
-  isEmpty: (obj) => {
+  isEmpty: obj => {
     var key
     for (key in obj) {
       if (obj.hasOwnProperty(key)) {

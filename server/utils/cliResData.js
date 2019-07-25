@@ -9,7 +9,7 @@ class Format {
    * @param  {Boolean} is_login  是否登录
    */
 
-  async client_resJson (ctx, { state, message, data = {} }) {
+  async resClientJson (ctx, { state, message, data = {} }) {
     ctx.body = {
       state,
       message,

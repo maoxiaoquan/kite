@@ -1,81 +1,76 @@
 const models = require('../../../db/mysqldb/index')
-const { sign_resJson, admin_resJson } = require('../../utils/res_data')
-const {
-  tools: { encrypt }
-} = require('../../utils/index')
-const config = require('../../config')
+const { resAdminJson } = require('../../utils/resData')
 const moment = require('moment')
-const Op = require('sequelize').Op
 
 class AdminIndex {
-  static async admin_index_statistics (ctx) {
+  static async adminIndexStatistics (ctx) {
     try {
-      const admin_user_count = await models.admin_user.count() // 后台用户统计
-      const user_count = await models.user.count() // 前台用户统计
-      const article_count = await models.article.count() // 文章统计
-      const comment_count = await models.comment.count() // 评论统计
+      const adminUserCount = await models.adminUser.count() // 后台用户统计
+      const userCount = await models.user.count() // 前台用户统计
+      const articleCount = await models.article.count() // 文章统计
+      const commentCount = await models.comment.count() // 评论统计
 
-      const new_user = await models.user.findAll({
+      const userAll = await models.user.findAll({
         limit: 10, // 每页限制返回的数据条数
         attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction'],
         order: [['create_timestamp', 'desc']]
       })
 
-      const new_article = await models.article.findAll({
+      const articleAll = await models.article.findAll({
         limit: 10, // 每页限制返回的数据条数
         order: [['create_timestamp', 'desc']]
       })
 
-      const new_comment = await models.comment.findAll({
+      const commentAll = await models.comment.findAll({
         limit: 10, // 每页限制返回的数据条数
         order: [['create_timestamp', 'desc']]
       })
 
-      for (const i in new_article) {
-        new_article[i].setDataValue(
+      for (const i in articleAll) {
+        articleAll[i].setDataValue(
           'create_at',
-          await moment(new_article[i].create_date).format('YYYY-MM-DD H:m:s')
+          await moment(articleAll[i].create_date).format('YYYY-MM-DD H:m:s')
         )
-        new_article[i].setDataValue(
+        articleAll[i].setDataValue(
           'user',
           await models.user.findOne({
-            where: { uid: new_article[i].uid },
+            where: { uid: articleAll[i].uid },
             attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
           })
         )
       }
 
-      for (const i in new_comment) {
-        new_comment[i].setDataValue(
+      for (const i in commentAll) {
+        commentAll[i].setDataValue(
           'create_at',
-          await moment(new_comment[i].create_date).format('YYYY-MM-DD H:m:s')
+          await moment(commentAll[i].create_date).format('YYYY-MM-DD H:m:s')
         )
-        new_comment[i].setDataValue(
+        commentAll[i].setDataValue(
           'user',
           await models.user.findOne({
-            where: { uid: new_comment[i].uid },
+            where: { uid: commentAll[i].uid },
             attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
           })
         )
       }
 
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '获取统计信息成功',
         data: {
           count: {
-            admin_user_count,
-            user_count,
-            article_count,
-            comment_count
+            admin_user_count: adminUserCount,
+            user_count: userCount,
+            article_count: articleCount,
+            comment_count: commentCount
           },
-          new_article,
-          new_user,
-          new_comment
+          new_article: articleAll,
+          new_user: userAll,
+          new_comment: commentAll
         }
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })

@@ -11,7 +11,7 @@ import {
 import { Layout, Drawer } from 'antd'
 import { connect } from 'react-redux'
 import { enquireScreen, unenquireScreen } from 'enquire-js'
-import { get_admin_user_info } from '../../../stores/actions/index'
+import { getAdminUserInfo } from '../../../stores/actions/index'
 
 import Header from '../../../components/Parts/Header' // 头部
 import Aside from '../../../components/Parts/Aside' // 侧栏
@@ -34,7 +34,7 @@ class Manager extends PureComponent {
       }
     })
     this.props.dispatch(
-      get_admin_user_info({}, result => {
+      getAdminUserInfo({}, result => {
         console.log('result', result)
         if (result.website) {
           document.title = result.website.website_name
@@ -109,6 +109,6 @@ class Manager extends PureComponent {
   }
 }
 
-export default connect(({ state_title }) => ({
-  state_title
+export default connect(({ stateTitle }) => ({
+  stateTitle
 }))(Manager)

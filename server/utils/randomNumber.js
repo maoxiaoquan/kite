@@ -1,8 +1,8 @@
 module.exports = function (randomFlag, min, max) {
-  let str = '',
-    pos = '',
-    range = min,
-    arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+  let str = ''
+  let pos = ''
+  let range = min
+  let arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
   // 随机产生
   if (randomFlag) {

@@ -1,11 +1,6 @@
-const { admin_resJson } = require('../../utils/res_data')
-const {
-  admin_role,
-  admin_user,
-  admin_authority
-} = require('../../../db/mysqldb/index')
-const { isEmpty } = require('../../utils/tools')
-const { create_admin_system_log } = require('./adminSystemLog')
+const { resAdminJson } = require('../../utils/resData')
+const models = require('../../../db/mysqldb/index')
+const { createAdminSystemLog } = require('./adminSystemLog')
 const Op = require('sequelize').Op
 
 function ErrorMessage (message) {
@@ -13,7 +8,7 @@ function ErrorMessage (message) {
   this.name = 'UserException'
 }
 
-class role_authority {
+class adminRoleAuthority {
   /**
    * -----------------------------------角色操作--------------------------------
    * 创建角色
@@ -28,29 +23,31 @@ class role_authority {
       if (!role_description) {
         throw new ErrorMessage('请输入角色介绍!')
       }
-      let find_role = await admin_role.findOne({ where: { role_name } })
-      if (find_role) {
+      let oneAdminRole = await models.adminRole.findOne({
+        where: { role_name }
+      })
+      if (oneAdminRole) {
         throw new ErrorMessage('角色已存在!')
       }
 
-      await admin_role.create({
+      await models.adminRole.create({
         role_name,
         role_description
       })
 
-      await create_admin_system_log({
+      await createAdminSystemLog({
         // 写入日志
         uid: ctx.request.userInfo.uid,
         type: 1,
         content: `成功创建了‘${role_name}’角色`
       })
 
-      await admin_resJson(ctx, {
+      await resAdminJson(ctx, {
         state: 'success',
         message: '角色创建成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -63,33 +60,33 @@ class role_authority {
    * @param   {object} ctx 上下文对象
    */
   static async editAdminRole (ctx) {
-    const req_data = ctx.request.body
+    const reqData = ctx.request.body
     try {
-      await admin_role.update(
+      await models.adminRole.update(
         {
-          role_name: req_data.role_name,
-          role_description: req_data.role_description
+          role_name: reqData.role_name,
+          role_description: reqData.role_description
         },
         {
           where: {
-            role_id: req_data.role_id // 查询条件
+            role_id: reqData.role_id // 查询条件
           }
         }
       )
 
-      await create_admin_system_log({
+      await createAdminSystemLog({
         // 写入日志
         uid: ctx.request.userInfo.uid,
         type: 1,
-        content: `成功更新了id为‘${req_data.role_id}’的角色为‘${req_data.role_name}’`
+        content: `成功更新了id为‘${reqData.role_id}’的角色为‘${reqData.role_name}’`
       })
 
-      await admin_resJson(ctx, {
+      await resAdminJson(ctx, {
         state: 'success',
         message: '修改角色成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -105,13 +102,13 @@ class role_authority {
     const { role_id } = ctx.request.body
     /* 角色与用户权限无关联的时候 */
     try {
-      await admin_role.destroy({ where: { role_id } })
-      await admin_resJson(ctx, {
+      await models.adminRole.destroy({ where: { role_id } })
+      await resAdminJson(ctx, {
         state: 'success',
         message: '删除角色成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -126,7 +123,7 @@ class role_authority {
   static async getAdminRoleList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
-      let { count, rows } = await admin_role.findAndCountAll({
+      let { count, rows } = await models.adminRole.findAndCountAll({
         attributes: [
           'role_id',
           'role_name',
@@ -137,7 +134,7 @@ class role_authority {
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize) // 每页限制返回的数据条数
       })
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -146,7 +143,7 @@ class role_authority {
         }
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -160,14 +157,14 @@ class role_authority {
    */
   static async getAdminRoleAll (ctx) {
     try {
-      let admin_role_findAll = await admin_role.findAll()
-      admin_resJson(ctx, {
+      let adminRoleAll = await models.adminRole.findAll()
+      resAdminJson(ctx, {
         state: 'success',
         message: '返回成功',
-        data: admin_role_findAll
+        data: adminRoleAll
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -181,38 +178,38 @@ class role_authority {
    * @param   {object} ctx 上下文对象
    */
   static async createAdminAuthority (ctx) {
-    const req_data = ctx.request.body
+    const reqData = ctx.request.body
 
     try {
-      let find_authority_name = await admin_authority.findOne({
-        where: { authority_name: req_data.authority_name }
+      let oneAdminAuthorityName = await models.adminAuthority.findOne({
+        where: { authority_name: reqData.authority_name }
       })
-      if (find_authority_name) {
+      if (oneAdminAuthorityName) {
         throw new ErrorMessage('权限名已存在!')
       }
-      let find_authority_url = await admin_authority.findOne({
-        where: { authority_url: req_data.authority_url }
+      let oneAdminAuthorityUrl = await models.adminAuthority.findOne({
+        where: { authority_url: reqData.authority_url }
       })
-      if (find_authority_url) {
+      if (oneAdminAuthorityUrl) {
         throw new ErrorMessage('权限路径已存在!')
       }
 
-      await admin_authority.create({
-        ...req_data
+      await models.adminAuthority.create({
+        ...reqData
       })
-      await create_admin_system_log({
+      await createAdminSystemLog({
         // 写入日志
         uid: ctx.request.userInfo.uid,
         type: 1,
-        content: `成功创建了‘${req_data.authority_name}’权限`
+        content: `成功创建了‘${reqData.authority_name}’权限`
       })
 
-      await admin_resJson(ctx, {
+      await resAdminJson(ctx, {
         state: 'success',
         message: '权限创建成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -226,15 +223,15 @@ class role_authority {
    */
   static async getAdminAuthorityList (ctx) {
     try {
-      let admin_authority_findAll = await admin_authority.findAll()
+      let adminAuthorityAll = await models.adminAuthority.findAll()
 
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '返回成功',
-        data: admin_authority_findAll
+        data: adminAuthorityAll
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -247,36 +244,36 @@ class role_authority {
    * @param   {object} ctx 上下文对象
    */
   static async updateAdminAuthority (ctx) {
-    const req_data = ctx.request.body
+    const reqData = ctx.request.body
     try {
-      await admin_authority.update(
+      await models.adminAuthority.update(
         {
-          authority_name: req_data.authority_name,
-          authority_type: req_data.authority_type,
-          authority_url: req_data.authority_url,
-          authority_sort: req_data.authority_sort,
-          authority_description: req_data.authority_description,
-          enable: req_data.enable
+          authority_name: reqData.authority_name,
+          authority_type: reqData.authority_type,
+          authority_url: reqData.authority_url,
+          authority_sort: reqData.authority_sort,
+          authority_description: reqData.authority_description,
+          enable: reqData.enable
         },
         {
           where: {
-            authority_id: req_data.authority_id // 查询条件
+            authority_id: reqData.authority_id // 查询条件
           }
         }
       )
-      await create_admin_system_log({
+      await createAdminSystemLog({
         // 写入日志
         uid: ctx.request.userInfo.uid,
         type: 1,
-        content: `成功更新了id为‘${req_data.authority_id}’的权限为‘${req_data.authority_name}’`
+        content: `成功更新了id为‘${reqData.authority_id}’的权限为‘${reqData.authority_name}’`
       })
 
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '更新权限成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -291,15 +288,15 @@ class role_authority {
   static async deleteAdminAuthority (ctx) {
     const { authority_id_arr } = ctx.request.body
     try {
-      await admin_authority.destroy({
+      await models.adminAuthority.destroy({
         where: { authority_id: { [Op.in]: authority_id_arr } }
       })
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '删除权限树成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -312,24 +309,24 @@ class role_authority {
    * @param   {object} ctx 上下文对象
    */
   static async createAdminUserRole (ctx) {
-    const req_data = ctx.request.body
+    const reqData = ctx.request.body
     try {
-      await admin_user.update(
+      await models.adminUser.update(
         {
-          admin_role_ids: req_data.role_id
+          admin_role_ids: reqData.role_id
         },
         {
           where: {
-            uid: req_data.uid // 查询条件
+            uid: reqData.uid // 查询条件
           }
         }
       )
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'success',
         message: '更新用户角色成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -343,20 +340,20 @@ class role_authority {
    */
 
   static async setAdminRoleAuthority (ctx) {
-    const req_data = ctx.request.body
+    const reqData = ctx.request.body
     try {
-      await admin_role.update(
-        { admin_authority_ids: req_data.role_authority_list_all.join(',') },
+      await models.adminRole.update(
+        { admin_authority_ids: reqData.role_authority_list_all.join(',') },
         {
-          where: { role_id: req_data.role_id } // 查询条件
+          where: { role_id: reqData.role_id } // 查询条件
         }
       )
-      await admin_resJson(ctx, {
+      await resAdminJson(ctx, {
         state: 'success',
         message: '修改成功'
       })
     } catch (err) {
-      admin_resJson(ctx, {
+      resAdminJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -364,4 +361,4 @@ class role_authority {
   }
 }
 
-module.exports = role_authority
+module.exports = adminRoleAuthority

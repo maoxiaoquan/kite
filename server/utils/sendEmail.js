@@ -6,27 +6,32 @@
 const { lowdb } = require('../../db/lowdb/index')
 var nodemailer = require('nodemailer')
 var smtpTransport = require('nodemailer-smtp-transport')
-const config = lowdb.read()
-  .value()
+const config = lowdb.read().value()
 
-if (config.email.type === 'company') { // 公司邮箱
-  smtpTransport = nodemailer.createTransport(smtpTransport({
-    host: config.email.host,
-    secureConnection: true,
-    port: Number(config.email.port),
-    auth: {
-      user: config.email.user,
-      pass: config.email.pass
-    }
-  }))
-} else if (config.email.type === 'personal') { // 个人邮箱
-  smtpTransport = nodemailer.createTransport(smtpTransport({
-    service: config.email.service,
-    auth: {
-      user: config.email.user,
-      pass: config.email.pass
-    }
-  }))
+if (config.email.type === 'company') {
+  // 公司邮箱
+  smtpTransport = nodemailer.createTransport(
+    smtpTransport({
+      host: config.email.host,
+      secureConnection: true,
+      port: Number(config.email.port),
+      auth: {
+        user: config.email.user,
+        pass: config.email.pass
+      }
+    })
+  )
+} else if (config.email.type === 'personal') {
+  // 个人邮箱
+  smtpTransport = nodemailer.createTransport(
+    smtpTransport({
+      service: config.email.service,
+      auth: {
+        user: config.email.user,
+        pass: config.email.pass
+      }
+    })
+  )
 }
 /**
  * @param {String} recipient 收件人
@@ -35,27 +40,30 @@ if (config.email.type === 'company') { // 公司邮箱
  */
 
 const sendMail = function (recipient, subject, html) {
-  smtpTransport.sendMail({
-    from: config.email.user,
-    to: recipient,
-    subject: subject,
-    html: html
-
-  }, function (error, response) {
-    if (error) {
-      console.log(error)
-    }
-    console.log('发送成功')
-  })
-}
-
-const send_verify_code_mail = function (recipient, subject, code) {
-  return new Promise((resolve, reject) => {
-    smtpTransport.sendMail({
+  smtpTransport.sendMail(
+    {
       from: config.email.user,
       to: recipient,
       subject: subject,
-      html: `
+      html: html
+    },
+    function (error, response) {
+      if (error) {
+        console.log(error)
+      }
+      console.log('发送成功')
+    }
+  )
+}
+
+const sendVerifyCodeMail = function (recipient, subject, code) {
+  return new Promise((resolve, reject) => {
+    smtpTransport.sendMail(
+      {
+        from: config.email.user,
+        to: recipient,
+        subject: subject,
+        html: `
         <div class="juejin-reset" style="
             width: 600px;
             margin-left: auto;
@@ -89,23 +97,24 @@ const send_verify_code_mail = function (recipient, subject, code) {
                 </div>
         </div>
         `
-
-    }, function (error, response) {
-      if (error) {
-        reject({
-          state: 'error',
-          message: error.response
+      },
+      function (error, response) {
+        if (error) {
+          reject({
+            state: 'error',
+            message: error.response
+          })
+        }
+        resolve({
+          state: 'success',
+          message: '发送成功'
         })
       }
-      resolve({
-        state: 'success',
-        message: '发送成功'
-      })
-    })
+    )
   })
 }
 
 module.exports = {
   sendMail,
-  send_verify_code_mail
+  sendVerifyCodeMail
 }

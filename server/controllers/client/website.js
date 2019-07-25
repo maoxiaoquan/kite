@@ -1,7 +1,5 @@
 const models = require('../../../db/mysqldb/index')
-const moment = require('moment')
-const { render, client_resJson } = require('../../utils/res_data')
-const Op = require('sequelize').Op
+const { resClientJson } = require('../../utils/resData')
 const { lowdb } = require('../../../db/lowdb/index')
 
 function ErrorMessage (message) {
@@ -34,7 +32,7 @@ class Website {
           option_key: 'advertise' // 查询条件
         }
       })
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'success',
         message: '获取网站信息成功',
         data: {
@@ -49,7 +47,7 @@ class Website {
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })

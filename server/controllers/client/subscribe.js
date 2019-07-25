@@ -1,24 +1,24 @@
-const { render, client_resJson } = require('../../utils/res_data')
+const { resClientJson } = require('../../utils/resData')
 const moment = require('moment')
 const models = require('../../../db/mysqldb/index')
 const Op = require('sequelize').Op
-const clientWhere = require('../../utils/client_where')
+const clientWhere = require('../../utils/clientWhere')
 
 class Subscribe {
   static async getArticleTagList (ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 24
     let tag_name = ctx.query.tag_name
-    let where_params = {
+    let whereParams = {
       enable: 1
     }
     try {
       tag_name &&
-        (where_params['article_tag_name'] = {
+        (whereParams['article_tag_name'] = {
           [Op.like]: `%${tag_name}%`
         })
 
-      let { count, rows } = await models.article_tag.findAndCountAll({
+      let { count, rows } = await models.articleTag.findAndCountAll({
         attributes: [
           'article_tag_id',
           'article_tag_name',
@@ -27,7 +27,7 @@ class Subscribe {
           'article_tag_description',
           'attention_count'
         ],
-        where: where_params, // 为空，获取全部，也可以自己添加条件
+        where: whereParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, // 每页限制返回的数据条数
         order: [
@@ -38,7 +38,7 @@ class Subscribe {
       for (let i in rows) {
         rows[i].setDataValue(
           'subscribe_count',
-          await models.subscribe_article_tag.count({
+          await models.subscribeArticleTag.count({
             where: { article_tag_id: rows[i].article_tag_id }
           })
         )
@@ -55,7 +55,7 @@ class Subscribe {
         )
       }
 
-      await client_resJson(ctx, {
+      await resClientJson(ctx, {
         state: 'success',
         message: 'subscribe',
         data: {
@@ -67,7 +67,7 @@ class Subscribe {
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -75,32 +75,32 @@ class Subscribe {
     }
   }
 
-  static async get_article_tag_list_my (ctx) {
+  static async getArticleTagListMy (ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 25
     let { user = '' } = ctx.request
-    let where_params = {
+    let whereParams = {
       enable: 1
     }
 
     try {
-      let subscribe_article_tag = await models.subscribe_article_tag.findAll({
+      let allSubscribeArticleTag = await models.subscribeArticleTag.findAll({
         where: {
           uid: user.uid
         }
       })
 
-      if (subscribe_article_tag.length > 0) {
-        let my_article_tag = subscribe_article_tag.map(result => {
+      if (allSubscribeArticleTag.length > 0) {
+        let myArticleTag = allSubscribeArticleTag.map(result => {
           return result.article_tag_id
         })
 
-        my_article_tag &&
-          (where_params['article_tag_id'] = {
-            [Op.regexp]: `${my_article_tag.join('|')}`
+        myArticleTag &&
+          (whereParams['article_tag_id'] = {
+            [Op.regexp]: `${myArticleTag.join('|')}`
           })
 
-        let { count, rows } = await models.article_tag.findAndCountAll({
+        let { count, rows } = await models.articleTag.findAndCountAll({
           attributes: [
             'article_tag_id',
             'article_tag_name',
@@ -109,7 +109,7 @@ class Subscribe {
             'article_tag_description',
             'attention_count'
           ],
-          where: where_params, // 为空，获取全部，也可以自己添加条件
+          where: whereParams, // 为空，获取全部，也可以自己添加条件
           offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
           limit: pageSize, // 每页限制返回的数据条数
           order: [
@@ -120,7 +120,7 @@ class Subscribe {
         for (let i in rows) {
           rows[i].setDataValue(
             'subscribe_count',
-            await models.subscribe_article_tag.count({
+            await models.subscribeArticleTag.count({
               where: { article_tag_id: rows[i].article_tag_id }
             })
           )
@@ -137,7 +137,7 @@ class Subscribe {
           )
         }
 
-        await client_resJson(ctx, {
+        await resClientJson(ctx, {
           state: 'success',
           message: 'subscribe',
           data: {
@@ -148,7 +148,7 @@ class Subscribe {
           }
         })
       } else {
-        await client_resJson(ctx, {
+        await resClientJson(ctx, {
           state: 'success',
           message: 'subscribe',
           data: {
@@ -160,7 +160,7 @@ class Subscribe {
         })
       }
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -173,23 +173,23 @@ class Subscribe {
    * @param   {object} ctx 上下文对象
    */
 
-  static async get_subscribe_tag_my (ctx) {
+  static async getSubscribeTagMyAll (ctx) {
     let { user = '' } = ctx.request
     try {
-      let subscribe_article_tag = await models.subscribe_article_tag.findAll({
+      let allSubscribeArticleTag = await models.subscribeArticleTag.findAll({
         where: {
           uid: user.uid
         }
       })
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'success',
         message: '获取当前用户订阅的标签成功',
         data: {
-          subscribe_article_tag
+          subscribe_article_tag: allSubscribeArticleTag
         }
       })
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -197,38 +197,36 @@ class Subscribe {
     }
   }
 
-  static async post_subscribe_tag (ctx) {
+  static async setSubscribeTag (ctx) {
     const { article_tag_id } = ctx.request.body
     let { user = '' } = ctx.request
     try {
-      let findone_subscribe_article_tag = await models.subscribe_article_tag.findOne(
-        {
-          where: {
-            uid: user.uid,
-            article_tag_id
-          }
+      let oneSubscribeArticleTag = await models.subscribeArticleTag.findOne({
+        where: {
+          uid: user.uid,
+          article_tag_id
         }
-      )
+      })
 
-      let findOneArticleTag = await models.article_tag.findOne({
+      let oneArticleTag = await models.articleTag.findOne({
         where: {
           article_tag_id
         }
       })
 
-      if (findone_subscribe_article_tag) {
+      if (oneSubscribeArticleTag) {
         /* 判断是否关注了，是则取消，否则添加 */
 
-        await models.subscribe_article_tag.destroy({
+        await models.subscribeArticleTag.destroy({
           where: {
             uid: user.uid,
             article_tag_id
           }
         })
 
-        await models.article_tag.update(
+        await models.articleTag.update(
           {
-            attention_count: findOneArticleTag.attention_count - 1
+            attention_count: oneArticleTag.attention_count - 1
           },
           {
             where: {
@@ -236,7 +234,7 @@ class Subscribe {
             }
           }
         )
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'success',
           message: '取消关注文章标签成功',
           data: {
@@ -244,14 +242,14 @@ class Subscribe {
           }
         })
       } else {
-        await models.subscribe_article_tag.create({
+        await models.subscribeArticleTag.create({
           uid: user.uid,
           article_tag_id
         })
 
-        await models.article_tag.update(
+        await models.articleTag.update(
           {
-            attention_count: findOneArticleTag.attention_count + 1
+            attention_count: oneArticleTag.attention_count + 1
           },
           {
             where: {
@@ -260,7 +258,7 @@ class Subscribe {
           }
         )
 
-        client_resJson(ctx, {
+        resClientJson(ctx, {
           state: 'success',
           message: '关注文章标签成功',
           data: {
@@ -269,7 +267,7 @@ class Subscribe {
         })
       }
     } catch (err) {
-      client_resJson(ctx, {
+      resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
       })

@@ -57,7 +57,7 @@ class AdminRole extends React.Component {
               <div className="table-right-btn">
                 <Button
                   onClick={async () => {
-                    this.edit_role(record)
+                    this.editRole(record)
                     await this.props.dispatch({
                       type: 'SET_CURRENT_ADMIN_ROLE_INFO',
                       data: record
@@ -76,7 +76,7 @@ class AdminRole extends React.Component {
                       type: 'SET_CURRENT_ADMIN_ROLE_INFO',
                       data: record
                     })
-                    this.delete_role()
+                    this.deleteRole()
                   }}
                   size="small"
                 >
@@ -88,7 +88,7 @@ class AdminRole extends React.Component {
                   onClick={async () => {
                     this.setState({
                       visible_set_authority_modal: true,
-                      role_authority_list: this.init_tree_data(
+                      role_authority_list: this.initTreeData(
                         record.admin_authority_ids
                           ? record.admin_authority_ids.split(',')
                           : ''
@@ -123,7 +123,7 @@ class AdminRole extends React.Component {
 
   componentDidMount() {
     /*获取后台角色分页列表*/
-    this.fetch_admin_role_list()
+    this.fetchAdminRoleList()
     /*获取后台权限所有*/
     this.props.dispatch(getAdminAuthorityList())
   }
@@ -133,13 +133,13 @@ class AdminRole extends React.Component {
       visible_create_role_modal: true,
       is_create: true
     })
-    this.init_role_from()
+    this.initRoleFrom()
   }
 
-  init_tree_data = val => {
+  initTreeData = val => {
     /* 初始化选中树 */
     let tree_arr = []
-    const { admin_authority_source_list } = this.props.state_admin_authority
+    const { admin_authority_source_list } = this.props.stateAdminAuthority
     admin_authority_source_list.map(item => {
       if (
         Number(item.authority_type) === 2 &&
@@ -151,7 +151,7 @@ class AdminRole extends React.Component {
     return tree_arr
   }
 
-  init_role_from = () => {
+  initRoleFrom = () => {
     /*初始化角色表单*/
     this.setState({
       role_name: '',
@@ -159,7 +159,7 @@ class AdminRole extends React.Component {
     })
   }
 
-  edit_role = val => {
+  editRole = val => {
     /*修改角色*/
     this.setState({
       visible_create_role_modal: true,
@@ -169,9 +169,9 @@ class AdminRole extends React.Component {
     })
   }
 
-  delete_role = () => {
+  deleteRole = () => {
     /* 删除角色 删除角色的同时要删除3张表之前的关联  用户角色表 角色表 角色权限表 */
-    const { current_role_info } = this.props.state_admin_role
+    const { current_role_info } = this.props.stateAdminRole
     confirm({
       title: '确认要删除当前角色吗?',
       content: '删除当前角色会删除角色用户关联，以及角色权限关联',
@@ -182,7 +182,7 @@ class AdminRole extends React.Component {
         await this.props.dispatch(
           deleteAdminRole({ role_id: current_role_info.role_id }, res => {
             /*获取后台角色分页列表*/
-            this.fetch_admin_role_list()
+            this.fetchAdminRoleList()
           })
         )
       },
@@ -195,9 +195,9 @@ class AdminRole extends React.Component {
   handleOk = () => {
     /*判断是修改还是创建*/
     if (this.state.is_create) {
-      this.fetch_admin_create_role()
+      this.fetchAdminCreateRole()
     } else {
-      this.fetch_admin_edit_role()
+      this.fetchAdminEditRole()
     }
   }
 
@@ -216,21 +216,21 @@ class AdminRole extends React.Component {
         current: pages.current
       }
     })
-    this.fetch_admin_role_list()
+    this.fetchAdminRoleList()
   }
 
-  fetch_admin_edit_role = () => {
+  fetchAdminEditRole = () => {
     /*修改角色*/
     this.props.dispatch(
       editAdminRole(
         {
-          role_id: this.props.state_admin_role.current_role_info.role_id,
+          role_id: this.props.stateAdminRole.current_role_info.role_id,
           role_name: this.state.role_name,
           role_description: this.state.role_description
         },
         () => {
           alert.message_success('修改角色成功')
-          this.fetch_admin_role_list()
+          this.fetchAdminRoleList()
           this.setState({
             visible_create_role_modal: false
           })
@@ -238,7 +238,8 @@ class AdminRole extends React.Component {
       )
     )
   }
-  fetch_admin_create_role = () => {
+
+  fetchAdminCreateRole = () => {
     /*创建角色*/
     let params = {
       role_name: this.state.role_name,
@@ -247,7 +248,7 @@ class AdminRole extends React.Component {
     this.props.dispatch(
       createAdminRole(params, () => {
         alert.message_success('角色创建成功')
-        this.fetch_admin_role_list()
+        this.fetchAdminRoleList()
         this.setState({
           visible_create_role_modal: false
         })
@@ -255,12 +256,12 @@ class AdminRole extends React.Component {
     )
   }
 
-  fetch_set_admin_role_authority = () => {
+  fetchSetAdminRoleAuthority = () => {
     /* 传递tyepe=2子节点 */
     const {
       current_role_info,
       role_authority_list_all
-    } = this.props.state_admin_role
+    } = this.props.stateAdminRole
     this.props.dispatch(
       setAdminRoleAuthority(
         {
@@ -269,7 +270,7 @@ class AdminRole extends React.Component {
         },
         () => {
           alert.message_success('角色权限设置成功')
-          this.fetch_admin_role_list()
+          this.fetchAdminRoleList()
           this.setState({
             visible_set_authority_modal: false
           })
@@ -278,7 +279,7 @@ class AdminRole extends React.Component {
     )
   }
 
-  fetch_admin_role_list = () => {
+  fetchAdminRoleList = () => {
     /*获取角色分页列表*/
     const that = this
     this.setState({ loading: true })
@@ -325,7 +326,7 @@ class AdminRole extends React.Component {
   }
 
   render() {
-    const { state_admin_role, state_admin_authority } = this.props
+    const { stateAdminRole, stateAdminAuthority } = this.props
     const { loading, role_name, role_description, is_create } = this.state
 
     const formItemLayout = {
@@ -426,13 +427,13 @@ class AdminRole extends React.Component {
               ref="tree"
               showLine
             >
-              {this.renderTreeNodes(state_admin_authority.admin_authority_list)}
+              {this.renderTreeNodes(stateAdminAuthority.admin_authority_list)}
             </Tree>
             <div className="admin-role-foot">
               <Button
                 icon="save"
                 onClick={() => {
-                  this.fetch_set_admin_role_authority()
+                  this.fetchSetAdminRoleAuthority()
                 }}
                 type="primary"
               >
@@ -453,7 +454,7 @@ class AdminRole extends React.Component {
           <div className="layout-table">
             <Table
               columns={this.state.columns}
-              dataSource={state_admin_role.admin_role_list}
+              dataSource={stateAdminRole.admin_role_list}
               loading={loading}
               onChange={this.handleTableChange.bind(this)}
               pagination={this.state.pagination}
@@ -466,9 +467,9 @@ class AdminRole extends React.Component {
   }
 }
 
-export default connect(({ state_admin_role, state_admin_authority }) => {
+export default connect(({ stateAdminRole, stateAdminAuthority }) => {
   return {
-    state_admin_role,
-    state_admin_authority
+    stateAdminRole,
+    stateAdminAuthority
   }
 })(AdminRole)

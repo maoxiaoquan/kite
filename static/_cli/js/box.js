@@ -1,4 +1,4 @@
-/*server func*/
+/* server func */
 
 const _Fetch = axios.create({
   baseURL: '/',
@@ -17,8 +17,8 @@ _Fetch.interceptors.response.use(
 )
 
 function hasClass (obj, cls) {
-  var obj_class = obj.className, // 获取 class 内容.
-    obj_class_lst = obj_class.split(/\s+/) // 通过split空字符将cls转换成数组.
+  var obj_class = obj.className // 获取 class 内容.
+  var obj_class_lst = obj_class.split(/\s+/) // 通过split空字符将cls转换成数组.
   for (var x in obj_class_lst) {
     if (obj_class_lst[x] == cls) {
       // 循环数组, 判断是否包含cls
@@ -28,29 +28,22 @@ function hasClass (obj, cls) {
   return false
 }
 
+// eslint-disable-next-line no-unused-expressions
 !(function (window) {
   var _server = {
-    create_user_article_topic: function (data) {
-      /* 创建用户专题 */
-      return _Fetch.post('/create_user_article_topic', data)
-    },
-    get_article: function (data) {
-      // 根据aid获取文章
-      return _Fetch.get('/get_article', { params: data })
-    },
-    post_set_step: function (data) {
+    cliSetStep: function (data) {
       // 根据uid更新用户相关信息
       return _Fetch.post('/set_step', data)
     },
-    post_set_mysql: function (data) {
+    cliSetMysql: function (data) {
       // 根据uid更新用户相关信息
       return _Fetch.post('/set_mysql', data)
     },
-    post_create_admin_user: function (data) {
+    cliCreateAdminUser: function (data) {
       // 根据uid更新用户相关信息
       return _Fetch.post('/create_admin_user', data)
     },
-    post_restart_project: function (data) {
+    cliRestartProject: function (data) {
       // 根据uid更新用户相关信息
       return _Fetch.post('/restart_project', data)
     }
@@ -85,7 +78,7 @@ var modal_template =
   '        </div>' +
   '    </transition>'
 
-/* <child :foo.sync=”msg”></child> 就会被扩展为： <child :foo=”bar” @update:foo=”val => bar = val”>  （@是v-on的简写）*/
+/* <child :foo.sync=”msg”></child> 就会被扩展为： <child :foo=”bar” @update:foo=”val => bar = val”>  （@是v-on的简写） */
 
 // register modal component
 Vue.component('box-modal', {

@@ -142,7 +142,7 @@ class ArticleTag extends React.Component {
   }
 
   componentDidMount() {
-    this.fetch_article_tag_list()
+    this.fetchArticleTagList()
   }
 
   _edit = data => {
@@ -166,9 +166,8 @@ class ArticleTag extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_delete_article_tag({
-          article_tag_id: this.props.state_article_tag.current_info
-            .article_tag_id
+        this.fetchDeleteArticleTag({
+          article_tag_id: this.props.stateArticleTag.current_info.article_tag_id
         })
         /*删除标签*/
       },
@@ -186,7 +185,7 @@ class ArticleTag extends React.Component {
         current: pages.current
       }
     })
-    this.fetch_article_tag_list(pages)
+    this.fetchArticleTagList(pages)
   }
 
   showModal = () => {
@@ -207,9 +206,9 @@ class ArticleTag extends React.Component {
       if (!err) {
         console.log('Received values of form: ', values)
         if (is_create) {
-          this.fetch_create_article_tag(values)
+          this.fetchCreateArticleTag(values)
         } else {
-          this.fetch_update_article_tag(values)
+          this.fetchUpdateArticleTag(values)
         }
       }
     })
@@ -234,12 +233,12 @@ class ArticleTag extends React.Component {
     callback()
   }
 
-  fetch_create_article_tag = values => {
+  fetchCreateArticleTag = values => {
     /*创建标签*/
     this.props.dispatch(
       createArticleTag(values, res => {
         alert.message_success('创建标签成功')
-        this.fetch_article_tag_list()
+        this.fetchArticleTagList()
         this.setState({
           modal_visible_edit: false
         })
@@ -247,18 +246,18 @@ class ArticleTag extends React.Component {
     )
   }
 
-  fetch_update_article_tag = values => {
+  fetchUpdateArticleTag = values => {
     /*修改标签*/
     this.props.dispatch(
       updateArticleTag(
         {
-          article_tag_id: this.props.state_article_tag.current_info
+          article_tag_id: this.props.stateArticleTag.current_info
             .article_tag_id,
           ...values
         },
         res => {
           alert.message_success('修改标签成功')
-          this.fetch_article_tag_list()
+          this.fetchArticleTagList()
           this.setState({
             modal_visible_edit: false
           })
@@ -267,17 +266,17 @@ class ArticleTag extends React.Component {
     )
   }
 
-  fetch_delete_article_tag = values => {
+  fetchDeleteArticleTag = values => {
     /*删除管理员用户*/
     this.props.dispatch(
       deleteArticleTag(values, res => {
         alert.message_success('删除标签成功')
-        this.fetch_article_tag_list()
+        this.fetchArticleTagList()
       })
     )
   }
 
-  fetch_article_tag_list = () => {
+  fetchArticleTagList = () => {
     /*获取管理员用户带分页的列表*/
     const that = this
     this.setState({ loading: true })
@@ -298,7 +297,7 @@ class ArticleTag extends React.Component {
   }
 
   render() {
-    const { state_article_tag } = this.props
+    const { stateArticleTag } = this.props
     const { loading, is_create } = this.state
     const { getFieldDecorator } = this.props.form
 
@@ -417,7 +416,7 @@ class ArticleTag extends React.Component {
           <div className="layout-table">
             <Table
               columns={this.state.columns}
-              dataSource={state_article_tag.list}
+              dataSource={stateArticleTag.list}
               loading={loading}
               onChange={this.TablePageChange.bind(this)}
               pagination={this.state.pagination}
@@ -432,8 +431,8 @@ class ArticleTag extends React.Component {
 
 const ArticleTagsForm = Form.create()(ArticleTag)
 
-export default connect(({ state_article_tag }) => {
+export default connect(({ stateArticleTag }) => {
   return {
-    state_article_tag
+    stateArticleTag
   }
 })(ArticleTagsForm)

@@ -220,8 +220,8 @@ class User extends React.Component {
   }
 
   componentDidMount() {
-    this.fetch_user_list()
-    this.fetch_user_role_all()
+    this.fetchUserList()
+    this.fetchUserRoleAll()
   }
 
   isBan(data) {
@@ -248,7 +248,7 @@ class User extends React.Component {
 
   banUser(val) {
     let params = {
-      uid: this.props.state_user.current_user_info.uid
+      uid: this.props.stateUser.current_user_info.uid
     }
     if (val.type === 'article') {
       params.article_ban_dt = this.state.articleBanDate
@@ -266,7 +266,7 @@ class User extends React.Component {
             isCommentBanVisible: false
           })
         }
-        this.fetch_user_list()
+        this.fetchUserList()
       })
     )
   }
@@ -280,8 +280,8 @@ class User extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_user_delete({
-          uid: this.props.state_user.current_user_info.uid
+        this.fetchUserDelete({
+          uid: this.props.stateUser.current_user_info.uid
         })
         /*删除用户*/
       },
@@ -299,19 +299,19 @@ class User extends React.Component {
         current: pages.current
       }
     })
-    this.fetch_user_list(pages)
+    this.fetchUserList(pages)
   }
 
   handleSubmit(e) {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.fetch_user_edit(values)
+        this.fetchUserEdit(values)
       }
     })
   }
 
-  fetch_user_role_all() {
+  fetchUserRoleAll() {
     this.props.dispatch(
       getUserRoleAll('', res => {
         this.setState({
@@ -321,17 +321,17 @@ class User extends React.Component {
     )
   }
 
-  fetch_user_delete(values) {
+  fetchUserDelete(values) {
     /*删除用户*/
     this.props.dispatch(
       deleteUser(values, res => {
         alert.message_success('删除用户成功')
-        this.fetch_user_list()
+        this.fetchUserList()
       })
     )
   }
 
-  fetch_user_list() {
+  fetchUserList() {
     /*获取用户带分页的列表*/
     const that = this
     this.setState({ loading: true })
@@ -351,14 +351,14 @@ class User extends React.Component {
     )
   }
 
-  fetch_user_edit = values => {
+  fetchUserEdit = values => {
     /*修改用户*/
     this.props.dispatch(
       editUser(
-        { uid: this.props.state_user.current_user_info.uid, ...values },
+        { uid: this.props.stateUser.current_user_info.uid, ...values },
         res => {
           alert.message_success('修改用户成功')
-          this.fetch_user_list()
+          this.fetchUserList()
           this.setState({
             modal_visible_edit: false
           })
@@ -369,7 +369,7 @@ class User extends React.Component {
 
   render() {
     const { loading } = this.state
-    const { state_user = {} } = this.props
+    const { stateUser = {} } = this.props
     const { getFieldDecorator } = this.props.form
 
     const prefixSelector = getFieldDecorator('prefix', {
@@ -526,7 +526,7 @@ class User extends React.Component {
           <div className="layout-table">
             <Table
               columns={this.state.columns}
-              dataSource={state_user.user_list}
+              dataSource={stateUser.user_list}
               loading={loading}
               onChange={this.TablePageChange.bind(this)}
               pagination={this.state.pagination}
@@ -541,8 +541,8 @@ class User extends React.Component {
 
 const UserForm = Form.create()(User)
 
-export default connect(({ state_user }) => {
+export default connect(({ stateUser }) => {
   return {
-    state_user
+    stateUser
   }
 })(UserForm)

@@ -7,7 +7,7 @@ import axios from 'axios'
 import ScrollBar from '../ScrollBar'
 
 import './aside.scss'
-import { get_admin_user_info } from '../../stores/actions'
+import { getAdminUserInfo } from '../../stores/actions'
 
 const { Header, Content, Footer, Sider } = Layout
 const SubMenu = Menu.SubMenu
@@ -163,7 +163,7 @@ class Aside extends Component {
 
   render() {
     const { aside_list = [], isMobile } = this.state
-    const { collapsed, onCollapseChange, state_mange } = this.props
+    const { collapsed, onCollapseChange, stateMange } = this.props
     return (
       <Layout.Sider
         breakpoint="lg"
@@ -179,7 +179,7 @@ class Aside extends Component {
         <div className="admin-aside-menu-view">
           <div className="admin-aside-header">
             <Link className="admin-logo-text" to="/manager/index">
-              {state_mange.website && state_mange.website.website_name}
+              {stateMange.website && stateMange.website.website_name}
             </Link>
           </div>
 
@@ -200,8 +200,8 @@ class Aside extends Component {
                 {aside_list.map(item => {
                   if (
                     item.link &&
-                    state_mange.asideList &&
-                    ~state_mange.asideList.indexOf(item.key)
+                    stateMange.asideList &&
+                    ~stateMange.asideList.indexOf(item.key)
                   ) {
                     return (
                       <Menu.Item key={item.key}>
@@ -212,8 +212,8 @@ class Aside extends Component {
                       </Menu.Item>
                     )
                   } else if (
-                    state_mange.asideList &&
-                    ~state_mange.asideList.indexOf(item.key)
+                    stateMange.asideList &&
+                    ~stateMange.asideList.indexOf(item.key)
                   ) {
                     return (
                       <SubMenu
@@ -226,7 +226,7 @@ class Aside extends Component {
                         }
                       >
                         {item.children.map(child_item => {
-                          if (~state_mange.asideList.indexOf(child_item.key)) {
+                          if (~stateMange.asideList.indexOf(child_item.key)) {
                             return (
                               <Menu.Item key={child_item.key}>
                                 <Link to={child_item.link}>
@@ -254,4 +254,4 @@ class Aside extends Component {
   }
 }
 
-export default connect(({ state_mange }) => ({ state_mange }))(Aside)
+export default connect(({ stateMange }) => ({ stateMange }))(Aside)

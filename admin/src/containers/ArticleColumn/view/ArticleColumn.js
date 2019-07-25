@@ -194,7 +194,7 @@ class ArticleColumn extends React.Component {
   }
 
   componentDidMount() {
-    this.fetch_article_column_list()
+    this.fetchArticleColumnList()
     this.props.dispatch(
       getArticleTagAll('', res => {
         console.log('res', res)
@@ -229,8 +229,8 @@ class ArticleColumn extends React.Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => {
-        this.fetch_delete_article_column({
-          article_column_id: this.props.state_article_column.current_info
+        this.fetchDeleteArticleColumn({
+          article_column_id: this.props.stateArticleColumn.current_info
             .article_column_id
         })
         /*删除专栏*/
@@ -249,7 +249,7 @@ class ArticleColumn extends React.Component {
         current: pages.current
       }
     })
-    this.fetch_article_column_list(pages)
+    this.fetchArticleColumnList(pages)
   }
 
   showModal = () => {
@@ -260,7 +260,7 @@ class ArticleColumn extends React.Component {
     })
     this.props.form.setFields({
       sort: {
-        value: this.props.state_article_column.list.length
+        value: this.props.stateArticleColumn.list.length
       }
     })
   }
@@ -272,9 +272,9 @@ class ArticleColumn extends React.Component {
       if (!err) {
         console.log('Received values of form: ', values)
         if (is_create) {
-          this.fetch_create_article_column(values)
+          this.fetchCreateArticleColumn(values)
         } else {
-          this.fetch_update_article_column(values)
+          this.fetchUpdateArticleColumn(values)
         }
       }
     })
@@ -299,12 +299,12 @@ class ArticleColumn extends React.Component {
     callback()
   }
 
-  fetch_create_article_column = values => {
+  fetchCreateArticleColumn = values => {
     /*创建专栏*/
     this.props.dispatch(
       createArticleColumn(values, res => {
         alert.message_success('创建专栏成功')
-        this.fetch_article_column_list()
+        this.fetchArticleColumnList()
         this.setState({
           modal_visible_edit: false
         })
@@ -312,18 +312,18 @@ class ArticleColumn extends React.Component {
     )
   }
 
-  fetch_update_article_column = values => {
+  fetchUpdateArticleColumn = values => {
     /*修改专栏*/
     this.props.dispatch(
       updateArticleColumn(
         {
-          article_column_id: this.props.state_article_column.current_info
+          article_column_id: this.props.stateArticleColumn.current_info
             .article_column_id,
           ...values
         },
         res => {
           alert.message_success('修改专栏成功')
-          this.fetch_article_column_list()
+          this.fetchArticleColumnList()
           this.setState({
             modal_visible_edit: false
           })
@@ -332,17 +332,17 @@ class ArticleColumn extends React.Component {
     )
   }
 
-  fetch_delete_article_column = values => {
+  fetchDeleteArticleColumn = values => {
     /*删除管理员用户*/
     this.props.dispatch(
       deleteArticleColumn(values, res => {
         alert.message_success('删除专栏成功')
-        this.fetch_article_column_list()
+        this.fetchArticleColumnList()
       })
     )
   }
 
-  fetch_article_column_list = () => {
+  fetchArticleColumnList = () => {
     /*获取管理员用户带分页的列表*/
     const that = this
     this.setState({ loading: true })
@@ -363,7 +363,7 @@ class ArticleColumn extends React.Component {
   }
 
   render() {
-    const { state_article_column } = this.props
+    const { stateArticleColumn } = this.props
     const { loading, is_create } = this.state
     const { getFieldDecorator } = this.props.form
 
@@ -512,7 +512,7 @@ class ArticleColumn extends React.Component {
           <div className="layout-table">
             <Table
               columns={this.state.columns}
-              dataSource={state_article_column.list}
+              dataSource={stateArticleColumn.list}
               loading={loading}
               onChange={this.TablePageChange.bind(this)}
               pagination={this.state.pagination}
@@ -536,8 +536,8 @@ class ArticleColumn extends React.Component {
 
 const ArticleColumnForm = Form.create()(ArticleColumn)
 
-export default connect(({ state_article_column }) => {
+export default connect(({ stateArticleColumn }) => {
   return {
-    state_article_column
+    stateArticleColumn
   }
 })(ArticleColumnForm)
