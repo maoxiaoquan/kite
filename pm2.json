@@ -8,14 +8,23 @@
     "error_file": "./log/pm2_err.log",
     "out_file": "./log/pm2_out.log",
     "pid_file": "./log/pm2_test.pid",
-    "watch": false,
+    "watch": [
+      "server",
+      "client",
+      "admin",
+      "db",
+      "views",
+      "static/_admin", 
+      "static/_cli",
+      "static/_client",
+      "static/default"
+    ],
     "ignore_watch": [
       "node_modules",
-      "log",
-      "static/upload",
-      "src",
-      "build",
-      "public"
-    ]
+      "static/upload"
+    ],
+    "env": { 
+      "NODE_ENV": "production"
+    }
   }
 }

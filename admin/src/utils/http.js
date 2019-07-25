@@ -46,7 +46,7 @@ http.interceptors.response.use(
     }
   },
   function (error) {
-    console.log(error)
+    console.warn(error)
     alerts.message_warning('服务器正忙，请稍后重试!')
     return Promise.reject(new Error('服务器正忙!'))
   }

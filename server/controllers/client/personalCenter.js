@@ -321,6 +321,9 @@ class PersonalCenter {
         })
         resClientJson(ctx, {
           state: 'success',
+          data: {
+            type: 'cancel'
+          },
           message: '取消like文章成功'
         })
       } else {
@@ -368,6 +371,9 @@ class PersonalCenter {
         })
         resClientJson(ctx, {
           state: 'success',
+          data: {
+            type: 'like'
+          },
           message: 'like文章成功'
         })
       }

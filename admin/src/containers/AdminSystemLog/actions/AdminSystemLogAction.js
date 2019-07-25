@@ -8,7 +8,7 @@ export const getAdminSystemLogList = (data, callback) => {
           callback(res)
         }
         return dispatch({
-          type: 'getAdminSystemLogList',
+          type: 'GET_ADMIN_SYSTEM_LOG_LIST',
           data: res
         })
       })

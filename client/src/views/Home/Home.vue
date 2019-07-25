@@ -3,6 +3,7 @@
        id="index">
     <div class="index-container">
       <div class="row">
+        8888
         <div class="home-col-left col-xs-12 col-sm-8 col-md-8">
           <!--home-lay layout-content start-->
           <section class="layout-content">

@@ -93,7 +93,7 @@ export default {
       })
         .then(() => {
           this.$store
-            .dispatch("user/deleteUserMessage", {
+            .dispatch("user/DELETE_USER_MESSAGE", {
               user_message_id: id
             })
             .then(result => {
