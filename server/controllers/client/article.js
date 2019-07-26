@@ -101,7 +101,7 @@ class Article {
         )
       }
 
-      let oneArticleTag = await models.articleTag.findOne({
+      let oneArticleTag = await models.article_tag.findOne({
         where: {
           article_tag_id: config.ARTICLE_TAG.dfOfficialExclusive
         }
@@ -123,7 +123,7 @@ class Article {
       const result = reqData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
       let $ = cheerio.load(reqData.content)
 
-      let userRoleALL = await models.userRole.findAll({
+      let userRoleALL = await models.user_role.findAll({
         where: {
           user_role_id: {
             [Op.or]: user.user_role_ids.split(',')
@@ -182,7 +182,7 @@ class Article {
     let pageSize = ctx.query.pageSize || 25
 
     try {
-      let oneArticleTag = await models.articleTag.findOne({
+      let oneArticleTag = await models.article_tag.findOne({
         where: {
           article_tag_en_name: qyData.article_tag_en_name
         }
@@ -214,12 +214,12 @@ class Article {
           )
         }
 
-        let subscribeArticleTagCount = await models.subscribeArticleTag.count({
+        let subscribeArticleTagCount = await models.subscribe_tag.count({
           where: { article_tag_id: oneArticleTag.article_tag_id }
         })
 
         /* 所有文章专题 */
-        let articleTagAll = await models.articleTag.findAll({
+        let articleTagAll = await models.article_tag.findAll({
           attributes: [
             'article_tag_id',
             'article_tag_name',
@@ -259,7 +259,7 @@ class Article {
    */
   static async getPopularArticleTag (ctx) {
     try {
-      let articleTagAll = await models.articleTag.findAll({
+      let articleTagAll = await models.article_tag.findAll({
         attributes: [
           'article_tag_id',
           'article_tag_name',
@@ -277,7 +277,7 @@ class Article {
       for (let i in articleTagAll) {
         articleTagAll[i].setDataValue(
           'subscribe_count',
-          await models.subscribeArticleTag.count({
+          await models.subscribe_tag.count({
             where: { article_tag_id: articleTagAll[i].article_tag_id }
           })
         )
@@ -315,7 +315,7 @@ class Article {
    */
   static async getArticleTagAll (ctx) {
     try {
-      let articleTagAll = await models.articleTag.findAll({
+      let articleTagAll = await models.article_tag.findAll({
         attributes: [
           'article_tag_id',
           'article_tag_name',
@@ -329,7 +329,7 @@ class Article {
       for (let i in articleTagAll) {
         articleTagAll[i].setDataValue(
           'subscribe_count',
-          await models.subscribeArticleTag.count({
+          await models.subscribe_tag.count({
             where: { article_tag_id: articleTagAll[i].article_tag_id }
           })
         )
@@ -514,7 +514,7 @@ class Article {
         )
       }
 
-      let oneArticleTag = await models.articleTag.findOne({
+      let oneArticleTag = await models.article_tag.findOne({
         where: {
           article_tag_id: config.ARTICLE_TAG.dfOfficialExclusive
         }
@@ -537,7 +537,7 @@ class Article {
 
       let $ = cheerio.load(reqData.content)
 
-      let userRoleAll = await models.userRole.findAll({
+      let userRoleAll = await models.user_role.findAll({
         where: {
           user_role_id: {
             [Op.or]: user.user_role_ids.split(',')
@@ -685,7 +685,7 @@ class Article {
       }
 
       /* 所有文章专题 */
-      let allArticleTag = await models.articleTag.findAll({
+      let allArticleTag = await models.article_tag.findAll({
         attributes: ['article_tag_id', 'article_tag_name']
       })
 
@@ -717,7 +717,7 @@ class Article {
 
   static async getArticleColumn (ctx) {
     try {
-      let allArticleColumn = await models.articleColumn.findAll({
+      let allArticleColumn = await models.article_column.findAll({
         attributes: [
           'article_column_id',
           'article_column_name',
@@ -763,7 +763,7 @@ class Article {
       enable: 1
     }
     try {
-      let { count, rows } = await models.articleColumn.findAndCountAll({
+      let { count, rows } = await models.article_column.findAndCountAll({
         attributes: [
           'article_column_id',
           'article_column_name',
@@ -784,7 +784,7 @@ class Article {
             : { [Op.in]: rows[i].article_tag_ids.split(',') }
         rows[i].setDataValue(
           'tag',
-          await models.articleTag.findAll({
+          await models.article_tag.findAll({
             where: { article_tag_id }
           })
         )

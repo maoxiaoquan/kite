@@ -25,11 +25,11 @@ class VerifyAuthority {
         } else {
           clientUrl = url
         }
-        let oneUserAuthority = await models.userAuthority.findOne({
+        let oneUserAuthority = await models.user_authority.findOne({
           where: { authority_url: clientUrl.split('/api-client/v1')[1] }
         })
         if (oneUserAuthority) {
-          let allUserRole = await models.userRole.findAll({
+          let allUserRole = await models.user_role.findAll({
             where: {
               user_role_id: {
                 [Op.in]: user_role_ids.split(',')
@@ -78,11 +78,11 @@ class VerifyAuthority {
         adminUrl = url
       }
       try {
-        let oneAdminAuthority = await models.adminAuthority.findOne({
+        let oneAdminAuthority = await models.admin_authority.findOne({
           where: { authority_url: adminUrl.split('/api-admin/v1')[1] }
         })
         if (oneAdminAuthority) {
-          let oneAdminRole = await models.adminRole.findOne({
+          let oneAdminRole = await models.admin_role.findOne({
             where: {
               role_id: role_id
             }

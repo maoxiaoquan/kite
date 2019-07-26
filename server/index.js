@@ -5,7 +5,9 @@ const bodyParser = require('koa-bodyparser')
 const koaLogger = require('koa-logger')
 const app = require('./app')
 const kiteConfig = require('../kite.config')
-const routers = require('./routers/index')
+const routers = require('./routers')
+
+require('../db/mysqldb/pool').poolInit()
 
 app.use(koaLogger())
 

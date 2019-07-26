@@ -5,7 +5,7 @@ const moment = require('moment')
 class AdminIndex {
   static async adminIndexStatistics (ctx) {
     try {
-      const adminUserCount = await models.adminUser.count() // 后台用户统计
+      const adminUserCount = await models.admin_user.count() // 后台用户统计
       const userCount = await models.user.count() // 前台用户统计
       const articleCount = await models.article.count() // 文章统计
       const commentCount = await models.comment.count() // 评论统计

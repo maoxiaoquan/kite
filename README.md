@@ -29,14 +29,13 @@
 
 v0.10.4
 
-1.代码优化70%，优化了大部分代码组件、类、方法、变量的命名
+1.代码优化 70%，优化了大部分代码组件、类、方法、变量的命名
 
-2.优化pm2部署
+2.优化 pm2 部署
 
 3.优化发表评论的输入框
 
 [版本更新历史记录](https://github.com/maoxiaoquan/kite/blob/master/docs/VERSION.md 'version')
-
 
 ## ☂️ 开发规范（以主文件夹开始）
 
@@ -79,7 +78,7 @@ admin 文件夹和 server 文件夹 变量多为下划线居多，主要是与my
 
 # 目前用的数据库只有mysql 本地开发的话，下一个phpstudy即可
 
-初始化：npm run init 然后打开浏览器收入 localhost:8086 按照步骤操作即可
+初始化：npm run init 然后打开浏览器收入 localhost:8085 按照步骤操作即可
 
 然后可以选择pro 或者 dev 开始
 

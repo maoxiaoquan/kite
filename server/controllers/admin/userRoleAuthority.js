@@ -19,14 +19,14 @@ class UserRole {
     const reqData = ctx.request.body
 
     try {
-      let oneUserRole = await models.userRole.findOne({
+      let oneUserRole = await models.user_role.findOne({
         where: { user_role_name: reqData.user_role_name }
       })
       if (oneUserRole) {
         throw new ErrorMessage('用户角色名已存在!')
       }
 
-      await models.userRole.create({
+      await models.user_role.create({
         user_role_name: reqData.user_role_name,
         user_role_description: reqData.user_role_description,
         user_role_icon: reqData.user_role_icon,
@@ -59,7 +59,7 @@ class UserRole {
    */
   static async getUserRoleAll (ctx) {
     try {
-      let userRoleAll = await models.userRole.findAll({
+      let userRoleAll = await models.user_role.findAll({
         attributes: [
           'user_role_id',
           'user_role_name',
@@ -93,7 +93,7 @@ class UserRole {
   static async getUserRoleList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
-      let { count, rows } = await models.userRole.findAndCountAll({
+      let { count, rows } = await models.user_role.findAndCountAll({
         attributes: [
           'user_role_id',
           'user_role_name',
@@ -131,7 +131,7 @@ class UserRole {
   static async updateUserRole (ctx) {
     const reqData = ctx.request.body
     try {
-      await models.userRole.update(
+      await models.user_role.update(
         {
           user_role_name: reqData.user_role_name,
           user_role_description: reqData.user_role_description,
@@ -180,7 +180,7 @@ class UserRole {
         return false
       }
 
-      await models.userRole.destroy({ where: { user_role_id } })
+      await models.user_role.destroy({ where: { user_role_id } })
       resAdminJson(ctx, {
         state: 'success',
         message: '删除用户角色成功'
@@ -202,19 +202,19 @@ class UserRole {
     const reqData = ctx.request.body
 
     try {
-      let oneUserAuthorityName = await models.userAuthority.findOne({
+      let oneUserAuthorityName = await models.user_authority.findOne({
         where: { authority_name: reqData.authority_name }
       })
       if (oneUserAuthorityName) {
         throw new ErrorMessage('权限名已存在!')
       }
-      let oneUserAuthorityUrl = await models.userAuthority.findOne({
+      let oneUserAuthorityUrl = await models.user_authority.findOne({
         where: { authority_url: reqData.authority_url }
       })
       if (oneUserAuthorityUrl) {
         throw new ErrorMessage('权限路径已存在!')
       }
-      await models.userAuthority.create({
+      await models.user_authority.create({
         ...reqData
       })
       resAdminJson(ctx, {
@@ -235,7 +235,7 @@ class UserRole {
    */
   static async getUserAuthorityList (ctx) {
     try {
-      let userAuthorityAll = await models.userAuthority.findAll()
+      let userAuthorityAll = await models.user_authority.findAll()
 
       resAdminJson(ctx, {
         state: 'success',
@@ -257,7 +257,7 @@ class UserRole {
   static async updateUserAuthority (ctx) {
     const reqData = ctx.request.body
     try {
-      await models.userAuthority.update(
+      await models.user_authority.update(
         {
           authority_name: reqData.authority_name,
           authority_type: reqData.authority_type,
@@ -291,7 +291,7 @@ class UserRole {
   static async deleteUserAuthority (ctx) {
     const { authority_id_arr } = ctx.request.body
     try {
-      await models.userAuthority.destroy({
+      await models.user_authority.destroy({
         where: { authority_id: { [Op.in]: authority_id_arr } }
       })
       resAdminJson(ctx, {
@@ -314,7 +314,7 @@ class UserRole {
   static async setUserRoleAuthority (ctx) {
     const reqData = ctx.request.body
     try {
-      await models.userRole.update(
+      await models.user_role.update(
         { user_authority_ids: reqData.role_authority_list_all.join(',') },
         {
           where: { user_role_id: reqData.user_role_id } // 查询条件

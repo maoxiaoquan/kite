@@ -3,7 +3,7 @@ const shortid = require('shortid')
 const time = require('../time')
 
 module.exports = {
-  NAME: 'user_like_article' /* 表名 */,
+  NAME: 'user_like' /* 表名 */,
   TABLE: {
     /* 表结构 */
     id: {

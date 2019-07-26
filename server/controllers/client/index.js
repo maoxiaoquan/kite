@@ -15,7 +15,7 @@ class Index {
     let orderParams = [] // 排序参数
 
     try {
-      let oneArticleColumn = await models.articleColumn.findOne({
+      let oneArticleColumn = await models.article_column.findOne({
         attributes: [
           'article_column_id',
           'article_column_name',

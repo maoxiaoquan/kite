@@ -137,7 +137,7 @@ class Comment {
         )
       }
 
-      let allUserRole = await models.userRole.findAll({
+      let allUserRole = await models.user_role.findAll({
         where: {
           user_role_id: {
             [Op.or]: user.user_role_ids.split(',')
@@ -206,7 +206,7 @@ class Comment {
             'YYYY-MM-DD H:m:s'
           )
 
-          await models.userMessage.create({
+          await models.user_message.create({
             // 用户行为记录
             uid: reqData.article_uid,
             type: 5, // 1:系统 2:喜欢文章  3:关注标签 4:关注用户 5:评论
@@ -219,7 +219,7 @@ class Comment {
           })
 
           if (reqData.reply_uid) {
-            await models.userMessage.create({
+            await models.user_message.create({
               // 用户行为记录
               uid: reqData.reply_uid,
               type: 5, // 类型 1:系统 2:喜欢文章  3:关注标签 4:用户关注 5:评论

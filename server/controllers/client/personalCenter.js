@@ -89,14 +89,14 @@ class PersonalCenter {
 
     let userAttentionUidArr
     try {
-      let meAttention = await models.userAttention
+      let meAttention = await models.user_attention
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((attention_item, tag_key) => {
             return attention_item.attention_uid
           })
         })
-      let otherAttention = await models.userAttention
+      let otherAttention = await models.user_attention
         .findAll({ where: { attention_uid: uid } })
         .then(res => {
           return res.map((attention_item, tag_key) => {
@@ -159,7 +159,7 @@ class PersonalCenter {
       if (attention_uid === user.uid) {
         throw new ErrorMessage('关注用户失败，自己不能关注自己')
       }
-      let oneUserAttention = await models.userAttention.findOne({
+      let oneUserAttention = await models.user_attention.findOne({
         where: {
           uid: user.uid,
           attention_uid
@@ -169,7 +169,7 @@ class PersonalCenter {
       if (oneUserAttention) {
         /* 判断是否关注了，是则取消，否则添加 */
 
-        await models.userAttention.destroy({
+        await models.user_attention.destroy({
           where: {
             uid: user.uid,
             attention_uid
@@ -180,11 +180,11 @@ class PersonalCenter {
           message: '取消关注用户成功'
         })
       } else {
-        await models.userAttention.create({
+        await models.user_attention.create({
           uid: user.uid,
           attention_uid
         })
-        await models.userMessage.create({
+        await models.user_message.create({
           // 用户行为记录
           uid: attention_uid,
           type: 4, // 1:系统消息 2:喜欢文章  3:关注标签 4:用户关注 5:评论
@@ -217,7 +217,7 @@ class PersonalCenter {
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
     try {
-      let allUserLikeArticle = await models.userLikeArticle
+      let allUserLikeArticle = await models.user_like
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((item, key) => {
@@ -275,7 +275,7 @@ class PersonalCenter {
     const { aid, uid } = ctx.request.body
     let { user = '' } = ctx.request
     try {
-      let oneUserLikeArticle = await models.userLikeArticle.findOne({
+      let oneUserLikeArticle = await models.user_like.findOne({
         where: {
           uid: user.uid,
           aid
@@ -287,7 +287,7 @@ class PersonalCenter {
 
         await models.sequelize.transaction(function (transaction) {
           // 在事务中执行操作
-          return models.userLikeArticle
+          return models.user_like
             .destroy(
               {
                 where: {
@@ -298,7 +298,7 @@ class PersonalCenter {
               { ...transaction }
             ) /* 删除user article关联 */
             .then(function (user_like_article_destroy) {
-              return models.userLikeArticle.count(
+              return models.user_like.count(
                 {
                   where: {
                     aid
@@ -329,7 +329,7 @@ class PersonalCenter {
       } else {
         await models.sequelize.transaction(function (transaction) {
           // 在事务中执行操作
-          return models.userLikeArticle
+          return models.user_like
             .create(
               {
                 uid: user.uid,
@@ -338,7 +338,7 @@ class PersonalCenter {
               { ...transaction }
             ) /* 添加user article关联 */
             .then(function (user_like_article_destroy) {
-              return models.userLikeArticle.count(
+              return models.user_like.count(
                 {
                   where: {
                     aid
@@ -359,7 +359,7 @@ class PersonalCenter {
               /* 修改文章like数 */
             })
         })
-        await models.userMessage.create({
+        await models.user_message.create({
           // 用户行为记录
           uid: uid,
           type: 2, // 1:系统消息 2:喜欢文章  3:关注标签 4:用户关注 5:评论

@@ -140,7 +140,7 @@ class Users {
   static async getAvatarReview (ctx) {
     const { page = 1, pageSize = 10, status = 1 } = ctx.query
     try {
-      let { count, rows } = await models.userInfo.findAndCountAll({
+      let { count, rows } = await models.user_info.findAndCountAll({
         where: {
           avatar_review_status: status
         }, // 为空，获取全部，也可以自己添加条件
@@ -181,7 +181,7 @@ class Users {
   static async set_avatar_review (ctx) {
     try {
       const { uid, status } = ctx.request.body
-      let oneUserInfo = await models.userInfo.findOne({
+      let oneUserInfo = await models.user_info.findOne({
         where: {
           uid: uid // 查询条件
         }
@@ -198,7 +198,7 @@ class Users {
             }
           }
         )
-        await models.userInfo.update(
+        await models.user_info.update(
           {
             avatar_review_status: status
           },
@@ -214,7 +214,7 @@ class Users {
         })
       } else if (status === '3' || status === '1') {
         // 审核失败或者其他
-        await models.userInfo.update(
+        await models.user_info.update(
           {
             avatar_review_status: status
           },

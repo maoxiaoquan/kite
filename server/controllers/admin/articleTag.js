@@ -17,20 +17,20 @@ class ArticleTag {
     const reqData = ctx.request.body
 
     try {
-      let oneArticleTagName = await models.articleTag.findOne({
+      let oneArticleTagName = await models.article_tag.findOne({
         where: { article_tag_name: reqData.article_tag_name }
       })
       if (oneArticleTagName) {
         throw new ErrorMessage('标签名已存在!')
       }
-      let oneArticleTagEnName = await models.articleTag.findOne({
+      let oneArticleTagEnName = await models.article_tag.findOne({
         where: { article_tag_en_name: reqData.article_tag_en_name }
       })
       if (oneArticleTagEnName) {
         throw new ErrorMessage('标签名英文已存在!')
       }
 
-      await models.articleTag.create({
+      await models.article_tag.create({
         article_tag_name: reqData.article_tag_name,
         article_tag_en_name: reqData.article_tag_en_name,
         article_tag_icon: reqData.article_tag_icon || '/default/img/tag.webp',
@@ -64,7 +64,7 @@ class ArticleTag {
   static async getArticleTagList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
-      let { count, rows } = await models.articleTag.findAndCountAll({
+      let { count, rows } = await models.article_tag.findAndCountAll({
         attributes: [
           'article_tag_id',
           'article_tag_name',
@@ -100,7 +100,7 @@ class ArticleTag {
    */
   static async getArticleTagAll (ctx) {
     try {
-      let articleTagAll = await models.articleTag.findAll({
+      let articleTagAll = await models.article_tag.findAll({
         attributes: [
           'article_tag_id',
           'article_tag_name',
@@ -134,7 +134,7 @@ class ArticleTag {
   static async updateArticleTag (ctx) {
     const reqData = ctx.request.body
     try {
-      await models.articleTag.update(
+      await models.article_tag.update(
         {
           article_tag_name: reqData.article_tag_name,
           article_tag_en_name: reqData.article_tag_en_name,
@@ -174,11 +174,11 @@ class ArticleTag {
   static async deleteArticleTag (ctx) {
     const { article_tag_id } = ctx.request.body
     try {
-      let oneArticleTag = await models.articleTag.findOne({
+      let oneArticleTag = await models.article_tag.findOne({
         where: { article_tag_id }
       })
 
-      await models.articleTag.destroy({ where: { article_tag_id } })
+      await models.article_tag.destroy({ where: { article_tag_id } })
       await createAdminSystemLog({
         // 写入日志
         uid: ctx.request.userInfo.uid,

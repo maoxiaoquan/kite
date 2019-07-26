@@ -143,7 +143,7 @@ class User {
 
         if (!oneUser) {
           let random = random_number(true, 6, 6)
-          await models.verifyCode.create({
+          await models.verify_code.create({
             email: reqData.email,
             verify_code: random,
             type: 'register'
@@ -286,7 +286,7 @@ class User {
                 enable: true
               })
               .then(user => {
-                return models.userInfo.create({
+                return models.user_info.create({
                   /* 注册写入数据库操作 */
                   uid: user.uid,
                   avatar_review_status: 2
@@ -375,12 +375,12 @@ class User {
         ]
       })
 
-      let oneUserInfo = await models.userInfo.findOne({
+      let oneUserInfo = await models.user_info.findOne({
         // 获取用户信息
         where: { uid }
       })
 
-      let allUserAttention = await models.userAttention
+      let allUserAttention = await models.user_attention
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((attention_item, key) => {
@@ -388,14 +388,14 @@ class User {
           })
         })
 
-      let userAttentionCount = await models.userAttention.count({
+      let userAttentionCount = await models.user_attention.count({
         // 关注了多少人
         where: {
           uid
         }
       })
 
-      let allUserLikeArticleAid = await models.userLikeArticle
+      let allUserLikeArticleAid = await models.user_like
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((item, key) => {
@@ -403,7 +403,7 @@ class User {
           })
         })
 
-      let allSubscribeArticleTagId = await models.subscribeArticleTag
+      let allSubscribeArticleTagId = await models.subscribe_tag
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((item, key) => {
@@ -411,7 +411,7 @@ class User {
           })
         })
 
-      let otherUserAttentionCount = await models.userAttention.count({
+      let otherUserAttentionCount = await models.user_attention.count({
         // 多少人关注了
         where: {
           attention_uid: uid
@@ -504,7 +504,7 @@ class User {
         }
       )
 
-      let updateUserInfo = await models.userInfo.update(
+      let updateUserInfo = await models.user_info.update(
         {
           profession: reqData.profession || '',
           company: reqData.company || '',
@@ -609,7 +609,7 @@ class User {
   static async getUnreadMessageCount (ctx) {
     let { user = '' } = ctx.request
     try {
-      let count = await models.userMessage.count({
+      let count = await models.user_message.count({
         where: {
           uid: user.uid,
           is_read: false
@@ -641,7 +641,7 @@ class User {
     let pageSize = Number(ctx.query.pageSize) || 10
     let { user = '' } = ctx.request
     try {
-      let allUserMessage = await models.userMessage
+      let allUserMessage = await models.user_message
         .findAll({
           // 获取所有未读消息id
           where: {
@@ -655,7 +655,7 @@ class User {
           })
         })
 
-      let { count, rows } = await models.userMessage.findAndCountAll({
+      let { count, rows } = await models.user_message.findAndCountAll({
         where: {
           uid: user.uid
         }, // 为空，获取全部，也可以自己添加条件
@@ -707,7 +707,7 @@ class User {
 
       if (allUserMessage.length > 0) {
         // 修改未读为已读
-        await models.userMessage.update(
+        await models.user_message.update(
           {
             is_read: true
           },
@@ -747,14 +747,14 @@ class User {
     let reqData = ctx.query
     let { user = '' } = ctx.request
     try {
-      let oneUserMessage = await models.userMessage.findOne({
+      let oneUserMessage = await models.user_message.findOne({
         where: {
           id: reqData.user_message_id,
           uid: user.uid
         }
       })
       if (oneUserMessage) {
-        await models.userMessage.destroy({
+        await models.user_message.destroy({
           where: {
             id: reqData.user_message_id,
             uid: user.uid
@@ -802,7 +802,7 @@ class User {
         if (email) {
           let random = random_number(true, 6, 6)
 
-          await models.verifyCode.create({
+          await models.verify_code.create({
             phone: '',
             email: reqData.email,
             type: 'reset_password',
@@ -955,7 +955,7 @@ class User {
   static async getUserRoleAll (ctx) {
     // get 页面
     try {
-      let allUserRole = await models.userRole.findAll({
+      let allUserRole = await models.user_role.findAll({
         where: {
           enable: true,
           is_show: true
