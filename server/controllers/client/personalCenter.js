@@ -217,7 +217,7 @@ class PersonalCenter {
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
     try {
-      let allUserLikeArticle = await models.user_like
+      let allUserLikeArticle = await models.article_like
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((item, key) => {
@@ -275,7 +275,7 @@ class PersonalCenter {
     const { aid, uid } = ctx.request.body
     let { user = '' } = ctx.request
     try {
-      let oneUserLikeArticle = await models.user_like.findOne({
+      let oneUserLikeArticle = await models.article_like.findOne({
         where: {
           uid: user.uid,
           aid
@@ -287,7 +287,7 @@ class PersonalCenter {
 
         await models.sequelize.transaction(function (transaction) {
           // 在事务中执行操作
-          return models.user_like
+          return models.article_like
             .destroy(
               {
                 where: {
@@ -298,7 +298,7 @@ class PersonalCenter {
               { ...transaction }
             ) /* 删除user article关联 */
             .then(function (user_like_article_destroy) {
-              return models.user_like.count(
+              return models.article_like.count(
                 {
                   where: {
                     aid
@@ -329,7 +329,7 @@ class PersonalCenter {
       } else {
         await models.sequelize.transaction(function (transaction) {
           // 在事务中执行操作
-          return models.user_like
+          return models.article_like
             .create(
               {
                 uid: user.uid,
@@ -338,7 +338,7 @@ class PersonalCenter {
               { ...transaction }
             ) /* 添加user article关联 */
             .then(function (user_like_article_destroy) {
-              return models.user_like.count(
+              return models.article_like.count(
                 {
                   where: {
                     aid

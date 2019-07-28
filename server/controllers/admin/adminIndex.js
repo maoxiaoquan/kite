@@ -8,7 +8,7 @@ class AdminIndex {
       const adminUserCount = await models.admin_user.count() // 后台用户统计
       const userCount = await models.user.count() // 前台用户统计
       const articleCount = await models.article.count() // 文章统计
-      const commentCount = await models.comment.count() // 评论统计
+      const commentCount = await models.article_comment.count() // 评论统计
 
       const userAll = await models.user.findAll({
         limit: 10, // 每页限制返回的数据条数
@@ -21,7 +21,7 @@ class AdminIndex {
         order: [['create_timestamp', 'desc']]
       })
 
-      const commentAll = await models.comment.findAll({
+      const commentAll = await models.article_comment.findAll({
         limit: 10, // 每页限制返回的数据条数
         order: [['create_timestamp', 'desc']]
       })

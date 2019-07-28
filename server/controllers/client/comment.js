@@ -21,7 +21,7 @@ class Comment {
     let pageSize = ctx.query.pageSize || 10
 
     try {
-      let { count, rows } = await models.comment.findAndCountAll({
+      let { count, rows } = await models.article_comment.findAndCountAll({
         // 默认一级评论
         where: {
           aid,
@@ -55,7 +55,7 @@ class Comment {
 
       for (let item in rows) {
         // 循环取子评论
-        let childAllComment = await models.comment.findAll({
+        let childAllComment = await models.article_comment.findAll({
           where: { parent_id: rows[item].id, ...clientWhere.comment }
         })
         rows[item].setDataValue('children', childAllComment)
@@ -155,7 +155,7 @@ class Comment {
         ? 5
         : 1
 
-      await models.comment
+      await models.article_comment
         .create({
           parent_id: reqData.parent_id || 0,
           aid: reqData.aid,
@@ -168,7 +168,7 @@ class Comment {
           await models.article.update(
             {
               // 更新文章评论数
-              comment_count: await models.comment.count({
+              comment_count: await models.article_comment.count({
                 where: {
                   aid: reqData.aid,
                   parent_id: 0
@@ -265,7 +265,7 @@ class Comment {
     let { user = '' } = ctx.request
 
     try {
-      let allComment = await models.comment
+      let allComment = await models.article_comment
         .findAll({ where: { parent_id: reqData.comment_id } })
         .then(res => {
           return res.map((item, key) => {
@@ -275,7 +275,7 @@ class Comment {
 
       if (allComment.length > 0) {
         // 判断当前评论下是否有子评论,有则删除子评论
-        await models.comment.destroy({
+        await models.article_comment.destroy({
           where: {
             id: { [Op.in]: allComment },
             uid: user.uid
@@ -283,7 +283,7 @@ class Comment {
         })
       }
 
-      await models.comment.destroy({
+      await models.article_comment.destroy({
         where: {
           id: reqData.comment_id,
           uid: user.uid
@@ -293,7 +293,7 @@ class Comment {
       await models.article.update(
         {
           // 更新文章评论数
-          comment_count: await models.comment.count({
+          comment_count: await models.article_comment.count({
             where: {
               aid: reqData.aid,
               parent_id: 0

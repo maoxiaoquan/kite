@@ -20,7 +20,7 @@
     "server-lint": "eslint --ext .js server/",
     "lint-fix": "eslint --fix --ext .js --ext .jsx --ext .vue /",
     "mysql": "node db/mysqldb/create.js",
-    "kite-update": "node update --name 666"
+    "kite-update": "node update"
   },
   "author": "xiaoquan",
   "license": "ISC",

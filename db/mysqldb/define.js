@@ -27,15 +27,15 @@ module.exports = sequelize => {
 
   /* 前台用户关注文章标签表 */
   const subscribe_tag = sequelize.define(
-    require('./models_type/db_subscribe_article_tag').NAME,
-    require('./models_type/db_subscribe_article_tag').TABLE,
+    require('./models_type/db_subscribe_tag').NAME,
+    require('./models_type/db_subscribe_tag').TABLE,
     SEQ_PARAMETER
   )
 
   /* 前台用户喜欢文章表 */
   const user_like = sequelize.define(
-    require('./models_type/db_user_like_article').NAME,
-    require('./models_type/db_user_like_article').TABLE,
+    require('./models_type/db_user_like').NAME,
+    require('./models_type/db_user_like').TABLE,
     SEQ_PARAMETER
   )
 
@@ -75,9 +75,9 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
   /* 前台用户文章专题表 */
-  const user_article_topic = sequelize.define(
-    require('./models_type/db_user_article_topic').NAME,
-    require('./models_type/db_user_article_topic').TABLE,
+  const article_topic = sequelize.define(
+    require('./models_type/db_article_topic').NAME,
+    require('./models_type/db_article_topic').TABLE,
     SEQ_PARAMETER
   )
   /* 前台用户角色表 */
@@ -128,8 +128,8 @@ module.exports = sequelize => {
   )
   /* 后台操作日志表 */
   const system_log = sequelize.define(
-    require('./models_type/db_admin_system_log').NAME,
-    require('./models_type/db_admin_system_log').TABLE,
+    require('./models_type/db_system_log').NAME,
+    require('./models_type/db_system_log').TABLE,
     SEQ_PARAMETER
   )
 
@@ -161,7 +161,7 @@ module.exports = sequelize => {
     article,
     article_tag,
     article_column,
-    user_article_topic,
+    article_topic,
     user_role,
     user_authority,
     comment,

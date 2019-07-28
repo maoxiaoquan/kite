@@ -395,7 +395,7 @@ class User {
         }
       })
 
-      let allUserLikeArticleAid = await models.user_like
+      let allUserLikeArticleAid = await models.article_like
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((item, key) => {
@@ -690,7 +690,7 @@ class User {
           // 评论
           rows[i].setDataValue(
             'comment',
-            await models.comment.findOne({
+            await models.article_comment.findOne({
               where: { id: JSON.parse(rows[i].content).comment_id }
             })
           )
