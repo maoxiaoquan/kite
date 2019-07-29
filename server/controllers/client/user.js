@@ -403,7 +403,7 @@ class User {
           })
         })
 
-      let allSubscribeArticleTagId = await models.subscribe_tag
+      let allSubscribeArticleTagId = await models.rss_article_tag
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((item, key) => {

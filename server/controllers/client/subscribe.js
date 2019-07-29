@@ -38,7 +38,7 @@ class Subscribe {
       for (let i in rows) {
         rows[i].setDataValue(
           'subscribe_count',
-          await models.subscribe_tag.count({
+          await models.rss_article_tag.count({
             where: { article_tag_id: rows[i].article_tag_id }
           })
         )
@@ -84,7 +84,7 @@ class Subscribe {
     }
 
     try {
-      let allSubscribeArticleTag = await models.subscribe_tag.findAll({
+      let allSubscribeArticleTag = await models.rss_article_tag.findAll({
         where: {
           uid: user.uid
         }
@@ -120,7 +120,7 @@ class Subscribe {
         for (let i in rows) {
           rows[i].setDataValue(
             'subscribe_count',
-            await models.subscribe_tag.count({
+            await models.rss_article_tag.count({
               where: { article_tag_id: rows[i].article_tag_id }
             })
           )
@@ -176,7 +176,7 @@ class Subscribe {
   static async getSubscribeTagMyAll (ctx) {
     let { user = '' } = ctx.request
     try {
-      let allSubscribeArticleTag = await models.subscribe_tag.findAll({
+      let allSubscribeArticleTag = await models.rss_article_tag.findAll({
         where: {
           uid: user.uid
         }
@@ -201,7 +201,7 @@ class Subscribe {
     const { article_tag_id } = ctx.request.body
     let { user = '' } = ctx.request
     try {
-      let oneSubscribeArticleTag = await models.subscribe_tag.findOne({
+      let oneSubscribeArticleTag = await models.rss_article_tag.findOne({
         where: {
           uid: user.uid,
           article_tag_id
@@ -217,7 +217,7 @@ class Subscribe {
       if (oneSubscribeArticleTag) {
         /* 判断是否关注了，是则取消，否则添加 */
 
-        await models.subscribe_tag.destroy({
+        await models.rss_article_tag.destroy({
           where: {
             uid: user.uid,
             article_tag_id
@@ -242,7 +242,7 @@ class Subscribe {
           }
         })
       } else {
-        await models.subscribe_tag.create({
+        await models.rss_article_tag.create({
           uid: user.uid,
           article_tag_id
         })

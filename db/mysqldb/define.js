@@ -26,16 +26,16 @@ module.exports = sequelize => {
   )
 
   /* 前台用户关注文章标签表 */
-  const subscribe_tag = sequelize.define(
-    require('./models_type/db_subscribe_tag').NAME,
-    require('./models_type/db_subscribe_tag').TABLE,
+  const rss_article_tag = sequelize.define(
+    require('./models_type/db_rss_article_tag').NAME,
+    require('./models_type/db_rss_article_tag').TABLE,
     SEQ_PARAMETER
   )
 
   /* 前台用户喜欢文章表 */
-  const user_like = sequelize.define(
-    require('./models_type/db_user_like').NAME,
-    require('./models_type/db_user_like').TABLE,
+  const article_like = sequelize.define(
+    require('./models_type/db_article_like').NAME,
+    require('./models_type/db_article_like').TABLE,
     SEQ_PARAMETER
   )
 
@@ -75,9 +75,9 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
   /* 前台用户文章专题表 */
-  const article_topic = sequelize.define(
-    require('./models_type/db_article_topic').NAME,
-    require('./models_type/db_article_topic').TABLE,
+  const article_blog = sequelize.define(
+    require('./models_type/db_article_blog').NAME,
+    require('./models_type/db_article_blog').TABLE,
     SEQ_PARAMETER
   )
   /* 前台用户角色表 */
@@ -93,9 +93,9 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
   /* 前台用户评论表 */
-  const comment = sequelize.define(
-    require('./models_type/db_comment').NAME,
-    require('./models_type/db_comment').TABLE,
+  const article_comment = sequelize.define(
+    require('./models_type/db_article_comment').NAME,
+    require('./models_type/db_article_comment').TABLE,
     SEQ_PARAMETER
   )
   /* 用户消息表 */
@@ -153,19 +153,19 @@ module.exports = sequelize => {
 
   const _define = {
     user,
-    user_attention,
-    subscribe_tag,
-    user_like,
     user_info,
+    user_attention,
+    user_role,
+    user_authority,
+    user_message,
+    rss_article_tag,
     verify_code,
     article,
     article_tag,
     article_column,
-    article_topic,
-    user_role,
-    user_authority,
-    comment,
-    user_message,
+    article_blog,
+    article_like,
+    article_comment,
     admin_user,
     admin_role,
     admin_authority,

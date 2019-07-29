@@ -11,16 +11,25 @@ class update0_2 {
         await models.sequelize.query(
           'rename TABLE user_like_article to article_like;'
         )
+
         await models.sequelize.query(
-          'rename TABLE subscribe_article_tag to subscribe_tag;'
+          'rename TABLE article_topic to article_blog;'
         )
+
+        await models.sequelize.query(
+          'rename TABLE subscribe_article_tag to rss_article_tag;'
+        )
+
         await models.sequelize.query(
           'rename TABLE admin_system_log to system_log;'
         )
+
         await models.sequelize.query(
           'rename TABLE user_article_topic to article_topic;'
         )
+
         await models.sequelize.query('rename TABLE comment to article_comment;')
+
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb
           .get('config')

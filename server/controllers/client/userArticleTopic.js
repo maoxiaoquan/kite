@@ -16,7 +16,7 @@ class UserArticleTopic {
     /* 获取所有文章专题 */
     let { uid } = ctx.query
     try {
-      let allUserArticleTopic = await models.article_topic.findAll({
+      let allUserArticleTopic = await models.article_blog.findAll({
         attributes: ['topic_id', 'topic_name', 'topic_description'],
         where: {
           uid
@@ -51,7 +51,7 @@ class UserArticleTopic {
         throw new ErrorMessage('请输入文章专题名字')
       }
 
-      let oneUserArticleTopic = await models.article_topic.findOne({
+      let oneUserArticleTopic = await models.article_blog.findOne({
         where: {
           uid: user.uid,
           topic_name
@@ -62,7 +62,7 @@ class UserArticleTopic {
         throw new ErrorMessage('不能创建自己已有的专题')
       }
 
-      await models.article_topic.create({
+      await models.article_blog.create({
         topic_name,
         topic_description,
         uid: user.uid,
@@ -89,7 +89,7 @@ class UserArticleTopic {
     const resData = ctx.request.body
     let { user = '' } = ctx.request
     try {
-      await models.article_topic.update(
+      await models.article_blog.update(
         {
           topic_name: resData.topic_name,
           topic_description: resData.topic_description
@@ -123,7 +123,7 @@ class UserArticleTopic {
     const resData = ctx.request.body
     let { user = '' } = ctx.request
     try {
-      await models.article_topic.destroy({
+      await models.article_blog.destroy({
         where: {
           topic_id: resData.topic_id, // 查询条件
           uid: user.uid

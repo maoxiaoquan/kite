@@ -41,7 +41,7 @@ class PersonalCenter {
         where: { uid: rows[item].uid },
         attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
       })
-    } */
+      } */
 
       for (let i in rows) {
         rows[i].setDataValue(
