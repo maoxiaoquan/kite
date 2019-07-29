@@ -61,7 +61,7 @@ class update0_2 {
           'ALTER TABLE article_blog CHANGE topic_icon icon VARCHAR(200) comment "图标地址";'
         )
         await models.sequelize.query(
-          'ALTER TABLE article CHANGE user_topic_ids user_blog_ids VARCHAR(200); comment "所属的blog";'
+          'ALTER TABLE article CHANGE user_topic_ids user_blog_ids VARCHAR(200) comment "所属的blog";'
         )
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb
