@@ -46,25 +46,23 @@ class update0_2 {
 
         // ALTER TABLE 表名 CHANGE 旧字段名 新字段名 新数据类型;
         await models.sequelize.query(
-          'ALTER TABLE article_blog CHANGE topic_id blog_id bigint(20) auto_increment comment "字段的注释";'
+          'ALTER TABLE article_blog CHANGE topic_id blog_id bigint(20) auto_increment comment "用户文章专栏的id";'
         )
         await models.sequelize.query(
-          'ALTER TABLE article_blog CHANGE topic_name name VARCHAR(20);'
+          'ALTER TABLE article_blog CHANGE topic_name name VARCHAR(20) comment "名字";'
         )
         await models.sequelize.query(
-          'ALTER TABLE article_blog CHANGE topic_description description VARCHAR(100);'
+          'ALTER TABLE article_blog CHANGE topic_description description VARCHAR(100) comment "详情";'
         )
         await models.sequelize.query(
-          'ALTER TABLE article_blog CHANGE topic_subscribe subscribe int(10);'
+          'ALTER TABLE article_blog CHANGE topic_subscribe rss_count int(10) comment "订阅数量";'
         )
         await models.sequelize.query(
-          'ALTER TABLE article_blog CHANGE topic_icon icon VARCHAR(200);'
+          'ALTER TABLE article_blog CHANGE topic_icon icon VARCHAR(200) comment "图标地址";'
         )
-
         await models.sequelize.query(
-          'ALTER TABLE article CHANGE user_topic_ids user_blog_ids VARCHAR(200);'
+          'ALTER TABLE article CHANGE user_topic_ids user_blog_ids VARCHAR(200); comment "所属的blog";'
         )
-
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb
           .get('config')
