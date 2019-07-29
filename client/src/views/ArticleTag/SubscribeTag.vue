@@ -180,7 +180,7 @@ export default {
   .list-header {
     padding: 0.5rem 0.4rem;
     .article-type {
-      .article-topic {
+      .article-blog {
         display: inline-block;
       }
       .article-tag {

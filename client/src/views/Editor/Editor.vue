@@ -105,43 +105,43 @@
       <h3 slot="header">发布文章</h3>
       <div class="writer-submit-view">
         <div class="clearfix">
-          <div class="topic-warp topic-warp-topic">
+          <div class="blog-warp blog-warp-blog">
             <p class="common-title">个人专题</p>
-            <div class="common-select-box topic-box js-topic-box">
+            <div class="common-select-box blog-box js-blog-box">
               <span class="common-select-name"
-                    @click="topic_ul_list_show=!topic_ul_list_show">{{current_topic.topic_name?current_topic.topic_name:'请选择需要投递的栏目'}}</span>
+                    @click="blog_ul_list_show=!blog_ul_list_show">{{current_blog.blog_name?current_blog.blog_name:'请选择需要投递的栏目'}}</span>
               <i class="iconfont icon-moreunfold"
-                 @click="topic_ul_list_show=!topic_ul_list_show"></i>
+                 @click="blog_ul_list_show=!blog_ul_list_show"></i>
               <ul class="common-select-ul"
-                  v-show="topic_ul_list_show">
+                  v-show="blog_ul_list_show">
                 <li class="active"
-                    @click="current_topic={};topic_ul_list_show=false">请选择需要投递的栏目</li>
-                <li v-for="item in user_article_topic_all"
-                    @click="current_topic=item;topic_ul_list_show=false">{{item.topic_name}}</li>
+                    @click="current_blog={};blog_ul_list_show=false">请选择需要投递的栏目</li>
+                <li v-for="item in user_article_blog_all"
+                    @click="current_blog=item;blog_ul_list_show=false">{{item.blog_name}}</li>
               </ul>
             </div>
           </div>
-          <div class="create-topic">
-            <div class="create-topic-view"
-                 v-show="create_topic_show">
-              <input class="create-topic-input"
-                     v-model="topic_name"
+          <div class="create-blog">
+            <div class="create-blog-view"
+                 v-show="create_blog_show">
+              <input class="create-blog-input"
+                     v-model="blog_name"
                      type="text" />
               <button class="btn btn-primary btn-sm"
-                      @click="save_create_topic">保存</button>
+                      @click="save_create_blog">保存</button>
               <button class="btn btn-primary btn-sm"
-                      @click="create_topic_show=false">取消</button>
+                      @click="create_blog_show=false">取消</button>
             </div>
             <button class="btn btn-primary btn-sm"
-                    v-show="!create_topic_show"
-                    @click="create_topic_show=true">创建新专题</button>
+                    v-show="!create_blog_show"
+                    @click="create_blog_show=true">创建新专题</button>
           </div>
         </div>
 
         <div class="clearfix">
-          <div class="topic-warp topic-warp-topic">
+          <div class="blog-warp blog-warp-blog">
             <p class="common-title">文章形式</p>
-            <div class="common-select-box topic-box js-topic-box"
+            <div class="common-select-box blog-box js-blog-box"
                  style="width: 130px">
               <span class="common-select-name"
                     @click="article_type_list_show=!article_type_list_show">{{current_article_type.text}}</span>
@@ -236,12 +236,12 @@ export default {
       article_title: "", // article title   文章的标题
       article_content: "", // article content   文章输入主内容
       create_show_modal: false, // article save model   保存时模态框是否显示的控制
-      current_topic: {}, // current user article topic  当前选中的用户文章专题
-      topic_ul_list_show: false, // whether to display topic list  用户文章专题列表是否显示控制
-      topic_name: "", // create user article topic name 创建文章专题input绑定的值
-      create_topic_show: false, // whether to display create topic btn and input 创建用户文章专题input是否显示
+      current_blog: {}, // current user article blog  当前选中的用户文章专题
+      blog_ul_list_show: false, // whether to display blog list  用户文章专题列表是否显示控制
+      blog_name: "", // create user article blog name 创建文章专题input绑定的值
+      create_blog_show: false, // whether to display create blog btn and input 创建用户文章专题input是否显示
       article_type_list: [
-        // whether to display create topic btn and input 文章类型列表
+        // whether to display create blog btn and input 文章类型列表
         {
           id: "",
           text: "请选择"
@@ -265,7 +265,7 @@ export default {
       source_article_tag_all: [], // 源全部的文章标题
       search_article_tag_all: [], // 搜索栏内呈现的文章标题
       current_article_tag_arr: [], // 用户选中的文章标签
-      user_article_topic_all: [],
+      user_article_blog_all: [],
       search_article_tag: "",
       search_box_width: "100%",
       search_result_show: false,
@@ -288,7 +288,7 @@ export default {
   },
   mounted () {
     this.init_article_tag_all();
-    this.getUserArticleTopicAll();
+    this.getUserArticleBlogAll();
   },
   watch: {
     article_content (val) {
@@ -321,31 +321,31 @@ export default {
       this.source_article_tag_all = this.article_tag_all;
       this.search_article_tag_all = this.article_tag_all;
     },
-    getUserArticleTopicAll () {
+    getUserArticleBlogAll () {
       if (!this.$store.state.personalInfo.islogin) {
         this.$message.warning("当前用户未登陆，请前往首页登陆后尝试");
         this.$router.push({ name: "home" });
         return false;
       }
       this.$store
-        .dispatch("editor/GET_USER_TOPIC", {
+        .dispatch("editor/GET_USER_BLOG", {
           uid: this.$store.state.personalInfo.user.uid
         })
         .then(res => {
-          this.user_article_topic_all = res.data.list;
+          this.user_article_blog_all = res.data.list;
         });
     },
-    save_create_topic () {
+    save_create_blog () {
       this.$store
-        .dispatch("editor/CREATE_ARTICLE_TOPIC", {
-          topic_name: this.topic_name
+        .dispatch("editor/CREATE_ARTICLE_BLOG", {
+          blog_name: this.blog_name
         })
         .then(res => {
           if (res.state === "success") {
             this.$message.success("创建文章专题成功");
-            this.topic_name = "";
-            this.getUserArticleTopicAll();
-            this.create_topic_show = false;
+            this.blog_name = "";
+            this.getUserArticleBlogAll();
+            this.create_blog_show = false;
           } else {
             this.$message.warning(res.message);
           }
@@ -416,9 +416,9 @@ export default {
           }
         });
 
-        this.user_article_topic_all.map(item => {
-          if (String(item.topic_id) === this.current_article.user_topic_ids) {
-            this.current_topic = item;
+        this.user_article_blog_all.map(item => {
+          if (String(item.blog_id) === this.current_article.user_blog_ids) {
+            this.current_blog = item;
           }
         });
 
@@ -442,7 +442,7 @@ export default {
         origin_content: that.article_content /*源内容*/,
         source: that.current_article_type.id, // 来源 （1原创 2转载）
         type: 1, // 类型 （1:文章;2:提问,3:说说 ）
-        user_topic_ids: that.current_topic.topic_id,
+        user_blog_ids: that.current_blog.blog_id,
         article_tag_ids: that
           .getObjectValues(that.current_article_tag_arr)
           .join(",")
@@ -461,7 +461,7 @@ export default {
           if (res.state === "success") {
             this.create_show_modal = false;
             this.$router.push({
-              name: "userTopic",
+              name: "userBlog",
               params: { uid: this.personalInfo.user.uid }
             });
             if (this.$route.params.editor_type === "create") {
@@ -715,7 +715,7 @@ export default {
 
 .writer-submit-view {
   padding: 0 15px;
-  .topic-warp {
+  .blog-warp {
     margin-bottom: 15px;
     .common-title {
       margin-bottom: 8px;
@@ -778,16 +778,16 @@ export default {
         }
       }
     }
-    &.topic-warp-topic {
+    &.blog-warp-blog {
       float: left;
     }
   }
-  .create-topic {
+  .create-blog {
     float: left;
     margin-top: 30px;
     margin-left: 25px;
-    .create-topic-view {
-      .create-topic-input {
+    .create-blog-view {
+      .create-blog-input {
         border: 1px solid #9199a1;
         border-radius: 6px;
         padding: 3px 10px;

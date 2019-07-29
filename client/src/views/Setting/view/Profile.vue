@@ -110,7 +110,7 @@ import { UploadImage } from '@components'
 
 export default {
   title () {
-    return 'TOPIC'
+    return 'BLOG'
   },
   name: 'profile',
   data: function () {

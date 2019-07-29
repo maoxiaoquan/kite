@@ -89,11 +89,11 @@ module.exports = {
       field: 'comment_count',
       defaultValue: 0
     },
-    user_topic_ids: {
+    user_blog_ids: {
       /* 文章所属的用户专栏id 可多个 */
       type: Seq.STRING(180),
       comment: '文章所属的用户专栏id',
-      field: 'user_topic_ids'
+      field: 'user_blog_ids'
     },
     article_tag_ids: {
       /* 文章所属的标签名字 可多个 */

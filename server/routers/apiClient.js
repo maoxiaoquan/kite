@@ -4,7 +4,7 @@ const user = require('../controllers/client/user') // 注册
 const personalCenter = require('../controllers/client/personalCenter') // 用户个人中心
 const article = require('../controllers/client/article') // 文章内容页
 const subscribe = require('../controllers/client/subscribe') // 订阅
-const userArticleTopic = require('../controllers/client/userArticleTopic') // 用户文章专题
+const userArticleBlog = require('../controllers/client/userArticleBlog') // 用户文章专题
 const comment = require('../controllers/client/comment') // 评论
 const upload = require('../controllers/client/upload') // 上传
 const website = require('../controllers/client/website') // 上传
@@ -35,21 +35,21 @@ router.post('/reset_password', user.userResetPassword) // 重置密码 TYPE:AJAX
 router.post('/personal/info', tokens.ClientVerifyToken, user.userPersonalInfo)
 
 router.post(
-  '/personal/create_article_topic',
+  '/personal/create_article_blog',
   tokens.ClientVerifyToken,
-  userArticleTopic.createUserArticleTopic
+  userArticleBlog.createUserArticleBlog
 ) // 用户文章专题 TYPE:AJAX post
 
 router.post(
-  '/personal/update-article-topic',
+  '/personal/update-article-blog',
   tokens.ClientVerifyToken,
-  userArticleTopic.updateUserArticleTopic
+  userArticleBlog.updateUserArticleBlog
 ) // 更新用户所有文章专题 TYPE:AJAX get
 
 router.post(
-  '/personal/delete-article-topic',
+  '/personal/delete-article-blog',
   tokens.ClientVerifyToken,
-  userArticleTopic.deleteUserArticleTopic
+  userArticleBlog.deleteUserArticleBlog
 ) // 删除用户所有文章专题 TYPE:AJAX get
 
 router.get(
@@ -93,7 +93,7 @@ router.put(
  */
 router.get('/user/info', user.getUserInfo) // 根据uid 获取用户相应信息 get
 
-router.get('/user/topic-all', userArticleTopic.getUserArticleTopicAll) // 获取用户所有文章专题 TYPE:AJAX get
+router.get('/user/blog-all', userArticleBlog.getUserArticleBlogAll) // 获取用户所有文章专题 TYPE:AJAX get
 
 router.post(
   '/user/attention',

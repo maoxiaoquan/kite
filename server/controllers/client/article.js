@@ -74,7 +74,7 @@ class Article {
         throw new ErrorMessage('请输入文章内容')
       }
 
-      if (!reqData.user_topic_ids) {
+      if (!reqData.user_blog_ids) {
         throw new ErrorMessage('请选择个人专题')
       }
 
@@ -153,7 +153,7 @@ class Article {
         cover_img: result ? result[2] : '',
         status, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败;4:回收站;5:已删除;6:无需审核)'
         type: reqData.type, // 类型 （1文章 2说说 3视频 4公告 ）
-        user_topic_ids: reqData.user_topic_ids,
+        user_blog_ids: reqData.user_blog_ids,
         article_tag_ids: reqData.article_tag_ids
       })
 
@@ -487,7 +487,7 @@ class Article {
         throw new ErrorMessage('请输入文章内容')
       }
 
-      if (!reqData.user_topic_ids) {
+      if (!reqData.user_blog_ids) {
         throw new ErrorMessage('请选择个人专题')
       }
 
@@ -567,7 +567,7 @@ class Article {
           cover_img: result ? result[2] : '',
           status, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败;4:回收站;5:已删除;6:无需审核)'
           type: reqData.type, // 类型 （1文章 2说说 3视频 4公告 ）
-          user_topic_ids: reqData.user_topic_ids,
+          user_blog_ids: reqData.user_blog_ids,
           article_tag_ids: reqData.article_tag_ids,
           update_date: moment(date.setHours(date.getHours())).format(
             'YYYY-MM-DD HH:mm:ss'

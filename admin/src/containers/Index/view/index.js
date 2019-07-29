@@ -131,7 +131,7 @@ class Index extends React.Component {
                           <List.Item.Meta
                             avatar={<Avatar src={item.avatar} />}
                             title={
-                              <a href={`/user/${item.uid}/topic`}>
+                              <a href={`/user/${item.uid}/blog`}>
                                 {item.nickname}
                               </a>
                             }

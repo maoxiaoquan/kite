@@ -1,13 +1,13 @@
 <template>
-  <div class="user-article-topic-item"
+  <div class="user-article-blog-item"
        :class="{'active':!isEdit}">
     <div class="input-view">
       <input type="text"
-             v-model="topicName">
+             v-model="blogName">
     </div>
     <div class="input-view">
       <input type="text"
-             v-model="topicDescription">
+             v-model="blogDescription">
     </div>
     <div class="operate">
       <button type="button"
@@ -23,7 +23,7 @@
               @click="cancelSave"
               class="btn btn-primary btn-sm">取消</button>
       <button type="button"
-              @click="deleteTopic"
+              @click="deleteBlog"
               class="btn btn-danger btn-sm">删除</button>
     </div>
   </div>
@@ -31,31 +31,31 @@
 
 <script>
 export default {
-  name: 'TopicList',
+  name: 'blogList',
   props: ['item'],
   data () {
     return {
-      topicName: '',
-      topicDescription: '',
+      blogName: '',
+      blogDescription: '',
       isEdit: false
     }
   },
   created () {
-    this.topicName = this.item.topic_name
-    this.topicDescription = this.item.topic_description
+    this.blogName = this.item.blog_name
+    this.blogDescription = this.item.blog_description
   },
   methods: {
     cancelSave () {
-      this.topicName = this.item.topic_name
-      this.topicDescription = this.item.topic_description
+      this.blogName = this.item.blog_name
+      this.blogDescription = this.item.blog_description
       this.isEdit = false
     },
     saveEdit () {
       var that = this
-      this.$store.dispatch('user/UPDATE_ARTICLE_TOPIC', {
-        topic_name: that.topicName,
-        topic_description: that.topicDescription,
-        topic_id: that.item.topic_id,
+      this.$store.dispatch('user/UPDATE_ARTICLE_BLOG', {
+        blog_name: that.blogName,
+        blog_description: that.blogDescription,
+        blog_id: that.item.blog_id,
       })
         .then(res => {
           if (res.state === 'success') {
@@ -67,10 +67,10 @@ export default {
           }
         })
     },
-    deleteTopic () {
+    deleteBlog () {
       var that = this
-      this.$store.dispatch('user/DELETE_ARTICLE_TOPIC', {
-        topic_id: that.item.topic_id,
+      this.$store.dispatch('user/DELETE_ARTICLE_BLOG', {
+        blog_id: that.item.blog_id,
       })
         .then(res => {
           if (res.state === 'success') {
@@ -81,15 +81,15 @@ export default {
           }
         })
     },
-    user_article_topic_all () { // 个人所有专栏
-      return this.$store.state.user.user_article_topic || []
+    user_article_blog_all () { // 个人所有专栏
+      return this.$store.state.user.user_article_blog || []
     },
   }
 }
 </script>
 
 <style scoped lang="scss">
-.user-article-topic-item {
+.user-article-blog-item {
   margin-bottom: 10px;
   border-bottom: 1px solid #f0f0f0;
   padding-bottom: 8px;

@@ -15,16 +15,16 @@ class PersonalCenter {
    */
   static async userMyArticle (ctx) {
     let uid = ctx.query.uid
-    let topic_id = ctx.query.topic_id || 'all'
+    let blog_id = ctx.query.blog_id || 'all'
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
     try {
       let whereParams =
-        topic_id === 'all'
+        blog_id === 'all'
           ? { uid, ...clientWhere.article.me }
           : {
             uid,
-            user_topic_ids: topic_id,
+            user_blog_ids: blog_id,
             ...clientWhere.article.me
           }
       let { count, rows } = await models.article.findAndCountAll({
@@ -62,7 +62,7 @@ class PersonalCenter {
         message: 'home',
         data: {
           count: count,
-          topic_id,
+          blog_id,
           page,
           pageSize,
           article_list: rows

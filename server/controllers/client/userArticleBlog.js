@@ -7,17 +7,17 @@ function ErrorMessage (message) {
   this.name = 'UserException'
 }
 
-class UserArticleTopic {
+class UserArticleBlog {
   /**
    * 获取所有文章专题get
    * @param   {object} ctx 上下文对象
    */
-  static async getUserArticleTopicAll (ctx) {
+  static async getUserArticleBlogAll (ctx) {
     /* 获取所有文章专题 */
     let { uid } = ctx.query
     try {
-      let allUserArticleTopic = await models.article_blog.findAll({
-        attributes: ['topic_id', 'topic_name', 'topic_description'],
+      let allUserArticleBlog = await models.article_blog.findAll({
+        attributes: ['blog_id', 'name', 'description'],
         where: {
           uid
         }
@@ -26,7 +26,7 @@ class UserArticleTopic {
         state: 'success',
         message: '获取当前用户个人专题成功',
         data: {
-          list: allUserArticleTopic
+          list: allUserArticleBlog
         }
       })
     } catch (err) {
@@ -42,29 +42,33 @@ class UserArticleTopic {
    * 创建用户专题
    * @param   {object} ctx 上下文对象
    */
-  static async createUserArticleTopic (ctx) {
+  static async createUserArticleBlog (ctx) {
     /* 创建用户专题 */
-    let { topic_name, topic_description, enable } = ctx.request.body
+    let { blog_name, blog_description, enable } = ctx.request.body
     let { user = '' } = ctx.request
     try {
-      if (topic_name.length === 0) {
+      if (blog_name.length === 0) {
         throw new ErrorMessage('请输入文章专题名字')
       }
 
-      let oneUserArticleTopic = await models.article_blog.findOne({
+      let oneUserArticleBlog = await models.article_blog.findOne({
         where: {
           uid: user.uid,
-          topic_name
+          name: blog_name
         }
       })
 
-      if (oneUserArticleTopic) {
+      console.log('oneUserArticleBlog', oneUserArticleBlog)
+
+      if (oneUserArticleBlog) {
         throw new ErrorMessage('不能创建自己已有的专题')
       }
 
+      console.log('blog_name', blog_name, blog_description, user.uid, enable)
+
       await models.article_blog.create({
-        topic_name,
-        topic_description,
+        name: blog_name,
+        description: blog_description || '',
         uid: user.uid,
         enable: enable || false
       })
@@ -73,6 +77,7 @@ class UserArticleTopic {
         message: '文章专题创建成功'
       })
     } catch (err) {
+      console.log('err', err)
       resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
@@ -85,18 +90,18 @@ class UserArticleTopic {
    * 更新用户专题
    * @param   {object} ctx 上下文对象
    */
-  static async updateUserArticleTopic (ctx) {
+  static async updateUserArticleBlog (ctx) {
     const resData = ctx.request.body
     let { user = '' } = ctx.request
     try {
       await models.article_blog.update(
         {
-          topic_name: resData.topic_name,
-          topic_description: resData.topic_description
+          name: resData.name,
+          description: resData.description
         },
         {
           where: {
-            topic_id: resData.topic_id, // 查询条件
+            blog_id: resData.blog_id, // 查询条件
             uid: user.uid
           }
         }
@@ -119,13 +124,13 @@ class UserArticleTopic {
    * @param   {object} ctx 上下文对象
    */
 
-  static async deleteUserArticleTopic (ctx) {
+  static async deleteUserArticleBlog (ctx) {
     const resData = ctx.request.body
     let { user = '' } = ctx.request
     try {
       await models.article_blog.destroy({
         where: {
-          topic_id: resData.topic_id, // 查询条件
+          blog_id: resData.blog_id, // 查询条件
           uid: user.uid
         }
       })
@@ -143,4 +148,4 @@ class UserArticleTopic {
   }
 }
 
-module.exports = UserArticleTopic
+module.exports = UserArticleBlog

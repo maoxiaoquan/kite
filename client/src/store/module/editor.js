@@ -5,17 +5,17 @@ const state = () => ({})
 const mutations = {}
 
 const actions = {
-  GET_USER_TOPIC: ({ commit, dispatch, state }, { uid }) => {
+  GET_USER_BLOG: ({ commit, dispatch, state }, { uid }) => {
     // 获取文章专题
     return fetch({
-      url: '/user/topic-all',
+      url: '/user/blog-all',
       method: 'get',
       parameter: { params: { uid } }
     })
   },
-  CREATE_ARTICLE_TOPIC: ({ commit, dispatch, state }, data) => {
+  CREATE_ARTICLE_BLOG: ({ commit, dispatch, state }, data) => {
     return fetch({
-      url: '/personal/create_article_topic',
+      url: '/personal/create_article_blog',
       method: 'post',
       parameter: { ...data }
     })
