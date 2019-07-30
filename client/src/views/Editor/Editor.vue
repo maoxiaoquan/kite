@@ -109,7 +109,7 @@
             <p class="common-title">个人专题</p>
             <div class="common-select-box blog-box js-blog-box">
               <span class="common-select-name"
-                    @click="blog_ul_list_show=!blog_ul_list_show">{{current_blog.blog_name?current_blog.blog_name:'请选择需要投递的栏目'}}</span>
+                    @click="blog_ul_list_show=!blog_ul_list_show">{{current_blog.name?current_blog.name:'请选择需要投递的栏目'}}</span>
               <i class="iconfont icon-moreunfold"
                  @click="blog_ul_list_show=!blog_ul_list_show"></i>
               <ul class="common-select-ul"
@@ -117,7 +117,7 @@
                 <li class="active"
                     @click="current_blog={};blog_ul_list_show=false">请选择需要投递的栏目</li>
                 <li v-for="item in user_article_blog_all"
-                    @click="current_blog=item;blog_ul_list_show=false">{{item.blog_name}}</li>
+                    @click="current_blog=item;blog_ul_list_show=false">{{item.name}}</li>
               </ul>
             </div>
           </div>

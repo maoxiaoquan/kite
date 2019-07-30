@@ -85,7 +85,7 @@
     <div v-else="isBlogListShow"
          id="user-article-blog-view">
       <button type="button"
-              @click="isBlogListShow=true"
+              @click="returnBlogHome"
               class="btn btn-secondary btn-sm">返回</button>
 
       <div class="user-article-blog-table">
@@ -102,8 +102,7 @@
         </div>
         <BlogList :item="item"
                   v-for="(item,key) in userArticleBlogAll"
-                  :key="key"
-                  @update-list="getUserArticleBlogList" />
+                  :key="key" />
 
       </div>
     </div>
@@ -155,6 +154,10 @@ export default {
         page: this.$route.query.page || 1,
         pageSize: this.$route.query.pageSize || 10,
       })
+    },
+    returnBlogHome () {
+      this.isBlogListShow = true
+      this.getUserArticleBlogList()
     },
     createNewUserBlog () {
       var that = this

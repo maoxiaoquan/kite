@@ -44,12 +44,6 @@ module.exports = {
       comment: '原内容',
       field: 'origin_content'
     },
-    source: {
-      // 来源 （1原创 2转载）
-      type: Seq.INTEGER(10),
-      comment: '来源 （1:原创,2转载）',
-      field: 'source'
-    },
     status: {
       // 状态
       type: Seq.INTEGER(10),

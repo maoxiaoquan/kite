@@ -32,11 +32,11 @@ module.exports = {
       comment: '描述',
       field: 'description'
     },
-    subscribe: {
+    rss_count: {
       // 专题订阅数量
       type: Seq.INTEGER(10),
       comment: '订阅数量（预留）',
-      field: 'subscribe'
+      field: 'rss_count'
     },
     icon: {
       // 专题图标

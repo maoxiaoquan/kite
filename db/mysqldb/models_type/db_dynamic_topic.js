@@ -6,13 +6,13 @@ module.exports = {
   NAME: 'article_tag' /* 表名 */,
   TABLE: {
     /* 表结构 */
-    id: {
+    topic_id: {
       // ID
       type: Seq.BIGINT(20),
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增
-      comment: 'id',
-      field: 'id'
+      comment: 'topic_id',
+      field: 'topic_id'
     },
     article_tag_id: {
       // 文章标签

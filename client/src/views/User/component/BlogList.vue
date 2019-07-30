@@ -1,6 +1,7 @@
 <template>
   <div class="user-article-blog-item"
-       :class="{'active':!isEdit}">
+       :class="{'active':!isEdit}"
+       v-if="isShow">
     <div class="input-view">
       <input type="text"
              v-model="blogName">
@@ -37,47 +38,46 @@ export default {
     return {
       blogName: '',
       blogDescription: '',
-      isEdit: false
+      isEdit: false,
+      isShow: true
     }
   },
   created () {
-    this.blogName = this.item.blog_name
-    this.blogDescription = this.item.blog_description
+    this.blogName = this.item.name
+    this.blogDescription = this.item.description
   },
   methods: {
     cancelSave () {
-      this.blogName = this.item.blog_name
-      this.blogDescription = this.item.blog_description
+      this.blogName = this.item.name
+      this.blogDescription = this.item.description
       this.isEdit = false
     },
     saveEdit () {
-      var that = this
       this.$store.dispatch('user/UPDATE_ARTICLE_BLOG', {
-        blog_name: that.blogName,
-        blog_description: that.blogDescription,
-        blog_id: that.item.blog_id,
+        name: this.blogName,
+        description: this.blogDescription,
+        blog_id: this.item.blog_id,
       })
-        .then(res => {
-          if (res.state === 'success') {
-            that.isEdit = false
-            this.$message.success(res.message);
-            that.$emit('update-list')
+        .then(result => {
+          if (result.state === 'success') {
+            this.isEdit = false
+            this.$message.success(result.message);
+            this.$emit('update-list')
           } else {
-            this.$message.warning(res.message);
+            this.$message.warning(result.message);
           }
         })
     },
     deleteBlog () {
-      var that = this
       this.$store.dispatch('user/DELETE_ARTICLE_BLOG', {
-        blog_id: that.item.blog_id,
+        blog_id: this.item.blog_id,
       })
-        .then(res => {
-          if (res.state === 'success') {
-            this.$message.success(res.message);
-            that.$emit('update-list')
+        .then(result => {
+          if (result.state === 'success') {
+            this.$message.success(result.message);
+            this.isShow = false
           } else {
-            this.$message.warning(res.message);
+            this.$message.warning(result.message);
           }
         })
     },
