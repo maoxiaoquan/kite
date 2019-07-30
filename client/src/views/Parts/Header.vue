@@ -65,7 +65,7 @@
               </li>
               <template v-if="personalInfo.islogin">
                 <li class="nav-item">
-                  <router-link :to="{name:'editor',params:{editor_type:'create'}}"
+                  <router-link :to="{name:'Write',params:{type:'create'}}"
                                class="btn btn-sm btn-outline-warning xiezuo">
                     <i class="iconfont icon-xiezuo"></i>
                   </router-link>

@@ -99,6 +99,11 @@ export default [
         path: 'comment_rule',
         name: 'comment_rule',
         component: () => import('@views/Rule/CommentRule') // 评论规则
+      },
+      {
+        path: 'write/:type',
+        name: 'Write',
+        component: () => import('@views/Write/Write') // 文章编写
       }
     ]
   },
