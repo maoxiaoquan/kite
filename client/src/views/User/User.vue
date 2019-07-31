@@ -53,7 +53,7 @@
                 </li>
                 <li>
                   <div class="meta-block">
-                    <router-link :to='{name:"userTopic",query:{topic_id:"all"}}'>
+                    <router-link :to='{name:"userBlog",query:{blog_id:"all"}}'>
                       <p>{{user.user_info.user_article_count}}</p>
                       <strong>文章</strong>
                     </router-link>
@@ -64,8 +64,8 @@
           </div>
 
           <ul class="trigger-menu">
-            <li :class="{'active':$route.name==='userTopic'}">
-              <router-link :to='{name:"userTopic",query:{topic_id:"all"}}'>
+            <li :class="{'active':$route.name==='userBlog'}">
+              <router-link :to='{name:"userBlog",query:{blog_id:"all"}}'>
                 文章
               </router-link>
             </li>
@@ -278,7 +278,7 @@ export default {
   .article-list {
     border-bottom: 1px solid rgba(178, 186, 194, 0.15);
   }
-  .topic-modal {
+  .blog-modal {
     padding: 20px 30px;
     .form-group {
       label {
@@ -289,12 +289,12 @@ export default {
       }
     }
   }
-  .topic-modal-create {
+  .blog-modal-create {
     margin-right: 6px;
     width: 100px;
     font-size: 14px;
   }
-  .topic-modal-cancel {
+  .blog-modal-cancel {
     width: 100px;
     margin-left: 6px;
     font-size: 14px;

@@ -18,7 +18,7 @@ module.exports = sequelize => {
       initialAutoIncrement: 10000
     }
   )
-  const userAttention = sequelize.define(
+  const user_attention = sequelize.define(
     /* 前台用户关注用户表 */
     require('./models_type/db_user_attention').NAME,
     require('./models_type/db_user_attention').TABLE,
@@ -26,28 +26,28 @@ module.exports = sequelize => {
   )
 
   /* 前台用户关注文章标签表 */
-  const subscribeArticleTag = sequelize.define(
-    require('./models_type/db_subscribe_article_tag').NAME,
-    require('./models_type/db_subscribe_article_tag').TABLE,
+  const rss_article_tag = sequelize.define(
+    require('./models_type/db_rss_article_tag').NAME,
+    require('./models_type/db_rss_article_tag').TABLE,
     SEQ_PARAMETER
   )
 
   /* 前台用户喜欢文章表 */
-  const userLikeArticle = sequelize.define(
-    require('./models_type/db_user_like_article').NAME,
-    require('./models_type/db_user_like_article').TABLE,
+  const article_like = sequelize.define(
+    require('./models_type/db_article_like').NAME,
+    require('./models_type/db_article_like').TABLE,
     SEQ_PARAMETER
   )
 
   /* 前台用户信息表 */
-  const userInfo = sequelize.define(
+  const user_info = sequelize.define(
     require('./models_type/db_user_info').NAME,
     require('./models_type/db_user_info').TABLE,
     SEQ_PARAMETER
   )
 
   /* 前台用户注册验证码 */
-  const verifyCode = sequelize.define(
+  const verify_code = sequelize.define(
     require('./models_type/db_verify_code').NAME,
     require('./models_type/db_verify_code').TABLE,
     SEQ_PARAMETER
@@ -63,43 +63,43 @@ module.exports = sequelize => {
     }
   )
   /* 前台文章官方标签表 */
-  const articleTag = sequelize.define(
+  const article_tag = sequelize.define(
     require('./models_type/db_article_tag').NAME,
     require('./models_type/db_article_tag').TABLE,
     SEQ_PARAMETER
   )
   /* 前台文章官方专栏 */
-  const articleColumn = sequelize.define(
+  const article_column = sequelize.define(
     require('./models_type/db_article_column').NAME,
     require('./models_type/db_article_column').TABLE,
     SEQ_PARAMETER
   )
   /* 前台用户文章专题表 */
-  const userArticleTopic = sequelize.define(
-    require('./models_type/db_user_article_topic').NAME,
-    require('./models_type/db_user_article_topic').TABLE,
+  const article_blog = sequelize.define(
+    require('./models_type/db_article_blog').NAME,
+    require('./models_type/db_article_blog').TABLE,
     SEQ_PARAMETER
   )
   /* 前台用户角色表 */
-  const userRole = sequelize.define(
+  const user_role = sequelize.define(
     require('./models_type/db_user_role').NAME,
     require('./models_type/db_user_role').TABLE,
     SEQ_PARAMETER
   )
   /* 前台用户权限表 */
-  const userAuthority = sequelize.define(
+  const user_authority = sequelize.define(
     require('./models_type/db_user_authority').NAME,
     require('./models_type/db_user_authority').TABLE,
     SEQ_PARAMETER
   )
   /* 前台用户评论表 */
-  const comment = sequelize.define(
-    require('./models_type/db_comment').NAME,
-    require('./models_type/db_comment').TABLE,
+  const article_comment = sequelize.define(
+    require('./models_type/db_article_comment').NAME,
+    require('./models_type/db_article_comment').TABLE,
     SEQ_PARAMETER
   )
   /* 用户消息表 */
-  const userMessage = sequelize.define(
+  const user_message = sequelize.define(
     require('./models_type/db_user_message').NAME,
     require('./models_type/db_user_message').TABLE,
     SEQ_PARAMETER
@@ -109,27 +109,27 @@ module.exports = sequelize => {
    */
 
   /* 后台用管理员表 */
-  const adminUser = sequelize.define(
+  const admin_user = sequelize.define(
     require('./models_type/db_admin_user').NAME,
     require('./models_type/db_admin_user').TABLE,
     SEQ_PARAMETER
   )
   /* 后台角色表 */
-  const adminRole = sequelize.define(
+  const admin_role = sequelize.define(
     require('./models_type/db_admin_role').NAME,
     require('./models_type/db_admin_role').TABLE,
     SEQ_PARAMETER
   )
   /* 权限表 */
-  const adminAuthority = sequelize.define(
+  const admin_authority = sequelize.define(
     require('./models_type/db_admin_authority').NAME,
     require('./models_type/db_admin_authority').TABLE,
     SEQ_PARAMETER
   )
   /* 后台操作日志表 */
-  const adminSystemLog = sequelize.define(
-    require('./models_type/db_admin_system_log').NAME,
-    require('./models_type/db_admin_system_log').TABLE,
+  const system_log = sequelize.define(
+    require('./models_type/db_system_log').NAME,
+    require('./models_type/db_system_log').TABLE,
     SEQ_PARAMETER
   )
 
@@ -153,23 +153,23 @@ module.exports = sequelize => {
 
   const _define = {
     user,
-    userAttention,
-    subscribeArticleTag,
-    userLikeArticle,
-    userInfo,
-    verifyCode,
+    user_info,
+    user_attention,
+    user_role,
+    user_authority,
+    user_message,
+    rss_article_tag,
+    verify_code,
     article,
-    articleTag,
-    articleColumn,
-    userArticleTopic,
-    userRole,
-    userAuthority,
-    comment,
-    userMessage,
-    adminUser,
-    adminRole,
-    adminAuthority,
-    adminSystemLog,
+    article_tag,
+    article_column,
+    article_blog,
+    article_like,
+    article_comment,
+    admin_user,
+    admin_role,
+    admin_authority,
+    system_log,
     picture,
     options
   }

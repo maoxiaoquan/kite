@@ -18,7 +18,7 @@ class Subscribe {
           [Op.like]: `%${tag_name}%`
         })
 
-      let { count, rows } = await models.articleTag.findAndCountAll({
+      let { count, rows } = await models.article_tag.findAndCountAll({
         attributes: [
           'article_tag_id',
           'article_tag_name',
@@ -38,7 +38,7 @@ class Subscribe {
       for (let i in rows) {
         rows[i].setDataValue(
           'subscribe_count',
-          await models.subscribeArticleTag.count({
+          await models.rss_article_tag.count({
             where: { article_tag_id: rows[i].article_tag_id }
           })
         )
@@ -84,7 +84,7 @@ class Subscribe {
     }
 
     try {
-      let allSubscribeArticleTag = await models.subscribeArticleTag.findAll({
+      let allSubscribeArticleTag = await models.rss_article_tag.findAll({
         where: {
           uid: user.uid
         }
@@ -100,7 +100,7 @@ class Subscribe {
             [Op.regexp]: `${myArticleTag.join('|')}`
           })
 
-        let { count, rows } = await models.articleTag.findAndCountAll({
+        let { count, rows } = await models.article_tag.findAndCountAll({
           attributes: [
             'article_tag_id',
             'article_tag_name',
@@ -120,7 +120,7 @@ class Subscribe {
         for (let i in rows) {
           rows[i].setDataValue(
             'subscribe_count',
-            await models.subscribeArticleTag.count({
+            await models.rss_article_tag.count({
               where: { article_tag_id: rows[i].article_tag_id }
             })
           )
@@ -176,7 +176,7 @@ class Subscribe {
   static async getSubscribeTagMyAll (ctx) {
     let { user = '' } = ctx.request
     try {
-      let allSubscribeArticleTag = await models.subscribeArticleTag.findAll({
+      let allSubscribeArticleTag = await models.rss_article_tag.findAll({
         where: {
           uid: user.uid
         }
@@ -201,14 +201,14 @@ class Subscribe {
     const { article_tag_id } = ctx.request.body
     let { user = '' } = ctx.request
     try {
-      let oneSubscribeArticleTag = await models.subscribeArticleTag.findOne({
+      let oneSubscribeArticleTag = await models.rss_article_tag.findOne({
         where: {
           uid: user.uid,
           article_tag_id
         }
       })
 
-      let oneArticleTag = await models.articleTag.findOne({
+      let oneArticleTag = await models.article_tag.findOne({
         where: {
           article_tag_id
         }
@@ -217,14 +217,14 @@ class Subscribe {
       if (oneSubscribeArticleTag) {
         /* 判断是否关注了，是则取消，否则添加 */
 
-        await models.subscribeArticleTag.destroy({
+        await models.rss_article_tag.destroy({
           where: {
             uid: user.uid,
             article_tag_id
           }
         })
 
-        await models.articleTag.update(
+        await models.article_tag.update(
           {
             attention_count: oneArticleTag.attention_count - 1
           },
@@ -242,12 +242,12 @@ class Subscribe {
           }
         })
       } else {
-        await models.subscribeArticleTag.create({
+        await models.rss_article_tag.create({
           uid: user.uid,
           article_tag_id
         })
 
-        await models.articleTag.update(
+        await models.article_tag.update(
           {
             attention_count: oneArticleTag.attention_count + 1
           },

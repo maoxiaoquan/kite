@@ -19,7 +19,7 @@ const state = () => ({
       user_role_ids: ''
     }
   },
-  user_article_topic: [], // 用户的文章专题
+  user_article_blog: [], // 用户的文章专题
   my_article: {
     // 用户的文章
     article_list: [],
@@ -63,9 +63,9 @@ const mutations = {
     // 获取用户的全部信息
     state.user_info = data
   },
-  SET_USER_ARTICLE_TOPIC (state, data) {
+  SET_USER_ARTICLE_BLOG (state, data) {
     // 设置获取的文章专题
-    state.user_article_topic = data.list
+    state.user_article_blog = data.list
   },
   SET_MY_ARTICLE_LIST (state, data) {
     // 设置获取用户的文章
@@ -121,29 +121,29 @@ const actions = {
       return result
     })
   },
-  GET_USER_ARTICLE_TOPIC: ({ commit, dispatch, state }, { uid }) => {
+  GET_USER_ARTICLE_BLOG: ({ commit, dispatch, state }, { uid }) => {
     // 获取文章专题 all
     return fetch({
-      url: '/user/topic-all',
+      url: '/user/blog-all',
       method: 'get',
       parameter: { params: { uid } }
     }).then(result => {
-      commit('SET_USER_ARTICLE_TOPIC', result.data)
+      commit('SET_USER_ARTICLE_BLOG', result.data)
       return result
     })
   },
-  CREATE_ARTICLE_TOPIC: ({ commit, dispatch, state }, data) => {
+  CREATE_ARTICLE_BLOG: ({ commit, dispatch, state }, data) => {
     // 创建用户个人文章专题
     return fetch({
-      url: '/personal/create_article_topic',
+      url: '/personal/create_article_blog',
       method: 'post',
       parameter: { ...data }
     })
   },
-  UPDATE_ARTICLE_TOPIC: ({ commit, dispatch, state }, data) => {
+  UPDATE_ARTICLE_BLOG: ({ commit, dispatch, state }, data) => {
     // 更新用户个人文章专题
     return fetch({
-      url: '/personal/update-article-topic',
+      url: '/personal/update-article-blog',
       method: 'post',
       parameter: { ...data }
     })
@@ -156,10 +156,10 @@ const actions = {
       parameter: { params: data }
     })
   },
-  DELETE_ARTICLE_TOPIC: ({ commit, dispatch, state }, data) => {
+  DELETE_ARTICLE_BLOG: ({ commit, dispatch, state }, data) => {
     // 删除用户个人文章专题
     return fetch({
-      url: '/personal/delete-article-topic',
+      url: '/personal/delete-article-blog',
       method: 'post',
       parameter: { ...data }
     })

@@ -28,7 +28,7 @@ class Upload {
         let filename = ctx.req.file.filename
         let origin = ctx.request.header.origin
         let { user = '' } = ctx.request
-        await models.userInfo.update(
+        await models.user_info.update(
           {
             avatar_review: `${origin}${destination}/${filename}`,
             avatar_review_status: 1

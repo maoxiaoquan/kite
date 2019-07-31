@@ -18,7 +18,9 @@
     "ssr-lint": "eslint --ext .js --ext .vue client/",
     "admin-lint": "eslint --ext .js --ext .jsx admin/",
     "server-lint": "eslint --ext .js server/",
-    "lint-fix": "eslint --fix --ext .js --ext .jsx --ext .vue /"
+    "lint-fix": "eslint --fix --ext .js --ext .jsx --ext .vue /",
+    "mysql": "node db/mysqldb/create.js",
+    "kite-update": "node update"
   },
   "author": "xiaoquan",
   "license": "ISC",
@@ -26,9 +28,11 @@
     "axios": "^0.18.0",
     "busboy": "^0.2.14",
     "cheerio": "^1.0.0-rc.2",
+    "colors": "^1.3.3",
     "date-fns": "^1.30.1",
     "ejs": "^2.5.7",
     "express": "^4.17.0",
+    "inquirer": "^6.5.0",
     "jsonwebtoken": "^8.2.0",
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
@@ -41,6 +45,7 @@
     "koa-views": "^6.1.1",
     "lowdb": "^1.0.0",
     "marked": "^0.3.19",
+    "mavon-editor": "^2.7.5",
     "moment": "^2.22.1",
     "mysql": "^2.15.0",
     "mysql2": "^1.5.3",
@@ -53,8 +58,10 @@
     "shelljs": "^0.8.3",
     "shortid": "^2.2.8",
     "trim-html": "^0.1.9",
+    "vue-client-only": "^2.0.0",
     "vue-server-renderer": "^2.5.21",
-    "xss": "^1.0.6"
+    "xss": "^1.0.6",
+    "yargs": "^13.3.0"
   },
   "devDependencies": {
     "@babel/cli": "7.1.2",

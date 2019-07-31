@@ -21,7 +21,7 @@ class Comment {
     let pageSize = ctx.query.pageSize || 10
 
     try {
-      let { count, rows } = await models.comment.findAndCountAll({
+      let { count, rows } = await models.article_comment.findAndCountAll({
         // 默认一级评论
         where: {
           aid,
@@ -55,7 +55,7 @@ class Comment {
 
       for (let item in rows) {
         // 循环取子评论
-        let childAllComment = await models.comment.findAll({
+        let childAllComment = await models.article_comment.findAll({
           where: { parent_id: rows[item].id, ...clientWhere.comment }
         })
         rows[item].setDataValue('children', childAllComment)
@@ -127,17 +127,15 @@ class Comment {
         'YYYY-MM-DD HH:mm:ss'
       )
 
-      if (
-        new Date(currDate).getTime() < new Date(user.comment_ban_dt).getTime()
-      ) {
+      if (new Date(currDate).getTime() < new Date(user.ban_dt).getTime()) {
         throw new ErrorMessage(
           `当前用户因违规已被管理员禁用发布评论，时间到：${moment(
-            user.comment_ban_dt
+            user.ban_dt
           ).format('YYYY年MM月DD日 HH时mm分ss秒')},如有疑问请联系网站管理员`
         )
       }
 
-      let allUserRole = await models.userRole.findAll({
+      let allUserRole = await models.user_role.findAll({
         where: {
           user_role_id: {
             [Op.or]: user.user_role_ids.split(',')
@@ -155,7 +153,7 @@ class Comment {
         ? 5
         : 1
 
-      await models.comment
+      await models.article_comment
         .create({
           parent_id: reqData.parent_id || 0,
           aid: reqData.aid,
@@ -168,7 +166,7 @@ class Comment {
           await models.article.update(
             {
               // 更新文章评论数
-              comment_count: await models.comment.count({
+              comment_count: await models.article_comment.count({
                 where: {
                   aid: reqData.aid,
                   parent_id: 0
@@ -206,7 +204,7 @@ class Comment {
             'YYYY-MM-DD H:m:s'
           )
 
-          await models.userMessage.create({
+          await models.user_message.create({
             // 用户行为记录
             uid: reqData.article_uid,
             type: 5, // 1:系统 2:喜欢文章  3:关注标签 4:关注用户 5:评论
@@ -219,7 +217,7 @@ class Comment {
           })
 
           if (reqData.reply_uid) {
-            await models.userMessage.create({
+            await models.user_message.create({
               // 用户行为记录
               uid: reqData.reply_uid,
               type: 5, // 类型 1:系统 2:喜欢文章  3:关注标签 4:用户关注 5:评论
@@ -265,7 +263,7 @@ class Comment {
     let { user = '' } = ctx.request
 
     try {
-      let allComment = await models.comment
+      let allComment = await models.article_comment
         .findAll({ where: { parent_id: reqData.comment_id } })
         .then(res => {
           return res.map((item, key) => {
@@ -275,7 +273,7 @@ class Comment {
 
       if (allComment.length > 0) {
         // 判断当前评论下是否有子评论,有则删除子评论
-        await models.comment.destroy({
+        await models.article_comment.destroy({
           where: {
             id: { [Op.in]: allComment },
             uid: user.uid
@@ -283,7 +281,7 @@ class Comment {
         })
       }
 
-      await models.comment.destroy({
+      await models.article_comment.destroy({
         where: {
           id: reqData.comment_id,
           uid: user.uid
@@ -293,7 +291,7 @@ class Comment {
       await models.article.update(
         {
           // 更新文章评论数
-          comment_count: await models.comment.count({
+          comment_count: await models.article_comment.count({
             where: {
               aid: reqData.aid,
               parent_id: 0

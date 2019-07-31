@@ -1,4 +1,5 @@
-var shell = require('shelljs')
+#!/usr/bin/env node
+const shell = require('shelljs')
 
 class Shell {
   static esc () {

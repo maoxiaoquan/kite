@@ -42,20 +42,35 @@ const pordWebpackConfig = merge(baseWebpackConfig, {
     new webpack.HashedModuleIdsPlugin()
   ],
   optimization: {
-    sideEffects: false,
     splitChunks: {
-      chunks: 'all',
-      minSize: 30000,
-      minChunks: 1,
+      maxInitialRequests: 6,
       cacheGroups: {
-        vendor: {
-          name: 'vendor',
-          test: /[\\/]node_modules[\\/]/,
+        dll: {
           chunks: 'all',
-          priority: -10,
-          enforce: true
+          test: /[\\/]node_modules[\\/](core-js|vue|vue-router)[\\/]/,
+          name: 'dll',
+          priority: 2,
+          enforce: true,
+          reuseExistingChunk: true
+        },
+        superSlide: {
+          chunks: 'all',
+          test: /[\\/]src[\\/]assets[\\/]js[\\/]/,
+          name: 'superSlide',
+          priority: 1,
+          enforce: true,
+          reuseExistingChunk: true
+        },
+        commons: {
+          name: 'commons',
+          minChunks: 2, // Math.ceil(pages.length / 3), 当你有多个页面时，获取pages.length，至少被1/3页面的引入才打入common包
+          chunks: 'all',
+          reuseExistingChunk: true
         }
       }
+    },
+    runtimeChunk: {
+      name: 'manifest'
     }
   }
 })

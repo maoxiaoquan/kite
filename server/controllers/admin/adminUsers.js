@@ -28,7 +28,7 @@ class AdminUsers {
   static async adminSignIn (ctx) {
     let { account, password } = ctx.request.body
     try {
-      const oneAdminUser = await models.adminUser.findOne({
+      const oneAdminUser = await models.admin_user.findOne({
         where: { account }
       })
       if (!account) {
@@ -101,7 +101,7 @@ class AdminUsers {
       if (!checkEmail(reqData.email)) {
         throw new ErrorMessage('邮箱格式输入有误!')
       }
-      let oneAdminUser = await models.adminUser.findOne({
+      let oneAdminUser = await models.admin_user.findOne({
         where: { account: reqData.account }
       })
 
@@ -109,7 +109,7 @@ class AdminUsers {
         throw new ErrorMessage('账户已存在!')
       }
 
-      await models.adminUser.create({
+      await models.admin_user.create({
         account: reqData.account,
         avatar: config.default_avatar,
         nickname: reqData.nickname,
@@ -143,7 +143,7 @@ class AdminUsers {
   static async editAdminUser (ctx) {
     const reqData = ctx.request.body
     try {
-      await models.adminUser.update(
+      await models.admin_user.update(
         {
           account: reqData.account,
           nickname: reqData.nickname,
@@ -178,7 +178,7 @@ class AdminUsers {
   static async getAdminUserList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
-      let { count, rows } = await models.adminUser.findAndCountAll({
+      let { count, rows } = await models.admin_user.findAndCountAll({
         attributes: [
           'uid',
           'account',
@@ -225,7 +225,7 @@ class AdminUsers {
         .get('website')
         .value()
 
-      let oneAdminRole = await models.adminRole.findOne({
+      let oneAdminRole = await models.admin_role.findOne({
         where: {
           role_id
         }
@@ -235,7 +235,7 @@ class AdminUsers {
         (whereParmams['authority_id'] = {
           [Op.in]: oneAdminRole.admin_authority_ids.split(',')
         })
-      let AllAuthorityName = await models.adminAuthority.findAll({
+      let AllAuthorityName = await models.admin_authority.findAll({
         where: whereParmams
       })
 
@@ -244,7 +244,7 @@ class AdminUsers {
         allAuthorityNameId.push(AllAuthorityName[i].authority_url)
       }
 
-      let oneAdminUser = await await models.adminUser.findOne({
+      let oneAdminUser = await await models.admin_user.findOne({
         attributes: [
           'uid',
           'avatar',
@@ -287,7 +287,7 @@ class AdminUsers {
     const { uid } = ctx.request.body
     /* 无关联 */
     try {
-      await models.adminUser.destroy({ where: { uid } })
+      await models.admin_user.destroy({ where: { uid } })
       await createAdminSystemLog({
         // 写入日志
         uid: ctx.request.userInfo.uid,

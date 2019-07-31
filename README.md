@@ -25,18 +25,34 @@
 
 ## 💼 最新版本更新记录
 
-2019.7.26 0:09:00
+2019.8.1 0:50:00
 
-v0.10.4
+外部版本号 v0.10.5 内部版本号 beta-0.2
 
-1.代码优化70%，优化了大部分代码组件、类、方法、变量的命名
+1.新增代码升级程序（还未达到全自动）
 
-2.优化pm2部署
+2.新增文章发布编辑器
 
-3.优化发表评论的输入框
+3.优化 sql 表字段
+
+4.修改其他 bug
 
 [版本更新历史记录](https://github.com/maoxiaoquan/kite/blob/master/docs/VERSION.md 'version')
 
+## ⌨️ 程序升级
+
+版本分内部版本和外部版本
+
+v0.10.5 是外部版本
+
+beta0.1、beta0.2 为内部版本、新版本发布，github 会发布响应版本的分支
+official 始终与最新版本同步
+
+0.2 版本之前的版本需要手动前往 /db/lowdb/db.js 中修改 config.version 为 0.1 , 类型为数字
+
+然后备份 mysql、 /db/lowdb/db.js、/static/update 文件夹
+
+备份后运行 npm run kite-update 升级程序会自动判断
 
 ## ☂️ 开发规范（以主文件夹开始）
 
@@ -79,7 +95,7 @@ admin 文件夹和 server 文件夹 变量多为下划线居多，主要是与my
 
 # 目前用的数据库只有mysql 本地开发的话，下一个phpstudy即可
 
-初始化：npm run init 然后打开浏览器收入 localhost:8086 按照步骤操作即可
+初始化：npm run init 然后打开浏览器收入 localhost:8085 按照步骤操作即可
 
 然后可以选择pro 或者 dev 开始
 

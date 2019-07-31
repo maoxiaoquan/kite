@@ -17,20 +17,20 @@ class ArticleColumn {
     const reqData = ctx.request.body
 
     try {
-      let oneArticleColumnName = await models.articleColumn.findOne({
+      let oneArticleColumnName = await models.article_column.findOne({
         where: { article_column_name: reqData.article_column_name }
       })
       if (oneArticleColumnName) {
         throw new ErrorMessage('专栏名已存在!')
       }
-      let oneArticleColumnEnName = await models.articleColumn.findOne({
+      let oneArticleColumnEnName = await models.article_column.findOne({
         where: { article_column_en_name: reqData.article_column_en_name }
       })
       if (oneArticleColumnEnName) {
         throw new ErrorMessage('专栏英文名已存在!')
       }
 
-      await models.articleColumn.create({
+      await models.article_column.create({
         ...reqData,
         article_tag_ids: reqData.article_tag_ids.join(',')
       })
@@ -62,7 +62,7 @@ class ArticleColumn {
   static async getArticleColumnList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
-      let { count, rows } = await models.articleColumn.findAndCountAll({
+      let { count, rows } = await models.article_column.findAndCountAll({
         attributes: [
           'article_column_id',
           'article_column_name',
@@ -105,7 +105,7 @@ class ArticleColumn {
   static async updateArticleColumn (ctx) {
     const reqData = ctx.request.body
     try {
-      await models.articleColumn.update(
+      await models.article_column.update(
         {
           ...reqData,
           article_tag_ids: reqData.article_tag_ids.join(',')
@@ -135,7 +135,7 @@ class ArticleColumn {
   static async deleteArticleColumn (ctx) {
     const { article_column_id } = ctx.request.body
 
-    await models.articleColumn
+    await models.article_column
       .destroy({ where: { article_column_id } })
       .then(data => {
         resAdminJson(ctx, {

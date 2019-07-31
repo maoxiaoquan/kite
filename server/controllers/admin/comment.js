@@ -16,7 +16,7 @@ class Comment {
       content && (whereParams['content'] = { [Op.like]: `%${content}%` })
       status && (whereParams['status'] = status)
 
-      let { count, rows } = await models.comment.findAndCountAll({
+      let { count, rows } = await models.article_comment.findAndCountAll({
         where: whereParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize) // 每页限制返回的数据条数
@@ -59,7 +59,7 @@ class Comment {
   static async updateComment (ctx) {
     const reqData = ctx.request.body
     try {
-      await await models.comment.update(
+      await await models.article_comment.update(
         {
           status: reqData.status
         },
@@ -87,12 +87,12 @@ class Comment {
   static async deleteComment (ctx) {
     const { id } = ctx.request.body
     try {
-      let oneComment = await models.comment.findOne({ where: { id } })
-      await models.comment.destroy({ where: { id } })
+      let oneComment = await models.article_comment.findOne({ where: { id } })
+      await models.article_comment.destroy({ where: { id } })
       await models.article.update(
         {
           // 更新文章评论数
-          comment_count: await models.comment.count({
+          comment_count: await models.article_comment.count({
             where: {
               aid: oneComment.aid,
               parent_id: 0

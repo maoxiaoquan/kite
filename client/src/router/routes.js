@@ -35,9 +35,9 @@ export default [
         component: () => import('@views/User/User'), // 文章内容页
         children: [
           {
-            path: 'topic',
-            name: 'userTopic',
-            component: () => import('@views/User/view/Topic') // 文章内容页
+            path: 'blog',
+            name: 'userBlog',
+            component: () => import('@views/User/view/Blog') // 文章内容页
           },
           {
             path: 'attention',
@@ -55,7 +55,7 @@ export default [
             component: () => import('@views/User/view/UserMessage') // 用户消息
           }
         ],
-        redirect: { name: 'userTopic' }
+        redirect: { name: 'userBlog' }
       },
       {
         path: 'user/setting',
@@ -75,7 +75,7 @@ export default [
         ],
         redirect: { name: 'settingProfile' }
       },
-      { 
+      {
         path: 'column-all',
         name: 'columnAll',
         component: () => import('@views/ArticleColumn/ArticleColumn') // 文章专栏
@@ -99,12 +99,17 @@ export default [
         path: 'comment_rule',
         name: 'comment_rule',
         component: () => import('@views/Rule/CommentRule') // 评论规则
+      },
+      {
+        path: 'write/:type',
+        name: 'Write',
+        component: () => import('@views/Write/Write') // 文章编写
       }
     ]
-  },
-  {
-    path: '/editor/:editor_type',
-    name: 'editor',
-    component: () => import('@views/Editor/Editor') // 文章编写
   }
+  // {
+  //   path: '/editor/:editor_type',
+  //   name: 'editor',
+  //   component: () => import('@views/Editor/Editor') // 文章编写
+  // }
 ]

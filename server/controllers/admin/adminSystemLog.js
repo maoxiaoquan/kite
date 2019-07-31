@@ -9,7 +9,7 @@ class AdminSystemLog {
    */
 
   static async createAdminSystemLog ({ uid, type = 1, content }) {
-    return models.adminSystemLog.create({
+    return models.system_log.create({
       uid,
       type,
       content
@@ -23,7 +23,7 @@ class AdminSystemLog {
   static async getAdminSystemLogList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
-      let { count, rows } = await models.adminSystemLog.findAndCountAll({
+      let { count, rows } = await models.system_log.findAndCountAll({
         where: '', // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize) // 每页限制返回的数据条数
@@ -37,7 +37,7 @@ class AdminSystemLog {
         )
         rows[i].setDataValue(
           'admin_user',
-          await models.adminUser.findOne({
+          await models.admin_user.findOne({
             where: { uid: rows[i].uid },
             attributes: ['uid', 'nickname']
           })
@@ -65,7 +65,7 @@ class AdminSystemLog {
   static async deleteAdminSystemLog (ctx) {
     const { id } = ctx.request.body
     try {
-      await models.adminSystemLog.destroy({ where: { id } })
+      await models.system_log.destroy({ where: { id } })
       await resAdminJson(ctx, {
         state: 'success',
         message: '删除后台系统日志成功'

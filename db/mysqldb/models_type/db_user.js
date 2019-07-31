@@ -91,17 +91,11 @@ module.exports = {
       comment: '是否可以登录',
       field: 'enable'
     },
-    article_ban_dt: {
-      // 文章禁言时间
+    ban_dt: {
+      // 禁言时间
       type: Seq.DATE,
-      comment: '文章禁言时间',
-      field: 'article_ban_dt'
-    },
-    comment_ban_dt: {
-      // 评论禁言时间
-      type: Seq.DATE,
-      comment: '评论禁言时间',
-      field: 'comment_ban_dt'
+      comment: '禁言时间',
+      field: 'ban_dt'
     },
     update_date: {
       // 更新时间

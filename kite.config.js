@@ -9,14 +9,14 @@ function ProcessCwd (val) {
 }
 
 module.exports = {
-  version: 0.1,
+  version: 0.2,
   theme: {
     'font-family': 'Microsoft YaHei'
   },
   env: NODE_ENV,
   publicStatic: ProcessCwd('static'),
   client: {
-    port: 8081,
+    port: 8081, // 前台调试端口号
     assetsSubDirectory: 'static',
     proxy: {
       target: `http://localhost:8086`, // client ssr
@@ -40,7 +40,7 @@ module.exports = {
   },
   admin: {
     // admin spa
-    port: 8083,
+    port: 8083, // 后台调试端口号
     basePath: ProcessCwd('admin'),
     srcDir: ProcessCwd('admin/src'),
     outDir: IS_NODE_ENV
@@ -68,6 +68,7 @@ module.exports = {
   server: {
     // server
     default_avatar: '/default/img/avatar.jpeg', // 所有使用的默认头像
-    port: 8086
+    port: 8086, // 生产环境运行端口号
+    ininProt: 8085 // 初始化项目端口号
   }
 }

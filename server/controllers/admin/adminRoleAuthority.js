@@ -23,14 +23,14 @@ class adminRoleAuthority {
       if (!role_description) {
         throw new ErrorMessage('请输入角色介绍!')
       }
-      let oneAdminRole = await models.adminRole.findOne({
+      let oneAdminRole = await models.admin_role.findOne({
         where: { role_name }
       })
       if (oneAdminRole) {
         throw new ErrorMessage('角色已存在!')
       }
 
-      await models.adminRole.create({
+      await models.admin_role.create({
         role_name,
         role_description
       })
@@ -62,7 +62,7 @@ class adminRoleAuthority {
   static async editAdminRole (ctx) {
     const reqData = ctx.request.body
     try {
-      await models.adminRole.update(
+      await models.admin_role.update(
         {
           role_name: reqData.role_name,
           role_description: reqData.role_description
@@ -102,7 +102,7 @@ class adminRoleAuthority {
     const { role_id } = ctx.request.body
     /* 角色与用户权限无关联的时候 */
     try {
-      await models.adminRole.destroy({ where: { role_id } })
+      await models.admin_role.destroy({ where: { role_id } })
       await resAdminJson(ctx, {
         state: 'success',
         message: '删除角色成功'
@@ -123,7 +123,7 @@ class adminRoleAuthority {
   static async getAdminRoleList (ctx) {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
-      let { count, rows } = await models.adminRole.findAndCountAll({
+      let { count, rows } = await models.admin_role.findAndCountAll({
         attributes: [
           'role_id',
           'role_name',
@@ -157,7 +157,7 @@ class adminRoleAuthority {
    */
   static async getAdminRoleAll (ctx) {
     try {
-      let adminRoleAll = await models.adminRole.findAll()
+      let adminRoleAll = await models.admin_role.findAll()
       resAdminJson(ctx, {
         state: 'success',
         message: '返回成功',
@@ -181,20 +181,20 @@ class adminRoleAuthority {
     const reqData = ctx.request.body
 
     try {
-      let oneAdminAuthorityName = await models.adminAuthority.findOne({
+      let oneAdminAuthorityName = await models.admin_authority.findOne({
         where: { authority_name: reqData.authority_name }
       })
       if (oneAdminAuthorityName) {
         throw new ErrorMessage('权限名已存在!')
       }
-      let oneAdminAuthorityUrl = await models.adminAuthority.findOne({
+      let oneAdminAuthorityUrl = await models.admin_authority.findOne({
         where: { authority_url: reqData.authority_url }
       })
       if (oneAdminAuthorityUrl) {
         throw new ErrorMessage('权限路径已存在!')
       }
 
-      await models.adminAuthority.create({
+      await models.admin_authority.create({
         ...reqData
       })
       await createAdminSystemLog({
@@ -223,7 +223,7 @@ class adminRoleAuthority {
    */
   static async getAdminAuthorityList (ctx) {
     try {
-      let adminAuthorityAll = await models.adminAuthority.findAll()
+      let adminAuthorityAll = await models.admin_authority.findAll()
 
       resAdminJson(ctx, {
         state: 'success',
@@ -246,7 +246,7 @@ class adminRoleAuthority {
   static async updateAdminAuthority (ctx) {
     const reqData = ctx.request.body
     try {
-      await models.adminAuthority.update(
+      await models.admin_authority.update(
         {
           authority_name: reqData.authority_name,
           authority_type: reqData.authority_type,
@@ -288,7 +288,7 @@ class adminRoleAuthority {
   static async deleteAdminAuthority (ctx) {
     const { authority_id_arr } = ctx.request.body
     try {
-      await models.adminAuthority.destroy({
+      await models.admin_authority.destroy({
         where: { authority_id: { [Op.in]: authority_id_arr } }
       })
       resAdminJson(ctx, {
@@ -311,7 +311,7 @@ class adminRoleAuthority {
   static async createAdminUserRole (ctx) {
     const reqData = ctx.request.body
     try {
-      await models.adminUser.update(
+      await models.admin_user.update(
         {
           admin_role_ids: reqData.role_id
         },
@@ -342,7 +342,7 @@ class adminRoleAuthority {
   static async setAdminRoleAuthority (ctx) {
     const reqData = ctx.request.body
     try {
-      await models.adminRole.update(
+      await models.admin_role.update(
         { admin_authority_ids: reqData.role_authority_list_all.join(',') },
         {
           where: { role_id: reqData.role_id } // 查询条件

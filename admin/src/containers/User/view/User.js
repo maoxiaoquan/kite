@@ -86,44 +86,22 @@ class User extends React.Component {
           }
         },
         {
-          title: '文章是否禁言中',
-          dataIndex: 'ft_article_ban_dt',
-          key: 'ft_article_ban_dt',
+          title: '是否禁言中',
+          dataIndex: 'ft_ban_dt',
+          key: 'ft_ban_dt',
           render: (value, record) => {
             return (
               <div className="ban">
                 <div>
-                  文章是否被禁：
+                  是否被禁：
                   <Tag className="table-article-tag-list" color="orange">
-                    {this.isBan(record.article_ban_dt) ? 'yes' : 'no'}
+                    {this.isBan(record.ban_dt) ? 'yes' : 'no'}
                   </Tag>
                 </div>
                 <div>
                   禁言到：
-                  {record.ft_article_ban_dt}（
-                  {this.isBan(record.article_ban_dt) ? '禁言中' : '已过期'}）
-                </div>
-              </div>
-            )
-          }
-        },
-        {
-          title: '评论是否禁言中',
-          dataIndex: 'ft_comment_ban_dt',
-          key: 'ft_comment_ban_dt',
-          render: (value, record) => {
-            return (
-              <div className="ban">
-                <div>
-                  评论是否被禁：
-                  <Tag className="table-article-tag-list" color="orange">
-                    {this.isBan(record.comment_ban_dt) ? 'yes' : 'no'}
-                  </Tag>
-                </div>
-                <div>
-                  禁言到：
-                  {record.ft_comment_ban_dt}（
-                  {this.isBan(record.comment_ban_dt) ? '禁言中' : '已过期'}）
+                  {record.ft_ban_dt}（
+                  {this.isBan(record.ban_dt) ? '禁言中' : '已过期'}）
                 </div>
               </div>
             )
@@ -177,29 +155,13 @@ class User extends React.Component {
                       data: record
                     })
                     this.setState({
-                      isArticleBanVisible: true
+                      isBanVisible: true
                     })
                   }}
                   size="small"
                   type="primary"
                 >
-                  禁文章
-                </Button>
-                <Button
-                  className="table--btn"
-                  onClick={() => {
-                    this.props.dispatch({
-                      type: 'SET_CURRENT_USER_INFO',
-                      data: record
-                    })
-                    this.setState({
-                      isCommentBanVisible: true
-                    })
-                  }}
-                  size="small"
-                  type="primary"
-                >
-                  禁评论
+                  禁言
                 </Button>
               </div>
             )
@@ -210,10 +172,8 @@ class User extends React.Component {
         current: 1
       },
       modal_visible_edit: false,
-      isArticleBanVisible: false,
-      isCommentBanVisible: false,
-      articleBanDate: '',
-      commentBanDate: '',
+      isBanVisible: false,
+      banDate: '',
       loading: false,
       user_role_all: []
     }
@@ -250,22 +210,12 @@ class User extends React.Component {
     let params = {
       uid: this.props.stateUser.current_user_info.uid
     }
-    if (val.type === 'article') {
-      params.article_ban_dt = this.state.articleBanDate
-    } else {
-      params.comment_ban_dt = this.state.commentBanDate
-    }
+    params.ban_dt = this.state.banDate
     this.props.dispatch(
       banUser(params, result => {
-        if (val.type === 'article') {
-          this.setState({
-            isArticleBanVisible: false
-          })
-        } else {
-          this.setState({
-            isCommentBanVisible: false
-          })
-        }
+        this.setState({
+          isBanVisible: false
+        })
         this.fetchUserList()
       })
     )
@@ -479,42 +429,17 @@ class User extends React.Component {
             }}
             onCancel={() => {
               this.setState({
-                isArticleBanVisible: false
+                isBanVisible: false
               })
             }}
-            title="禁言用户发表文章"
-            visible={this.state.isArticleBanVisible}
+            title="禁言用户"
+            visible={this.state.isBanVisible}
           >
             <div>
               <DatePicker
                 onOk={Result => {
                   this.setState({
-                    articleBanDate: format(Result, 'YYYY-MM-DD HH:mm:ss')
-                  })
-                }}
-                format="YYYY-MM-DD HH:mm:ss"
-                showTime={{ defaultValue: format('00:00:00', 'HH:mm:ss') }}
-              />
-            </div>
-          </Modal>
-
-          <Modal
-            onOk={() => {
-              this.banUser({ type: 'comment' })
-            }}
-            onCancel={() => {
-              this.setState({
-                isCommentBanVisible: false
-              })
-            }}
-            title="禁言用户发表评论"
-            visible={this.state.isCommentBanVisible}
-          >
-            <div>
-              <DatePicker
-                onOk={Result => {
-                  this.setState({
-                    commentBanDate: format(Result, 'YYYY-MM-DD HH:mm:ss')
+                    banDate: format(Result, 'YYYY-MM-DD HH:mm:ss')
                   })
                 }}
                 format="YYYY-MM-DD HH:mm:ss"

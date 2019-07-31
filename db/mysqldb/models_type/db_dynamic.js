@@ -6,7 +6,7 @@ module.exports = {
   NAME: 'article' /* 表名 */,
   TABLE: {
     /* 表结构 */
-    aid: {
+    dynamic_id: {
       // 用户ID
       type: Seq.BIGINT(20),
       primaryKey: true, // 定义主键
@@ -43,12 +43,6 @@ module.exports = {
       type: Seq.TEXT('long'),
       comment: '原内容',
       field: 'origin_content'
-    },
-    source: {
-      // 来源 （1原创 2转载）
-      type: Seq.INTEGER(10),
-      comment: '来源 （1:原创,2转载）',
-      field: 'source'
     },
     status: {
       // 状态
@@ -88,12 +82,6 @@ module.exports = {
       comment: '评论数',
       field: 'comment_count',
       defaultValue: 0
-    },
-    user_blog_ids: {
-      /* 文章所属的用户专栏id 可多个 */
-      type: Seq.STRING(180),
-      comment: '文章所属的用户专栏id',
-      field: 'user_blog_ids'
     },
     article_tag_ids: {
       /* 文章所属的标签名字 可多个 */

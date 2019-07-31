@@ -74,7 +74,7 @@ class Article {
         throw new ErrorMessage('请输入文章内容')
       }
 
-      if (!reqData.user_topic_ids) {
+      if (!reqData.user_blog_ids) {
         throw new ErrorMessage('请选择个人专题')
       }
 
@@ -91,17 +91,15 @@ class Article {
         'YYYY-MM-DD HH:mm:ss'
       )
 
-      if (
-        new Date(currDate).getTime() < new Date(user.article_ban_dt).getTime()
-      ) {
+      if (new Date(currDate).getTime() < new Date(user.ban_dt).getTime()) {
         throw new ErrorMessage(
           `当前用户因违规已被管理员禁用发布文章，时间到：${moment(
-            user.article_ban_dt
+            user.ban_dt
           ).format('YYYY年MM月DD日 HH时mm分ss秒')},如有疑问请联系网站管理员`
         )
       }
 
-      let oneArticleTag = await models.articleTag.findOne({
+      let oneArticleTag = await models.article_tag.findOne({
         where: {
           article_tag_id: config.ARTICLE_TAG.dfOfficialExclusive
         }
@@ -123,7 +121,7 @@ class Article {
       const result = reqData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
       let $ = cheerio.load(reqData.content)
 
-      let userRoleALL = await models.userRole.findAll({
+      let userRoleALL = await models.user_role.findAll({
         where: {
           user_role_id: {
             [Op.or]: user.user_role_ids.split(',')
@@ -153,7 +151,7 @@ class Article {
         cover_img: result ? result[2] : '',
         status, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败;4:回收站;5:已删除;6:无需审核)'
         type: reqData.type, // 类型 （1文章 2说说 3视频 4公告 ）
-        user_topic_ids: reqData.user_topic_ids,
+        user_blog_ids: reqData.user_blog_ids,
         article_tag_ids: reqData.article_tag_ids
       })
 
@@ -182,7 +180,7 @@ class Article {
     let pageSize = ctx.query.pageSize || 25
 
     try {
-      let oneArticleTag = await models.articleTag.findOne({
+      let oneArticleTag = await models.article_tag.findOne({
         where: {
           article_tag_en_name: qyData.article_tag_en_name
         }
@@ -214,12 +212,12 @@ class Article {
           )
         }
 
-        let subscribeArticleTagCount = await models.subscribeArticleTag.count({
+        let subscribeArticleTagCount = await models.rss_article_tag.count({
           where: { article_tag_id: oneArticleTag.article_tag_id }
         })
 
         /* 所有文章专题 */
-        let articleTagAll = await models.articleTag.findAll({
+        let articleTagAll = await models.article_tag.findAll({
           attributes: [
             'article_tag_id',
             'article_tag_name',
@@ -259,7 +257,7 @@ class Article {
    */
   static async getPopularArticleTag (ctx) {
     try {
-      let articleTagAll = await models.articleTag.findAll({
+      let articleTagAll = await models.article_tag.findAll({
         attributes: [
           'article_tag_id',
           'article_tag_name',
@@ -277,7 +275,7 @@ class Article {
       for (let i in articleTagAll) {
         articleTagAll[i].setDataValue(
           'subscribe_count',
-          await models.subscribeArticleTag.count({
+          await models.rss_article_tag.count({
             where: { article_tag_id: articleTagAll[i].article_tag_id }
           })
         )
@@ -315,7 +313,7 @@ class Article {
    */
   static async getArticleTagAll (ctx) {
     try {
-      let articleTagAll = await models.articleTag.findAll({
+      let articleTagAll = await models.article_tag.findAll({
         attributes: [
           'article_tag_id',
           'article_tag_name',
@@ -329,7 +327,7 @@ class Article {
       for (let i in articleTagAll) {
         articleTagAll[i].setDataValue(
           'subscribe_count',
-          await models.subscribeArticleTag.count({
+          await models.rss_article_tag.count({
             where: { article_tag_id: articleTagAll[i].article_tag_id }
           })
         )
@@ -487,7 +485,7 @@ class Article {
         throw new ErrorMessage('请输入文章内容')
       }
 
-      if (!reqData.user_topic_ids) {
+      if (!reqData.user_blog_ids) {
         throw new ErrorMessage('请选择个人专题')
       }
 
@@ -504,17 +502,15 @@ class Article {
         'YYYY-MM-DD HH:mm:ss'
       )
 
-      if (
-        new Date(currDate).getTime() < new Date(user.article_ban_dt).getTime()
-      ) {
+      if (new Date(currDate).getTime() < new Date(user.ban_dt).getTime()) {
         throw new ErrorMessage(
           `当前用户因违规已被管理员禁用修改文章，时间到：${moment(
-            user.article_ban_dt
+            user.ban_dt
           ).format('YYYY年MM月DD日 HH时mm分ss秒')},如有疑问请联系网站管理员`
         )
       }
 
-      let oneArticleTag = await models.articleTag.findOne({
+      let oneArticleTag = await models.article_tag.findOne({
         where: {
           article_tag_id: config.ARTICLE_TAG.dfOfficialExclusive
         }
@@ -537,7 +533,7 @@ class Article {
 
       let $ = cheerio.load(reqData.content)
 
-      let userRoleAll = await models.userRole.findAll({
+      let userRoleAll = await models.user_role.findAll({
         where: {
           user_role_id: {
             [Op.or]: user.user_role_ids.split(',')
@@ -567,7 +563,7 @@ class Article {
           cover_img: result ? result[2] : '',
           status, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败;4:回收站;5:已删除;6:无需审核)'
           type: reqData.type, // 类型 （1文章 2说说 3视频 4公告 ）
-          user_topic_ids: reqData.user_topic_ids,
+          user_blog_ids: reqData.user_blog_ids,
           article_tag_ids: reqData.article_tag_ids,
           update_date: moment(date.setHours(date.getHours())).format(
             'YYYY-MM-DD HH:mm:ss'
@@ -685,7 +681,7 @@ class Article {
       }
 
       /* 所有文章专题 */
-      let allArticleTag = await models.articleTag.findAll({
+      let allArticleTag = await models.article_tag.findAll({
         attributes: ['article_tag_id', 'article_tag_name']
       })
 
@@ -717,7 +713,7 @@ class Article {
 
   static async getArticleColumn (ctx) {
     try {
-      let allArticleColumn = await models.articleColumn.findAll({
+      let allArticleColumn = await models.article_column.findAll({
         attributes: [
           'article_column_id',
           'article_column_name',
@@ -763,7 +759,7 @@ class Article {
       enable: 1
     }
     try {
-      let { count, rows } = await models.articleColumn.findAndCountAll({
+      let { count, rows } = await models.article_column.findAndCountAll({
         attributes: [
           'article_column_id',
           'article_column_name',
@@ -784,7 +780,7 @@ class Article {
             : { [Op.in]: rows[i].article_tag_ids.split(',') }
         rows[i].setDataValue(
           'tag',
-          await models.articleTag.findAll({
+          await models.article_tag.findAll({
             where: { article_tag_id }
           })
         )

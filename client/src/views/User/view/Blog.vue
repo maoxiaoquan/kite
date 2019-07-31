@@ -1,65 +1,66 @@
 <template>
 
   <div class="user-center-article-view">
-    <div v-if="isTopicListShow">
-      <ul class="topic-list">
+    <div v-if="isBlogListShow">
+      <ul class="blog-list">
         <li class="title">个人专题：</li>
-        <li :class="{'current':!$route.query.topic_id||$route.query.topic_id==='all'}">
-          <router-link :to='{name:"userTopic",query:{topic_id:"all"}}'>
+        <li :class="{'current':!$route.query.blog_id||$route.query.blog_id==='all'}">
+          <router-link :to='{name:"userBlog",query:{blog_id:"all"}}'>
             全部
           </router-link>
         </li>
 
-        <li v-for="item in userArticleTopicAll"
-            :class="{'current':item.topic_id==$route.query.topic_id}">
-          <router-link :to='{name:"userTopic",query:{topic_id:item.topic_id}}'
+        <li v-for="(item,key) in userArticleBlogAll"
+            :class="{'current':item.blog_id==$route.query.blog_id}"
+            :key="key">
+          <router-link :to='{name:"userBlog",query:{blog_id:item.blog_id}}'
                        class="avatar">
-            {{ item.topic_name }}
+            {{ item.name }}
           </router-link>
         </li>
 
         <template v-if="personalInfo.user.uid===userInfo.user.uid">
           <li>
             <a class="btn btn-green"
-               @click="isCreateTopicShow=true"
+               @click="isCreateBlogShow=true"
                href="javascript:;">创建新专题</a>
           </li>
           <li>
             <a class="btn btn-info"
                href="javascript:;"
-               @click="isTopicListShow=false">编辑专题</a>
+               @click="isBlogListShow=false">编辑专题</a>
           </li>
         </template>
       </ul>
 
       <!-- use the modal component, pass in the prop -->
-      <el-dialog :visible.sync="isCreateTopicShow"
+      <el-dialog :visible.sync="isCreateBlogShow"
                  width="300px">
-        <div class="topic-modal">
+        <div class="blog-modal">
           <div class="form-group">
-            <label for="topic-name-input">专题名字</label>
+            <label for="blog-name-input">专题名字</label>
             <input type="email"
-                   v-model="topic_name"
+                   v-model="blog_name"
                    class="form-control"
-                   id="topic-name-input"
+                   id="blog-name-input"
                    placeholder="请输入个人文章专题名字">
           </div>
           <div class="form-group">
-            <label for="article-topic-description">专题描述</label>
-            <textarea v-model="topic_description"
+            <label for="article-blog-description">专题描述</label>
+            <textarea v-model="blog_description"
                       type="password"
                       class="form-control"
-                      id="article-topic-description"
+                      id="article-blog-description"
                       placeholder="请输入个人文章专题描述"></textarea>
           </div>
           <div class="footer-view">
             <button type="button"
-                    class="btn btn-primary topic-modal-create"
-                    @click="createNewUserTopic">创建
+                    class="btn btn-primary blog-modal-create"
+                    @click="createNewUserBlog">创建
             </button>
             <button type="button"
-                    @click="isCreateTopicShow=false"
-                    class="btn btn-secondary topic-modal-cancel">取消
+                    @click="isCreateBlogShow=false"
+                    class="btn btn-secondary blog-modal-cancel">取消
             </button>
           </div>
         </div>
@@ -71,8 +72,8 @@
           <div class="article-item"
                v-for="(item,key) in myArticle.article_list"
                :key="key">
-            <TopicArticleItem @delete-change="updateArticleList"
-                              :articleItem="item" />
+            <BlogArticleItem @delete-change="updateArticleList"
+                             :articleItem="item" />
           </div>
         </div>
         <Page :count="pagination"
@@ -81,14 +82,14 @@
       </div>
     </div>
 
-    <div v-else="isTopicListShow"
-         id="user-article-topic-view">
+    <div v-else="isBlogListShow"
+         id="user-article-blog-view">
       <button type="button"
-              @click="isTopicListShow=true"
+              @click="returnBlogHome"
               class="btn btn-secondary btn-sm">返回</button>
 
-      <div class="user-article-topic-table">
-        <div class="user-article-topic-item">
+      <div class="user-article-blog-table">
+        <div class="user-article-blog-item">
           <div class="input-view">
             <span class="title">专题名字</span>
           </div>
@@ -99,10 +100,9 @@
             <span class="title">操作</span>
           </div>
         </div>
-        <TopicList :item="item"
-                   v-for="(item,key) in userArticleTopicAll"
-                   :key="key"
-                   @update-list="getUserArticleTopicList" />
+        <BlogList :item="item"
+                  v-for="(item,key) in userArticleBlogAll"
+                  :key="key" />
 
       </div>
     </div>
@@ -112,12 +112,12 @@
 
 <script>
 
-import TopicList from '../component/TopicList'
-import TopicArticleItem from '../component/TopicArticleItem'
+import BlogList from '../component/BlogList'
+import BlogArticleItem from '../component/BlogArticleItem'
 import { Page } from '@components'
 
 export default {
-  name: 'Topic',
+  name: 'Blog',
   metaInfo () {
     return {
       title: '个人专题',
@@ -129,58 +129,62 @@ export default {
   async asyncData ({ store, route }) {
     return store.dispatch('user/USER_MY_ARTICLE', {
       uid: route.params.uid,
-      topic_id: route.query.topic_id || 'all',
+      blog_id: route.query.blog_id || 'all',
       page: route.query.page || 1,
       pageSize: route.query.pageSize || 10,
     })
   },
   data () {
     return {
-      isCreateTopicShow: false,
-      isTopicListShow: true,
-      topic_name: '',
-      topic_description: '',
-      topic_list: [],
+      isCreateBlogShow: false,
+      isBlogListShow: true,
+      blog_name: '',
+      blog_description: '',
+      blog_list: [],
     }
   },
   created () {
-    this.getUserArticleTopicList()
+    this.getUserArticleBlogList()
   },
   methods: {
     updateArticleList () {
       this.$store.dispatch('user/USER_MY_ARTICLE', {
         uid: this.$route.params.uid,
-        topic_id: this.$route.query.topic_id || 'all',
+        blog_id: this.$route.query.blog_id || 'all',
         page: this.$route.query.page || 1,
         pageSize: this.$route.query.pageSize || 10,
       })
     },
-    createNewUserTopic () {
+    returnBlogHome () {
+      this.isBlogListShow = true
+      this.getUserArticleBlogList()
+    },
+    createNewUserBlog () {
       var that = this
-      this.$store.dispatch('user/CREATE_ARTICLE_TOPIC', {
-        topic_name: that.topic_name,
-        topic_description: that.topic_description,
+      this.$store.dispatch('user/CREATE_ARTICLE_BLOG', {
+        blog_name: that.blog_name,
+        blog_description: that.blog_description,
       })
         .then(res => {
           if (res.state === 'success') {
-            that.isCreateTopicShow = false
-            that.topic_name = ''
-            that.topic_description = ''
+            that.isCreateBlogShow = false
+            that.blog_name = ''
+            that.blog_description = ''
             this.$message.success('创建成功')
-            this.getUserArticleTopicList()
+            this.getUserArticleBlogList()
           } else {
             this.$message.warning(res.message)
           }
         })
     },
-    async getUserArticleTopicList () {
-      await this.$store.dispatch('user/GET_USER_ARTICLE_TOPIC', { uid: this.$route.params.uid })
+    async getUserArticleBlogList () {
+      await this.$store.dispatch('user/GET_USER_ARTICLE_BLOG', { uid: this.$route.params.uid })
     },
     pageChange (val) {
       this.$router.push({
-        name: 'userTopic',
+        name: 'userBlog',
         query: {
-          topic_id: this.currentTopicId,
+          blog_id: this.currentBlogId,
           page: val
         }
       })
@@ -199,16 +203,16 @@ export default {
     myArticle () { // 用户个人的文章
       return this.$store.state.user.my_article || {}
     },
-    currentTopicId () {
-      return this.$route.query.topic_id || 'all'
+    currentBlogId () {
+      return this.$route.query.blog_id || 'all'
     },
-    userArticleTopicAll () { // 个人所有专栏
-      return this.$store.state.user.user_article_topic || []
+    userArticleBlogAll () { // 个人所有专栏
+      return this.$store.state.user.user_article_blog || []
     },
   },
   components: {
-    TopicList,
-    TopicArticleItem,
+    BlogList,
+    BlogArticleItem,
     Page
   }
 }
@@ -219,7 +223,7 @@ export default {
   margin-top: 20px;
 }
 
-.topic-list {
+.blog-list {
   li {
     display: inline-block;
     margin: 6px 0;
@@ -265,16 +269,16 @@ export default {
   }
 }
 
-#user-article-topic-view {
+#user-article-blog-view {
   margin-top: 20px;
   .btn-secondary {
     margin-bottom: 20px;
   }
-  .user-article-topic-table {
+  .user-article-blog-table {
     display: block;
     width: 100%;
   }
-  .user-article-topic-item {
+  .user-article-blog-item {
     margin-bottom: 10px;
     border-bottom: 1px solid #f0f0f0;
     padding-bottom: 8px;
@@ -304,7 +308,7 @@ export default {
   }
 }
 
-.topic-modal {
+.blog-modal {
   .form-group {
     margin-bottom: 10px;
     label {

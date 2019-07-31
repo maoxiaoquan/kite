@@ -3,16 +3,16 @@ const shortid = require('shortid')
 const time = require('../time')
 
 module.exports = {
-  NAME: 'user_article_topic' /* 表名 */,
+  NAME: 'article_blog' /* 表名 */,
   TABLE: {
     /* 表结构 */
-    topic_id: {
+    blog_id: {
       // 专题ID
       type: Seq.BIGINT(20),
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增
       comment: '专题ID',
-      field: 'topic_id'
+      field: 'blog_id'
     },
     uid: {
       // uid
@@ -20,29 +20,29 @@ module.exports = {
       comment: 'uid',
       field: 'uid'
     },
-    topic_name: {
+    name: {
       // 专题名字
       type: Seq.STRING(20),
-      comment: '专题名字',
-      field: 'topic_name'
+      comment: '名字',
+      field: 'name'
     },
-    topic_description: {
+    description: {
       // 专题描述
       type: Seq.STRING(100),
-      comment: '专题描述',
-      field: 'topic_description'
+      comment: '描述',
+      field: 'description'
     },
-    topic_subscribe: {
+    rss_count: {
       // 专题订阅数量
       type: Seq.INTEGER(10),
-      comment: '专题订阅数量（预留）',
-      field: 'topic_subscribe'
+      comment: '订阅数量（预留）',
+      field: 'rss_count'
     },
-    topic_icon: {
+    icon: {
       // 专题图标
       type: Seq.STRING(200),
-      comment: '专题图标（预留）',
-      field: 'topic_icon'
+      comment: '图标（预留）',
+      field: 'icon'
     },
     enable: {
       // 是否可以显示

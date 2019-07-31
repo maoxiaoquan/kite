@@ -225,14 +225,14 @@ class Init {
         })
         .write()
 
-      await models.adminAuthority.bulkCreate(dfAdminAuthorityList) // 导入默认后台管理员角色权限列表
-      await models.userAuthority.bulkCreate(dfUserAuthorityList) // 导入默认用户角色权限列表
-      await models.adminRole.bulkCreate(dfAdminRoleList)
-      await models.userRole.bulkCreate(dfUserRoleList)
-      await models.articleTag.bulkCreate(dfArticleTagList)
-      await models.articleColumn.bulkCreate(dfArticleColumnList)
+      await models.admin_authority.bulkCreate(dfAdminAuthorityList) // 导入默认后台管理员角色权限列表
+      await models.user_authority.bulkCreate(dfUserAuthorityList) // 导入默认用户角色权限列表
+      await models.admin_role.bulkCreate(dfAdminRoleList)
+      await models.user_role.bulkCreate(dfUserRoleList)
+      await models.article_tag.bulkCreate(dfArticleTagList)
+      await models.article_column.bulkCreate(dfArticleColumnList)
 
-      await models.adminUser.create({
+      await models.admin_user.create({
         // 创建默认超管角色
         account: reqData.account,
         avatar: config.default_avatar,

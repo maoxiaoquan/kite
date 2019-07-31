@@ -3,7 +3,7 @@ const shortid = require('shortid')
 const time = require('../time')
 
 module.exports = {
-  NAME: 'comment' /* 表名 */,
+  NAME: 'dynamic_comment' /* 表名 */,
   TABLE: {
     /* 表结构 */
     id: {
@@ -20,7 +20,7 @@ module.exports = {
       comment: 'parent_id',
       field: 'parent_id'
     },
-    aid: {
+    dynamic_id: {
       // 文章id
       type: Seq.BIGINT(20),
       comment: '文章id',
