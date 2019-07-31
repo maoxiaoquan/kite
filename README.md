@@ -12,8 +12,11 @@
 ## ✨ kite
 
 前台演示网站地址： [小随笔 https://www.xiaosuibi.com/](https://www.xiaosuibi.com/ 'xiaosuibi')
+
 后台演示网站地址： [小随笔 https://www.xiaosuibi.com/\_admin](https://www.xiaosuibi.com/_admin 'xiaosuibi')
+
 后台演示网站账户：kitetest 密码：q123456 （资源有点大，可能要加载一段时间）
+
 兼容方面会兼容大部分浏览器，过于古老的将放弃
 
 ## 😊 前台界面
@@ -22,13 +25,21 @@
 
 ## 💼 最新版本更新记录
 
+```
 2019.8.1 0:50:00
+外部版本号 v0.10.5 内部版本号 beta-0.2 (此次更新需要 cnpm i or npm i or yarn)
+1.新增代码升级程序（还未达到全自动）
+2.新增文章发布编辑器
+3.优化 sql 表字段
+4.修改其他 bug
 
-外部版本号 v0.10.5 内部版本号 beta-0.2 (此次更新需要 cnpm i or npm i or yarn) 1.新增代码升级程序（还未达到全自动） 2.新增文章发布编辑器 3.优化 sql 表字段 4.修改其他 bug
+```
 
 [版本更新历史记录](https://github.com/maoxiaoquan/kite/blob/master/docs/VERSION.md 'version')
 
 ## ⌨️ 程序升级
+
+```
 
 初次使用请忽略以下，直接下载最新版本使用即可，以下是旧版本升级的程序
 版本分内部版本和外部版本 v0.10.5 是外部版本
@@ -37,6 +48,8 @@ official 始终与最新版本同步
 0.2 版本之前的版本需要手动前往 /db/lowdb/db.js 中修改 config.version 为 0.1 , 类型为数字
 然后备份 mysql、 /db/lowdb/db.js、/static/update 文件夹
 备份后运行 npm run kite-update 升级程序会自动判断
+
+```
 
 ## 📦 Start
 
@@ -145,6 +158,7 @@ kite/
 
 ## 👓 说明
 
+```
 使用的技术栈：
 
 前台方面：vue 服务端渲染 + vuex + vue-router + vue-server-renderer
@@ -157,6 +171,7 @@ server: koa + mysql
 前台目前比较简单，就是一个多人文章发布系统，用户可以注册账号，发布文章，关注用户，喜欢文章，评论等等
 后台管理文章的发布、审核，评论的审核，管理员权限管理，系统配置等等，前后台用户管理员独立
 初始化界面是对整个文章发布系统的一个初始化，包括初始管理员角色，mysql 等等
+```
 
 ## LICENSE
 
