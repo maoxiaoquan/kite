@@ -60,7 +60,7 @@
               </div>
               <button class="btn btn-primary btn-sm"
                       v-show="!isCreateBlogShow"
-                      @click="isCreateBlogShow=true">创建新专题</button>
+                      @click="isCreateBlogShow=true">创建新个人专栏</button>
             </div>
           </div>
         </div>

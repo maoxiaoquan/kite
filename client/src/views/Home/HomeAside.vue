@@ -102,10 +102,7 @@ export default {
       if (!this.$store.state.personalInfo.islogin) {
         this.$store.commit('SET_IS_LOGIN', true)
       } else {
-        this.$router.push({
-          name: 'editor',
-          params: { editor_type: 'create' }
-        })
+        this.$router.push({ name: 'Write', params: { type: 'create' } })
       }
     }
   },
