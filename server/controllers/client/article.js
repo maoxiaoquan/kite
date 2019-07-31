@@ -91,12 +91,10 @@ class Article {
         'YYYY-MM-DD HH:mm:ss'
       )
 
-      if (
-        new Date(currDate).getTime() < new Date(user.article_ban_dt).getTime()
-      ) {
+      if (new Date(currDate).getTime() < new Date(user.ban_dt).getTime()) {
         throw new ErrorMessage(
           `当前用户因违规已被管理员禁用发布文章，时间到：${moment(
-            user.article_ban_dt
+            user.ban_dt
           ).format('YYYY年MM月DD日 HH时mm分ss秒')},如有疑问请联系网站管理员`
         )
       }
@@ -504,12 +502,10 @@ class Article {
         'YYYY-MM-DD HH:mm:ss'
       )
 
-      if (
-        new Date(currDate).getTime() < new Date(user.article_ban_dt).getTime()
-      ) {
+      if (new Date(currDate).getTime() < new Date(user.ban_dt).getTime()) {
         throw new ErrorMessage(
           `当前用户因违规已被管理员禁用修改文章，时间到：${moment(
-            user.article_ban_dt
+            user.ban_dt
           ).format('YYYY年MM月DD日 HH时mm分ss秒')},如有疑问请联系网站管理员`
         )
       }

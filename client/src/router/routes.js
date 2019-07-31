@@ -106,10 +106,10 @@ export default [
         component: () => import('@views/Write/Write') // 文章编写
       }
     ]
-  },
-  {
-    path: '/editor/:editor_type',
-    name: 'editor',
-    component: () => import('@views/Editor/Editor') // 文章编写
   }
+  // {
+  //   path: '/editor/:editor_type',
+  //   name: 'editor',
+  //   component: () => import('@views/Editor/Editor') // 文章编写
+  // }
 ]

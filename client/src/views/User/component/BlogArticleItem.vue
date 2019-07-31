@@ -42,7 +42,7 @@
               </div>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item icon="el-icon-edit"
-                                  :command="{name:'editor',params:{editor_type:articleItem.aid}}">修改</el-dropdown-item>
+                                  :command="{name:'Write',params:{type:articleItem.aid}}">修改</el-dropdown-item>
                 <el-dropdown-item icon="el-icon-delete"
                                   :command="{name:'delete'}">删除</el-dropdown-item>
               </el-dropdown-menu>

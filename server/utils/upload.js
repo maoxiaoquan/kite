@@ -15,6 +15,7 @@ module.exports = type => {
   }
 
   let fileFilter = (ctx, file, cb) => {
+    console.log('file', file)
     // 过滤文件
     let ImgLimitType = ['image/jpeg', 'image/jpg', 'image/gif', 'image/png']
     if (~ImgLimitType.indexOf(file.mimetype)) {

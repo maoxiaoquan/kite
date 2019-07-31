@@ -16,8 +16,7 @@ class Users {
           'last_sign_time',
           'reg_ip',
           'user_role_ids',
-          'article_ban_dt',
-          'comment_ban_dt',
+          'ban_dt',
           'enable'
         ],
         where: '', // 为空，获取全部，也可以自己添加条件
@@ -27,16 +26,8 @@ class Users {
 
       for (let i in rows) {
         rows[i].setDataValue(
-          'ft_article_ban_dt',
-          await moment(rows[i].article_ban_dt).format(
-            'YYYY年MM月DD日 HH时mm分ss秒'
-          )
-        )
-        rows[i].setDataValue(
-          'ft_comment_ban_dt',
-          await moment(rows[i].comment_ban_dt).format(
-            'YYYY年MM月DD日 HH时mm分ss秒'
-          )
+          'ft_ban_dt',
+          await moment(rows[i].ban_dt).format('YYYY年MM月DD日 HH时mm分ss秒')
         )
       }
 
@@ -243,11 +234,10 @@ class Users {
    */
   static async banUser (ctx) {
     try {
-      const { uid, article_ban_dt, comment_ban_dt } = ctx.request.body
+      const { uid, ban_dt } = ctx.request.body
       let setUpdate = {}
 
-      article_ban_dt && (setUpdate['article_ban_dt'] = new Date(article_ban_dt))
-      comment_ban_dt && (setUpdate['comment_ban_dt'] = new Date(comment_ban_dt))
+      ban_dt && (setUpdate['ban_dt'] = new Date(ban_dt))
       // 审核成功
       await models.user.update(
         {

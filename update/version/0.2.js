@@ -45,6 +45,7 @@ class update0_2 {
         // await models.sequelize.query('rename TABLE article_comment to comment;')
 
         // ALTER TABLE 表名 CHANGE 旧字段名 新字段名 新数据类型;
+
         await models.sequelize.query(
           'ALTER TABLE article_blog CHANGE topic_id blog_id bigint(20) auto_increment comment "用户文章专栏的id";'
         )
@@ -62,6 +63,12 @@ class update0_2 {
         )
         await models.sequelize.query(
           'ALTER TABLE article CHANGE user_topic_ids user_blog_ids VARCHAR(200) comment "所属的blog";'
+        )
+        await models.sequelize.query(
+          'ALTER TABLE user CHANGE article_ban_dt ban_dt VARCHAR(200) comment "禁言时间";'
+        )
+        await models.sequelize.query(
+          'ALTER TABLE user drop column `comment_ban_dt`;'
         )
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb
