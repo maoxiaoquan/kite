@@ -91,12 +91,12 @@ export default [
         component: () => import('@views/ArticleTag/ArticleTag') // 文章标签内容页
       },
       {
-        path: 'article_rule',
+        path: 'article-rule',
         name: 'article_rule',
         component: () => import('@views/Rule/ArticleRule') // 文章编写规则
       },
       {
-        path: 'comment_rule',
+        path: 'comment-rule',
         name: 'comment_rule',
         component: () => import('@views/Rule/CommentRule') // 评论规则
       },
@@ -107,7 +107,7 @@ export default [
       },
       {
         //动态 2019.8.1 12:11开发
-        path: 'dynamics',
+        path: 'dynamics/:dynamicTopicId',
         name: 'dynamics',
         component: () => import('@views/Dynamic/index') // 动态首页
       },
@@ -117,12 +117,12 @@ export default [
         component: () => import('@views/Dynamic/dynamicView') // 动态内容页
       },
       {
-        path: 'dynamic-topic',
+        path: 'topics',
         name: 'dynamicTopic',
         component: () => import('@views/Dynamic/dynamicTopic') // 动态内容页
       },
       {
-        path: 'dynamic-topic-view/:dynamicTopicId',
+        path: 'topic/:dynamicTopicId',
         name: 'dynamicTopicView',
         component: () => import('@views/Dynamic/dynamicTopicView') // 动态内容页
       }

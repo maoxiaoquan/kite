@@ -5,18 +5,26 @@
         <nav role="navigation"
              class="dock-nav">
           <ul class="nav-list">
-            <li class="nav-item acitve"><a href="/pins/recommended">推荐 </a></li>
-            <li class="nav-item"><a href="/pins/hot">热门 </a></li>
-            <li class="nav-item"><a href="/pins/following">关注 </a></li>
+            <li class="nav-item acitve">
+              <router-link :to="{name:'dynamics',params:{dynamicTopicId:'recommended'}}"
+                           class="nav-link">推荐</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link :to="{name:'dynamics',params:{dynamicTopicId:'hot'}}"
+                           class="nav-link">热门</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link :to="{name:'dynamics',params:{dynamicTopicId:'following'}}"
+                           class="nav-link">关注</router-link>
+            </li>
           </ul>
           <ul class="nav-list">
-            <li class="nav-item"><a href="/pins/topic/5c09ea2b092dcb42c740fe73">开源推荐 </a></li>
-            <li class="nav-item"><a href="/pins/topic/5abb61e1092dcb4620ca3322">内推招聘</a></li>
-            <li class="nav-item"><a href="/pins/topic/5abcaa67092dcb4620ca335c">掘金相亲</a></li>
-            <li class="nav-item"><a href="/pins/topic/5c106be9092dcb2cc5de7257">上班摸鱼</a></li>
-            <li class="nav-item"><a href="/pins/topic/5b514af1092dcb61bd72800d">应用安利</a></li>
-            <li class="nav-item"><a href="/pins/topic/5abb67d2092dcb4620ca3324">开发工具</a></li>
-            <li class="nav-item"><a href="/pins/topic/5c46a17f092dcb4737217152">New资讯</a></li>
+            <li class="nav-item"
+                v-for="(item,key) in 5"
+                :key="key">
+              <router-link :to="{name:'dynamics',params:{dynamicTopicId:'5c09ea2b092dcb42c740fe73'+item}}"
+                           class="nav-link">开源推荐</router-link>
+            </li>
             <li class="nav-item">
               <router-link :to="{name:'dynamicTopic'}">
                 更多
@@ -88,12 +96,13 @@ export default {
           border-radius: 5px;
           transition: background-color 0.2s, color 0.2s;
         }
-        &.acitve {
-          a {
-            background: #007fff;
-            color: #fff;
-          }
+        .current-active {
+          background: #007fff;
+          color: #fff;
         }
+      }
+      &:last-child {
+        border-bottom: none;
       }
     }
   }
