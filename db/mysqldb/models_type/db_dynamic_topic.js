@@ -3,7 +3,7 @@ const shortid = require('shortid')
 const time = require('../time')
 
 module.exports = {
-  NAME: 'article_tag' /* 表名 */,
+  NAME: 'dynamic_topic' /* 表名 */,
   TABLE: {
     /* 表结构 */
     topic_id: {
@@ -14,42 +14,35 @@ module.exports = {
       comment: 'topic_id',
       field: 'topic_id'
     },
-    article_tag_id: {
-      // 文章标签
-      type: Seq.STRING(20),
-      comment: '文章标签',
-      defaultValue: shortid.generate,
-      field: 'article_tag_id'
-    },
-    article_tag_name: {
+    name: {
       // 标签名字
       type: Seq.STRING(50),
       comment: '标签名字',
-      field: 'article_tag_name'
+      field: 'name'
     },
-    article_tag_en_name: {
+    en_name: {
       // 标签英文名字
       type: Seq.STRING(100),
       comment: '标签英文名字',
-      field: 'article_tag_en_name'
+      field: 'en_name'
     },
-    article_tag_icon: {
+    icon: {
       // 标签图标地址
       type: Seq.STRING(200),
       comment: '标签图标地址',
-      field: 'article_tag_icon'
+      field: 'icon'
     },
-    article_tag_description: {
+    description: {
       // 标签描述
       type: Seq.STRING(100),
       comment: '标签描述',
-      field: 'article_tag_description'
+      field: 'description'
     },
-    attention_count: {
+    rss_count: {
       // 关注数统计
       type: Seq.BIGINT(20),
       comment: '关注数统计',
-      field: 'attention_count',
+      field: 'rss_count',
       defaultValue: 0
     },
     sort: {
@@ -58,10 +51,16 @@ module.exports = {
       comment: '排序',
       field: 'sort'
     },
-    enable: {
-      // 是否可以显示
+    is_show: {
+      // 是否在前台页面显示
       type: Seq.BOOLEAN,
-      comment: '是否可以显示',
+      comment: '是否在前台页面显示',
+      field: 'is_show'
+    },
+    enable: {
+      // 是否可用
+      type: Seq.BOOLEAN,
+      comment: '是否可用',
       field: 'enable'
     },
     ...time.create_date

@@ -104,12 +104,28 @@ export default [
         path: 'write/:type',
         name: 'Write',
         component: () => import('@views/Write/Write') // 文章编写
+      },
+      {
+        //动态 2019.8.1 12:11开发
+        path: 'dynamic',
+        name: 'dynamic',
+        component: () => import('@views/Dynamic/index') // 动态首页
+      },
+      {
+        path: 'dynamic/:dynamicId',
+        name: 'dynamicContent',
+        component: () => import('@views/Dynamic/dynamicContent') // 动态内容页
+      },
+      {
+        path: 'dynamic/topic',
+        name: 'dynamicTopic',
+        component: () => import('@views/Dynamic/dynamicTopic') // 动态内容页
       }
     ]
   }
   // {
   //   path: '/editor/:editor_type',
   //   name: 'editor',
-  //   component: () => import('@views/Editor/Editor') // 文章编写
+  //   component: () => import('@views/Editor/Editor') // 旧文章编写保留文件
   // }
 ]

@@ -151,6 +151,41 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
 
+  // 内部显示为动态模块
+
+  const dynamic = sequelize.define(
+    require('./models_type/db_dynamic').NAME,
+    require('./models_type/db_dynamic').TABLE,
+    {
+      ...SEQ_PARAMETER,
+      initialAutoIncrement: 10000
+    }
+  )
+
+  const dynamic_topic = sequelize.define(
+    require('./models_type/db_dynamic_topic').NAME,
+    require('./models_type/db_dynamic_topic').TABLE,
+    SEQ_PARAMETER
+  )
+
+  const dynamic_comment = sequelize.define(
+    require('./models_type/db_dynamic_comment').NAME,
+    require('./models_type/db_dynamic_comment').TABLE,
+    SEQ_PARAMETER
+  )
+
+  const dynamic_like = sequelize.define(
+    require('./models_type/db_dynamic_like').NAME,
+    require('./models_type/db_dynamic_like').TABLE,
+    SEQ_PARAMETER
+  )
+
+  const rss_dynamic_topic = sequelize.define(
+    require('./models_type/db_rss_dynamic_topic').NAME,
+    require('./models_type/db_rss_dynamic_topic').TABLE,
+    SEQ_PARAMETER
+  )
+
   const _define = {
     user,
     user_info,
@@ -166,6 +201,11 @@ module.exports = sequelize => {
     article_blog,
     article_like,
     article_comment,
+    dynamic,
+    dynamic_topic,
+    dynamic_comment,
+    dynamic_like,
+    rss_dynamic_topic,
     admin_user,
     admin_role,
     admin_authority,

@@ -60,7 +60,7 @@ module.exports = {
     type: {
       // 类型 0:提问1:文章;2:说说 ）保留字段
       type: Seq.INTEGER(10),
-      comment: '类型 （1:文章;2:提问,3:说说 ）',
+      comment: '类型 （1:文章;2:提问）',
       field: 'type'
     },
     cover_img: {
@@ -102,7 +102,7 @@ module.exports = {
       field: 'article_tag_ids'
     },
     rejection_reason: {
-      /* 文章所属的标签名字 可多个 */
+      /* 驳回，或者文章审核不通过的原因 */
       type: Seq.STRING(160),
       comment: '驳回，或者文章审核不通过的原因',
       field: 'rejection_reason'
