@@ -162,7 +162,6 @@ export default {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background-color: #007fff;
   color: #fff;
   border-radius: 2px;
   border: none;
@@ -175,8 +174,8 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    width: 80px;
-    height: 30px;
+    width: 100%;
+    height: 100%;
     opacity: 0;
     cursor: pointer;
     &:hover {

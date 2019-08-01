@@ -272,6 +272,9 @@ export default {
             font-size: 12px;
           }
         }
+        /deep/.UploadImage {
+          background: #007fff;
+        }
         .button,
         button {
           font-size: 12px;

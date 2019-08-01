@@ -107,19 +107,24 @@ export default [
       },
       {
         //动态 2019.8.1 12:11开发
-        path: 'dynamic',
-        name: 'dynamic',
+        path: 'dynamics',
+        name: 'dynamics',
         component: () => import('@views/Dynamic/index') // 动态首页
       },
       {
         path: 'dynamic/:dynamicId',
-        name: 'dynamicContent',
-        component: () => import('@views/Dynamic/dynamicContent') // 动态内容页
+        name: 'dynamicView',
+        component: () => import('@views/Dynamic/dynamicView') // 动态内容页
       },
       {
-        path: 'dynamic/topic',
+        path: 'dynamic-topic',
         name: 'dynamicTopic',
         component: () => import('@views/Dynamic/dynamicTopic') // 动态内容页
+      },
+      {
+        path: 'dynamic-topic-view/:dynamicTopicId',
+        name: 'dynamicTopicView',
+        component: () => import('@views/Dynamic/dynamicTopicView') // 动态内容页
       }
     ]
   }
