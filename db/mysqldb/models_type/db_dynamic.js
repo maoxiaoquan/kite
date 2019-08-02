@@ -6,13 +6,13 @@ module.exports = {
   NAME: 'dynamic' /* 表名 */,
   TABLE: {
     /* 表结构 */
-    dynamic_id: {
+    id: {
       // 用户ID
       type: Seq.BIGINT(20),
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增
-      comment: 'aid 主键，自增',
-      field: 'aid' //  相应的字段名称
+      comment: 'id 主键，自增',
+      field: 'id' //  相应的字段名称
     },
     uid: {
       // 作者id
@@ -32,6 +32,11 @@ module.exports = {
       comment: '原内容',
       field: 'origin_content'
     },
+    summary: {
+      type: Seq.TEXT('long'),
+      comment: '摘要',
+      field: 'summary'
+    },
     status: {
       // 状态
       type: Seq.INTEGER(10),
@@ -41,13 +46,8 @@ module.exports = {
     type: {
       // 类型1:动态;2:提问
       type: Seq.INTEGER(10),
-      comment: '类型 （1:动态;2:提问 ）',
+      comment: '类型 （1:动态;2:图片,3:连接，4：视频 ）',
       field: 'type'
-    },
-    cover_img: {
-      type: Seq.TEXT('long'),
-      comment: '封面图片',
-      field: 'cover_img'
     },
     like_count: {
       // 喜欢数

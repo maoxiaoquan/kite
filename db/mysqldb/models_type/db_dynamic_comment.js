@@ -21,10 +21,10 @@ module.exports = {
       field: 'parent_id'
     },
     dynamic_id: {
-      // 文章id
+      // 动态id
       type: Seq.BIGINT(20),
-      comment: '文章id',
-      field: 'aid'
+      comment: '动态id',
+      field: 'dynamic_id'
     },
     uid: {
       // 评论用户ID

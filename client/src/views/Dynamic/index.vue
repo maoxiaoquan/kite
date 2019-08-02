@@ -39,7 +39,7 @@
             <dynamic-wtite />
           </div>
           <ul>
-            <li class="item shadow"
+            <li class="dy-item"
                 v-for="item in 10"
                 :key="item">
               <dynamic-item />
@@ -72,14 +72,12 @@ export default {
 #dynamic {
   .aside {
     position: fixed;
-    border-radius: 5px;
-    background-color: #fff;
-    position: fixed;
     top: 90px;
     width: 120px;
     transition: all 0.2s linear;
     padding: 12px 15px;
-    box-shadow: 1px 1px 15px rgba(67, 38, 100, 0.15);
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 16px;
     .nav-list {
       height: 100%;
       display: flex;
@@ -110,6 +108,12 @@ export default {
     padding-left: 145px;
     margin-top: 30px;
     .stream-wrapper {
+      margin-bottom: 8px;
+    }
+    .dy-item {
+      position: relative;
+      background: rgba(0, 0, 0, 0.06);
+      border-radius: 16px;
       margin-bottom: 8px;
     }
   }

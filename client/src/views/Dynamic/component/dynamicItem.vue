@@ -84,8 +84,6 @@ export default {
 
 <style scoped lang="scss">
 .dynamic-item {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  margin-bottom: 8px;
   .dynamic-content-row,
   .dynamic-image-row,
   .dynamic-link-row,
@@ -182,7 +180,6 @@ export default {
       position: relative;
       margin-top: 15px;
       height: 34px;
-      border-top: 1px solid #ebebeb;
     }
     .action {
       flex: 1 1 33.333%;
@@ -202,16 +199,6 @@ export default {
         font-weight: 500;
         color: #8a93a0;
       }
-    }
-    .action:not(:last-child):after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      right: 0;
-      margin-top: -1rem;
-      width: 1px;
-      height: 2rem;
-      background-color: #ebebeb;
     }
   }
 }

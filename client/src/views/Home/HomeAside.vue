@@ -154,10 +154,19 @@ export default {
   }
   .aside-component {
     height: 114px;
-    background: rgba(43, 51, 59, 0.06);
-    border-radius: 12px;
+    // background: rgba(43, 51, 59, 0.06);
+    // border-radius: 12px;
     box-sizing: border-box;
     margin-bottom: 20px;
+
+    background: var(--bg2);
+    // padding: 3rem 2rem;
+    border-radius: 3px;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // position: relative;
+    box-shadow: 0 2px 5px var(--very-subtle);
     h3 {
       font-size: 16px;
       color: #1c1f21;

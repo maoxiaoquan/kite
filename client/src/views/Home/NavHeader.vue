@@ -55,7 +55,6 @@ export default {
               box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.06);*/
   transition: all 0.2s;
   transform: translateZ(0);
-  background-color: #fff;
   &.recommend-collection {
     .nav-item-view {
       position: relative;

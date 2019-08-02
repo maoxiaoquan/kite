@@ -216,7 +216,7 @@ export default {
       height: 60px;
       position: relative;
       &:after {
-        box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.07);
+        border-bottom: 1px solid #f1f1f1;
         display: block;
         position: absolute;
         top: 60px;

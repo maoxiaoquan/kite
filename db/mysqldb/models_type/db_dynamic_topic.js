@@ -6,36 +6,36 @@ module.exports = {
   NAME: 'dynamic_topic' /* 表名 */,
   TABLE: {
     /* 表结构 */
-    topic_id: {
+    id: {
       // ID
       type: Seq.BIGINT(20),
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增
-      comment: 'topic_id',
-      field: 'topic_id'
+      comment: 'id',
+      field: 'id'
     },
     name: {
-      // 标签名字
+      // 话题名字
       type: Seq.STRING(50),
-      comment: '标签名字',
+      comment: '话题名字',
       field: 'name'
     },
     en_name: {
-      // 标签英文名字
+      // 话题英文名字
       type: Seq.STRING(100),
-      comment: '标签英文名字',
+      comment: '话题英文名字',
       field: 'en_name'
     },
     icon: {
-      // 标签图标地址
+      // 话题图标地址
       type: Seq.STRING(200),
-      comment: '标签图标地址',
+      comment: '话题图标地址',
       field: 'icon'
     },
     description: {
-      // 标签描述
+      // 话题描述
       type: Seq.STRING(100),
-      comment: '标签描述',
+      comment: '话题描述',
       field: 'description'
     },
     rss_count: {

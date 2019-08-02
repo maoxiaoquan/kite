@@ -156,32 +156,8 @@ export default {
   .main-top {
     width: 100%;
     padding: 15px 20px;
-    background: #fff;
     margin-bottom: 15px;
     box-shadow: 0 1px 3px rgba(27, 95, 160, 0.1);
-    .main-top-img {
-      width: 50px;
-      height: 50px;
-      margin-right: 15px;
-      border-radius: 10px;
-      float: left;
-      overflow: hidden;
-      .column-img-icon {
-        width: 100%;
-        height: 50px;
-        background-color: #fff;
-        background-position: 50%;
-        background-repeat: no-repeat;
-        background-size: contain;
-      }
-      .column-font-icon {
-        text-align: center;
-        line-height: 50px;
-        i {
-          font-size: 28px;
-        }
-      }
-    }
     .main-top-view {
       padding-left: 70px;
       > h3 {
@@ -195,7 +171,6 @@ export default {
   }
   .layout-content {
     position: relative;
-    background: #fff;
     border-radius: 2px;
     .article-view {
       /deep/ .article-item {

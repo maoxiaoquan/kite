@@ -21,10 +21,10 @@ module.exports = {
       field: 'uid'
     },
     dynamic_id: {
-      // 文章id
+      // 动态的dynamic_id
       type: Seq.BIGINT(20),
-      comment: '文章id',
-      field: 'aid'
+      comment: '动态的dynamic_id',
+      field: 'dynamic_id'
     },
     ...time.create_date
   }

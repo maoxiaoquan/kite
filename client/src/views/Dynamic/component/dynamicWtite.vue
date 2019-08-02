@@ -63,17 +63,16 @@ export default {
 
 <style scoped lang="scss">
 .dynamic-editor {
-  border-radius: 3px;
   position: relative;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
   .editor-body {
     padding: 15px 20px 0;
     position: relative;
     border-radius: 2px;
     .content {
       position: relative;
-      border-radius: 2px;
-      border: 1px solid hsla(0, 0%, 59.2%, 0.2);
+      border-radius: 16px;
       background-color: rgba(226, 230, 235, 0.2);
       .editor {
         position: relative;
