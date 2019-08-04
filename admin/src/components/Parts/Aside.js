@@ -48,6 +48,18 @@ class Aside extends Component {
         ]
       },
       {
+        title: '动态管理',
+        key: 'dynamic',
+        icon: 'file-text',
+        children: [
+          {
+            title: '动态话题',
+            key: 'dynamicTopic',
+            link: '/manager/dynamic_topic'
+          }
+        ]
+      },
+      {
         title: '用户管理',
         key: 'user_manger',
         icon: 'user',

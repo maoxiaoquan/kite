@@ -64,8 +64,6 @@ export default {
 <style scoped lang="scss">
 .dynamic-editor {
   position: relative;
-  background: rgba(0, 0, 0, 0.06);
-  border-radius: 16px;
   .editor-body {
     padding: 15px 20px 0;
     position: relative;

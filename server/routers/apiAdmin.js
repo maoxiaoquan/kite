@@ -15,7 +15,7 @@ const adminIndex = require('../controllers/admin/adminIndex') // 登录tokens
 const tokens = require('../utils/tokens') // 登录tokens
 const options = require('../controllers/admin/options') // options 可增加选项栏
 const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
-
+const dynamicTopic = require('../controllers/admin/dynamicTopic') // 动态专题
 // 此文件所有接口都是后台管理员操作前后台数据所用
 
 /* 前台用户 */
@@ -494,6 +494,43 @@ router.post(
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
   options.deleteOptions
+)
+
+/* 动态话题管理 */
+/* 获取所有话题 */
+router.get(
+  '/dynamic-topic/all',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  dynamicTopic.getDynamicTopicAll
+)
+/* 根据分页获取话题 */
+router.get(
+  '/dynamic-topic/list',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  dynamicTopic.getDynamicTopicList
+)
+/* 文章创建话题 */
+router.post(
+  '/dynamic-topic/create',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  dynamicTopic.createDynamicTopic
+)
+/* 文章更新话题 */
+router.post(
+  '/dynamic-topic/update',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  dynamicTopic.updateDynamicTopic
+)
+/* 文章删除话题 */
+router.post(
+  '/dynamic-topic/delete',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  dynamicTopic.deleteDynamicTopic
 )
 
 module.exports = router

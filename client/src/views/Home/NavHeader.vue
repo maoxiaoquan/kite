@@ -60,22 +60,26 @@ export default {
       position: relative;
       .nav-item {
         display: inline-block;
-        border: 1px solid #e0e0e0;
-        font-size: 14px;
-        cursor: pointer;
-        border-radius: 20px;
-        margin-right: 10px;
-        margin-bottom: 10px;
         a,
         span {
           display: block;
-          padding: 3px 15px;
+          font-size: 13px;
+          color: rgba(0, 0, 0, 0.56);
+          text-align: center;
+          padding: 3px 12px;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          border-radius: 14px;
+          margin-right: 10px;
+          margin-bottom: 10px;
+          cursor: pointer;
+          transition: all 0.3s ease;
         }
         &.active {
-          border-color: #ea6f5a;
-          color: #ea6f5a;
-          a {
-            color: #ea6f5a;
+          a,
+          span {
+            background: #f46300;
+            border-color: #f46300;
+            color: #fff;
           }
         }
       }

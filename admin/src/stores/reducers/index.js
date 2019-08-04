@@ -17,6 +17,7 @@ import stateAdminRole from '../../containers/AdminRole/reducer/AdminRoleReducers
 import stateAdminAuthority from '../../containers/AdminAuthority/reducer/AdminAuthorityReducer'
 import stateAdminSystemLog from '../../containers/AdminSystemLog/reducer/AdminSystemLogReducer'
 import stateWebsiteConfig from '../../containers/WebsiteConfig/reducer/WebsiteConfigReducer'
+import stateDynamicTopic from '../../containers/DynamicTopic/reducer/DynamicTopicReducer'
 
 const rootReducer = {
   stateTitle,
@@ -37,7 +38,8 @@ const rootReducer = {
   stateAdminAuthority,
   stateAdminSystemLog,
   stateSystemConfig,
-  stateWebsiteConfig
+  stateWebsiteConfig,
+  stateDynamicTopic
 }
 
 export default rootReducer

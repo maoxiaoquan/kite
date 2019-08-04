@@ -8,6 +8,8 @@ const dfUserRoleList = require('../../libs/dfUserRoleList')
 
 const dfArticleColumnList = require('../../libs/dfArticleColumnList')
 const dfArticleTagList = require('../../libs/dfArticleTagList')
+const dfDynamicTopicList = require('../../libs/dfDynamicTopicList')
+
 const {
   checkUserName,
   checkPwd,
@@ -231,6 +233,7 @@ class Init {
       await models.user_role.bulkCreate(dfUserRoleList)
       await models.article_tag.bulkCreate(dfArticleTagList)
       await models.article_column.bulkCreate(dfArticleColumnList)
+      await models.dynamic_topic.bulkCreate(dfDynamicTopicList)
 
       await models.admin_user.create({
         // 创建默认超管角色

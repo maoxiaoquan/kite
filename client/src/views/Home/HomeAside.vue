@@ -11,16 +11,19 @@
     </div>
 
     <div class="aside-component">
-      <h3>写下你想说的</h3>
+      <h3 class="title">写下你想说的</h3>
       <div class="issue-btn">
+        <a href="/daily_recommend"
+           class="btn-dynamic js-publish-btn">
+          <i class="el-icon-chat-line-round"></i>
+          发说说
+        </a>
         <a href="javascript:;"
            @click="switchRouter"
            class="btn-note"
            id="js-btn-note">
-          <i class="iconfont icon-xiezuo"></i>写文章
+          <i class="el-icon-edit"></i>写文章
         </a>
-        <!--<span class="middle-line"></span>
-                <a href="/daily_recommend" class="btn-dynamic js-publish-btn">发说说</a>-->
       </div>
     </div>
 
@@ -153,72 +156,67 @@ export default {
     }
   }
   .aside-component {
-    height: 114px;
-    // background: rgba(43, 51, 59, 0.06);
-    // border-radius: 12px;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-
-    background: var(--bg2);
-    // padding: 3rem 2rem;
-    border-radius: 3px;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
-    // position: relative;
-    box-shadow: 0 2px 5px var(--very-subtle);
-    h3 {
+    margin-bottom: 24px;
+    background: #f8f8f8;
+    padding: 24px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    .title {
       font-size: 16px;
-      color: #1c1f21;
-      line-height: 24px;
-      text-align: center;
+      line-height: 28px;
+      color: rgba(0, 0, 0, 0.88);
       font-weight: 700;
-      padding-top: 24px;
-      margin-bottom: 8px;
+      margin-bottom: 16px;
+      position: relative;
+      padding-left: 12px;
+      &::before {
+        content: "";
+        width: 4px;
+        height: 20px;
+        position: absolute;
+        top: 4px;
+        left: 0;
+        border-radius: 2px;
+        background: #ffd600;
+      }
     }
     .issue-btn {
-      width: 80%;
-      height: 38px;
-      line-height: 38px;
-      margin: 0 auto;
-      background: #f53d3d;
-      border-radius: 24px;
       a {
         font-size: 15px;
         width: 100%;
-        /*width: 45%;*/
         text-align: center;
-        display: inline-block;
+        display: block;
         cursor: pointer;
+        padding: 6px 0;
         color: #ffffff;
+        margin-bottom: 10px;
+        border-radius: 5px;
         i {
           margin-right: 10px;
         }
       }
-      .btn-dynamic,
-      .btn-note {
-        border-radius: 24px;
-        transition: all 0.3s;
-        -moz-transition: all 0.3s;
-        -webkit-transition: all 0.3s;
-        -o-transition: all 0.3s;
+      .btn-dynamic {
+        color: #db5000;
+        border: 1px solid rgba(219, 80, 0, 0.7);
       }
-      .middle-line {
-        width: 2px;
-        height: 16px;
-        background-color: rgba(255, 255, 255, 0.4);
-        display: inline-block;
-        margin-top: 10px;
+      .btn-note {
+        color: rgba(0, 0, 0, 0.88);
+        background: #ffd600;
+        border: 1px solid #ffd600;
       }
     }
   }
 
   .hot-tags-for-sidebar {
-    margin-top: 60px;
+    margin-bottom: 24px;
+    background: #f8f8f8;
+    padding: 24px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
     .hot-tags-header {
       position: relative;
       padding-bottom: 13px;
-      border-bottom: 1px solid #ededed;
+      // border-bottom: 1px solid #ededed;
       width: 100%;
       display: -webkit-box;
       display: -ms-flexbox;
@@ -228,6 +226,16 @@ export default {
       align-items: center;
       line-height: 1;
       margin-bottom: 15px;
+      padding-left: 12px;
+      &::before {
+        content: "";
+        width: 4px;
+        height: 20px;
+        position: absolute;
+        left: 0;
+        border-radius: 2px;
+        background: #ffd600;
+      }
       span.hot-tags-header-title {
         font-weight: bold;
         font-size: 16px;
@@ -240,7 +248,7 @@ export default {
           height: 1px;
           width: 64px;
           background: #2d2d2f;
-          content: "";
+          // content: "";
         }
       }
       .hot-tags-more {
@@ -250,16 +258,18 @@ export default {
       }
     }
     ul.hot-sidebar-items li {
-      border: 1px solid #f5f5f5;
-      border-radius: 2px;
-      height: 32px;
-      margin-right: 8px;
-      margin-bottom: 8px;
-      padding: 5px 10px;
-      line-height: 22px;
       display: inline-block;
       a {
-        padding: 0px;
+        border: 1px solid #f5f5f5;
+        border-radius: 17px;
+        height: 32px;
+        margin-right: 8px;
+        color: #888;
+        margin-bottom: 8px;
+        padding: 5px 10px;
+        background: rgba(0, 0, 0, 0.03);
+        line-height: 22px;
+        display: block;
         font-size: 14px;
       }
     }

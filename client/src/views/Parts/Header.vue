@@ -106,7 +106,7 @@
                 <li class="nav-item"
                     @click="show_register"
                     v-if="website.config.on_register==='yes'">
-                  <a class="btn btn-danger btn-sm sign-btn btn-outline-warning"
+                  <a class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
                      href="javascript:;">注册</a>
                 </li>
               </template>
@@ -282,6 +282,9 @@ export default {
             a {
               padding: 20px 15px;
               display: block;
+              font-size: 15px;
+              font-weight: bold;
+              color: rgba(0, 0, 0, 0.56);
             }
             i {
               display: inline-block;
@@ -289,7 +292,7 @@ export default {
               font-weight: bold;
             }
             a.current-active {
-              color: #df5858;
+              color: rgba(0, 0, 0, 0.88);
             }
             &.search {
               margin-right: 30px;
@@ -341,6 +344,10 @@ export default {
             .btn-outline-warning {
               border-radius: 20px;
               padding: 5px 20px;
+            }
+            .sign-btn {
+              font-weight: bold;
+              font-size: 14px;
             }
             .unread-message-count {
               padding: 0 3px;

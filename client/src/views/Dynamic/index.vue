@@ -20,14 +20,15 @@
           </ul>
           <ul class="nav-list">
             <li class="nav-item"
-                v-for="(item,key) in 5"
+                v-for="(item,key) in dynamic.dynamicTopicIndex"
                 :key="key">
-              <router-link :to="{name:'dynamics',params:{dynamicTopicId:'5c09ea2b092dcb42c740fe73'+item}}"
-                           class="nav-link">开源推荐</router-link>
+              <router-link :to="{name:'dynamics',params:{dynamicTopicId:item.topic_id}}"
+                           class="nav-link">{{item.name}}</router-link>
             </li>
-            <li class="nav-item">
+            <li class="nav-item more">
               <router-link :to="{name:'dynamicTopic'}">
-                更多
+                <i class="el-icon-star-off"></i>
+                <span>更多</span>
               </router-link>
             </li>
           </ul>
@@ -58,8 +59,26 @@
 import dynamicItem from './component/dynamicItem'
 import dynamicWtite from './component/dynamicWtite'
 import dynamicAside from './component/dynamicAside'
+import { mapState } from "vuex";
 export default {
   name: 'dynamic',
+  metaInfo () {
+    return {
+      title: `千言-${this.website.meta.website_name}`,
+      htmlAttrs: {
+        lang: "zh"
+      }
+    };
+  },
+  async asyncData ({ store, route, accessToken = "" }) {
+    // 触发 action 后，会返回 Promise
+    return Promise.all([
+      store.dispatch("dynamic/GET_DYNAMIC_TOPIC_INDEX"), // 重置文章列表数据
+    ]);
+  },
+  computed: {
+    ...mapState(["home", "dynamic", "website"]) // home:主页  article_column:文章的专栏
+  },
   components: {
     dynamicItem,
     dynamicWtite,
@@ -72,48 +91,62 @@ export default {
 #dynamic {
   .aside {
     position: fixed;
-    top: 90px;
-    width: 120px;
-    transition: all 0.2s linear;
-    padding: 12px 15px;
-    background: rgba(0, 0, 0, 0.06);
-    border-radius: 16px;
+    top: 89px;
+    width: 110px;
+    padding: 12px 10px;
+    background: #fff;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0px 3px rgba(67, 38, 100, 0.15);
     .nav-list {
       height: 100%;
       display: flex;
       flex-direction: column;
-      border-bottom: 1px solid rgba(92, 96, 102, 0.1);
       .nav-item {
         a {
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 14px;
-          color: #2e3135;
-          padding: 6px 10px;
-          border-radius: 5px;
+          margin-bottom: 5px;
+          padding: 3px 10px;
+          border-radius: 15px;
+          color: #666;
           transition: background-color 0.2s, color 0.2s;
         }
         .current-active {
-          background: #007fff;
-          color: #fff;
+          color: rgba(0, 0, 0, 0.88);
+          background: #ffd600;
+          border-color: #ffd600;
         }
       }
       &:last-child {
         border-bottom: none;
       }
     }
+    .more {
+      i {
+        display: inline-block;
+        margin-right: 5px;
+        margin-top: -2px;
+        vertical-align: top;
+      }
+    }
   }
   .dynamic-main {
-    padding-left: 145px;
-    margin-top: 30px;
+    padding-left: 135px;
+    margin-top: 25px;
     .stream-wrapper {
       margin-bottom: 8px;
+      .dynamic-editor {
+        box-shadow: 0 0px 3px rgba(67, 38, 100, 0.15);
+        border-radius: 3px;
+      }
     }
     .dy-item {
       position: relative;
-      background: rgba(0, 0, 0, 0.06);
-      border-radius: 16px;
+      box-shadow: 0 0px 3px rgba(67, 38, 100, 0.15);
+      border-radius: 3px;
       margin-bottom: 8px;
     }
   }

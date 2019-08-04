@@ -21,7 +21,7 @@ module.exports = {
     },
     topic_id: {
       // 话题ID
-      type: Seq.STRING(20),
+      type: Seq.STRING(100),
       comment: 'id 主键，自增',
       field: 'topic_id'
     }

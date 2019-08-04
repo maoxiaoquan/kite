@@ -9,6 +9,8 @@ import comment from './comment'
 import setting from './setting'
 import search from './search'
 import website from './website'
+import dynamic from './dynamic'
+
 export default {
   sign,
   home,
@@ -20,5 +22,6 @@ export default {
   comment,
   setting,
   search,
-  website
+  website,
+  dynamic
 }

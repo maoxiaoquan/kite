@@ -18,6 +18,9 @@ module.exports = {
   ARTICLE_TAG: {
     dfOfficialExclusive: 'dfOfficialExclusive'
   },
+  DYNAMIC: {
+    dfOfficialTopic: 'officialTopic'
+  },
   SUPER_ROLE_ID: '1000000', // 排除超管，超管无视所有，拥有最高权限 role = 1000000 为超管
   default_avatar: KiteConfig.server.default_avatar, // 所有使用的默认头像
   database: {

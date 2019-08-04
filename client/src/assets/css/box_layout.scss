@@ -110,7 +110,7 @@ body {
   line-height: 1.5;
   color: #212529;
   text-align: left;
-  background-color: var(--bg2);
+  // background-color: var(--bg2);
 }
 
 [tabindex='-1']:focus {
@@ -1582,6 +1582,12 @@ fieldset:disabled a.btn {
   color: #212529;
   background-color: #e0a800;
   border-color: #d39e00;
+}
+
+.s-btn--primary {
+  color: rgba(0, 0, 0, 0.88);
+  background: #ffd600;
+  border-color: #ffd600;
 }
 
 .btn-warning:focus,

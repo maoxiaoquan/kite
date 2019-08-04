@@ -10,7 +10,7 @@ const upload = require('../controllers/client/upload') // 上传
 const website = require('../controllers/client/website') // 上传
 const tokens = require('../utils/tokens') // 登录tokens
 const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
-
+const dynamic = require('../controllers/client/dynamic') // 动态
 /**
  * 获取标签列表操作
  * @param   {String} TYPE 当前router 作用类型 AJAX:ajax传递数据 RENDER:render渲染页面或者 post form提交数据
@@ -210,5 +210,9 @@ router.post(
  */
 
 router.get('/website/info', website.getWebsiteInfo) // 网站配置相关信息 TYPE:AJAX get
+
+router.get('/dynamic-topic/index', dynamic.dynamicTopicIndex) // 获取首页专题 TYPE:AJAX post
+
+router.get('/dynamic-topic/list', dynamic.dynamicTopicList) // 获取专题页专题
 
 module.exports = router

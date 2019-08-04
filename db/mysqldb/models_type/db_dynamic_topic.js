@@ -1,7 +1,7 @@
 const Seq = require('sequelize')
 const shortid = require('shortid')
 const time = require('../time')
-
+const { uuid } = require('../../../server/utils')
 module.exports = {
   NAME: 'dynamic_topic' /* 表名 */,
   TABLE: {
@@ -13,6 +13,15 @@ module.exports = {
       autoIncrement: true, // 自动递增
       comment: 'id',
       field: 'id'
+    },
+    topic_id: {
+      // 话题名字
+      type: Seq.STRING(100),
+      defaultValue: () => {
+        return uuid(24)
+      },
+      comment: 'topic_id',
+      field: 'topic_id'
     },
     name: {
       // 话题名字

@@ -1,6 +1,7 @@
 <template>
   <aside class="dynamic-aside">
-    <div class="profile-box shadow">
+    <div class="profile-box"
+         v-if="personalInfo.islogin">
       <div class="profile">
         <a>
           <el-image class="avatar"
@@ -27,7 +28,7 @@
       </ul>
     </div>
 
-    <div class="related-dynamic-block dynamic-block shadow">
+    <div class="related-dynamic-block dynamic-block">
       <header class="title">推荐沸点</header>
       <ul class="dynamic-list"
           v-for="x in 3">
@@ -36,8 +37,7 @@
                        :to='{name:"dynamicView",params:{dynamicId:1}}'>
             <div class="content-box">
               <div class="content">掘金文章评论 点赞 会下大拇指雨 hhh 有点意思</div>
-              <div class="stat item"
-                   style="margin-top: 0.83rem;"><span>210 赞 · </span><span>84 评论</span></div>
+              <div class="stat item"><span>210 赞 · </span><span>84 评论</span></div>
             </div>
 
           </router-link>
@@ -45,10 +45,12 @@
       </ul>
     </div>
 
-    <div class="topic-sidebar shadow topics shadow">
-      <div class="title"><span>关注的话题</span><a href="/topics"
-           target="_blank"
-           rel="">全部<i class="icon ion-chevron-right"></i></a></div>
+    <div class="topic-sidebar shadow topics">
+      <div class="title"><span>关注的话题</span>
+        <router-link :to="{name:'dynamicTopic'}">
+          <span>全部</span>
+        </router-link>
+      </div>
       <div class="content">
         <ul class="topic-list topic_list">
           <li>
@@ -68,8 +70,18 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
+  name: 'dynamicAside',
+  async asyncData ({ store, route, accessToken = "" }) {
+    // 触发 action 后，会返回 Promise
+    return Promise.all([
 
+    ]);
+  },
+  computed: {
+    ...mapState(["personalInfo", "dynamic", "website"]) // home:主页  article_column:文章的专栏
+  }
 }
 </script>
 
@@ -77,8 +89,8 @@ export default {
 .profile-box {
   display: flex;
   flex-direction: column;
-  background-color: #fff;
-  border-radius: 0.2rem;
+  background: #f8f8f8;
+  border-radius: 4px;
   margin-bottom: 8px;
   font-size: 13px;
   .profile {
@@ -94,7 +106,6 @@ export default {
       height: 60px;
       border-radius: 50%;
       border: 1px solid #fff;
-      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
     }
     .user-info {
       position: relative;
@@ -140,16 +151,28 @@ export default {
 }
 
 .related-dynamic-block {
+  background: #f8f8f8;
+  padding: 24px;
   .title {
-    color: #2e3135;
-    font-weight: 600;
-    font-size: 13px;
-    line-height: 15px;
-    padding: 13px 16px;
-    border-bottom: 1px solid hsla(0, 0%, 59.2%, 0.1);
+    font-size: 16px;
+    line-height: 28px;
+    color: rgba(0, 0, 0, 0.88);
+    font-weight: 700;
+    margin-bottom: 16px;
+    position: relative;
+    padding-left: 12px;
+    &:before {
+      content: "";
+      width: 4px;
+      height: 20px;
+      position: absolute;
+      top: 4px;
+      left: 0;
+      border-radius: 2px;
+      background: #ffd600;
+    }
   }
   .dynamic-list {
-    padding: 0 16px;
     .item {
       padding: 12px 0;
     }
@@ -182,18 +205,31 @@ export default {
   }
 }
 
-.topic-sidebar .content {
-  padding: 0 15px 6px;
-}
 .topic-sidebar {
+  background: #f8f8f8;
+  padding: 24px;
   .title {
-    padding: 10px 13px;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid hsla(0, 0%, 59.2%, 0.1);
+    font-size: 16px;
+    line-height: 28px;
+    color: rgba(0, 0, 0, 0.88);
+    font-weight: 700;
+    margin-bottom: 16px;
+    position: relative;
+    padding-left: 12px;
+    &:before {
+      content: "";
+      width: 4px;
+      height: 20px;
+      position: absolute;
+      top: 4px;
+      left: 0;
+      border-radius: 2px;
+      background: #ffd600;
+    }
     a {
       color: #007fff;
       font-size: 13px;
+      float: right;
     }
   }
   .topic-list {

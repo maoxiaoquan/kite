@@ -26,18 +26,19 @@
       <div class="dynamic-main-title">全部话题</div>
       <div class="row">
         <div class="col-xs-12 col-sm-4 col-md-4"
-             v-for="x in 30">
+             v-for="(item,key) in dynamic.dynamicTopicIndex"
+             :key="key">
           <div class="topic-item">
             <router-link class="icon"
-                         :to='{name:"dynamicTopicView",params:{dynamicTopicId:1}}'>
+                         :to='{name:"dynamicTopicView",params:{dynamicTopicId:item.topic_id}}'>
               <el-image class="avatar"
                         size="size"
-                        src="circleUrl">
+                        :src="item.icon">
               </el-image>
             </router-link>
             <div class="content">
-              <a title="能用图，就不要用字。">一图胜千言</a>
-              <span>4582 关注 · 3367 沸点</span>
+              <a title="能用图，就不要用字。">{{item.name}}</a>
+              <span>{{item.rss_count}} 关注 · 3367 沸点</span>
               <span class="subscribe">已关注</span>
             </div>
           </div>
@@ -48,8 +49,26 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: 'dynamicTopic',
+  metaInfo () {
+    return {
+      title: `话题-${this.website.meta.website_name}`,
+      htmlAttrs: {
+        lang: "zh"
+      }
+    };
+  },
+  async asyncData ({ store, route, accessToken = "" }) {
+    // 触发 action 后，会返回 Promise
+    return Promise.all([
+      store.dispatch("dynamic/GET_DYNAMIC_TOPIC_LIST"), // 重置文章列表数据
+    ]);
+  },
+  computed: {
+    ...mapState(["home", "dynamic", "website"]) // home:主页  article_column:文章的专栏
+  },
 }
 </script>
 
