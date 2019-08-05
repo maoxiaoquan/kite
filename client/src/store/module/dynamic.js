@@ -18,7 +18,16 @@ const mutations = {
 }
 
 const actions = {
-  CREATE_DYNAMIC ({ commit, dispatch, state }, parameter) {},
+  CREATE_DYNAMIC ({ commit, dispatch, state }, parameter) {
+    // 创建动态
+    return fetch({
+      url: '/dynamic/create',
+      method: 'post',
+      parameter: { params: parameter }
+    }).then(result => {
+      return result
+    })
+  },
   GET_DYNAMIC_TOPIC_INDEX ({ commit, dispatch, state }, parameter) {
     // 获取首页侧栏导航话题
     return fetch({

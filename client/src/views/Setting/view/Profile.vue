@@ -20,7 +20,8 @@
                   ({{formData.avatar_review_status===1?'新头像正在审核中，审核通过则显示，否则将换回原头像':'头像审核失败，请重新上传'}})
                 </span>
               </div>
-              <UploadImage @changeUpload="changeAvatar" />
+              <UploadImage class="upload-image"
+                           @changeUpload="changeAvatar" />
             </div>
           </div>
 
@@ -315,6 +316,12 @@ export default {
         outline: none;
         transition: background-color 0.3s, color 0.3s;
         cursor: pointer;
+      }
+      .upload-image {
+        border-radius: 2px;
+        border: none;
+        display: inline-block;
+        padding: 6px 15px;
       }
       .button-save {
         padding: 8px 30px;

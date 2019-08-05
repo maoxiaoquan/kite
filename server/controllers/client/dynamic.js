@@ -58,9 +58,6 @@ class dynamic {
         }
       }
 
-      const result = reqData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
-      let $ = cheerio.load(reqData.content)
-
       let userRoleALL = await models.user_role.findAll({
         where: {
           user_role_id: {
@@ -81,18 +78,14 @@ class dynamic {
         ? 4
         : 1
 
-      await models.article.create({
+      await models.dynamic.create({
         uid: user.uid,
-        title: xss(reqData.title),
-        excerpt: getSubStr(getNoMarkupStr($.text())) /* 摘记 */,
         content: xss(reqData.content) /* 主内容 */,
         origin_content: reqData.origin_content /* 源内容 */,
-        source: reqData.source, // 来源 （1原创 2转载）
-        cover_img: result ? result[2] : '',
-        status, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败;4:回收站;5:已删除;6:无需审核)'
-        type: reqData.type, // 类型 （1文章 2说说 3视频 4公告 ）
-        user_blog_ids: reqData.user_blog_ids,
-        article_tag_ids: reqData.article_tag_ids
+        attach: reqData.attach, // 摘要
+        status, // '状态(1:审核中;2:审核通过;3:审核失败;4：无需审核)'
+        type: reqData.type, // 类型 （1:默认动态;2:图片,3:连接，4：视频  ）
+        topic_ids: reqData.topic_ids
       })
 
       resClientJson(ctx, {

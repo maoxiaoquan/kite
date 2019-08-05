@@ -163,10 +163,8 @@ export default {
   -moz-appearance: none;
   appearance: none;
   color: #fff;
-  border-radius: 2px;
   border: none;
   display: inline-block;
-  padding: 6px 15px;
   outline: none;
   transition: background-color 0.3s, color 0.3s;
   cursor: pointer;
@@ -176,6 +174,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
+    font-size: 0;
     opacity: 0;
     cursor: pointer;
     &:hover {
