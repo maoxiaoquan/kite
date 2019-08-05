@@ -47,13 +47,11 @@ async function forcedUpgrade() {
     console.log('升级进行中,请勿关闭当前程序...')
     for (let i = 1; i <= versionIndex; i++) {
       console.log(
-        `解析升级文件:./version/${
-          versionHistory.list[currentVersionIndex + i]
-        }.js`
+        `解析升级文件:./version/${versionHistory.list[currentVersionIndex + i]}`
       )
       await require(`./version/${
         versionHistory.list[currentVersionIndex + i]
-      }.js`).update()
+      }`).update()
       if (versionIndex === i) {
         console.log('恭喜您，版本升级完成，程序自动关闭')
         process.exit()

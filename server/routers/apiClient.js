@@ -190,7 +190,7 @@ router.get(
  * 文章评论相关
  */
 
-router.get('/article/comment-list', comment.getArticleComment) // 获取用户发表的评论 TYPE:AJAX get
+router.get('/article/comment-list', comment.getArticleComment) // 获取用户发表的评论列表 TYPE:AJAX get
 
 router.post(
   '/article/comment-create',
@@ -208,6 +208,13 @@ router.post(
 /**
  * 网站配置相关信息
  */
+
+router.post(
+  '/dynamic/create',
+  tokens.ClientVerifyToken,
+  verifyAuthority.ClientCheck,
+  dynamic.createDynamic
+) // 创建动态
 
 router.get('/website/info', website.getWebsiteInfo) // 网站配置相关信息 TYPE:AJAX get
 

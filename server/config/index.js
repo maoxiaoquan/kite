@@ -9,17 +9,19 @@ module.exports = {
   USER_ROLE: {
     dfId: 'ordinary_role_100000', // 用户默认角色id
     dfLegalizeId: 'commission_100000', // 定制角色，认证作者ID
-    management_team: 'management_team'
+    dfManagementTeam: 'management_team'
   },
   USER_AUTHORITY: {
-    dfArticleNoReviewId: 'no_review_article', // 无需核文章的权限id
-    comment_review_authority_id: 'no_review_comment' // 无需审核评论的权限id
+    dfNoReviewId: 'no_review_article', // 发布文章无需审核的权限id
+    dfNoReviewCommentId: 'no_review_comment', // 无需审核评论的权限id
+    dfNoReviewDynamicId: 'dfNoReviewDynamicId', // 无需审核动态的权限id
+    dfNoReviewDynamicCommentId: 'dfNoReviewDynamicCommentId' // 无需审核动态评论的权限id
   },
   ARTICLE_TAG: {
-    dfOfficialExclusive: 'dfOfficialExclusive'
+    dfOfficialExclusive: 'dfOfficialExclusive' // 默认只能由官方使用的文章标签
   },
   DYNAMIC: {
-    dfOfficialTopic: 'officialTopic'
+    dfOfficialTopic: 'dfOfficialTopic' // 默认只能由官方使用的动态话题
   },
   SUPER_ROLE_ID: '1000000', // 排除超管，超管无视所有，拥有最高权限 role = 1000000 为超管
   default_avatar: KiteConfig.server.default_avatar, // 所有使用的默认头像

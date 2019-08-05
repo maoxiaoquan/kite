@@ -1,20 +1,12 @@
 const models = require('../../../db/mysqldb/index')
-const {
-  checkEmail,
-  checkPhoneNum,
-  checkUrl,
-  checkPwd
-} = require('../../utils/validators')
 const moment = require('moment')
 const { resClientJson } = require('../../utils/resData')
-const { sendVerifyCodeMail } = require('../../utils/sendEmail')
-const { random_number, tools } = require('../../utils/index')
-const config = require('../../config')
 const Op = require('sequelize').Op
-const tokens = require('../../utils/tokens')
-const { queryUserVerifyCode } = require('../../sql/query')
-const { lowdb } = require('../../../db/lowdb/index')
+const cheerio = require('cheerio')
 const clientWhere = require('../../utils/clientWhere')
+const xss = require('xss')
+const config = require('../../config')
+const { lowdb } = require('../../../db/lowdb/index')
 
 function ErrorMessage (message) {
   this.message = message
@@ -47,21 +39,21 @@ class dynamic {
         )
       }
 
-      let oneArticleTag = await models.article_tag.findOne({
+      let oneDynamicTopic = await models.dynamic_topic.findOne({
         where: {
-          article_tag_id: config.ARTICLE_TAG.dfOfficialExclusive
+          topic_id: config.ARTICLE_TAG.dfNoReviewDynamicId
         }
       })
       const website = lowdb
         .read()
         .get('website')
         .value()
-      if (
-        ~reqData.article_tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)
-      ) {
-        if (!~user.user_role_ids.indexOf(config.USER_ROLE.management_team)) {
+      if (~reqData.topic_id.indexOf(config.ARTICLE_TAG.dfNoReviewDynamicId)) {
+        // 判断使用的是否是官方才能使用的动态话题
+        if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
+          // 是的话再判断是否有权限，否则就弹出提示
           throw new ErrorMessage(
-            `${oneArticleTag.article_tag_name}只有${website.website_name}管理团队才能发布文章`
+            `${oneDynamicTopic.name}只有${website.website_name}管理团队才能发布文章`
           )
         }
       }
@@ -84,9 +76,9 @@ class dynamic {
       })
 
       let status = ~userAuthorityIds.indexOf(
-        config.USER_AUTHORITY.dfArticleNoReviewId
-      )
-        ? 6
+        config.USER_AUTHORITY.dfNoReviewDynamicId
+      ) // 4无需审核， 1审核中
+        ? 4
         : 1
 
       await models.article.create({

@@ -148,7 +148,7 @@ class Comment {
         userAuthorityIds += roleItem.user_authority_ids + ','
       })
       let status = ~userAuthorityIds.indexOf(
-        config.USER_AUTHORITY.comment_review_authority_id
+        config.USER_AUTHORITY.dfNoReviewCommentId
       )
         ? 5
         : 1

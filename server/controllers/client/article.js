@@ -111,7 +111,7 @@ class Article {
       if (
         ~reqData.article_tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)
       ) {
-        if (!~user.user_role_ids.indexOf(config.USER_ROLE.management_team)) {
+        if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
             `${oneArticleTag.article_tag_name}只有${website.website_name}管理团队才能发布文章`
           )
@@ -135,9 +135,7 @@ class Article {
         userAuthorityIds += roleItem.user_authority_ids + ','
       })
 
-      let status = ~userAuthorityIds.indexOf(
-        config.USER_AUTHORITY.dfArticleNoReviewId
-      )
+      let status = ~userAuthorityIds.indexOf(config.USER_AUTHORITY.dfNoReviewId)
         ? 6
         : 1
 
@@ -522,7 +520,7 @@ class Article {
       if (
         ~reqData.article_tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)
       ) {
-        if (!~user.user_role_ids.indexOf(config.USER_ROLE.management_team)) {
+        if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
             `${oneArticleTag.article_tag_name}只有${website.website_name}管理团队才能更新文章`
           )
@@ -546,9 +544,7 @@ class Article {
         userAuthorityIds += roleItem.user_authority_ids + ','
       })
 
-      let status = ~userAuthorityIds.indexOf(
-        config.USER_AUTHORITY.dfArticleNoReviewId
-      )
+      let status = ~userAuthorityIds.indexOf(config.USER_AUTHORITY.dfNoReviewId)
         ? 6
         : 1
 
