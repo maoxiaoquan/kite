@@ -20,8 +20,8 @@
                   ({{formData.avatar_review_status===1?'新头像正在审核中，审核通过则显示，否则将换回原头像':'头像审核失败，请重新上传'}})
                 </span>
               </div>
-              <UploadImage class="upload-image"
-                           @changeUpload="changeAvatar" />
+              <upload-image class="upload-image"
+                            @changeUpload="changeAvatar">上传图片</upload-image>
             </div>
           </div>
 

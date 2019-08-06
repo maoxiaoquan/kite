@@ -12,6 +12,16 @@
         <span class="word-counter count">1000</span>
       </div>
     </div>
+
+    <div class="insert-picture"
+         v-show="isInsertPicture">
+      <div class="add-picture">
+        <upload-image>
+          <i class="el-icon-plus"></i>
+        </upload-image>
+      </div>
+    </div>
+
     <div class="editor-bottom">
       <div class="toolbar editor-toolbar">
         <div class="tool">
@@ -19,8 +29,8 @@
             <el-popover placement="bottom-start"
                         width="500"
                         v-model="faceVisible">
-              <comment-face @changeFace="changeFace"
-                            v-if="faceVisible" />
+              <face @changeFace="changeFace"
+                    v-if="faceVisible" />
               <div class="emoji-box"
                    slot="reference">
                 <i class="el-icon-picture-outline-round"></i>
@@ -30,7 +40,8 @@
           </div>
 
           <div class="file-picker picker active">
-            <div class="emoji-box">
+            <div class="emoji-box"
+                 @click="isInsertPicture=!isInsertPicture">
               <i class="el-icon-picture-outline"></i>
               <span class="tool-text">图片</span>
             </div>
@@ -61,14 +72,14 @@
 </template>
 
 <script>
-import { UploadImage } from '@components'
-import commentFace from '../../Comment/ArticleComment/CommentFace'
+import { UploadImage, Face } from '@components'
 export default {
   name: 'dynamicWtite',
   data () {
     return {
       content: '',
-      faceVisible: false
+      faceVisible: false,
+      isInsertPicture: false // 是否显示插入图片
     }
   },
   methods: {
@@ -86,7 +97,7 @@ export default {
   },
   components: {
     UploadImage,
-    commentFace
+    Face
   }
 }
 </script>
@@ -131,6 +142,27 @@ export default {
           height: 100px;
           resize: none;
           overflow: hidden;
+        }
+      }
+    }
+  }
+  .insert-picture {
+    padding: 15px 20px 0;
+    .add-picture {
+      cursor: pointer;
+      width: 80px;
+      height: 80px;
+      position: relative;
+      border-radius: 16px;
+      border: 1px dashed #c5c5c5;
+      background: #f8f8f9;
+      .UploadImage {
+        width: 100%;
+        height: 100%;
+        .el-icon-plus {
+          position: absolute;
+          color: #666;
+          font-size: 30px;
         }
       }
     }

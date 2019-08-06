@@ -1,7 +1,7 @@
 <template>
   <div class="UploadImage"
        v-loading='loading'>
-    上传图片
+    <slot></slot>
     <input type="file"
            name="fileImg"
            class="file-input"
