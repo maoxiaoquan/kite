@@ -216,6 +216,12 @@ router.post(
   dynamic.createDynamic
 ) // 创建动态
 
+router.post(
+  '/dynamic/upload-dynamic-picture',
+  tokens.ClientVerifyToken,
+  upload.uploadDynamicPicture
+) // 动态图片上传
+
 router.get('/website/info', website.getWebsiteInfo) // 网站配置相关信息 TYPE:AJAX get
 
 router.get('/dynamic-topic/index', dynamic.dynamicTopicIndex) // 获取首页专题 TYPE:AJAX post

@@ -16,9 +16,10 @@ import {
   Loading,
   Image
 } from 'element-ui'
-import './assets/css/reset.scss'
-import './assets/css/box_layout.scss'
 
+import './assets/css/box_layout.scss'
+import './assets/css/reset.scss'
+import './assets/css/other.scss'
 Vue.prototype.$msgbox = MessageBox
 Vue.prototype.$alert = MessageBox.alert
 Vue.prototype.$confirm = MessageBox.confirm

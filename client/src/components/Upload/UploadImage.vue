@@ -158,11 +158,9 @@ export default {
 <style scoped lang="scss">
 .UploadImage {
   position: relative;
-  font-size: 12px;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  color: #fff;
   border: none;
   display: inline-block;
   outline: none;

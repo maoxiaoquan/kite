@@ -28,6 +28,14 @@ const actions = {
       return result
     })
   },
+  UPLOAD_DYNAMIC_PICTURE: ({ commit, dispatch, state }, parameter) => {
+    // 上传动态图片
+    return fetch({
+      url: '/dynamic/upload-dynamic-picture',
+      method: 'post',
+      parameter: parameter
+    })
+  },
   GET_DYNAMIC_TOPIC_INDEX ({ commit, dispatch, state }, parameter) {
     // 获取首页侧栏导航话题
     return fetch({

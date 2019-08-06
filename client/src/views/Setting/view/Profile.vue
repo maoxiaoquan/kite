@@ -275,6 +275,8 @@ export default {
         }
         /deep/.UploadImage {
           background: #007fff;
+          color: #fff;
+          font-size: 12px;
         }
         .button,
         button {

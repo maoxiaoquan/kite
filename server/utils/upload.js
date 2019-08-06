@@ -9,18 +9,17 @@ module.exports = type => {
   const month = date.getMonth() + 1
 
   let destination_url = {
-    avatarImg: `static/upload/avatar-img-service/${year}-${month}`,
-    articleImg: `static/upload/article-img-service/${year}-${month}`,
-    admin: `static/upload/admin-img-service/${year}-${month}`
+    avatarImg: `static/upload/avatar-img-service/${year}/${month}`,
+    articleImg: `static/upload/article-img-service/${year}/${month}`,
+    admin: `static/upload/admin-img-service/${year}/${month}`,
+    dynamic: `static/upload/dynamic-img-service/${year}/${month}`
   }
 
   let fileFilter = (ctx, file, cb) => {
-    console.log('file', file)
     // 过滤文件
     let ImgLimitType = ['image/jpeg', 'image/jpg', 'image/gif', 'image/png']
     if (~ImgLimitType.indexOf(file.mimetype)) {
       cb(null, true)
-      console.log(111111111111111111)
     } else {
       cb(null, false)
     }

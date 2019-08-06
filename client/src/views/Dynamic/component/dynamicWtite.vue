@@ -12,11 +12,19 @@
         <span class="word-counter count">1000</span>
       </div>
     </div>
-
     <div class="insert-picture"
          v-show="isInsertPicture">
+      <div class="img-item"
+           v-for="(url,key) in coverImageArr"
+           v-if="url"
+           :key="key">
+        <i @click="deleteCoverImage(url,key)"
+           class="close el-icon-error"></i>
+        <img :src="url"
+             alt="">
+      </div>
       <div class="add-picture">
-        <upload-image>
+        <upload-image @changeUpload="changeDynamicImage">
           <i class="el-icon-plus"></i>
         </upload-image>
       </div>
@@ -39,15 +47,47 @@
             </el-popover>
           </div>
 
-          <div class="file-picker picker active">
+          <div class="file-picker picker"
+               :class="{'no-click':type===3}">
+            <upload-image @changeUpload="changeDynamicImage"
+                          v-show="type!==3">
+              <div class="emoji-box">
+                <i class="el-icon-picture-outline"></i>
+                <span class="tool-text">图片</span>
+              </div>
+            </upload-image>
             <div class="emoji-box"
-                 @click="isInsertPicture=!isInsertPicture">
+                 v-show="type===3">
               <i class="el-icon-picture-outline"></i>
               <span class="tool-text">图片</span>
             </div>
           </div>
-          <div class="link-picker picker">
-            <div class="emoji-box">
+          <div class="link-picker picker"
+               :class="{'no-click':type===2}">
+            <el-popover ref="popoverLink"
+                        placement="bottom"
+                        popper-class="link-view"
+                        v-model="isLink">
+              <input type="text"
+                     class="link-input"
+                     placeholder="请输入连接地址">
+              <div style="text-align: right; margin: 0">
+                <el-button size="mini"
+                           type="text"
+                           @click="isLink = false">取消</el-button>
+                <el-button type="primary"
+                           size="mini"
+                           @click="isLink = false">确定</el-button>
+              </div>
+            </el-popover>
+            <div class="emoji-box"
+                 v-popover:popoverLink
+                 v-show="Number(type)!==2">
+              <i class="el-icon-link"></i>
+              <span class="tool-text">链接</span>
+            </div>
+            <div class="emoji-box"
+                 v-show="type===2">
               <i class="el-icon-link"></i>
               <span class="tool-text">链接</span>
             </div>
@@ -78,11 +118,45 @@ export default {
   data () {
     return {
       content: '',
+      type: 1, // 1:默认动态;2:图片,3:连接，4：视频
       faceVisible: false,
-      isInsertPicture: false // 是否显示插入图片
+      isInsertPicture: false, // 是否显示插入图片
+      coverImage: '', // 封面图片
+      isLink: false, // 是否显示link
+      linkContent: '' // 连接内容
+    }
+  },
+  watch: {
+    coverImage (val) {
+      if (val) {
+        this.type = 2
+        this.isInsertPicture = true
+      } else {
+        this.type = 1
+        this.isInsertPicture = false
+      }
+    },
+    linkContent (val) {
+      if (val) {
+        this.type = 3
+      } else {
+        this.type = 1
+      }
     }
   },
   methods: {
+    changeDynamicImage ({ formData, config }) { // 上传图片，并且组合
+      this.$store.dispatch('dynamic/UPLOAD_DYNAMIC_PICTURE', formData)
+        .then(result => {
+          this.coverImage += result.data.img + ','
+        })
+    },
+    deleteCoverImage (url, index) { // 删除已上传的图片
+      let coverImageArr = this.coverImage.split(',') || []
+      coverImageArr.splice(index, 1)
+      let newCoverImageArr = coverImageArr.join(',')
+      this.coverImage = newCoverImageArr
+    },
     changeFace (val) { // 表情
       console.log(val)
       this.faceVisible = false
@@ -93,6 +167,13 @@ export default {
     },
     createDynamic () { // 提交表单
       this.$store.dispatch('dynamic/CREATE_DYNAMIC')
+    }
+  },
+  computed: {
+    coverImageArr () { // 已上传的图片处理成数组
+      let urlArr = this.coverImage.split(',') || []
+      let length = this.coverImage.split(',').length
+      return length > 0 ? urlArr : []
     }
   },
   components: {
@@ -148,12 +229,36 @@ export default {
   }
   .insert-picture {
     padding: 15px 20px 0;
+    .img-item,
     .add-picture {
-      cursor: pointer;
       width: 80px;
       height: 80px;
       position: relative;
       border-radius: 16px;
+      border: 1px dashed #c5c5c5;
+      display: inline-block;
+      margin-right: 5px;
+      margin-bottom: 0px;
+    }
+    .img-item {
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+      .close {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        cursor: pointer;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        color: #666;
+      }
+    }
+    .add-picture {
+      cursor: pointer;
       border: 1px dashed #c5c5c5;
       background: #f8f8f9;
       .UploadImage {
@@ -163,6 +268,9 @@ export default {
           position: absolute;
           color: #666;
           font-size: 30px;
+          top: 24px;
+          left: 28px;
+          font-size: 25px;
         }
       }
     }
@@ -186,12 +294,21 @@ export default {
           z-index: 1;
           margin-right: 16px;
           user-select: none;
+          cursor: pointer;
           .tool-text {
             padding: 1px;
             font-size: 13px;
           }
+          &.no-click {
+            cursor: no-drop;
+            .tool-text,
+            i {
+              color: #999;
+            }
+          }
         }
       }
+
       .submit {
         display: flex;
         .tip {
@@ -211,6 +328,21 @@ export default {
         }
       }
     }
+  }
+}
+
+.link-view {
+  .link-input {
+    width: 100%;
+    background-color: #fafafb;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+    outline: #027fff;
+    color: #666;
+    display: block;
+    font-size: 12px;
+    padding: 3px 10px;
+    margin-bottom: 10px;
   }
 }
 </style>
