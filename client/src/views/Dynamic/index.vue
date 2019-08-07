@@ -6,17 +6,17 @@
              class="dock-nav">
           <ul class="nav-list">
             <li class="nav-item acitve">
-              <router-link :to="{name:'dynamics',params:{dynamicTopicId:'recommended'}}"
+              <router-link :to="{name:'dynamics',params:{dynamicTopicId:'newest'}}"
                            class="nav-link">推荐</router-link>
             </li>
             <li class="nav-item">
               <router-link :to="{name:'dynamics',params:{dynamicTopicId:'hot'}}"
                            class="nav-link">热门</router-link>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <router-link :to="{name:'dynamics',params:{dynamicTopicId:'following'}}"
                            class="nav-link">关注</router-link>
-            </li>
+            </li> -->
           </ul>
           <ul class="nav-list">
             <li class="nav-item"
@@ -36,14 +36,15 @@
       </div>
       <div class="row dynamic-main">
         <div class="col-xs-12 col-sm-8 col-md-8">
-          <div class="stream-wrapper">
+          <div class="stream-wrapper"
+               v-if="personalInfo.islogin">
             <dynamic-wtite />
           </div>
           <ul>
             <li class="dy-item"
-                v-for="item in 10"
-                :key="item">
-              <dynamic-item />
+                v-for="(dynamicItem,key) in dynamic.dynamicList.list"
+                :key="key">
+              <dynamic-item :dynamicItem="dynamicItem" />
             </li>
           </ul>
         </div>
@@ -73,11 +74,12 @@ export default {
   async asyncData ({ store, route, accessToken = "" }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
-      store.dispatch("dynamic/GET_DYNAMIC_TOPIC_INDEX"), // 重置文章列表数据
+      store.dispatch("dynamic/GET_DYNAMIC_TOPIC_INDEX"), // 重置文章列表数据 
+      store.dispatch("dynamic/GET_DYNAMIC_LIST", { topic_id: route.params.dynamicTopicId || '' })
     ]);
   },
   computed: {
-    ...mapState(["home", "dynamic", "website"]) // home:主页  article_column:文章的专栏
+    ...mapState(['home', 'dynamic', 'website', 'personalInfo'])
   },
   components: {
     dynamicItem,

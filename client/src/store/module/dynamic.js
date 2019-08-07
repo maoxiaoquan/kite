@@ -3,7 +3,12 @@ import { fetch } from '@request'
 const state = () => ({
   dynamicTopicIndex: [], // 首页侧栏导航话题
   dynamicTopicList: [], // 专题页所有话题列表
-  indexDynamicList: [] // 首页动态列表
+  dynamicList: {
+    count: 0,
+    list: [],
+    page: 1,
+    pageSize: 10
+  } // 动态列表
 })
 
 const mutations = {
@@ -14,16 +19,31 @@ const mutations = {
   SET_DYNAMIC_TOPIC_LIST (state, data) {
     // 设置首页侧栏导航话题
     state.dynamicTopicIndex = data
+  },
+  SET_DYNAMIC_LIST (state, data) {
+    // 设置动态列表
+    state.dynamicList = data
   }
 }
 
 const actions = {
+  GET_DYNAMIC_LIST ({ commit, dispatch, state }, parameter) {
+    // 获取动态列表
+    return fetch({
+      url: '/dynamic/list',
+      method: 'get',
+      parameter: { params: parameter }
+    }).then(result => {
+      commit('SET_DYNAMIC_LIST', result.data)
+      return result
+    })
+  },
   CREATE_DYNAMIC ({ commit, dispatch, state }, parameter) {
     // 创建动态
     return fetch({
       url: '/dynamic/create',
       method: 'post',
-      parameter: { params: parameter }
+      parameter
     }).then(result => {
       return result
     })
@@ -33,7 +53,7 @@ const actions = {
     return fetch({
       url: '/dynamic/upload-dynamic-picture',
       method: 'post',
-      parameter: parameter
+      parameter
     })
   },
   GET_DYNAMIC_TOPIC_INDEX ({ commit, dispatch, state }, parameter) {

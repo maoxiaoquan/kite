@@ -1,7 +1,10 @@
 const config = require('../config')
 const dfUserAuthorityList = require('./dfUserAuthorityList')
 let operatingArr = []
-let limitArr = [config.USER_AUTHORITY.dfNoReviewId]
+let limitArr = [
+  config.USER_AUTHORITY.dfNoReviewArticleId,
+  config.USER_AUTHORITY.dfNoReviewDynamicId
+]
 dfUserAuthorityList.map(item => {
   if (item.authority_type === '2' && !~limitArr.indexOf(item.authority_id)) {
     operatingArr.push(item.authority_id)
@@ -24,7 +27,7 @@ module.exports = [
     user_role_id: config.USER_ROLE.dfLegalizeId,
     user_role_name: '认证作者',
     user_role_description: '认证作者发布文章时，默认对所有人可见',
-    user_authority_ids: config.USER_AUTHORITY.dfNoReviewId,
+    user_authority_ids: config.USER_AUTHORITY.dfNoReviewArticleId,
     user_role_type: 1,
     is_show: true,
     enable: true

@@ -23,7 +23,7 @@ module.exports = [
     enable: false
   },
   {
-    authority_id: config.USER_AUTHORITY.dfNoReviewId,
+    authority_id: config.USER_AUTHORITY.dfNoReviewArticleId,
     authority_name: '文章不需要审核',
     authority_type: '2',
     authority_parent_id: 'NZ6RFatVy',

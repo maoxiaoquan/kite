@@ -69,11 +69,11 @@ module.exports = {
       comment: '文章所属的标签id',
       field: 'topic_ids'
     },
-    tag_name: {
-      /* 以后可能用到的标签名字 */
+    topic_name: {
+      /* 以后可能用到的话题名字 */
       type: Seq.STRING(200),
-      comment: '以后可能用到的标签名字',
-      field: 'tag_name'
+      comment: '以后可能用到的话题名字',
+      field: 'topic_name'
     },
     rejection_reason: {
       /* 文章所属的标签名字 可多个 */

@@ -12,7 +12,7 @@ module.exports = {
     dfManagementTeam: 'management_team'
   },
   USER_AUTHORITY: {
-    dfNoReviewId: 'no_review_article', // 发布文章无需审核的权限id
+    dfNoReviewArticleId: 'no_review_article', // 发布文章无需审核的权限id
     dfNoReviewCommentId: 'no_review_comment', // 无需审核评论的权限id
     dfNoReviewDynamicId: 'dfNoReviewDynamicId', // 无需审核动态的权限id
     dfNoReviewDynamicCommentId: 'dfNoReviewDynamicCommentId' // 无需审核动态评论的权限id
@@ -21,7 +21,8 @@ module.exports = {
     dfOfficialExclusive: 'dfOfficialExclusive' // 默认只能由官方使用的文章标签
   },
   DYNAMIC: {
-    dfOfficialTopic: 'dfOfficialTopic' // 默认只能由官方使用的动态话题
+    dfOfficialTopic: 'dfOfficialTopic', // 默认只能由官方使用的动态话题
+    dfTreeHole: 'dfTreeHole' // 树洞话题
   },
   SUPER_ROLE_ID: '1000000', // 排除超管，超管无视所有，拥有最高权限 role = 1000000 为超管
   default_avatar: KiteConfig.server.default_avatar, // 所有使用的默认头像

@@ -216,6 +216,8 @@ router.post(
   dynamic.createDynamic
 ) // 创建动态
 
+router.get('/dynamic/list', dynamic.getDynamicList) // 获取动态列表
+
 router.post(
   '/dynamic/upload-dynamic-picture',
   tokens.ClientVerifyToken,

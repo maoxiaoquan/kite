@@ -8,7 +8,7 @@
              class="user-link">
             <el-image class="avatar"
                       size="size"
-                      src="circleUrl">
+                      :src="dynamicItem.user.avatar">
             </el-image>
           </a>
         </div>
@@ -18,9 +18,9 @@
             <a href="/user/57ac00985bbb500062b20476"
                target="_blank"
                rel=""
-               class="username">alentan</a></div>
+               class="username">{{dynamicItem.user.nickname}}</a></div>
           <div class="meta-box">
-            <div class="position ellipsis">前端 @ 不和产品经理打架的公司</div>
+            <div class="position ellipsis">@ {{dynamicItem.user.introduction}}</div>
             <div class="dot">·</div>
             <a href="/dynamic/5d428a996fb9a07d87241e2c"
                target="_blank"
@@ -40,11 +40,9 @@
     </div>
     <div class="dynamic-content-row">
       <div class="content-box content-box">
-        <span>程序员每天除了写代码，还需要思考什么？我觉得：程序员一定要去学一些理财知识，我也是从去年开始投资股市，一边学一边做，到目前亏了60%，于是现在写代码写得更勤奋了
-          <img class="emoji"
-               draggable="false"
-               alt="😰"
-               src="https://gold-cdn.xitu.io/asset/twemoji/2.6.0/svg/1f630.svg"></span>
+        <span>
+          {{dynamicItem.content}}
+        </span>
         <div class="limit-ctl-box"></div>
       </div>
     </div>
@@ -78,7 +76,12 @@
 
 <script>
 export default {
-
+  name: "dynamicItem",
+  props: {
+    dynamicItem: {
+      default: {}
+    }
+  }
 }
 </script>
 
@@ -151,7 +154,7 @@ export default {
     .content-box {
       font-size: 15px;
       line-height: 20px;
-      white-space: pre-wrap;
+      white-space: pre-line;
       color: #17181a;
       .emoji {
         width: 19px;

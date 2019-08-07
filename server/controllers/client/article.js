@@ -135,7 +135,9 @@ class Article {
         userAuthorityIds += roleItem.user_authority_ids + ','
       })
 
-      let status = ~userAuthorityIds.indexOf(config.USER_AUTHORITY.dfNoReviewId)
+      let status = ~userAuthorityIds.indexOf(
+        config.USER_AUTHORITY.dfNoReviewArticleId
+      )
         ? 6
         : 1
 
@@ -544,7 +546,9 @@ class Article {
         userAuthorityIds += roleItem.user_authority_ids + ','
       })
 
-      let status = ~userAuthorityIds.indexOf(config.USER_AUTHORITY.dfNoReviewId)
+      let status = ~userAuthorityIds.indexOf(
+        config.USER_AUTHORITY.dfNoReviewArticleId
+      )
         ? 6
         : 1
 

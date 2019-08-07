@@ -3,11 +3,11 @@
     <div class="editor-body">
       <div class="content">
         <div class="rich-editor">
-          <textarea v-model="content"
+          <textarea v-model.trim="content"
                     class="empty"
-                    cols="20"
-                    placeholder="告诉你个小秘密，发沸点时添加话题会被更多小伙伴看见呦~"
-                    rows="10"></textarea>
+                    placeholder="告诉你个小秘密，发沸点时添加话题会被更多小伙伴看见呦~" />
+          <div class="current-topic"
+               v-if="currentTopic.name">{{currentTopic.name}}</div>
         </div>
         <span class="word-counter count">1000</span>
       </div>
@@ -24,7 +24,8 @@
         <img :src="url"
              alt="">
       </div>
-      <div class="add-picture">
+      <div class="add-picture"
+           v-if="coverImageArr.length<7">
         <upload-image @changeUpload="changeDynamicImage">
           <i class="el-icon-plus"></i>
         </upload-image>
@@ -110,25 +111,24 @@
                      class="search-input"
                      placeholder="请输入连接地址">
               <ul class="topic-list">
-                <li>
-                  <div class="topic-item no">
-                    <div class="lazy loaded immediate">
-                      <el-image class="icon"
-                                :src="1"
-                                lazy></el-image>
+                <li @click="onTopic">
+                  <div class="topic-item no-topic">
+                    <div class="icon">
+                      <i class="el-icon-remove-outline"></i>
                     </div>
                     <div class="content">
-                      <span>D2 开源组</span><span>12 关注 · 0 沸点</span>
+                      <span>不添加任何话题</span>
                     </div>
                   </div>
                 </li>
                 <li v-for="(item,key) in searchTopicResultList"
+                    @click="onTopic(item)"
                     :key="key">
                   <div class="topic-item">
                     <div class="lazy loaded immediate">
-                      <el-image class="icon"
-                                :src="1"
-                                lazy></el-image>
+                      <img class="icon"
+                           :src="item.icon"
+                           alt="">
                     </div>
                     <div class="content">
                       <span>{{item.name}}</span><span>{{item.like_count}} 关注 · 0 沸点</span>
@@ -174,6 +174,7 @@ export default {
       linkContent: '', // 连接内容
       searchTopicVal: "", // 
       searchTopicResultList: [], //搜索结果展示
+      currentTopic: {} // 当前使用专题
     }
   },
   created () {
@@ -194,6 +195,7 @@ export default {
       if (val) {
         this.type = 3
       } else {
+        this.isInsertLink = false
         this.type = 1
       }
     },
@@ -225,11 +227,14 @@ export default {
       this.coverImage = newCoverImageArr
     },
     changeFace (val) { // 表情
-      console.log(val)
       this.faceVisible = false
       this.content = this.content + val.face_text
     },
-    onLink (val) {
+    onTopic (val) { // 选择专题
+      this.currentTopic = val
+      this.isTopicPopover = false
+    },
+    onLink (val) { // 插入连接
       this.isLinkPopover = false
       if (val === 'delete') {
         this.linkContent = ''
@@ -239,14 +244,44 @@ export default {
       }
     },
     send () { // 发送消息
-      console.log(this.content)
+      if (!this.personalInfo.islogin) {
+        this.$message.warning("当前用户未登陆，请前往首页登陆后尝试");
+        return false
+      }
+      if (!this.content) {
+        this.$message.warning("当前内容为空，请输入内容后再发送");
+        return false
+      }
+      this.createDynamic()
     },
     createDynamic () { // 提交表单
-      this.$store.dispatch('dynamic/CREATE_DYNAMIC')
+      let attach = ''
+      if (this.type === 2) {
+        attach = this.coverImage
+      } else if (this.type === 3) {
+        attach = this.linkContent
+      }
+      let params = {
+        content: this.content /* 主内容 */,
+        attach, // 摘要
+        type: this.type, // 类型 （1:默认动态;2:图片,3:连接，4：视频  ）
+        topic_ids: this.currentTopic.topic_id
+      }
+      this.$store.dispatch('dynamic/CREATE_DYNAMIC', params).then(result => {
+        if (result.state === 'success') {
+          this.$message.warning("动态创建成功");
+          this.content = ''
+          this.coverImage = ''
+          this.currentTopic = ''
+          this.linkContent = ''
+        } else {
+          this.$message.error(result.message);
+        }
+      })
     }
   },
   computed: {
-    ...mapState(['dynamic']),
+    ...mapState(['personalInfo', 'dynamic']),
     coverImageArr () { // 已上传的图片处理成数组
       let urlArr = this.coverImage.split(',') || []
       let length = this.coverImage.split(',').length
@@ -293,13 +328,25 @@ export default {
         color: #17181a;
         min-height: 75px;
         font-size: 14px;
-        padding: 3px 10px;
+        padding: 8px 10px;
         .empty {
           background: transparent;
           border: none;
-          height: 100px;
+          height: 75px;
           resize: none;
           overflow: hidden;
+        }
+        .current-topic {
+          font-size: 13px;
+          display: inline-block;
+          line-height: 22px;
+          height: 22px;
+          padding: 0 12px;
+          border: 1px solid #007fff;
+          border-radius: 14px;
+          text-align: center;
+          color: #007fff;
+          user-select: none;
         }
       }
     }
@@ -456,7 +503,13 @@ export default {
   .topic-list {
     height: 250px;
     overflow: auto;
+    margin-top: 10px;
     padding: 0;
+    li {
+      &:hover {
+        background: #f3f3f3;
+      }
+    }
     .topic-item {
       border-bottom: 1px solid hsla(0, 0%, 59.2%, 0.1);
       display: flex;
@@ -465,10 +518,31 @@ export default {
       align-items: flex-start;
       cursor: pointer;
       padding: 10px 0;
-      .icon {
-        width: 42px;
+      .loaded {
         height: 42px;
-        border-radius: 4px;
+        .icon {
+          width: 42px;
+          height: 42px;
+          border-radius: 4px;
+        }
+      }
+      &.no-topic {
+        .icon {
+          width: 42px;
+          height: 42px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 4px;
+          background-color: #eef2f5;
+          i {
+            font-size: 20px;
+            color: #999;
+          }
+        }
+        .content {
+          line-height: 42px;
+        }
       }
       .content {
         color: #8a9aa9;
