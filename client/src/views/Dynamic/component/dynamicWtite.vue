@@ -12,6 +12,7 @@
         <span class="word-counter count">1000</span>
       </div>
     </div>
+
     <div class="insert-picture"
          v-show="isInsertPicture">
       <div class="img-item"
@@ -28,6 +29,12 @@
           <i class="el-icon-plus"></i>
         </upload-image>
       </div>
+    </div>
+
+    <div class="insert-link"
+         v-if="isInsertLink">
+      <span class="insert-link-view"> <i class="close el-icon-error"
+           @click="isInsertLink=false;linkContent=''"></i>{{linkContent}}</span>
     </div>
 
     <div class="editor-bottom">
@@ -67,17 +74,18 @@
             <el-popover ref="popoverLink"
                         placement="bottom"
                         popper-class="link-view"
-                        v-model="isLink">
+                        v-model="isLinkPopover">
               <input type="text"
+                     v-model="linkContent"
                      class="link-input"
                      placeholder="请输入连接地址">
               <div style="text-align: right; margin: 0">
                 <el-button size="mini"
                            type="text"
-                           @click="isLink = false">取消</el-button>
+                           @click="onLink('delete')">取消</el-button>
                 <el-button type="primary"
                            size="mini"
-                           @click="isLink = false">确定</el-button>
+                           @click="onLink('enter')">确定</el-button>
               </div>
             </el-popover>
             <div class="emoji-box"
@@ -93,7 +101,44 @@
             </div>
           </div>
           <div class="topic-picker picker">
-            <div class="emoji-box">
+            <el-popover ref="topicView"
+                        placement="bottom"
+                        popper-class="topic-view"
+                        v-model="isTopicPopover">
+              <input type="text"
+                     v-model="searchTopicVal"
+                     class="search-input"
+                     placeholder="请输入连接地址">
+              <ul class="topic-list">
+                <li>
+                  <div class="topic-item no">
+                    <div class="lazy loaded immediate">
+                      <el-image class="icon"
+                                :src="1"
+                                lazy></el-image>
+                    </div>
+                    <div class="content">
+                      <span>D2 开源组</span><span>12 关注 · 0 沸点</span>
+                    </div>
+                  </div>
+                </li>
+                <li v-for="(item,key) in searchTopicResultList"
+                    :key="key">
+                  <div class="topic-item">
+                    <div class="lazy loaded immediate">
+                      <el-image class="icon"
+                                :src="1"
+                                lazy></el-image>
+                    </div>
+                    <div class="content">
+                      <span>{{item.name}}</span><span>{{item.like_count}} 关注 · 0 沸点</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </el-popover>
+            <div class="emoji-box"
+                 v-popover:topicView>
               <i class="el-icon-collection-tag"></i>
               <span class="tool-text">话题</span>
             </div>
@@ -113,6 +158,7 @@
 
 <script>
 import { UploadImage, Face } from '@components'
+import { mapState } from 'vuex'
 export default {
   name: 'dynamicWtite',
   data () {
@@ -121,13 +167,21 @@ export default {
       type: 1, // 1:默认动态;2:图片,3:连接，4：视频
       faceVisible: false,
       isInsertPicture: false, // 是否显示插入图片
+      isInsertLink: false, // 是否显示插入连接
       coverImage: '', // 封面图片
-      isLink: false, // 是否显示link
-      linkContent: '' // 连接内容
+      isLinkPopover: false, // 是否显示link弹窗
+      isTopicPopover: false, // 是否显示topic弹窗
+      linkContent: '', // 连接内容
+      searchTopicVal: "", // 
+      searchTopicResultList: [], //搜索结果展示
     }
   },
+  created () {
+    this.$store.dispatch("dynamic/GET_DYNAMIC_TOPIC_LIST")
+    this.searchTopicResultList = this.dynamic.dynamicTopicIndex
+  },
   watch: {
-    coverImage (val) {
+    coverImage (val) { // 判断当前是否是在传封面图
       if (val) {
         this.type = 2
         this.isInsertPicture = true
@@ -136,12 +190,25 @@ export default {
         this.isInsertPicture = false
       }
     },
-    linkContent (val) {
+    linkContent (val) { // 判断当前是否是在写连接
       if (val) {
         this.type = 3
       } else {
         this.type = 1
       }
+    },
+    searchTopicVal (val) {
+      let arr = [];
+      for (let item in this.dynamic.dynamicTopicIndex) {
+        if (
+          this.dynamic.dynamicTopicIndex[item].name
+            .toLowerCase()
+            .indexOf(this.searchTopicVal.toLowerCase()) >= 0
+        ) {
+          arr.push(this.dynamic.dynamicTopicIndex[item]);
+        }
+      }
+      this.searchTopicResultList = arr;
     }
   },
   methods: {
@@ -162,6 +229,15 @@ export default {
       this.faceVisible = false
       this.content = this.content + val.face_text
     },
+    onLink (val) {
+      this.isLinkPopover = false
+      if (val === 'delete') {
+        this.linkContent = ''
+        this.isInsertLink = false
+      } else {
+        this.isInsertLink = true
+      }
+    },
     send () { // 发送消息
       console.log(this.content)
     },
@@ -170,6 +246,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['dynamic']),
     coverImageArr () { // 已上传的图片处理成数组
       let urlArr = this.coverImage.split(',') || []
       let length = this.coverImage.split(',').length
@@ -224,6 +301,25 @@ export default {
           resize: none;
           overflow: hidden;
         }
+      }
+    }
+  }
+  .insert-link {
+    padding: 15px 20px 0;
+    .insert-link-view {
+      position: relative;
+      border: 1px dashed #c5c5c5;
+      padding: 0 12px;
+      border-radius: 10px;
+      display: block;
+      height: 30px;
+      padding-right: 20px;
+      line-height: 30px;
+      .close {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        color: #999;
       }
     }
   }
@@ -343,6 +439,56 @@ export default {
     font-size: 12px;
     padding: 3px 10px;
     margin-bottom: 10px;
+  }
+}
+.topic-view {
+  .search-input {
+    display: inline-block;
+    height: 30px;
+    width: 100%;
+    font-size: 12px;
+    color: #666;
+    border: 0.5px solid #e5e5e5;
+    padding: 10px 12px;
+    outline: none;
+    background-color: #fafafb;
+  }
+  .topic-list {
+    height: 250px;
+    overflow: auto;
+    padding: 0;
+    .topic-item {
+      border-bottom: 1px solid hsla(0, 0%, 59.2%, 0.1);
+      display: flex;
+      flex-grow: 0;
+      margin: 0;
+      align-items: flex-start;
+      cursor: pointer;
+      padding: 10px 0;
+      .icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 4px;
+      }
+      .content {
+        color: #8a9aa9;
+        width: 144px;
+        max-width: 144px;
+        letter-spacing: normal;
+        text-align: left;
+        margin-left: 14px;
+        display: flex;
+        flex-direction: column;
+        span:first-child {
+          color: #2e3135;
+          font-size: 14px;
+        }
+        span {
+          padding-top: 1px;
+          font-size: 13px;
+        }
+      }
+    }
   }
 }
 </style>
