@@ -109,7 +109,6 @@ class dynamic {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10
     let topic_id = ctx.query.topic_id || ''
-    let sort = ctx.query.sort || 'newest'
     let whereParams = {} // 查询参数
     let orderParams = [] // 排序参数
 
@@ -122,7 +121,7 @@ class dynamic {
         }
       }
       !~['hot', 'newest'].indexOf(topic_id) &&
-        whereParams.push({ topic_ids: topic_id })
+        (whereParams['topic_ids'] = topic_id)
       topic_id === 'hot' && orderParams.push(['like_count', 'DESC'])
       // monthlyHottest 本月最热:
       // sort === 'monthlyHottest' &&
@@ -150,6 +149,14 @@ class dynamic {
         rows[i].setDataValue(
           'create_at',
           await moment(rows[i].create_date).format('YYYY-MM-DD')
+        )
+        rows[i].setDataValue(
+          'topic',
+          rows[i].topic_ids
+            ? await models.dynamic_topic.findOne({
+              where: { topic_id: rows[i].topic_ids }
+            })
+            : ''
         )
         rows[i].setDataValue(
           'user',

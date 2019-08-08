@@ -25,6 +25,12 @@ class update0_3 {
         await models.rss_dynamic_topic.sync({
           force: true
         })
+        await models.sequelize.query(
+          'ALTER TABLE admin_authority CHANGE authority_id authority_id VARCHAR(100) comment "权限ID";'
+        )
+        await models.sequelize.query(
+          'ALTER TABLE user_authority CHANGE authority_id authority_id VARCHAR(100) comment "权限ID";'
+        )
         await models.dynamic_topic.bulkCreate(dfDynamicTopicList)
         await models.admin_authority.bulkCreate(newAdminAuthorityList)
         await models.user_authority.bulkCreate(newUserAuthorityList)

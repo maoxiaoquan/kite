@@ -15,7 +15,7 @@ module.exports = {
     },
     authority_id: {
       // 权限ID
-      type: Seq.STRING(20),
+      type: Seq.STRING(100),
       comment: '权限ID',
       defaultValue: shortid.generate,
       field: 'authority_id'

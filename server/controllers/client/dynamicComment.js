@@ -14,14 +14,14 @@ function ErrorMessage (message) {
 
 /* 评论模块 */
 
-class Comment {
-  static async getArticleComment (ctx) {
+class dynamicComment {
+  static async getDynamicCommentList (ctx) {
     let aid = ctx.query.aid
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10
 
     try {
-      let { count, rows } = await models.article_comment.findAndCountAll({
+      let { count, rows } = await models.dynamic_comment.findAndCountAll({
         // 默认一级评论
         where: {
           aid,
@@ -55,7 +55,7 @@ class Comment {
 
       for (let item in rows) {
         // 循环取子评论
-        let childAllComment = await models.article_comment.findAll({
+        let childAllComment = await models.dynamic_comment.findAll({
           where: { parent_id: rows[item].id, ...clientWhere.comment }
         })
         rows[item].setDataValue('children', childAllComment)
@@ -113,7 +113,7 @@ class Comment {
    * 新建评论post提交
    * @param   {object} ctx 上下文对象
    */
-  static async createArticleComment (ctx) {
+  static async createDynamicComment (ctx) {
     let reqData = ctx.request.body
     let { user = '' } = ctx.request
 
@@ -148,15 +148,16 @@ class Comment {
         userAuthorityIds += roleItem.user_authority_ids + ','
       })
       let status = ~userAuthorityIds.indexOf(
-        config.USER_AUTHORITY.dfNoReviewCommentId
+        // 判断动态评论不需要审核
+        config.USER_AUTHORITY.dfNoReviewDynamicCommentId
       )
         ? 5
         : 1
 
-      await models.article_comment
+      await models.dynamic_comment
         .create({
           parent_id: reqData.parent_id || 0,
-          aid: reqData.aid,
+          dynamic_id: reqData.dynamic_id,
           uid: user.uid,
           reply_uid: reqData.reply_uid || 0,
           content: xss(reqData.content),
@@ -166,14 +167,14 @@ class Comment {
           await models.article.update(
             {
               // 更新文章评论数
-              comment_count: await models.article_comment.count({
+              comment_count: await models.dynamic_comment.count({
                 where: {
-                  aid: reqData.aid,
+                  dynamic_id: reqData.dynamic_id,
                   parent_id: 0
                 }
               })
             },
-            { where: { aid: reqData.aid } }
+            { where: { dynamic_id: reqData.dynamic_id } }
           )
 
           const oneUser = await models.user.findOne({
@@ -258,12 +259,12 @@ class Comment {
    * 删除评论post提交
    * @param   {object} ctx 上下文对象
    */
-  static async deleteArticleComment (ctx) {
+  static async deleteDynamicComment (ctx) {
     let reqData = ctx.request.body
     let { user = '' } = ctx.request
 
     try {
-      let allComment = await models.article_comment
+      let allComment = await models.dynamic_comment
         .findAll({ where: { parent_id: reqData.comment_id } })
         .then(res => {
           return res.map((item, key) => {
@@ -273,7 +274,7 @@ class Comment {
 
       if (allComment.length > 0) {
         // 判断当前评论下是否有子评论,有则删除子评论
-        await models.article_comment.destroy({
+        await models.dynamic_comment.destroy({
           where: {
             id: { [Op.in]: allComment },
             uid: user.uid
@@ -281,7 +282,7 @@ class Comment {
         })
       }
 
-      await models.article_comment.destroy({
+      await models.dynamic_comment.destroy({
         where: {
           id: reqData.comment_id,
           uid: user.uid
@@ -291,7 +292,7 @@ class Comment {
       await models.article.update(
         {
           // 更新文章评论数
-          comment_count: await models.article_comment.count({
+          comment_count: await models.dynamic_comment.count({
             where: {
               aid: reqData.aid,
               parent_id: 0
@@ -315,4 +316,4 @@ class Comment {
   }
 }
 
-module.exports = Comment
+module.exports = dynamicComment

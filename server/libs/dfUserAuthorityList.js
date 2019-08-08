@@ -56,7 +56,7 @@ module.exports = [
     enable: false
   },
   {
-    authority_id: config.USER_AUTHORITY.dfNoReviewCommentId,
+    authority_id: config.USER_AUTHORITY.dfNoReviewArticleCommentId,
     authority_name: '评论不需要审核',
     authority_type: '2',
     authority_parent_id: '7ucZnNUAH',

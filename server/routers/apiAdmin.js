@@ -8,7 +8,7 @@ const articleColumn = require('../controllers/admin/articleColumn') // 文章专
 const picture = require('../controllers/admin/picture') // 图片管理
 const upload = require('../controllers/admin/upload') // 上传
 const adminRoleAuthority = require('../controllers/admin/adminRoleAuthority') // 后台角色权限
-const comment = require('../controllers/admin/comment') // 评论
+const articleComment = require('../controllers/admin/articleComment') // 文章评论
 const adminSystemLog = require('../controllers/admin/adminSystemLog') // 系统日志
 const system = require('../controllers/admin/system') // 系统配置
 const adminIndex = require('../controllers/admin/adminIndex') // 登录tokens
@@ -260,21 +260,21 @@ router.post(
   '/comment/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  comment.getCommentList
+  articleComment.getCommentList
 )
 // 评论数据更新
 router.post(
   '/comment/update',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  comment.updateComment
+  articleComment.updateComment
 )
 // 评论数据删除
 router.post(
   '/comment/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
-  comment.deleteComment
+  articleComment.deleteComment
 )
 
 /**

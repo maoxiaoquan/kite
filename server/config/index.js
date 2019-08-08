@@ -13,7 +13,7 @@ module.exports = {
   },
   USER_AUTHORITY: {
     dfNoReviewArticleId: 'no_review_article', // 发布文章无需审核的权限id
-    dfNoReviewCommentId: 'no_review_comment', // 无需审核评论的权限id
+    dfNoReviewArticleCommentId: 'no_review_comment', // 无需审核评论的权限id
     dfNoReviewDynamicId: 'dfNoReviewDynamicId', // 无需审核动态的权限id
     dfNoReviewDynamicCommentId: 'dfNoReviewDynamicCommentId' // 无需审核动态评论的权限id
   },

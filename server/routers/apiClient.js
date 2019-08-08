@@ -5,12 +5,13 @@ const personalCenter = require('../controllers/client/personalCenter') // 用户
 const article = require('../controllers/client/article') // 文章内容页
 const subscribe = require('../controllers/client/subscribe') // 订阅
 const userArticleBlog = require('../controllers/client/userArticleBlog') // 用户文章专题
-const comment = require('../controllers/client/comment') // 评论
+const articleComment = require('../controllers/client/articleComment') // 文章评论
 const upload = require('../controllers/client/upload') // 上传
 const website = require('../controllers/client/website') // 上传
 const tokens = require('../utils/tokens') // 登录tokens
 const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
 const dynamic = require('../controllers/client/dynamic') // 动态
+const dynamicComment = require('../controllers/client/dynamicComment') // 动态评论
 /**
  * 获取标签列表操作
  * @param   {String} TYPE 当前router 作用类型 AJAX:ajax传递数据 RENDER:render渲染页面或者 post form提交数据
@@ -190,19 +191,19 @@ router.get(
  * 文章评论相关
  */
 
-router.get('/article/comment-list', comment.getArticleComment) // 获取用户发表的评论列表 TYPE:AJAX get
+router.get('/article/comment-list', articleComment.getArticleComment) // 获取用户发表的评论列表 TYPE:AJAX get
 
 router.post(
   '/article/comment-create',
   tokens.ClientVerifyToken,
   verifyAuthority.ClientCheck,
-  comment.createArticleComment
+  articleComment.createArticleComment
 ) // 用户发表评论 TYPE:AJAX post
 
 router.post(
   '/article/comment-delete',
   tokens.ClientVerifyToken,
-  comment.deleteArticleComment
+  articleComment.deleteArticleComment
 ) // 删除评论 TYPE:AJAX post
 
 /**
@@ -229,5 +230,24 @@ router.get('/website/info', website.getWebsiteInfo) // 网站配置相关信息 
 router.get('/dynamic-topic/index', dynamic.dynamicTopicIndex) // 获取首页专题 TYPE:AJAX post
 
 router.get('/dynamic-topic/list', dynamic.dynamicTopicList) // 获取专题页专题
+
+/**
+ * 动态评论相关
+ */
+
+router.get('/dynamic-comment/list', dynamicComment.getDynamicCommentList) // 获取用户发表的动态评论列表 TYPE:AJAX get
+
+router.post(
+  '/dynamic-comment/create',
+  tokens.ClientVerifyToken,
+  verifyAuthority.ClientCheck,
+  dynamicComment.createDynamicComment
+) // 用户发表动态评论 TYPE:AJAX post
+
+router.post(
+  '/dynamic-comment/delete',
+  tokens.ClientVerifyToken,
+  dynamicComment.deleteDynamicComment
+) // 删除动态评论 TYPE:AJAX post
 
 module.exports = router

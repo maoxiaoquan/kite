@@ -230,6 +230,9 @@ export default {
       this.faceVisible = false
       this.content = this.content + val.face_text
     },
+    trim (string) {
+      return (string || '').replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '');
+    },
     onTopic (val) { // 选择专题
       this.currentTopic = val
       this.isTopicPopover = false
@@ -262,7 +265,7 @@ export default {
         attach = this.linkContent
       }
       let params = {
-        content: this.content /* 主内容 */,
+        content: this.trim(this.content) /* 主内容 */,
         attach, // 摘要
         type: this.type, // 类型 （1:默认动态;2:图片,3:连接，4：视频  ）
         topic_ids: this.currentTopic.topic_id

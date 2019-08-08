@@ -14,11 +14,9 @@
         </div>
         <div class="dynamic-header-content">
           <div class="user-popover-box">
-
-            <a href="/user/57ac00985bbb500062b20476"
-               target="_blank"
-               rel=""
-               class="username">{{dynamicItem.user.nickname}}</a></div>
+            <router-link :to="{name:'user',params:{uid:dynamicItem.user.uid}}"
+                         class="username">{{dynamicItem.user.nickname}}</router-link>
+          </div>
           <div class="meta-box">
             <div class="position ellipsis">@ {{dynamicItem.user.introduction}}</div>
             <div class="dot">·</div>
@@ -28,7 +26,7 @@
                class="time-box">
               <time datetime="2019-08-01T06:45:45.474Z"
                     title="Thu Aug 01 2019 14:45:45 GMT+0800 (中国标准时间)"
-                    class="time">30分钟前</time>
+                    class="time">{{dynamicItem.create_at}}</time>
             </a>
           </div>
         </div>
@@ -40,29 +38,40 @@
     </div>
     <div class="dynamic-content-row">
       <div class="content-box content-box">
-        <span>
-          {{dynamicItem.content}}
-        </span>
+        <div v-html="dynamicItem.content"></div>
         <div class="limit-ctl-box"></div>
       </div>
     </div>
-    <div class="dynamic-image-row">
-
+    <div class="dynamic-image-row"
+         v-if="dynamicItem.type===2">
+      <el-image class="preview-picture"
+                style="width: 100px; height: 100px"
+                :src="url"
+                v-for="(url,key) in imgAnalyze(dynamicItem.attach)"
+                :key="key"
+                v-if="url"
+                :preview-src-list="imgAnalyze(dynamicItem.attach)">
+      </el-image>
     </div>
-    <div class="dynamic-topic-row">
-      <a href="/topic/5c106be9092dcb2cc5de7257"
-         target="_blank"
-         class="topic-title">上班摸鱼</a>
+    <div class="dynamic-link-row"
+         v-if="dynamicItem.type===3">
+      <a :href="dynamicItem.attach"
+         target="_block">{{dynamicItem.attach}}</a>
+    </div>
+    <div class="dynamic-topic-row"
+         v-if="dynamicItem.topic">
+      <router-link :to='{name:"dynamicTopicView",params:{dynamicTopicId:dynamicItem.topic.topic_id}}'
+                   class="topic-title">{{dynamicItem.topic.name}}</router-link>
     </div>
     <div class="dynamic-action-row">
       <div class="action-box action-box">
         <div class="like-action action">
           <i class="el-icon-thumb"></i>
-          <span class="action-title">15</span>
+          <span class="action-title">{{dynamicItem.like_count}}</span>
         </div>
         <div class="comment-action action">
           <i class="el-icon-chat-line-round"></i>
-          <span class="action-title">7</span>
+          <span class="action-title">{{dynamicItem.comment_count}}</span>
         </div>
         <div class="share-action action">
           <i class="el-icon-share"></i>
@@ -80,6 +89,13 @@ export default {
   props: {
     dynamicItem: {
       default: {}
+    }
+  },
+  methods: {
+    imgAnalyze (attach) {
+      let urlArr = attach.split(',') || []
+      let length = attach.split(',').length
+      return length > 0 ? urlArr : []
     }
   }
 }
@@ -163,7 +179,26 @@ export default {
       }
     }
   }
+  .dynamic-link-row {
+    a {
+      display: flex;
+      align-items: center;
+      padding: 9px 15px;
+      max-width: 100%;
+      background-color: #fff;
+      border: 1px solid #ebebeb;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+  }
   .dynamic-image-row {
+    .preview-picture {
+      width: 100px;
+      height: 100px;
+      overflow: hidden;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
   }
   .dynamic-topic-row {
     .topic-title {

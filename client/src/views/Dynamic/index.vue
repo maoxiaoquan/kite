@@ -13,10 +13,11 @@
               <router-link :to="{name:'dynamics',params:{dynamicTopicId:'hot'}}"
                            class="nav-link">热门</router-link>
             </li>
-            <!-- <li class="nav-item">
+            <li class="nav-item"
+                v-if="personalInfo.islogin">
               <router-link :to="{name:'dynamics',params:{dynamicTopicId:'following'}}"
                            class="nav-link">关注</router-link>
-            </li> -->
+            </li>
           </ul>
           <ul class="nav-list">
             <li class="nav-item"
