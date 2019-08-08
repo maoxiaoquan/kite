@@ -7,6 +7,7 @@
                 lazy></el-image>
     </div>
     <div class="comment-body">
+
       <div class="comment-main">
         <h4>
           <router-link class="user-info"
@@ -22,6 +23,7 @@
              v-else-if="Number(commentItem.status)===3"
              style="color:#f96b84;">当前用户评论违规</div>
       </div>
+
       <div class="comment-foot clearfix">
         <span>{{commentItem.create_at}}</span>
         <span class="comment-reply"
@@ -42,14 +44,11 @@
     </div>
     <div class="comment-item-children"
          v-if="commentItem.children.length>0||isComment">
-      <div class="comment-item-children-view"
-           v-if="commentItem.children.length>0">
-        <comment-child-item v-for="(childCommentItem,key) in commentItem.children"
-                            :key="key"
-                            :p_id="commentItem.id"
-                            :childCommentItem="childCommentItem"
-                            @ChildCommentChange="commentChange" />
-      </div>
+      <comment-child-item v-for="(childCommentItem,key) in commentItem.children"
+                          :key="key"
+                          :p_id="commentItem.id"
+                          :childCommentItem="childCommentItem"
+                          @ChildCommentChange="commentChange" />
     </div>
   </div>
 </template>
@@ -127,19 +126,16 @@ export default {
 
 <style scoped lang="scss">
 .comment-item {
-  margin-bottom: 30px;
-  padding-bottom: 20px;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
   border-bottom: 1px solid #f1f1f1;
-  &:last-child {
-    border-bottom: none;
-  }
   .avatar {
     float: left;
     margin: 0 13px 10px 0;
     margin-right: 0;
     /deep/ .el-image {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       img {
         width: 100%;
         height: 100%;
@@ -148,21 +144,20 @@ export default {
     }
   }
   .comment-body {
-    margin-left: 50px;
+    margin-left: 40px;
     .comment-main {
       display: inline-block;
-      padding: 10px 15px;
+      padding: 5px 13px;
       background: #f7f7f7;
       border-radius: 20px;
       font-size: 14px;
       color: #393939;
       h4 {
         font-weight: bold;
-        font-size: 14px;
+        font-size: 13px;
         color: #393939;
-        margin-bottom: 5px;
         .middle-text {
-          font-size: 13px;
+          font-size: 12px;
           display: inline-block;
           font-weight: normal;
           padding: 0 5px;
@@ -194,38 +189,13 @@ export default {
     }
   }
   .comment-item-children {
-    margin-left: 50px;
-    margin-top: 30px;
-    padding-left: 20px;
-    border-left: 1px solid #f1f1f1;
+    margin-top: 10px;
+    padding-left: 50px;
     overflow: hidden;
-    .comment-item {
-      margin-bottom: 15px;
-      padding-bottom: 10px;
+    /deep/.comment-item {
       &:last-child {
-        margin-bottom: 0;
+        border-bottom: none;
       }
-    }
-    /deep/ .comment-form {
-      margin-top: 30px;
-    }
-    .comment-main {
-      padding: 6px 10px;
-      h4 {
-        margin-bottom: 0;
-        font-size: 13px;
-      }
-      p {
-        font-size: 13px;
-      }
-    }
-    /deep/ .avatar img {
-      width: 35px;
-      height: 35px;
-    }
-    /deep/ .comment-avatar {
-      width: 35px;
-      height: 35px;
     }
   }
 }

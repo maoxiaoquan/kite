@@ -50,7 +50,7 @@ class Aside extends Component {
       {
         title: '动态管理',
         key: 'dynamic',
-        icon: 'file-text',
+        icon: 'message',
         children: [
           {
             title: '动态话题',
@@ -143,7 +143,14 @@ class Aside extends Component {
     ]
   }
 
-  rootSubmenuKeys = ['home', 'article_mange', 'user_manger', 'web', 'admin']
+  rootSubmenuKeys = [
+    'home',
+    'article_mange',
+    'dynamic',
+    'user_manger',
+    'web',
+    'admin'
+  ]
 
   onOpenChange = openKeys => {
     const latestOpenKey = openKeys.find(

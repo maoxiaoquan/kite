@@ -11,7 +11,7 @@
     </div>
 
     <div class="form-item"
-         style="margin-left: 50px;"
+         style="margin-left: 45px;"
          v-loading="isCommentSubmit">
       <div class="input-view">
         <textarea name="comment"
@@ -33,7 +33,7 @@
         <div class="right-view">
           <button type="submit"
                   class="form-btn"
-                  @click="submitComment">提交评论</button>
+                  @click="submitComment">评论</button>
         </div>
       </div>
     </div>
@@ -110,13 +110,13 @@ export default {
 .comment-form {
   .comment-avatar {
     float: left;
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     overflow: hidden;
     border-radius: 35px;
     /deep/ .el-image {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       img {
         width: 100%;
         height: 100%;
@@ -134,7 +134,7 @@ export default {
       display: block;
       box-sizing: border-box;
       width: 100%;
-      border-radius: 40px;
+      border-radius: 15px;
       line-height: 25px;
       height: 45px;
       padding: 5px 15px;
@@ -146,7 +146,7 @@ export default {
       float: left;
       font-family: "Microsoft Yahei", sans-serif;
       &.textarea {
-        height: 100px;
+        height: 50px;
         border-radius: 20px;
       }
     }
@@ -164,19 +164,20 @@ export default {
     }
     .right-view {
       float: right;
-      padding-top: 15px;
     }
     .form-btn {
       display: inline-block;
-      border-radius: 40px;
+      border-radius: 10px;
       box-sizing: border-box;
       border: none;
       background: #f50;
       color: #fff;
       text-align: center;
-      line-height: 40px;
+      line-height: 26px;
       cursor: pointer;
-      padding: 0 30px;
+      padding: 0 20px;
+      font-size: 13px;
+      cursor: pointer;
       margin-left: 10px;
       outline: none;
       &.btn-cancel {

@@ -69,7 +69,8 @@
           <i class="el-icon-thumb"></i>
           <span class="action-title">{{dynamicItem.like_count}}</span>
         </div>
-        <div class="comment-action action">
+        <div class="comment-action action"
+             @click="isCommnet=!isCommnet">
           <i class="el-icon-chat-line-round"></i>
           <span class="action-title">{{dynamicItem.comment_count}}</span>
         </div>
@@ -79,16 +80,30 @@
         </div>
       </div>
     </div>
+
+    <div class="dynamic-comment-row"
+         v-if="isCommnet">
+      <dynamic-comment />
+    </div>
+
   </div>
 
 </template>
 
 <script>
+
+import DynamicComment from '../../Comment/DynamicComment'
+
 export default {
   name: "dynamicItem",
   props: {
     dynamicItem: {
       default: {}
+    }
+  },
+  data () {
+    return {
+      isCommnet: false
     }
   },
   methods: {
@@ -97,6 +112,9 @@ export default {
       let length = attach.split(',').length
       return length > 0 ? urlArr : []
     }
+  },
+  components: {
+    DynamicComment
   }
 }
 </script>
@@ -218,6 +236,7 @@ export default {
       position: relative;
       margin-top: 15px;
       height: 34px;
+      border-top: 1px solid #ebebeb;
     }
     .action {
       flex: 1 1 33.333%;
@@ -238,6 +257,10 @@ export default {
         color: #8a93a0;
       }
     }
+  }
+  .dynamic-comment-row {
+    border-top: 1px solid #ebebeb;
+    padding: 20px;
   }
 }
 </style>

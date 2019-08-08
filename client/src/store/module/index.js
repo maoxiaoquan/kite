@@ -5,7 +5,7 @@ import editor from './editor'
 import article from './article'
 import articleTag from './articleTag'
 import articleColumn from './articleColumn'
-import comment from './comment'
+import articleComment from './articleComment'
 import setting from './setting'
 import search from './search'
 import website from './website'
@@ -19,7 +19,7 @@ export default {
   article,
   articleTag,
   articleColumn,
-  comment,
+  articleComment,
   setting,
   search,
   website,

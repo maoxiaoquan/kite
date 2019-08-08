@@ -1,84 +1,72 @@
 <template>
   <div class="comment-item"
-       :id="'comment'+commentItem.id"
-       ref="comment_list">
+       :id="'comment'+childCommentItem.id">
     <div class="avatar">
-      <el-image :src="commentItem.user.avatar"
+      <el-image :src="childCommentItem.user.avatar"
                 lazy></el-image>
     </div>
     <div class="comment-body">
+
       <div class="comment-main">
         <h4>
           <router-link class="user-info"
-                       :to="{name:'user',params:{uid:commentItem.user.uid}}">{{commentItem.user.nickname}}</router-link>
+                       :to="{name:'user',params:{uid:childCommentItem.user.uid}}">{{childCommentItem.user.nickname}}</router-link>
+          <template v-if="childCommentItem.reply_user">
+            <i class="middle-text">回复</i>
+            <router-link class="user-info"
+                         :to="{name:'user',params:{uid:childCommentItem.reply_user.uid}}">{{childCommentItem.reply_user.nickname}}</router-link>
+          </template>
         </h4>
         <div class="comment-text"
-             v-if="Number(commentItem.status)===2||Number(commentItem.status)===5"
-             v-html="commentRender(commentItem.content)"></div>
+             v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===5"
+             v-html="commentRender(childCommentItem.content)"></div>
         <div class="comment-text"
-             v-else-if="Number(commentItem.status)===1"
+             v-else-if="Number(childCommentItem.status)===1"
              style="color:#f96b84;">当前用户评论需要管理员审核才能可见</div>
         <div class="comment-text"
-             v-else-if="Number(commentItem.status)===3"
+             v-else-if="Number(childCommentItem.status)===3"
              style="color:#f96b84;">当前用户评论违规</div>
       </div>
+
       <div class="comment-foot clearfix">
-        <span>{{commentItem.create_at}}</span>
+        <span>{{childCommentItem.create_at}}</span>
         <span class="comment-reply"
-              v-if="Number(commentItem.status)===2||Number(commentItem.status)===5"
-              @click="isComment=!isComment">{{isComment?'取消回复':'回复'}}</span>
+              v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===5"
+              @click="isComment=!isComment;reply_uid=childCommentItem.uid">{{isComment?'取消回复':'回复'}}</span>
         <span class="comment-delete"
-              v-if="personalInfo.user.uid===commentItem.uid"
-              @click="deleteComment(commentItem.id)">删除</span>
+              v-if="personalInfo.user.uid===childCommentItem.uid"
+              @click="deleteComment(childCommentItem.id)">删除</span>
       </div>
 
-      <div class="comment-form-view"
-           v-if="isComment"
-           :id="'comment-reply'+commentItem.id">
-        <comment-form reply_uid=""
-                      :child_comment_id="commentItem.id"
-                      @commentChange="commentChange" />
-      </div>
     </div>
-    <div class="comment-item-children"
-         v-if="commentItem.children.length>0||isComment">
-      <div class="comment-item-children-view"
-           v-if="commentItem.children.length>0">
-        <comment-child-item v-for="(childCommentItem,key) in commentItem.children"
-                            :key="key"
-                            :p_id="commentItem.id"
-                            :childCommentItem="childCommentItem"
-                            @ChildCommentChange="commentChange" />
-      </div>
+
+    <div class="comment-form-view"
+         v-if="isComment"
+         :id="'comment-reply'+childCommentItem.id">
+      <comment-form :reply_uid="reply_uid"
+                    :child_comment_id="p_id"
+                    @commentChange="commentChange" />
     </div>
   </div>
 </template>
 
 <script>
-
 import commentForm from "./CommentForm";
 import faceqq from "./face/qq";
-import commentChildItem from "./CommentChildItem";
 
 export default {
-  name: "index",
-  props: ["commentItem"],
+  name: "childrenItem",
+  props: ["childCommentItem", "p_id"],
   data: function () {
     return {
-      isComment: false
+      isComment: false,
+      reply_uid: ""
     };
   },
   methods: {
     commentChange (res) {
-      if (res.state === "success") {
-        this.$message.success(res.message);
-        this.$nextTick(function () {
-          this.commentItem.children.push(res.data);
-        });
-      } else {
-        this.$message.warning(res.message);
-      }
       this.isComment = false;
+      this.$emit("ChildCommentChange", res);
     },
     deleteComment (id) {
       this.$store
@@ -119,27 +107,23 @@ export default {
     }
   },
   components: {
-    'comment-form': commentForm,
-    'comment-child-item': commentChildItem
+    'comment-form': commentForm
   }
 };
 </script>
 
 <style scoped lang="scss">
 .comment-item {
-  margin-bottom: 30px;
-  padding-bottom: 20px;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
   border-bottom: 1px solid #f1f1f1;
-  &:last-child {
-    border-bottom: none;
-  }
   .avatar {
     float: left;
     margin: 0 13px 10px 0;
     margin-right: 0;
     /deep/ .el-image {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       img {
         width: 100%;
         height: 100%;
@@ -148,21 +132,20 @@ export default {
     }
   }
   .comment-body {
-    margin-left: 50px;
+    margin-left: 40px;
     .comment-main {
       display: inline-block;
-      padding: 10px 15px;
+      padding: 5px 13px;
       background: #f7f7f7;
       border-radius: 20px;
       font-size: 14px;
       color: #393939;
       h4 {
         font-weight: bold;
-        font-size: 14px;
+        font-size: 13px;
         color: #393939;
-        margin-bottom: 5px;
         .middle-text {
-          font-size: 13px;
+          font-size: 12px;
           display: inline-block;
           font-weight: normal;
           padding: 0 5px;
@@ -191,41 +174,6 @@ export default {
     }
     .comment-form {
       margin-top: 20px;
-    }
-  }
-  .comment-item-children {
-    margin-left: 50px;
-    margin-top: 30px;
-    padding-left: 20px;
-    border-left: 1px solid #f1f1f1;
-    overflow: hidden;
-    .comment-item {
-      margin-bottom: 15px;
-      padding-bottom: 10px;
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-    /deep/ .comment-form {
-      margin-top: 30px;
-    }
-    .comment-main {
-      padding: 6px 10px;
-      h4 {
-        margin-bottom: 0;
-        font-size: 13px;
-      }
-      p {
-        font-size: 13px;
-      }
-    }
-    /deep/ .avatar img {
-      width: 35px;
-      height: 35px;
-    }
-    /deep/ .comment-avatar {
-      width: 35px;
-      height: 35px;
     }
   }
 }

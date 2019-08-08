@@ -67,7 +67,7 @@ export default {
     },
     deleteComment (id) {
       this.$store
-        .dispatch("comment/ARTICLE_COMMENT_DELETE", {
+        .dispatch("articleComment/ARTICLE_COMMENT_DELETE", {
           aid: this.article.aid,
           comment_id: id
         })
