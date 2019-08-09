@@ -1,17 +1,26 @@
 <template>
-  <div class="box-comment">
-    <div class="box-comment-part"
+  <div class="dynamic-comment">
+    <div class="dynamic-comment-part"
          v-if="website.config.on_comment==='yes'">
-      <comment-form @commentChange="commentChange" />
+      <comment-form :dynamicId="dynamicId"
+                    @commentChange="commentChange" />
       <div class="comment-list"
            v-loading="isLoadingComment">
         <comment-item :comment-item="item"
-                      v-for="(item,key) in articleComment.comment_list"
+                      :dynamicId="dynamicId"
+                      v-for="(item,key) in commentList"
                       :key="key" />
       </div>
     </div>
     <div v-else>
       <p class="no-comment">评论模块已关闭</p>
+    </div>
+    <div class="more"
+         v-show="commentList.length>6">
+      <router-link class="dynamic"
+                   :to='{name:"dynamicView",params:{dynamicId}}'>
+        查看更多 >
+      </router-link>
     </div>
   </div>
 </template>
@@ -25,14 +34,16 @@ export default {
   name: "index",
   data () {
     return {
-      comment_page: 1,
-      comment_pageSize: 10,
-      comment_count: 0,
-      comment_list: [], // 用户评论的列表
-      comment_content: "", // 顶级输入框
-      comment_loading_btn: true,
+      commentList: [], // 用户评论的列表
+      page: 1,
+      pageSize: 10,
       isLoadingComment: false
     };
+  },
+  props: {
+    dynamicId: { // 当前动态的ID
+      default: ""
+    }
   },
   created () {
     this.getCommentList(); // 获取用户的评论
@@ -43,63 +54,30 @@ export default {
       this.isLoadingComment = true;
       var that = this;
       this.$store
-        .dispatch("articleComment/ARTICLE_COMMENT_LIST", {
-          aid: 10007,
-          page: this.comment_page,
-          pageSize: this.comment_pageSize
+        .dispatch("dynamicComment/DYNAMIC_COMMENT_LIST", {
+          dynamic_id: this.dynamicId,
+          page: this.page,
+          pageSize: this.pageSize
         })
         .then(result => {
+          this.commentList = result.data.list
           this.isLoadingComment = false;
         })
         .catch(err => {
           this.isLoadingComment = false;
         });
     },
-    pageChange (val) {
-      this.isLoadingComment = true;
-      this.$store
-        .dispatch("articleComment/ARTICLE_COMMENT_LIST", {
-          aid: this.article.aid,
-          page: val,
-          pageSize: this.comment_pageSize
-        })
-        .then(result => {
-          this.isLoadingComment = false;
-        })
-        .catch(err => {
-          this.isLoadingComment = false;
-        });
-    },
-    commentChange (res) {
-      if (res.state === "success") {
-        this.$message.success(res.message);
-        this.comment_content = ""; // 评论输入框为空
-        this.$store.commit("articleComment/SET_ARTICLE_COMMENT_UNSHIFT", res.data);
-        this.$store.commit("articleComment/SET_ARTICLE_COMMENT_COUNT_ADD");
+    commentChange (result) {
+      if (result.state === "success") {
+        this.commentList.unshift(result.data)
+        this.$message.success(result.message);
       } else {
-        this.$message.warning(res.message);
+        this.$message.warning(result.message);
       }
     }
   },
   computed: {
-    ...mapState(["website"]),
-    personalInfo () {
-      // 登录后的个人信息
-      return this.$store.state.personalInfo || {};
-    },
-    article () {
-      return this.$store.state.article.article || {};
-    },
-    pagination () {
-      // 分页
-      return Math.ceil(
-        this.articleComment.count / this.articleComment.pageSize
-      );
-    },
-    articleComment () {
-      // 文章的评论
-      return this.$store.state.articleComment.article_comment || {};
-    }
+    ...mapState(["website", "personalInfo"])
   },
   components: {
     "comment-item": commentItem,
@@ -112,7 +90,7 @@ export default {
 <style scoped lang="scss">
 /*comment-lay start*/
 
-.box-comment {
+.dynamic-comment {
   .no-comment {
     text-align: center;
     padding: 15px;
@@ -126,6 +104,19 @@ export default {
       &:last-child {
         border-bottom: none;
       }
+    }
+  }
+  .more {
+    margin-top: 10px;
+    a {
+      display: block;
+      background: rgb(233, 86, 62);
+      // box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 8px 0px;
+      border-radius: 5px;
+      text-align: center;
+      padding: 5px 20px;
+      font-size: 12px;
+      color: #fff;
     }
   }
 }

@@ -8,7 +8,8 @@ const state = () => ({
     list: [],
     page: 1,
     pageSize: 10
-  } // 动态列表
+  }, // 动态列表
+  dynamicView: {}
 })
 
 const mutations = {
@@ -23,6 +24,10 @@ const mutations = {
   SET_DYNAMIC_LIST (state, data) {
     // 设置动态列表
     state.dynamicList = data
+  },
+  SET_DYNAMIC_VIEW (state, data) {
+    // 设置动态内容
+    state.dynamicView = data
   }
 }
 
@@ -42,9 +47,20 @@ const actions = {
     // 创建动态
     return fetch({
       url: '/dynamic/create',
-      method: 'post',
-      parameter
+      method: 'get',
+      parameter: { params: parameter }
     }).then(result => {
+      return result
+    })
+  },
+  GET_DYNAMIC_VIEW ({ commit, dispatch, state }, parameter) {
+    // 获取动态内容
+    return fetch({
+      url: '/dynamic/view',
+      method: 'get',
+      parameter: { params: parameter }
+    }).then(result => {
+      commit('SET_DYNAMIC_VIEW', result.data.dynamic)
       return result
     })
   },

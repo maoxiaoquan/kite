@@ -105,6 +105,66 @@ class dynamic {
     }
   }
 
+  static async getDynamicView (ctx) {
+    let topic_id = ctx.query.topic_id || ''
+    let whereParams = {} // 查询参数
+
+    try {
+      // sort
+      // hottest 全部热门:
+      whereParams = {
+        status: {
+          [Op.or]: [2, 4]
+        }
+      }
+
+      let oneDynamic = await models.dynamic.findOne({
+        where: whereParams // 为空，获取全部，也可以自己添加条件
+      })
+
+      oneDynamic.setDataValue(
+        'create_at',
+        await moment(oneDynamic.create_date).format('YYYY-MM-DD')
+      )
+      oneDynamic.setDataValue(
+        'topic',
+        oneDynamic.topic_ids
+          ? await models.dynamic_topic.findOne({
+            where: { topic_id: oneDynamic.topic_ids }
+          })
+          : ''
+      )
+      oneDynamic.setDataValue(
+        'user',
+        await models.user.findOne({
+          where: { uid: oneDynamic.uid },
+          attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+        })
+      )
+
+      if (oneDynamic) {
+        resClientJson(ctx, {
+          state: 'success',
+          message: '数据返回成功',
+          data: {
+            dynamic: oneDynamic
+          }
+        })
+      } else {
+        resClientJson(ctx, {
+          state: 'error',
+          message: '数据返回错误，请再次刷新尝试'
+        })
+      }
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
   static async getDynamicList (ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10

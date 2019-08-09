@@ -1,5 +1,6 @@
 <template>
   <div class="dynamic-item">
+
     <div class="dynamic-header-row">
       <div class="account-group">
         <div class="user-popover-box">
@@ -42,6 +43,7 @@
         <div class="limit-ctl-box"></div>
       </div>
     </div>
+
     <div class="dynamic-image-row"
          v-if="dynamicItem.type===2">
       <el-image class="preview-picture"
@@ -53,16 +55,19 @@
                 :preview-src-list="imgAnalyze(dynamicItem.attach)">
       </el-image>
     </div>
+
     <div class="dynamic-link-row"
          v-if="dynamicItem.type===3">
       <a :href="dynamicItem.attach"
          target="_block">{{dynamicItem.attach}}</a>
     </div>
+
     <div class="dynamic-topic-row"
          v-if="dynamicItem.topic">
       <router-link :to='{name:"dynamicTopicView",params:{dynamicTopicId:dynamicItem.topic.topic_id}}'
                    class="topic-title">{{dynamicItem.topic.name}}</router-link>
     </div>
+
     <div class="dynamic-action-row">
       <div class="action-box action-box">
         <div class="like-action action">
@@ -83,7 +88,7 @@
 
     <div class="dynamic-comment-row"
          v-if="isCommnet">
-      <dynamic-comment />
+      <dynamic-comment :dynamicId="dynamicItem.id" />
     </div>
 
   </div>
@@ -98,8 +103,16 @@ export default {
   name: "dynamicItem",
   props: {
     dynamicItem: {
-      default: {}
+      default: () => {
+        return {}
+      }
+    },
+    dfIsCommnet: { // 判断默认是否展开评论
+      default: false
     }
+  },
+  created () {
+    this.isCommnet = this.dfIsCommnet
   },
   data () {
     return {

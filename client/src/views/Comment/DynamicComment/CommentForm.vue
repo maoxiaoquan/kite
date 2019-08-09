@@ -63,11 +63,14 @@ export default {
     child_comment_id: {
       default: ''
     },
+    dynamicId: {
+      default: ""
+    }
   },
   methods: {
     getParams () {
       return {
-        aid: this.article.aid,
+        dynamic_id: this.dynamicId,
         content: this.commentContent,
         reply_uid: this.reply_uid,
         parent_id: this.child_comment_id,
@@ -80,7 +83,7 @@ export default {
     submitComment () { // 提交评论
       var params = this.getParams()
       this.isCommentSubmit = true
-      this.$store.dispatch("articleComment/ARTICLE_COMMENT_CREATE", params)
+      this.$store.dispatch("dynamicComment/DYNAMIC_COMMENT_CREATE", params)
         .then(result => {
           this.commentContent = ''
           this.isCommentSubmit = false
@@ -125,7 +128,6 @@ export default {
     }
   }
   .form-item {
-    margin-bottom: 20px;
     font-size: 14px;
     line-height: 40px;
     color: #555;
@@ -147,7 +149,7 @@ export default {
       font-family: "Microsoft Yahei", sans-serif;
       &.textarea {
         height: 50px;
-        border-radius: 20px;
+        border-radius: 10px;
       }
     }
     .input-view {

@@ -219,6 +219,8 @@ router.post(
 
 router.get('/dynamic/list', dynamic.getDynamicList) // 获取动态列表
 
+router.get('/dynamic/view', dynamic.getDynamicView) // 获取动态详情
+
 router.post(
   '/dynamic/upload-dynamic-picture',
   tokens.ClientVerifyToken,

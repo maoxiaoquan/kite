@@ -38,6 +38,7 @@
            v-if="isComment"
            :id="'comment-reply'+commentItem.id">
         <comment-form reply_uid=""
+                      :dynamicId="dynamicId"
                       :child_comment_id="commentItem.id"
                       @commentChange="commentChange" />
       </div>
@@ -61,7 +62,7 @@ import commentChildItem from "./CommentChildItem";
 
 export default {
   name: "index",
-  props: ["commentItem"],
+  props: ["commentItem", "dynamicId"],
   data: function () {
     return {
       isComment: false

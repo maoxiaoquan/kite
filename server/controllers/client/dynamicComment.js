@@ -16,16 +16,17 @@ function ErrorMessage (message) {
 
 class dynamicComment {
   static async getDynamicCommentList (ctx) {
-    let aid = ctx.query.aid
+    let dynamic_id = ctx.query.dynamic_id
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10
+    let parent_id = ctx.query.parent_id || 0
 
     try {
       let { count, rows } = await models.dynamic_comment.findAndCountAll({
         // 默认一级评论
         where: {
-          aid,
-          parent_id: 0,
+          dynamic_id,
+          parent_id,
           ...clientWhere.comment
         }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
@@ -97,7 +98,7 @@ class dynamicComment {
           page,
           pageSize,
           count,
-          comment_list: rows
+          list: rows
         }
       })
     } catch (err) {
@@ -164,7 +165,7 @@ class dynamicComment {
           status
         })
         .then(async data => {
-          await models.article.update(
+          await models.dynamic.update(
             {
               // 更新文章评论数
               comment_count: await models.dynamic_comment.count({
@@ -174,7 +175,7 @@ class dynamicComment {
                 }
               })
             },
-            { where: { dynamic_id: reqData.dynamic_id } }
+            { where: { id: reqData.dynamic_id } }
           )
 
           const oneUser = await models.user.findOne({
@@ -213,7 +214,7 @@ class dynamicComment {
               other_uid: user.uid,
               comment_id: _data.id,
               aid: reqData.aid,
-              title: '文章有新的评论'
+              title: '动态有新的评论'
             })
           })
 
