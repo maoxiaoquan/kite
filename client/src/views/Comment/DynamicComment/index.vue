@@ -58,6 +58,7 @@ export default {
         .dispatch("dynamicComment/DYNAMIC_COMMENT_LIST", {
           dynamic_id: this.dynamicId,
           page: this.page,
+          childPageSize: 5,
           pageSize: this.pageSize
         })
         .then(result => {

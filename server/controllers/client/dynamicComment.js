@@ -63,20 +63,13 @@ class dynamicComment {
             })
           )
         }
-
-        rows[i].setDataValue(
-          'count',
-          await models.dynamic_comment.count({
-            where: { parent_id: rows[i].id, ...clientWhere.comment }
-          })
-        )
       }
 
       for (let item in rows) {
         // 循环取子评论
         let childAllComment = await models.dynamic_comment.findAll({
           where: { parent_id: rows[item].id, ...clientWhere.comment },
-          limit: childPageSize || 5 // 每页限制返回的数据条数
+          limit: Number(childPageSize) // 每页限制返回的数据条数
         })
         rows[item].setDataValue('children', childAllComment)
         for (let childCommentItem in childAllComment) {
@@ -118,6 +111,117 @@ class dynamicComment {
           pageSize,
           count,
           list: rows
+        }
+      })
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
+  static async getDynamicCommentAll (ctx) {
+    let dynamic_id = ctx.query.dynamic_id
+    let parent_id = ctx.query.parent_id || 0
+    let sort = ctx.query.sort || ''
+
+    let order = []
+
+    sort === 'desc' && order.push(['create_date', 'desc'])
+
+    try {
+      let allDynamicComment = await models.dynamic_comment.findAll({
+        // 默认一级评论
+        where: {
+          dynamic_id,
+          parent_id,
+          ...clientWhere.comment
+        }, // 为空，获取全部，也可以自己添加条件
+        order
+      })
+
+      for (let i in allDynamicComment) {
+        allDynamicComment[i].setDataValue(
+          'create_at',
+          await moment(allDynamicComment[i].create_date).format(
+            'YYYY-MM-DD H:m:s'
+          )
+        )
+        if (Number(allDynamicComment[i].status === 1)) {
+          allDynamicComment[i].setDataValue('content', '当前用户评论需要审核')
+        }
+        if (Number(allDynamicComment[i].status === 3)) {
+          allDynamicComment[i].setDataValue('content', '当前用户评论违规')
+        }
+        allDynamicComment[i].setDataValue(
+          'user',
+          await models.user.findOne({
+            where: { uid: allDynamicComment[i].uid },
+            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+          })
+        )
+
+        if (
+          allDynamicComment[i].reply_uid !== 0 &&
+          allDynamicComment[i].reply_uid !== allDynamicComment[i].uid
+        ) {
+          allDynamicComment[i].setDataValue(
+            'reply_user',
+            await models.user.findOne({
+              where: { uid: allDynamicComment[i].reply_uid },
+              attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+            })
+          )
+        }
+      }
+
+      for (let item in allDynamicComment) {
+        // 循环取子评论
+        let childAllComment = await models.dynamic_comment.findAll({
+          where: {
+            parent_id: allDynamicComment[item].id,
+            ...clientWhere.comment
+          }
+        })
+        allDynamicComment[item].setDataValue('children', childAllComment)
+        for (let childCommentItem in childAllComment) {
+          // 循环取用户  代码有待优化，层次过于复杂
+          childAllComment[childCommentItem].setDataValue(
+            'create_at',
+            await moment(childAllComment[childCommentItem].create_date).format(
+              'YYYY-MM-DD H:m:s'
+            )
+          )
+          childAllComment[childCommentItem].setDataValue(
+            'user',
+            await models.user.findOne({
+              where: { uid: childAllComment[childCommentItem].uid },
+              attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+            })
+          )
+          if (
+            childAllComment[childCommentItem].reply_uid !== 0 &&
+            childAllComment[childCommentItem].reply_uid !==
+              childAllComment[childCommentItem].uid
+          ) {
+            childAllComment[childCommentItem].setDataValue(
+              'reply_user',
+              await models.user.findOne({
+                where: { uid: childAllComment[childCommentItem].reply_uid },
+                attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+              })
+            )
+          }
+        }
+      }
+
+      await resClientJson(ctx, {
+        state: 'success',
+        message: '获取评论列表成功',
+        data: {
+          list: allDynamicComment
         }
       })
     } catch (err) {
@@ -173,6 +277,8 @@ class dynamicComment {
       )
         ? 5
         : 1
+
+      console.log('status', status)
 
       await models.dynamic_comment
         .create({

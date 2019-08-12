@@ -239,6 +239,8 @@ router.get('/dynamic-topic/list', dynamic.dynamicTopicList) // 获取专题页�
 
 router.get('/dynamic-comment/list', dynamicComment.getDynamicCommentList) // 获取用户发表的动态评论列表 TYPE:AJAX get
 
+router.get('/dynamic-comment/all', dynamicComment.getDynamicCommentAll) // 获取用户发表的动态评论全部 TYPE:AJAX get
+
 router.post(
   '/dynamic-comment/create',
   tokens.ClientVerifyToken,

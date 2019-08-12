@@ -51,8 +51,9 @@
                           :dynamicId="dynamicId"
                           :childCommentItem="childCommentItem"
                           @ChildCommentChange="commentChange" />
-      <span v-if="commentItem.count>5"
-            class="more">查看更多</span>
+      <span v-if="commentItem.children.length>=5&&isChildMore"
+            class="more"
+            @click="getCommentList">查看更多</span>
     </div>
   </div>
 </template>
@@ -68,7 +69,9 @@ export default {
   props: ["commentItem", "dynamicId"],
   data: function () {
     return {
-      isComment: false
+      isComment: false,
+      childPage: 2,
+      isChildMore: true
     };
   },
   methods: {
@@ -82,6 +85,18 @@ export default {
         this.$message.warning(res.message);
       }
       this.isComment = false;
+    },
+    getCommentList () {
+      // 获取评论列表
+      this.$store
+        .dispatch("dynamicComment/DYNAMIC_COMMENT_ALL", {
+          dynamic_id: this.dynamicId,
+          parent_id: this.commentItem.id
+        })
+        .then(result => {
+          this.commentItem.children = result.data.list;
+          this.isChildMore = false
+        })
     },
     deleteComment (id) {
       this.$store

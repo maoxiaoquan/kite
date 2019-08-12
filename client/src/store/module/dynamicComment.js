@@ -13,6 +13,14 @@ const actions = {
       parameter: { params: parameter }
     })
   },
+  DYNAMIC_COMMENT_ALL ({ commit, dispatch, state }, parameter) {
+    // 获取动态评论列表
+    return fetch({
+      url: '/dynamic-comment/all',
+      method: 'get',
+      parameter: { params: parameter }
+    })
+  },
   DYNAMIC_COMMENT_CREATE ({ commit, dispatch, state }, parameter) {
     // 获取动态评论列表
     return fetch({
