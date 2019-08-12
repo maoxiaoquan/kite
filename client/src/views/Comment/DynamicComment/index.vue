@@ -9,6 +9,7 @@
         <comment-item :comment-item="item"
                       :dynamicId="dynamicId"
                       v-for="(item,key) in commentList"
+                      v-if="key<6"
                       :key="key" />
       </div>
     </div>
@@ -16,7 +17,7 @@
       <p class="no-comment">评论模块已关闭</p>
     </div>
     <div class="more"
-         v-show="commentList.length>6">
+         v-show="commentList.length>=6">
       <router-link class="dynamic"
                    :to='{name:"dynamicView",params:{dynamicId}}'>
         查看更多 >
@@ -36,7 +37,7 @@ export default {
     return {
       commentList: [], // 用户评论的列表
       page: 1,
-      pageSize: 10,
+      pageSize: 6,
       isLoadingComment: false
     };
   },

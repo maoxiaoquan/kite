@@ -19,6 +19,7 @@ class dynamicComment {
     let dynamic_id = ctx.query.dynamic_id
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10
+    let childPageSize = ctx.query.childPageSize || ''
     let parent_id = ctx.query.parent_id || 0
 
     try {
@@ -52,12 +53,30 @@ class dynamicComment {
             attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
           })
         )
+
+        if (rows[i].reply_uid !== 0 && rows[i].reply_uid !== rows[i].uid) {
+          rows[i].setDataValue(
+            'reply_user',
+            await models.user.findOne({
+              where: { uid: rows[i].reply_uid },
+              attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+            })
+          )
+        }
+
+        rows[i].setDataValue(
+          'count',
+          await models.dynamic_comment.count({
+            where: { parent_id: rows[i].id, ...clientWhere.comment }
+          })
+        )
       }
 
       for (let item in rows) {
         // 循环取子评论
         let childAllComment = await models.dynamic_comment.findAll({
-          where: { parent_id: rows[item].id, ...clientWhere.comment }
+          where: { parent_id: rows[item].id, ...clientWhere.comment },
+          limit: childPageSize || 5 // 每页限制返回的数据条数
         })
         rows[item].setDataValue('children', childAllComment)
         for (let childCommentItem in childAllComment) {

@@ -48,8 +48,11 @@
       <comment-child-item v-for="(childCommentItem,key) in commentItem.children"
                           :key="key"
                           :p_id="commentItem.id"
+                          :dynamicId="dynamicId"
                           :childCommentItem="childCommentItem"
                           @ChildCommentChange="commentChange" />
+      <span v-if="commentItem.count>5"
+            class="more">查看更多</span>
     </div>
   </div>
 </template>
@@ -192,11 +195,20 @@ export default {
   .comment-item-children {
     margin-top: 10px;
     padding-left: 50px;
-    overflow: hidden;
     /deep/.comment-item {
       &:last-child {
         border-bottom: none;
       }
+    }
+    .more {
+      background: #f46e65;
+      padding: 5px 15px;
+      font-size: 12px;
+      color: #ffffff;
+      display: block;
+      text-align: center;
+      border-radius: 3px;
+      cursor: pointer;
     }
   }
 }

@@ -45,6 +45,7 @@
          :id="'comment-reply'+childCommentItem.id">
       <comment-form :reply_uid="reply_uid"
                     :child_comment_id="p_id"
+                    :dynamicId="dynamicId"
                     @commentChange="commentChange" />
     </div>
   </div>
@@ -56,7 +57,7 @@ import faceqq from "./face/qq";
 
 export default {
   name: "childrenItem",
-  props: ["childCommentItem", "p_id"],
+  props: ["childCommentItem", "p_id", "dynamicId"],
   data: function () {
     return {
       isComment: false,
