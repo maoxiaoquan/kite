@@ -113,6 +113,7 @@ class dynamic {
       // sort
       // hottest 全部热门:
       whereParams = {
+        id: topic_id,
         status: {
           [Op.or]: [2, 4]
         }
@@ -253,6 +254,154 @@ class dynamic {
     }
   }
 
+  static async getDynamicListMe (ctx) {
+    let page = ctx.query.page || 1
+    let pageSize = ctx.query.pageSize || 10
+    let topic_id = ctx.query.topic_id || ''
+    let whereParams = {} // 查询参数
+    let orderParams = [['create_date', 'DESC']] // 排序参数
+    let { user = '' } = ctx.request
+
+    try {
+      // sort
+      // hottest 全部热门:
+      whereParams = {
+        uid: user.uid,
+        status: {
+          [Op.or]: [1, 2, 4]
+        }
+      }
+
+      let { count, rows } = await models.dynamic.findAndCountAll({
+        where: whereParams, // 为空，获取全部，也可以自己添加条件
+        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: pageSize, // 每页限制返回的数据条数
+        order: orderParams
+      })
+
+      for (let i in rows) {
+        rows[i].setDataValue(
+          'create_at',
+          await moment(rows[i].create_date).format('YYYY-MM-DD')
+        )
+        rows[i].setDataValue(
+          'topic',
+          rows[i].topic_ids
+            ? await models.dynamic_topic.findOne({
+              where: { topic_id: rows[i].topic_ids }
+            })
+            : ''
+        )
+        rows[i].setDataValue(
+          'user',
+          await models.user.findOne({
+            where: { uid: rows[i].uid },
+            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+          })
+        )
+      }
+
+      if (rows) {
+        resClientJson(ctx, {
+          state: 'success',
+          message: '数据返回成功',
+          data: {
+            count,
+            page,
+            pageSize,
+            list: rows
+          }
+        })
+      } else {
+        resClientJson(ctx, {
+          state: 'error',
+          message: '数据返回错误，请再次刷新尝试'
+        })
+      }
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
+  // 推荐动态
+  static async recommendDynamicList (ctx) {
+    let whereParams = {} // 查询参数
+    let orderParams = [
+      ['create_date', 'DESC'],
+      ['like_count', 'DESC'],
+      ['comment_count', 'DESC']
+    ] // 排序参数
+
+    try {
+      // sort
+      // hottest 全部热门:
+      whereParams = {
+        status: {
+          [Op.or]: [2, 4]
+        },
+        create_date: {
+          [Op.between]: [
+            new Date(TimeNow.showMonthFirstDay()),
+            new Date(TimeNow.showMonthLastDay())
+          ]
+        }
+      }
+
+      let allDynamic = await models.dynamic.findAll({
+        where: whereParams, // 为空，获取全部，也可以自己添加条件
+        limit: 3, // 每页限制返回的数据条数
+        order: orderParams
+      })
+
+      for (let i in allDynamic) {
+        allDynamic[i].setDataValue(
+          'create_at',
+          await moment(allDynamic[i].create_date).format('YYYY-MM-DD')
+        )
+        allDynamic[i].setDataValue(
+          'topic',
+          allDynamic[i].topic_ids
+            ? await models.dynamic_topic.findOne({
+              where: { topic_id: allDynamic[i].topic_ids }
+            })
+            : ''
+        )
+        allDynamic[i].setDataValue(
+          'user',
+          await models.user.findOne({
+            where: { uid: allDynamic[i].uid },
+            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+          })
+        )
+      }
+
+      if (allDynamic) {
+        resClientJson(ctx, {
+          state: 'success',
+          message: '数据返回成功',
+          data: {
+            list: allDynamic
+          }
+        })
+      } else {
+        resClientJson(ctx, {
+          state: 'error',
+          message: '数据返回错误，请再次刷新尝试'
+        })
+      }
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
   static async dynamicTopicIndex (ctx) {
     // 获取首页侧栏动态列表
     try {
@@ -329,4 +478,5 @@ class dynamic {
     }
   }
 }
+
 module.exports = dynamic

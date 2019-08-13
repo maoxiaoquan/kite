@@ -30,14 +30,15 @@
 
     <div class="related-dynamic-block dynamic-block">
       <header class="title">推荐沸点</header>
-      <ul class="dynamic-list"
-          v-for="x in 3">
-        <li class="item">
+      <ul class="dynamic-list">
+        <li class="item"
+            v-for="(item,key) in dynamic.recommendDynamicList"
+            :key="key">
           <router-link class="dynamic"
-                       :to='{name:"dynamicView",params:{dynamicId:1}}'>
+                       :to='{name:"dynamicView",params:{dynamicId:item.id}}'>
             <div class="content-box">
-              <div class="content">掘金文章评论 点赞 会下大拇指雨 hhh 有点意思</div>
-              <div class="stat item"><span>210 赞 · </span><span>84 评论</span></div>
+              <div class="content">{{item.content}}</div>
+              <div class="stat item"><span>{{item.like_count}} 赞 · </span><span>{{item.comment_count}} 评论</span></div>
             </div>
 
           </router-link>
@@ -78,6 +79,9 @@ export default {
     return Promise.all([
 
     ]);
+  },
+  created () {
+    this.$store.dispatch("dynamic/GET_RECOMMEND_DYNAMIC_LIST")
   },
   computed: {
     ...mapState(["personalInfo", "dynamic", "website"]) // home:主页  article_column:文章的专栏

@@ -12,20 +12,17 @@
               <header class="title">相关推荐</header>
               <ul class="dynamic-list">
                 <li class="item"
-                    v-for="x in 3">
-                  <a href="/dynamic/5d424d0e51882564daa2f264"
-                     target="_blank"
-                     rel=""
-                     class="dynamic">
+                    v-for="(item,key) in dynamic.recommendDynamicList"
+                    :key="key">
+                  <router-link class="dynamic"
+                               :to='{name:"dynamicView",params:{dynamicId:item.id}}'>
                     <div class="content-box">
-                      <div class="content">微信防撤回、微信语音转发、微信秒抢红包、微信自定义骰子、微信自动回复、朋友圈伪集赞、
-                        手机机型伪造、虚拟定位在家里也可以上班打卡，你是否也感受过xposed模块的威力？</div>
-                      <div class="stat item"
-                           style="margin-top: 0.83rem;"><span>1 赞 · </span><span>0 评论</span></div>
+                      <div class="content">{{item.content}}</div>
+                      <div class="stat item"><span>{{item.like_count}} 赞 · </span><span>{{item.comment_count}} 评论</span></div>
                     </div>
-                    <!---->
-                  </a></li>
 
+                  </router-link>
+                </li>
               </ul>
             </div>
 
@@ -38,7 +35,7 @@
 
 <script>
 import dynamicItem from './component/dynamicItem'
-import dynamicWtite from './component/dynamicWtite'
+import dynamicWrite from './component/dynamicWrite'
 import dynamicAside from './component/dynamicAside'
 import { mapState } from 'vuex'
 export default {
@@ -51,12 +48,15 @@ export default {
       })
     ]);
   },
+  created () {
+    this.$store.dispatch("dynamic/GET_RECOMMEND_DYNAMIC_LIST")
+  },
   computed: {
     ...mapState(['dynamic'])
   },
   components: {
     dynamicItem,
-    dynamicWtite,
+    dynamicWrite,
     dynamicAside
   }
 }

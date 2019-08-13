@@ -71,7 +71,7 @@ class dynamicComment {
           where: { parent_id: rows[item].id, ...clientWhere.comment },
           limit: Number(childPageSize) // 每页限制返回的数据条数
         })
-        rows[item].setDataValue('children', childAllComment)
+
         for (let childCommentItem in childAllComment) {
           // 循环取用户  代码有待优化，层次过于复杂
           childAllComment[childCommentItem].setDataValue(
@@ -80,6 +80,18 @@ class dynamicComment {
               'YYYY-MM-DD H:m:s'
             )
           )
+          if (Number(childAllComment[childCommentItem].status === 1)) {
+            childAllComment[childCommentItem].setDataValue(
+              'content',
+              '当前用户评论需要审核'
+            )
+          }
+          if (Number(childAllComment[childCommentItem].status === 3)) {
+            childAllComment[childCommentItem].setDataValue(
+              'content',
+              '当前用户评论违规'
+            )
+          }
           childAllComment[childCommentItem].setDataValue(
             'user',
             await models.user.findOne({
@@ -101,6 +113,8 @@ class dynamicComment {
             )
           }
         }
+
+        rows[item].setDataValue('children', childAllComment)
       }
 
       await resClientJson(ctx, {
@@ -185,7 +199,7 @@ class dynamicComment {
             ...clientWhere.comment
           }
         })
-        allDynamicComment[item].setDataValue('children', childAllComment)
+
         for (let childCommentItem in childAllComment) {
           // 循环取用户  代码有待优化，层次过于复杂
           childAllComment[childCommentItem].setDataValue(
@@ -194,6 +208,20 @@ class dynamicComment {
               'YYYY-MM-DD H:m:s'
             )
           )
+
+          if (Number(childAllComment[childCommentItem].status === 1)) {
+            childAllComment[childCommentItem].setDataValue(
+              'content',
+              '当前用户评论需要审核'
+            )
+          }
+          if (Number(childAllComment[childCommentItem].status === 3)) {
+            childAllComment[childCommentItem].setDataValue(
+              'content',
+              '当前用户评论违规'
+            )
+          }
+
           childAllComment[childCommentItem].setDataValue(
             'user',
             await models.user.findOne({
@@ -215,6 +243,8 @@ class dynamicComment {
             )
           }
         }
+
+        allDynamicComment[item].setDataValue('children', childAllComment)
       }
 
       await resClientJson(ctx, {
@@ -277,8 +307,6 @@ class dynamicComment {
       )
         ? 5
         : 1
-
-      console.log('status', status)
 
       await models.dynamic_comment
         .create({

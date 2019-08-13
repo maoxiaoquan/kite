@@ -9,7 +9,8 @@ const state = () => ({
     page: 1,
     pageSize: 10
   }, // 动态列表
-  dynamicView: {}
+  dynamicView: {},
+  recommendDynamicList: [] // 专推荐动态列表
 })
 
 const mutations = {
@@ -28,16 +29,32 @@ const mutations = {
   SET_DYNAMIC_VIEW (state, data) {
     // 设置动态内容
     state.dynamicView = data
+  },
+  SET_RECOMMEND_DYNAMIC_LIST (state, data) {
+    // 设置推荐动态列表
+    state.recommendDynamicList = data
   }
 }
 
 const actions = {
   GET_DYNAMIC_LIST ({ commit, dispatch, state }, parameter) {
     // 获取动态列表
+    let params = {}
+
+    if (parameter.topic_id === 'following') {
+      params = parameter
+    } else {
+      delete parameter.accessToken
+      params = parameter
+    }
+
     return fetch({
-      url: '/dynamic/list',
+      url:
+        parameter.topic_id === 'following'
+          ? '/dynamic/list-my'
+          : '/dynamic/list',
       method: 'get',
-      parameter: { params: parameter }
+      parameter: { params }
     }).then(result => {
       commit('SET_DYNAMIC_LIST', result.data)
       return result
@@ -47,8 +64,8 @@ const actions = {
     // 创建动态
     return fetch({
       url: '/dynamic/create',
-      method: 'get',
-      parameter: { params: parameter }
+      method: 'post',
+      parameter
     }).then(result => {
       return result
     })
@@ -61,6 +78,17 @@ const actions = {
       parameter: { params: parameter }
     }).then(result => {
       commit('SET_DYNAMIC_VIEW', result.data.dynamic)
+      return result
+    })
+  },
+  GET_RECOMMEND_DYNAMIC_LIST ({ commit, dispatch, state }, parameter) {
+    // 获取推荐动态列表
+    return fetch({
+      url: '/dynamic/recommend-list',
+      method: 'get',
+      parameter: { params: parameter }
+    }).then(result => {
+      commit('SET_RECOMMEND_DYNAMIC_LIST', result.data.list)
       return result
     })
   },

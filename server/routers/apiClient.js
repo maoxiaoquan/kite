@@ -219,6 +219,14 @@ router.post(
 
 router.get('/dynamic/list', dynamic.getDynamicList) // 获取动态列表
 
+router.get('/dynamic/recommend-list', dynamic.recommendDynamicList) // 获取推荐动态列表
+
+router.get(
+  '/dynamic/list-my',
+  tokens.ClientVerifyToken,
+  dynamic.getDynamicListMe
+) // 获取我的动态或者关注列表
+
 router.get('/dynamic/view', dynamic.getDynamicView) // 获取动态详情
 
 router.post(

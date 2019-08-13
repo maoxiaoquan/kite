@@ -160,7 +160,7 @@
 import { UploadImage, Face } from '@components'
 import { mapState } from 'vuex'
 export default {
-  name: 'dynamicWtite',
+  name: 'dynamicWrite',
   data () {
     return {
       content: '',
@@ -277,6 +277,7 @@ export default {
           this.coverImage = ''
           this.currentTopic = ''
           this.linkContent = ''
+          this.$emit('changeDynamicWrite')
         } else {
           this.$message.error(result.message);
         }

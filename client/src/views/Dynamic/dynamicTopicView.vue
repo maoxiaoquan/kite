@@ -4,7 +4,7 @@
       <div class="row dynamic-main">
         <div class="col-xs-12 col-sm-8 col-md-8">
           <div class="stream-wrapper">
-            <dynamic-wtite />
+            <dynamic-write />
           </div>
           <ul>
             <li class="item shadow"
@@ -70,13 +70,13 @@
 
 <script>
 import dynamicItem from './component/dynamicItem'
-import dynamicWtite from './component/dynamicWtite'
+import dynamicWrite from './component/dynamicWrite'
 import dynamicAside from './component/dynamicAside'
 export default {
   name: 'dynamic',
   components: {
     dynamicItem,
-    dynamicWtite,
+    dynamicWrite,
     dynamicAside
   }
 }

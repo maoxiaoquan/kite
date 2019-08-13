@@ -39,7 +39,7 @@
         <div class="col-xs-12 col-sm-8 col-md-8">
           <div class="stream-wrapper"
                v-if="personalInfo.islogin">
-            <dynamic-wtite />
+            <dynamic-write @changeDynamicWrite="dynamicSubmit" />
           </div>
           <ul>
             <li class="dy-item"
@@ -59,7 +59,7 @@
 
 <script>
 import dynamicItem from './component/dynamicItem'
-import dynamicWtite from './component/dynamicWtite'
+import dynamicWrite from './component/dynamicWrite'
 import dynamicAside from './component/dynamicAside'
 import { mapState } from "vuex";
 export default {
@@ -76,15 +76,20 @@ export default {
     // 触发 action 后，会返回 Promise
     return Promise.all([
       store.dispatch("dynamic/GET_DYNAMIC_TOPIC_INDEX"), // 重置文章列表数据 
-      store.dispatch("dynamic/GET_DYNAMIC_LIST", { topic_id: route.params.dynamicTopicId || '' })
+      store.dispatch("dynamic/GET_DYNAMIC_LIST", { topic_id: route.params.dynamicTopicId || '', accessToken })
     ]);
+  },
+  methods: {
+    dynamicSubmit () { // 评论提交的回调
+      this.$router.push({ name: 'dynamics', params: { dynamicTopicId: 'following' } })
+    }
   },
   computed: {
     ...mapState(['home', 'dynamic', 'website', 'personalInfo'])
   },
   components: {
     dynamicItem,
-    dynamicWtite,
+    dynamicWrite,
     dynamicAside
   }
 }
