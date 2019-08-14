@@ -184,20 +184,8 @@ class dynamic {
       !~['hot', 'newest'].indexOf(topic_id) &&
         (whereParams['topic_ids'] = topic_id)
       topic_id === 'hot' && orderParams.push(['like_count', 'DESC'])
-      // monthlyHottest 本月最热:
-      // sort === 'monthlyHottest' &&
-      //   (whereParams['create_date'] = {
-      //     [Op.between]: [
-      //       new Date(TimeNow.showMonthFirstDay()),
-      //       new Date(TimeNow.showMonthLastDay())
-      //     ]
-      //   })
       // newest 最新推荐:
-      topic_id === 'newest' && orderParams.push(['create_date', 'DESC'])
-
-      if (!topic_id) {
-        orderParams.push(['create_date', 'ASC'])
-      }
+      orderParams.push(['create_date', 'DESC'])
 
       let { count, rows } = await models.dynamic.findAndCountAll({
         where: whereParams, // 为空，获取全部，也可以自己添加条件
@@ -428,7 +416,7 @@ class dynamic {
         state: 'success',
         message: '返回成功',
         data: {
-          all: allDynamicTopic
+          list: allDynamicTopic
         }
       })
     } catch (err) {
@@ -466,7 +454,7 @@ class dynamic {
         state: 'success',
         message: '返回成功',
         data: {
-          all: allDynamicTopic
+          list: allDynamicTopic
         }
       })
     } catch (err) {

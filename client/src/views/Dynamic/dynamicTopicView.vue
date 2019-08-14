@@ -2,62 +2,44 @@
   <div id="dynamic-topic-view">
     <div class="container dynamic-container">
       <div class="row dynamic-main">
-        <div class="col-xs-12 col-sm-8 col-md-8">
-          <div class="stream-wrapper">
-            <dynamic-write />
+        <div class="col-xs-12 col-sm-8 col-md-8 left">
+          <div class="stream-wrapper"
+               v-if="personalInfo.islogin">
+            <dynamic-write @changeDynamicWrite="dynamicSubmit"
+                           :afferentTopic="afferentTopic" />
           </div>
           <ul>
-            <li class="item shadow"
-                v-for="item in 10"
-                :key="item">
-              <dynamic-item />
+            <li class="dy-item"
+                v-for="(dynamicItem,key) in dynamic.dynamicList.list"
+                :key="key">
+              <dynamic-item :dynamicItem="dynamicItem" />
             </li>
           </ul>
         </div>
         <div class="col-xs-12 col-sm-4 col-md-4">
           <aside class="topic-side topic-side sidebar">
-            <div data-v-6e4c1285=""
-                 data-v-49233e61=""
-                 class="topic-box shadow">
-              <div data-v-6e4c1285=""
-                   class="wallpaper">
-                <span data-v-6e4c1285=""
-                      style="background-image: url(&quot;https://user-gold-cdn.xitu.io/2018/5/15/1635f8400e159843?imageView2/1/w/300/h/144/q/85/format/webp/interlace/1&quot;);"></span></div>
-              <div data-v-6e4c1285=""
-                   class="content">
+            <div class="topic-box shadow">
+              <div class="wallpaper">
+                <span style="background-image: url(&quot;https://user-gold-cdn.xitu.io/2018/5/15/1635f8400e159843?imageView2/1/w/300/h/144/q/85/format/webp/interlace/1&quot;);"></span></div>
+              <div class="content">
                 <el-image class="icon"
                           size="size"
                           src="circleUrl">
                 </el-image>
-                <div data-v-6e4c1285=""
-                     class="title">一图胜千言</div><button data-v-6e4c1285=""
-                        class="followed">已关注</button>
-                <div data-v-6e4c1285=""
-                     class="describe">
-                  <div data-v-6e4c1285=""
-                       class="desc-title">话题介绍:</div><span data-v-6e4c1285="">能用图，就不要用字。</span>
-                  <div data-v-6e4c1285=""
-                       class="limit-ctl-box">
-                    <!---->
-                    <!---->
-                  </div>
+                <div class="title">一图胜千言</div><button class="followed">已关注</button>
+                <div class="describe">
+                  <div class="desc-title">话题介绍:</div><span>能用图，就不要用字。</span>
+                  <div class="limit-ctl-box"></div>
                 </div>
               </div>
-              <div data-v-6e4c1285=""
-                   class="stat-box">
-                <li data-v-6e4c1285=""
-                    class="item">
-                  <div data-v-6e4c1285=""
-                       class="count">3367</div>
-                  <div data-v-6e4c1285=""
-                       class="title">沸点</div>
+              <div class="stat-box">
+                <li class="item">
+                  <div class="count">3367</div>
+                  <div class="title">沸点</div>
                 </li>
-                <li data-v-6e4c1285=""
-                    class="item">
-                  <div data-v-6e4c1285=""
-                       class="count">4582</div>
-                  <div data-v-6e4c1285=""
-                       class="title">关注</div>
+                <li class="item">
+                  <div class="count">4582</div>
+                  <div class="title">关注</div>
                 </li>
               </div>
             </div>
@@ -72,8 +54,31 @@
 import dynamicItem from './component/dynamicItem'
 import dynamicWrite from './component/dynamicWrite'
 import dynamicAside from './component/dynamicAside'
+import { mapState } from 'vuex'
 export default {
   name: 'dynamic',
+  async asyncData ({ store, route, accessToken = "" }) {
+    // 触发 action 后，会返回 Promise
+    return Promise.all([
+      store.dispatch("dynamic/GET_DYNAMIC_LIST", { topic_id: route.params.dynamicTopicId || '' })
+    ]);
+  },
+  data () {
+    return {
+      afferentTopic: ""
+    }
+  },
+  created () {
+    this.afferentTopic = this.$route.params.dynamicTopicId
+  },
+  methods: {
+    dynamicSubmit () {
+
+    }
+  },
+  computed: {
+    ...mapState(['personalInfo', 'dynamic'])
+  },
   components: {
     dynamicItem,
     dynamicWrite,
@@ -85,7 +90,11 @@ export default {
 <style scoped lang="scss">
 #dynamic-topic-view {
   padding-top: 30px;
+
   .dynamic-main {
+    .left {
+      box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
+    }
   }
   .topic-side {
     .topic-box {

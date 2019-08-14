@@ -426,6 +426,14 @@ class User {
         }
       })
 
+      let dynamicCount = await models.dynamic.count({
+        // 他有多少文章
+        where: {
+          uid,
+          ...clientWhere.dynamic.myQuery
+        }
+      })
+
       resClientJson(ctx, {
         state: 'success',
         message: '获取用户所有信息成功',
@@ -437,7 +445,8 @@ class User {
           subscribe_article_tag_id_arr: allSubscribeArticleTagId,
           other_user_attention_count: otherUserAttentionCount,
           user_attention_other_count: userAttentionCount,
-          user_article_count: articleCount
+          user_article_count: articleCount,
+          dynamicCount
         }
       })
     } catch (err) {

@@ -101,7 +101,7 @@
               <span class="tool-text">链接</span>
             </div>
           </div>
-          <div class="topic-picker picker">
+          <div class="topic-picker picker" :class="{'no-click':afferentTopic}">
             <el-popover ref="topicView"
                         placement="bottom"
                         popper-class="topic-view"
@@ -138,7 +138,12 @@
               </ul>
             </el-popover>
             <div class="emoji-box"
-                 v-popover:topicView>
+                 v-popover:topicView v-if="!afferentTopic">
+              <i class="el-icon-collection-tag"></i>
+              <span class="tool-text">话题</span>
+            </div>
+             <div class="emoji-box"
+                 v-else>
               <i class="el-icon-collection-tag"></i>
               <span class="tool-text">话题</span>
             </div>
@@ -177,9 +182,19 @@ export default {
       currentTopic: {} // 当前使用专题
     }
   },
+  props: {
+    afferentTopic: {
+      default: ''
+    }
+  },
   created () {
-    this.$store.dispatch("dynamic/GET_DYNAMIC_TOPIC_LIST")
-    this.searchTopicResultList = this.dynamic.dynamicTopicIndex
+    this.$store.dispatch("dynamic/GET_DYNAMIC_TOPIC_LIST").then(result => {
+      let topic_id = this.$route.params.dynamicTopicId
+      if (topic_id) {
+        this.initTopic(topic_id)
+      }
+    })
+    this.searchTopicResultList = this.dynamic.dynamicTopicList
   },
   watch: {
     coverImage (val) { // 判断当前是否是在传封面图
@@ -201,13 +216,13 @@ export default {
     },
     searchTopicVal (val) {
       let arr = [];
-      for (let item in this.dynamic.dynamicTopicIndex) {
+      for (let item in this.dynamic.dynamicTopicList) {
         if (
-          this.dynamic.dynamicTopicIndex[item].name
+          this.dynamic.dynamicTopicList[item].name
             .toLowerCase()
             .indexOf(this.searchTopicVal.toLowerCase()) >= 0
         ) {
-          arr.push(this.dynamic.dynamicTopicIndex[item]);
+          arr.push(this.dynamic.dynamicTopicList[item]);
         }
       }
       this.searchTopicResultList = arr;
@@ -232,6 +247,13 @@ export default {
     },
     trim (string) {
       return (string || '').replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '');
+    },
+    initTopic (val) { // 初始化当前专题
+      this.dynamic.dynamicTopicList.map((item) => {
+        if (item.topic_id === val) {
+          this.currentTopic = item
+        }
+      })
     },
     onTopic (val) { // 选择专题
       this.currentTopic = val

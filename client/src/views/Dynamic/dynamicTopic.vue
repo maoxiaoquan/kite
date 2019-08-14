@@ -26,7 +26,7 @@
       <div class="dynamic-main-title">全部话题</div>
       <div class="row">
         <div class="col-xs-12 col-sm-4 col-md-4"
-             v-for="(item,key) in dynamic.dynamicTopicIndex"
+             v-for="(item,key) in dynamic.dynamicTopicList"
              :key="key">
           <div class="topic-item">
             <router-link class="icon"
@@ -63,7 +63,7 @@ export default {
   async asyncData ({ store, route, accessToken = "" }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
-      store.dispatch("dynamic/GET_DYNAMIC_TOPIC_LIST"), // 重置文章列表数据
+      store.dispatch("dynamic/GET_DYNAMIC_TOPIC_LIST"), // 获取所有动态专题列表
     ]);
   },
   computed: {

@@ -75,9 +75,11 @@ export default {
   async asyncData ({ store, route, accessToken = "" }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
-      store.dispatch("dynamic/GET_DYNAMIC_TOPIC_INDEX"), // 重置文章列表数据 
       store.dispatch("dynamic/GET_DYNAMIC_LIST", { topic_id: route.params.dynamicTopicId || '', accessToken })
     ]);
+  },
+  created () {
+    this.$store.dispatch("dynamic/GET_DYNAMIC_TOPIC_INDEX") // 获取首页动态专题列表
   },
   methods: {
     dynamicSubmit () { // 评论提交的回调

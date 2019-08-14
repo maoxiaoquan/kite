@@ -8,6 +8,7 @@ const state = () => ({
     subscribe_article_tag_id_arr: [],
     user_article_count: 0,
     user_attention_other_count: 0,
+    dynamicCount: 0,
     user_info: {},
     user_like_aid_arr: [],
     user: {

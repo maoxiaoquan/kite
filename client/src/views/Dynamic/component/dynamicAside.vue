@@ -6,24 +6,24 @@
         <a>
           <el-image class="avatar"
                     size="size"
-                    src="circleUrl">
+                    :src="userInfo.user.avatar">
           </el-image>
         </a>
         <div class="user-info">
-          <a class="username ellipsis">靖丶之</a>
-          <div class="position ellipsis">das46564</div>
+          <a class="username ellipsis">{{userInfo.user.nickname}}</a>
+          <div class="position ellipsis">{{userInfo.user.nickname}}</div>
         </div>
       </div>
       <ul class="stat-list">
         <a class="item">
           <div class="title">沸点</div>
-          <div class="count">0</div>
+          <div class="count">{{userInfo.dynamicCount}}</div>
         </a><a class="item">
           <div class="title">关注</div>
-          <div class="count">34</div>
+          <div class="count">{{userInfo.user_attention_other_count}}</div>
         </a><a class="item">
           <div class="title">关注者</div>
-          <div class="count">0</div>
+          <div class="count">{{userInfo.other_user_attention_count}}</div>
         </a>
       </ul>
     </div>
@@ -83,8 +83,16 @@ export default {
   created () {
     this.$store.dispatch("dynamic/GET_RECOMMEND_DYNAMIC_LIST")
   },
+  mounted () {
+    if (this.personalInfo.islogin) {
+      this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
+    }
+  },
   computed: {
-    ...mapState(["personalInfo", "dynamic", "website"]) // home:主页  article_column:文章的专栏
+    ...mapState(["personalInfo", "dynamic", "website", "user"]), // home:主页  article_column:文章的专栏
+    userInfo () {
+      return this.user.user_info
+    }
   }
 }
 </script>

@@ -19,8 +19,8 @@ const mutations = {
     state.dynamicTopicIndex = data
   },
   SET_DYNAMIC_TOPIC_LIST (state, data) {
-    // 设置首页侧栏导航话题
-    state.dynamicTopicIndex = data
+    // 所有话题列表
+    state.dynamicTopicList = data
   },
   SET_DYNAMIC_LIST (state, data) {
     // 设置动态列表
@@ -107,18 +107,18 @@ const actions = {
       method: 'get',
       parameter: { params: parameter }
     }).then(result => {
-      commit('SET_DYNAMIC_TOPIC_INDEX', result.data.all)
+      commit('SET_DYNAMIC_TOPIC_INDEX', result.data.list)
       return result
     })
   },
   GET_DYNAMIC_TOPIC_LIST ({ commit, dispatch, state }, parameter) {
-    // 获取首页侧栏导航话题
+    // 获取首页全部话题
     return fetch({
       url: '/dynamic-topic/list',
       method: 'get',
       parameter: { params: parameter }
     }).then(result => {
-      commit('SET_DYNAMIC_TOPIC_LIST', result.data.all)
+      commit('SET_DYNAMIC_TOPIC_LIST', result.data.list)
       return result
     })
   }
