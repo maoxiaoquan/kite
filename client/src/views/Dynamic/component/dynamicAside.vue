@@ -46,7 +46,8 @@
       </ul>
     </div>
 
-    <div class="topic-sidebar shadow topics">
+    <div class="topic-sidebar shadow topics"
+         v-if="personalInfo.islogin">
       <div class="title"><span>关注的话题</span>
         <router-link :to="{name:'dynamicTopic'}">
           <span>全部</span>
@@ -54,14 +55,19 @@
       </div>
       <div class="content">
         <ul class="topic-list topic_list">
-          <li>
-            <div class="topic-item">
-              <div class="lazy icon loaded immediate"
-                   style="background-image: url(&quot;https://user-gold-cdn.xitu.io/2018/5/15/1635f8400e159843?imageView2/1/w/80/h/80/q/85/format/webp/interlace/1&quot;);"></div>
-              <div class="content"><span data-v-57a73037="">一图胜千言</span><span data-v-57a73037="">4580 关注 · 3364 沸点</span>
+          <li v-for="(item,key) in dynamic.dynamicTopicList"
+              v-if="isRssDynamicTopic(item)"
+              :key="key">
+            <router-link class="topic-item"
+                         :to='{name:"dynamicTopicView",params:{dynamicTopicId:item.topic_id}}'>
+              <el-image class="lazy icon loaded immediate"
+                        size="size"
+                        :src="item.icon">
+              </el-image>
+              <div class="content"><span>{{item.name}}</span><span>{{item.rss_count}} 关注 · {{item.dynamicCount}} 沸点</span>
                 <!---->
               </div>
-            </div>
+            </router-link>
           </li>
         </ul>
       </div>
@@ -87,6 +93,11 @@ export default {
     if (this.personalInfo.islogin) {
       this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
     }
+  },
+  methods: {
+    isRssDynamicTopic (item) {
+      return ~this.user.user_info.allRssDynamicTopicId.indexOf(item.topic_id)
+    },
   },
   computed: {
     ...mapState(["personalInfo", "dynamic", "website", "user"]), // home:主页  article_column:文章的专栏

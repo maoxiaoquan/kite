@@ -9,6 +9,8 @@ const state = () => ({
     user_article_count: 0,
     user_attention_other_count: 0,
     dynamicCount: 0,
+    allLikeDymaicId: [], // 关注的所有动态ID
+    allRssDynamicTopicId: [], // 订阅的所有动态话题ID
     user_info: {},
     user_like_aid_arr: [],
     user: {
@@ -111,6 +113,14 @@ const actions = {
       parameter: parameter
     })
   },
+  USER_LIKE_DYNAMIC ({ commit, dispatch, state }, parameter) {
+    // 用户喜欢动态
+    return fetch({
+      url: '/user/like-dynamic',
+      method: 'post',
+      parameter: parameter
+    })
+  },
   GET_USER_INFO_ALL ({ commit, dispatch, state }, parameter) {
     // 获取用户信息
     return fetch({
@@ -136,7 +146,7 @@ const actions = {
   CREATE_ARTICLE_BLOG: ({ commit, dispatch, state }, data) => {
     // 创建用户个人文章专题
     return fetch({
-      url: '/personal/create_article_blog',
+      url: '/personal/create-article-blog',
       method: 'post',
       parameter: { ...data }
     })

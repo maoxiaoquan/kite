@@ -70,7 +70,9 @@
 
     <div class="dynamic-action-row">
       <div class="action-box action-box">
-        <div class="like-action action">
+        <div class="like-action action"
+             :class="{'active':~user.user_info.allLikeDymaicId.indexOf(dynamicItem.id||'')}"
+             @click="setUserLikeDynamic">
           <i class="el-icon-thumb"></i>
           <span class="action-title">{{dynamicItem.like_count}}</span>
         </div>
@@ -121,7 +123,6 @@ export default {
   },
   methods: {
     setUserAttention () { // 设置用户关注用户
-
       if (!this.personalInfo.islogin) {
         this.$message.warning('请先登录')
         return false
@@ -137,6 +138,28 @@ export default {
           this.$message.error(result.message)
         }
       })
+    },
+    setUserLikeDynamic () {
+      /*用户like 动态*/
+      this.$store
+        .dispatch("user/USER_LIKE_DYNAMIC", {
+          dynamic_id: this.dynamicItem.id
+        })
+        .then(res => {
+          if (res.state === "success") {
+            if (res.data.type === "like") {
+              this.dynamicItem.like_count = Number(this.dynamicItem.like_count) + 1
+            } else if (res.data.type === "cancel") {
+              this.dynamicItem.like_count -= 1
+            }
+            this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
+          } else {
+            this.$message.warning(res.message);
+          }
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
     },
     imgAnalyze (attach) {
       let urlArr = attach.split(',') || []
@@ -293,6 +316,11 @@ export default {
         font-size: 13px;
         font-weight: 500;
         color: #8a93a0;
+      }
+      &.active {
+        i {
+          color: #007fff;
+        }
       }
     }
   }

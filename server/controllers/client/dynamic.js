@@ -450,6 +450,16 @@ class dynamic {
           ['sort', 'ASC'] // asc
         ]
       })
+
+      for (let i in allDynamicTopic) {
+        allDynamicTopic[i].setDataValue(
+          'dynamicCount',
+          await models.dynamic.count({
+            where: { topic_ids: allDynamicTopic[i].topic_id }
+          })
+        )
+      }
+
       resClientJson(ctx, {
         state: 'success',
         message: '返回成功',

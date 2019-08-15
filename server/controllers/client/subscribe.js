@@ -200,6 +200,7 @@ class Subscribe {
   static async setSubscribeTag (ctx) {
     const { article_tag_id } = ctx.request.body
     let { user = '' } = ctx.request
+    let type = ''
     try {
       let oneSubscribeArticleTag = await models.rss_article_tag.findOne({
         where: {
@@ -208,64 +209,112 @@ class Subscribe {
         }
       })
 
-      let oneArticleTag = await models.article_tag.findOne({
-        where: {
-          article_tag_id
-        }
-      })
-
       if (oneSubscribeArticleTag) {
         /* 判断是否关注了，是则取消，否则添加 */
-
+        type = 'cancel'
         await models.rss_article_tag.destroy({
           where: {
             uid: user.uid,
             article_tag_id
           }
         })
-
-        await models.article_tag.update(
-          {
-            attention_count: oneArticleTag.attention_count - 1
-          },
-          {
-            where: {
-              article_tag_id
-            }
-          }
-        )
-        resClientJson(ctx, {
-          state: 'success',
-          message: '取消关注文章标签成功',
-          data: {
-            type: 'cancel'
-          }
-        })
       } else {
+        type = 'attention'
         await models.rss_article_tag.create({
           uid: user.uid,
           article_tag_id
         })
+      }
 
-        await models.article_tag.update(
-          {
-            attention_count: oneArticleTag.attention_count + 1
-          },
-          {
-            where: {
-              article_tag_id
-            }
+      let articleTagRssCount = await models.rss_article_tag.count({
+        where: {
+          article_tag_id
+        }
+      })
+
+      await models.article_tag.update(
+        {
+          attention_count: articleTagRssCount
+        },
+        {
+          where: {
+            article_tag_id
           }
-        )
+        }
+      )
 
-        resClientJson(ctx, {
-          state: 'success',
-          message: '关注文章标签成功',
-          data: {
-            type: 'attention'
+      resClientJson(ctx, {
+        state: 'success',
+        message:
+          type === 'attention' ? '关注文章标签成功' : '取消关注文章标签成功',
+        data: {
+          type
+        }
+      })
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
+  // 订阅动态话题
+  static async setSubscribeDynamicTopic (ctx) {
+    const { topic_id } = ctx.request.body
+    let { user = '' } = ctx.request
+    let type = ''
+    try {
+      let oneSubscribeDynamicTopic = await models.rss_dynamic_topic.findOne({
+        where: {
+          uid: user.uid,
+          topic_id
+        }
+      })
+
+      if (oneSubscribeDynamicTopic) {
+        /* 判断是否关注了，是则取消，否则添加 */
+        type = 'cancel'
+        await models.rss_dynamic_topic.destroy({
+          where: {
+            uid: user.uid,
+            topic_id
           }
         })
+      } else {
+        type = 'attention'
+        await models.rss_dynamic_topic.create({
+          uid: user.uid,
+          topic_id
+        })
       }
+
+      let dynamicTopicRssCount = await models.rss_dynamic_topic.count({
+        where: {
+          topic_id
+        }
+      })
+
+      await models.dynamic_topic.update(
+        {
+          rss_count: dynamicTopicRssCount
+        },
+        {
+          where: {
+            topic_id
+          }
+        }
+      )
+
+      resClientJson(ctx, {
+        state: 'success',
+        message:
+          type === 'attention' ? '关注动态话题成功' : '取消关注动态话题成功',
+        data: {
+          type
+        }
+      })
     } catch (err) {
       resClientJson(ctx, {
         state: 'error',

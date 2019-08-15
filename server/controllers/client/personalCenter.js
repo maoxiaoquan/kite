@@ -274,6 +274,7 @@ class PersonalCenter {
   static async setUserLikeArticle (ctx) {
     const { aid, uid } = ctx.request.body
     let { user = '' } = ctx.request
+    let type = ''
     try {
       let oneUserLikeArticle = await models.article_like.findOne({
         where: {
@@ -284,80 +285,18 @@ class PersonalCenter {
 
       if (oneUserLikeArticle) {
         /* 判断是否like文章，是则取消，否则添加 */
-
-        await models.sequelize.transaction(function (transaction) {
-          // 在事务中执行操作
-          return models.article_like
-            .destroy(
-              {
-                where: {
-                  uid: user.uid,
-                  aid
-                }
-              },
-              { ...transaction }
-            ) /* 删除user article关联 */
-            .then(function (user_like_article_destroy) {
-              return models.article_like.count(
-                {
-                  where: {
-                    aid
-                  }
-                },
-                { ...transaction }
-              )
-              /* 获取文章所有like数 */
-            })
-            .then(function (user_like_article_count) {
-              return models.article.update(
-                {
-                  like_count: user_like_article_count
-                },
-                { where: { aid } },
-                { ...transaction }
-              )
-              /* 修改文章like数 */
-            })
-        })
-        resClientJson(ctx, {
-          state: 'success',
-          data: {
-            type: 'cancel'
-          },
-          message: '取消like文章成功'
+        type = 'cancel'
+        await models.article_like.destroy({
+          where: {
+            uid: user.uid,
+            aid
+          }
         })
       } else {
-        await models.sequelize.transaction(function (transaction) {
-          // 在事务中执行操作
-          return models.article_like
-            .create(
-              {
-                uid: user.uid,
-                aid
-              },
-              { ...transaction }
-            ) /* 添加user article关联 */
-            .then(function (user_like_article_destroy) {
-              return models.article_like.count(
-                {
-                  where: {
-                    aid
-                  }
-                },
-                { ...transaction }
-              )
-              /* 获取文章所有like数 */
-            })
-            .then(function (user_like_article_count) {
-              return models.article.update(
-                {
-                  like_count: user_like_article_count
-                },
-                { where: { aid } },
-                { ...transaction }
-              )
-              /* 修改文章like数 */
-            })
+        type = 'like'
+        await models.article_like.create({
+          uid: user.uid,
+          aid
         })
         await models.user_message.create({
           // 用户行为记录
@@ -369,14 +308,101 @@ class PersonalCenter {
             title: '文章有新的喜欢'
           })
         })
-        resClientJson(ctx, {
-          state: 'success',
-          data: {
-            type: 'like'
-          },
-          message: 'like文章成功'
-        })
       }
+
+      let articleLikeCount = await models.article_like.count({
+        where: {
+          aid
+        }
+      })
+
+      await models.article.update(
+        {
+          like_count: articleLikeCount
+        },
+        { where: { aid } }
+      )
+
+      resClientJson(ctx, {
+        state: 'success',
+        data: {
+          type
+        },
+        message: type === 'like' ? 'like文章成功' : '取消like文章成功'
+      })
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
+  /**
+   * 用户like动态post
+   * @param   {object} ctx 上下文对象
+   */
+  static async setUserLikeDynamic (ctx) {
+    const { dynamic_id } = ctx.request.body
+    let { user = '' } = ctx.request
+    let type = ''
+    try {
+      let oneUserLikeArticle = await models.dynamic_like.findOne({
+        where: {
+          uid: user.uid,
+          dynamic_id
+        }
+      })
+
+      if (oneUserLikeArticle) {
+        /* 判断是否like动态，是则取消，否则添加 */
+        type = 'cancel'
+        await models.dynamic_like.destroy({
+          where: {
+            uid: user.uid,
+            dynamic_id
+          }
+        })
+      } else {
+        type = 'like'
+        await models.dynamic_like.create({
+          uid: user.uid,
+          dynamic_id
+        })
+        // 暂时取消
+        // await models.user_message.create({
+        //   // 用户行为记录
+        //   uid: uid,
+        //   type: 6, // 1:系统消息 2:喜欢文章  3:关注标签 4:用户关注 5:评论
+        //   content: JSON.stringify({
+        //     other_uid: user.uid,
+        //     aid: aid,
+        //     title: '文章有新的喜欢'
+        //   })
+        // })
+      }
+
+      let dynamicLikeCount = await models.dynamic_like.count({
+        where: {
+          dynamic_id
+        }
+      })
+
+      await models.dynamic.update(
+        {
+          like_count: dynamicLikeCount
+        },
+        { where: { id: dynamic_id } }
+      )
+
+      resClientJson(ctx, {
+        state: 'success',
+        data: {
+          type
+        },
+        message: type === 'like' ? 'like动态成功' : '取消like动态成功'
+      })
     } catch (err) {
       resClientJson(ctx, {
         state: 'error',

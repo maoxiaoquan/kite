@@ -11,6 +11,7 @@ import setting from './setting'
 import search from './search'
 import website from './website'
 import dynamic from './dynamic'
+import rss from './rss'
 
 export default {
   sign,
@@ -25,5 +26,6 @@ export default {
   setting,
   search,
   website,
-  dynamic
+  dynamic,
+  rss
 }

@@ -15,7 +15,7 @@ const actions = {
   },
   CREATE_ARTICLE_BLOG: ({ commit, dispatch, state }, data) => {
     return fetch({
-      url: '/personal/create_article_blog',
+      url: '/personal/create-article-blog',
       method: 'post',
       parameter: { ...data }
     })

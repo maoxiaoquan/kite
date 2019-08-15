@@ -49,7 +49,8 @@
 
       <div class="row tag-list">
         <div class="item col-xs-12 col-sm-3 col-md-3"
-             v-for="item in subscribe.article_tag_list">
+             v-for="(item,key) in subscribe.article_tag_list"
+             :key="key">
           <articleTagItem :articleTagItem="item" />
         </div>
       </div>

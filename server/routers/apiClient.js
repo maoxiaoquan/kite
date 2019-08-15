@@ -36,7 +36,7 @@ router.post('/reset_password', user.userResetPassword) // 重置密码 TYPE:AJAX
 router.post('/personal/info', tokens.ClientVerifyToken, user.userPersonalInfo)
 
 router.post(
-  '/personal/create_article_blog',
+  '/personal/create-article-blog',
   tokens.ClientVerifyToken,
   userArticleBlog.createUserArticleBlog
 ) // 用户文章专题 TYPE:AJAX post
@@ -261,5 +261,17 @@ router.post(
   tokens.ClientVerifyToken,
   dynamicComment.deleteDynamicComment
 ) // 删除动态评论 TYPE:AJAX post
+
+router.post(
+  '/user/like-dynamic',
+  tokens.ClientVerifyToken,
+  personalCenter.setUserLikeDynamic
+) // 用户like动态TYPE:AJAX post
+
+router.post(
+  '/subscribe/dynamic_topic',
+  tokens.ClientVerifyToken,
+  subscribe.setSubscribeDynamicTopic
+) // 用户订阅话题 TYPE:AJAX post
 
 module.exports = router

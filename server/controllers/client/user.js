@@ -403,11 +403,27 @@ class User {
           })
         })
 
+      let allLikeDymaicId = await models.dynamic_like
+        .findAll({ where: { uid } })
+        .then(res => {
+          return res.map((item, key) => {
+            return item.dynamic_id
+          })
+        })
+
       let allSubscribeArticleTagId = await models.rss_article_tag
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((item, key) => {
             return item.article_tag_id
+          })
+        })
+
+      let allRssDynamicTopicId = await models.rss_dynamic_topic
+        .findAll({ where: { uid } })
+        .then(res => {
+          return res.map((item, key) => {
+            return item.topic_id
           })
         })
 
@@ -446,7 +462,9 @@ class User {
           other_user_attention_count: otherUserAttentionCount,
           user_attention_other_count: userAttentionCount,
           user_article_count: articleCount,
-          dynamicCount
+          dynamicCount,
+          allLikeDymaicId,
+          allRssDynamicTopicId
         }
       })
     } catch (err) {
