@@ -25,16 +25,16 @@
                target="_blank"
                rel=""
                class="time-box">
-              <time datetime="2019-08-01T06:45:45.474Z"
-                    title="Thu Aug 01 2019 14:45:45 GMT+0800 (中国标准时间)"
+              <time :title="dynamicItem.create_at"
                     class="time">{{dynamicItem.create_at}}</time>
             </a>
           </div>
         </div>
       </div>
-
       <div class="header-action">
-        <button class="subscribe-btn follow-button">关注</button>
+        <button class="subscribe-btn follow-button"
+                :class="{'active':~user.user_info.attention_uid_arr.indexOf(dynamicItem.user.uid||'')}"
+                @click="setUserAttention">关注</button>
       </div>
     </div>
     <div class="dynamic-content-row">
@@ -98,7 +98,7 @@
 <script>
 
 import DynamicComment from '../../Comment/DynamicComment'
-
+import { mapState } from 'vuex'
 export default {
   name: "dynamicItem",
   props: {
@@ -120,11 +120,32 @@ export default {
     }
   },
   methods: {
+    setUserAttention () { // 设置用户关注用户
+
+      if (!this.personalInfo.islogin) {
+        this.$message.warning('请先登录')
+        return false
+      }
+
+      this.$store.dispatch('user/USER_ATTENTION', {
+        attention_uid: this.dynamicItem.user.uid
+      }).then(result => {
+        if (result.state === 'success') {
+          this.$message.success(result.message)
+          this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
+        } else {
+          this.$message.error(result.message)
+        }
+      })
+    },
     imgAnalyze (attach) {
       let urlArr = attach.split(',') || []
       let length = attach.split(',').length
       return length > 0 ? urlArr : []
     }
+  },
+  computed: {
+    ...mapState(['personalInfo', 'user'])
   },
   components: {
     DynamicComment
@@ -193,6 +214,10 @@ export default {
       color: #6cbd45;
       border: 1px solid #37c700;
       background-color: #fff;
+      &.active {
+        border: 1px solid #999;
+        color: #999;
+      }
     }
   }
   .dynamic-content-row {
