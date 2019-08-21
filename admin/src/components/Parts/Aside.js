@@ -44,6 +44,11 @@ class Aside extends Component {
             title: '文章专栏',
             key: 'article_column',
             link: '/manager/article_column'
+          },
+          {
+            title: '文章评论管理',
+            key: 'comment',
+            link: '/manager/comment'
           }
         ]
       },
@@ -83,11 +88,6 @@ class Aside extends Component {
             title: '用户头像审核',
             key: 'user_avatar_review',
             link: '/manager/user_avatar_review'
-          },
-          {
-            title: '评论管理',
-            key: 'comment',
-            link: '/manager/comment'
           }
         ]
       },

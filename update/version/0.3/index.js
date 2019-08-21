@@ -31,6 +31,52 @@ class update0_3 {
         await models.sequelize.query(
           'ALTER TABLE user_authority CHANGE authority_id authority_id VARCHAR(100) comment "权限ID";'
         )
+
+        await models.admin_authority.update(
+          {
+            authority_url: '/article-comment/list'
+          },
+          {
+            where: {
+              authority_id: 'vAlRwG42i' // 查询条件
+            }
+          }
+        )
+
+        await models.admin_authority.update(
+          {
+            authority_url: '/article-comment/update'
+          },
+          {
+            where: {
+              authority_id: 'Aj46PocjE' // 查询条件
+            }
+          }
+        )
+
+        await models.admin_authority.update(
+          {
+            authority_url: '/article-comment/delete'
+          },
+          {
+            where: {
+              authority_id: 'NgMPyBTyt' // 查询条件
+            }
+          }
+        )
+
+        await models.admin_authority.update(
+          {
+            authority_parent_id: 'f-AaZjGoX4K',
+            authority_parent_name: '文章管理'
+          },
+          {
+            where: {
+              authority_id: 'yoUnDy1tf' // 查询条件
+            }
+          }
+        )
+
         await models.dynamic_topic.bulkCreate(dfDynamicTopicList)
         await models.admin_authority.bulkCreate(newAdminAuthorityList)
         await models.user_authority.bulkCreate(newUserAuthorityList)

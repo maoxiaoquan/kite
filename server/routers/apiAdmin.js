@@ -16,6 +16,8 @@ const tokens = require('../utils/tokens') // 登录tokens
 const options = require('../controllers/admin/options') // options 可增加选项栏
 const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
 const dynamicTopic = require('../controllers/admin/dynamicTopic') // 动态专题
+const dynamicComment = require('../controllers/admin/dynamicComment') // 动态专评论
+const dynamics = require('../controllers/admin/dynamics') // 动态
 // 此文件所有接口都是后台管理员操作前后台数据所用
 
 /* 前台用户 */
@@ -69,14 +71,14 @@ router.post(
   verifyAuthority.AdminCheck,
   articles.getArticleList
 )
-// 更新用户
+// 更新文章
 router.post(
   '/article/edit',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
   articles.editArticle
 )
-// 删除用户
+// 删除文章
 router.post(
   '/article/delete',
   tokens.AdminVerifyToken,
@@ -254,24 +256,24 @@ router.post(
   picture.deletePicture
 )
 
-// 评论模块
+// 文章评论模块
 // 评论分页列表
 router.post(
-  '/comment/list',
+  '/article-comment/list',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
   articleComment.getCommentList
 )
-// 评论数据更新
+// 文章评论数据更新
 router.post(
-  '/comment/update',
+  '/article-comment/update',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
   articleComment.updateComment
 )
-// 评论数据删除
+// 文章评论数据删除
 router.post(
-  '/comment/delete',
+  '/article-comment/delete',
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
   articleComment.deleteComment
@@ -531,6 +533,51 @@ router.post(
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
   dynamicTopic.deleteDynamicTopic
+)
+
+/* 动态汇总 */
+router.post(
+  '/dynamic/list',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  dynamics.getDynamicList
+)
+// 更新动态
+router.post(
+  '/dynamic/update',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  dynamics.updateDynamic
+)
+// 删除动态
+router.post(
+  '/dynamic/delete',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  dynamics.deleteDynamic
+)
+
+// 动态评论模块
+// 评论分页列表
+router.post(
+  '/dynamic-comment/list',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  dynamicComment.getCommentList
+)
+// 动态评论数据更新
+router.post(
+  '/dynamic-comment/update',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  dynamicComment.updateComment
+)
+// 动态评论数据删除
+router.post(
+  '/dynamic-comment/delete',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  dynamicComment.deleteComment
 )
 
 module.exports = router

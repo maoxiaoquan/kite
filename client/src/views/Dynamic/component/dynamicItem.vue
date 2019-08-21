@@ -89,7 +89,7 @@
     </div>
 
     <div class="dynamic-comment-row"
-         v-if="isCommnet">
+         v-if="isCommnet&&dfIsCommnet">
       <dynamic-comment :dynamicId="dynamicItem.id" />
     </div>
 
@@ -110,11 +110,8 @@ export default {
       }
     },
     dfIsCommnet: { // 判断默认是否展开评论
-      default: false
+      default: true
     }
-  },
-  created () {
-    this.isCommnet = this.dfIsCommnet
   },
   data () {
     return {
