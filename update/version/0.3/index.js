@@ -67,8 +67,9 @@ class update0_3 {
 
         await models.admin_authority.update(
           {
-            authority_parent_id: 'f-AaZjGoX4K',
-            authority_parent_name: '文章管理'
+            authority_parent_id: 'AaZjGoX4K',
+            authority_parent_name: '文章管理',
+            authority_name: '文章评论管理'
           },
           {
             where: {

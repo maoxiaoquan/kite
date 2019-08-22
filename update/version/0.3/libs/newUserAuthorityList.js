@@ -1,4 +1,4 @@
-const config = require('../../../server/config')
+const config = require('../../../../server/config')
 module.exports = [
   {
     authority_description: '动态模块',
