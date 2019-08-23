@@ -72,7 +72,8 @@ export default [
         path: '/manager/comment',
         name: 'comment',
         title: '评论管理',
-        component: () => import('../containers/Comment/view/Comment') // 评论管理
+        component: () =>
+          import('../containers/ArticleComment/view/ArticleComment') // 评论管理
       },
       {
         path: '/manager/admin_user',

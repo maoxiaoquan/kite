@@ -13,21 +13,20 @@ import {
 } from 'antd'
 import { Link } from 'react-router-dom'
 
-import './Comment.scss'
+import './ArticleComment.scss'
 import {
   getCommentList,
   updateComment,
   deleteComment
 } from '../actions/CommentAction'
 import alert from '../../../utils/alert'
-import stateComment from '../reducer/CommentReducer'
 import faceqq from './qq'
 const Option = Select.Option
 const FormItem = Form.Item
 const confirm = Modal.confirm
 const { TextArea } = Input
 
-class Comment extends React.Component {
+class ArticleComment extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -151,7 +150,7 @@ class Comment extends React.Component {
       cancelText: 'No',
       onOk: () => {
         this.fetchDeleteComment({
-          id: this.props.stateComment.current_info.id
+          id: this.props.stateArticleComment.current_info.id
         })
         /*删除用户评论*/
       },
@@ -198,7 +197,7 @@ class Comment extends React.Component {
     /*修改用户评论*/
     this.props.dispatch(
       updateComment(
-        { id: this.props.stateComment.current_info.id, ...values },
+        { id: this.props.stateArticleComment.current_info.id, ...values },
         res => {
           alert.message_success('修改用户评论成功')
           this.fetchCommentList()
@@ -264,7 +263,7 @@ class Comment extends React.Component {
   }
 
   render() {
-    const { stateComment } = this.props
+    const { stateArticleComment } = this.props
     const { loading, content_val, status_val } = this.state
     const { getFieldDecorator } = this.props.form
 
@@ -343,7 +342,7 @@ class Comment extends React.Component {
 
           <Table
             columns={this.state.columns}
-            dataSource={stateComment.list}
+            dataSource={stateArticleComment.list}
             loading={loading}
             onChange={this.TablePageChange.bind(this)}
             pagination={this.state.pagination}
@@ -386,10 +385,10 @@ class Comment extends React.Component {
   }
 }
 
-const CommentForm = Form.create()(Comment)
+const ArticleCommentForm = Form.create()(ArticleComment)
 
-export default connect(({ stateComment }) => {
+export default connect(({ stateArticleComment }) => {
   return {
-    stateComment
+    stateArticleComment
   }
-})(CommentForm)
+})(ArticleCommentForm)

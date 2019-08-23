@@ -7,7 +7,7 @@ import stateUserRole from '../../containers/UserRole/reducer/UserRoleReducer'
 import stateUserAuthority from '../../containers/UserAuthority/reducer/UserAuthorityReducer'
 import stateUserAvatarReview from '../../containers/AvatarReview/reducer/AvatarReviewReducer'
 import stateArticle from '../../containers/Article/reducer/ArticleReducer'
-import stateComment from '../../containers/Comment/reducer/CommentReducer'
+import stateArticleComment from '../../containers/ArticleComment/reducer/CommentReducer'
 import stateArticleTag from '../../containers/ArticleTag/reducer/ArticleTagReducer'
 import stateArticleColumn from '../../containers/ArticleColumn/reducer/ArticleColumnReducer'
 import statePicture from '../../containers/Picture/reducer/PictureReducer'
@@ -29,7 +29,7 @@ const rootReducer = {
   stateUserAuthority,
   stateUserAvatarReview,
   stateArticle,
-  stateComment,
+  stateArticleComment,
   stateArticleTag,
   stateArticleColumn,
   statePicture,

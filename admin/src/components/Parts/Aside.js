@@ -47,7 +47,7 @@ class Aside extends Component {
           },
           {
             title: '文章评论管理',
-            key: 'comment',
+            key: 'article_comment',
             link: '/manager/comment'
           }
         ]

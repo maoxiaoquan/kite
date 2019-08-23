@@ -14,7 +14,7 @@ function ErrorMessage (message) {
 
 /* 评论模块 */
 
-class Comment {
+class ArticleComment {
   static async getArticleComment (ctx) {
     let aid = ctx.query.aid
     let page = ctx.query.page || 1
@@ -315,4 +315,4 @@ class Comment {
   }
 }
 
-module.exports = Comment
+module.exports = ArticleComment

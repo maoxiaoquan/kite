@@ -1,7 +1,7 @@
 const { resAdminJson } = require('../../utils/resData')
 const { lowdb } = require('../../../db/lowdb/index')
 
-class Comment {
+class System {
   /**
    * 获取标分页评论列表操作
    * @param   {object} ctx 上下文对象
@@ -78,4 +78,4 @@ class Comment {
   }
 }
 
-module.exports = Comment
+module.exports = System

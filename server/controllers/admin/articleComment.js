@@ -3,7 +3,7 @@ const { resAdminJson } = require('../../utils/resData')
 const moment = require('moment')
 const Op = require('sequelize').Op
 
-class Comment {
+class ArticleComment {
   /**
    * 获取标分页评论列表操作
    * @param   {object} ctx 上下文对象
@@ -115,4 +115,4 @@ class Comment {
   }
 }
 
-module.exports = Comment
+module.exports = ArticleComment

@@ -69,7 +69,8 @@ class update0_3 {
           {
             authority_parent_id: 'AaZjGoX4K',
             authority_parent_name: '文章管理',
-            authority_name: '文章评论管理'
+            authority_name: '文章评论管理',
+            authority_url: 'articleComment'
           },
           {
             where: {
