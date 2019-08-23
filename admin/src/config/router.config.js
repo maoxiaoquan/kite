@@ -69,8 +69,8 @@ export default [
         component: () => import('../containers/Picture/view/Picture') // 图片管理
       },
       {
-        path: '/manager/comment',
-        name: 'comment',
+        path: '/manager/article-comment',
+        name: 'articleComment',
         title: '评论管理',
         component: () =>
           import('../containers/ArticleComment/view/ArticleComment') // 评论管理
