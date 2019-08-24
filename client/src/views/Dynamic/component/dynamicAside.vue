@@ -16,7 +16,7 @@
       </div>
       <ul class="stat-list">
         <a class="item">
-          <div class="title">沸点</div>
+          <div class="title">片刻</div>
           <div class="count">{{userInfo.dynamicCount}}</div>
         </a><a class="item">
           <div class="title">关注</div>
@@ -29,7 +29,7 @@
     </div>
 
     <div class="related-dynamic-block dynamic-block">
-      <header class="title">推荐沸点</header>
+      <header class="title">推荐片刻</header>
       <ul class="dynamic-list">
         <li class="item"
             v-for="(item,key) in dynamic.recommendDynamicList"
@@ -64,7 +64,7 @@
                         size="size"
                         :src="item.icon">
               </el-image>
-              <div class="content"><span>{{item.name}}</span><span>{{item.rss_count}} 关注 · {{item.dynamicCount}} 沸点</span>
+              <div class="content"><span>{{item.name}}</span><span>{{item.rss_count}} 关注 · {{item.dynamicCount}} 片刻</span>
                 <!---->
               </div>
             </router-link>

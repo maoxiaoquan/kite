@@ -43,14 +43,14 @@ const state = () => ({
   user_like_article: {
     // 用户like文章
     article_list: [],
-    count: 1,
+    count: 0,
     page: 1,
     pageSize: 10
   },
   user_message: {
     // 用户消息
     user_message_list: [],
-    count: 1,
+    count: 0,
     page: 1,
     pageSize: 10
   },
@@ -58,6 +58,13 @@ const state = () => ({
     // 侧栏
     user_role_all: []
   },
+  dynamicList: {
+    // 个人中心动态列表
+    count: 0,
+    list: [],
+    page: 1,
+    pageSize: 10
+  }, // 动态列表
   unread_message_count: 0 // 用户未读
 })
 
@@ -93,6 +100,10 @@ const mutations = {
   SET_UNREAD_MESSAGE_COUNT (state, data) {
     // 用户消息数量
     state.unread_message_count = data
+  },
+  SET_PERSONAL_DYNAMIC_LIST (state, data) {
+    // 设置动态列表
+    state.dynamicList = data
   }
 }
 
@@ -246,6 +257,17 @@ const actions = {
       parameter: { params: data }
     }).then(result => {
       commit('SET_UNREAD_MESSAGE_COUNT', result.data)
+      return result
+    })
+  },
+  GET_PERSONAL_DYNAMIC_LIST ({ commit, dispatch, state }, parameter) {
+    // 获取动态列表
+    return fetch({
+      url: '/personal/dynamic-list',
+      method: 'get',
+      parameter: { params: parameter }
+    }).then(result => {
+      commit('SET_PERSONAL_DYNAMIC_LIST', result.data)
       return result
     })
   }

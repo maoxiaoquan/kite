@@ -21,7 +21,7 @@
           <div class="meta-box">
             <div class="position ellipsis">@ {{dynamicItem.user.introduction}}</div>
             <div class="dot">·</div>
-            <a href="/dynamic/5d428a996fb9a07d87241e2c"
+            <a href="javascript:;"
                target="_blank"
                rel=""
                class="time-box">
@@ -37,9 +37,10 @@
                 @click="setUserAttention">关注</button>
       </div>
     </div>
+
     <div class="dynamic-content-row">
       <div class="content-box content-box">
-        <div v-html="dynamicItem.content"></div>
+        <div v-html="contentRender(dynamicItem.content)"></div>
         <div class="limit-ctl-box"></div>
       </div>
     </div>
@@ -100,6 +101,7 @@
 <script>
 
 import DynamicComment from '../../Comment/DynamicComment'
+import { faceQQ } from '@components'
 import { mapState } from 'vuex'
 export default {
   name: "dynamicItem",
@@ -124,7 +126,6 @@ export default {
         this.$message.warning('请先登录')
         return false
       }
-
       this.$store.dispatch('user/USER_ATTENTION', {
         attention_uid: this.dynamicItem.user.uid
       }).then(result => {
@@ -136,7 +137,21 @@ export default {
         }
       })
     },
+    contentRender (val) {
+      let content = val;
+      faceQQ.map(faceItem => {
+        content = content.replace(
+          new RegExp("\\" + faceItem.face_text, "g"),
+          faceItem.face_view
+        );
+      });
+      return content;
+    },
     setUserLikeDynamic () {
+      if (!this.personalInfo.islogin) {
+        this.$message.warning('请先登录')
+        return false
+      }
       /*用户like 动态*/
       this.$store
         .dispatch("user/USER_LIKE_DYNAMIC", {

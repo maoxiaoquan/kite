@@ -26,7 +26,7 @@
                       <el-dropdown-item icon="el-icon-s-home"
                                         :command="{name:'home'}">主页</el-dropdown-item>
                       <el-dropdown-item icon="el-icon-s-home"
-                                        :command="{name:'dynamics',params:{dynamicTopicId:'newest'}}">千言</el-dropdown-item>
+                                        :command="{name:'dynamics',params:{dynamicTopicId:'newest'}}">片刻</el-dropdown-item>
                       <el-dropdown-item icon="el-icon-chat-line-square"
                                         v-if="personalInfo.islogin"
                                         :command="{name:'userMessage',params:{uid:personalInfo.user.uid}}">消息</el-dropdown-item>
@@ -41,7 +41,7 @@
                   </li>
                   <li class="nav-item">
                     <router-link :to="{name:'dynamics',params:{dynamicTopicId:'newest'}}"
-                                 class="nav-link">千言</router-link>
+                                 class="nav-link">片刻</router-link>
                   </li>
                   <li class="nav-item"
                       v-if="personalInfo.islogin">

@@ -22,9 +22,16 @@ const mutations = {
     // 所有话题列表
     state.dynamicTopicList = data
   },
+  INIT_DYNAMIC_LIST (state, data) {
+    // 重置动态列表
+    state.dynamicList = { count: 0, list: [], page: 1, pageSize: 10 }
+  },
   SET_DYNAMIC_LIST (state, data) {
+    const { count, list, page, pageSize } = data
+    let _list = state.dynamicList.list || []
     // 设置动态列表
-    state.dynamicList = data
+    state.dynamicList = { count, page, pageSize }
+    state.dynamicList.list = [..._list, ...list]
   },
   SET_DYNAMIC_VIEW (state, data) {
     // 设置动态内容
@@ -120,6 +127,14 @@ const actions = {
     }).then(result => {
       commit('SET_DYNAMIC_TOPIC_LIST', result.data.list)
       return result
+    })
+  },
+  DELETE_DYNAMIC ({ commit, dispatch, state }, parameter) {
+    // 删除动态
+    return fetch({
+      url: '/dynamic/delete',
+      method: 'delete',
+      parameter: { params: parameter }
     })
   }
 }

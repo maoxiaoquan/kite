@@ -152,7 +152,7 @@ export default {
         uid: this.$route.params.uid,
         blog_id: this.$route.query.blog_id || 'all',
         page: this.$route.query.page || 1,
-        pageSize: this.$route.query.pageSize || 10,
+        pageSize: 10,
       })
     },
     returnBlogHome () {

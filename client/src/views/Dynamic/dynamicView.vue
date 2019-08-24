@@ -9,12 +9,15 @@
                v-if="website.config.on_comment==='yes'">
             <comment-form :dynamicId="$route.params.dynamicId"
                           @commentChange="commentChange" />
-            <div class="comment-list"
-                 v-loading="isLoadingComment">
-              <comment-item :comment-item="item"
-                            :dynamicId="$route.params.dynamicId"
-                            v-for="(item,key) in commentList"
-                            :key="key" />
+            <div class="comment-list">
+              <scroll-loading @scroll-loading="infiniteHandler"
+                              :isLoading="isLoading"
+                              :isMore="isMore">
+                <comment-item :comment-item="item"
+                              :dynamicId="$route.params.dynamicId"
+                              v-for="(item,key) in commentList"
+                              :key="key" />
+              </scroll-loading>
             </div>
           </div>
           <div v-else>
@@ -54,9 +57,8 @@ import dynamicWrite from './component/dynamicWrite'
 import dynamicAside from './component/dynamicAside'
 
 import commentItem from "../Comment/DynamicComment/CommentItem";
-import { Page } from "@components";
+import { Page, ScrollLoading } from "@components";
 import commentForm from "../Comment/DynamicComment/CommentForm";
-
 
 import { mapState } from 'vuex'
 export default {
@@ -65,7 +67,7 @@ export default {
     // 触发 action 后，会返回 Promise
     return Promise.all([
       store.dispatch("dynamic/GET_DYNAMIC_VIEW", {
-        topic_id: route.params.dynamicId
+        id: route.params.dynamicId
       })
     ]);
   },
@@ -74,21 +76,27 @@ export default {
       commentList: [], // 用户评论的列表
       page: 1,
       pageSize: 6,
-      isLoadingComment: false
+      isLoading: false,
+      isMore: true
     };
   },
   created () {
     this.$store.dispatch("dynamic/GET_RECOMMEND_DYNAMIC_LIST")
-    this.getCommentList()
+  },
+  watch: {
+    $route (to, from) {
+      this.commentList = []
+      this.page = 1
+      this.isLoading = false
+      this.isMore = true
+    }
   },
   computed: {
     ...mapState(['dynamic', "website", "personalInfo"])
   },
   methods: {
-    getCommentList () {
-      // 获取评论列表
-      this.isLoadingComment = true;
-      var that = this;
+    infiniteHandler () {
+      this.isLoading = true;
       this.$store
         .dispatch("dynamicComment/DYNAMIC_COMMENT_LIST", {
           dynamic_id: this.$route.params.dynamicId,
@@ -97,11 +105,16 @@ export default {
           pageSize: this.pageSize
         })
         .then(result => {
-          this.commentList = result.data.list
-          this.isLoadingComment = false;
+          this.isLoading = false;
+          this.commentList = [...this.commentList, ...result.data.list]
+          if (result.data.list.length === 10) {
+            this.page += 1;
+          } else {
+            this.isMore = false;
+          }
         })
         .catch(err => {
-          this.isLoadingComment = false;
+          this.isMore = false;
         });
     },
     commentChange (result) {
@@ -117,6 +130,7 @@ export default {
     dynamicItem,
     dynamicWrite,
     dynamicAside,
+    ScrollLoading,
     "comment-item": commentItem,
     'comment-form': commentForm,
   }

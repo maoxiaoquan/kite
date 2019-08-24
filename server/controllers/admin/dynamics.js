@@ -67,7 +67,7 @@ class Dynamics {
    * @param   {object} ctx 上下文对象
    */
   static async updateDynamic (ctx) {
-    const { dynamic_id, status, type, rejection_reason } = ctx.request.body
+    const { id, status, type, rejection_reason } = ctx.request.body
     try {
       await models.dynamic.update(
         {
@@ -77,7 +77,7 @@ class Dynamics {
         },
         {
           where: {
-            id: dynamic_id // 查询条件
+            id // 查询条件
           }
         }
       )
@@ -100,11 +100,11 @@ class Dynamics {
    * 无关联则直接删除动态，有关联则开启事务同时删除与动态的关联
    */
   static async deleteDynamic (ctx) {
-    const { aid } = ctx.request.body
+    const { id } = ctx.request.body
     try {
-      let oneDynamic = await models.dynamic.findOne({ where: { aid } })
+      let oneDynamic = await models.dynamic.findOne({ where: { id } })
       if (oneDynamic) {
-        await models.dynamic.destroy({ where: { aid } })
+        await models.dynamic.destroy({ where: { id } })
         resAdminJson(ctx, {
           state: 'success',
           message: '删除动态成功'

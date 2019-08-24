@@ -88,17 +88,18 @@ class dynamicComment {
     try {
       let oneComment = await models.dynamic_comment.findOne({ where: { id } })
       await models.dynamic_comment.destroy({ where: { id } })
+      let dynamicCommentCount = await models.dynamic_comment.count({
+        where: {
+          dynamic_id: oneComment.dynamic_id,
+          parent_id: 0
+        }
+      })
       await models.dynamic.update(
         {
           // 更新文章评论数
-          comment_count: await models.dynamic_comment.count({
-            where: {
-              dynamic_id: oneComment.dynamic_id,
-              parent_id: 0
-            }
-          })
+          comment_count: dynamicCommentCount
         },
-        { where: { aid: oneComment.aid } }
+        { where: { id: oneComment.dynamic_id } }
       )
 
       resAdminJson(ctx, {

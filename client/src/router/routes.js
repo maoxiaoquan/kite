@@ -40,6 +40,11 @@ export default [
             component: () => import('@views/User/view/Blog') // 文章内容页
           },
           {
+            path: 'user-dynamic',
+            name: 'userDynamic',
+            component: () => import('@views/User/view/Dynamic') // 个人发送的动态列表
+          },
+          {
             path: 'attention',
             name: 'userAttention',
             component: () => import('@views/User/view/UserAttention') // 用户关注用户

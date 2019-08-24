@@ -235,6 +235,12 @@ router.post(
   upload.uploadDynamicPicture
 ) // 动态图片上传
 
+router.delete(
+  '/dynamic/delete',
+  tokens.ClientVerifyToken,
+  dynamic.deleteDynamic
+) // 删除动态 TYPE:AJAX post
+
 router.get('/website/info', website.getWebsiteInfo) // 网站配置相关信息 TYPE:AJAX get
 
 router.get('/dynamic-topic/index', dynamic.dynamicTopicIndex) // 获取首页专题 TYPE:AJAX post
@@ -273,5 +279,7 @@ router.post(
   tokens.ClientVerifyToken,
   subscribe.setSubscribeDynamicTopic
 ) // 用户订阅话题 TYPE:AJAX post
+
+router.get('/personal/dynamic-list', personalCenter.getDynamicListMe) // 个人中心获取列表
 
 module.exports = router

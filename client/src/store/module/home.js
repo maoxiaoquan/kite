@@ -13,17 +13,18 @@ const state = () => ({
 const mutations = {
   SET_INIT_INDEX_ARTICLE_LIST (state, data) {
     // 初始化首页 专栏页 文章列表
-    state.article.article_list = []
-    state.article.column_en_name = ''
-    state.article.count = 0
-    state.article.page = 0
+    state.article = {
+      article_list: [],
+      column_en_name: '',
+      count: 0,
+      page: 0
+    }
   },
   SET_INDEX_ARTICLE_LIST (state, { article_list, column_en_name, count, page }) {
+    let _list = state.article.article_list
     // 首页 专栏页 文章列表
-    state.article.column_en_name = column_en_name
-    state.article.count = count
-    state.article.page = page
-    state.article.article_list = state.article.article_list.concat(article_list)
+    state.article = { column_en_name, count, page }
+    state.article.article_list = [..._list, ...article_list]
   },
   SET_POPULAR_ARTICLE_TAG (state, data) {
     // 设置热门文章标签

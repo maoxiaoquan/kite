@@ -26,7 +26,7 @@
                           size="size"
                           src="circleUrl">
                 </el-image>
-                <div class="title">一图胜千言</div><button class="followed">已关注</button>
+                <div class="title">一图胜片刻</div><button class="followed">已关注</button>
                 <div class="describe">
                   <div class="desc-title">话题介绍:</div><span>能用图，就不要用字。</span>
                   <div class="limit-ctl-box"></div>
@@ -35,7 +35,7 @@
               <div class="stat-box">
                 <li class="item">
                   <div class="count">3367</div>
-                  <div class="title">沸点</div>
+                  <div class="title">片刻</div>
                 </li>
                 <li class="item">
                   <div class="count">4582</div>

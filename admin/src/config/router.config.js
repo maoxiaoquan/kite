@@ -115,11 +115,26 @@ export default [
           import('../containers/WebsiteConfig/view/WebsiteConfig') // 网站配置
       },
       {
+        // 2019.8.24 新增 动态
+        path: '/manager/dynamic',
+        name: 'dynamic',
+        title: '动态',
+        component: () => import('../containers/Dynamic/view/Dynamic') // 动态的话题
+      },
+      {
         // 2019.8.4 新增 动态话题
         path: '/manager/dynamic_topic',
         name: 'dynamicTopic',
         title: '动态的话题',
         component: () => import('../containers/DynamicTopic/view/DynamicTopic') // 动态的话题
+      },
+      {
+        // 2019.8.24 新增动态评论管理
+        path: '/manager/dynamic-comment',
+        name: 'dynamicComment',
+        title: '动态的评论管理',
+        component: () =>
+          import('../containers/DynamicComment/view/DynamicComment') // 动态的评论管理
       }
     ]
   }

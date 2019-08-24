@@ -58,9 +58,19 @@ class Aside extends Component {
         icon: 'message',
         children: [
           {
+            title: '动态汇总',
+            key: 'dynamic',
+            link: '/manager/dynamic'
+          },
+          {
             title: '动态话题',
             key: 'dynamicTopic',
             link: '/manager/dynamic_topic'
+          },
+          {
+            title: '动态评论',
+            key: 'dynamicComment',
+            link: '/manager/dynamic-comment'
           }
         ]
       },

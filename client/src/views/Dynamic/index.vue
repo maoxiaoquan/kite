@@ -41,13 +41,17 @@
                v-if="personalInfo.islogin">
             <dynamic-write @changeDynamicWrite="dynamicSubmit" />
           </div>
-          <ul>
-            <li class="dy-item"
-                v-for="(dynamicItem,key) in dynamic.dynamicList.list"
-                :key="key">
-              <dynamic-item :dynamicItem="dynamicItem" />
-            </li>
-          </ul>
+          <div>
+            <scroll-loading @scroll-loading="infiniteHandler"
+                            :isLoading="isLoading"
+                            :isMore="isMore">
+              <div class="dy-item"
+                   v-for="(dynamicItem,key) in dynamic.dynamicList.list"
+                   :key="key">
+                <dynamic-item :dynamicItem="dynamicItem" />
+              </div>
+            </scroll-loading>
+          </div>
         </div>
         <div class="col-xs-12 col-sm-4 col-md-4">
           <dynamic-aside />
@@ -62,19 +66,28 @@ import dynamicItem from './component/dynamicItem'
 import dynamicWrite from './component/dynamicWrite'
 import dynamicAside from './component/dynamicAside'
 import { mapState } from "vuex";
+import { ScrollLoading } from "@components";
 export default {
   name: 'dynamic',
   metaInfo () {
     return {
-      title: `千言-${this.website.meta.website_name}`,
+      title: `片刻-${this.website.meta.website_name}`,
       htmlAttrs: {
         lang: "zh"
       }
     };
   },
+  data () {
+    return {
+      page: 2,
+      isLoading: false,
+      isMore: true
+    }
+  },
   async asyncData ({ store, route, accessToken = "" }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
+      store.commit('dynamic/INIT_DYNAMIC_LIST'),
       store.dispatch("dynamic/GET_DYNAMIC_LIST", { topic_id: route.params.dynamicTopicId || '', accessToken })
     ]);
   },
@@ -84,12 +97,32 @@ export default {
   methods: {
     dynamicSubmit () { // 评论提交的回调
       this.$router.push({ name: 'dynamics', params: { dynamicTopicId: 'following' } })
+    },
+    infiniteHandler () {
+      this.isLoading = true;
+      this.$store
+        .dispatch("dynamic/GET_DYNAMIC_LIST", {
+          topic_id: this.$route.params.dynamicTopicId,
+          page: this.page
+        })
+        .then(result => {
+          this.isLoading = false;
+          if (result.data.list.length === 10) {
+            this.page += 1;
+          } else {
+            this.isMore = false;
+          }
+        })
+        .catch(err => {
+          this.isMore = false;
+        });
     }
   },
   computed: {
     ...mapState(['home', 'dynamic', 'website', 'personalInfo'])
   },
   components: {
+    ScrollLoading,
     dynamicItem,
     dynamicWrite,
     dynamicAside

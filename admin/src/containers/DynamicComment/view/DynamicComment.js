@@ -13,12 +13,12 @@ import {
 } from 'antd'
 import { Link } from 'react-router-dom'
 
-import './ArticleComment.scss'
+import './DynamicComment.scss'
 import {
-  getCommentList,
-  updateComment,
-  deleteComment
-} from '../actions/CommentAction'
+  getDynamicCommentList,
+  updateDynamicComment,
+  deleteDynamicComment
+} from '../actions'
 import alert from '../../../utils/alert'
 import faceqq from './qq'
 const Option = Select.Option
@@ -26,7 +26,7 @@ const FormItem = Form.Item
 const confirm = Modal.confirm
 const { TextArea } = Input
 
-class ArticleComment extends React.Component {
+class DynamicComment extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -60,12 +60,12 @@ class ArticleComment extends React.Component {
         },
         {
           title: '来自文章',
-          dataIndex: 'article',
-          key: 'article',
+          dataIndex: 'dynamic',
+          key: 'dynamic',
           render: (text, record) => (
             <div>
-              <a href={`/p/${record.article.aid}`} target="_block">
-                {record.article.title}
+              <a href={`/dynamic/${record.dynamic.id}`} target="_block">
+                {record.dynamic.content}
               </a>
             </div>
           )
@@ -134,14 +134,14 @@ class ArticleComment extends React.Component {
     this.setState({
       modal_visible_edit: true
     })
-    this.props.dispatch({ type: 'SET_COMMENT_INFO', data: data })
+    this.props.dispatch({ type: 'SET_DYNAMIC_COMMENT_INFO', data: data })
     this.props.form.setFieldsValue({
       status: String(data.status)
     })
   }
 
   _delete = value => {
-    this.props.dispatch({ type: 'SET_COMMENT_INFO', data: value })
+    this.props.dispatch({ type: 'SET_DYNAMIC_COMMENT_INFO', data: value })
     confirm({
       title: '确认要删除此条用户评论吗？',
       content: '此操作不可逆转',
@@ -150,7 +150,7 @@ class ArticleComment extends React.Component {
       cancelText: 'No',
       onOk: () => {
         this.fetchDeleteComment({
-          id: this.props.stateArticleComment.current_info.id
+          id: this.props.stateDynamicComment.current_info.id
         })
         /*删除用户评论*/
       },
@@ -196,8 +196,8 @@ class ArticleComment extends React.Component {
   fetchUpdateComment = values => {
     /*修改用户评论*/
     this.props.dispatch(
-      updateComment(
-        { id: this.props.stateArticleComment.current_info.id, ...values },
+      updateDynamicComment(
+        { id: this.props.stateDynamicComment.current_info.id, ...values },
         res => {
           alert.message_success('修改用户评论成功')
           this.fetchCommentList()
@@ -234,7 +234,7 @@ class ArticleComment extends React.Component {
   fetchDeleteComment = values => {
     /*删除用户评论*/
     this.props.dispatch(
-      deleteComment(values, res => {
+      deleteDynamicComment(values, res => {
         alert.message_success('删除用户评论成功')
         this.fetchCommentList()
       })
@@ -250,7 +250,7 @@ class ArticleComment extends React.Component {
       pagination: { current }
     } = this.state
     this.props.dispatch(
-      getCommentList({ page: current, ...params }, res => {
+      getDynamicCommentList({ page: current, ...params }, res => {
         let pagination = { ...that.state.pagination }
         pagination.total = res.count
         pagination.current = current
@@ -263,7 +263,7 @@ class ArticleComment extends React.Component {
   }
 
   render() {
-    const { stateArticleComment } = this.props
+    const { stateDynamicComment } = this.props
     const { loading, content_val, status_val } = this.state
     const { getFieldDecorator } = this.props.form
 
@@ -293,7 +293,7 @@ class ArticleComment extends React.Component {
     return (
       <div className="layout-main">
         <div className="layout-main-title">
-          <Icon type="user" /> <em>用户评论管理</em>
+          <Icon type="user" /> <em>用户动态评论管理</em>
         </div>
 
         <div className="admin-comment layout-card-view">
@@ -342,7 +342,7 @@ class ArticleComment extends React.Component {
 
           <Table
             columns={this.state.columns}
-            dataSource={stateArticleComment.list}
+            dataSource={stateDynamicComment.list}
             loading={loading}
             onChange={this.TablePageChange.bind(this)}
             pagination={this.state.pagination}
@@ -385,10 +385,10 @@ class ArticleComment extends React.Component {
   }
 }
 
-const ArticleCommentForm = Form.create()(ArticleComment)
+const DynamicCommentForm = Form.create()(DynamicComment)
 
-export default connect(({ stateArticleComment }) => {
+export default connect(({ stateDynamicComment }) => {
   return {
-    stateArticleComment
+    stateDynamicComment
   }
-})(ArticleCommentForm)
+})(DynamicCommentForm)

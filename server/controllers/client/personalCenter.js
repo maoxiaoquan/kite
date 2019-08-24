@@ -411,6 +411,78 @@ class PersonalCenter {
       return false
     }
   }
+
+  static async getDynamicListMe (ctx) {
+    const { uid } = ctx.query
+    let page = ctx.query.page || 1
+    let pageSize = Number(ctx.query.pageSize) || 10
+    let whereParams = {} // 查询参数
+    let orderParams = [['create_date', 'DESC']] // 排序参数
+
+    try {
+      // sort
+      // hottest 全部热门:
+      whereParams = {
+        uid,
+        status: {
+          [Op.or]: [1, 2, 4]
+        }
+      }
+
+      let { count, rows } = await models.dynamic.findAndCountAll({
+        where: whereParams, // 为空，获取全部，也可以自己添加条件
+        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: pageSize, // 每页限制返回的数据条数
+        order: orderParams
+      })
+
+      for (let i in rows) {
+        rows[i].setDataValue(
+          'create_at',
+          await moment(rows[i].create_date).format('YYYY-MM-DD')
+        )
+        rows[i].setDataValue(
+          'topic',
+          rows[i].topic_ids
+            ? await models.dynamic_topic.findOne({
+              where: { topic_id: rows[i].topic_ids }
+            })
+            : ''
+        )
+        rows[i].setDataValue(
+          'user',
+          await models.user.findOne({
+            where: { uid: rows[i].uid },
+            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+          })
+        )
+      }
+
+      if (rows) {
+        resClientJson(ctx, {
+          state: 'success',
+          message: '数据返回成功',
+          data: {
+            count,
+            page,
+            pageSize,
+            list: rows
+          }
+        })
+      } else {
+        resClientJson(ctx, {
+          state: 'error',
+          message: '数据返回错误，请再次刷新尝试'
+        })
+      }
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
 }
 
 module.exports = PersonalCenter

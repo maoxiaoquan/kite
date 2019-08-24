@@ -9,7 +9,7 @@
     </router-link>
     <div class="content">
       <a title="能用图，就不要用字。">{{dynamicTopicItem.name}}</a>
-      <span>{{dynamicTopicItem.rss_count}} 关注 · {{dynamicTopicItem.dynamicCount}} 沸点</span>
+      <span>{{dynamicTopicItem.rss_count}} 关注 · {{dynamicTopicItem.dynamicCount}} 片刻</span>
       <span class="subscribe"
             :class="{'active':isRssDynamicTopic}"
             @click="subscribeDynamicTopic">{{isRssDynamicTopic?'已关注':'+ 关注'}}</span>

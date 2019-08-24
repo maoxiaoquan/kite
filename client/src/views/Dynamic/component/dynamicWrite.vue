@@ -5,7 +5,7 @@
         <div class="rich-editor">
           <textarea v-model.trim="content"
                     class="empty"
-                    placeholder="告诉你个小秘密，发沸点时添加话题会被更多小伙伴看见呦~" />
+                    placeholder="告诉你个小秘密，发片刻时添加话题会被更多小伙伴看见呦~" />
           <div class="current-topic"
                v-if="currentTopic.name">{{currentTopic.name}}</div>
         </div>
@@ -131,7 +131,7 @@
                            alt="">
                     </div>
                     <div class="content">
-                      <span>{{item.name}}</span><span>{{item.like_count}} 关注 · 0 沸点</span>
+                      <span>{{item.name}}</span><span>{{item.like_count}} 关注 · 0 片刻</span>
                     </div>
                   </div>
                 </li>
@@ -189,12 +189,12 @@ export default {
   },
   created () {
     this.$store.dispatch("dynamic/GET_DYNAMIC_TOPIC_LIST").then(result => {
+      this.searchTopicResultList = result.data.list
       let topic_id = this.$route.params.dynamicTopicId
       if (topic_id) {
         this.initTopic(topic_id)
       }
     })
-    this.searchTopicResultList = this.dynamic.dynamicTopicList
   },
   watch: {
     coverImage (val) { // 判断当前是否是在传封面图

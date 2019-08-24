@@ -20,7 +20,7 @@ class dynamic {
     let { user = '' } = ctx.request
     try {
       if (!reqData.content) {
-        throw new ErrorMessage('请输入千言内容')
+        throw new ErrorMessage('请输入片刻内容')
       }
 
       if (reqData.content.length > 1000) {
@@ -34,7 +34,7 @@ class dynamic {
 
       if (new Date(currDate).getTime() < new Date(user.ban_dt).getTime()) {
         throw new ErrorMessage(
-          `当前用户因违规已被管理员禁用发布千言，时间到：${moment(
+          `当前用户因违规已被管理员禁用发布片刻，时间到：${moment(
             user.ban_dt
           ).format('YYYY年MM月DD日 HH时mm分ss秒')},如有疑问请联系网站管理员`
         )
@@ -106,16 +106,17 @@ class dynamic {
   }
 
   static async getDynamicView (ctx) {
-    let topic_id = ctx.query.topic_id || ''
+    let id = ctx.query.id || ''
+
     let whereParams = {} // 查询参数
 
     try {
       // sort
       // hottest 全部热门:
       whereParams = {
-        id: topic_id,
+        id: id,
         status: {
-          [Op.or]: [2, 4]
+          [Op.or]: [1, 2, 3, 4]
         }
       }
 
@@ -123,25 +124,31 @@ class dynamic {
         where: whereParams // 为空，获取全部，也可以自己添加条件
       })
 
-      oneDynamic.setDataValue(
-        'create_at',
-        await moment(oneDynamic.create_date).format('YYYY-MM-DD')
-      )
-      oneDynamic.setDataValue(
-        'topic',
-        oneDynamic.topic_ids
-          ? await models.dynamic_topic.findOne({
-            where: { topic_id: oneDynamic.topic_ids }
+      console.log('oneDynamic', oneDynamic)
+
+      if (oneDynamic) {
+        oneDynamic.setDataValue(
+          'create_at',
+          await moment(oneDynamic.create_date).format('YYYY-MM-DD')
+        )
+
+        oneDynamic.setDataValue(
+          'topic',
+          oneDynamic.topic_ids
+            ? await models.dynamic_topic.findOne({
+              where: { topic_id: oneDynamic.topic_ids }
+            })
+            : ''
+        )
+
+        oneDynamic.setDataValue(
+          'user',
+          await models.user.findOne({
+            where: { uid: oneDynamic.uid },
+            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
           })
-          : ''
-      )
-      oneDynamic.setDataValue(
-        'user',
-        await models.user.findOne({
-          where: { uid: oneDynamic.uid },
-          attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-        })
-      )
+        )
+      }
 
       if (oneDynamic) {
         resClientJson(ctx, {
@@ -466,6 +473,51 @@ class dynamic {
         data: {
           list: allDynamicTopic
         }
+      })
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
+  /**
+   * 删除动态
+   * @param   {object} ctx 上下文对象
+   * 删除动态判断是否有文章
+   * 无关联则直接删除动态，有关联则开启事务同时删除与文章的关联
+   */
+  static async deleteDynamic (ctx) {
+    const { id } = ctx.query
+    let { islogin = '', user = '' } = ctx.request
+
+    try {
+      let oneDynamic = await models.dynamic.findOne({
+        where: {
+          id,
+          uid: user.uid // 查询条件
+        }
+      })
+
+      if (!oneDynamic) {
+        throw new ErrorMessage('动态不存在')
+      }
+
+      if (!islogin) {
+        throw new ErrorMessage('请登录后尝试')
+      }
+
+      if (user.uid !== oneDynamic.uid) {
+        throw new ErrorMessage('非法操作已禁止')
+      }
+
+      await models.dynamic.destroy({ where: { id } })
+
+      resClientJson(ctx, {
+        state: 'success',
+        message: '删除动态成功'
       })
     } catch (err) {
       resClientJson(ctx, {

@@ -69,6 +69,11 @@
                 文章
               </router-link>
             </li>
+            <li :class="{'active':$route.name==='userDynamic'}">
+              <router-link :to='{name:"userDynamic"}'>
+                片刻
+              </router-link>
+            </li>
             <li :class="{'active':$route.name==='userAttention'}">
               <router-link :to='{name:"userAttention"}'>
                 关注
