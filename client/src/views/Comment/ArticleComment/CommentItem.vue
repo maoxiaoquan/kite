@@ -7,7 +7,6 @@
                 lazy></el-image>
     </div>
     <div class="comment-body">
-
       <div class="comment-main">
         <h4>
           <router-link class="user-info"
@@ -23,7 +22,6 @@
              v-else-if="Number(commentItem.status)===3"
              style="color:#f96b84;">当前用户评论违规</div>
       </div>
-
       <div class="comment-foot clearfix">
         <span>{{commentItem.create_at}}</span>
         <span class="comment-reply"
@@ -84,7 +82,7 @@ export default {
     },
     deleteComment (id) {
       this.$store
-        .dispatch("dynamicComment/DYNAMIC_COMMENT_DELETE", {
+        .dispatch("articleComment/ARTICLE_COMMENT_DELETE", {
           aid: this.article.aid,
           comment_id: id
         })
