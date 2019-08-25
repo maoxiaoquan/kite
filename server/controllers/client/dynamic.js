@@ -141,13 +141,27 @@ class dynamic {
             : ''
         )
 
-        oneDynamic.setDataValue(
-          'user',
-          await models.user.findOne({
-            where: { uid: oneDynamic.uid },
-            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+        if (
+          oneDynamic.topic_ids &&
+          config.DYNAMIC.dfTreeHole === oneDynamic.topic_ids
+        ) {
+          // 判断是不是树洞
+          oneDynamic.setDataValue('user', {
+            uid: 'tree',
+            avatar: config.DF_ARTICLE_TAG_IMG,
+            nickname: '树洞',
+            sex: '',
+            introduction: '树洞'
           })
-        )
+        } else {
+          oneDynamic.setDataValue(
+            'user',
+            await models.user.findOne({
+              where: { uid: oneDynamic.uid },
+              attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+            })
+          )
+        }
       }
 
       if (oneDynamic) {
@@ -214,13 +228,28 @@ class dynamic {
             })
             : ''
         )
-        rows[i].setDataValue(
-          'user',
-          await models.user.findOne({
-            where: { uid: rows[i].uid },
-            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+
+        if (
+          rows[i].topic_ids &&
+          config.DYNAMIC.dfTreeHole === rows[i].topic_ids
+        ) {
+          // 判断是不是树洞
+          rows[i].setDataValue('user', {
+            uid: 'tree',
+            avatar: config.DF_ARTICLE_TAG_IMG,
+            nickname: '树洞',
+            sex: '',
+            introduction: '树洞'
           })
-        )
+        } else {
+          rows[i].setDataValue(
+            'user',
+            await models.user.findOne({
+              where: { uid: rows[i].uid },
+              attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+            })
+          )
+        }
       }
 
       if (rows) {
@@ -287,13 +316,27 @@ class dynamic {
             })
             : ''
         )
-        rows[i].setDataValue(
-          'user',
-          await models.user.findOne({
-            where: { uid: rows[i].uid },
-            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+        if (
+          rows[i].topic_ids &&
+          config.DYNAMIC.dfTreeHole === rows[i].topic_ids
+        ) {
+          // 判断是不是树洞
+          rows[i].setDataValue('user', {
+            uid: 'tree',
+            avatar: config.DF_ARTICLE_TAG_IMG,
+            nickname: '树洞',
+            sex: '',
+            introduction: '树洞'
           })
-        )
+        } else {
+          rows[i].setDataValue(
+            'user',
+            await models.user.findOne({
+              where: { uid: rows[i].uid },
+              attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+            })
+          )
+        }
       }
 
       if (rows) {
@@ -365,13 +408,27 @@ class dynamic {
             })
             : ''
         )
-        allDynamic[i].setDataValue(
-          'user',
-          await models.user.findOne({
-            where: { uid: allDynamic[i].uid },
-            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+        if (
+          allDynamic[i].topic_ids &&
+          config.DYNAMIC.dfTreeHole === allDynamic[i].topic_ids
+        ) {
+          // 判断是不是树洞
+          allDynamic[i].setDataValue('user', {
+            uid: 'tree',
+            avatar: config.DF_ARTICLE_TAG_IMG,
+            nickname: '树洞',
+            sex: '',
+            introduction: '树洞'
           })
-        )
+        } else {
+          allDynamic[i].setDataValue(
+            'user',
+            await models.user.findOne({
+              where: { uid: allDynamic[i].uid },
+              attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+            })
+          )
+        }
       }
 
       if (allDynamic) {

@@ -13,11 +13,10 @@
     <div class="aside-component">
       <h3 class="title">写下你想说的</h3>
       <div class="issue-btn">
-        <a href="/daily_recommend"
-           class="btn-dynamic js-publish-btn">
-          <i class="el-icon-chat-line-round"></i>
-          发说说
-        </a>
+        <router-link class="btn-dynamic js-publish-btn"
+                     :to="{name:'dynamics',params:{dynamicTopicId:'newest'}}">
+          <i class="el-icon-chat-line-round"></i>发说说
+        </router-link>
         <a href="javascript:;"
            @click="switchRouter"
            class="btn-note"

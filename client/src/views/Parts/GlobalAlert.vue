@@ -3,6 +3,7 @@
 
     <el-dialog :visible.sync="isLoginShow"
                :close-on-click-modal="false"
+               class="sign-alert"
                width="350px">
       <SignIn v-if="website.config.on_login==='yes'" />
       <p class="info"
@@ -11,6 +12,7 @@
 
     <el-dialog :visible.sync="isRegisterShow"
                :close-on-click-modal="false"
+               class="sign-alert"
                width="350px">
       <SignUp v-if="website.config.on_register==='yes'" />
       <p class="info"
@@ -19,6 +21,7 @@
 
     <el-dialog :visible.sync="isResetPasswordShow"
                :close-on-click-modal="false"
+               class="sign-alert"
                width="350px">
       <ResetPassword />
     </el-dialog>
@@ -124,31 +127,34 @@ export default {
       }
       .remember-btn {
         margin: 15px 0;
+        font-size: 12px;
         span {
           margin-left: 5px;
-          font-size: 14px;
+          font-size: 12px;
           color: #969696;
           vertical-align: middle;
         }
       }
       .input-prepend {
         position: relative;
+        margin-bottom: 15px;
         input {
           width: 100%;
-          height: 50px;
+          height: 35px;
           margin-bottom: 0;
           padding: 4px 12px 4px 42px;
           border: none;
-          border-bottom: 1px solid #ebebeb;
+          border: 1px solid #ebebeb;
           background-color: #ffffff;
           vertical-align: middle;
-          font-size: 14px;
+          font-size: 13px;
+          border-radius: 12px;
         }
         i {
           position: absolute;
-          top: 11px;
-          left: 10px;
-          font-size: 18px;
+          top: 6px;
+          left: 12px;
+          font-size: 14px;
           color: #969696;
         }
       }
@@ -160,6 +166,7 @@ export default {
           position: absolute;
           right: 0;
           font-size: 12px;
+          top: 0px;
           bottom: 10px;
         }
       }
@@ -174,7 +181,7 @@ export default {
         margin-top: 20px;
         width: 100%;
         padding: 9px 18px;
-        font-size: 18px;
+        font-size: 15px;
         border: none;
         border-radius: 25px;
         color: #fff;
@@ -238,6 +245,14 @@ export default {
           display: inline-block;
         }
       }
+    }
+  }
+}
+
+.sign-alert {
+  /deep/.el-dialog {
+    border-radius: 12px;
+    .el-dialog__header {
     }
   }
 }

@@ -51,7 +51,12 @@ class Dynamic extends React.Component {
       {
         title: '内容',
         dataIndex: 'content',
-        key: 'content'
+        key: 'content',
+        render: (text, record) => (
+          <a href={`/dynamic/${record.id}`} className="dynamic-content">
+            {record.content}
+          </a>
+        )
       },
       {
         title: '创建时间',
@@ -63,7 +68,7 @@ class Dynamic extends React.Component {
         dataIndex: 'status',
         key: 'status',
         render: (text, record) => (
-          <Tag className="table-article-tag-list" color="orange">
+          <Tag className="table-article-tag-list" color="red">
             {this.state.status_list[record.status]}
           </Tag>
         )
@@ -333,8 +338,8 @@ class Dynamic extends React.Component {
         <div className="layout-main-title">
           <Icon type="file-text" /> <em>动态汇总</em>
         </div>
-        <div className="admin-article layout-card-view">
-          <div className="admin-article-bar">
+        <div className="admin-dynamic layout-card-view">
+          <div className="dynamic-article-bar">
             <Form layout="inline">
               <FormItem label="动态内容">
                 <Input

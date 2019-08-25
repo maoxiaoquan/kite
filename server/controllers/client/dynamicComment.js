@@ -418,6 +418,12 @@ class dynamicComment {
     let { user = '' } = ctx.request
 
     try {
+      let oneDynamicComment = await models.dynamic_comment.findOne({
+        where: {
+          id: reqData.comment_id
+        }
+      })
+
       let allComment = await models.dynamic_comment
         .findAll({ where: { parent_id: reqData.comment_id } })
         .then(res => {
@@ -443,17 +449,17 @@ class dynamicComment {
         }
       })
 
-      await models.article.update(
+      await models.dynamic.update(
         {
           // 更新文章评论数
           comment_count: await models.dynamic_comment.count({
             where: {
-              aid: reqData.aid,
+              dynamic_id: oneDynamicComment.dynamic_id,
               parent_id: 0
             }
           })
         },
-        { where: { aid: reqData.aid } }
+        { where: { id: oneDynamicComment.dynamic_id } }
       )
 
       resClientJson(ctx, {

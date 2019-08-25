@@ -45,7 +45,7 @@ const actions = {
     })
   },
   ARTICLE_COMMENT_DELETE ({ commit, dispatch, state }, parameter) {
-    // 获取文章评论列表
+    // 删除文章评论
     return fetch({
       url: '/article/comment-delete',
       method: 'post',

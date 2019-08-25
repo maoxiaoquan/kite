@@ -100,8 +100,7 @@ export default {
     },
     deleteComment (id) {
       this.$store
-        .dispatch("articleComment/ARTICLE_COMMENT_DELETE", {
-          aid: this.article.aid,
+        .dispatch("dynamicComment/DYNAMIC_COMMENT_DELETE", {
           comment_id: id
         })
         .then(res => {

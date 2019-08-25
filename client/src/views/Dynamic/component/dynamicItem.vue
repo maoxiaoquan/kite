@@ -4,9 +4,20 @@
     <div class="dynamic-header-row">
       <div class="account-group">
         <div class="user-popover-box">
-          <a href="/user/57ac00985bbb500062b20476"
+
+          <router-link class="user-link"
+                       :to="{name:'user',params:{uid:dynamicItem.user.uid}}"
+                       v-if="dynamicItem.user.uid!=='tree'">
+            <el-image class="avatar"
+                      size="size"
+                      :src="dynamicItem.user.avatar">
+            </el-image>
+          </router-link>
+
+          <a href="javascript:;"
              target="_blank"
-             class="user-link">
+             class="user-link"
+             v-else>
             <el-image class="avatar"
                       size="size"
                       :src="dynamicItem.user.avatar">
@@ -16,7 +27,12 @@
         <div class="dynamic-header-content">
           <div class="user-popover-box">
             <router-link :to="{name:'user',params:{uid:dynamicItem.user.uid}}"
-                         class="username">{{dynamicItem.user.nickname}}</router-link>
+                         class="username"
+                         v-if="dynamicItem.user.uid!=='tree'">{{dynamicItem.user.nickname}}</router-link>
+            <a href="javascript:;"
+               target="_blank"
+               class="username"
+               v-else> {{dynamicItem.user.nickname}} </a>
           </div>
           <div class="meta-box">
             <div class="position ellipsis">@ {{dynamicItem.user.introduction}}</div>
@@ -31,7 +47,8 @@
           </div>
         </div>
       </div>
-      <div class="header-action">
+      <div class="header-action"
+           v-if="dynamicItem.user.uid!=='tree'">
         <button class="subscribe-btn follow-button"
                 :class="{'active':~user.user_info.attention_uid_arr.indexOf(dynamicItem.user.uid||'')}"
                 @click="setUserAttention">关注</button>
@@ -243,8 +260,9 @@ export default {
       margin: 0 0 0 auto;
       padding: 0;
       width: 55px;
-      height: 26px;
+      height: 23px;
       font-size: 13px;
+      border-radius: 25px;
       border-color: #6cbd45;
       color: #6cbd45;
       border: 1px solid #37c700;

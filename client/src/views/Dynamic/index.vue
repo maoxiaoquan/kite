@@ -27,8 +27,8 @@
                            class="nav-link">{{item.name}}</router-link>
             </li>
             <li class="nav-item more">
-              <router-link :to="{name:'dynamicTopic'}">
-                <i class="el-icon-star-off"></i>
+              <router-link :to="{name:'dynamicTopic'}"
+                           class="more-view">
                 <span>更多</span>
               </router-link>
             </li>
@@ -96,7 +96,11 @@ export default {
   },
   methods: {
     dynamicSubmit () { // 评论提交的回调
-      this.$router.push({ name: 'dynamics', params: { dynamicTopicId: 'following' } })
+      if (this.$route.params.dynamicTopicId !== 'following') { // 判断是不是关注页面，是则直接刷新
+        this.$router.push({ name: 'dynamics', params: { dynamicTopicId: 'following' } })
+      } else {
+        window.location.reload()
+      }
     },
     infiniteHandler () {
       this.isLoading = true;
@@ -168,11 +172,9 @@ export default {
       }
     }
     .more {
-      i {
-        display: inline-block;
-        margin-right: 5px;
-        margin-top: -2px;
-        vertical-align: top;
+      .more-view {
+        border: 1px solid #e0e0e0;
+        border-radius: 10px !important;
       }
     }
   }

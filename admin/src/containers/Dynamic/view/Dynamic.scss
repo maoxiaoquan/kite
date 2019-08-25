@@ -1,5 +1,5 @@
-.admin-article {
-  .admin-article-bar {
+.admin-dynamic {
+  .dynamic-article-bar {
     margin-bottom: 20px;
     .select-view {
       width: 150px;
@@ -8,10 +8,20 @@
       margin: 0 5px;
     }
   }
-  .article-title{
+  .dynamic-title {
     color: #00bcd4;
-    &:hover{
-      color: #00D0B2;
+    &:hover {
+      color: #00d0b2;
     }
+  }
+  .dynamic-content {
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    width: 300px;
   }
 }

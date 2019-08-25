@@ -9,7 +9,7 @@
           <div class="current-topic"
                v-if="currentTopic.name">{{currentTopic.name}}</div>
         </div>
-        <span class="word-counter count">1000</span>
+        <span class="word-counter count">{{content.length<1000?(1000-content.length):0}}</span>
       </div>
     </div>
 
@@ -494,6 +494,10 @@ export default {
           padding: 3px 5px;
         }
         .send-dynamic {
+          border-radius: 15px;
+          background: #ffd600;
+          border-color: #ffd600;
+          color: #333;
         }
       }
     }

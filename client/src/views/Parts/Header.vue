@@ -73,7 +73,7 @@
                 <li class="nav-item">
                   <router-link :to="{name:'Write',params:{type:'create'}}"
                                class="btn btn-sm btn-outline-warning xiezuo">
-                    <i class="iconfont icon-xiezuo"></i>
+                    <i class="iconfont el-icon-edit"></i>
                   </router-link>
                 </li>
                 <li class="nav-item dropdown">

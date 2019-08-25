@@ -306,8 +306,9 @@ export default {
         margin: 0 0 0 auto;
         padding: 0;
         width: 55px;
-        height: 26px;
-        font-size: 13px;
+        height: 23px;
+        border-radius: 25px;
+        font-size: 12px;
         border-color: #6cbd45;
         color: #6cbd45;
         border: 1px solid #37c700;
@@ -370,6 +371,7 @@ export default {
       position: absolute;
       right: 20px;
       top: 15px;
+      cursor: pointer;
     }
   }
 }

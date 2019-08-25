@@ -159,6 +159,13 @@ export default {
       flex: 1 1 33.333%;
       max-height: 83px;
       line-height: 1;
+      .title {
+        font-size: 13px;
+        padding-bottom: 5px;
+      }
+      .count {
+        font-size: 13px;
+      }
     }
     .item:not(:last-child) {
       border-right: 1px solid rgba(92, 96, 102, 0.1);

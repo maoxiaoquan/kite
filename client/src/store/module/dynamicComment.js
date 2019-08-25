@@ -30,7 +30,7 @@ const actions = {
     })
   },
   DYNAMIC_COMMENT_DELETE ({ commit, dispatch, state }, parameter) {
-    // 获取动态评论列表
+    // 删除动态评论
     return fetch({
       url: '/dynamic-comment/delete',
       method: 'post',

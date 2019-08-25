@@ -127,6 +127,8 @@ class ArticleComment {
         'YYYY-MM-DD HH:mm:ss'
       )
 
+      let oneArticle = await models.article.findOne({ aid: reqData.aid })
+
       if (new Date(currDate).getTime() < new Date(user.ban_dt).getTime()) {
         throw new ErrorMessage(
           `当前用户因违规已被管理员禁用发布评论，时间到：${moment(
@@ -206,7 +208,7 @@ class ArticleComment {
 
           await models.user_message.create({
             // 用户行为记录
-            uid: reqData.article_uid,
+            uid: oneArticle.uid,
             type: 5, // 1:系统 2:喜欢文章  3:关注标签 4:关注用户 5:评论
             content: JSON.stringify({
               other_uid: user.uid,
