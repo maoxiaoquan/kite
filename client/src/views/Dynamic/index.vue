@@ -86,9 +86,15 @@ export default {
   },
   async asyncData ({ store, route, accessToken = "" }) {
     // 触发 action 后，会返回 Promise
+    const dispatchUrl = route.params.dynamicTopicId !== 'following' ? "dynamic/GET_DYNAMIC_LIST" : "dynamic/GET_DYNAMIC_LIST_ME"
     return Promise.all([
       store.commit('dynamic/INIT_DYNAMIC_LIST'),
-      store.dispatch("dynamic/GET_DYNAMIC_LIST", { topic_id: route.params.dynamicTopicId || '', accessToken })
+      store.dispatch(dispatchUrl,
+        {
+          topic_id: route.params.dynamicTopicId || '',
+          accessToken,
+          isCommit: true
+        })
     ]);
   },
   created () {
@@ -104,10 +110,12 @@ export default {
     },
     infiniteHandler () {
       this.isLoading = true;
+      const dispatchUrl = this.$route.params.dynamicTopicId !== 'following' ? "dynamic/GET_DYNAMIC_LIST" : "dynamic/GET_DYNAMIC_LIST_ME"
       this.$store
-        .dispatch("dynamic/GET_DYNAMIC_LIST", {
+        .dispatch(dispatchUrl, {
           topic_id: this.$route.params.dynamicTopicId,
-          page: this.page
+          page: this.page,
+          isCommit: true
         })
         .then(result => {
           this.isLoading = false;

@@ -46,22 +46,23 @@ const mutations = {
 const actions = {
   GET_DYNAMIC_LIST ({ commit, dispatch, state }, parameter) {
     // 获取动态列表
-    let params = {}
-
-    if (parameter.topic_id === 'following') {
-      params = parameter
-    } else {
-      delete parameter.accessToken
-      params = parameter
-    }
-
     return fetch({
-      url:
-        parameter.topic_id === 'following'
-          ? '/dynamic/list-my'
-          : '/dynamic/list',
+      url: '/dynamic/list',
       method: 'get',
-      parameter: { params }
+      parameter: { params: parameter }
+    }).then(result => {
+      if (parameter.isCommit) {
+        commit('SET_DYNAMIC_LIST', result.data)
+      }
+      return result
+    })
+  },
+  GET_DYNAMIC_LIST_ME ({ commit, dispatch, state }, parameter) {
+    // 获取自己动态列表
+    return fetch({
+      url: '/dynamic/list-my',
+      method: 'get',
+      parameter: { params: parameter }
     }).then(result => {
       commit('SET_DYNAMIC_LIST', result.data)
       return result
@@ -134,6 +135,14 @@ const actions = {
     return fetch({
       url: '/dynamic/delete',
       method: 'delete',
+      parameter: { params: parameter }
+    })
+  },
+  GET_DYNAMIC_TOPIC_INFO ({ commit, dispatch, state }, parameter) {
+    // 删除动态
+    return fetch({
+      url: '/dynamic-topic/info',
+      method: 'get',
       parameter: { params: parameter }
     })
   }

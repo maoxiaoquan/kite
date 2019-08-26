@@ -12,6 +12,8 @@ const tokens = require('../utils/tokens') // 登录tokens
 const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
 const dynamic = require('../controllers/client/dynamic') // 动态
 const dynamicComment = require('../controllers/client/dynamicComment') // 动态评论
+const dynamicTopic = require('../controllers/client/dynamicTopic') // 动态专题
+
 /**
  * 获取标签列表操作
  * @param   {String} TYPE 当前router 作用类型 AJAX:ajax传递数据 RENDER:render渲染页面或者 post form提交数据
@@ -281,5 +283,7 @@ router.post(
 ) // 用户订阅话题 TYPE:AJAX post
 
 router.get('/personal/dynamic-list', personalCenter.getDynamicListMe) // 个人中心获取列表
+
+router.get('/dynamic-topic/info', dynamicTopic.getDynamicTopicInfo) // 获取动态话题的信息
 
 module.exports = router

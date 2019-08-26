@@ -3,42 +3,62 @@
     <div class="container dynamic-container">
       <div class="row dynamic-main">
         <div class="col-xs-12 col-sm-8 col-md-8 left">
-          <div class="stream-wrapper"
-               v-if="personalInfo.islogin">
-            <dynamic-write @changeDynamicWrite="dynamicSubmit"
-                           :afferentTopic="afferentTopic" />
+          <div class="stream-wrapper">
+            <div class="edit-view">
+              <dynamic-write @changeDynamicWrite="dynamicSubmit"
+                             v-if="personalInfo.islogin"
+                             :afferentTopic="afferentTopic" />
+            </div>
+
+            <div class="sort">
+              <router-link :to='{name:"dynamicTopicView",params:{dynamicTopicId:afferentTopic}}'
+                           class="topic-title">推荐</router-link>
+              <router-link :to='{name:"dynamicTopicView",params:{dynamicTopicId:afferentTopic},query:{sort:"new"}}'
+                           class="topic-title">最新</router-link>
+            </div>
+
+            <div class="dy-view">
+              <scroll-loading @scroll-loading="infiniteHandler"
+                              :isLoading="isLoading"
+                              :isMore="isMore">
+                <div class="dy-item"
+                     v-for="(dynamicItem,key) in list"
+                     :key="key">
+                  <dynamic-item :dynamicItem="dynamicItem" />
+                </div>
+              </scroll-loading>
+            </div>
           </div>
-          <ul>
-            <li class="dy-item"
-                v-for="(dynamicItem,key) in dynamic.dynamicList.list"
-                :key="key">
-              <dynamic-item :dynamicItem="dynamicItem" />
-            </li>
-          </ul>
         </div>
         <div class="col-xs-12 col-sm-4 col-md-4">
-          <aside class="topic-side topic-side sidebar">
+          <aside class="topic-side topic-side sidebar"
+                 v-loading="isLoadingTopicInfo">
             <div class="topic-box shadow">
               <div class="wallpaper">
-                <span style="background-image: url(&quot;https://user-gold-cdn.xitu.io/2018/5/15/1635f8400e159843?imageView2/1/w/300/h/144/q/85/format/webp/interlace/1&quot;);"></span></div>
+                <span :style="`background-image: url(${topicInfo.icon});`"></span></div>
               <div class="content">
                 <el-image class="icon"
                           size="size"
-                          src="circleUrl">
+                          :src="topicInfo.icon">
                 </el-image>
-                <div class="title">一图胜片刻</div><button class="followed">已关注</button>
+                <div class="title">{{topicInfo.name}}</div>
+
+                <span class="followed"
+                      :class="{'active':isRssDynamicTopic}"
+                      @click="subscribeDynamicTopic">{{isRssDynamicTopic?'已关注':'+ 关注'}}</span>
+
                 <div class="describe">
-                  <div class="desc-title">话题介绍:</div><span>能用图，就不要用字。</span>
+                  <div class="desc-title">话题介绍:</div><span>{{topicInfo.description}}</span>
                   <div class="limit-ctl-box"></div>
                 </div>
               </div>
               <div class="stat-box">
                 <li class="item">
-                  <div class="count">3367</div>
+                  <div class="count">{{topicInfo.dynamic_count}}</div>
                   <div class="title">片刻</div>
                 </li>
                 <li class="item">
-                  <div class="count">4582</div>
+                  <div class="count">{{topicInfo.rss_count}}</div>
                   <div class="title">关注</div>
                 </li>
               </div>
@@ -55,34 +75,98 @@ import dynamicItem from './component/dynamicItem'
 import dynamicWrite from './component/dynamicWrite'
 import dynamicAside from './component/dynamicAside'
 import { mapState } from 'vuex'
+import { ScrollLoading } from "@components";
 export default {
   name: 'dynamic',
-  async asyncData ({ store, route, accessToken = "" }) {
-    // 触发 action 后，会返回 Promise
-    return Promise.all([
-      store.dispatch("dynamic/GET_DYNAMIC_LIST", { topic_id: route.params.dynamicTopicId || '' })
-    ]);
-  },
   data () {
     return {
-      afferentTopic: ""
+      afferentTopic: "",
+      topicInfo: {},
+      isLoadingTopicInfo: false,
+      page: 1,
+      isLoading: false,
+      isMore: true,
+      list: []
     }
   },
   created () {
     this.afferentTopic = this.$route.params.dynamicTopicId
   },
+  watch: {
+    $route (to, from) {
+      this.getDynamicTopicInfo()
+      this.page = 1
+      this.isLoading = false
+      this.isMore = true
+      this.list = []
+      this.infiniteHandler()
+    }
+  },
+  mounted () {
+    this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
+    this.getDynamicTopicInfo()
+  },
   methods: {
+    infiniteHandler () {
+      this.isLoading = true;
+      let _list = this.list
+      this.$store
+        .dispatch("dynamic/GET_DYNAMIC_LIST", {
+          topic_id: this.$route.params.dynamicTopicId,
+          page: this.page,
+          isCommit: false,
+          sort: this.$route.query.sort || ''
+        })
+        .then(result => {
+          this.isLoading = false;
+          this.list = [..._list, ...result.data.list]
+          if (result.data.list.length === 10) {
+            this.page += 1;
+          } else {
+            this.isMore = false;
+          }
+        })
+        .catch(err => {
+          this.isMore = false;
+        });
+    },
     dynamicSubmit () {
-
+      this.$router.push({ name: 'dynamics', params: { dynamicTopicId: 'following' } })
+    },
+    getDynamicTopicInfo () {
+      this.isLoadingTopicInfo = true // 表示正在加载专题信息
+      this.$store.dispatch("dynamic/GET_DYNAMIC_TOPIC_INFO", { topic_id: this.$route.params.dynamicTopicId || '' }).then(result => {
+        this.topicInfo = result.data.info || {}
+        this.isLoadingTopicInfo = false
+      })
+    },
+    async subscribeDynamicTopic () { // 订阅动态话题
+      await this.$store.dispatch('rss/SET_RSS_DYNAMIC_TOPIC', { topic_id: this.$route.params.dynamicTopicId })
+        .then(res => {
+          // this.$store.dispatch('articleTag/MY_SUBSCRIBE_TAG_LIST')
+          if (res.state === 'success') {
+            if (res.data.type === 'attention') {
+              this.topicInfo.rss_count = Number(this.topicInfo.rss_count) + 1
+            } else {
+              this.topicInfo.rss_count -= 1
+            }
+            this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
+            this.$message.success(res.message);
+          }
+        })
     }
   },
   computed: {
-    ...mapState(['personalInfo', 'dynamic'])
+    ...mapState(['personalInfo', 'dynamic', 'user']),
+    isRssDynamicTopic () {
+      return ~this.user.user_info.allRssDynamicTopicId.indexOf(this.$route.params.dynamicTopicId)
+    },
   },
   components: {
     dynamicItem,
     dynamicWrite,
-    dynamicAside
+    dynamicAside,
+    ScrollLoading
   }
 }
 </script>
@@ -92,8 +176,13 @@ export default {
   padding-top: 30px;
 
   .dynamic-main {
-    .left {
+    .stream-wrapper {
       box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
+      padding: 15px 15px 0;
+      border-radius: 12px;
+      .edit-view {
+        border-bottom: 1px solid rgba(92, 96, 102, 0.1);
+      }
     }
   }
   .topic-side {
@@ -106,6 +195,16 @@ export default {
         position: relative;
         height: 109px;
         overflow: hidden;
+        span {
+          display: inline-block;
+          width: 100%;
+          height: 100%;
+          background-position: 50%;
+          background-size: 120%;
+          background-repeat: no-repeat;
+          filter: blur(6.3px);
+          transform: scale(1.1);
+        }
       }
       .content {
         display: flex;
@@ -133,20 +232,26 @@ export default {
           font-weight: 600;
           color: #17181a;
         }
-        button {
+        .followed {
           padding: 0;
-          width: 6.5rem;
-          height: 2.5rem;
-          line-height: 2.5rem;
+          width: 80px;
+          height: 30px;
+          line-height: 30px;
           text-align: center;
           background: #fff;
-          border-radius: 3px;
-          color: #37c701;
-          border: 1px solid #37c701;
-          font-size: 15px;
+          border-radius: 15px;
+          color: #333;
+          border: 1px solid #f3f3f3;
+          font-size: 14px;
           margin: 10px 0 8px;
-          background: #37c701;
+          background: #f3f3f3;
           color: #fff;
+          cursor: pointer;
+          &.active {
+            background: #37c701;
+            border: 1px solid #37c701;
+            color: #fff;
+          }
         }
         .describe {
           font-size: 13px;

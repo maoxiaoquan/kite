@@ -191,22 +191,35 @@ class dynamic {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10
     let topic_id = ctx.query.topic_id || ''
+    let sort = ctx.query.sort || '' // 排序
     let whereParams = {} // 查询参数
     let orderParams = [] // 排序参数
-
+    let status = []
     try {
       // sort
       // hottest 全部热门:
+
+      if (sort === 'new') {
+        status = [1, 2, 4]
+      } else {
+        status = [2, 4]
+      }
+
       whereParams = {
         status: {
-          [Op.or]: [2, 4]
+          [Op.or]: status
         }
       }
-      !~['hot', 'newest'].indexOf(topic_id) &&
-        (whereParams['topic_ids'] = topic_id)
-      topic_id === 'hot' && orderParams.push(['like_count', 'DESC'])
+
+      if (!~['hot', 'newest'].indexOf(topic_id)) {
+        whereParams['topic_ids'] = topic_id
+      }
+
+      sort === 'hot' && orderParams.push(['like_count', 'DESC'])
       // newest 最新推荐:
-      orderParams.push(['create_date', 'DESC'])
+      if (!sort || sort === 'new') {
+        orderParams.push(['create_date', 'DESC'])
+      }
 
       let { count, rows } = await models.dynamic.findAndCountAll({
         where: whereParams, // 为空，获取全部，也可以自己添加条件

@@ -8,7 +8,10 @@
       </el-image>
     </router-link>
     <div class="content">
-      <a title="能用图，就不要用字。">{{dynamicTopicItem.name}}</a>
+      <router-link class="icon"
+                   :to='{name:"dynamicTopicView",params:{dynamicTopicId:dynamicTopicItem.topic_id}}'>
+        {{dynamicTopicItem.name}}
+      </router-link>
       <span>{{dynamicTopicItem.rss_count}} 关注 · {{dynamicTopicItem.dynamicCount}} 片刻</span>
       <span class="subscribe"
             :class="{'active':isRssDynamicTopic}"
