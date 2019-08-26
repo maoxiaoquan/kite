@@ -291,8 +291,8 @@ export default {
               margin-right: 5px;
               font-weight: bold;
             }
-            a.current-active {
-              color: rgba(0, 0, 0, 0.88);
+            a.exact-active {
+              color: #ea6f5a;
             }
             &.search {
               margin-right: 30px;

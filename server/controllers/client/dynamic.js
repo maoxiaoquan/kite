@@ -23,8 +23,8 @@ class dynamic {
         throw new ErrorMessage('请输入片刻内容')
       }
 
-      if (reqData.content.length > 1000) {
-        throw new ErrorMessage('文章标题过长，请小于1000个字符')
+      if (reqData.content.length > 600) {
+        throw new ErrorMessage('动态内容过长，请小于600个字符')
       }
 
       let date = new Date()
@@ -94,7 +94,7 @@ class dynamic {
 
       resClientJson(ctx, {
         state: 'success',
-        message: '文章创建成功'
+        message: '动态创建成功'
       })
     } catch (err) {
       resClientJson(ctx, {
@@ -556,8 +556,8 @@ class dynamic {
   /**
    * 删除动态
    * @param   {object} ctx 上下文对象
-   * 删除动态判断是否有文章
-   * 无关联则直接删除动态，有关联则开启事务同时删除与文章的关联
+   * 删除动态判断是否有动态
+   * 无关联则直接删除动态，有关联则开启事务同时删除与动态的关联
    */
   static async deleteDynamic (ctx) {
     const { id } = ctx.query

@@ -193,13 +193,13 @@ export default {
       margin-bottom: 8px;
       .dynamic-editor {
         box-shadow: 0 0px 3px rgba(67, 38, 100, 0.15);
-        border-radius: 3px;
+        border-radius: 6px;
       }
     }
     .dy-item {
       position: relative;
       box-shadow: 0 0px 3px rgba(67, 38, 100, 0.15);
-      border-radius: 3px;
+      border-radius: 6px;
       margin-bottom: 8px;
     }
   }

@@ -1,5 +1,6 @@
 <template>
-  <div class="dynamic-item">
+  <div class="dynamic-item"
+       v-show="isShowDynamic">
 
     <div class="dynamic-header-row">
       <div class="account-group">
@@ -103,6 +104,11 @@
           <i class="el-icon-share"></i>
           <span class="action-title">分享</span>
         </div>
+        <div class="share-action action"
+             v-if="isShowDeleteBtn()"
+             @click="deleteDynamic">
+          <span class="action-title">删除</span>
+        </div>
       </div>
     </div>
 
@@ -134,7 +140,8 @@ export default {
   },
   data () {
     return {
-      isCommnet: false
+      isCommnet: false,
+      isShowDynamic: true // 是否显示动态
     }
   },
   methods: {
@@ -149,6 +156,21 @@ export default {
         if (result.state === 'success') {
           this.$message.success(result.message)
           this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
+        } else {
+          this.$message.error(result.message)
+        }
+      })
+    },
+    isShowDeleteBtn () { // 是否显示删除按钮
+      return this.personalInfo.islogin && this.personalInfo.user.uid === this.dynamicItem.user.uid && this.$route.name !== 'dynamicView'
+    },
+    deleteDynamic () { // 删除动态
+      this.$store.dispatch('dynamic/DELETE_DYNAMIC', {
+        id: this.dynamicItem.id
+      }).then(result => {
+        if (result.state === 'success') {
+          this.$message.success(result.message)
+          this.isShowDynamic = false
         } else {
           this.$message.error(result.message)
         }

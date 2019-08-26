@@ -32,6 +32,14 @@ class update0_3 {
           'ALTER TABLE user_authority CHANGE authority_id authority_id VARCHAR(100) comment "权限ID";'
         )
 
+        await models.sequelize.query(
+          'ALTER TABLE article_tag ADD is_push tinyint(1);'
+        )
+
+        await models.sequelize.query(
+          'ALTER TABLE dynamic_topic ADD is_push tinyint(1);'
+        )
+
         await models.admin_authority.update(
           {
             authority_url: '/article-comment/list'

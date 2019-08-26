@@ -113,7 +113,8 @@ export default {
   display: flex;
   flex-direction: column;
   background: #f8f8f8;
-  border-radius: 4px;
+  border-radius: 6px;
+  overflow: hidden;
   margin-bottom: 8px;
   font-size: 13px;
   .profile {
@@ -182,6 +183,8 @@ export default {
 
 .related-dynamic-block {
   background: #f8f8f8;
+  border-radius: 6px;
+  overflow: hidden;
   padding: 24px;
   .title {
     font-size: 16px;
@@ -238,6 +241,8 @@ export default {
 .topic-sidebar {
   background: #f8f8f8;
   padding: 24px;
+  border-radius: 6px;
+  overflow: hidden;
   .title {
     font-size: 16px;
     line-height: 28px;

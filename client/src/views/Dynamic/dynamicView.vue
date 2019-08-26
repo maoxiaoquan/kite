@@ -63,6 +63,21 @@ import commentForm from "../Comment/DynamicComment/CommentForm";
 import { mapState } from 'vuex'
 export default {
   name: 'dynamic-view',
+  metaInfo () {
+    return {
+      title: this.dynamic.dynamicView.content || "动态不存在",
+      meta: [
+        {
+          // set meta
+          name: "description",
+          content: `${this.dynamic.dynamicView.content || "文章不存在"}`
+        }
+      ],
+      htmlAttrs: {
+        lang: "zh"
+      }
+    };
+  },
   async asyncData ({ store, route, accessToken = "" }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
@@ -143,6 +158,10 @@ export default {
   .dynamic-content-main {
     box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
     margin-bottom: 8px;
+  }
+  .dynamic-comment-part {
+    border-top: 1px solid #ebebeb;
+    padding-top: 15px;
   }
 }
 

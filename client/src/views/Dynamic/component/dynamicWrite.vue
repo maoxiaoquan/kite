@@ -4,12 +4,13 @@
       <div class="content">
         <div class="rich-editor">
           <textarea v-model.trim="content"
+                    ref="dynamicContent"
                     class="empty"
                     placeholder="告诉你个小秘密，发片刻时添加话题会被更多小伙伴看见呦~" />
           <div class="current-topic"
                v-if="currentTopic.name">{{currentTopic.name}}</div>
         </div>
-        <span class="word-counter count">{{content.length<1000?(1000-content.length):0}}</span>
+        <span class="word-counter count">{{content.length<600?(600-content.length):0}}</span>
       </div>
     </div>
 
@@ -150,7 +151,7 @@
           </div>
         </div>
         <div class="submit">
-          <div class="tip">Ctrl or ⌘ + Enter</div>
+          <!-- <div class="tip">Ctrl or ⌘ + Enter</div> -->
           <el-button size="mini"
                      type="primary"
                      @click="send"
@@ -226,7 +227,17 @@ export default {
         }
       }
       this.searchTopicResultList = arr;
+    },
+    //watch()监听某个值（双向绑定）的变化，从而达到change事件监听的效果
+    content: {//watch()监听某个值（双向绑定）的变化，从而达到change事件监听的效果
+      handler () {
+        var _sum = 600; //字体限制为100个
+        this.$refs.dynamicContent.setAttribute("maxlength", _sum);
+        this.number = _sum - this.$refs.dynamicContent.value.length;
+      },
+      deep: true
     }
+
   },
   methods: {
     changeDynamicImage ({ formData, config }) { // 上传图片，并且组合
@@ -304,7 +315,10 @@ export default {
           this.$message.error(result.message);
         }
       })
-    }
+    },
+    shareOtherWeb () { // 分享到其他网站
+
+    },
   },
   computed: {
     ...mapState(['personalInfo', 'dynamic']),
@@ -360,6 +374,7 @@ export default {
           border: none;
           height: 75px;
           resize: none;
+          font-size: 14px;
           overflow: hidden;
         }
         .current-topic {

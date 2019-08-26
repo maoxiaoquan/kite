@@ -175,7 +175,6 @@ export default {
         this.$message.warning('请先登录')
         return false
       }
-
       /*用户like 动态*/
       this.$store
         .dispatch("user/USER_LIKE_DYNAMIC", {

@@ -2,9 +2,15 @@ const models = require('./index')
 
 // 当前js是用来调试 sql 使用，请勿用作其他用途、
 try {
-  models.sequelize.query('rename TABLE admin_system_log to system_log;')
-  models.sequelize.query('rename TABLE user_like_article to user_like;')
-  models.sequelize.query('rename TABLE subscribe_article_tag to subscribe_tag;')
+  async function add () {
+    await models.sequelize.query(
+      'alter table article_tag add column is_push tinyint(1);'
+    )
+    await models.sequelize.query(
+      'alter table dynamic_topic add column is_push tinyint(1);'
+    )
+  }
+  add()
   process.exit()
 } catch (err) {
   console.log('出现错误', err)

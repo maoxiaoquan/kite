@@ -35,10 +35,10 @@
                  v-loading="isLoadingTopicInfo">
             <div class="topic-box shadow">
               <div class="wallpaper">
-                <span :style="`background-image: url(${topicInfo.icon});`"></span></div>
+                <span :style="`background-image: url(${topicInfo.icon});`"></span>
+              </div>
               <div class="content">
                 <el-image class="icon"
-                          size="size"
                           :src="topicInfo.icon">
                 </el-image>
                 <div class="title">{{topicInfo.name}}</div>
@@ -78,6 +78,21 @@ import { mapState } from 'vuex'
 import { ScrollLoading } from "@components";
 export default {
   name: 'dynamic',
+  metaInfo () {
+    return {
+      title: this.topicInfo.name || "话题不存在",
+      meta: [
+        {
+          // set meta
+          name: "description",
+          content: `${this.topicInfo.name || "话题不存在"}`
+        }
+      ],
+      htmlAttrs: {
+        lang: "zh"
+      }
+    };
+  },
   data () {
     return {
       afferentTopic: "",
@@ -94,12 +109,12 @@ export default {
   },
   watch: {
     $route (to, from) {
-      this.getDynamicTopicInfo()
       this.page = 1
       this.isLoading = false
       this.isMore = true
       this.list = []
       this.infiniteHandler()
+      this.getDynamicTopicInfo()
     }
   },
   mounted () {
@@ -131,7 +146,11 @@ export default {
         });
     },
     dynamicSubmit () {
-      this.$router.push({ name: 'dynamics', params: { dynamicTopicId: 'following' } })
+      if (this.$route.query.sort !== 'new') {
+        this.$router.push({ name: "dynamicTopicView", params: { dynamicTopicId: this.afferentTopic }, query: { sort: "new" } })
+      } else {
+        window.location.reload()
+      }
     },
     getDynamicTopicInfo () {
       this.isLoadingTopicInfo = true // 表示正在加载专题信息
@@ -173,19 +192,34 @@ export default {
 
 <style scoped lang="scss">
 #dynamic-topic-view {
-  padding-top: 30px;
-
+  padding-top: 25px;
   .dynamic-main {
     .stream-wrapper {
       box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
       padding: 15px 15px 0;
-      border-radius: 12px;
-      .edit-view {
+      border-radius: 6px;
+      .sort {
+        border-top: 1px solid rgba(92, 96, 102, 0.1);
+        border-bottom: 1px solid rgba(92, 96, 102, 0.1);
+        display: flex;
+        a {
+          flex: 1;
+          text-align: center;
+          padding: 12px 0;
+          font-size: 13px;
+          &.exact-active {
+            color: #37c701;
+          }
+        }
+      }
+      /deep/.action-box {
         border-bottom: 1px solid rgba(92, 96, 102, 0.1);
       }
     }
   }
   .topic-side {
+    border-radius: 6px;
+    overflow: hidden;
     .topic-box {
       display: flex;
       flex-direction: column;
@@ -241,11 +275,10 @@ export default {
           background: #fff;
           border-radius: 15px;
           color: #333;
-          border: 1px solid #f3f3f3;
+          border: 1px solid #666;
           font-size: 14px;
           margin: 10px 0 8px;
           background: #f3f3f3;
-          color: #fff;
           cursor: pointer;
           &.active {
             background: #37c701;
@@ -283,6 +316,12 @@ export default {
         .item {
           flex: 1 1 auto;
           max-height: 40px;
+          .count {
+            font-size: 14px;
+          }
+          .title {
+            font-size: 14px;
+          }
         }
         .item:not(:last-child) {
           border-right: 1px solid rgba(92, 96, 102, 0.1);

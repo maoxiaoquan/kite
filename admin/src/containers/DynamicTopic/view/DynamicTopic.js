@@ -86,7 +86,7 @@ class DynamicTopic extends React.Component {
           key: 'rss_count'
         },
         {
-          title: '是否首页显示',
+          title: '是否首页侧栏显示',
           dataIndex: 'is_show',
           key: 'is_show',
           render: (value, record) => {

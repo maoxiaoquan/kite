@@ -87,7 +87,12 @@ class Dynamic extends React.Component {
         title: '预览',
         dataIndex: 'attach',
         key: 'attach',
-        render: (text, record) => <div>{this.renderAttach(record)}</div>
+        render: (text, record) => (
+          <div
+            className="img-preview"
+            dangerouslySetInnerHTML={{ __html: this.renderAttach(record) }}
+          ></div>
+        )
       },
       {
         title: '评论数',
@@ -172,14 +177,23 @@ class Dynamic extends React.Component {
   renderAttach(item) {
     // 渲染其他
     if (item.type === 3) {
-      return (
-        <a href={item.attach} target="_block">
-          {item.attach}
-        </a>
-      )
+      return `<a href="${item.attach}" target="_block">
+       ${item.attach}
+        </a>`
     } else if (item.type === 2) {
-      return <img src={item.attach} alt=""></img>
+      let img = ''
+      console.log('this.imgAnalyze(item.attach)', this.imgAnalyze(item.attach))
+      this.imgAnalyze(item.attach).map(item => {
+        img += `<img src="${item}" alt=""></img>`
+      })
+      return img
     }
+  }
+
+  imgAnalyze(attach) {
+    let urlArr = attach.split(',') || []
+    let length = attach.split(',').length
+    return length > 0 ? urlArr : []
   }
 
   deleteDynamic(val) {
