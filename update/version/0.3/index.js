@@ -39,14 +39,6 @@ class update0_3 {
           'ALTER TABLE dynamic_topic add COLUMN is_push tinyint(1) DEFAULT 1 comment "是否加入首页或者推荐";'
         )
 
-        await models.sequelize.query(
-          'ALTER TABLE article_tag ADD is_push tinyint(1);'
-        )
-
-        await models.sequelize.query(
-          'ALTER TABLE dynamic_topic ADD is_push tinyint(1);'
-        )
-
         await models.admin_authority.update(
           {
             authority_url: '/article-comment/list'
