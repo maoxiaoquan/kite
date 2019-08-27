@@ -92,7 +92,7 @@ class DynamicTopic extends React.Component {
           render: (value, record) => {
             return (
               <div className="table-is-login">
-                {value ? (
+                {record.is_show ? (
                   <Icon type="check-circle" />
                 ) : (
                   <Icon type="close-circle" />
@@ -108,7 +108,23 @@ class DynamicTopic extends React.Component {
           render: (value, record) => {
             return (
               <div className="table-is-login">
-                {value ? (
+                {record.enable ? (
+                  <Icon type="check-circle" />
+                ) : (
+                  <Icon type="close-circle" />
+                )}
+              </div>
+            )
+          }
+        },
+        {
+          title: '是否加入首页或者推荐',
+          dataIndex: 'is_push',
+          key: 'is_push',
+          render: (value, record) => {
+            return (
+              <div className="table-is-login">
+                {record.is_push ? (
                   <Icon type="check-circle" />
                 ) : (
                   <Icon type="close-circle" />
@@ -242,12 +258,6 @@ class DynamicTopic extends React.Component {
     this.setState({ confirmDirty: this.state.confirmDirty || !!value })
   }
 
-  selectRole = value => {
-    this.setState({
-      role_id: value
-    })
-  }
-
   validateToNextPassword = (rule, value, callback) => {
     const form = this.props.form
     if (value && this.state.confirmDirty) {
@@ -326,11 +336,11 @@ class DynamicTopic extends React.Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 }
+        sm: { span: 8 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 19 }
+        sm: { span: 16 }
       }
     }
     const tailFormItemLayout = {
@@ -341,7 +351,7 @@ class DynamicTopic extends React.Component {
         },
         sm: {
           span: 16,
-          offset: 5
+          offset: 8
         }
       }
     }
@@ -425,6 +435,12 @@ class DynamicTopic extends React.Component {
 
               <FormItem {...formItemLayout} label="是否有效">
                 {getFieldDecorator('enable', { valuePropName: 'checked' })(
+                  <Switch />
+                )}
+              </FormItem>
+
+              <FormItem {...formItemLayout} label="是否加入首页或者推荐">
+                {getFieldDecorator('is_push', { valuePropName: 'checked' })(
                   <Switch />
                 )}
               </FormItem>

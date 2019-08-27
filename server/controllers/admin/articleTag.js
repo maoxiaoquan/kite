@@ -35,7 +35,8 @@ class ArticleTag {
         article_tag_en_name: reqData.article_tag_en_name,
         article_tag_icon: reqData.article_tag_icon || '/default/img/tag.webp',
         article_tag_description: reqData.article_tag_description,
-        enable: reqData.enable
+        enable: reqData.enable,
+        is_push: reqData.is_push
       })
       await createAdminSystemLog({
         // 写入日志
@@ -65,14 +66,6 @@ class ArticleTag {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
       let { count, rows } = await models.article_tag.findAndCountAll({
-        attributes: [
-          'article_tag_id',
-          'article_tag_name',
-          'article_tag_en_name',
-          'article_tag_icon',
-          'article_tag_description',
-          'enable'
-        ],
         where: '', // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize) // 每页限制返回的数据条数
@@ -101,14 +94,6 @@ class ArticleTag {
   static async getArticleTagAll (ctx) {
     try {
       let articleTagAll = await models.article_tag.findAll({
-        attributes: [
-          'article_tag_id',
-          'article_tag_name',
-          'article_tag_en_name',
-          'article_tag_icon',
-          'article_tag_description',
-          'enable'
-        ],
         where: { enable: 1 } // 为空，获取全部，也可以自己添加条件
       })
       resAdminJson(ctx, {
@@ -140,7 +125,8 @@ class ArticleTag {
           article_tag_en_name: reqData.article_tag_en_name,
           article_tag_icon: reqData.article_tag_icon,
           article_tag_description: reqData.article_tag_description,
-          enable: reqData.enable
+          enable: reqData.enable,
+          is_push: reqData.is_push
         },
         {
           where: {

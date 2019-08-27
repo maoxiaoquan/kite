@@ -9,40 +9,67 @@ class Index {
   static async getIndex (ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10
-    let column_en_name = ctx.query.column_en_name || ''
+    let columnEnName = ctx.query.columnEnName || ''
     let sort = ctx.query.sort || 'newest'
-    let whereParams = {} // 查询参数
+    let whereArticleParams = {} // 查询参数
+    let whereArticleColumnParams = {} // 查询参数
     let orderParams = [] // 排序参数
 
     try {
-      let oneArticleColumn = await models.article_column.findOne({
-        attributes: [
-          'article_column_id',
-          'article_column_name',
-          'article_column_icon',
-          'article_tag_ids'
-        ],
-        where: { article_column_en_name: column_en_name } // 为空，获取全部，也可以自己添加条件
-      })
-      whereParams = {
+      // where
+      whereArticleParams = {
+        // 默认全部导入的专题
         ...clientWhere.article.otherList
       }
-      // where
-      // 判断专栏下方是否有专题
-      column_en_name &&
-        oneArticleColumn.article_tag_ids &&
-        (whereParams['article_tag_ids'] = {
-          [Op.regexp]: `${oneArticleColumn.article_tag_ids
-            .split(',')
-            .join('|')}`
+
+      if (!columnEnName) {
+        // 判断是否有专题
+        let allArticleTagId = [] // 全部禁止某些文章标签推送的id
+        let allArticleTag = await models.article_tag.findAll({
+          where: {
+            is_push: false
+          } // 为空，获取全部，也可以自己添加条件
         })
+
+        if (allArticleTag && allArticleTag.length > 0) {
+          for (let item in allArticleTag) {
+            console.log('item', item)
+            allArticleTagId.push(allArticleTag[item].article_tag_id)
+          }
+
+          console.log('allArticleTag', allArticleTagId)
+          whereArticleParams['article_tag_ids'] = {
+            [Op.notRegexp]: `${allArticleTagId.join('|')}`
+          }
+        }
+      } else {
+        whereArticleColumnParams['article_column_en_name'] = columnEnName
+        let oneArticleColumn = await models.article_column.findOne({
+          attributes: [
+            'article_column_id',
+            'article_column_name',
+            'article_column_icon',
+            'article_tag_ids'
+          ],
+          where: whereArticleColumnParams // 为空，获取全部，也可以自己添加条件
+        })
+
+        // 判断专栏下方是否有专题
+        columnEnName &&
+          oneArticleColumn.article_tag_ids &&
+          (whereArticleParams['article_tag_ids'] = {
+            [Op.regexp]: `${oneArticleColumn.article_tag_ids
+              .split(',')
+              .join('|')}`
+          })
+      }
 
       // sort
       // hottest 全部热门:
       sort === 'hottest' && orderParams.push(['comment_count', 'DESC'])
       // monthlyHottest 本月最热:
       sort === 'monthlyHottest' &&
-        (whereParams['create_date'] = {
+        (whereArticleParams['create_date'] = {
           [Op.between]: [
             new Date(TimeNow.showMonthFirstDay()),
             new Date(TimeNow.showMonthLastDay())
@@ -56,7 +83,7 @@ class Index {
       }
 
       let { count, rows } = await models.article.findAndCountAll({
-        where: whereParams, // 为空，获取全部，也可以自己添加条件
+        where: whereArticleParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, // 每页限制返回的数据条数
         order: orderParams
@@ -92,7 +119,7 @@ class Index {
             count,
             page,
             pageSize,
-            column_en_name,
+            column_en_name: columnEnName,
             article_list: rows,
             sort
           }

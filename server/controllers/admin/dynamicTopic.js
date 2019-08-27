@@ -37,7 +37,8 @@ class dynamicTopic {
         description: reqData.description,
         enable: reqData.enable,
         sort: reqData.sort,
-        is_show: reqData.is_show
+        is_show: reqData.is_show,
+        is_push: reqData.is_push
       })
       await createAdminSystemLog({
         // 写入日志
@@ -67,19 +68,6 @@ class dynamicTopic {
     const { page = 1, pageSize = 10 } = ctx.query
     try {
       let { count, rows } = await models.dynamic_topic.findAndCountAll({
-        attributes: [
-          'id',
-          'topic_id',
-          'name',
-          'en_name',
-          'icon',
-          'description',
-          'rss_count',
-          'enable',
-          'sort',
-          'is_show',
-          'enable'
-        ],
         where: '', // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize), // 每页限制返回的数据条数
@@ -111,19 +99,6 @@ class dynamicTopic {
   static async getDynamicTopicAll (ctx) {
     try {
       let allDynamicTopic = await models.dynamic_topic.findAll({
-        attributes: [
-          'id',
-          'topic_id',
-          'name',
-          'en_name',
-          'icon',
-          'description',
-          'rss_count',
-          'enable',
-          'sort',
-          'is_show',
-          'enable'
-        ],
         where: { enable: 1 } // 为空，获取全部，也可以自己添加条件
       })
       resAdminJson(ctx, {
@@ -155,9 +130,10 @@ class dynamicTopic {
           en_name: reqData.en_name,
           icon: reqData.icon || '/default/img/tag.webp',
           description: reqData.description,
-          enable: reqData.enable,
           sort: reqData.sort,
-          is_show: reqData.is_show
+          is_show: reqData.is_show,
+          is_push: reqData.is_push,
+          enable: reqData.enable
         },
         {
           where: {

@@ -192,7 +192,7 @@ class dynamic {
     let pageSize = ctx.query.pageSize || 10
     let topic_id = ctx.query.topic_id || ''
     let sort = ctx.query.sort || '' // 排序
-    let whereParams = {} // 查询参数
+    let whereDynamicParams = {} // 查询参数
     let orderParams = [] // 排序参数
     let status = []
     try {
@@ -205,16 +205,37 @@ class dynamic {
         status = [2, 4]
       }
 
-      whereParams = {
+      whereDynamicParams = {
         status: {
           [Op.or]: status
         }
       }
 
-      if (!~['hot', 'newest'].indexOf(topic_id)) {
-        whereParams['topic_ids'] = topic_id
+      if (!~['hot', 'newest'].indexOf(sort)) {
+        whereDynamicParams['topic_ids'] = topic_id
+      } else {
+        // 属于最热或者推荐
+        let allDynamicTopicId = [] // 全部禁止某些动态话题推送的id
+        let allDynamicTopic = await models.dynamic_topic.findAll({
+          where: {
+            is_push: false
+          } // 为空，获取全部，也可以自己添加条件
+        })
+
+        if (allDynamicTopic && allDynamicTopic.length > 0) {
+          for (let item in allDynamicTopic) {
+            allDynamicTopicId.push(allDynamicTopic[item].topic_id)
+          }
+          whereDynamicParams['topic_ids'] = {
+            [Op.or]: {
+              [Op.notIn]: allDynamicTopicId,
+              [Op.is]: null
+            }
+          }
+        }
       }
 
+      sort === 'newest' && orderParams.push(['create_date', 'DESC'])
       sort === 'hot' && orderParams.push(['like_count', 'DESC'])
       // newest 最新推荐:
       if (!sort || sort === 'new') {
@@ -222,7 +243,7 @@ class dynamic {
       }
 
       let { count, rows } = await models.dynamic.findAndCountAll({
-        where: whereParams, // 为空，获取全部，也可以自己添加条件
+        where: whereDynamicParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, // 每页限制返回的数据条数
         order: orderParams
@@ -294,7 +315,6 @@ class dynamic {
   static async getDynamicListMe (ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10
-    let topic_id = ctx.query.topic_id || ''
     let whereParams = {} // 查询参数
     let orderParams = [['create_date', 'DESC']] // 排序参数
     let { user = '' } = ctx.request

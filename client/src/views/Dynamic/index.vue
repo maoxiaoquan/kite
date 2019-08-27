@@ -87,11 +87,13 @@ export default {
   async asyncData ({ store, route, accessToken = "" }) {
     // 触发 action 后，会返回 Promise
     const dispatchUrl = route.params.dynamicTopicId !== 'following' ? "dynamic/GET_DYNAMIC_LIST" : "dynamic/GET_DYNAMIC_LIST_ME"
+    const isSort = ~['newest', 'hot'].indexOf(route.params.dynamicTopicId)
     return Promise.all([
       store.commit('dynamic/INIT_DYNAMIC_LIST'),
       store.dispatch(dispatchUrl,
         {
-          topic_id: route.params.dynamicTopicId || '',
+          topic_id: !isSort ? route.params.dynamicTopicId : '',
+          sort: isSort ? route.params.dynamicTopicId : '',
           accessToken,
           isCommit: true
         })
@@ -111,9 +113,11 @@ export default {
     infiniteHandler () {
       this.isLoading = true;
       const dispatchUrl = this.$route.params.dynamicTopicId !== 'following' ? "dynamic/GET_DYNAMIC_LIST" : "dynamic/GET_DYNAMIC_LIST_ME"
+      const isSort = ~['newest', 'hot'].indexOf(this.$route.params.dynamicTopicId)
       this.$store
         .dispatch(dispatchUrl, {
-          topic_id: this.$route.params.dynamicTopicId,
+          topic_id: !isSort ? this.$route.params.dynamicTopicId : '',
+          sort: isSort ? this.$route.params.dynamicTopicId : '',
           page: this.page,
           isCommit: true
         })

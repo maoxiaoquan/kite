@@ -100,6 +100,22 @@ class ArticleTag extends React.Component {
           }
         },
         {
+          title: '是否加入首页或者推荐',
+          dataIndex: 'is_push',
+          key: 'is_push',
+          render: (value, record) => {
+            return (
+              <div className="table-is-login">
+                {value ? (
+                  <Icon type="check-circle" />
+                ) : (
+                  <Icon type="close-circle" />
+                )}
+              </div>
+            )
+          }
+        },
+        {
           title: '操作',
           key: 'action',
           render: (text, record) => {
@@ -304,11 +320,11 @@ class ArticleTag extends React.Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 }
+        sm: { span: 8 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 19 }
+        sm: { span: 16 }
       }
     }
     const tailFormItemLayout = {
@@ -319,7 +335,7 @@ class ArticleTag extends React.Component {
         },
         sm: {
           span: 16,
-          offset: 5
+          offset: 8
         }
       }
     }
@@ -397,6 +413,12 @@ class ArticleTag extends React.Component {
 
               <FormItem {...formItemLayout} label="是否有效">
                 {getFieldDecorator('enable', { valuePropName: 'checked' })(
+                  <Switch />
+                )}
+              </FormItem>
+
+              <FormItem {...formItemLayout} label="是否加入首页或者推荐">
+                {getFieldDecorator('is_push', { valuePropName: 'checked' })(
                   <Switch />
                 )}
               </FormItem>

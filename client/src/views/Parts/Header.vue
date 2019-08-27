@@ -25,7 +25,7 @@
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item icon="el-icon-s-home"
                                         :command="{name:'home'}">主页</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-s-home"
+                      <el-dropdown-item icon="el-icon-chat-line-round"
                                         :command="{name:'dynamics',params:{dynamicTopicId:'newest'}}">片刻</el-dropdown-item>
                       <el-dropdown-item icon="el-icon-chat-line-square"
                                         v-if="personalInfo.islogin"
@@ -53,7 +53,6 @@
                   </li>
                 </ul>
               </li>
-              <!--  <li class="nav-item"><a class="nav-link" href="/">说说</a></li>-->
               <li class="nav-item search">
                 <div class="form-search form-inline mr-lg-5">
                   <input class="form-control form-search-view"

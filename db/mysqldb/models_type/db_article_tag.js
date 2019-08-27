@@ -64,6 +64,12 @@ module.exports = {
       comment: '是否可以显示',
       field: 'enable'
     },
+    is_push: {
+      // 是否加入首页或者推荐
+      type: Seq.BOOLEAN,
+      comment: '是否加入首页或者推荐',
+      field: 'enable'
+    },
     ...time.create_date
   }
 }

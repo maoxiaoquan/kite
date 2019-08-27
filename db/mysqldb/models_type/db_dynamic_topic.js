@@ -66,6 +66,12 @@ module.exports = {
       comment: '是否在前台页面显示',
       field: 'is_show'
     },
+    is_push: {
+      // 是否加入首页或者推荐
+      type: Seq.BOOLEAN,
+      comment: '是否加入首页或者推荐',
+      field: 'is_push'
+    },
     enable: {
       // 是否可用
       type: Seq.BOOLEAN,
