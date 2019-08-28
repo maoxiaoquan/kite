@@ -7,7 +7,7 @@ const clientWhere = require('../../utils/clientWhere')
 const xss = require('xss')
 const config = require('../../config')
 const { lowdb } = require('../../../db/lowdb/index')
-const { TimeNow } = require('../../utils/time')
+const { TimeNow, TimeDistance } = require('../../utils/time')
 
 function ErrorMessage (message) {
   this.message = message
@@ -129,7 +129,7 @@ class dynamic {
       if (oneDynamic) {
         oneDynamic.setDataValue(
           'create_at',
-          await moment(oneDynamic.create_date).format('YYYY-MM-DD')
+          await TimeDistance(oneDynamic.create_date)
         )
 
         oneDynamic.setDataValue(
@@ -250,18 +250,16 @@ class dynamic {
       })
 
       for (let i in rows) {
+        let topic = rows[i].topic_ids
+          ? await models.dynamic_topic.findOne({
+            where: { topic_id: rows[i].topic_ids }
+          })
+          : ''
         rows[i].setDataValue(
           'create_at',
-          await moment(rows[i].create_date).format('YYYY-MM-DD')
+          await TimeDistance(rows[i].create_date)
         )
-        rows[i].setDataValue(
-          'topic',
-          rows[i].topic_ids
-            ? await models.dynamic_topic.findOne({
-              where: { topic_id: rows[i].topic_ids }
-            })
-            : ''
-        )
+        rows[i].setDataValue('topic', topic)
 
         if (
           rows[i].topic_ids &&
@@ -339,7 +337,7 @@ class dynamic {
       for (let i in rows) {
         rows[i].setDataValue(
           'create_at',
-          await moment(rows[i].create_date).format('YYYY-MM-DD')
+          await TimeDistance(rows[i].create_date)
         )
         rows[i].setDataValue(
           'topic',
@@ -431,7 +429,7 @@ class dynamic {
       for (let i in allDynamic) {
         allDynamic[i].setDataValue(
           'create_at',
-          await moment(allDynamic[i].create_date).format('YYYY-MM-DD')
+          await TimeDistance(allDynamic[i].create_date)
         )
         allDynamic[i].setDataValue(
           'topic',

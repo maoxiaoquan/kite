@@ -31,6 +31,7 @@
       <div class="comment-foot clearfix">
         <span>{{childCommentItem.create_at}}</span>
         <span class="comment-reply"
+              v-show="personalInfo.islogin"
               v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===5"
               @click="isComment=!isComment;reply_uid=childCommentItem.uid">{{isComment?'取消回复':'回复'}}</span>
         <span class="comment-delete"

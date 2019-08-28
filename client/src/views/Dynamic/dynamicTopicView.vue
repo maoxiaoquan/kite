@@ -193,10 +193,11 @@ export default {
 <style scoped lang="scss">
 #dynamic-topic-view {
   padding-top: 25px;
+  margin-bottom: 15px;
   .dynamic-main {
     .stream-wrapper {
       box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
-      padding: 15px 15px 0;
+      padding: 15px;
       border-radius: 6px;
       .sort {
         border-top: 1px solid rgba(92, 96, 102, 0.1);

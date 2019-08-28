@@ -148,6 +148,7 @@ export default {
 
 <style scoped lang="scss">
 #dynamic {
+  margin-bottom: 15px;
   .aside {
     position: fixed;
     top: 89px;

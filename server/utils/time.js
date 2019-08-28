@@ -35,6 +35,25 @@ exports.timestampFormat2 = function (timestamp, fmt = 'yyyy-MM-dd') {
   return new Date(timestamp * 1000).Format(fmt)
 }
 
+exports.TimeDistance = async function (time) {
+  let minuteDistance = moment().diff(time, 'minute')
+  let hoursDistance = moment().diff(time, 'hours')
+  let daysDistance = moment().diff(time, 'days')
+  let _Time = await moment(time).format('YYYY-MM-DD')
+
+  if (minuteDistance === 0) {
+    return '刚刚'
+  } else if (minuteDistance > 0 && minuteDistance <= 60) {
+    return `${minuteDistance}分钟前`
+  } else if (hoursDistance > 1 && hoursDistance <= 24) {
+    return `${hoursDistance}小时前`
+  } else if (daysDistance > 1 && daysDistance <= 30) {
+    return `${daysDistance}天前`
+  } else {
+    return _Time
+  }
+}
+
 exports.TimeNow = {
   time () {
     let date = new Date()

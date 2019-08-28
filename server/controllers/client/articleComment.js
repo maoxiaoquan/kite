@@ -6,6 +6,7 @@ const trimHtml = require('trim-html')
 const xss = require('xss')
 const clientWhere = require('../../utils/clientWhere')
 const config = require('../../config')
+const { TimeNow, TimeDistance } = require('../../utils/time')
 
 function ErrorMessage (message) {
   this.message = message
@@ -36,7 +37,7 @@ class ArticleComment {
       for (let i in rows) {
         rows[i].setDataValue(
           'create_at',
-          await moment(rows[i].create_date).format('YYYY-MM-DD H:m:s')
+          await TimeDistance(rows[i].create_date)
         )
         if (Number(rows[i].status === 1)) {
           rows[i].setDataValue('content', '当前用户评论需要审核')
@@ -63,9 +64,7 @@ class ArticleComment {
           // 循环取用户  代码有待优化，层次过于复杂
           childAllComment[childCommentItem].setDataValue(
             'create_at',
-            await moment(childAllComment[childCommentItem].create_date).format(
-              'YYYY-MM-DD H:m:s'
-            )
+            await TimeDistance(childAllComment[childCommentItem].create_date)
           )
           childAllComment[childCommentItem].setDataValue(
             'user',
@@ -202,9 +201,7 @@ class ArticleComment {
             })
           }
 
-          _data['create_at'] = await moment(_data.create_date).format(
-            'YYYY-MM-DD H:m:s'
-          )
+          _data['create_at'] = await TimeDistance(_data.create_date)
 
           await models.user_message.create({
             // 用户行为记录

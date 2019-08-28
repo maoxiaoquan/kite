@@ -17,15 +17,17 @@ export default context => {
         return reject({ code: 404 })
       }
       // 对所有匹配的路由组件调用 `asyncData()`
-      Promise.all(matchedComponents.map(Component => {
-        if (Component.asyncData) {
-          return Component.asyncData({
-            store,
-            route: router.currentRoute,
-            accessToken: context.accessToken,
-          })
-        }
-      }))
+      Promise.all(
+        matchedComponents.map(Component => {
+          if (Component.asyncData) {
+            return Component.asyncData({
+              store,
+              route: router.currentRoute,
+              accessToken: context.accessToken
+            })
+          }
+        })
+      )
         .then(() => {
           // 在所有预取钩子(preFetch hook) resolve 后，
           // 我们的 store 现在已经填充入渲染应用程序所需的状态。

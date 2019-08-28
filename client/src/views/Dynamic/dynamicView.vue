@@ -2,26 +2,28 @@
   <div id="dynamic-content">
     <div class="container">
       <div class="row">
-        <div class="col-xs-12 col-sm-8 col-md-8 dynamic-content-main">
-          <dynamic-item :dynamicItem="dynamic.dynamicView"
-                        :dfIsCommnet="false" />
-          <div class="dynamic-comment-part"
-               v-if="website.config.on_comment==='yes'">
-            <comment-form :dynamicId="$route.params.dynamicId"
-                          @commentChange="commentChange" />
-            <div class="comment-list">
-              <scroll-loading @scroll-loading="infiniteHandler"
-                              :isLoading="isLoading"
-                              :isMore="isMore">
-                <comment-item :comment-item="item"
-                              :dynamicId="$route.params.dynamicId"
-                              v-for="(item,key) in commentList"
-                              :key="key" />
-              </scroll-loading>
+        <div class="col-xs-12 col-sm-8 col-md-8">
+          <div class="dynamic-content-main">
+            <dynamic-item :dynamicItem="dynamicView"
+                          :dfIsCommnet="false" />
+            <div class="dynamic-comment-part"
+                 v-if="website.config.on_comment==='yes'">
+              <comment-form :dynamicId="$route.params.dynamicId"
+                            @commentChange="commentChange" />
+              <div class="comment-list">
+                <scroll-loading @scroll-loading="infiniteHandler"
+                                :isLoading="isLoading"
+                                :isMore="isMore">
+                  <comment-item :comment-item="item"
+                                :dynamicId="$route.params.dynamicId"
+                                v-for="(item,key) in commentList"
+                                :key="key" />
+                </scroll-loading>
+              </div>
             </div>
-          </div>
-          <div v-else>
-            <p class="no-comment">评论模块已关闭</p>
+            <div v-else>
+              <p class="no-comment">评论模块已关闭</p>
+            </div>
           </div>
         </div>
         <div class="col-xs-12 col-sm-4 col-md-4">
@@ -70,7 +72,7 @@ export default {
         {
           // set meta
           name: "description",
-          content: `${this.dynamic.dynamicView.content || "文章不存在"}`
+          content: `${this.dynamic.dynamicView.content || "动态不存在"}`
         }
       ],
       htmlAttrs: {
@@ -106,9 +108,6 @@ export default {
       this.isMore = true
     }
   },
-  computed: {
-    ...mapState(['dynamic', "website", "personalInfo"])
-  },
   methods: {
     infiniteHandler () {
       this.isLoading = true;
@@ -135,11 +134,23 @@ export default {
     commentChange (result) {
       if (result.state === "success") {
         this.commentList.unshift(result.data)
+        this.dynamicView.comment_count = Number(this.dynamicItem.comment_count) + 1
         this.$message.success(result.message);
       } else {
         this.$message.warning(result.message);
       }
     }
+  },
+  computed: {
+    dynamicView: { // 登录弹窗的状态
+      get () {
+        return this.$store.state.dynamic.dynamicView
+      },
+      set (val) {
+        this.$store.state.dynamic.dynamicView = val
+      },
+    },
+    ...mapState(['dynamic', "website", "personalInfo"])
   },
   components: {
     dynamicItem,
@@ -154,10 +165,13 @@ export default {
 
 <style scoped lang="scss">
 #dynamic-content {
-  padding-top: 30px;
+  padding-top: 25px;
+  margin-bottom: 15px;
   .dynamic-content-main {
     box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
     margin-bottom: 8px;
+    border-radius: 6px;
+    padding: 15px;
   }
   .dynamic-comment-part {
     border-top: 1px solid #ebebeb;

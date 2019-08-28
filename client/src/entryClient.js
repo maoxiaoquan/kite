@@ -6,7 +6,7 @@ const { app, router, store } = createApp()
 NProgress.configure({
   easing: 'ease', // 动画方式
   speed: 500, // 递增进度条的速度
-  showSpinner: true, // 是否显示加载ico
+  showSpinner: false, // 是否显示加载ico
   trickleSpeed: 200, // 自动递增间隔
   minimum: 0.3 // 初始化时的最小百分比
 })
@@ -38,17 +38,17 @@ router.onReady(() => {
     // 我们只关心非预渲染的组件
     // 所以我们对比它们，找出两个匹配列表的差异组件
     let diffed = false
-    const activated = matched.filter((c, i) => {
-      return diffed || (diffed = prevMatched[i] !== c)
+    const activated = matched.filter((d, i) => {
+      return diffed || (diffed = prevMatched[i] !== d)
     })
     if (!activated.length) {
       return next()
     }
     // 这里如果有加载指示器(loading indicator)，就触发
     Promise.all(
-      activated.map(c => {
-        if (c.asyncData) {
-          return c.asyncData({
+      activated.map(r => {
+        if (r.asyncData) {
+          return r.asyncData({
             store,
             route: to
           })

@@ -7,6 +7,7 @@ function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
 }
+const { TimeNow, TimeDistance } = require('../../utils/time')
 
 class PersonalCenter {
   /**
@@ -46,7 +47,7 @@ class PersonalCenter {
       for (let i in rows) {
         rows[i].setDataValue(
           'create_at',
-          await moment(rows[i].create_date).format('YYYY-MM-DD')
+          await TimeDistance(rows[i].create_date)
         )
         rows[i].setDataValue(
           'user',
@@ -237,7 +238,7 @@ class PersonalCenter {
       for (let i in rows) {
         rows[i].setDataValue(
           'create_at',
-          await moment(rows[i].create_date).format('YYYY-MM-DD')
+          await TimeDistance(rows[i].create_date)
         )
         rows[i].setDataValue(
           'user',
@@ -425,7 +426,7 @@ class PersonalCenter {
       whereParams = {
         uid,
         status: {
-          [Op.or]: [1, 2, 4]
+          [Op.or]: [1, 2, 3, 4]
         }
       }
 
@@ -439,8 +440,9 @@ class PersonalCenter {
       for (let i in rows) {
         rows[i].setDataValue(
           'create_at',
-          await moment(rows[i].create_date).format('YYYY-MM-DD')
+          await TimeDistance(rows[i].create_date)
         )
+
         rows[i].setDataValue(
           'topic',
           rows[i].topic_ids
@@ -449,6 +451,7 @@ class PersonalCenter {
             })
             : ''
         )
+
         rows[i].setDataValue(
           'user',
           await models.user.findOne({

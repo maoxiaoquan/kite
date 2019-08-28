@@ -72,6 +72,7 @@ export default {
     commentChange (result) {
       if (result.state === "success") {
         this.commentList.unshift(result.data)
+        this.$emit('dynamicCommentChange')
         this.$message.success(result.message);
       } else {
         this.$message.warning(result.message);

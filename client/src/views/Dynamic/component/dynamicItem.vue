@@ -88,11 +88,11 @@
     </div>
 
     <div class="dynamic-action-row">
-      <div class="action-box action-box">
+      <div class="action-box">
         <div class="like-action action"
              :class="{'active':~user.user_info.allLikeDymaicId.indexOf(dynamicItem.id||'')}"
              @click="setUserLikeDynamic">
-          <i class="el-icon-thumb"></i>
+          <i class="el-icon-star-off"></i>
           <span class="action-title">{{dynamicItem.like_count}}</span>
         </div>
         <div class="comment-action action"
@@ -101,8 +101,19 @@
           <span class="action-title">{{dynamicItem.comment_count}}</span>
         </div>
         <div class="share-action action">
-          <i class="el-icon-share"></i>
-          <span class="action-title">分享</span>
+
+          <el-dropdown trigger="click"
+                       @command="shareChange">
+            <div class="el-dropdown-link">
+              <i class="el-icon-share"></i>
+              <span class="action-title">分享</span>
+            </div>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item :command="{type:'qq',data:dynamicItem}">分享到QQ</el-dropdown-item>
+              <el-dropdown-item :command="{type:'sina',data:dynamicItem}">分享到新浪</el-dropdown-item>
+              <el-dropdown-item :command="{type:'qzone',data:dynamicItem}">分享到QQ空间</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
         <div class="share-action action"
              v-if="isShowDeleteBtn()"
@@ -114,7 +125,8 @@
 
     <div class="dynamic-comment-row"
          v-if="isCommnet&&dfIsCommnet">
-      <dynamic-comment :dynamicId="dynamicItem.id" />
+      <dynamic-comment @dynamicCommentChange="dynamicCommentChange"
+                       :dynamicId="dynamicItem.id" />
     </div>
 
   </div>
@@ -126,6 +138,7 @@
 import DynamicComment from '../../Comment/DynamicComment'
 import { faceQQ } from '@components'
 import { mapState } from 'vuex'
+import { share } from '../../../utils'
 export default {
   name: "dynamicItem",
   props: {
@@ -176,6 +189,9 @@ export default {
         }
       })
     },
+    dynamicCommentChange () { // 动态一级子评论提交成功
+      this.dynamicItem.comment_count = Number(this.dynamicItem.comment_count) + 1
+    },
     contentRender (val) {
       let content = val;
       faceQQ.map(faceItem => {
@@ -216,10 +232,20 @@ export default {
       let urlArr = attach.split(',') || []
       let length = attach.split(',').length
       return length > 0 ? urlArr : []
+    },
+    shareChange (val) { // 分享到其他
+      let urlOrigin = window.location.origin // 源地址
+      if (val.type === 'sina') { // 新浪
+        share.shareToXl(val.data.content, urlOrigin + '/dynamic/' + val.data.id, this.website.meta.logo)
+      } else if (val.type === 'qzone') { // qq空间
+        share.shareToQq(val.data.content, urlOrigin + '/dynamic/' + val.data.id, this.website.meta.logo)
+      } else if (val.type === 'qq') { // qq空间
+        share.shareQQ(val.data.content, urlOrigin + '/dynamic/' + val.data.id, this.website.meta.logo)
+      }
     }
   },
   computed: {
-    ...mapState(['personalInfo', 'user'])
+    ...mapState(['personalInfo', 'user', 'website'])
   },
   components: {
     DynamicComment
@@ -344,12 +370,15 @@ export default {
     }
   }
   .dynamic-action-row {
+    padding: 0 12px 12px;
     .action-box {
       display: flex;
       position: relative;
       margin-top: 15px;
       height: 34px;
-      border-top: 1px solid #ebebeb;
+      background: #f8f8f8;
+      border-radius: 10px;
+      border: 1px solid #f8f8f8;
     }
     .action {
       flex: 1 1 33.333%;
@@ -367,9 +396,11 @@ export default {
         margin-left: 5px;
         font-size: 13px;
         font-weight: 500;
+        margin-top: 1px;
         color: #8a93a0;
       }
       &.active {
+        .action-title,
         i {
           color: #007fff;
         }

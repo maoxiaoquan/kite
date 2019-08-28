@@ -38,12 +38,12 @@ class Aside extends Component {
           {
             title: '文章标签',
             key: 'article_tag',
-            link: '/manager/article_tag'
+            link: '/manager/article-tag'
           },
           {
             title: '文章专栏',
             key: 'article_column',
-            link: '/manager/article_column'
+            link: '/manager/article-column'
           },
           {
             title: '文章评论管理',
@@ -59,13 +59,13 @@ class Aside extends Component {
         children: [
           {
             title: '动态汇总',
-            key: 'dynamic',
+            key: 'dynamics',
             link: '/manager/dynamic'
           },
           {
             title: '动态话题',
             key: 'dynamicTopic',
-            link: '/manager/dynamic_topic'
+            link: '/manager/dynamic-topic'
           },
           {
             title: '动态评论',
@@ -87,17 +87,17 @@ class Aside extends Component {
           {
             title: '用户角色',
             key: 'user_role',
-            link: '/manager/user_role'
+            link: '/manager/user-role'
           },
           {
             title: '用户权限',
             key: 'user_authority',
-            link: '/manager/user_authority'
+            link: '/manager/user-authority'
           },
           {
             title: '用户头像审核',
             key: 'user_avatar_review',
-            link: '/manager/user_avatar_review'
+            link: '/manager/user-avatar-review'
           }
         ]
       },
@@ -109,7 +109,7 @@ class Aside extends Component {
           {
             title: '网站配置',
             key: 'website_config',
-            link: '/manager/website_config'
+            link: '/manager/website-config'
           },
           {
             title: '图库',
@@ -126,27 +126,27 @@ class Aside extends Component {
           {
             title: '管理员管理',
             key: 'admin_user',
-            link: '/manager/admin_user'
+            link: '/manager/admin-user'
           },
           {
             title: '角色管理',
             key: 'admin_role',
-            link: '/manager/admin_role'
+            link: '/manager/admin-role'
           },
           {
             title: '权限菜单',
             key: 'admin_authority',
-            link: '/manager/admin_authority'
+            link: '/manager/admin-authority'
           },
           {
             title: '系统配置',
             key: 'system_config',
-            link: '/manager/system_config'
+            link: '/manager/system-config'
           },
           {
             title: '系统日志',
             key: 'admin_system_log',
-            link: '/manager/admin_system_log'
+            link: '/manager/admin-system-log'
           }
         ]
       }

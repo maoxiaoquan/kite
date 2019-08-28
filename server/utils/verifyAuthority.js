@@ -96,7 +96,7 @@ class VerifyAuthority {
           } else {
             throw new ErrorMessage('当前用户无权限!')
           }
-        } else if (~noLimit.indexOf(admin_url.split('/api-admin/v1')[1])) {
+        } else if (~noLimit.indexOf(adminUrl.split('/api-admin/v1')[1])) {
           // 排除某些特定接口
           await next()
         } else {

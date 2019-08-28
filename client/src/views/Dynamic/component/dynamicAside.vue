@@ -37,7 +37,8 @@
           <router-link class="dynamic"
                        :to='{name:"dynamicView",params:{dynamicId:item.id}}'>
             <div class="content-box">
-              <div class="content">{{item.content}}</div>
+              <div class="content"
+                   v-html="contentRender(item.content)"></div>
               <div class="stat item"><span>{{item.like_count}} 赞 · </span><span>{{item.comment_count}} 评论</span></div>
             </div>
 
@@ -78,6 +79,7 @@
 
 <script>
 import { mapState } from "vuex";
+import { faceQQ } from '@components'
 export default {
   name: 'dynamicAside',
   async asyncData ({ store, route, accessToken = "" }) {
@@ -95,6 +97,16 @@ export default {
     }
   },
   methods: {
+    contentRender (val) {
+      let content = val;
+      faceQQ.map(faceItem => {
+        content = content.replace(
+          new RegExp("\\" + faceItem.face_text, "g"),
+          faceItem.face_view
+        );
+      });
+      return content;
+    },
     isRssDynamicTopic (item) {
       return ~this.user.user_info.allRssDynamicTopicId.indexOf(item.topic_id)
     },
@@ -185,7 +197,7 @@ export default {
   background: #f8f8f8;
   border-radius: 6px;
   overflow: hidden;
-  padding: 24px;
+  padding: 22px;
   .title {
     font-size: 16px;
     line-height: 28px;
@@ -240,7 +252,7 @@ export default {
 
 .topic-sidebar {
   background: #f8f8f8;
-  padding: 24px;
+  padding: 22px;
   border-radius: 6px;
   overflow: hidden;
   .title {

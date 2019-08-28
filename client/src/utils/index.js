@@ -1,3 +1,3 @@
 import compressPictures from './compressPictures'
-
-export { compressPictures }
+import share from './share'
+export { compressPictures, share }

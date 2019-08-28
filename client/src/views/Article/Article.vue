@@ -20,7 +20,7 @@
                   </div>
                   <!-- 文章数据信息 -->
                   <div class="meta">
-                    <span class="publish-time">{{article.create_at }}</span>
+                    <span class="publish-time">{{article.create_at}}</span>
                     <span class="views-count">阅读 {{article.read_count}}</span>
                     <span class="comments-count">评论 {{articleComment.count}}</span>
                     <span class="likes-count">喜欢 {{article.like_count}}</span>

@@ -7,6 +7,7 @@ const clientWhere = require('../../utils/clientWhere')
 const xss = require('xss')
 const config = require('../../config')
 const { lowdb } = require('../../../db/lowdb/index')
+const { TimeNow, TimeDistance } = require('../../utils/time')
 
 function ErrorMessage (message) {
   this.message = message
@@ -201,7 +202,7 @@ class Article {
         for (let i in rows) {
           rows[i].setDataValue(
             'create_at',
-            await moment(rows[i].create_date).format('YYYY-MM-DD')
+            await TimeDistance(rows[i].create_date)
           )
           rows[i].setDataValue(
             'user',
@@ -377,6 +378,11 @@ class Article {
         )
 
         article.setDataValue(
+          'create_at',
+          await TimeDistance(article.create_date)
+        )
+
+        article.setDataValue(
           'user',
           await models.user.findOne({
             where: { uid: article.uid },
@@ -427,6 +433,11 @@ class Article {
             where: { uid: article.uid },
             attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
           })
+        )
+
+        article.setDataValue(
+          'create_at',
+          await TimeDistance(article.create_date)
         )
 
         if (article) {
@@ -669,7 +680,7 @@ class Article {
       for (let i in rows) {
         rows[i].setDataValue(
           'create_at',
-          await moment(rows[i].create_date).format('YYYY-MM-DD')
+          await TimeDistance(rows[i].create_date)
         )
         rows[i].setDataValue(
           'user',

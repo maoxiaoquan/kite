@@ -2,7 +2,7 @@ const models = require('../../../db/mysqldb/index')
 const moment = require('moment')
 const { resClientJson } = require('../../utils/resData')
 const Op = require('sequelize').Op
-const { TimeNow } = require('../../utils/time')
+const { TimeNow, TimeDistance } = require('../../utils/time')
 const clientWhere = require('../../utils/clientWhere')
 
 class Index {
@@ -33,7 +33,6 @@ class Index {
 
         if (allArticleTag && allArticleTag.length > 0) {
           for (let item in allArticleTag) {
-            console.log('item', item)
             allArticleTagId.push(allArticleTag[item].article_tag_id)
           }
 
@@ -92,7 +91,7 @@ class Index {
       for (let i in rows) {
         rows[i].setDataValue(
           'create_at',
-          await moment(rows[i].create_date).format('YYYY-MM-DD')
+          await TimeDistance(rows[i].create_date)
         )
         rows[i].setDataValue(
           'user',

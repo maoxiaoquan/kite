@@ -25,6 +25,7 @@ class update0_3 {
         await models.rss_dynamic_topic.sync({
           force: true
         })
+
         await models.sequelize.query(
           'ALTER TABLE admin_authority CHANGE authority_id authority_id VARCHAR(100) comment "权限ID";'
         )

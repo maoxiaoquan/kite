@@ -61,7 +61,8 @@
       <div class="dynamic-content-row">
         <div class="content-box content-box">
           <div v-html="contentRender(dynamicItem.content)"></div>
-          <div class="limit-ctl-box"></div>
+          <div class="limit-ctl-box"
+               v-if="dynamicItem.status===3">审核失败原因：{{dynamicItem.rejection_reason}}</div>
         </div>
       </div>
 
@@ -331,6 +332,11 @@ export default {
           height: 19px;
           vertical-align: sub;
         }
+      }
+      .limit-ctl-box {
+        color: #f46300;
+        margin-top: 5px;
+        font-size: 12px;
       }
     }
     .dynamic-link-row {

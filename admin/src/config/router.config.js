@@ -31,33 +31,33 @@ export default [
         component: () => import('../containers/Article/view/Article') // 文章汇总
       },
       {
-        path: '/manager/article_tag',
+        path: '/manager/article-tag',
         name: 'articleTag',
         title: '文章标签',
         component: () => import('../containers/ArticleTag/view/ArticleTag') // 文章标签
       },
       {
-        path: '/manager/article_column',
+        path: '/manager/article-column',
         name: 'articleColumn',
         title: '文章专栏',
         component: () =>
           import('../containers/ArticleColumn/view/ArticleColumn') // 文章专栏
       },
       {
-        path: '/manager/user_role',
+        path: '/manager/user-role',
         name: 'userRole',
         title: '用户角色',
         component: () => import('../containers/UserRole/view/UserRole') // 用户角色
       },
       {
-        path: '/manager/user_authority',
+        path: '/manager/user-authority',
         name: 'userAuthority',
         title: '用户权限',
         component: () =>
           import('../containers/UserAuthority/view/UserAuthority') // 用户权限
       },
       {
-        path: '/manager/user_avatar_review',
+        path: '/manager/user-avatar-review',
         name: 'userAvatarReview',
         title: '用户头像审核',
         component: () => import('../containers/AvatarReview/view/AvatarReview') // 用户头像审核
@@ -76,39 +76,39 @@ export default [
           import('../containers/ArticleComment/view/ArticleComment') // 评论管理
       },
       {
-        path: '/manager/admin_user',
+        path: '/manager/admin-user',
         name: 'adminUser',
         title: '后台管理员管理',
         component: () => import('../containers/AdminUser/view/AdminUser') // 后台管理员
       },
       {
-        path: '/manager/admin_role',
+        path: '/manager/admin-role',
         name: 'adminRole',
         title: '后台角色',
         component: () => import('../containers/AdminRole/view/AdminRole') // 后台角色
       },
       {
-        path: '/manager/admin_authority',
+        path: '/manager/admin-authority',
         name: 'adminAuthority',
         title: '后台权限',
         component: () =>
           import('../containers/AdminAuthority/view/AdminAuthority') // 后台权限
       },
       {
-        path: '/manager/system_config',
+        path: '/manager/system-config',
         name: 'systemConfig',
         title: '系统配置',
         component: () => import('../containers/SystemConfig/view/SystemConfig') // 系统配置
       },
       {
-        path: '/manager/admin_system_log',
+        path: '/manager/admin-system-log',
         name: 'adminSystemLog',
         title: '后台系统日志',
         component: () =>
           import('../containers/AdminSystemLog/view/AdminSystemLog') // 后台系统日志
       },
       {
-        path: '/manager/website_config',
+        path: '/manager/website-config',
         name: 'websiteConfig',
         title: '网站配置',
         component: () =>
@@ -123,7 +123,7 @@ export default [
       },
       {
         // 2019.8.4 新增 动态话题
-        path: '/manager/dynamic_topic',
+        path: '/manager/dynamic-topic',
         name: 'dynamicTopic',
         title: '动态的话题',
         component: () => import('../containers/DynamicTopic/view/DynamicTopic') // 动态的话题

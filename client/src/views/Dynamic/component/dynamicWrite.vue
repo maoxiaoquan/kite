@@ -6,7 +6,7 @@
           <textarea v-model.trim="content"
                     ref="dynamicContent"
                     class="empty"
-                    placeholder="告诉你个小秘密，发片刻时添加话题会被更多小伙伴看见呦~" />
+                    placeholder="发布的动态~" />
           <div class="current-topic"
                v-if="currentTopic.name">{{currentTopic.name}}</div>
         </div>
