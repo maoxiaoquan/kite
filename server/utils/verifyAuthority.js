@@ -11,6 +11,7 @@ function ErrorMessage (message) {
 const noLimit = ['/admin-index/statistics', '/admin-user/info']
 
 class VerifyAuthority {
+  // 前台权限验证
   static async ClientCheck (ctx, next) {
     const { url, user = {} } = ctx.request
     const { user_role_ids } = user
@@ -65,6 +66,7 @@ class VerifyAuthority {
     }
   }
 
+  // 后台权限验证
   static async AdminCheck (ctx, next) {
     const { url, userInfo = {} } = ctx.request
     const { role_id } = userInfo

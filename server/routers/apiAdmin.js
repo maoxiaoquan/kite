@@ -331,6 +331,7 @@ router.post(
 router.post(
   '/admin-user/info',
   tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
   adminUser.getAdminUserInfo
 )
 // 获取管理员用户列表
