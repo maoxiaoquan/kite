@@ -303,6 +303,14 @@ class dynamicComment {
         ? 5
         : 1
 
+      let oneDynamic = await models.dynamic.findOne({
+        where: {
+          id: reqData.dynamic_id
+        }
+      })
+
+      console.log('oneDynamic', oneDynamic)
+
       await models.dynamic_comment
         .create({
           parent_id: reqData.parent_id || 0,
@@ -354,12 +362,12 @@ class dynamicComment {
 
           await models.user_message.create({
             // 用户行为记录
-            uid: reqData.article_uid,
-            type: 5, // 1:系统 2:喜欢文章  3:关注标签 4:关注用户 5:评论
+            uid: oneDynamic.uid,
+            type: 6, // 1:系统 2:喜欢文章  3:关注标签 4:关注用户 5:评论 6:动态评论
             content: JSON.stringify({
               other_uid: user.uid,
               comment_id: _data.id,
-              aid: reqData.aid,
+              dynamic_id: reqData.dynamic_id,
               title: '动态有新的评论'
             })
           })
@@ -368,11 +376,11 @@ class dynamicComment {
             await models.user_message.create({
               // 用户行为记录
               uid: reqData.reply_uid,
-              type: 5, // 类型 1:系统 2:喜欢文章  3:关注标签 4:用户关注 5:评论
+              type: 6, // 类型 1:系统 2:喜欢文章  3:关注标签 4:用户关注 5:评论 6:动态评论
               content: JSON.stringify({
                 other_uid: user.uid,
                 comment_id: _data.id,
-                aid: reqData.aid,
+                dynamic_id: reqData.dynamic_id,
                 title: `你的评论有新的回复`
               })
             })

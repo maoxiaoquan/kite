@@ -49,7 +49,7 @@
         </div>
       </div>
       <div class="header-action"
-           v-if="dynamicItem.user.uid!=='tree'">
+           v-if="dynamicItem.user.uid!=='tree'&&personalInfo.islogin">
         <button class="subscribe-btn follow-button"
                 :class="{'active':~user.user_info.attention_uid_arr.indexOf(dynamicItem.user.uid||'')}"
                 @click="setUserAttention">关注</button>

@@ -67,6 +67,40 @@
       <span class="delete-message"
             @click="deleteUserMessage(MessageItem.id)">删除</span>
     </div>
+
+    <div class="main clearfix"
+         v-if="Number(MessageItem.type)===6">
+      <router-link class="user-info"
+                   :to="{name:'user',params:{uid:MessageItem.other_user.uid}}">
+        <img class="avatar"
+             :src="MessageItem.other_user.avatar"
+             alt />
+        <span class="nickname">{{MessageItem.other_user.nickname}}</span>
+      </router-link>
+      <div class="content">
+        <router-link style="color:#df5858"
+                     :to="{name:'dynamicView',params:{dynamicId:MessageItem.dynamic.id}}">{{MessageItem.dynamic.content}}</router-link>
+        中{{typeList[MessageItem.type]}}：
+      </div>
+      <div class="content-text">
+        <template v-if="MessageItem.comment">
+          <p v-html="commentRender(MessageItem.comment.content||'评论被用户删除')"
+             v-if="Number(MessageItem.comment.status)===2||Number(MessageItem.comment.status)===5"></p>
+          <p v-else-if="Number(MessageItem.comment.status)===1"
+             style="color:#f96b84;">当前用户评论需要管理员审核才能可见</p>
+          <p v-else-if="Number(MessageItem.comment.status)===4"
+             style="color:#f96b84;">评论被删除</p>
+          <p v-else-if="Number(MessageItem.comment.status)===3"
+             style="color:#f96b84;">当前用户评论违规</p>
+        </template>
+        <template v-else>
+          <p style="color:#f96b84;">评论被删除</p>
+        </template>
+      </div>
+      <span class="delete-message"
+            @click="deleteUserMessage(MessageItem.id)">删除</span>
+    </div>
+
   </div>
 </template>
 
@@ -81,7 +115,7 @@ export default {
   },
   data () {
     return {
-      typeList: ["", "系统消息", "喜欢文章", "关注标签", "用户关注", "评论"]
+      typeList: ["", "系统消息", "喜欢文章", "关注标签", "用户关注", "评论", "动态评论"]
     };
   },
   methods: {

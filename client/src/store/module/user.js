@@ -139,7 +139,8 @@ const actions = {
       method: 'get',
       parameter: { params: parameter }
     }).then(result => {
-      commit('SET_USER_INFO_ALL', result.data)
+      Object.keys(result.data).length > 0 &&
+        commit('SET_USER_INFO_ALL', result.data)
       return result
     })
   },

@@ -4,7 +4,8 @@
       <div class="row dynamic-main">
         <div class="col-xs-12 col-sm-8 col-md-8 left">
           <div class="stream-wrapper">
-            <div class="edit-view">
+            <div class="edit-view"
+                 v-if="personalInfo.islogin">
               <dynamic-write @changeDynamicWrite="dynamicSubmit"
                              v-if="personalInfo.islogin"
                              :afferentTopic="afferentTopic" />
@@ -44,6 +45,7 @@
                 <div class="title">{{topicInfo.name}}</div>
 
                 <span class="followed"
+                      v-if="personalInfo.islogin"
                       :class="{'active':isRssDynamicTopic}"
                       @click="subscribeDynamicTopic">{{isRssDynamicTopic?'已关注':'+ 关注'}}</span>
 
@@ -80,12 +82,12 @@ export default {
   name: 'dynamic',
   metaInfo () {
     return {
-      title: this.topicInfo.name || "话题不存在",
+      title: this.topicInfo.name || "",
       meta: [
         {
           // set meta
           name: "description",
-          content: `${this.topicInfo.name || "话题不存在"}`
+          content: `${this.topicInfo.name || ""}`
         }
       ],
       htmlAttrs: {
@@ -178,7 +180,11 @@ export default {
   computed: {
     ...mapState(['personalInfo', 'dynamic', 'user']),
     isRssDynamicTopic () {
-      return ~this.user.user_info.allRssDynamicTopicId.indexOf(this.$route.params.dynamicTopicId)
+      if (this.personalInfo.islogin) {
+        return ~this.user.user_info.allRssDynamicTopicId.indexOf(this.$route.params.dynamicTopicId)
+      } else {
+        return false
+      }
     },
   },
   components: {
@@ -199,8 +205,10 @@ export default {
       box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
       padding: 15px;
       border-radius: 6px;
+      .edit-view {
+        border-bottom: 1px solid rgba(92, 96, 102, 0.1);
+      }
       .sort {
-        border-top: 1px solid rgba(92, 96, 102, 0.1);
         border-bottom: 1px solid rgba(92, 96, 102, 0.1);
         display: flex;
         a {

@@ -705,6 +705,7 @@ class User {
         )
 
         if (rows[i].type === 2) {
+          // 喜欢文章
           rows[i].setDataValue(
             'article',
             await models.article.findOne({
@@ -726,6 +727,20 @@ class User {
             await models.article.findOne({
               where: { aid: JSON.parse(rows[i].content).aid },
               attributes: ['aid', 'uid', 'title']
+            })
+          )
+        } else if (rows[i].type === 6) {
+          // 动态评论
+          rows[i].setDataValue(
+            'comment',
+            await models.dynamic_comment.findOne({
+              where: { id: JSON.parse(rows[i].content).comment_id }
+            })
+          )
+          rows[i].setDataValue(
+            'dynamic',
+            await models.dynamic.findOne({
+              where: { id: JSON.parse(rows[i].content).dynamic_id }
             })
           )
         }
