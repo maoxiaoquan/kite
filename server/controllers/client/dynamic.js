@@ -489,19 +489,6 @@ class dynamic {
     // 获取首页侧栏动态列表
     try {
       let allDynamicTopic = await models.dynamic_topic.findAll({
-        attributes: [
-          'id',
-          'topic_id',
-          'name',
-          'en_name',
-          'icon',
-          'description',
-          'rss_count',
-          'enable',
-          'sort',
-          'is_show',
-          'enable'
-        ],
         where: { enable: 1, is_show: 1 }, // 为空，获取全部，也可以自己添加条件
         order: [
           ['sort', 'ASC'] // asc
@@ -527,19 +514,6 @@ class dynamic {
     // 获取所有动态列表
     try {
       let allDynamicTopic = await models.dynamic_topic.findAll({
-        attributes: [
-          'id',
-          'topic_id',
-          'name',
-          'en_name',
-          'icon',
-          'description',
-          'rss_count',
-          'enable',
-          'sort',
-          'is_show',
-          'enable'
-        ],
         where: { enable: 1 }, // 为空，获取全部，也可以自己添加条件
         order: [
           ['sort', 'ASC'] // asc

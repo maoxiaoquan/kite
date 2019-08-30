@@ -120,7 +120,7 @@ export default {
   name: 'Blog',
   metaInfo () {
     return {
-      title: '个人专题',
+      title: '个人专栏',
       htmlAttrs: {
         lang: 'zh'
       }
