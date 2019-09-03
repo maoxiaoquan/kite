@@ -19,16 +19,12 @@ function ErrorMessage (message) {
 class dynamicTopic {
   static async getDynamicTopicInfo (ctx) {
     const { topic_id } = ctx.query
-    console.log('topic_id---------', topic_id)
     try {
       const oneDynamicTopic = await models.dynamic_topic.findOne({
         where: {
           topic_id
         }
       })
-
-      console.log('oneDynamicTopic', JSON.stringify(oneDynamicTopic))
-
       oneDynamicTopic.setDataValue(
         'dynamic_count',
         await models.dynamic.count({

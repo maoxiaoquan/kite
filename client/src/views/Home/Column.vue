@@ -115,7 +115,6 @@ export default {
         })
         .then(result => {
           this.isLoading = false;
-          console.log('result.data.article_list.length', result.data.article_list.length)
           if (result.data.article_list.length === 10) {
             this.page += 1;
           } else {

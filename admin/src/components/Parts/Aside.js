@@ -226,6 +226,12 @@ class Aside extends Component {
                 theme="dark"
                 mode="inline"
               >
+                <Menu.Item>
+                  <Link to="/manager/index">
+                    <Icon type="home" />
+                    <span>首页</span>
+                  </Link>
+                </Menu.Item>
                 {aside_list.map(item => {
                   if (
                     item.link &&

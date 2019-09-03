@@ -70,7 +70,10 @@ module.exports = {
       // 是否加入首页或者推荐
       type: Seq.BOOLEAN,
       comment: '是否加入首页或者推荐',
-      field: 'is_push'
+      field: 'is_push',
+      defaultValue: () => {
+        return false
+      }
     },
     enable: {
       // 是否可用
