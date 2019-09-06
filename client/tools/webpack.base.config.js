@@ -35,6 +35,7 @@ module.exports = {
     alias: {
       '@components': resolve('src/components'),
       '@views': resolve('src/views'),
+      '@utils': resolve('src/utils'),
       assets: resolve('src/assets'),
       '@request': resolve('request')
     }

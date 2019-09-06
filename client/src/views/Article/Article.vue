@@ -63,20 +63,23 @@
             </div>
 
             <div class="meta-bottom clearfix">
-              <div class="like">
-                <div class="btn like-group"
-                     :class="{'active':~currUserInfo.user_like_aid_arr.indexOf(String(article.aid))}"
-                     @click="onUserLikeArticle">
-                  <div class="btn-like">
-                    <a href="javascript:;">
-                      <i class="iconfont icon-xin"></i>喜欢
-                    </a>
+              <div class="meta-bottom-item like"
+                   @click="onUserLikeArticle"
+                   :class="{'active':~currUserInfo.user_like_aid_arr.indexOf(String(article.aid))}">
+                <i :class="~currUserInfo.user_like_aid_arr.indexOf(String(article.aid))?'el-icon-star-on':'el-icon-star-off'"></i>
+              </div>
+              <div class="meta-bottom-item share">
+                <el-dropdown trigger="click"
+                             @command="shareChange">
+                  <div class="el-dropdown-link">
+                    <i class="el-icon-share"></i>
                   </div>
-                  <div class="modal-wrap">
-                    <a href="javascript:;">{{article.like_count}}</a>
-                  </div>
-                </div>
-                <!---->
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item :command="{type:'qq',data:article}">分享到QQ</el-dropdown-item>
+                    <el-dropdown-item :command="{type:'sina',data:article}">分享到新浪</el-dropdown-item>
+                    <el-dropdown-item :command="{type:'qzone',data:article}">分享到QQ空间</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </div>
             </div>
             <!--article footer end-->
@@ -97,7 +100,8 @@
 
 <script>
 import ArticleComment from "@views/Comment/ArticleComment";
-
+import { share } from '@utils'
+import { mapState } from 'vuex'
 export default {
   metaInfo () {
     return {
@@ -212,6 +216,16 @@ export default {
         .catch(function (err) {
           console.log(err);
         });
+    },
+    shareChange (val) { // 分享到其他
+      let urlOrigin = window.location.origin // 源地址
+      if (val.type === 'sina') { // 新浪
+        share.shareToXl(val.data.title, urlOrigin + '/p/' + val.data.aid, this.website.meta.logo)
+      } else if (val.type === 'qzone') { // qq空间
+        share.shareToQq(val.data.title, urlOrigin + '/p/' + val.data.aid, this.website.meta.logo)
+      } else if (val.type === 'qq') { // qq空间
+        share.shareQQ(val.data.title, urlOrigin + '/p/' + val.data.aid, this.website.meta.logo)
+      }
     }
   },
   computed: {
@@ -224,7 +238,8 @@ export default {
     personalInfo () {
       // 登录后的个人信息
       return this.$store.state.personalInfo || {};
-    }
+    },
+    ...mapState(['website'])
   },
   components: {
     ArticleComment
@@ -405,56 +420,24 @@ export default {
         margin-top: 40px;
         margin-bottom: 80px;
         text-align: center;
-        .like {
+        .meta-bottom-item {
           display: inline-block;
-          .like-group {
-            position: relative;
-            padding: 13px 0 15px 0;
-            font-size: 0;
-            border: 1px solid #ea6f5a;
-            border-radius: 40px;
-            &.active {
-              background-color: #ea6f5a;
-              color: #fff;
-              .btn-like {
-                a {
-                  color: #fff;
-                }
-                i {
-                  color: #fff;
-                }
-              }
-              .modal-wrap {
-                border-left-color: #fff;
-                a {
-                  color: #fff;
-                }
-              }
-            }
-            .btn-like {
-              display: inline-block;
-              font-size: 19px;
-              a {
-                position: relative;
-                padding: 18px 30px 18px 55px;
-                color: #ea6f5a;
-              }
-              i {
-                position: absolute;
-                left: 25px;
-                top: 15px;
-                font-size: 20px;
-              }
-            }
-            .modal-wrap {
-              font-size: 18px;
-              border-left: 1px solid rgba(236, 97, 73, 0.4);
-              display: inline-block;
-              margin-left: -15px;
-              a {
-                color: #ea6f5a;
-                padding: 18px 26px 18px 18px;
-              }
+          width: 45px;
+          height: 45px;
+          line-height: 45px;
+          border: 1px solid #e0e0e0;
+          text-align: center;
+          margin: 0 8px;
+          cursor: pointer;
+          border-radius: 90px;
+          i {
+            font-size: 18px;
+            color: #333;
+          }
+          &.active {
+            border: 1px solid #e67e7e;
+            i {
+              color: #e67e7e;
             }
           }
         }

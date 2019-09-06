@@ -215,7 +215,6 @@ class Aside extends Component {
           <div className="admin-aside-content clearfix">
             <ScrollBar
               option={{
-                // Disabled horizontal scrolling, https://github.com/utatti/perfect-scrollbar#options
                 suppressScrollX: true
               }}
             >
