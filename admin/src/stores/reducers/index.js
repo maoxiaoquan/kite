@@ -9,6 +9,7 @@ import stateUserAvatarReview from '../../containers/AvatarReview/reducer/AvatarR
 import stateArticle from '../../containers/Article/reducer/ArticleReducer'
 import stateArticleComment from '../../containers/ArticleComment/reducer/CommentReducer'
 import stateArticleTag from '../../containers/ArticleTag/reducer/ArticleTagReducer'
+import stateArticleBlog from '../../containers/ArticleBlog/reducer'
 import stateArticleColumn from '../../containers/ArticleColumn/reducer/ArticleColumnReducer'
 import statePicture from '../../containers/Picture/reducer/PictureReducer'
 import stateAdminUser from '../../containers/AdminUser/reducer/AdminUserReducer'
@@ -33,6 +34,7 @@ const rootReducer = {
   stateArticle,
   stateArticleComment,
   stateArticleTag,
+  stateArticleBlog,
   stateArticleColumn,
   statePicture,
   stateAdminUser,

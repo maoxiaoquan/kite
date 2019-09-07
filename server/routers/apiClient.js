@@ -3,9 +3,9 @@ const index = require('../controllers/client/index') // 主页
 const user = require('../controllers/client/user') // 注册
 const personalCenter = require('../controllers/client/personalCenter') // 用户个人中心
 const article = require('../controllers/client/article') // 文章内容页
-const subscribe = require('../controllers/client/subscribe') // 订阅
-const userArticleBlog = require('../controllers/client/userArticleBlog') // 用户文章专题
+const articleBlog = require('../controllers/client/articleBlog') // 文章评论
 const articleComment = require('../controllers/client/articleComment') // 文章评论
+const subscribe = require('../controllers/client/subscribe') // 订阅
 const upload = require('../controllers/client/upload') // 上传
 const website = require('../controllers/client/website') // 上传
 const tokens = require('../utils/tokens') // 登录tokens
@@ -40,19 +40,19 @@ router.post('/personal/info', tokens.ClientVerifyToken, user.userPersonalInfo)
 router.post(
   '/personal/create-article-blog',
   tokens.ClientVerifyToken,
-  userArticleBlog.createUserArticleBlog
+  articleBlog.createUserArticleBlog
 ) // 用户文章专题 TYPE:AJAX post
 
 router.post(
   '/personal/update-article-blog',
   tokens.ClientVerifyToken,
-  userArticleBlog.updateUserArticleBlog
+  articleBlog.updateUserArticleBlog
 ) // 更新用户所有文章专题 TYPE:AJAX get
 
 router.post(
   '/personal/delete-article-blog',
   tokens.ClientVerifyToken,
-  userArticleBlog.deleteUserArticleBlog
+  articleBlog.deleteUserArticleBlog
 ) // 删除用户所有文章专题 TYPE:AJAX get
 
 router.get(
@@ -96,7 +96,7 @@ router.put(
  */
 router.get('/user/info', user.getUserInfo) // 根据uid 获取用户相应信息 get
 
-router.get('/user/blog-all', userArticleBlog.getUserArticleBlogAll) // 获取用户所有文章专题 TYPE:AJAX get
+router.get('/user/blog-all', articleBlog.getUserArticleBlogAll) // 获取用户所有文章专题 TYPE:AJAX get
 
 router.post(
   '/user/attention',
@@ -130,6 +130,12 @@ router.post(
   '/article/upload-article-picture',
   tokens.ClientVerifyToken,
   upload.uploadArticlePicture
+) // 文章图片上传
+
+router.post(
+  '/article-blog/upload-img',
+  tokens.ClientVerifyToken,
+  upload.uploadArticleBlogPicture
 ) // 文章图片上传
 
 router.post(
@@ -188,6 +194,12 @@ router.get(
   tokens.ClientVerifyToken,
   subscribe.getSubscribeTagMyAll
 ) // 获取文章标签 获取全部的
+
+/**
+ * 个人专栏相关
+ */
+
+router.get('/article-blog/list', articleBlog.getArticleBlogList) // 文章标签
 
 /**
  * 文章评论相关

@@ -6,6 +6,7 @@ import article from './article'
 import articleTag from './articleTag'
 import articleColumn from './articleColumn'
 import articleComment from './articleComment'
+import articleBlog from './articleBlog'
 import dynamicComment from './dynamicComment'
 import setting from './setting'
 import search from './search'
@@ -21,6 +22,7 @@ export default {
   article,
   articleTag,
   articleColumn,
+  articleBlog,
   articleComment,
   dynamicComment,
   setting,

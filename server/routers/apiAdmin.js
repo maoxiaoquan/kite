@@ -5,6 +5,7 @@ const userRoleAuthority = require('../controllers/admin/userRoleAuthority') // �
 const articles = require('../controllers/admin/articles') // 文章
 const articleTag = require('../controllers/admin/articleTag') // 文章标签
 const articleColumn = require('../controllers/admin/articleColumn') // 文章专栏 （专栏为官方）
+const articleBlog = require('../controllers/admin/articleBlog') // 个人文章专栏 （专栏为个人）
 const picture = require('../controllers/admin/picture') // 图片管理
 const upload = require('../controllers/admin/upload') // 上传
 const adminRoleAuthority = require('../controllers/admin/adminRoleAuthority') // 后台角色权限
@@ -150,6 +151,22 @@ router.post(
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
   articleColumn.deleteArticleColumn
+)
+
+/* 个人专栏管理 （专栏为个人） */
+router.get(
+  '/article-blog/list',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  articleBlog.getArticleBlogList
+)
+
+/* 个人更新专栏 */
+router.post(
+  '/article-blog/update',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  articleBlog.updateArticleBlog
 )
 
 /* 文章专题管理 （专题为个人） */

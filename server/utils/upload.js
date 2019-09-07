@@ -12,7 +12,8 @@ module.exports = type => {
     avatarImg: `static/upload/avatar-img-service/${year}/${month}`,
     articleImg: `static/upload/article-img-service/${year}/${month}`,
     admin: `static/upload/admin-img-service/${year}/${month}`,
-    dynamic: `static/upload/dynamic-img-service/${year}/${month}`
+    dynamic: `static/upload/dynamic-img-service/${year}/${month}`,
+    articleBlogImg: `static/upload/blog-img-service/${year}/${month}`
   }
 
   let fileFilter = (ctx, file, cb) => {

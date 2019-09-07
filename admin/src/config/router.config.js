@@ -44,6 +44,12 @@ export default [
           import('../containers/ArticleColumn/view/ArticleColumn') // 文章专栏
       },
       {
+        path: '/manager/article-blog',
+        name: 'articleBlog',
+        title: '个人专栏',
+        component: () => import('../containers/ArticleBlog/view/ArticleBlog') // 个人专栏
+      },
+      {
         path: '/manager/user-role',
         name: 'userRole',
         title: '用户角色',

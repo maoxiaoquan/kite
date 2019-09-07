@@ -2,7 +2,7 @@ const Seq = require('sequelize')
 const shortid = require('shortid')
 const time = require('../time')
 module.exports = {
-  NAME: 'rss_article_tag' /* 表名 */,
+  NAME: 'rss_article_blog' /* 表名 */,
   TABLE: {
     /* 表结构 */
     id: {
@@ -19,11 +19,11 @@ module.exports = {
       comment: 'uid',
       field: 'uid'
     },
-    article_tag_id: {
+    blog_id: {
       // 标签ID
-      type: Seq.STRING(20),
-      comment: 'id 主键，自增',
-      field: 'article_tag_id'
+      type: Seq.BIGINT(20),
+      comment: '专题ID',
+      field: 'blog_id'
     }
   }
 }

@@ -1,0 +1,38 @@
+.article-blog {
+  .dynamic-article-bar {
+    margin-bottom: 20px;
+    .select-view {
+      width: 150px;
+    }
+    button {
+      margin: 0 5px;
+    }
+  }
+  .table-right-btn {
+    button {
+      margin-left: 5px;
+    }
+  }
+
+  .table-is-login {
+    padding-left: 5px;
+    .anticon-check-circle {
+      color: #28a745;
+    }
+    .anticon-close-circle {
+      color: #f46e65;
+    }
+  }
+
+  .tag-img-icon {
+    width: 60px;
+  }
+
+  .tag-font-icon {
+    font-size: 20px;
+  }
+
+  .article-tag-user-create-btn {
+    margin-bottom: 15px;
+  }
+}

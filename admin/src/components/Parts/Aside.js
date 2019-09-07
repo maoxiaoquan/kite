@@ -36,6 +36,11 @@ class Aside extends Component {
             link: '/manager/article'
           },
           {
+            title: '个人专栏',
+            key: 'articleBlog',
+            link: '/manager/article-blog'
+          },
+          {
             title: '文章标签',
             key: 'article_tag',
             link: '/manager/article-tag'

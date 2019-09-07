@@ -42,7 +42,13 @@ class NormalLoginForm extends React.Component {
             <FormItem hasFeedback>
               {getFieldDecorator('account', {
                 rules: [{ required: true, message: '请输入你的账户！' }]
-              })(<Input placeholder="账户" prefix={<Icon type="user" />} />)}
+              })(
+                <Input
+                  className="from-view-input"
+                  placeholder="账户"
+                  prefix={<Icon type="user" />}
+                />
+              )}
             </FormItem>
             <FormItem hasFeedback>
               {getFieldDecorator('password', {
@@ -50,6 +56,7 @@ class NormalLoginForm extends React.Component {
               })(
                 <Input
                   placeholder="密码"
+                  className="from-view-input"
                   prefix={<Icon type="lock" />}
                   type="password"
                 />

@@ -186,6 +186,12 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
 
+  const rss_article_blog = sequelize.define(
+    require('./models_type/db_rss_article_blog').NAME,
+    require('./models_type/db_rss_article_blog').TABLE,
+    SEQ_PARAMETER
+  )
+
   const _define = {
     user,
     user_info,
@@ -201,6 +207,7 @@ module.exports = sequelize => {
     article_blog,
     article_like,
     article_comment,
+    rss_article_blog,
     dynamic,
     dynamic_topic,
     dynamic_comment,

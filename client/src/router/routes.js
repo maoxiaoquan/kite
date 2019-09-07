@@ -130,6 +130,16 @@ export default [
         path: 'topic/:dynamicTopicId',
         name: 'dynamicTopicView',
         component: () => import('@views/Dynamic/dynamicTopicView') // 动态内容页
+      },
+      {
+        path: 'blogs',
+        name: 'articleBlogs',
+        component: () => import('@views/articleBlog/Blog') // 个人专栏
+      },
+      {
+        path: 'blog/:blogId',
+        name: 'articleBlog',
+        component: () => import('@views/articleBlog/BlogView') // 个人专栏内容
       }
     ]
   }

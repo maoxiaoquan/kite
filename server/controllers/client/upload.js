@@ -123,6 +123,35 @@ class Upload {
       return false
     }
   }
+
+  static async uploadArticleBlogPicture (ctx) {
+    try {
+      await upload('articleBlogImg').single('file')(ctx)
+      if (ctx.req.file) {
+        let destination = ctx.req.file.destination.split('static')[1]
+        let filename = ctx.req.file.filename
+        let origin = ctx.request.header.origin
+        resClientJson(ctx, {
+          state: 'success',
+          message: '个人专栏图片上传成功',
+          data: {
+            img: `${origin}${destination}/${filename}`
+          }
+        })
+      } else {
+        resClientJson(ctx, {
+          state: 'error',
+          message: '个人专栏图片上传成功失败，文件格式有误'
+        })
+      }
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '上传图片大于1m'
+      })
+      return false
+    }
+  }
 }
 
 module.exports = Upload

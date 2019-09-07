@@ -6,6 +6,7 @@ module.exports = {
   // 密码盐
   ENCRYPT_KEY: 'kite',
   DF_ARTICLE_TAG_IMG: '/default/img/default_article_tag.png', // 文章默认的标签
+  DF_ICON: '/default/img/default_icon.png', // 默认所有图标
   USER_ROLE: {
     dfId: 'ordinary_role_100000', // 用户默认角色id
     dfLegalizeId: 'commission_100000', // 定制角色，认证作者ID

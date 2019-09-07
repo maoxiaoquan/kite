@@ -40,17 +40,50 @@
           <div class="form-group">
             <label for="blog-name-input">专题名字</label>
             <input type="email"
-                   v-model="blog_name"
+                   v-model="blogForm.blog_name"
                    class="form-control"
-                   id="blog-name-input"
                    placeholder="请输入个人文章专题名字">
           </div>
           <div class="form-group">
+            <label for="blog-name-input">专题英文名字</label>
+            <input type="email"
+                   v-model="blogForm.en_name"
+                   class="form-control"
+                   placeholder="请输入个人文章专题英文名字">
+          </div>
+          <div class="form-group">
+            <label for="blog-name-input">是否公开</label>
+            <div class="form-radio-view">
+              <input type="radio"
+                     name="sex"
+                     :value="true"
+                     class="form-input-radio"
+                     v-model="blogForm.is_pubclic"><span>是</span>
+              <input type="radio"
+                     name="sex"
+                     :value="false"
+                     class="form-input-radio"
+                     v-model="blogForm.is_pubclic"><span>否</span>
+            </div>
+          </div>
+
+          <div class="avatar-uploader avatar-uploader">
+            <div class="avatar">
+              <el-image :src="blogForm.icon"
+                        lazy></el-image>
+            </div>
+            <div class="action-box">
+              <div class="hint">支持 jpg、png 格式大小 1M 以内的图片</div>
+              <upload-image class="upload-image"
+                            @changeUpload="changeArticleBlogImg">上传图片</upload-image>
+            </div>
+          </div>
+
+          <div class="form-group">
             <label for="article-blog-description">专题描述</label>
-            <textarea v-model="blog_description"
+            <textarea v-model="blogForm.blog_description"
                       type="password"
                       class="form-control"
-                      id="article-blog-description"
                       placeholder="请输入个人文章专题描述"></textarea>
           </div>
           <div class="footer-view">
@@ -114,7 +147,7 @@
 
 import BlogList from '../component/BlogList'
 import BlogArticleItem from '../component/BlogArticleItem'
-import { Page } from '@components'
+import { Page, UploadImage } from '@components'
 
 export default {
   name: 'Blog',
@@ -138,9 +171,14 @@ export default {
     return {
       isCreateBlogShow: false,
       isBlogListShow: true,
-      blog_name: '',
-      blog_description: '',
       blog_list: [],
+      blogForm: {
+        blog_name: '',
+        en_name: '',
+        blog_description: '',
+        is_pubclic: false,
+        icon: ''
+      },
     }
   },
   created () {
@@ -160,16 +198,14 @@ export default {
       this.getUserArticleBlogList()
     },
     createNewUserBlog () {
-      var that = this
       this.$store.dispatch('user/CREATE_ARTICLE_BLOG', {
-        blog_name: that.blog_name,
-        blog_description: that.blog_description,
+        ...this.blogForm
       })
         .then(res => {
           if (res.state === 'success') {
-            that.isCreateBlogShow = false
-            that.blog_name = ''
-            that.blog_description = ''
+            this.isCreateBlogShow = false
+            this.blog_name = ''
+            this.blog_description = ''
             this.$message.success('创建成功')
             this.getUserArticleBlogList()
           } else {
@@ -179,6 +215,16 @@ export default {
     },
     async getUserArticleBlogList () {
       await this.$store.dispatch('user/GET_USER_ARTICLE_BLOG', { uid: this.$route.params.uid })
+    },
+    changeArticleBlogImg ({ formData, config }) {
+      this.$store.dispatch('articleBlog/UPLOAD_ARTICLE_BLOG_IMG', formData)
+        .then(result => {
+          if (result.state === 'success') {
+            this.blogForm.icon = result.data.img
+          } else {
+            this.$message.warning(result.message)
+          }
+        })
     },
     pageChange (val) {
       this.$router.push({
@@ -213,6 +259,7 @@ export default {
   components: {
     BlogList,
     BlogArticleItem,
+    UploadImage,
     Page
   }
 }
@@ -322,6 +369,13 @@ export default {
       width: 100%;
       padding: 5px 10px;
       font-size: 14px;
+    }
+    .form-radio-view {
+      margin-top: 10px;
+      span {
+        display: inline-block;
+        margin-right: 20px;
+      }
     }
   }
   .footer-view {

@@ -1,17 +1,18 @@
 const Seq = require('sequelize')
 const shortid = require('shortid')
 const time = require('../time')
+const config = require('../../../server/config')
 
 module.exports = {
   NAME: 'article_blog' /* 表名 */,
   TABLE: {
     /* 表结构 */
     blog_id: {
-      // 专题ID
+      // 个人专栏ID
       type: Seq.BIGINT(20),
       primaryKey: true, // 定义主键
       autoIncrement: true, // 自动递增
-      comment: '专题ID',
+      comment: '个人专栏ID',
       field: 'blog_id'
     },
     uid: {
@@ -21,28 +22,52 @@ module.exports = {
       field: 'uid'
     },
     name: {
-      // 专题名字
+      // 个人专栏名字
       type: Seq.STRING(20),
       comment: '名字',
       field: 'name'
     },
+    en_name: {
+      // 个人专栏英文名字
+      type: Seq.STRING(60),
+      comment: '英文名字',
+      field: 'en_name'
+    },
     description: {
-      // 专题描述
+      // 个人专栏描述
       type: Seq.STRING(100),
       comment: '描述',
       field: 'description'
     },
-    rss_count: {
-      // 专题订阅数量
+    read_count: {
+      // 个人专栏阅读数量
       type: Seq.INTEGER(10),
-      comment: '订阅数量（预留）',
-      field: 'rss_count'
+      comment: '个人专栏阅读数量',
+      field: 'read_count'
     },
     icon: {
-      // 专题图标
+      // 个人专栏图标
       type: Seq.STRING(200),
       comment: '图标（预留）',
-      field: 'icon'
+      field: 'icon',
+      defaultValue: () => {
+        return config.DF_ICON
+      }
+    },
+    status: {
+      // 状态
+      type: Seq.INTEGER(10),
+      comment: '状态(1:审核中;2:审核通过;3:审核失败;4：无需审核)',
+      field: 'status'
+    },
+    is_public: {
+      // 是否公开
+      type: Seq.BOOLEAN,
+      comment: '是否公开',
+      field: 'is_public',
+      defaultValue: () => {
+        return false
+      }
     },
     enable: {
       // 是否可以显示
