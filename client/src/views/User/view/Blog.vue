@@ -67,7 +67,8 @@
             </div>
           </div>
 
-          <div class="avatar-uploader avatar-uploader">
+          <div class="form-group avatar-uploader avatar-uploader">
+            <label for="blog-name-input">专栏封面图片（非必传）</label>
             <div class="avatar">
               <el-image :src="blogForm.icon"
                         lazy></el-image>
