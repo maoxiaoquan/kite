@@ -53,7 +53,7 @@
                 </li>
                 <li>
                   <div class="meta-block">
-                    <router-link :to='{name:"userBlog",query:{blog_id:"all"}}'>
+                    <router-link :to='{name:"userArticle",query:{blog_id:"all"}}'>
                       <p>{{user.user_info.user_article_count}}</p>
                       <strong>文章</strong>
                     </router-link>
@@ -64,9 +64,14 @@
           </div>
 
           <ul class="trigger-menu">
-            <li :class="{'active':$route.name==='userBlog'}">
-              <router-link :to='{name:"userBlog",query:{blog_id:"all"}}'>
+            <li :class="{'active':$route.name==='userArticle'}">
+              <router-link :to='{name:"userArticle",query:{blog_id:"all"}}'>
                 文章
+              </router-link>
+            </li>
+            <li :class="{'active':$route.name==='userBlog'}">
+              <router-link :to='{name:"userBlog"}'>
+                专栏
               </router-link>
             </li>
             <li :class="{'active':$route.name==='userDynamic'}">

@@ -461,7 +461,7 @@ export default {
           if (res.state === "success") {
             this.create_show_modal = false;
             this.$router.push({
-              name: "userBlog",
+              name: "userArticle",
               params: { uid: this.personalInfo.user.uid }
             });
             if (this.$route.params.editor_type === "create") {

@@ -298,4 +298,6 @@ router.get('/personal/dynamic-list', personalCenter.getDynamicListMe) // 个人�
 
 router.get('/dynamic-topic/info', dynamicTopic.getDynamicTopicInfo) // 获取动态话题的信息
 
+router.get('/personal/article-blog-list', personalCenter.userArticleBlogList) // 用户自己的个人专栏列表
+
 module.exports = router

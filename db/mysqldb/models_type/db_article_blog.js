@@ -54,6 +54,12 @@ module.exports = {
         return config.DF_ICON
       }
     },
+    tag_ids: {
+      /* 文章所属的标签名字 可多个 */
+      type: Seq.STRING(180),
+      comment: '个人专栏所属的标签id',
+      field: 'tag_ids'
+    },
     status: {
       // 状态
       type: Seq.INTEGER(10),

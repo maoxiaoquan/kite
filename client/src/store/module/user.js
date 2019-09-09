@@ -64,7 +64,14 @@ const state = () => ({
     list: [],
     page: 1,
     pageSize: 10
-  }, // 动态列表
+  },
+  articleBlog: {
+    // 个人中心个人专栏列表
+    count: 0,
+    list: [],
+    page: 1,
+    pageSize: 10
+  },
   unread_message_count: 0 // 用户未读
 })
 
@@ -73,8 +80,8 @@ const mutations = {
     // 获取用户的全部信息
     state.user_info = data
   },
-  SET_USER_ARTICLE_BLOG (state, data) {
-    // 设置获取的文章专题
+  SET_USER_ARTICLE_BLOG_ALL (state, data) {
+    // 设置获取的全部的个人文章专栏
     state.user_article_blog = data.list
   },
   SET_MY_ARTICLE_LIST (state, data) {
@@ -104,6 +111,10 @@ const mutations = {
   SET_PERSONAL_DYNAMIC_LIST (state, data) {
     // 设置动态列表
     state.dynamicList = data
+  },
+  SET_USER_ARTICLE_BLOG_LIST (state, data) {
+    // 设置用户个人专栏列表
+    state.articleBlog = data
   }
 }
 
@@ -144,14 +155,14 @@ const actions = {
       return result
     })
   },
-  GET_USER_ARTICLE_BLOG: ({ commit, dispatch, state }, { uid }) => {
+  GET_USER_ARTICLE_BLOG_ALL: ({ commit, dispatch, state }, { uid }) => {
     // 获取文章专题 all
     return fetch({
       url: '/user/blog-all',
       method: 'get',
       parameter: { params: { uid } }
     }).then(result => {
-      commit('SET_USER_ARTICLE_BLOG', result.data)
+      commit('SET_USER_ARTICLE_BLOG_ALL', result.data)
       return result
     })
   },
@@ -269,6 +280,17 @@ const actions = {
       parameter: { params: parameter }
     }).then(result => {
       commit('SET_PERSONAL_DYNAMIC_LIST', result.data)
+      return result
+    })
+  },
+  GET_USER_ARTICLE_BLOG_LIST ({ commit, dispatch, state }, parameter) {
+    // 获取用户的个人专栏列表
+    return fetch({
+      url: '/personal/article-blog-list',
+      method: 'get',
+      parameter: { params: parameter }
+    }).then(result => {
+      commit('SET_USER_ARTICLE_BLOG_LIST', result.data)
       return result
     })
   }

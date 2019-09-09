@@ -7,6 +7,7 @@ const xss = require('xss')
 const clientWhere = require('../../utils/clientWhere')
 const config = require('../../config')
 const { TimeNow, TimeDistance } = require('../../utils/time')
+const shortid = require('shortid')
 
 function ErrorMessage (message) {
   this.message = message
@@ -27,7 +28,6 @@ class dynamicBlog {
     let { uid } = ctx.query
     try {
       let allUserArticleBlog = await models.article_blog.findAll({
-        attributes: ['blog_id', 'name', 'description'],
         where: {
           uid
         }
@@ -75,31 +75,27 @@ class dynamicBlog {
         }
       })
 
-      let enNameArticleBlog = await models.article_blog.findOne({
-        where: {
-          en_name: en_name
+      if (en_name) {
+        let enNameArticleBlog = await models.article_blog.findOne({
+          where: {
+            en_name
+          }
+        })
+        if (enNameArticleBlog) {
+          throw new ErrorMessage('英文名字已存在')
         }
-      })
+        if (en_name.length > 60) {
+          throw new ErrorMessage('英文名字小于60个字符')
+        }
+      }
 
       if (oneUserArticleBlog) {
         throw new ErrorMessage('不能创建自己已有的专题')
       }
 
-      if (!en_name) {
-        throw new ErrorMessage('请输入英文名字')
-      }
-
-      if (en_name.length > 60) {
-        throw new ErrorMessage('英文名字小于60个字符')
-      }
-
-      if (enNameArticleBlog) {
-        throw new ErrorMessage('英文名字已存在')
-      }
-
       await models.article_blog.create({
         name: blog_name,
-        en_name: en_name || blog_name,
+        en_name: en_name || shortid.generate(),
         icon: icon || config.DF_ICON,
         description: blog_description || '',
         uid: user.uid,
@@ -109,10 +105,9 @@ class dynamicBlog {
       })
       resClientJson(ctx, {
         state: 'success',
-        message: '文章专题创建成功'
+        message: '文章个人专栏创建成功'
       })
     } catch (err) {
-      console.log('err', err)
       resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message
@@ -171,7 +166,7 @@ class dynamicBlog {
       })
       resClientJson(ctx, {
         state: 'success',
-        message: '删除用户文章成功'
+        message: '删除用户个人专栏成功'
       })
     } catch (err) {
       resClientJson(ctx, {

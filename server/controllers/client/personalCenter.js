@@ -486,6 +486,90 @@ class PersonalCenter {
       return false
     }
   }
+
+  /**
+   * 用户个人中心个人专栏列表
+   * @param   {object} ctx 上下文对象
+   */
+  static async userArticleBlogList (ctx) {
+    let uid = ctx.query.uid
+    let page = ctx.query.page || 1
+    let pageSize = Number(ctx.query.pageSize) || 10
+    let whereParams = {
+      uid
+    }
+    try {
+      let { count, rows } = await models.article_blog.findAndCountAll({
+        where: whereParams, // 为空，获取全部，也可以自己添加条件
+        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: pageSize, // 每页限制返回的数据条数
+        order: [['create_timestamp', 'desc']]
+      })
+
+      /* for (let item in rows) { // 循环取用户 render 渲染必须用这种方法 与 ajax 有区别
+      rows[item].create_at = await moment(rows[item].create_date)
+        .format('YYYY-MM-DD H:m:s')
+      rows[item].user = await models.user.findOne({
+        where: { uid: rows[item].uid },
+        attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+      })
+      } */
+
+      for (let i in rows) {
+        rows[i].setDataValue(
+          'create_at',
+          await TimeDistance(rows[i].create_date)
+        )
+        rows[i].setDataValue(
+          'articleCount',
+          await models.article.count({
+            where: { user_blog_ids: rows[i].blog_id }
+          })
+        )
+
+        rows[i].setDataValue(
+          'likeCount',
+          await models.rss_article_blog.count({
+            where: { blog_id: rows[i].blog_id }
+          })
+        )
+
+        if (rows[i].tag_ids) {
+          rows[i].setDataValue(
+            'tag',
+            await models.article_tag.findAll({
+              where: { article_tag_id: { [Op.or]: rows[i].tag_ids.spilt(',') } }
+            })
+          )
+        }
+
+        rows[i].setDataValue(
+          'user',
+          await models.user.findOne({
+            where: { uid: rows[i].uid },
+            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+          })
+        )
+      }
+
+      await resClientJson(ctx, {
+        state: 'success',
+        message: '获取用户个人专栏成功列表',
+        data: {
+          count: count,
+          page,
+          pageSize,
+          list: rows
+        }
+      })
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
 }
 
 module.exports = PersonalCenter

@@ -35,9 +35,14 @@ export default [
         component: () => import('@views/User/User'), // 文章内容页
         children: [
           {
+            path: 'article',
+            name: 'userArticle',
+            component: () => import('@views/User/view/Article') // 文章内容页
+          },
+          {
             path: 'blog',
             name: 'userBlog',
-            component: () => import('@views/User/view/Blog') // 文章内容页
+            component: () => import('@views/User/view/Blog') // 用户自己的个人专栏
           },
           {
             path: 'user-dynamic',
@@ -60,7 +65,7 @@ export default [
             component: () => import('@views/User/view/UserMessage') // 用户消息
           }
         ],
-        redirect: { name: 'userBlog' }
+        redirect: { name: 'userArticle' }
       },
       {
         path: 'user/setting',

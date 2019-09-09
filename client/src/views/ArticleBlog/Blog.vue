@@ -5,7 +5,7 @@
         <router-link class="nav-item"
                      :to="{name:'articleBlogs'}">全部</router-link>
         <router-link class="nav-item"
-                     :to="{name:'articleBlogs',query:{type:'my'}}">我的</router-link>
+                     :to="{name:'articleBlogs',query:{type:'my'}}">我的关注</router-link>
       </nav>
 
       <div class="article-blog-list">

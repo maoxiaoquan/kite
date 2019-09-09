@@ -149,7 +149,6 @@ export default {
       blog: {
         name: ''
       },
-
       userArticleBlogAll: [], // 用户全部专栏
       sourceList: [ // 文章来源
         // whether to display create blog btn and input 文章类型列表
@@ -373,7 +372,7 @@ export default {
           if (res.state === "success") {
             this.create_show_modal = false;
             this.$router.push({
-              name: "userBlog",
+              name: "userArticle",
               params: { uid: this.personalInfo.user.uid }
             });
             if (this.$route.params.type === "create") {

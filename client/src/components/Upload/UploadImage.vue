@@ -34,6 +34,7 @@ export default {
       } else {
         this.imgPreview(this.picavalue);
       }
+      e.target.value = ""
     },
     //获取图片
     imgPreview (file, callback) {

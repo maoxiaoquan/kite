@@ -14,7 +14,10 @@ import {
   DropdownItem,
   Popover,
   Loading,
-  Image
+  Image,
+  Select,
+  Option,
+  OptionGroup
 } from 'element-ui'
 
 import './assets/css/box_layout.scss'
@@ -24,7 +27,6 @@ Vue.prototype.$msgbox = MessageBox
 Vue.prototype.$alert = MessageBox.alert
 Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$prompt = MessageBox.prompt
-// Vue.prototype.$notify = Notification
 Vue.prototype.$message = Message
 Vue.use(Loading)
 
@@ -35,6 +37,9 @@ Vue.component('el-dropdown-menu', DropdownMenu)
 Vue.component('el-dropdown-item', DropdownItem)
 Vue.component('el-popover', Popover)
 Vue.component('el-image', Image)
+Vue.component('el-select', Select)
+Vue.component('el-option', Option)
+Vue.component('el-option-group', OptionGroup)
 
 export function createApp (context) {
   // 创建 router 和 store 实例
