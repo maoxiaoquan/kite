@@ -54,7 +54,6 @@
 
 <script>
 
-import BlogList from '../component/BlogList'
 import BlogArticleItem from '../component/BlogArticleItem'
 import { Page, UploadImage } from '@components'
 
@@ -127,7 +126,6 @@ export default {
     },
   },
   components: {
-    BlogList,
     BlogArticleItem,
     UploadImage,
     Page
@@ -165,7 +163,7 @@ export default {
         border-radius: 10px;
         padding: 0 3px;
         color: #fff;
-        &.active {
+        &.true {
           background: #41b883;
         }
       }

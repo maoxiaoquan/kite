@@ -23,7 +23,21 @@
               <div class="info-content">
                 <router-link class="name"
                              :to="{name:'articleBlog',params:{blogId:articleBlogItem.blog_id}}">{{articleBlogItem.name}}</router-link>
-                <span class="article-count">文章总数：{{articleBlogItem.articleCount}}</span>
+                <ul class="statistics">
+                  <li><span class="article-count"> 文章总数：{{articleBlogItem.articleCount}}</span> </li>
+                  <li class="item item-icon read-count">
+                    <i class="el-icon-reading"></i>
+                    <span v-text="articleBlogItem.read_count||0"></span>
+                  </li>
+                  <li class="item item-icon like-article">
+                    <i class="el-icon-star-off"></i>
+                    <span v-text="articleBlogItem.likeCount||0"></span>
+                  </li>
+                  <li>
+                    <span class="type"
+                          :class="{'true':articleBlogItem.is_public}"> {{ articleBlogItem.is_public?'公开':'个人' }}</span>
+                  </li>
+                </ul>
               </div>
               <p class="description">介绍：{{articleBlogItem.description}}</p>
             </div>
@@ -45,6 +59,23 @@
             </div>
 
           </div>
+
+          <div class="user-article-blog-tag">
+            <span class="title">所属标签:</span>
+            <template v-if="articleBlogItem.tag">
+              <router-link v-for="(itemArticleTag,key) in articleBlogItem.tag"
+                           class="tag-class frontend"
+                           :key="key"
+                           :to="{name:'article_tag',params:{article_tag_en_name:itemArticleTag.article_tag_en_name}}">{{itemArticleTag.article_tag_name}}</router-link>
+            </template>
+            <template v-else>
+              <span class="hint">
+                暂时没有加入标签，加入标签更能容易被搜索到
+              </span>
+            </template>
+
+          </div>
+
           <div class="user-article-blog-main">
             <ul>
               <li class="item item-icon read-count">
@@ -54,13 +85,8 @@
                 <router-link :to='{name:"user",params:{uid:articleBlogItem.user.uid}}'
                              class="nickname">{{articleBlogItem.user.nickname}}</router-link>
               </li>
-              <li class="item item-icon read-count">
-                <i class="el-icon-reading"></i>
-                <strong v-text="articleBlogItem.read_count||0"></strong>
-              </li>
-              <li class="item item-icon like-article">
-                <i class="el-icon-star-off"></i>
-                <strong v-text="articleBlogItem.likeCount||0"></strong>
+              <li class="item item-icon">
+                <span class="time">{{setBlogTime(articleBlogItem)}}</span>
               </li>
             </ul>
           </div>
@@ -78,14 +104,14 @@
                width="380px">
       <div class="blog-modal">
         <div class="form-group">
-          <label for="blog-name-input">专题名字</label>
+          <label for="blog-name-input">专题名字：</label>
           <input type="email"
                  v-model="blogForm.blog_name"
                  class="form-control"
                  placeholder="请输入个人文章专题名字">
         </div>
         <div class="form-group">
-          <label for="blog-name-input">专题英文名字</label>
+          <label for="blog-name-input">专题英文名字：</label>
           <input type="email"
                  v-model="blogForm.en_name"
                  class="form-control"
@@ -93,25 +119,27 @@
         </div>
 
         <div class="form-group">
-          <label for="blog-name-input">是否公开</label>
+          <label for="blog-name-input">是否公开：</label>
           <div class="form-radio-view">
             <input type="radio"
                    name="sex"
                    :value="true"
                    class="form-input-radio"
-                   v-model="blogForm.is_pubclic"><span>公开</span>
+                   v-model="blogForm.is_public"><span>公开</span>
             <input type="radio"
                    name="sex"
                    :value="false"
                    class="form-input-radio"
-                   v-model="blogForm.is_pubclic"><span>仅自己</span>
+                   v-model="blogForm.is_public"><span>仅自己</span>
           </div>
         </div>
 
         <div class="form-group avatar-uploader avatar-uploader">
-          <label for="blog-name-input">专栏封面图片（非必传）</label>
-          <div class="avatar">
-            <el-image :src="blogForm.icon"
+          <label for="blog-name-input">专栏封面图片（非必传）：</label>
+          <div class="avatar"
+               v-if="blogForm.icon">
+            <el-image class="avatar-img"
+                      :src="blogForm.icon"
                       lazy></el-image>
           </div>
           <div class="action-box">
@@ -122,11 +150,10 @@
         </div>
 
         <div class="form-group">
-          <label for="blog-name-input">选择标签</label>
-          {{blogForm.tag_ids}}
+          <label for="blog-name-input">选择标签：</label>
           <el-select filterable
                      multiple
-                     :multiple-limit="3"
+                     :multiple-limit="5"
                      v-model="blogForm.tag_ids"
                      placeholder="请选择">
             <el-option v-for="(item,key) in articleTagAll"
@@ -139,8 +166,8 @@
         </div>
 
         <div class="form-group">
-          <label for="article-blog-description">专题描述</label>
-          <textarea v-model="blogForm.blog_description"
+          <label for="article-blog-description">专题描述：</label>
+          <textarea v-model="blogForm.description"
                     type="password"
                     class="form-control"
                     placeholder="请输入个人文章专题描述"></textarea>
@@ -149,7 +176,7 @@
         <div class="footer-view">
           <button type="button"
                   class="btn btn-primary blog-modal-create"
-                  @click="createNewUserBlog">创建
+                  @click="setIsEditCreateArticleBlog">创建
           </button>
           <button type="button"
                   @click="isCreateBlogShow=false"
@@ -186,11 +213,13 @@ export default {
   data () {
     return {
       isCreateBlogShow: false,
+      isCreate: true,
       blogForm: {
+        blog_id: '',
         blog_name: '',
         en_name: '',
-        blog_description: '',
-        is_pubclic: false,
+        description: '',
+        is_public: false,
         icon: '',
         tag_ids: ''
       },
@@ -200,28 +229,13 @@ export default {
     this.$store.dispatch("articleTag/GET_ARTICLE_TAG_ALL")
   },
   methods: {
-    createNewUserBlog () {
-      this.$store.dispatch('user/CREATE_ARTICLE_BLOG', {
-        ...this.blogForm
-      })
-        .then(res => {
-          if (res.state === 'success') {
-            this.isCreateBlogShow = false
-            this.blog_name = ''
-            this.blog_description = ''
-            this.$message.success('创建成功')
-            this.getUserArticleBlogList()
-          } else {
-            this.$message.warning(res.message)
-          }
-        })
-    },
-    createEditArticleBlog (type) {
+    createEditArticleBlog (type) { // 触发创建文章个人专栏
       this.isCreateBlogShow = true
+      this.isCreate = true
       this.blogForm.blog_name = ''
       this.blogForm.en_name = ''
-      this.blogForm.blog_description = ''
-      this.blogForm.is_pubclic = false
+      this.blogForm.description = ''
+      this.blogForm.is_public = false
       this.blogForm.icon = ''
       this.blogForm.tag_ids = ''
     },
@@ -235,7 +249,36 @@ export default {
           }
         })
     },
-    deleteArticleBlog (blog_id) {
+    setBlogTime (item) { // 设置blog的时间
+      if (item.create_date === item.update_date) {
+        return `创建于：${item.create_dt}`
+      } else {
+        return `更新于：${item.update_dt}`
+      }
+    },
+    setIsEditCreateArticleBlog () {
+      let url = ''
+      let params = {}
+      url = this.isCreate ? 'user/CREATE_ARTICLE_BLOG' : 'user/UPDATE_ARTICLE_BLOG'
+      params = {
+        ...this.blogForm,
+        tag_ids: this.blogForm.tag_ids.join(',')
+      }
+      this.$store.dispatch(url, {
+        ...params
+      })
+        .then(result => {
+          if (result.state === 'success') {
+            this.isEdit = false
+            this.$message.success(result.message);
+            this.isCreateBlogShow = false
+            window.location.reload()
+          } else {
+            this.$message.warning(result.message);
+          }
+        })
+    },
+    deleteArticleBlog (blog_id) { // 删除文章的个人专栏
       this.$store.dispatch('user/DELETE_ARTICLE_BLOG', {
         blog_id,
       })
@@ -251,7 +294,13 @@ export default {
     commandChange (val) {
       if (val.type === 'edit') {
         this.isCreateBlogShow = true
-        this.blogForm = val.articleBlogItem
+        this.isCreate = false
+        this.blogForm.blog_id = val.articleBlogItem.blog_id
+        this.blogForm.blog_name = val.articleBlogItem.name
+        this.blogForm.en_name = val.articleBlogItem.en_name
+        this.blogForm.description = val.articleBlogItem.description
+        this.blogForm.is_public = val.articleBlogItem.is_public
+        this.blogForm.icon = val.articleBlogItem.icon
         val.articleBlogItem.tag_ids && (this.blogForm.tag_ids = val.articleBlogItem.tag_ids.split(','))
       } else if (val.type === 'delete') {
         this.deleteArticleBlog(val.articleBlogItem.blog_id);
@@ -293,7 +342,7 @@ export default {
       padding-bottom: 12px;
       position: relative;
       display: block;
-      height: 130px;
+      height: 185px;
       padding: 10px;
       .user-article-blog-top {
         display: flex;
@@ -313,15 +362,42 @@ export default {
           .info-content {
             .name {
               color: #333;
+              font-size: 13px;
               &:hover {
                 color: #0c7d9d;
               }
             }
-            span {
-              display: block;
-              font-size: 12px;
-              color: #666;
-              margin-right: 5px;
+            .statistics {
+              li {
+                display: inline-block;
+                .article-count,
+                span {
+                  display: inline-block;
+                  font-size: 12px;
+                  color: #999;
+                  margin-right: 5px;
+                  vertical-align: middle;
+                }
+                i {
+                  font-size: 14px;
+                  color: #999;
+                }
+                .type {
+                  font-size: 12px;
+                  display: inline-block;
+                  margin-left: 3px;
+                }
+                .type {
+                  background: #fd763a;
+                  color: #fff;
+                  border-radius: 10px;
+                  line-height: 15px;
+                  padding: 1px 3px;
+                  &.true {
+                    background: #41b883;
+                  }
+                }
+              }
             }
           }
           .description {
@@ -342,6 +418,26 @@ export default {
           cursor: pointer;
         }
       }
+      .user-article-blog-tag {
+        .title {
+          display: inline-block;
+          font-size: 12px;
+        }
+        a {
+          display: inline-block;
+          background: #fd763a;
+          font-size: 12px;
+          color: #fff;
+          border-radius: 10px;
+          line-height: 15px;
+          padding: 1px 3px;
+          margin-right: 5px;
+        }
+        .hint {
+          font-size: 12px;
+          color: #999;
+        }
+      }
       .user-article-blog-main {
         border-top: 1px solid #f0f0f0;
         padding-top: 8px;
@@ -353,7 +449,7 @@ export default {
           &:after {
             display: inline-block;
             content: "\B7";
-            margin: 0 4px;
+            margin: 0 1px;
             color: #b2bac2;
           }
           &:last-of-type {
@@ -366,10 +462,23 @@ export default {
             height: 28px;
             border-radius: 20px;
             vertical-align: middle;
-            margin-right: 10px;
+            margin-right: 1px;
           }
           strong {
             font-weight: normal;
+          }
+          .nickname {
+            white-space: nowrap;
+            overflow: hidden;
+            font-size: 12px;
+            color: #777;
+            text-overflow: ellipsis;
+            width: 50px;
+            display: inline-block;
+            vertical-align: middle;
+          }
+          .time {
+            font-size: 12px;
           }
         }
       }
@@ -389,8 +498,9 @@ export default {
       display: block;
       border: 1px solid #eaeaea;
       width: 100%;
-      padding: 5px 10px;
+      padding: 8px 10px;
       font-size: 14px;
+      border-radius: 6px;
     }
     .form-radio-view {
       margin-top: 10px;
@@ -398,6 +508,26 @@ export default {
         display: inline-block;
         margin-right: 20px;
       }
+    }
+    .avatar {
+      width: 60px;
+      height: 60px;
+      .avatar-img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .hint {
+      font-size: 12px;
+      color: #999;
+    }
+    .UploadImage {
+      cursor: pointer;
+      background: #409eff;
+      padding: 3px 15px;
+      color: #fff;
+      margin-top: 3px;
+      border-radius: 3px;
     }
   }
   .footer-view {

@@ -28,7 +28,7 @@ class AdminIndex {
 
       for (const i in articleAll) {
         articleAll[i].setDataValue(
-          'create_at',
+          'create_dt',
           await moment(articleAll[i].create_date).format('YYYY-MM-DD H:m:s')
         )
         articleAll[i].setDataValue(
@@ -42,7 +42,7 @@ class AdminIndex {
 
       for (const i in commentAll) {
         commentAll[i].setDataValue(
-          'create_at',
+          'create_dt',
           await moment(commentAll[i].create_date).format('YYYY-MM-DD H:m:s')
         )
         commentAll[i].setDataValue(

@@ -28,8 +28,8 @@
                  target="_blank"
                  rel=""
                  class="meta-box-item time-box">
-                <time :title="dynamicItem.create_at"
-                      class="time">{{dynamicItem.create_at}}</time>
+                <time :title="dynamicItem.create_dt"
+                      class="time">{{dynamicItem.create_dt}}</time>
               </a>
               <div class="dot">·</div>
               <div class="meta-box-item like-action action"

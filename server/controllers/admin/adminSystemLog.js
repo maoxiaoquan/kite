@@ -30,7 +30,7 @@ class AdminSystemLog {
       })
       for (let i in rows) {
         rows[i].setDataValue(
-          'create_at',
+          'create_dt',
           await moment(rows[i].create_date)
             .format('YYYY-MM-DD H:m:s')
             .toLocaleString()

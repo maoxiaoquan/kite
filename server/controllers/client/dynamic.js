@@ -128,7 +128,7 @@ class dynamic {
 
       if (oneDynamic) {
         oneDynamic.setDataValue(
-          'create_at',
+          'create_dt',
           await TimeDistance(oneDynamic.create_date)
         )
 
@@ -256,7 +256,7 @@ class dynamic {
           })
           : ''
         rows[i].setDataValue(
-          'create_at',
+          'create_dt',
           await TimeDistance(rows[i].create_date)
         )
         rows[i].setDataValue('topic', topic)
@@ -336,7 +336,7 @@ class dynamic {
 
       for (let i in rows) {
         rows[i].setDataValue(
-          'create_at',
+          'create_dt',
           await TimeDistance(rows[i].create_date)
         )
         rows[i].setDataValue(
@@ -428,7 +428,7 @@ class dynamic {
 
       for (let i in allDynamic) {
         allDynamic[i].setDataValue(
-          'create_at',
+          'create_dt',
           await TimeDistance(allDynamic[i].create_date)
         )
         allDynamic[i].setDataValue(

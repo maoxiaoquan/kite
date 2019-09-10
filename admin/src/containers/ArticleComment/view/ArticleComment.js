@@ -82,8 +82,8 @@ class ArticleComment extends React.Component {
         },
         {
           title: '评论时间',
-          dataIndex: 'create_at',
-          key: 'create_at'
+          dataIndex: 'create_dt',
+          key: 'create_dt'
         },
         {
           title: '操作',

@@ -1,7 +1,7 @@
 import { fetch } from '@request'
 
 const state = () => ({
-  home_column: [],
+  homeColumn: [],
   column_list: {
     count: 0,
     list: [],
@@ -14,7 +14,7 @@ const state = () => ({
 const mutations = {
   SET_ARTICLE_COLUMN (state, data) {
     // 设置获取的文章专栏
-    state.home_column = data.list
+    state.homeColumn = data.list
   },
   SET_CURRENT_ARTICLE_COLUMN (state, data) {
     // 设置当前切换的文章专栏

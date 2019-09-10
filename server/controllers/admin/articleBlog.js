@@ -15,11 +15,11 @@ class ArticleBlog {
    */
   static async getArticleBlogList (ctx) {
     let whereParams = {} // 定义查询条件
-    const { page = 1, pageSize = 10, name, status } = ctx.query
+    const { page = 1, pageSize = 10, name, status, is_public } = ctx.query
     try {
       name && (whereParams['name'] = { [Op.like]: `%${name}%` })
       status && (whereParams['status'] = status)
-
+      whereParams['is_public'] = is_public
       let { count, rows } = await models.article_blog.findAndCountAll({
         where: whereParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目

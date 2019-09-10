@@ -36,7 +36,7 @@ class ArticleComment {
 
       for (let i in rows) {
         rows[i].setDataValue(
-          'create_at',
+          'create_dt',
           await TimeDistance(rows[i].create_date)
         )
         if (Number(rows[i].status === 1)) {
@@ -63,7 +63,7 @@ class ArticleComment {
         for (let childCommentItem in childAllComment) {
           // 循环取用户  代码有待优化，层次过于复杂
           childAllComment[childCommentItem].setDataValue(
-            'create_at',
+            'create_dt',
             await TimeDistance(childAllComment[childCommentItem].create_date)
           )
           childAllComment[childCommentItem].setDataValue(
@@ -201,7 +201,7 @@ class ArticleComment {
             })
           }
 
-          _data['create_at'] = await TimeDistance(_data.create_date)
+          _data['create_dt'] = await TimeDistance(_data.create_date)
 
           await models.user_message.create({
             // 用户行为记录

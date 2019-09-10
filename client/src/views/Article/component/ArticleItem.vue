@@ -26,7 +26,7 @@
             <strong v-text="articleItem.comment_count"></strong>
           </li>
           <li class="item"
-              v-text="articleItem.create_at"></li>
+              v-text="articleItem.create_dt"></li>
           <li class="item"
               v-if="articleItem.article_tag_ids">
             <router-link v-for="(item_article_tag,key) in articleTagFilter(articleItem.article_tag_ids)"

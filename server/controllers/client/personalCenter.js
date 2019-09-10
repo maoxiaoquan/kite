@@ -36,7 +36,7 @@ class PersonalCenter {
       })
 
       /* for (let item in rows) { // 循环取用户 render 渲染必须用这种方法 与 ajax 有区别
-      rows[item].create_at = await moment(rows[item].create_date)
+      rows[item].create_dt = await moment(rows[item].create_date)
         .format('YYYY-MM-DD H:m:s')
       rows[item].user = await models.user.findOne({
         where: { uid: rows[item].uid },
@@ -46,7 +46,7 @@ class PersonalCenter {
 
       for (let i in rows) {
         rows[i].setDataValue(
-          'create_at',
+          'create_dt',
           await TimeDistance(rows[i].create_date)
         )
         rows[i].setDataValue(
@@ -237,7 +237,7 @@ class PersonalCenter {
 
       for (let i in rows) {
         rows[i].setDataValue(
-          'create_at',
+          'create_dt',
           await TimeDistance(rows[i].create_date)
         )
         rows[i].setDataValue(
@@ -439,7 +439,7 @@ class PersonalCenter {
 
       for (let i in rows) {
         rows[i].setDataValue(
-          'create_at',
+          'create_dt',
           await TimeDistance(rows[i].create_date)
         )
 
@@ -503,11 +503,11 @@ class PersonalCenter {
         where: whereParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, // 每页限制返回的数据条数
-        order: [['create_timestamp', 'desc']]
+        order: [['update_date', 'desc']]
       })
 
       /* for (let item in rows) { // 循环取用户 render 渲染必须用这种方法 与 ajax 有区别
-      rows[item].create_at = await moment(rows[item].create_date)
+      rows[item].create_dt = await moment(rows[item].create_date)
         .format('YYYY-MM-DD H:m:s')
       rows[item].user = await models.user.findOne({
         where: { uid: rows[item].uid },
@@ -517,9 +517,11 @@ class PersonalCenter {
 
       for (let i in rows) {
         rows[i].setDataValue(
-          'create_at',
+          'create_dt',
           await TimeDistance(rows[i].create_date)
         )
+        rows[i].setDataValue('update_dt', await TimeDistance(rows[i].update_dt))
+
         rows[i].setDataValue(
           'articleCount',
           await models.article.count({
@@ -538,7 +540,7 @@ class PersonalCenter {
           rows[i].setDataValue(
             'tag',
             await models.article_tag.findAll({
-              where: { article_tag_id: { [Op.or]: rows[i].tag_ids.spilt(',') } }
+              where: { article_tag_id: { [Op.or]: rows[i].tag_ids.split(',') } }
             })
           )
         }

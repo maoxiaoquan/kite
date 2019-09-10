@@ -46,7 +46,7 @@
                                  class="nav-link">片刻</router-link>
                   </li>
                   <li class="nav-item">
-                    <router-link :to="{name:'articleBlogs'}"
+                    <router-link :to="{name:'articleBlogs',params:{columnEnName:'all'}}"
                                  class="nav-link">专栏</router-link>
                   </li>
                   <li class="nav-item"
@@ -224,7 +224,7 @@ export default {
         border-bottom: 1px solid #f1f1f1;
         display: block;
         position: absolute;
-        top: 60px;
+        top: 59px;
         color: rgba(0, 0, 0, 0.07);
         content: "";
         width: 100%;

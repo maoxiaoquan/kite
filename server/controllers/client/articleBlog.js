@@ -8,6 +8,7 @@ const clientWhere = require('../../utils/clientWhere')
 const config = require('../../config')
 const { TimeNow, TimeDistance } = require('../../utils/time')
 const shortid = require('shortid')
+const { lowdb } = require('../../../db/lowdb/index')
 
 function ErrorMessage (message) {
   this.message = message
@@ -57,10 +58,11 @@ class dynamicBlog {
     let {
       blog_name,
       en_name,
-      blog_description,
+      description,
       icon,
       is_public,
-      enable
+      enable,
+      tag_ids
     } = ctx.request.body
     let { user = '' } = ctx.request
     try {
@@ -89,6 +91,23 @@ class dynamicBlog {
         }
       }
 
+      let oneArticleTag = await models.article_tag.findOne({
+        where: {
+          article_tag_id: config.ARTICLE_TAG.dfOfficialExclusive
+        }
+      })
+      const website = lowdb
+        .read()
+        .get('website')
+        .value()
+      if (~tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
+        if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
+          throw new ErrorMessage(
+            `${oneArticleTag.article_tag_name}只有${website.website_name}管理团队才能使用`
+          )
+        }
+      }
+
       if (oneUserArticleBlog) {
         throw new ErrorMessage('不能创建自己已有的专题')
       }
@@ -97,10 +116,11 @@ class dynamicBlog {
         name: blog_name,
         en_name: en_name || shortid.generate(),
         icon: icon || config.DF_ICON,
-        description: blog_description || '',
+        description: description || '',
         uid: user.uid,
         enable: enable || false,
         is_public: is_public || false,
+        tag_ids: tag_ids || '',
         status: 1
       })
       resClientJson(ctx, {
@@ -123,11 +143,61 @@ class dynamicBlog {
   static async updateUserArticleBlog (ctx) {
     const resData = ctx.request.body
     let { user = '' } = ctx.request
+
     try {
+      let oneUserArticleBlog = await models.article_blog.findOne({
+        where: {
+          uid: user.uid,
+          name: resData.blog_name
+        }
+      })
+
+      if (resData.en_name) {
+        let enNameArticleBlog = await models.article_blog.findOne({
+          where: {
+            en_name: resData.en_name
+          }
+        })
+        if (enNameArticleBlog) {
+          throw new ErrorMessage('英文名字已存在')
+        }
+
+        if (resData.en_name.length > 60) {
+          throw new ErrorMessage('英文名字小于60个字符')
+        }
+      }
+
+      let oneArticleTag = await models.article_tag.findOne({
+        where: {
+          article_tag_id: config.ARTICLE_TAG.dfOfficialExclusive
+        }
+      })
+      const website = lowdb
+        .read()
+        .get('website')
+        .value()
+      if (~resData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
+        if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
+          throw new ErrorMessage(
+            `${oneArticleTag.article_tag_name}只有${website.website_name}管理团队才能使用`
+          )
+        }
+      }
+
+      if (oneUserArticleBlog) {
+        throw new ErrorMessage('不能修改自己已有的专题')
+      }
+
       await models.article_blog.update(
         {
-          name: resData.name,
-          description: resData.description
+          name: resData.blog_name,
+          en_name: resData.en_name || shortid.generate(),
+          icon: resData.icon || config.DF_ICON,
+          description: resData.description || '',
+          enable: resData.enable || false,
+          is_public: resData.is_public || false,
+          tag_ids: resData.tag_ids || '',
+          status: 1
         },
         {
           where: {
@@ -177,20 +247,44 @@ class dynamicBlog {
     }
   }
 
+  // 公开的个人专栏列表
+
   static async getArticleBlogList (ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 24
     let sort = ctx.query.sort
+    let tagId = ctx.query.tagId
+    let columnEnName = ctx.query.columnEnName
+    let tagIdArr = []
     let whereParams = {
       is_public: true,
       status: {
         [Op.or]: [2, 4]
       }
     }
+
     let orderParams = []
+
+    if (columnEnName && columnEnName !== 'all') {
+      if (!tagId) {
+        let oneArticleColumn = await models.article_column.findOne({
+          where: {
+            article_column_en_name: columnEnName
+          } // 为空，获取全部，也可以自己添加条件
+        })
+        tagIdArr = oneArticleColumn.article_tag_ids.split(',')
+      } else {
+        tagIdArr = [tagId]
+      }
+    }
 
     !sort && (orderParams = [['create_date', 'DESC']])
     sort === 'hot' && (orderParams = [['like_count', 'DESC']])
+
+    tagIdArr.length > 0 &&
+      (whereParams['tag_ids'] = {
+        [Op.regexp]: `${tagIdArr.join('|')}`
+      })
 
     try {
       let { count, rows } = await models.article_blog.findAndCountAll({
@@ -202,15 +296,34 @@ class dynamicBlog {
 
       for (let i in rows) {
         rows[i].setDataValue(
-          'like_count',
+          'create_dt',
+          await TimeDistance(rows[i].create_date)
+        )
+        rows[i].setDataValue('update_dt', await TimeDistance(rows[i].update_dt))
+
+        rows[i].setDataValue(
+          'articleCount',
+          await models.article.count({
+            where: { user_blog_ids: rows[i].blog_id }
+          })
+        )
+
+        rows[i].setDataValue(
+          'likeCount',
           await models.rss_article_blog.count({
             where: { blog_id: rows[i].blog_id }
           })
         )
-        rows[i].setDataValue(
-          'create_at',
-          await TimeDistance(rows[i].create_date)
-        )
+
+        if (rows[i].tag_ids) {
+          rows[i].setDataValue(
+            'tag',
+            await models.article_tag.findAll({
+              where: { article_tag_id: { [Op.or]: rows[i].tag_ids.split(',') } }
+            })
+          )
+        }
+
         rows[i].setDataValue(
           'user',
           await models.user.findOne({

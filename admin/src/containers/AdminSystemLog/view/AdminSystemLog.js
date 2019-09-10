@@ -47,8 +47,8 @@ class AdminSystemLog extends React.Component {
         },
         {
           title: '操作时间',
-          dataIndex: 'create_at',
-          key: 'create_at'
+          dataIndex: 'create_dt',
+          key: 'create_dt'
         },
         {
           title: '管理员',

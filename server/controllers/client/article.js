@@ -201,7 +201,7 @@ class Article {
 
         for (let i in rows) {
           rows[i].setDataValue(
-            'create_at',
+            'create_dt',
             await TimeDistance(rows[i].create_date)
           )
           rows[i].setDataValue(
@@ -378,7 +378,7 @@ class Article {
         )
 
         article.setDataValue(
-          'create_at',
+          'create_dt',
           await TimeDistance(article.create_date)
         )
 
@@ -436,7 +436,7 @@ class Article {
         )
 
         article.setDataValue(
-          'create_at',
+          'create_dt',
           await TimeDistance(article.create_date)
         )
 
@@ -679,7 +679,7 @@ class Article {
 
       for (let i in rows) {
         rows[i].setDataValue(
-          'create_at',
+          'create_dt',
           await TimeDistance(rows[i].create_date)
         )
         rows[i].setDataValue(
@@ -741,6 +741,22 @@ class Article {
           ['sort', 'ASC'] // asc
         ]
       })
+
+      for (let i in allArticleColumn) {
+        if (allArticleColumn[i].article_tag_ids) {
+          allArticleColumn[i].setDataValue(
+            'tag',
+            await models.article_tag.findAll({
+              where: {
+                article_tag_id: {
+                  [Op.or]: allArticleColumn[i].article_tag_ids.split(',')
+                }
+              }
+            })
+          )
+        }
+      }
+
       resClientJson(ctx, {
         state: 'success',
         message: '获取所有文章专栏成功',

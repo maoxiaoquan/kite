@@ -90,7 +90,7 @@ class Index {
 
       for (let i in rows) {
         rows[i].setDataValue(
-          'create_at',
+          'create_dt',
           await TimeDistance(rows[i].create_date)
         )
         rows[i].setDataValue(
@@ -103,7 +103,7 @@ class Index {
       }
 
       /* for (let item in rows) {// 循环取用户 render 渲染必须用这种方法 与 ajax 有区别
-      rows[item].create_at = await moment(rows[item].create_date).format('YYYY-MM-DD')
+      rows[item].create_dt = await moment(rows[item].create_date).format('YYYY-MM-DD')
       rows[item].user = await models.user.findOne({
         where: {uid: rows[item].uid},
         attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']

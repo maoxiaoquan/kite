@@ -30,6 +30,10 @@ class ArticleColumn {
         throw new ErrorMessage('专栏英文名已存在!')
       }
 
+      if (reqData.article_column_en_name === 'all') {
+        throw new ErrorMessage('英文名字不能等于all')
+      }
+
       await models.article_column.create({
         ...reqData,
         article_tag_ids: reqData.article_tag_ids.join(',')

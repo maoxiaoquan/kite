@@ -1,6 +1,6 @@
 <template>
-  <section class="article-list-lay layout-content">
-    <div class="container">
+  <section class="article-list-lay layout-content ">
+    <div class="container box-container">
       <div class="row">
 
         <div class="col-xs-12 col-sm-8 col-md-8">
@@ -38,37 +38,7 @@
         </div>
 
         <div class="col-xs-12 col-sm-4 col-md-4">
-          <div class="box-aside">
-            <div class="notice"
-                 v-if="website.notice.length>0">
-              <a class="notice-item"
-                 v-for="(item,key) in website.notice"
-                 v-if="item.enable"
-                 :href="item.link"
-                 :key="key">{{item.title}}</a>
-            </div>
-
-            <div class="advertise"
-                 v-if="website.advertise.length>0">
-              <div class="advertise-item"
-                   v-for="(advertiseItem,key) in website.advertise"
-                   v-if="advertiseItem.enable"
-                   :key="key">
-                <a class="advertise-img"
-                   :href="advertiseItem.link||'javascript:;'"
-                   v-if="advertiseItem.img_url">
-                  <img :src="advertiseItem.img_url"
-                       alt="">
-                </a>
-                <a class="advertise-text"
-                   :href="advertiseItem.link||'javascript:;'"
-                   v-else>
-                  {{advertiseItem.title}}
-                </a>
-              </div>
-            </div>
-
-          </div>
+          <website-notice />
         </div>
 
       </div>
@@ -79,6 +49,7 @@
 <script>
 import ArticleItem from '@views/Article/component/ArticleItem'
 import { Page } from '@components'
+import websiteNotice from '../../Parts/websiteNotice'
 import { mapState } from 'vuex'
 export default {
   name: 'Search',
@@ -122,6 +93,7 @@ export default {
   },
   components: {
     ArticleItem,
+    websiteNotice,
     Page
   }
 }
@@ -129,10 +101,8 @@ export default {
 
 <style scoped lang="scss">
 .article-list-lay.layout-content {
-  padding-bottom: 50px;
   .article-list {
     .main-top {
-      margin-top: 30px;
       margin-bottom: 20px;
       background: #ffc107;
       padding: 10px 20px;
@@ -180,44 +150,6 @@ export default {
           &:hover {
             background: #f9f9f9;
           }
-        }
-      }
-    }
-  }
-  .box-aside {
-    margin-top: 30px;
-
-    .notice {
-      padding: 15px 12px;
-      margin-bottom: 20px;
-      border: 1px solid transparent;
-      border-radius: 12px;
-      background-color: #fcf8e3;
-      border-color: #faebcc;
-      color: #8a6d3b;
-      .notice-item {
-        display: block;
-        line-height: 20px;
-        color: #8a6d3b;
-        font-size: 14px;
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-    }
-
-    .advertise {
-      .advertise-item {
-        overflow: hidden;
-        margin-bottom: 10px;
-        .advertise-img {
-          border-radius: 12px;
-          overflow: hidden;
-          display: block;
-        }
-        .advertise-text {
-          font-size: 14px;
-          color: #666;
         }
       }
     }

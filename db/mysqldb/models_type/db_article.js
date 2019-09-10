@@ -111,7 +111,8 @@ module.exports = {
       // 更新时间
       type: Seq.DATE,
       comment: '更新时间',
-      field: 'update_date'
+      field: 'update_date',
+      defaultValue: Seq.NOW /* 时间 */
     },
     update_timestamp: {
       // 更新时间戳

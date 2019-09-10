@@ -137,7 +137,7 @@ export default [
         component: () => import('@views/Dynamic/dynamicTopicView') // 动态内容页
       },
       {
-        path: 'blogs',
+        path: 'blogs/:columnEnName',
         name: 'articleBlogs',
         component: () => import('@views/articleBlog/Blog') // 个人专栏
       },

@@ -33,6 +33,10 @@ class update0_4 {
           'ALTER TABLE article_blog add COLUMN tag_ids VARCHAR(180)  comment "个人专栏所属的标签id";'
         )
 
+        await models.sequelize.query(
+          'ALTER TABLE article_blog add COLUMN update_date datetime(0)  comment "专栏内容更新时间";'
+        )
+
         await models.admin_authority.bulkCreate(newAdminAuthorityList)
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb

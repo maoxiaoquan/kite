@@ -27,7 +27,7 @@
              style="color:#f96b84;">当前用户评论违规</div>
       </div>
       <div class="comment-foot clearfix">
-        <span>{{childCommentItem.create_at}}</span>
+        <span>{{childCommentItem.create_dt}}</span>
         <span class="comment-reply"
               v-show="personalInfo.islogin"
               v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===5"

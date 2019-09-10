@@ -73,8 +73,8 @@ class Article extends React.Component {
       },
       {
         title: '创建时间',
-        dataIndex: 'create_at',
-        key: 'create_at'
+        dataIndex: 'create_dt',
+        key: 'create_dt'
       },
       {
         title: '状态',

@@ -103,7 +103,7 @@ class Index extends React.Component {
                             avatar={<Avatar src={item.user.avatar} />}
                             title={
                               <a href={`/p/${item.aid}`}>
-                                {item.title} {item.create_at}
+                                {item.title} {item.create_dt}
                               </a>
                             }
                             description={item.excerpt}
@@ -161,7 +161,7 @@ class Index extends React.Component {
                             avatar={<Avatar src={item.user.avatar} />}
                             title={
                               <a href={`/p/${item.aid}`}>
-                                {item.user.nickname} {item.create_at}
+                                {item.user.nickname} {item.create_dt}
                               </a>
                             }
                             description={item.content}

@@ -81,6 +81,13 @@ module.exports = {
       comment: '是否可以显示（预留）',
       field: 'enable'
     },
+    update_date: {
+      // 更新时间
+      type: Seq.DATE,
+      comment: '更新时间',
+      field: 'update_date',
+      defaultValue: Seq.NOW /* 时间 */
+    },
     ...time.create_date
   }
 }

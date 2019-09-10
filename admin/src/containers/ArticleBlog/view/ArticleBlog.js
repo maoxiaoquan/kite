@@ -116,6 +116,7 @@ class ArticleBlog extends React.Component {
       status_list: ['未知', '审核中', '审核通过', '审核失败', '无需审核'],
       is_create: true,
       status_val: '',
+      is_public_val: true,
       name_val: ''
     }
   }
@@ -197,10 +198,11 @@ class ArticleBlog extends React.Component {
   }
 
   getParams = () => {
-    const { name_val, status_val } = this.state
+    const { name_val, status_val, is_public_val } = this.state
     return {
       name: name_val,
-      status: status_val
+      status: status_val,
+      is_public: is_public_val
     }
   }
 
@@ -226,7 +228,14 @@ class ArticleBlog extends React.Component {
   }
 
   render() {
-    const { loading, status_list, status_val, name_val, is_create } = this.state
+    const {
+      loading,
+      status_list,
+      status_val,
+      name_val,
+      is_public_val,
+      is_create
+    } = this.state
     const { stateArticleBlog } = this.props
     const { getFieldDecorator } = this.props.form
 
@@ -339,6 +348,23 @@ class ArticleBlog extends React.Component {
                       )
                     )}
                   </Select>
+                </FormItem>
+
+                <FormItem {...formItemLayout} hasFeedback label="是否公开">
+                  {getFieldDecorator('is_public', {
+                    rules: [{ required: true, message: '请选择状态！' }]
+                  })(
+                    <Select
+                      placeholder="状态"
+                      value={is_public_val}
+                      onChange={value => {
+                        this.changeVal(value, 'is_public_val')
+                      }}
+                    >
+                      <Option value={false}>个人</Option>
+                      <Option value={true}>公开</Option>
+                    </Select>
+                  )}
                 </FormItem>
 
                 <Form.Item>

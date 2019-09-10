@@ -25,7 +25,7 @@
       </div>
 
       <div class="comment-foot clearfix">
-        <span>{{commentItem.create_at}}</span>
+        <span>{{commentItem.create_dt}}</span>
         <span class="comment-reply"
               v-show="personalInfo.islogin"
               v-if="Number(commentItem.status)===2||Number(commentItem.status)===5"
