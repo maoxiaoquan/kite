@@ -28,7 +28,9 @@ class update0_4 {
         await models.sequelize.query(
           'ALTER TABLE article_blog add COLUMN is_public tinyint(1) DEFAULT 0 comment "是否公开";'
         )
-
+        await models.sequelize.query(
+          'ALTER TABLE article CHANGE user_topic_ids blog_ids VARCHAR(200) comment "所属的blog";'
+        )
         await models.sequelize.query(
           'ALTER TABLE article_blog add COLUMN tag_ids VARCHAR(180)  comment "个人专栏所属的标签id";'
         )

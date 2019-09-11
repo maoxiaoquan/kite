@@ -417,7 +417,7 @@ export default {
         });
 
         this.user_article_blog_all.map(item => {
-          if (String(item.blog_id) === this.current_article.user_blog_ids) {
+          if (String(item.blog_id) === this.current_article.blog_ids) {
             this.current_blog = item;
           }
         });
@@ -442,7 +442,7 @@ export default {
         origin_content: that.article_content /*源内容*/,
         source: that.current_article_type.id, // 来源 （1原创 2转载）
         type: 1, // 类型 （1:文章;2:提问,3:说说 ）
-        user_blog_ids: that.current_blog.blog_id,
+        blog_ids: that.current_blog.blog_id,
         article_tag_ids: that
           .getObjectValues(that.current_article_tag_arr)
           .join(",")

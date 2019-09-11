@@ -39,7 +39,9 @@
                   </li>
                 </ul>
               </div>
-              <p class="description">介绍：{{articleBlogItem.description}}</p>
+              <div>
+                <span class="time">{{setBlogTime(articleBlogItem)}}</span>
+              </div>
             </div>
 
             <div class="operat-view"
@@ -77,18 +79,8 @@
           </div>
 
           <div class="user-article-blog-main">
-            <ul>
-              <li class="item item-icon read-count">
-                <el-image class="user-avatar"
-                          :src="articleBlogItem.user.avatar"
-                          lazy></el-image>
-                <router-link :to='{name:"user",params:{uid:articleBlogItem.user.uid}}'
-                             class="nickname">{{articleBlogItem.user.nickname}}</router-link>
-              </li>
-              <li class="item item-icon">
-                <span class="time">{{setBlogTime(articleBlogItem)}}</span>
-              </li>
-            </ul>
+            <p class="description">介绍：{{articleBlogItem.description}}</p>
+
           </div>
 
         </div>
@@ -442,45 +434,6 @@ export default {
         border-top: 1px solid #f0f0f0;
         padding-top: 8px;
         margin-top: 8px;
-        .item {
-          display: inline-block;
-          color: #b3bac1;
-          font-size: 12px;
-          &:after {
-            display: inline-block;
-            content: "\B7";
-            margin: 0 1px;
-            color: #b2bac2;
-          }
-          &:last-of-type {
-            &:after {
-              content: "";
-            }
-          }
-          .user-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 20px;
-            vertical-align: middle;
-            margin-right: 1px;
-          }
-          strong {
-            font-weight: normal;
-          }
-          .nickname {
-            white-space: nowrap;
-            overflow: hidden;
-            font-size: 12px;
-            color: #777;
-            text-overflow: ellipsis;
-            width: 50px;
-            display: inline-block;
-            vertical-align: middle;
-          }
-          .time {
-            font-size: 12px;
-          }
-        }
       }
     }
   }

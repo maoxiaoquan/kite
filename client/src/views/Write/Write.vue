@@ -42,7 +42,7 @@
             <label class="box-label"
                    for="">个人专栏</label>
             <select class="box-select"
-                    v-model="write.user_blog_ids">
+                    v-model="write.blog_ids">
               <option :value="item.blog_id"
                       v-for="(item,key) in userArticleBlogAll"
                       :key="key">{{item.name}}</option>
@@ -144,7 +144,7 @@ export default {
         title: '', // 文章的标题
         source: '', // 文章的来源
         content: '', // 文章的内容
-        user_blog_ids: '', // 文章所属专栏ID
+        blog_ids: '', // 文章所属专栏ID
       },
       blog: {
         name: ''
@@ -232,7 +232,7 @@ export default {
             this.write.title = result.data.article.title;
             this.write.source = result.data.article.source;
             this.write.content = result.data.article.origin_content;
-            this.write.user_blog_ids = result.data.article.user_blog_ids;
+            this.write.blog_ids = result.data.article.blog_ids;
             this.editArticleInfo = result.data.article
 
             this.articleTagAll.map(item => {
@@ -353,7 +353,7 @@ export default {
         origin_content: this.write.content /*源内容*/,
         source: this.write.source, // 来源 （1原创 2转载）
         type: 1, // 类型 （1:文章;2:提问,3:说说 ）
-        user_blog_ids: this.write.user_blog_ids,
+        blog_ids: this.write.blog_ids,
         article_tag_ids: this
           .getObjectValues(this.currentArticleTagArr)
           .join(",")

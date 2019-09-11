@@ -25,7 +25,7 @@ class PersonalCenter {
           ? { uid, ...clientWhere.article.me }
           : {
             uid,
-            user_blog_ids: blog_id,
+            blog_ids: blog_id,
             ...clientWhere.article.me
           }
       let { count, rows } = await models.article.findAndCountAll({
@@ -525,7 +525,7 @@ class PersonalCenter {
         rows[i].setDataValue(
           'articleCount',
           await models.article.count({
-            where: { user_blog_ids: rows[i].blog_id }
+            where: { blog_ids: rows[i].blog_id }
           })
         )
 

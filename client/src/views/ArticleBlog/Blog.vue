@@ -6,6 +6,7 @@
         <div class="col-xs-12 col-sm-8 col-md-8">
 
           <div class="article-blog-menu">
+
             <nav class="column-menu">
               <ul class="nav-item-view">
                 <li class="nav-item">
@@ -24,31 +25,35 @@
               </ul>
             </nav>
 
-            <nav class="column-tag-menu"
-                 v-if="childNavItem.tag&&childNavItem.tag.length>0">
-              <ul>
-                <li v-for="(item,key) in childNavItem.tag"
-                    :key="key">
-                  <router-link :to="{name:'articleBlogs',params:{columnEnName:$route.params.columnEnName},query:{tagId:item.article_tag_id}}">
-                    {{item.article_tag_name}}
-                  </router-link>
-                </li>
-              </ul>
-            </nav>
-          </div>
+            <div class="article-blog-menu-main">
+              <nav class="column-tag-menu"
+                   v-if="childNavItem.tag&&childNavItem.tag.length>0">
+                <ul class="nav-item-view">
+                  <li class="nav-item"
+                      v-for="(item,key) in childNavItem.tag"
+                      :key="key">
+                    <router-link :to="{name:'articleBlogs',params:{columnEnName:$route.params.columnEnName},query:{tagId:item.article_tag_id}}">
+                      {{item.article_tag_name}}
+                    </router-link>
+                  </li>
+                </ul>
+              </nav>
 
-          <nav class="nav-list">
-            <router-link class="nav-item"
-                         :to="{name:'articleBlogs',query:{type:'all'}}">热门</router-link>
-            <router-link class="nav-item"
-                         :to="{name:'articleBlogs',query:{type:'all'}}">最新</router-link>
-            <router-link class="nav-item"
-                         :to="{name:'articleBlogs',query:{type:'all'}}">近30天</router-link>
-            <router-link class="nav-item"
-                         :to="{name:'articleBlogs',query:{type:'all'}}">近7天</router-link>
-            <router-link class="nav-item"
-                         :to="{name:'articleBlogs',query:{type:'my'}}">我的关注</router-link>
-          </nav>
+              <nav class="sort-list-menu">
+                <router-link class="nav-item"
+                             :to="{name:'articleBlogs',query:{type:'all'}}">热门</router-link>
+                <router-link class="nav-item"
+                             :to="{name:'articleBlogs',query:{type:'all'}}">最新</router-link>
+                <router-link class="nav-item"
+                             :to="{name:'articleBlogs',query:{type:'all'}}">近30天</router-link>
+                <router-link class="nav-item"
+                             :to="{name:'articleBlogs',query:{type:'all'}}">近7天</router-link>
+                <router-link class="nav-item"
+                             :to="{name:'articleBlogs',query:{type:'my'}}">我的关注</router-link>
+              </nav>
+            </div>
+
+          </div>
 
           <div class="article-blog-list row">
             <div class="col-xs-6 col-sm-6 col-md-6"
@@ -79,7 +84,6 @@ import { share } from '@utils'
 import { mapState } from 'vuex'
 import { Page } from "@components";
 import websiteNotice from '../Parts/websiteNotice'
-import navHeader from './component/navHeader'
 import BlogItem from './component/BlogItem'
 export default {
   metaInfo () {
@@ -176,7 +180,6 @@ export default {
   components: {
     websiteNotice,
     BlogItem,
-    navHeader,
     Page
   }
 };
@@ -184,14 +187,74 @@ export default {
 
 <style scoped lang="scss">
 .article-blog {
-  .nav-list {
-    padding-bottom: 15px;
-    border-bottom: 1px solid rgba(178, 186, 194, 0.15);
-    .nav-item {
-      display: inline-block;
-      padding: 0 15px;
-      &.exact-active {
-        color: #fd5c2d;
+  .article-blog-menu {
+    .column-menu {
+      .nav-item-view {
+        .nav-item {
+          display: inline-block;
+          margin-right: 10px;
+          a {
+            display: block;
+            border: 1px solid #e0e0e0;
+            padding: 2px 10px;
+            font-size: 14px;
+            border-radius: 3px;
+            &.current-active {
+              background: #fd763a;
+              color: #fff;
+              border: 1px solid #fd763a;
+            }
+          }
+        }
+      }
+    }
+
+    .article-blog-menu-main {
+      border-top: 1px solid rgba(178, 186, 194, 0.15);
+      padding: 15px 0 0;
+      border-radius: 3px;
+      margin-top: 20px;
+      .column-tag-menu {
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(178, 186, 194, 0.15);
+        .nav-item-view {
+          .nav-item {
+            display: inline-block;
+            margin-right: 10px;
+            a {
+              display: block;
+              border: 1px solid #e0e0e0;
+              padding: 2px 10px;
+              font-size: 14px;
+              border-radius: 20px;
+              &.exact-active {
+                background: #fd763a;
+                color: #fff;
+                border: 1px solid #fd763a;
+              }
+            }
+          }
+        }
+      }
+
+      .sort-list-menu {
+        display: flex;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(178, 186, 194, 0.15);
+        .nav-item {
+          align-items: center;
+          line-height: 1;
+          position: relative;
+          display: flex;
+          font-size: 13px;
+          margin-right: 15px;
+          .active {
+            a {
+              color: #ea6f5a;
+            }
+          }
+        }
       }
     }
   }

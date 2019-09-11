@@ -247,6 +247,154 @@ class dynamicBlog {
     }
   }
 
+  // 获取个人专栏详细信息信息
+
+  static async getArticleBlogView (ctx) {
+    let blogId = ctx.query.blogId
+    try {
+      let oneArticleBlog = await models.article_blog.findOne({
+        where: {
+          blog_id: blogId // 查询条件
+        }
+      })
+
+      oneArticleBlog.setDataValue(
+        'create_dt',
+        await TimeDistance(oneArticleBlog.create_date)
+      )
+      oneArticleBlog.setDataValue(
+        'update_dt',
+        await TimeDistance(oneArticleBlog.update_date)
+      )
+
+      oneArticleBlog.setDataValue(
+        'articleCount',
+        await models.article.count({
+          where: { blog_ids: oneArticleBlog.blog_id }
+        })
+      )
+
+      oneArticleBlog.setDataValue(
+        'likeCount',
+        await models.rss_article_blog.count({
+          where: { blog_id: oneArticleBlog.blog_id }
+        })
+      )
+
+      if (oneArticleBlog.tag_ids) {
+        oneArticleBlog.setDataValue(
+          'tag',
+          await models.article_tag.findAll({
+            where: {
+              article_tag_id: { [Op.or]: oneArticleBlog.tag_ids.split(',') }
+            }
+          })
+        )
+      }
+
+      oneArticleBlog.setDataValue(
+        'user',
+        await models.user.findOne({
+          where: { uid: oneArticleBlog.uid },
+          attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+        })
+      )
+
+      if (oneArticleBlog) {
+        await resClientJson(ctx, {
+          state: 'success',
+          message: 'success',
+          data: {
+            articleBlog: oneArticleBlog
+          }
+        })
+      } else {
+        await resClientJson(ctx, {
+          state: 'success',
+          message: '文章个人专栏不存在',
+          data: {
+            articleBlog: {}
+          }
+        })
+      }
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
+  // 获取个人专栏所含有的文章
+  static async getArticleBlogArticleList (ctx) {
+    let page = ctx.query.page || 1
+    let pageSize = ctx.query.pageSize || 24
+    let sort = ctx.query.sort
+    let blogId = ctx.query.blogId
+    let whereParams = {
+      blog_ids: blogId
+    }
+
+    let orderParams = []
+
+    try {
+      let { count, rows } = await models.article.findAndCountAll({
+        where: whereParams, // 为空，获取全部，也可以自己添加条件
+        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: pageSize, // 每页限制返回的数据条数
+        order: orderParams
+      })
+
+      for (let i in rows) {
+        rows[i].setDataValue(
+          'create_dt',
+          await TimeDistance(rows[i].create_date)
+        )
+        rows[i].setDataValue(
+          'update_dt',
+          await TimeDistance(rows[i].update_date)
+        )
+
+        if (rows[i].article_tag_ids) {
+          rows[i].setDataValue(
+            'tag',
+            await models.article_tag.findAll({
+              where: {
+                article_tag_id: { [Op.or]: rows[i].article_tag_ids.split(',') }
+              }
+            })
+          )
+        }
+
+        rows[i].setDataValue(
+          'user',
+          await models.user.findOne({
+            where: { uid: rows[i].uid },
+            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+          })
+        )
+      }
+
+      await resClientJson(ctx, {
+        state: 'success',
+        message: 'success',
+        data: {
+          page,
+          count,
+          pageSize,
+          list: rows
+        }
+      })
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
   // 公开的个人专栏列表
 
   static async getArticleBlogList (ctx) {
@@ -299,12 +447,15 @@ class dynamicBlog {
           'create_dt',
           await TimeDistance(rows[i].create_date)
         )
-        rows[i].setDataValue('update_dt', await TimeDistance(rows[i].update_dt))
+        rows[i].setDataValue(
+          'update_dt',
+          await TimeDistance(rows[i].update_date)
+        )
 
         rows[i].setDataValue(
           'articleCount',
           await models.article.count({
-            where: { user_blog_ids: rows[i].blog_id }
+            where: { blog_ids: rows[i].blog_id }
           })
         )
 
