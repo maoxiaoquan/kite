@@ -29,10 +29,16 @@
               <nav class="column-tag-menu"
                    v-if="childNavItem.tag&&childNavItem.tag.length>0">
                 <ul class="nav-item-view">
+                  <!-- <li class="nav-item">
+                    <router-link :to="{name:'articleBlogs',params:{columnEnName:$router.params.columnEnName||''}}">
+                      全部
+                    </router-link>
+                  </li> -->
                   <li class="nav-item"
                       v-for="(item,key) in childNavItem.tag"
-                      :key="key">
-                    <router-link :to="{name:'articleBlogs',params:{columnEnName:$route.params.columnEnName},query:{tagId:item.article_tag_id}}">
+                      :key="key"
+                      :class="{'active':item.article_tag_id===$route.query.tagId}">
+                    <router-link :to="{name:'articleBlogs',query:{tagId:item.article_tag_id}}">
                       {{item.article_tag_name}}
                     </router-link>
                   </li>
@@ -41,15 +47,15 @@
 
               <nav class="sort-list-menu">
                 <router-link class="nav-item"
-                             :to="{name:'articleBlogs',query:{type:'all'}}">热门</router-link>
+                             :to="{name:'articleBlogs',query:sortMenu('')}">热门</router-link>
                 <router-link class="nav-item"
-                             :to="{name:'articleBlogs',query:{type:'all'}}">最新</router-link>
+                             :to="{name:'articleBlogs',query:sortMenu('new')}">最新</router-link>
                 <router-link class="nav-item"
-                             :to="{name:'articleBlogs',query:{type:'all'}}">近30天</router-link>
+                             :to="{name:'articleBlogs',query:sortMenu('30day')}">近30天</router-link>
                 <router-link class="nav-item"
-                             :to="{name:'articleBlogs',query:{type:'all'}}">近7天</router-link>
+                             :to="{name:'articleBlogs',query:sortMenu('7day')}">近7天</router-link>
                 <router-link class="nav-item"
-                             :to="{name:'articleBlogs',query:{type:'my'}}">我的关注</router-link>
+                             :to="{name:'articleBlogs',query:{sort:'my'}}">我的关注</router-link>
               </nav>
             </div>
 
@@ -110,6 +116,7 @@ export default {
         page: route.query.page || 1,
         columnEnName: route.params.columnEnName || '',
         tagId: route.query.tagId || '',
+        sort: route.query.sort || '',
       })
     ]);
   },
@@ -142,6 +149,18 @@ export default {
         }
       })
     },
+    sortMenu (sort) {
+      let query = {
+      }
+      if (sort) {
+        query.sort = sort
+      }
+      if (this.$route.query.tagId) {
+        query.tagId = this.$route.query.tagId
+      }
+
+      return query
+    },
     shareChange (val) { // 分享到其他
       let urlOrigin = window.location.origin // 源地址
       if (val.type === 'sina') { // 新浪
@@ -158,6 +177,9 @@ export default {
       }
       if (this.$route.query.tagId) {
         query.tagId = this.$route.query.tagId
+      }
+      if (this.$route.query.sort) {
+        query.sort = this.$route.query.sort
       }
       this.$router.push({
         name: 'articleBlogs',
@@ -228,7 +250,9 @@ export default {
               padding: 2px 10px;
               font-size: 14px;
               border-radius: 20px;
-              &.exact-active {
+            }
+            &.active {
+              a {
                 background: #fd763a;
                 color: #fff;
                 border: 1px solid #fd763a;
@@ -249,10 +273,8 @@ export default {
           display: flex;
           font-size: 13px;
           margin-right: 15px;
-          .active {
-            a {
-              color: #ea6f5a;
-            }
+          &.exact-active {
+            color: #ea6f5a;
           }
         }
       }

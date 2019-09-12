@@ -1,9 +1,9 @@
+const app = require('./app')
 const path = require('path')
 const views = require('koa-views')
 const koaStatic = require('koa-static')
 const bodyParser = require('koa-bodyparser')
 const koaLogger = require('koa-logger')
-const app = require('./app')
 const kiteConfig = require('../kite.config')
 const routers = require('./routers')
 

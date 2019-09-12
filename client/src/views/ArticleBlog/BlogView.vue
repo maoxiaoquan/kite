@@ -8,20 +8,18 @@
 
           <div class="article-blog-header">
             <div class="user-article-blog-top">
-              <router-link class="article-blog-icon"
-                           :to="{name:'articleBlog',params:{blogId:articleBlog.blogInfo.blog_id}}">
+              <div class="article-blog-icon">
                 <el-image class="article-blog-icon-img"
                           :src="articleBlog.blogInfo.icon"
                           lazy></el-image>
-              </router-link>
+              </div>
 
               <div class="user-article-blog-info">
                 <div class="info-content">
-                  <router-link class="name"
-                               :to="{name:'articleBlog',params:{blogId:articleBlog.blogInfo.blog_id}}">
+                  <div class="name">
                     {{articleBlog.blogInfo.name}}
                     <span class="article-count"> {{articleBlog.blogInfo.articleCount}}</span>
-                  </router-link>
+                  </div>
                   <ul class="statistics">
                     <li class="item item-icon read-count">
                       <i class="el-icon-reading"></i>

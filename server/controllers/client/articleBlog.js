@@ -147,23 +147,31 @@ class dynamicBlog {
     try {
       let oneUserArticleBlog = await models.article_blog.findOne({
         where: {
-          uid: user.uid,
-          name: resData.blog_name
+          name: resData.blog_name,
+          blog_id: {
+            [Op.ne]: resData.blog_id
+          }
         }
       })
 
+      if (oneUserArticleBlog) {
+        throw new ErrorMessage('标题已存在')
+      }
       if (resData.en_name) {
         let enNameArticleBlog = await models.article_blog.findOne({
           where: {
-            en_name: resData.en_name
+            en_name: resData.en_name,
+            blog_id: {
+              [Op.ne]: resData.blog_id
+            }
           }
         })
         if (enNameArticleBlog) {
-          throw new ErrorMessage('英文名字已存在')
+          throw new ErrorMessage('英文标题已存在')
         }
 
         if (resData.en_name.length > 60) {
-          throw new ErrorMessage('英文名字小于60个字符')
+          throw new ErrorMessage('英文标题小于60个字符')
         }
       }
 
@@ -432,6 +440,22 @@ class dynamicBlog {
     tagIdArr.length > 0 &&
       (whereParams['tag_ids'] = {
         [Op.regexp]: `${tagIdArr.join('|')}`
+      })
+
+    sort === '7day' &&
+      (whereParams['create_date'] = {
+        [Op.between]: [
+          new Date(TimeNow.showWeekFirstDay()),
+          new Date(TimeNow.showWeekLastDay())
+        ]
+      })
+
+    sort === '30day' &&
+      (whereParams['create_date'] = {
+        [Op.between]: [
+          new Date(TimeNow.showMonthFirstDay()),
+          new Date(TimeNow.showMonthLastDay())
+        ]
       })
 
     try {

@@ -81,6 +81,13 @@ module.exports = {
       comment: '是否可以显示（预留）',
       field: 'enable'
     },
+    like_count: {
+      // 喜欢数
+      type: Seq.BIGINT(20),
+      comment: '喜欢数',
+      field: 'like_count',
+      defaultValue: 0
+    },
     update_date: {
       // 更新时间
       type: Seq.DATE,

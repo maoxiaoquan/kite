@@ -20,26 +20,26 @@
             </router-link>
 
             <div class="user-article-blog-info">
-              <div class="info-content">
-                <router-link class="name"
-                             :to="{name:'articleBlog',params:{blogId:articleBlogItem.blog_id}}">{{articleBlogItem.name}}</router-link>
-                <ul class="statistics">
-                  <li><span class="article-count"> 文章总数：{{articleBlogItem.articleCount}}</span> </li>
-                  <li class="item item-icon read-count">
-                    <i class="el-icon-reading"></i>
-                    <span v-text="articleBlogItem.read_count||0"></span>
-                  </li>
-                  <li class="item item-icon like-article">
-                    <i class="el-icon-star-off"></i>
-                    <span v-text="articleBlogItem.likeCount||0"></span>
-                  </li>
-                  <li>
-                    <span class="type"
-                          :class="{'true':articleBlogItem.is_public}"> {{ articleBlogItem.is_public?'公开':'个人' }}</span>
-                  </li>
-                </ul>
-              </div>
-              <div>
+
+              <router-link class="name"
+                           :to="{name:'articleBlog',params:{blogId:articleBlogItem.blog_id}}">{{articleBlogItem.name}}</router-link>
+              <ul class="statistics">
+                <li class="item">文章数：<span class="article-count">{{articleBlogItem.articleCount}}</span> </li>
+                <li class="item item-icon read-count">
+                  <i class="el-icon-reading"></i>
+                  <span v-text="articleBlogItem.read_count||0"></span>
+                </li>
+                <li class="item item-icon like-article">
+                  <i class="el-icon-star-off"></i>
+                  <span v-text="articleBlogItem.likeCount||0"></span>
+                </li>
+                <li>
+                  <span class="type"
+                        :class="{'true':articleBlogItem.is_public}"> {{ articleBlogItem.is_public?'公开':'个人' }}</span>
+                </li>
+              </ul>
+
+              <div class="time-view">
                 <span class="time">{{setBlogTime(articleBlogItem)}}</span>
               </div>
             </div>
@@ -79,7 +79,7 @@
           </div>
 
           <div class="user-article-blog-main">
-            <p class="description">介绍：{{articleBlogItem.description}}</p>
+            <p class="description">介绍：{{articleBlogItem.description||'没有写入介绍'}}</p>
 
           </div>
 
@@ -351,47 +351,56 @@ export default {
         .user-article-blog-info {
           flex: 1;
           padding-left: 10px;
-          .info-content {
-            .name {
-              color: #333;
-              font-size: 13px;
-              &:hover {
-                color: #0c7d9d;
-              }
+
+          .name {
+            color: #333;
+            font-size: 13px;
+            &:hover {
+              color: #0c7d9d;
             }
-            .statistics {
-              li {
+          }
+          .statistics {
+            li {
+              display: inline-block;
+              font-size: 12px;
+              color: #999;
+              .article-count,
+              span {
                 display: inline-block;
-                .article-count,
-                span {
-                  display: inline-block;
-                  font-size: 12px;
-                  color: #999;
-                  margin-right: 5px;
-                  vertical-align: middle;
-                }
-                i {
-                  font-size: 14px;
-                  color: #999;
-                }
-                .type {
-                  font-size: 12px;
-                  display: inline-block;
-                  margin-left: 3px;
-                }
-                .type {
-                  background: #fd763a;
-                  color: #fff;
-                  border-radius: 10px;
-                  line-height: 15px;
-                  padding: 1px 3px;
-                  &.true {
-                    background: #41b883;
-                  }
+                font-size: 12px;
+                color: #999;
+                margin-right: 5px;
+                vertical-align: middle;
+              }
+              i {
+                font-size: 14px;
+                color: #999;
+              }
+              .type {
+                font-size: 12px;
+                display: inline-block;
+                margin-left: 3px;
+              }
+              .type {
+                background: #fd763a;
+                color: #fff;
+                border-radius: 10px;
+                line-height: 15px;
+                padding: 1px 3px;
+                &.true {
+                  background: #41b883;
                 }
               }
             }
           }
+          .time-view {
+            color: #999;
+            .time {
+              color: #999;
+              font-size: 12px;
+            }
+          }
+
           .description {
             white-space: nowrap;
             overflow: hidden;
@@ -434,6 +443,10 @@ export default {
         border-top: 1px solid #f0f0f0;
         padding-top: 8px;
         margin-top: 8px;
+        .description {
+          font-size: 12px;
+          color: #999;
+        }
       }
     }
   }
