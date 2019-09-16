@@ -196,6 +196,26 @@ class dynamicBlog {
         throw new ErrorMessage('不能修改自己已有的专题')
       }
 
+      let userRoleALL = await models.user_role.findAll({
+        where: {
+          user_role_id: {
+            [Op.or]: user.user_role_ids.split(',')
+          },
+          user_role_type: 1 // 用户角色类型1是默认角色
+        }
+      })
+
+      let userAuthorityIds = ''
+      userRoleALL.map(roleItem => {
+        userAuthorityIds += roleItem.user_authority_ids + ','
+      })
+
+      let status = ~userAuthorityIds.indexOf(
+        config.ARTICLE_BLOG.dfNoReviewArticleBlogId
+      )
+        ? 4
+        : 1
+
       await models.article_blog.update(
         {
           name: resData.blog_name,
@@ -205,7 +225,7 @@ class dynamicBlog {
           enable: resData.enable || false,
           is_public: resData.is_public || false,
           tag_ids: resData.tag_ids || '',
-          status: 1
+          status
         },
         {
           where: {
@@ -516,6 +536,75 @@ class dynamicBlog {
           count,
           pageSize,
           list: rows
+        }
+      })
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
+  // 订阅个人专栏
+  static async setSubscribeArticleBlog (ctx) {
+    const { blog_id } = ctx.request.body
+    let { user = '' } = ctx.request
+    let type = ''
+    try {
+      let oneSubscribeArticleBlog = await models.rss_article_blog.findOne({
+        where: {
+          uid: user.uid,
+          blog_id
+        }
+      })
+
+      if (oneSubscribeArticleBlog) {
+        /* 判断是否关注了 */
+        type = oneSubscribeArticleBlog.is_like ? 'cancel' : 'attention'
+        await models.rss_article_blog.update(
+          {
+            is_like: !oneSubscribeArticleBlog.is_like
+          },
+          {
+            where: {
+              uid: user.uid,
+              blog_id
+            }
+          }
+        )
+      } else {
+        type = 'attention'
+        await models.rss_article_blog.create({
+          uid: user.uid,
+          blog_id
+        })
+      }
+
+      let articleBlogRssCount = await models.rss_article_blog.count({
+        where: {
+          blog_id,
+          is_like: true
+        }
+      })
+
+      await models.article_blog.update(
+        {
+          like_count: articleBlogRssCount
+        },
+        {
+          where: {
+            blog_id
+          }
+        }
+      )
+
+      resClientJson(ctx, {
+        state: 'success',
+        message: type === 'attention' ? '关注个人专栏成功' : '取消个人专栏成功',
+        data: {
+          type
         }
       })
     } catch (err) {

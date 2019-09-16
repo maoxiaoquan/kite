@@ -552,6 +552,13 @@ class PersonalCenter {
             attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
           })
         )
+
+        rows[i].setDataValue(
+          'likeUserIds',
+          await models.rss_article_blog.findAll({
+            where: { blog_id: rows[i].blog_id }
+          })
+        )
       }
 
       await resClientJson(ctx, {

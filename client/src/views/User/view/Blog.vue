@@ -23,21 +23,6 @@
 
               <router-link class="name"
                            :to="{name:'articleBlog',params:{blogId:articleBlogItem.blog_id}}">{{articleBlogItem.name}}</router-link>
-              <ul class="statistics">
-                <li class="item">文章数：<span class="article-count">{{articleBlogItem.articleCount}}</span> </li>
-                <li class="item item-icon read-count">
-                  <i class="el-icon-reading"></i>
-                  <span v-text="articleBlogItem.read_count||0"></span>
-                </li>
-                <li class="item item-icon like-article">
-                  <i class="el-icon-star-off"></i>
-                  <span v-text="articleBlogItem.likeCount||0"></span>
-                </li>
-                <li>
-                  <span class="type"
-                        :class="{'true':articleBlogItem.is_public}"> {{ articleBlogItem.is_public?'公开':'个人' }}</span>
-                </li>
-              </ul>
 
               <div class="time-view">
                 <span class="time">{{setBlogTime(articleBlogItem)}}</span>
@@ -83,6 +68,27 @@
 
           </div>
 
+          <div class="user-article-blog-footer">
+            <ul class="statistics">
+              <li class="item">文章数：<span class="article-count">{{articleBlogItem.articleCount}}</span> </li>
+              <li class="item item-icon read-count">
+                <i class="el-icon-reading"></i>
+                <span v-text="articleBlogItem.read_count||0"></span>
+              </li>
+              <li class="item item-icon like-article">
+                <i class="el-icon-star-off"></i>
+                <span v-text="articleBlogItem.likeCount||0"></span>
+              </li>
+              <li>
+                <span class="type"
+                      :class="{'true':articleBlogItem.is_public}"> {{ articleBlogItem.is_public?'公开':'个人' }}</span>
+              </li>
+              <li>
+                <span>{{isLike(articleBlogItem)}}</span>
+              </li>
+            </ul>
+          </div>
+
         </div>
       </div>
     </div>
@@ -93,6 +99,8 @@
 
     <!-- use the modal component, pass in the prop -->
     <el-dialog :visible.sync="isCreateBlogShow"
+               :close-on-click-modal="false"
+               :close-on-press-escape="false"
                width="380px">
       <div class="blog-modal">
         <div class="form-group">
@@ -298,6 +306,9 @@ export default {
         this.deleteArticleBlog(val.articleBlogItem.blog_id);
       }
     },
+    isLike () { // 是否like
+
+    },
     pageChange (val) {
       this.$router.push({
         name: 'userBlog',
@@ -334,7 +345,7 @@ export default {
       padding-bottom: 12px;
       position: relative;
       display: block;
-      height: 185px;
+      height: 210px;
       padding: 10px;
       .user-article-blog-top {
         display: flex;
@@ -359,40 +370,7 @@ export default {
               color: #0c7d9d;
             }
           }
-          .statistics {
-            li {
-              display: inline-block;
-              font-size: 12px;
-              color: #999;
-              .article-count,
-              span {
-                display: inline-block;
-                font-size: 12px;
-                color: #999;
-                margin-right: 5px;
-                vertical-align: middle;
-              }
-              i {
-                font-size: 14px;
-                color: #999;
-              }
-              .type {
-                font-size: 12px;
-                display: inline-block;
-                margin-left: 3px;
-              }
-              .type {
-                background: #fd763a;
-                color: #fff;
-                border-radius: 10px;
-                line-height: 15px;
-                padding: 1px 3px;
-                &.true {
-                  background: #41b883;
-                }
-              }
-            }
-          }
+
           .time-view {
             color: #999;
             .time {
@@ -420,6 +398,7 @@ export default {
         }
       }
       .user-article-blog-tag {
+        height: 50px;
         .title {
           display: inline-block;
           font-size: 12px;
@@ -446,6 +425,43 @@ export default {
         .description {
           font-size: 12px;
           color: #999;
+          height: 40px;
+        }
+      }
+      .user-article-blog-footer {
+        .statistics {
+          li {
+            display: inline-block;
+            font-size: 12px;
+            color: #999;
+            .article-count,
+            span {
+              display: inline-block;
+              font-size: 12px;
+              color: #999;
+              margin-right: 5px;
+              vertical-align: middle;
+            }
+            i {
+              font-size: 14px;
+              color: #999;
+            }
+            .type {
+              font-size: 12px;
+              display: inline-block;
+              margin-left: 3px;
+            }
+            .type {
+              background: #fd763a;
+              color: #fff;
+              border-radius: 10px;
+              line-height: 15px;
+              padding: 1px 3px;
+              &.true {
+                background: #41b883;
+              }
+            }
+          }
         }
       }
     }

@@ -76,6 +76,14 @@ const actions = {
       commit('SET_ARTICLE_BLOG_ARTICLE_LIST', result.data)
       return result
     })
+  },
+  LIKE_ARTICLE_BLOG ({ commit, dispatch, state }, parameter) {
+    // 个人专栏like
+    return fetch({
+      url: '/article-blog/like',
+      method: 'post',
+      parameter
+    })
   }
 }
 

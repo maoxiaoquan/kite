@@ -24,6 +24,12 @@ module.exports = {
       type: Seq.BIGINT(20),
       comment: '专题ID',
       field: 'blog_id'
+    },
+    is_like: {
+      // 是否like
+      type: Seq.BOOLEAN,
+      comment: '是否like',
+      field: 'is_like'
     }
   }
 }

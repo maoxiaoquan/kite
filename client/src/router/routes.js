@@ -145,6 +145,11 @@ export default [
         path: 'blog/:blogId',
         name: 'articleBlog',
         component: () => import('@views/articleBlog/BlogView') // 个人专栏内容
+      },
+      {
+        path: 'blogs-like',
+        name: 'articleBlogsLike',
+        component: () => import('@views/articleBlog/myLikeBlog') // 个人用户like的个人专栏
       }
     ]
   }

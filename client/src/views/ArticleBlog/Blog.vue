@@ -55,7 +55,8 @@
                 <router-link class="nav-item"
                              :to="{name:'articleBlogs',query:sortMenu('7day')}">近7天</router-link>
                 <router-link class="nav-item"
-                             :to="{name:'articleBlogs',query:{sort:'my'}}">我的关注</router-link>
+                             :to="{name:'articleBlogsLike'}"
+                             v-if="personalInfo.islogin">我的关注</router-link>
               </nav>
             </div>
 
@@ -197,7 +198,7 @@ export default {
       // 登录后的个人信息
       return this.$store.state.personalInfo || {};
     },
-    ...mapState(['website', 'articleBlog', 'articleColumn'])
+    ...mapState(['website', 'articleBlog', 'articleColumn', 'personalInfo'])
   },
   components: {
     websiteNotice,

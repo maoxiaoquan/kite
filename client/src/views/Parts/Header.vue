@@ -174,11 +174,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["website"]), // home:主页  article_column:文章的专栏
-    personalInfo () {
-      // 登录后的个人信息
-      return this.$store.state.personalInfo;
-    },
+    ...mapState(["website", "personalInfo"]), // home:主页  article_column:文章的专栏
     unread_message_count () {
       // 登录后的个人信息
       return this.$store.state.user.unread_message_count;

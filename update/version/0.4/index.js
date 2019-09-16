@@ -2,6 +2,7 @@ const sequelize = require('../../../db/mysqldb/init')
 const models = require('../../../db/mysqldb/define')(sequelize)
 const { lowdb } = require('../../../db/lowdb/index')
 const newAdminAuthorityList = require('./libs/newAdminAuthorityList')
+const newUserAuthorityList = require('./libs/newUserAuthorityList')
 const CURRENT_VERSION = 0.4
 class update0_4 {
   static update () {
@@ -45,6 +46,7 @@ class update0_4 {
         )
 
         await models.admin_authority.bulkCreate(newAdminAuthorityList)
+        await models.user_authority.bulkCreate(newUserAuthorityList)
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb
           .get('config')
