@@ -202,7 +202,17 @@ router.get(
 router.get('/article-blog/list', articleBlog.getArticleBlogList) // 个人专栏列表
 router.get('/article-blog/info', articleBlog.getArticleBlogView) // 个人专栏详细信息
 router.get('/article-blog/article-list', articleBlog.getArticleBlogArticleList) // 当前个人专栏文章列表
-router.get('/article-blog/like', articleBlog.setSubscribeArticleBlog) // 当前个人专栏like
+router.post(
+  '/article-blog/like',
+  tokens.ClientVerifyToken,
+  articleBlog.setSubscribeArticleBlog
+) // 当前个人专栏like
+router.get(
+  '/article-blog/like-list',
+  tokens.ClientVerifyToken,
+  articleBlog.getLikeArticleBlogList
+) // 获取用户个人like的文章列表
+
 /**
  * 文章评论相关
  */

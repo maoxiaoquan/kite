@@ -19,7 +19,7 @@ class ArticleBlog {
     try {
       name && (whereParams['name'] = { [Op.like]: `%${name}%` })
       status && (whereParams['status'] = status)
-      whereParams['is_public'] = is_public
+      is_public && (whereParams['is_public'] = is_public)
       let { count, rows } = await models.article_blog.findAndCountAll({
         where: whereParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
@@ -51,7 +51,8 @@ class ArticleBlog {
     try {
       await models.article_blog.update(
         {
-          status: reqData.status
+          status: reqData.status,
+          rejection_reason: reqData.rejection_reason || ''
         },
         {
           where: {

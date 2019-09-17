@@ -1,0 +1,305 @@
+<template>
+  <div class="user-article-blog-item">
+
+    <template v-if="articleBlogItem.articleBlog">
+      <div class="user-article-blog-top">
+        <router-link class="article-blog-icon"
+                     :to="{name:'articleBlog',params:{blogId:articleBlogItem.articleBlog.blog_id}}">
+          <el-image class="article-blog-icon-img"
+                    :src="articleBlogItem.articleBlog.icon"
+                    lazy></el-image>
+        </router-link>
+
+        <div class="user-article-blog-info">
+          <div class="info-content">
+            <router-link class="name"
+                         :to="{name:'articleBlog',params:{blogId:articleBlogItem.articleBlog.blog_id}}">
+              {{articleBlogItem.articleBlog.name}}
+              <span class="article-count"> {{articleBlogItem.articleCount}}</span>
+            </router-link>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="user-article-blog-main">
+        <p class="description">介绍：{{articleBlogItem.articleBlog.description||'暂时没有简介，输入简介更直观表达专栏内容'}}</p>
+        <ul>
+          <li class="item item-icon read-count">
+            <el-image class="user-avatar"
+                      :src="articleBlogItem.user.avatar"
+                      lazy></el-image>
+            <router-link :to='{name:"user",params:{uid:articleBlogItem.user.uid}}'
+                         class="nickname">{{articleBlogItem.user.nickname}}</router-link>
+          </li>
+          <li class="item item-icon">
+            <span class="time">{{setBlogTime(articleBlogItem)}}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="user-article-blog-footer">
+        <ul class="statistics">
+          <li class="item item-icon read-count">
+            <i class="el-icon-reading"></i>
+            <span v-text="articleBlogItem.read_count||0"></span>
+          </li>
+          <li class="item item-icon like-article">
+            <i class="el-icon-star-off"></i>
+            <span v-text="articleBlogItem.likeCount||0"></span>
+          </li>
+          <li class="item attention"
+              v-if="~[2,4].indexOf(articleBlogItem.articleBlog.status)&&personalInfo.islogin&&articleBlogItem.articleBlog.is_public"
+              @click="setLikeArticleBlog(articleBlogItem.blog_id)">
+            <span :class="{'active':isLike(articleBlogItem).status}">{{isLike(articleBlogItem).text}}</span>
+          </li>
+        </ul>
+      </div>
+    </template>
+    <template v-else>
+      <div class="user-article-blog-null">
+        <span class="info">此专栏由于未知原因，专栏被个人或者官方下架</span>
+        <span class="cancel-attention"
+              @click="setLikeArticleBlog(articleBlogItem.blog_id)">取消关注</span>
+      </div>
+    </template>
+
+  </div>
+</template>
+
+
+<script>
+import { share } from '@utils'
+import { mapState } from 'vuex'
+import { Page } from "@components";
+export default {
+  name: "articleBlogItem",
+  props: ['articleBlogItem'],
+  methods: {
+    shareChange (val) { // 分享到其他
+      let urlOrigin = window.location.origin // 源地址
+      if (val.type === 'sina') { // 新浪
+        share.shareToXl(val.data.title, urlOrigin + '/p/' + val.data.aid, this.website.meta.logo)
+      } else if (val.type === 'qzone') { // qq空间
+        share.shareToQq(val.data.title, urlOrigin + '/p/' + val.data.aid, this.website.meta.logo)
+      } else if (val.type === 'qq') { // qq
+        share.shareQQ(val.data.title, urlOrigin + '/p/' + val.data.aid, this.website.meta.logo)
+      }
+    },
+    setLikeArticleBlog (blog_id) { // 用户关注blog
+      this.$store.dispatch('articleBlog/LIKE_ARTICLE_BLOG', {
+        blog_id,
+      })
+        .then(result => {
+          if (result.state === 'success') {
+            this.$message.success(result.message);
+            window.location.reload()
+          } else {
+            this.$message.warning(result.message);
+          }
+        })
+    },
+    isLike (item) { // 是否like
+      if (item.uid == this.personalInfo.user.uid) {
+        return {
+          status: true,
+          text: '已关注'
+        }
+      } else {
+        return {
+          status: false,
+          text: '关注'
+        }
+      }
+    },
+    setBlogTime (item) { // 设置blog的时间
+      if (item.create_date === item.update_date) {
+        return `创建于：${item.create_dt}`
+      } else {
+        return `更新于：${item.update_dt}`
+      }
+    },
+  },
+  computed: {
+    personalInfo () {
+      // 登录后的个人信息
+      return this.$store.state.personalInfo || {};
+    },
+    ...mapState(['website', 'personalInfo'])
+  },
+  components: {
+    Page
+  }
+};
+</script>
+
+<style scoped lang="scss">
+.user-article-blog-item {
+  box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
+  background: #f8f8f8;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin-top: 25px;
+  border-radius: 3px;
+  padding-bottom: 12px;
+  position: relative;
+  display: block;
+  height: 250px;
+  padding: 24px;
+  .user-article-blog-top {
+    display: flex;
+    .article-blog-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+      .article-blog-icon-img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .user-article-blog-info {
+      flex: 1;
+      padding-left: 10px;
+      .info-content {
+        .name {
+          color: #333;
+          font-size: 13px;
+          &:hover {
+            color: #0c7d9d;
+          }
+          .article-count {
+            display: inline-block;
+            font-weight: 400;
+            color: rgba(0, 0, 0, 0.88);
+            background: #ffd600;
+            border-radius: 4px;
+            padding: 0 6px;
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+    .operat-view {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      top: 10px;
+      right: 15px;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
+
+  .user-article-blog-main {
+    border-top: 1px dashed rgba(0, 0, 0, 0.08);
+    padding-top: 8px;
+    margin-top: 8px;
+    .description {
+      font-size: 12px;
+      line-height: 20px;
+      color: rgba(0, 0, 0, 0.56);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      height: 42px;
+    }
+    .item {
+      display: inline-block;
+      color: #b3bac1;
+      font-size: 12px;
+      &:after {
+        display: inline-block;
+        content: "\B7";
+        margin: 0 1px;
+        color: #b2bac2;
+      }
+      &:last-of-type {
+        &:after {
+          content: "";
+        }
+      }
+      .user-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 20px;
+        vertical-align: middle;
+        margin-right: 1px;
+      }
+      strong {
+        font-weight: normal;
+      }
+      .nickname {
+        white-space: nowrap;
+        overflow: hidden;
+        font-size: 12px;
+        color: #777;
+        text-overflow: ellipsis;
+        width: 50px;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .time {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .user-article-blog-footer {
+    .statistics {
+      li {
+        display: inline-block;
+        font-size: 12px;
+        color: #999;
+        .article-count,
+        span {
+          display: inline-block;
+          font-size: 12px;
+          color: #999;
+          margin-right: 5px;
+          vertical-align: middle;
+        }
+        i {
+          font-size: 14px;
+          color: #999;
+        }
+        .type {
+          font-size: 12px;
+          display: inline-block;
+          margin-left: 3px;
+        }
+        .type {
+          background: #fd763a;
+          color: #fff;
+          border-radius: 10px;
+          line-height: 15px;
+          padding: 2px 3px;
+          &.true {
+            background: #41b883;
+          }
+        }
+        &.attention {
+          cursor: pointer;
+          span {
+            font-size: 12px;
+            display: inline-block;
+            margin-left: 3px;
+            color: #333;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            line-height: 15px;
+            padding: 2px 3px;
+            &.active {
+              color: #fff;
+              background: #41b883;
+              border: 1px solid #41b883;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+</style>
+

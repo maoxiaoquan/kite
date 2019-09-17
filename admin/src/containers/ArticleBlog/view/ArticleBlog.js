@@ -58,6 +58,16 @@ class ArticleBlog extends React.Component {
           key: 'icon'
         },
         {
+          title: '专栏图标演示',
+          dataIndex: 'icon',
+          key: 'icon',
+          render: (text, record) => (
+            <div className="avatar">
+              {record.icon ? <img src={record.icon} alt="" /> : ''}
+            </div>
+          )
+        },
+        {
           title: '状态',
           dataIndex: 'status',
           key: 'status',
@@ -78,15 +88,14 @@ class ArticleBlog extends React.Component {
           key: 'is_public',
           render: (value, record) => {
             return (
-              <div className="table-is-login">
-                {value ? (
-                  <Icon type="check-circle" />
-                ) : (
-                  <Icon type="close-circle" />
-                )}
-              </div>
+              <div className="table-is-login">{value ? '公开' : '个人'}</div>
             )
           }
+        },
+        {
+          title: '审核被拒绝的原因',
+          dataIndex: 'rejection_reason',
+          key: 'rejection_reason'
         },
         {
           title: '操作',
@@ -94,15 +103,19 @@ class ArticleBlog extends React.Component {
           render: (text, record) => {
             return (
               <div className="table-right-btn">
-                <Button
-                  onClick={() => {
-                    this._edit(record)
-                  }}
-                  size="small"
-                  type="primary"
-                >
-                  修改
-                </Button>
+                {record.is_public ? (
+                  <Button
+                    onClick={() => {
+                      this._edit(record)
+                    }}
+                    size="small"
+                    type="primary"
+                  >
+                    修改
+                  </Button>
+                ) : (
+                  ''
+                )}
               </div>
             )
           }
@@ -115,8 +128,9 @@ class ArticleBlog extends React.Component {
       modal_visible_edit: false,
       status_list: ['未知', '审核中', '审核通过', '审核失败', '无需审核'],
       is_create: true,
+      edit_status_val: '',
       status_val: '',
-      is_public_val: true,
+      is_public_val: '',
       name_val: ''
     }
   }
@@ -129,8 +143,10 @@ class ArticleBlog extends React.Component {
     /*修改专栏*/
     this.setState({
       modal_visible_edit: true,
-      is_create: false
+      is_create: false,
+      edit_status_val: String(data.status)
     })
+
     this.props.dispatch({ type: 'SET_ARTICLE_BLOG_INFO', data: data })
     this.props.form.setFieldsValue({
       ...data,
@@ -234,7 +250,8 @@ class ArticleBlog extends React.Component {
       status_val,
       name_val,
       is_public_val,
-      is_create
+      is_create,
+      edit_status_val
     } = this.state
     const { stateArticleBlog } = this.props
     const { getFieldDecorator } = this.props.form
@@ -291,20 +308,43 @@ class ArticleBlog extends React.Component {
                       whitespace: true
                     }
                   ]
-                })(<Input placeholder="个人专栏名" />)}
+                })(<Input disabled placeholder="个人专栏名" />)}
               </FormItem>
 
               <FormItem {...formItemLayout} hasFeedback label="状态">
                 {getFieldDecorator('status', {
                   rules: [{ required: true, message: '请选择状态！' }]
                 })(
-                  <Select placeholder="状态">
+                  <Select
+                    placeholder="状态"
+                    onChange={value => {
+                      this.setState({
+                        edit_status_val: value
+                      })
+                    }}
+                  >
                     {this.state.status_list.map((item, key) =>
                       item ? <Option key={key}>{item}</Option> : ''
                     )}
                   </Select>
                 )}
               </FormItem>
+
+              {~[3, 4, 5].indexOf(Number(edit_status_val)) ? (
+                <FormItem {...formItemLayout} label="拒绝的原因">
+                  {getFieldDecorator('rejection_reason', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入拒绝的原因！',
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input placeholder="文章被拒绝的原因" />)}
+                </FormItem>
+              ) : (
+                ''
+              )}
 
               <FormItem {...tailFormItemLayout}>
                 <Button
@@ -350,21 +390,18 @@ class ArticleBlog extends React.Component {
                   </Select>
                 </FormItem>
 
-                <FormItem {...formItemLayout} hasFeedback label="是否公开">
-                  {getFieldDecorator('is_public', {
-                    rules: [{ required: true, message: '请选择状态！' }]
-                  })(
-                    <Select
-                      placeholder="状态"
-                      value={is_public_val}
-                      onChange={value => {
-                        this.changeVal(value, 'is_public_val')
-                      }}
-                    >
-                      <Option value={false}>个人</Option>
-                      <Option value={true}>公开</Option>
-                    </Select>
-                  )}
+                <FormItem hasFeedback label="是否公开">
+                  <Select
+                    placeholder="状态"
+                    value={is_public_val}
+                    onChange={value => {
+                      this.changeVal(value, 'is_public_val')
+                    }}
+                  >
+                    <Option value="">全部</Option>
+                    <Option value={0}>个人</Option>
+                    <Option value={1}>公开</Option>
+                  </Select>
                 </FormItem>
 
                 <Form.Item>

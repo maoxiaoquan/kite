@@ -81,6 +81,12 @@ module.exports = {
       comment: '是否可以显示（预留）',
       field: 'enable'
     },
+    rejection_reason: {
+      /* 驳回，或者文章审核不通过的原因 */
+      type: Seq.STRING(160),
+      comment: '驳回，或者文章审核不通过的原因',
+      field: 'rejection_reason'
+    },
     like_count: {
       // 喜欢数
       type: Seq.BIGINT(20),

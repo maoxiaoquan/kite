@@ -13,9 +13,9 @@
 
           <div class="article-blog-list row">
             <div class="col-xs-6 col-sm-6 col-md-6"
-                 v-for="(articleBlogItem,key) in articleBlog.blogs.list"
+                 v-for="(articleBlogItem,key) in articleBlog.likeBlogArticleList.list"
                  :key="key">
-              <BlogItem :articleBlogItem="articleBlogItem" />
+              <LikeBlogItem :articleBlogItem="articleBlogItem" />
             </div>
           </div>
 
@@ -40,7 +40,7 @@ import { share } from '@utils'
 import { mapState } from 'vuex'
 import { Page } from "@components";
 import websiteNotice from '../Parts/websiteNotice'
-import BlogItem from './component/BlogItem'
+import LikeBlogItem from './component/LikeBlogItem'
 export default {
   metaInfo () {
     return {
@@ -57,60 +57,16 @@ export default {
       }
     };
   },
-  name: "ArticleBlog",
-  asyncData ({ store, route }) {
-    // 触发 action 后，会返回 Promise
-    return Promise.all([
-      store.dispatch("articleColumn/GET_ARTICLE_COLUMN"),
-      store.dispatch('articleBlog/GET_ARTICLE_BLOG_LIST', {
-        page: route.query.page || 1,
-        columnEnName: route.params.columnEnName || '',
-        tagId: route.query.tagId || '',
-        sort: route.query.sort || '',
-      })
-    ]);
-  },
-  data () {
-    return {
-      childNavItem: ''
-    };
-  },
-  created () {
-    this.initColumn()
+  name: "LikeArticleBlog",
+  mounted () {
+    this.getLikeArticleBlogList()
   },
   watch: {
     $route (to, from) {
-      this.initColumn()
+      this.getLikeArticleBlogList()
     }
   },
   methods: {
-    initColumn () {
-      if (this.$route.params.columnEnName && this.$route.params.columnEnName !== 'all') {
-        this.switchColumn(this.$route.params.columnEnName)
-      } else {
-        this.childNavItem = {}
-      }
-    },
-    switchColumn (val) {
-      this.articleColumn.homeColumn.map(item => {
-        console.log(item.article_column_en_name, val)
-        if (item.article_column_en_name === val) {
-          this.childNavItem = item || {}
-        }
-      })
-    },
-    sortMenu (sort) {
-      let query = {
-      }
-      if (sort) {
-        query.sort = sort
-      }
-      if (this.$route.query.tagId) {
-        query.tagId = this.$route.query.tagId
-      }
-
-      return query
-    },
     shareChange (val) { // 分享到其他
       let urlOrigin = window.location.origin // 源地址
       if (val.type === 'sina') { // 新浪
@@ -121,19 +77,17 @@ export default {
         share.shareQQ(val.data.title, urlOrigin + '/p/' + val.data.aid, this.website.meta.logo)
       }
     },
+    getLikeArticleBlogList () { // 用户关注blog
+      this.$store.dispatch('articleBlog/GET_LIKE_ARTICLE_BLOG_LIST', {
+        page: this.$route.query.page || 1
+      })
+    },
     pageChange (val) {
       let query = {
         page: val
       }
-      if (this.$route.query.tagId) {
-        query.tagId = this.$route.query.tagId
-      }
-      if (this.$route.query.sort) {
-        query.sort = this.$route.query.sort
-      }
       this.$router.push({
-        name: 'articleBlogs',
-        params: { columnEnName: this.$route.params.columnEnName },
+        name: 'articleBlogsLike',
         query
       })
     }
@@ -141,17 +95,13 @@ export default {
   computed: {
     pagination () {
       // 分页
-      return Math.ceil(this.articleBlog.blogs.count / this.articleBlog.blogs.pageSize);
+      return Math.ceil(this.articleBlog.likeBlogArticleList.count / this.articleBlog.likeBlogArticleList.pageSize);
     },
-    personalInfo () {
-      // 登录后的个人信息
-      return this.$store.state.personalInfo || {};
-    },
-    ...mapState(['website', 'articleBlog', 'articleColumn'])
+    ...mapState(['website', 'articleBlog', 'articleColumn', 'personalInfo'])
   },
   components: {
     websiteNotice,
-    BlogItem,
+    LikeBlogItem,
     Page
   }
 };

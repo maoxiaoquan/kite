@@ -286,6 +286,11 @@ class dynamicBlog {
         }
       })
 
+      await models.article_blog.update(
+        { read_count: Number(oneArticleBlog.read_count) + 1 },
+        { where: { blog_id: blogId } } // 为空，获取全部，也可以自己添加条件
+      )
+
       oneArticleBlog.setDataValue(
         'create_dt',
         await TimeDistance(oneArticleBlog.create_date)
@@ -306,6 +311,13 @@ class dynamicBlog {
         'likeCount',
         await models.rss_article_blog.count({
           where: { blog_id: oneArticleBlog.blog_id }
+        })
+      )
+
+      oneArticleBlog.setDataValue(
+        'likeUserIds',
+        await models.rss_article_blog.findAll({
+          where: { blog_id: oneArticleBlog.blog_id, is_like: true }
         })
       )
 
@@ -506,7 +518,7 @@ class dynamicBlog {
         rows[i].setDataValue(
           'likeCount',
           await models.rss_article_blog.count({
-            where: { blog_id: rows[i].blog_id }
+            where: { blog_id: rows[i].blog_id, is_like: true }
           })
         )
 
@@ -524,6 +536,13 @@ class dynamicBlog {
           await models.user.findOne({
             where: { uid: rows[i].uid },
             attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+          })
+        )
+
+        rows[i].setDataValue(
+          'likeUserIds',
+          await models.rss_article_blog.findAll({
+            where: { blog_id: rows[i].blog_id, is_like: true }
           })
         )
       }
@@ -578,7 +597,8 @@ class dynamicBlog {
         type = 'attention'
         await models.rss_article_blog.create({
           uid: user.uid,
-          blog_id
+          blog_id,
+          is_like: true
         })
       }
 
@@ -605,6 +625,131 @@ class dynamicBlog {
         message: type === 'attention' ? '关注个人专栏成功' : '取消个人专栏成功',
         data: {
           type
+        }
+      })
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
+  // 获取用户like的专栏列表
+
+  static async getLikeArticleBlogList (ctx) {
+    let page = ctx.query.page || 1
+    let pageSize = ctx.query.pageSize || 24
+    let { user = '' } = ctx.request
+    let whereParams = {
+      is_public: true,
+      status: {
+        [Op.or]: [2, 4]
+      }
+    }
+
+    try {
+      let { count, rows } = await models.rss_article_blog.findAndCountAll({
+        where: { is_like: true, uid: user.uid }, // 为空，获取全部，也可以自己添加条件
+        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: pageSize // 每页限制返回的数据条数
+        // order: orderParams
+      })
+      for (let i in rows) {
+        const oneArticleBlog = await models.article_blog.findOne({
+          where: { blog_id: rows[i].blog_id, ...whereParams }
+        })
+
+        if (oneArticleBlog) {
+          rows[i].setDataValue('articleBlog', oneArticleBlog)
+        }
+
+        rows[i].setDataValue(
+          'user',
+          await models.user.findOne({
+            where: { uid: rows[i].uid },
+            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+          })
+        )
+        rows[i].setDataValue(
+          'articleCount',
+          await models.article.count({
+            where: { blog_ids: rows[i].blog_id }
+          })
+        )
+
+        rows[i].setDataValue(
+          'likeCount',
+          await models.rss_article_blog.count({
+            where: { blog_id: rows[i].blog_id, is_like: true }
+          })
+        )
+
+        rows[i].setDataValue(
+          'likeUserIds',
+          await models.rss_article_blog.findAll({
+            where: { blog_id: rows[i].blog_id, is_like: true }
+          })
+        )
+      }
+      // for (let i in rows) {
+      //   rows[i].setDataValue(
+      //     'create_dt',
+      //     await TimeDistance(rows[i].create_date)
+      //   )
+      //   rows[i].setDataValue(
+      //     'update_dt',
+      //     await TimeDistance(rows[i].update_date)
+      //   )
+
+      //   rows[i].setDataValue(
+      //     'articleCount',
+      //     await models.article.count({
+      //       where: { blog_ids: rows[i].blog_id }
+      //     })
+      //   )
+
+      //   rows[i].setDataValue(
+      //     'likeCount',
+      //     await models.rss_article_blog.count({
+      //       where: { blog_id: rows[i].blog_id, is_like: true }
+      //     })
+      //   )
+
+      //   if (rows[i].tag_ids) {
+      //     rows[i].setDataValue(
+      //       'tag',
+      //       await models.article_tag.findAll({
+      //         where: { article_tag_id: { [Op.or]: rows[i].tag_ids.split(',') } }
+      //       })
+      //     )
+      //   }
+
+      //   rows[i].setDataValue(
+      //     'user',
+      //     await models.user.findOne({
+      //       where: { uid: rows[i].uid },
+      //       attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+      //     })
+      //   )
+
+      //   rows[i].setDataValue(
+      //     'likeUserIds',
+      //     await models.rss_article_blog.findAll({
+      //       where: { blog_id: rows[i].blog_id, is_like: true }
+      //     })
+      //   )
+      // }
+
+      await resClientJson(ctx, {
+        state: 'success',
+        message: 'success',
+        data: {
+          page,
+          count,
+          pageSize,
+          list: rows
         }
       })
     } catch (err) {

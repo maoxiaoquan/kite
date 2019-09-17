@@ -25,6 +25,11 @@
               <i class="el-icon-star-off"></i>
               <span v-text="articleBlogItem.likeCount||0"></span>
             </li>
+            <li class="item attention"
+                v-if="~[2,4].indexOf(articleBlogItem.status)&&personalInfo.islogin&&articleBlogItem.is_public"
+                @click="setLikeArticleBlog(articleBlogItem.blog_id)">
+              <span :class="{'active':isLike(articleBlogItem).status}">{{isLike(articleBlogItem).text}}</span>
+            </li>
           </ul>
         </div>
 
@@ -63,7 +68,6 @@
         </li>
       </ul>
     </div>
-
   </div>
 </template>
 
@@ -93,6 +97,36 @@ export default {
         return `更新于：${item.update_dt}`
       }
     },
+    setLikeArticleBlog (blog_id) { // 用户关注blog
+      this.$store.dispatch('articleBlog/LIKE_ARTICLE_BLOG', {
+        blog_id,
+      })
+        .then(result => {
+          if (result.state === 'success') {
+            this.$message.success(result.message);
+            window.location.reload()
+          } else {
+            this.$message.warning(result.message);
+          }
+        })
+    },
+    isLike (item) { // 是否like
+      let likeUserIds = []
+      item.likeUserIds.map(item => {
+        likeUserIds.push(item.uid)
+      })
+      if (~likeUserIds.indexOf(Number(this.personalInfo.user.uid))) {
+        return {
+          status: true,
+          text: '已关注'
+        }
+      } else {
+        return {
+          status: false,
+          text: '关注'
+        }
+      }
+    },
   },
   computed: {
     personalInfo () {
@@ -119,7 +153,7 @@ export default {
   position: relative;
   display: block;
   height: 250px;
-  padding: 24px;
+  padding: 20px;
   .user-article-blog-top {
     display: flex;
     .article-blog-icon {
@@ -139,6 +173,7 @@ export default {
         .name {
           color: #333;
           font-size: 13px;
+          line-height: 18px;
           &:hover {
             color: #0c7d9d;
           }
@@ -182,6 +217,24 @@ export default {
                 background: #41b883;
               }
             }
+            &.attention {
+              cursor: pointer;
+              span {
+                font-size: 12px;
+                display: inline-block;
+                margin-left: 3px;
+                color: #333;
+                border-radius: 10px;
+                border: 1px solid #e0e0e0;
+                line-height: 15px;
+                padding: 2px 3px;
+                &.active {
+                  color: #fff;
+                  background: #41b883;
+                  border: 1px solid #41b883;
+                }
+              }
+            }
           }
         }
       }
@@ -223,7 +276,7 @@ export default {
     margin-top: 8px;
     .description {
       font-size: 12px;
-      line-height: 20px;
+      line-height: 18px;
       color: rgba(0, 0, 0, 0.56);
       display: -webkit-box;
       -webkit-box-orient: vertical;

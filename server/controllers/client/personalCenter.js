@@ -532,7 +532,7 @@ class PersonalCenter {
         rows[i].setDataValue(
           'likeCount',
           await models.rss_article_blog.count({
-            where: { blog_id: rows[i].blog_id }
+            where: { blog_id: rows[i].blog_id, is_like: true }
           })
         )
 
@@ -556,7 +556,7 @@ class PersonalCenter {
         rows[i].setDataValue(
           'likeUserIds',
           await models.rss_article_blog.findAll({
-            where: { blog_id: rows[i].blog_id }
+            where: { blog_id: rows[i].blog_id, is_like: true }
           })
         )
       }

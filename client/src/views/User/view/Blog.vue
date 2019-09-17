@@ -64,8 +64,10 @@
           </div>
 
           <div class="user-article-blog-main">
-            <p class="description">介绍：{{articleBlogItem.description||'没有写入介绍'}}</p>
-
+            <p class="description"
+               v-if="articleBlogItem.status!==3">介绍：{{articleBlogItem.description||'没有写入介绍'}}</p>
+            <p class="description faild"
+               v-else>审核失败 原因：{{articleBlogItem.rejection_reason}}</p>
           </div>
 
           <div class="user-article-blog-footer">
@@ -79,12 +81,14 @@
                 <i class="el-icon-star-off"></i>
                 <span v-text="articleBlogItem.likeCount||0"></span>
               </li>
-              <li>
+              <li class="item">
                 <span class="type"
                       :class="{'true':articleBlogItem.is_public}"> {{ articleBlogItem.is_public?'公开':'个人' }}</span>
               </li>
-              <li>
-                <span>{{isLike(articleBlogItem)}}</span>
+              <li class="item attention"
+                  v-if="~[2,4].indexOf(articleBlogItem.status)&&personalInfo.islogin&&articleBlogItem.is_public"
+                  @click="setLikeArticleBlog(articleBlogItem.blog_id)">
+                <span :class="{'active':isLike(articleBlogItem).status}">{{isLike(articleBlogItem).text}}</span>
               </li>
             </ul>
           </div>
@@ -306,8 +310,35 @@ export default {
         this.deleteArticleBlog(val.articleBlogItem.blog_id);
       }
     },
-    isLike () { // 是否like
-
+    setLikeArticleBlog (blog_id) { // 用户关注blog
+      this.$store.dispatch('articleBlog/LIKE_ARTICLE_BLOG', {
+        blog_id,
+      })
+        .then(result => {
+          if (result.state === 'success') {
+            this.$message.success(result.message);
+            window.location.reload()
+          } else {
+            this.$message.warning(result.message);
+          }
+        })
+    },
+    isLike (item) { // 是否like
+      let likeUserIds = []
+      item.likeUserIds.map(item => {
+        likeUserIds.push(item.uid)
+      })
+      if (~likeUserIds.indexOf(Number(this.personalInfo.user.uid))) {
+        return {
+          status: true,
+          text: '已关注'
+        }
+      } else {
+        return {
+          status: false,
+          text: '关注'
+        }
+      }
     },
     pageChange (val) {
       this.$router.push({
@@ -364,8 +395,11 @@ export default {
           padding-left: 10px;
 
           .name {
+            display: inline-block;
             color: #333;
             font-size: 13px;
+            line-height: 18px;
+            padding-right: 37px;
             &:hover {
               color: #0c7d9d;
             }
@@ -377,14 +411,6 @@ export default {
               color: #999;
               font-size: 12px;
             }
-          }
-
-          .description {
-            white-space: nowrap;
-            overflow: hidden;
-            font-size: 12px;
-            color: #777;
-            text-overflow: ellipsis;
           }
         }
         .operat-view {
@@ -426,6 +452,9 @@ export default {
           font-size: 12px;
           color: #999;
           height: 40px;
+          &.faild {
+            color: red;
+          }
         }
       }
       .user-article-blog-footer {
@@ -456,9 +485,27 @@ export default {
               color: #fff;
               border-radius: 10px;
               line-height: 15px;
-              padding: 1px 3px;
+              padding: 2px 3px;
               &.true {
                 background: #41b883;
+              }
+            }
+            &.attention {
+              cursor: pointer;
+              span {
+                font-size: 12px;
+                display: inline-block;
+                margin-left: 3px;
+                color: #333;
+                border-radius: 10px;
+                border: 1px solid #e0e0e0;
+                line-height: 15px;
+                padding: 2px 3px;
+                &.active {
+                  color: #fff;
+                  background: #41b883;
+                  border: 1px solid #41b883;
+                }
               }
             }
           }

@@ -5,72 +5,76 @@
       <div class="row">
 
         <div class="col-xs-12 col-sm-8 col-md-8">
+          <div class="article-blog-view">
+            <div class="article-blog-header">
+              <div class="user-article-blog-top">
+                <div class="article-blog-icon">
+                  <el-image class="article-blog-icon-img"
+                            :src="articleBlog.blogInfo.icon"
+                            lazy></el-image>
+                </div>
 
-          <div class="article-blog-header">
-            <div class="user-article-blog-top">
-              <div class="article-blog-icon">
-                <el-image class="article-blog-icon-img"
-                          :src="articleBlog.blogInfo.icon"
-                          lazy></el-image>
-              </div>
-
-              <div class="user-article-blog-info">
-                <div class="info-content">
-                  <div class="name">
-                    {{articleBlog.blogInfo.name}}
-                    <span class="article-count"> {{articleBlog.blogInfo.articleCount}}</span>
+                <div class="user-article-blog-info">
+                  <div class="info-content">
+                    <div class="name">
+                      {{articleBlog.blogInfo.name}}
+                      <span class="article-count"> {{articleBlog.blogInfo.articleCount}}</span>
+                    </div>
+                    <ul class="statistics">
+                      <li class="item item-icon read-count">
+                        <i class="el-icon-reading"></i>
+                        <span v-text="articleBlog.blogInfo.read_count||0"></span>
+                      </li>
+                      <li class="item item-icon like-article">
+                        <i class="el-icon-star-off"></i>
+                        <span v-text="articleBlog.blogInfo.likeCount||0"></span>
+                      </li>
+                      <li class="item attention"
+                          v-if="~[2,4].indexOf(articleBlog.blogInfo.status)&&personalInfo.islogin&&articleBlog.blogInfo.is_public"
+                          @click="setLikeArticleBlog(articleBlog.blogInfo.blog_id)">
+                        <span :class="{'active':isLike(articleBlog.blogInfo).status}">{{isLike(articleBlog.blogInfo).text}}</span>
+                      </li>
+                    </ul>
                   </div>
-                  <ul class="statistics">
-                    <li class="item item-icon read-count">
-                      <i class="el-icon-reading"></i>
-                      <span v-text="articleBlog.blogInfo.read_count||0"></span>
-                    </li>
-                    <li class="item item-icon like-article">
-                      <i class="el-icon-star-off"></i>
-                      <span v-text="articleBlog.blogInfo.likeCount||0"></span>
-                    </li>
-                  </ul>
+
                 </div>
 
               </div>
 
-            </div>
-
-            <div class="user-article-blog-tag">
-              <div class="title">所属标签:
-                <template v-if="articleBlog.blogInfo.tag">
-                  <router-link v-for="(itemArticleTag,key) in articleBlog.blogInfo.tag"
-                               class="tag-class frontend"
-                               :key="key"
-                               :to="{name:'article_tag',params:{article_tag_en_name:itemArticleTag.article_tag_en_name}}">{{itemArticleTag.article_tag_name}}</router-link>
-                </template>
-                <template v-else>
-                  <span class="hint">
-                    暂时没有加入标签，加入标签更能容易被搜索到
-                  </span>
-                </template>
+              <div class="user-article-blog-tag">
+                <div class="title">所属标签:
+                  <template v-if="articleBlog.blogInfo.tag">
+                    <router-link v-for="(itemArticleTag,key) in articleBlog.blogInfo.tag"
+                                 class="tag-class frontend"
+                                 :key="key"
+                                 :to="{name:'article_tag',params:{article_tag_en_name:itemArticleTag.article_tag_en_name}}">{{itemArticleTag.article_tag_name}}</router-link>
+                  </template>
+                  <template v-else>
+                    <span class="hint">
+                      暂时没有加入标签，加入标签更能容易被搜索到
+                    </span>
+                  </template>
+                </div>
               </div>
-            </div>
 
-            <div class="user-article-blog-main">
-              <p class="description">介绍：{{articleBlog.blogInfo.description||'暂时没有简介，输入简介更直观表达专栏内容'}}</p>
-              <ul>
-                <li class="item item-icon read-count">
-                  <el-image class="user-avatar"
-                            :src="articleBlog.blogInfo.user.avatar"
-                            lazy></el-image>
-                  <router-link :to='{name:"user",params:{uid:articleBlog.blogInfo.user.uid}}'
-                               class="nickname">{{articleBlog.blogInfo.user.nickname}}</router-link>
-                </li>
-                <li class="item item-icon">
-                  <span class="time">{{setBlogTime(articleBlog.blogInfo)}}</span>
-                </li>
-              </ul>
-            </div>
+              <div class="user-article-blog-main">
+                <p class="description">介绍：{{articleBlog.blogInfo.description||'暂时没有简介，输入简介更直观表达专栏内容'}}</p>
+                <ul>
+                  <li class="item item-icon read-count">
+                    <el-image class="user-avatar"
+                              :src="articleBlog.blogInfo.user.avatar"
+                              lazy></el-image>
+                    <router-link :to='{name:"user",params:{uid:articleBlog.blogInfo.user.uid}}'
+                                 class="nickname">{{articleBlog.blogInfo.user.nickname}}</router-link>
+                  </li>
+                  <li class="item item-icon">
+                    <span class="time">{{setBlogTime(articleBlog.blogInfo)}}</span>
+                  </li>
+                </ul>
+              </div>
 
-          </div>
-          <div class="article-blog-main">
-            <div class="list-container">
+            </div>
+            <div class="article-blog-main">
               <div class="article-view">
                 <div class="article-item"
                      v-for="(item,key) in articleBlog.blogArticleList.list"
@@ -84,7 +88,6 @@
                     @pageChange="pageChange"></Page>
             </div>
           </div>
-
         </div>
 
         <div class="col-xs-12 col-sm-4 col-md-4">
@@ -154,7 +157,37 @@ export default {
       } else if (val.type === 'qq') { // qq空间
         share.shareQQ(val.data.title, urlOrigin + '/p/' + val.data.aid, this.website.meta.logo)
       }
-    }
+    },
+    setLikeArticleBlog (blog_id) { // 用户关注blog
+      this.$store.dispatch('articleBlog/LIKE_ARTICLE_BLOG', {
+        blog_id,
+      })
+        .then(result => {
+          if (result.state === 'success') {
+            this.$message.success(result.message);
+            window.location.reload()
+          } else {
+            this.$message.warning(result.message);
+          }
+        })
+    },
+    isLike (item) { // 是否like
+      let likeUserIds = []
+      item.likeUserIds.map(item => {
+        likeUserIds.push(item.uid)
+      })
+      if (~likeUserIds.indexOf(Number(this.personalInfo.user.uid))) {
+        return {
+          status: true,
+          text: '已关注'
+        }
+      } else {
+        return {
+          status: false,
+          text: '关注'
+        }
+      }
+    },
   },
   computed: {
     pagination () { // 分页
@@ -172,17 +205,13 @@ export default {
 
 <style scoped lang="scss">
 .article-blog {
-  .article-blog-header {
+  .article-blog-view {
     box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
-    background: #f8f8f8;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    border-radius: 3px;
-    padding-bottom: 12px;
-    position: relative;
-    display: block;
-    height: 250px;
+    border-radius: 6px;
+  }
+  .article-blog-header {
     padding: 24px;
+    border-bottom: 1px solid rgba(178, 186, 194, 0.15);
     .user-article-blog-top {
       display: flex;
       .article-blog-icon {
@@ -243,6 +272,24 @@ export default {
                 padding: 1px 3px;
                 &.true {
                   background: #41b883;
+                }
+              }
+              &.attention {
+                cursor: pointer;
+                span {
+                  font-size: 12px;
+                  display: inline-block;
+                  margin-left: 3px;
+                  color: #333;
+                  border-radius: 10px;
+                  border: 1px solid #e0e0e0;
+                  line-height: 15px;
+                  padding: 2px 3px;
+                  &.active {
+                    color: #fff;
+                    background: #41b883;
+                    border: 1px solid #41b883;
+                  }
                 }
               }
             }
@@ -336,6 +383,12 @@ export default {
     }
   }
   .article-blog-main {
+    padding: 20px;
+    .article-view {
+      /deep/ .article-item {
+        border-bottom: 1px solid rgba(178, 186, 194, 0.15);
+      }
+    }
   }
 }
 </style>
