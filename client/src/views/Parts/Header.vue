@@ -20,7 +20,7 @@
                   <el-dropdown trigger="click"
                                @command="commandChange">
                     <div class="el-dropdown-link">
-                      <i class="iconfont icon-viewgallery"></i>
+                      <i class="menu-icon el-icon-menu"></i>
                     </div>
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item icon="el-icon-s-home"
@@ -70,7 +70,7 @@
                          aria-label="Search" />
                   <button class="search-btn"
                           @click="search">
-                    <i class="iconfont icon-search"></i>
+                    <i class="el-icon-search"></i>
                   </button>
                 </div>
               </li>
@@ -270,6 +270,14 @@ export default {
           }
           .navbar-toggler {
             display: none;
+            .menu-icon {
+              width: 50px;
+              height: 50px;
+              text-align: center;
+              line-height: 50px;
+              color: #999;
+              font-size: 18px;
+            }
           }
           .nav-item {
             position: relative;

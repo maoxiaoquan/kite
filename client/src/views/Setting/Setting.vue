@@ -7,18 +7,18 @@
 
         <div class="col-xs-12 col-sm-4 col-md-4">
           <div class="user-setting-aside">
-            <h2 class="title"><i class="iconfont icon-set"></i>设置</h2>
+            <h2 class="title"><i class="el-icon-setting"></i>设置</h2>
             <ul class="setting-tap-list">
               <li>
                 <router-link :to='{name:"settingProfile"}'
                              class="dropdown-item">
-                  <i class="iconfont icon-account"></i>个人资料
+                  <i class="el-icon-user-solid"></i>个人资料
                 </router-link>
               </li>
               <li>
                 <router-link :to='{name:"settingResetPassword"}'
                              class="dropdown-item">
-                  <i class="iconfont icon-mima"></i> 密码修改
+                  <i class="el-icon-lock"></i> 密码修改
                 </router-link>
               </li>
             </ul>
@@ -70,6 +70,7 @@ export default {
       font-weight: bold;
       i {
         margin-right: 15px;
+        font-size: 18px;
       }
     }
     .setting-tap-list {
@@ -81,6 +82,7 @@ export default {
           font-size: 14px;
           i {
             margin-right: 15px;
+            font-size: 18px;
           }
           &:hover {
             color: #f46e65;

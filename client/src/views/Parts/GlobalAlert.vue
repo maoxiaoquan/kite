@@ -152,9 +152,9 @@ export default {
         }
         i {
           position: absolute;
-          top: 6px;
+          top: 8px;
           left: 12px;
-          font-size: 14px;
+          font-size: 18px;
           color: #969696;
         }
       }

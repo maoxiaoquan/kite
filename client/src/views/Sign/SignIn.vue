@@ -12,8 +12,9 @@
             <input placeholder="邮箱"
                    type="text"
                    v-model="formData.email"
+                   @keyup.enter.native="login"
                    value="">
-            <i class="iconfont icon-account"></i>
+            <i class="el-icon-user-solid"></i>
           </div>
 
           <div class="input-prepend">
@@ -21,8 +22,9 @@
                    type="password"
                    v-model="formData.password"
                    name="password"
+                   @keyup.enter.native="login"
                    value="">
-            <i class="iconfont icon-mima"></i>
+            <i class="el-icon-key"></i>
           </div>
 
           <div class="remember-btn clearfix">
@@ -45,19 +47,7 @@
             登录
           </button>
         </form>
-        <!-- 更多登录方式 -->
-        <!--<div class="more-sign">
-                  <h6>社交帐号登录</h6>
-                  <ul>
-                    <li><a class="weibo" href="javascript:alert('暂未开放，请等待后续开放');"><i class="iconfont icon-xinlang"></i></a></li>
-                    <li><a class="weixin" target="_blank" href="javascript:alert('暂未开放，请等待后续开放');"><i
-                      class="iconfont icon-iconfontweixin"></i></a></li>
-                    <li><a class="qq" target="_blank" href="javascript:alert('暂未开放，请等待后续开放');"><i class="iconfont icon-qq"></i></a>
-                    </li>
-                  </ul>
 
-                  <div class="weibo-geetest-captcha"></div>
-                </div>-->
       </div>
     </div>
   </section>

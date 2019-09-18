@@ -5,7 +5,9 @@
       <div class="row">
 
         <div class="col-xs-12 col-sm-8 col-md-8">
+
           <div class="article-blog-view">
+
             <div class="article-blog-header">
               <div class="user-article-blog-top">
                 <div class="article-blog-icon">
@@ -74,6 +76,7 @@
               </div>
 
             </div>
+
             <div class="article-blog-main">
               <div class="article-view">
                 <div class="article-item"
@@ -206,12 +209,14 @@ export default {
 <style scoped lang="scss">
 .article-blog {
   .article-blog-view {
-    box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
-    border-radius: 6px;
   }
   .article-blog-header {
     padding: 24px;
-    border-bottom: 1px solid rgba(178, 186, 194, 0.15);
+    box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    // border-bottom: 1px solid rgba(178, 186, 194, 0.15);
     .user-article-blog-top {
       display: flex;
       .article-blog-icon {
@@ -328,18 +333,16 @@ export default {
       }
     }
     .user-article-blog-main {
-      border-top: 1px dashed rgba(0, 0, 0, 0.08);
-      padding-top: 8px;
+      // border-top: 1px dashed rgba(0, 0, 0, 0.08);
       margin-top: 8px;
       .description {
         font-size: 12px;
+        background: #f3f3f3;
         line-height: 20px;
         color: rgba(0, 0, 0, 0.56);
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
-        height: 56px;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 6px;
       }
       .item {
         display: inline-block;
@@ -382,7 +385,25 @@ export default {
       }
     }
   }
+  .article-blog-line {
+    height: 20px;
+    background: #f3f3f3
+      linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.15) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.15) 75%,
+        transparent 75%,
+        transparent
+      )
+      center / 40px 40px;
+  }
   .article-blog-main {
+    box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
+    border-radius: 6px;
+    overflow: hidden;
     padding: 20px;
     .article-view {
       /deep/ .article-item {

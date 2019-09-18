@@ -662,6 +662,15 @@ class dynamicBlog {
         })
 
         if (oneArticleBlog) {
+          oneArticleBlog.setDataValue(
+            'create_dt',
+            await TimeDistance(oneArticleBlog.create_date)
+          )
+
+          oneArticleBlog.setDataValue(
+            'update_dt',
+            await TimeDistance(oneArticleBlog.update_date)
+          )
           rows[i].setDataValue('articleBlog', oneArticleBlog)
         }
 

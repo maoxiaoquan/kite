@@ -56,7 +56,7 @@ app.use(async (ctx, next) => {
 })
 
 let renderer
-const templatePath = path.resolve(__dirname, './index.template.html')
+const templatePath = path.resolve(__dirname, '../public/index.template.html')
 
 setupDevServer(app, templatePath, (bundle, options) => {
   console.log('bundle success ~~~~~~')

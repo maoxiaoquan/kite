@@ -48,7 +48,7 @@
                    :class="{'active':currUserInfo.attention_uid_arr.indexOf(article.uid)!==-1}"
                    @click="onUserAttention"
                    href="javascript:;">
-                  <i class="iconfont icon-tianjia"></i>
+                  <i class="el-icon-plus"></i>
                   <span>关注</span>
                 </a>
                 <router-link :to="{name:'user',params:{uid:article.user.uid}}"
@@ -105,12 +105,12 @@ import { mapState } from 'vuex'
 export default {
   metaInfo () {
     return {
-      title: this.article.title || "文章不存在",
+      title: this.article.title || "",
       meta: [
         {
           // set meta
           name: "description",
-          content: `${this.article.excerpt || "文章不存在"}`
+          content: `${this.article.excerpt || ""}`
         }
       ],
       htmlAttrs: {

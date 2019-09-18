@@ -13,7 +13,7 @@
                    type="text"
                    class="send-email-input account"
                    v-model="formData.email">
-            <i class="iconfont icon-phone"></i>
+            <i class="el-icon-message"></i>
             <send-code v-model="isSendCode"
                        @click.native="sendCode"
                        storage-key="reset-sendEmailCode"
@@ -26,7 +26,7 @@
                    type="text"
                    v-model="formData.code"
                    class="send-email-code code">
-            <i class="iconfont icon-yanzhengma"></i>
+            <i class="el-icon-chat-round"></i>
           </div>
 
           <div class="input-prepend">
@@ -34,7 +34,7 @@
                    type="password"
                    class="password"
                    v-model="formData.new_password">
-            <i class="iconfont icon-mima"></i>
+            <i class="el-icon-key"></i>
           </div>
 
           <div class="input-prepend">
@@ -42,7 +42,7 @@
                    type="password"
                    class="double_password"
                    v-model="formData.repeat_new_password">
-            <i class="iconfont icon-mima"></i>
+            <i class="el-icon-key"></i>
           </div>
 
           <button @click="resetSubmit"
@@ -60,7 +60,6 @@
       </div>
     </div>
   </section>
-  <!--home-lay layout-content end-->
   <!--home-lay layout-content end-->
 </template>
 

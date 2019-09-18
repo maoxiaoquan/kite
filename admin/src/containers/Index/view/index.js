@@ -45,7 +45,7 @@ class Index extends React.Component {
           <Row gutter={24}>
             <Col span={6} className="count-view">
               <div className="box-card clearfix">
-                <i className="iconfont icon-guanliyuan" />
+                <Icon type="user" />
                 <div className="content">
                   <p>管理员</p>
                   <strong>{count.admin_user_count}</strong>
@@ -55,7 +55,7 @@ class Index extends React.Component {
 
             <Col span={6} className="count-view ">
               <div className="box-card clearfix">
-                <i className="iconfont icon-duouser" />
+                <Icon type="team" />
                 <div className="content">
                   <p>用户数</p>
                   <strong>{count.user_count}</strong>
@@ -65,7 +65,7 @@ class Index extends React.Component {
 
             <Col span={6} className="count-view ">
               <div className="box-card clearfix">
-                <i className="iconfont icon-form" />
+                <Icon type="file-text" />
                 <div className="content">
                   <p>文章数</p>
                   <strong>{count.article_count}</strong>
@@ -75,7 +75,7 @@ class Index extends React.Component {
 
             <Col span={6} className="count-view ">
               <div className="box-card clearfix">
-                <i className="iconfont icon-comments" />
+                <Icon type="message" />
                 <div className="content">
                   <p>总评论数</p>
                   <strong>{count.comment_count}</strong>

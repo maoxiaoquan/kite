@@ -23,8 +23,7 @@
       </div>
 
       <div class="user-article-blog-main">
-        <p class="description">介绍：{{articleBlogItem.articleBlog.description||'暂时没有简介，输入简介更直观表达专栏内容'}}</p>
-        <ul>
+        <ul class="user-info">
           <li class="item item-icon read-count">
             <el-image class="user-avatar"
                       :src="articleBlogItem.user.avatar"
@@ -33,9 +32,10 @@
                          class="nickname">{{articleBlogItem.user.nickname}}</router-link>
           </li>
           <li class="item item-icon">
-            <span class="time">{{setBlogTime(articleBlogItem)}}</span>
+            <span class="time">{{setBlogTime(articleBlogItem.articleBlog)}}</span>
           </li>
         </ul>
+        <p class="description">介绍：{{articleBlogItem.articleBlog.description||'暂时没有简介，输入简介更直观表达专栏内容'}}</p>
       </div>
 
       <div class="user-article-blog-footer">
@@ -144,8 +144,8 @@ export default {
   padding-bottom: 12px;
   position: relative;
   display: block;
-  height: 250px;
-  padding: 24px;
+  height: 220px;
+  padding: 20px;
   .user-article-blog-top {
     display: flex;
     .article-blog-icon {
@@ -204,6 +204,9 @@ export default {
       -webkit-line-clamp: 2;
       overflow: hidden;
       height: 42px;
+    }
+    .user-info {
+      margin-bottom: 10px;
     }
     .item {
       display: inline-block;
@@ -286,10 +289,10 @@ export default {
             display: inline-block;
             margin-left: 3px;
             color: #333;
-            border-radius: 10px;
+            border-radius: 3px;
             border: 1px solid #e0e0e0;
-            line-height: 15px;
-            padding: 2px 3px;
+            line-height: 12px;
+            padding: 1px 3px;
             &.active {
               color: #fff;
               background: #41b883;
@@ -298,6 +301,24 @@ export default {
           }
         }
       }
+    }
+  }
+  .user-article-blog-null {
+    .info {
+      font-size: 13px;
+      display: block;
+    }
+    .cancel-attention {
+      width: 100px;
+      height: 30px;
+      text-align: center;
+      line-height: 30px;
+      cursor: pointer;
+      font-size: 13px;
+      border: 1px solid #e0e0e0;
+      color: #666;
+      display: block;
+      margin: 10px auto 0;
     }
   }
 }

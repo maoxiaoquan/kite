@@ -27,7 +27,7 @@
             <comment-face @changeFace="changeFace"
                           v-if="faceVisible" />
             <i slot="reference"
-               class="iconfont icon-biaoqing"></i>
+               class="face-icon el-icon-picture-outline-round"></i>
           </el-popover>
         </div>
         <div class="right-view">
@@ -185,6 +185,9 @@ export default {
       &.btn-cancel {
         background: #999999;
       }
+    }
+    .face-icon {
+      font-size: 18px;
     }
   }
 }

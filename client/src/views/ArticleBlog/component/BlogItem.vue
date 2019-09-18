@@ -224,9 +224,9 @@ export default {
                 display: inline-block;
                 margin-left: 3px;
                 color: #333;
-                border-radius: 10px;
+                border-radius: 3px;
                 border: 1px solid #e0e0e0;
-                line-height: 15px;
+                line-height: 12px;
                 padding: 2px 3px;
                 &.active {
                   color: #fff;
@@ -251,18 +251,21 @@ export default {
   }
   .user-article-blog-tag {
     padding-top: 5px;
+    height: 45px;
     .title {
       display: inline-block;
       font-size: 12px;
     }
     a {
       display: inline-block;
-      background: #fd763a;
+      /* background: #fd763a; */
+      border: 1px solid #fd763a;
       font-size: 12px;
-      color: #fff;
-      border-radius: 10px;
-      line-height: 15px;
+      color: #fd763a;
+      border-radius: 3px;
+      line-height: 12px;
       padding: 1px 3px;
+      margin-bottom: 5px;
       margin-right: 5px;
     }
     .hint {

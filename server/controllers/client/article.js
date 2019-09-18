@@ -158,7 +158,8 @@ class Article {
 
       resClientJson(ctx, {
         state: 'success',
-        message: '文章创建成功'
+        message:
+          '文章创建成功，最晚会在4小时内由人工审核通过后发布，超过24点文章，将在次日8.30审核后发布'
       })
     } catch (err) {
       resClientJson(ctx, {
@@ -592,7 +593,8 @@ class Article {
       )
       resClientJson(ctx, {
         state: 'success',
-        message: '文章更新成功'
+        message:
+          '文章更新后需要重新审核，最晚会在4小时内由人工审核通过后发布，超过24点文章，将在次日8.30审核后发布'
       })
     } catch (err) {
       resClientJson(ctx, {

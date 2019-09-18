@@ -12,15 +12,16 @@ const microCache = new LRU({
 const isCacheable = ctx => {
   // 实现逻辑为，检查请求是否是用户特定(user-specific)。
   // 只有非用户特定(non-user-specific)页面才会缓存
+  // 暂时未用到
   console.log(ctx.url)
-  if (ctx.url === '/b') {
+  if (ctx.url === '/kite-test-cacheable') {
     return true
   }
   return false
 }
 
 let renderer
-const templatePath = path.resolve(__dirname, './index.template.html')
+const templatePath = path.resolve(__dirname, '../public/index.template.html')
 // 第 2步：根据环境变量生成不同BundleRenderer实例
 
 // 获取客户端、服务器端打包生成的json文件
@@ -40,7 +41,10 @@ const render = async (ctx, next) => {
 
   const handleError = err => {
     if (err.code === 404) {
-      const html = fs.readFileSync(path.resolve(__dirname, '../../views/404.html'), 'utf-8')
+      const html = fs.readFileSync(
+        path.resolve(__dirname, '../../views/404.html'),
+        'utf-8'
+      )
       ctx.status = 404
       ctx.body = html
     } else {
@@ -62,7 +66,7 @@ const render = async (ctx, next) => {
     const hit = microCache.get(ctx.url)
     if (hit) {
       console.log('从缓存中取', hit)
-      return ctx.body = hit
+      return (ctx.body = hit)
     }
   }
 

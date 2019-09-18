@@ -2,10 +2,11 @@
   .layout-count {
     .box-card {
       padding: 20px;
-      .iconfont {
+      .anticon {
         float: left;
         font-size: 35px;
         margin-left: 25px;
+        margin-top: 13px;
       }
       .content {
         margin-left: 100px;
@@ -29,14 +30,17 @@
         padding-right: 10px;
         overflow-y: auto;
         overflow-x: hidden;
-        &::-webkit-scrollbar-track-piece { //滚动条凹槽的颜色，还可以设置边框属性
+        &::-webkit-scrollbar-track-piece {
+          //滚动条凹槽的颜色，还可以设置边框属性
           background-color: #fff;
         }
-        &::-webkit-scrollbar { //滚动条的宽度
+        &::-webkit-scrollbar {
+          //滚动条的宽度
           width: 8px;
           height: 8px;
         }
-        &::-webkit-scrollbar-thumb { //滚动条的设置
+        &::-webkit-scrollbar-thumb {
+          //滚动条的设置
           background-color: #dddddd;
           background-clip: padding-box;
           min-height: 28px;

@@ -15,7 +15,7 @@
                    type="text"
                    class="nickname"
                    placeholder="你的昵称">
-            <i class="iconfont icon-account"></i>
+            <i class="el-icon-user-solid"></i>
           </div>
 
           <div class="input-prepend email-view">
@@ -23,7 +23,7 @@
                    type="text"
                    class="send-email-input account"
                    placeholder="邮箱">
-            <i class="iconfont icon-phone"></i>
+            <i class="el-icon-message"></i>
             <send-code v-model="isSendCode"
                        @click.native="sendCode"
                        storage-key="sendEmailCode"
@@ -37,7 +37,7 @@
                    type="text"
                    class="send-email-code code"
                    placeholder="请输入验证码">
-            <i class="iconfont icon-yanzhengma"></i>
+            <i class="el-icon-chat-round"></i>
           </div>
 
           <div class="input-prepend">
@@ -45,7 +45,7 @@
                    type="password"
                    class="password"
                    placeholder="密码">
-            <i class="iconfont icon-mima"></i>
+            <i class="el-icon-key"></i>
           </div>
 
           <div class="input-prepend">
@@ -53,7 +53,7 @@
                    type="password"
                    class="double_password"
                    placeholder="重复密码">
-            <i class="iconfont icon-mima"></i>
+            <i class="el-icon-key"></i>
           </div>
 
           <div class="footer-text">已有账户， <em @click="tapSign">登录</em></div>
@@ -62,20 +62,7 @@
                   type="button"
                   @click="register">注册</button>
         </form>
-        <!-- 更多登录方式 -->
-        <!--<div class="more-sign">
-                  <h6>社交帐号登录</h6>
-                  <ul>
-                    <li><a class="weibo" href="javascript:alert(暂未开放，请等待后续开放);"><i
-                      class="iconfont icon-xinlang"></i></a></li>
-                    <li><a class="weixin" target="_blank" href="javascript:alert(暂未开放，请等待后续开放);"><i
-                      class="iconfont icon-iconfontweixin"></i></a></li>
-                    <li><a class="qq" target="_blank" href="javascript:alert(暂未开放，请等待后续开放);"><i
-                      class="iconfont icon-qq"></i></a></li>
-                  </ul>
 
-                  <div class="weibo-geetest-captcha"></div>
-                </div>-->
       </div>
     </div>
   </section>
