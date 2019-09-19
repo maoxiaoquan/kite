@@ -14,7 +14,7 @@ async function sql () {
   //   'ALTER TABLE article_blog add COLUMN update_date datetime  comment "专栏内容更新时间";'
   // )
   await models.sequelize.query(
-    'ALTER TABLE article_blog add COLUMN like_count bigint(20) DEFAULT 0 comment "文章like数量";'
+    'ALTER TABLE article_blog add COLUMN update_date datetime  comment "专栏内容更新时间";'
   )
   process.exit()
 }

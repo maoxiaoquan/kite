@@ -42,7 +42,7 @@ class update0_4 {
         )
 
         await models.sequelize.query(
-          'ALTER TABLE article_blog add COLUMN update_date datetime(0)  comment "专栏内容更新时间";'
+          'ALTER TABLE article_blog add COLUMN update_date datetime  comment "专栏内容更新时间";'
         )
 
         await models.sequelize.query(
@@ -50,7 +50,7 @@ class update0_4 {
         )
 
         await models.sequelize.query(
-          'ALTER TABLE article_blog CHANGE description description text(0) comment "描述";'
+          'ALTER TABLE article_blog CHANGE description description text comment "描述";'
         )
 
         await models.admin_authority.bulkCreate(newAdminAuthorityList)
