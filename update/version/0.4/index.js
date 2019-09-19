@@ -35,7 +35,7 @@ class update0_4 {
         )
 
         await models.sequelize.query(
-          'ALTER TABLE article CHANGE user_topic_ids blog_ids VARCHAR(200) comment "所属的blog";'
+          'ALTER TABLE article CHANGE user_blog_ids blog_ids VARCHAR(200) comment "所属的blog";'
         )
         await models.sequelize.query(
           'ALTER TABLE article_blog add COLUMN tag_ids VARCHAR(180)  comment "个人专栏所属的标签id";'
