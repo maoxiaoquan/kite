@@ -77,6 +77,16 @@ class dynamicBlog {
         }
       })
 
+      let userArticleBlogCount = await models.article_blog.count({
+        where: {
+          uid: user.uid
+        }
+      })
+
+      if (userArticleBlogCount > 50) {
+        throw new ErrorMessage('当前只开放，用户创建的个人专栏上限为50个')
+      }
+
       if (en_name) {
         let enNameArticleBlog = await models.article_blog.findOne({
           where: {

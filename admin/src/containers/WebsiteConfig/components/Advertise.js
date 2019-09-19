@@ -254,78 +254,84 @@ class _Advertise extends React.Component {
     }
 
     return (
-      <div className="layout-main" id="system-config">
-        <h3>系统Banner</h3>
+      <div className="card layout-main" id="system-config">
+        <div className="card-body">
+          <h3>系统Banner</h3>
 
-        <Button
-          className="article-tag-user-create-btn layout-btn"
-          icon="plus"
-          type="primary"
-          style={{ marginBottom: '15px' }}
-          onClick={() => this.showModal(0)}
-        >
-          创建Banner
-        </Button>
+          <Button
+            className="article-tag-user-create-btn layout-btn"
+            icon="plus"
+            type="primary"
+            style={{ marginBottom: '15px' }}
+            onClick={() => this.showModal(0)}
+          >
+            创建Banner
+          </Button>
 
-        <Modal
-          footer={null}
-          onCancel={() => {
-            this.setState({
-              modal_visible_edit: false
-            })
-          }}
-          title="填写广告"
-          visible={this.state.modal_visible_edit}
-        >
-          <Form className="from-view" onSubmit={this.handleSubmit}>
-            <FormItem {...formItemLayout} label="广告标题">
-              {getFieldDecorator('title', {
-                rules: [
-                  {
-                    message: '请输入广告标题！',
-                    whitespace: true
-                  }
-                ]
-              })(<Input placeholder="广告标题" />)}
-            </FormItem>
+          <Modal
+            footer={null}
+            onCancel={() => {
+              this.setState({
+                modal_visible_edit: false
+              })
+            }}
+            title="填写广告"
+            visible={this.state.modal_visible_edit}
+          >
+            <Form className="from-view" onSubmit={this.handleSubmit}>
+              <FormItem {...formItemLayout} label="广告标题">
+                {getFieldDecorator('title', {
+                  rules: [
+                    {
+                      message: '请输入广告标题！',
+                      whitespace: true
+                    }
+                  ]
+                })(<Input placeholder="广告标题" />)}
+              </FormItem>
 
-            <FormItem {...formItemLayout} label="广告链接">
-              {getFieldDecorator('link', {
-                rules: [
-                  {
-                    message: '请输入广告链接！',
-                    whitespace: true
-                  }
-                ]
-              })(<Input placeholder="广告链接" />)}
-            </FormItem>
+              <FormItem {...formItemLayout} label="广告链接">
+                {getFieldDecorator('link', {
+                  rules: [
+                    {
+                      message: '请输入广告链接！',
+                      whitespace: true
+                    }
+                  ]
+                })(<Input placeholder="广告链接" />)}
+              </FormItem>
 
-            <FormItem {...formItemLayout} hasFeedback label="背景图片">
-              {getFieldDecorator('img_url', {
-                rules: [{ message: '请输入背景图片链接' }]
-              })(<Input placeholder="背景图片链接" type="text" />)}
-            </FormItem>
+              <FormItem {...formItemLayout} hasFeedback label="背景图片">
+                {getFieldDecorator('img_url', {
+                  rules: [{ message: '请输入背景图片链接' }]
+                })(<Input placeholder="背景图片链接" type="text" />)}
+              </FormItem>
 
-            <FormItem {...formItemLayout} label="是否有效">
-              {getFieldDecorator('enable', { valuePropName: 'checked' })(
-                <Switch />
-              )}
-            </FormItem>
+              <FormItem {...formItemLayout} label="是否有效">
+                {getFieldDecorator('enable', { valuePropName: 'checked' })(
+                  <Switch />
+                )}
+              </FormItem>
 
-            <FormItem {...tailFormItemLayout}>
-              <Button className="register-btn" htmlType="submit" type="primary">
-                {is_create ? '更新' : '创建广告'}
-              </Button>
-            </FormItem>
-          </Form>
-        </Modal>
+              <FormItem {...tailFormItemLayout}>
+                <Button
+                  className="register-btn"
+                  htmlType="submit"
+                  type="primary"
+                >
+                  {is_create ? '更新' : '创建广告'}
+                </Button>
+              </FormItem>
+            </Form>
+          </Modal>
 
-        <Table
-          columns={this.state.columns}
-          dataSource={stateWebsiteConfig.advertise}
-          loading={loading}
-          rowKey="option_id"
-        />
+          <Table
+            columns={this.state.columns}
+            dataSource={stateWebsiteConfig.advertise}
+            loading={loading}
+            rowKey="option_id"
+          />
+        </div>
       </div>
     )
   }

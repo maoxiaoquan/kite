@@ -14,6 +14,7 @@ import moment from 'moment'
 import 'moment/locale/zh-cn'
 
 import './app.scss'
+import './reset.scss'
 
 import App from './routers/router'
 moment.locale('zh-cn')

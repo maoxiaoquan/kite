@@ -9,6 +9,7 @@ import {
   Input,
   Select,
   Switch,
+  Breadcrumb,
   Tag
 } from 'antd'
 import { Link } from 'react-router-dom'
@@ -429,7 +430,18 @@ class AdminUser extends React.Component {
     return (
       <div className="layout-main">
         <div className="layout-main-title">
-          <Icon type="setting" /> <em>管理员管理</em>
+          <Breadcrumb>
+            <Breadcrumb.Item href="#/manager/index">
+              <Icon type="home" />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#/manager/index">
+              <span>主页</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#">
+              <span>系统管理</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>管理员管理</Breadcrumb.Item>
+          </Breadcrumb>
         </div>
 
         <div className="layout-nav-btn">
@@ -443,160 +455,160 @@ class AdminUser extends React.Component {
           </Button>
         </div>
 
-        <div className="admin-user">
-          <Modal
-            footer={null}
-            onCancel={() => {
-              this.setState({
-                modal_visible_register: false
-              })
-            }}
-            title="填写管理用户"
-            visible={this.state.modal_visible_register}
-          >
-            <Form className="from-view" onSubmit={this.handleSubmit}>
-              <FormItem {...formItemLayout} label="账户">
-                {getFieldDecorator('account', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入账户！',
-                      whitespace: true
-                    }
-                  ]
-                })(<Input placeholder="账户" />)}
-              </FormItem>
+        <div className="card admin-user">
+          <div className="card-body">
+            <Modal
+              footer={null}
+              onCancel={() => {
+                this.setState({
+                  modal_visible_register: false
+                })
+              }}
+              title="填写管理用户"
+              visible={this.state.modal_visible_register}
+            >
+              <Form className="from-view" onSubmit={this.handleSubmit}>
+                <FormItem {...formItemLayout} label="账户">
+                  {getFieldDecorator('account', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入账户！',
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input placeholder="账户" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="昵称">
-                {getFieldDecorator('nickname', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入昵称！',
-                      whitespace: true
-                    }
-                  ]
-                })(<Input placeholder="昵称" />)}
-              </FormItem>
+                <FormItem {...formItemLayout} label="昵称">
+                  {getFieldDecorator('nickname', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入昵称！',
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input placeholder="昵称" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="密码">
-                {getFieldDecorator('password', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入密码！'
-                    },
-                    {
-                      validator: this.validateToNextPassword
-                    }
-                  ]
-                })(<Input placeholder="密码" type="password" />)}
-              </FormItem>
+                <FormItem {...formItemLayout} label="密码">
+                  {getFieldDecorator('password', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入密码！'
+                      },
+                      {
+                        validator: this.validateToNextPassword
+                      }
+                    ]
+                  })(<Input placeholder="密码" type="password" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="重复密码">
-                {getFieldDecorator('confirm', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '重复输入密码！'
-                    },
-                    {
-                      validator: this.compareToFirstPassword
-                    }
-                  ]
-                })(
-                  <Input
-                    onBlur={this.handleConfirmBlur}
-                    placeholder="重复密码"
-                    type="password"
-                  />
-                )}
-              </FormItem>
+                <FormItem {...formItemLayout} label="重复密码">
+                  {getFieldDecorator('confirm', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '重复输入密码！'
+                      },
+                      {
+                        validator: this.compareToFirstPassword
+                      }
+                    ]
+                  })(
+                    <Input
+                      onBlur={this.handleConfirmBlur}
+                      placeholder="重复密码"
+                      type="password"
+                    />
+                  )}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="电子邮件">
-                {getFieldDecorator('email', {
-                  rules: [
-                    {
-                      type: 'email',
-                      message: '输入的电子邮件无效！'
-                    },
-                    {
-                      required: true,
-                      message: '请输入您的电子邮件！'
-                    }
-                  ]
-                })(<Input placeholder="邮箱" />)}
-              </FormItem>
+                <FormItem {...formItemLayout} label="电子邮件">
+                  {getFieldDecorator('email', {
+                    rules: [
+                      {
+                        type: 'email',
+                        message: '输入的电子邮件无效！'
+                      },
+                      {
+                        required: true,
+                        message: '请输入您的电子邮件！'
+                      }
+                    ]
+                  })(<Input placeholder="邮箱" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="手机号码">
-                {getFieldDecorator('phone', {
-                  rules: [{ required: true, message: '请输入你的手机号码！' }]
-                })(
-                  <Input
-                    addonBefore={prefixSelector}
-                    style={{ width: '100%' }}
-                  />
-                )}
-              </FormItem>
+                <FormItem {...formItemLayout} label="手机号码">
+                  {getFieldDecorator('phone', {
+                    rules: [{ required: true, message: '请输入你的手机号码！' }]
+                  })(
+                    <Input
+                      addonBefore={prefixSelector}
+                      style={{ width: '100%' }}
+                    />
+                  )}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="是否有效">
-                {getFieldDecorator('enable', { valuePropName: 'checked' })(
-                  <Switch />
-                )}
-              </FormItem>
+                <FormItem {...formItemLayout} label="是否有效">
+                  {getFieldDecorator('enable', { valuePropName: 'checked' })(
+                    <Switch />
+                  )}
+                </FormItem>
 
+                <FormItem {...tailFormItemLayout}>
+                  <Button
+                    className="register-btn"
+                    htmlType="submit"
+                    type="primary"
+                  >
+                    {is_create ? '创建账户' : '更新'}
+                  </Button>
+                </FormItem>
+              </Form>
+            </Modal>
+
+            <Modal
+              footer={null}
+              onCancel={() => {
+                this.setState({
+                  modal_visible_authority: false
+                })
+              }}
+              title="修改用户权限"
+              visible={this.state.modal_visible_authority}
+            >
+              <FormItem {...formItemLayout} label="管理员账户">
+                <Input
+                  disabled={true}
+                  type="text"
+                  value={stateAdminUser.current_user_info.account}
+                />
+              </FormItem>
+              <FormItem {...formItemLayout} label="角色类型">
+                <Select
+                  placeholder="请设置权限"
+                  style={{ width: 150 }}
+                  onChange={this.selectRole}
+                >
+                  {admin_role_all.map(item => (
+                    <Option key={item.role_id}>{item.role_name}</Option>
+                  ))}
+                </Select>
+              </FormItem>
               <FormItem {...tailFormItemLayout}>
                 <Button
                   className="register-btn"
-                  htmlType="submit"
                   type="primary"
+                  onClick={this.handleSubmitAuthority}
                 >
-                  {is_create ? '创建账户' : '更新'}
+                  修改权限
                 </Button>
               </FormItem>
-            </Form>
-          </Modal>
+            </Modal>
 
-          <Modal
-            footer={null}
-            onCancel={() => {
-              this.setState({
-                modal_visible_authority: false
-              })
-            }}
-            title="修改用户权限"
-            visible={this.state.modal_visible_authority}
-          >
-            <FormItem {...formItemLayout} label="管理员账户">
-              <Input
-                disabled={true}
-                type="text"
-                value={stateAdminUser.current_user_info.account}
-              />
-            </FormItem>
-            <FormItem {...formItemLayout} label="角色类型">
-              <Select
-                placeholder="请设置权限"
-                style={{ width: 150 }}
-                onChange={this.selectRole}
-              >
-                {admin_role_all.map(item => (
-                  <Option key={item.role_id}>{item.role_name}</Option>
-                ))}
-              </Select>
-            </FormItem>
-            <FormItem {...tailFormItemLayout}>
-              <Button
-                className="register-btn"
-                type="primary"
-                onClick={this.handleSubmitAuthority}
-              >
-                修改权限
-              </Button>
-            </FormItem>
-          </Modal>
-
-          <div className="layout-table">
             <Table
               columns={this.state.columns}
               dataSource={stateAdminUser.admin_user_list}

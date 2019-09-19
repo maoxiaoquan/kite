@@ -88,14 +88,17 @@ class Header extends Component {
               <Menu.Item key="alipay" />
               <SubMenu
                 title={
-                  <span className="personal">
-                    <span className="nickname">{user.nickname}</span>
+                  <div className="personal">
                     <Avatar src={user.avatar} />
-                  </span>
+                    <div className="personal-info">
+                      <span className="name">{user.nickname}</span>
+                      <span className="role">{user.account}</span>
+                    </div>
+                  </div>
                 }
               >
                 {/* <Menu.Item key="setting:1">个人资料</Menu.Item>*/}
-                <Menu.Item key="setting:2" onClick={this._esc}>
+                <Menu.Item key="setting" onClick={this._esc}>
                   退出
                 </Menu.Item>
               </SubMenu>

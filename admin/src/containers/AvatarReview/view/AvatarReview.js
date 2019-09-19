@@ -10,6 +10,7 @@ import {
   Select,
   Radio,
   Switch,
+  Breadcrumb,
   Tag,
   Alert
 } from 'antd'
@@ -234,46 +235,58 @@ class AvatarReview extends React.Component {
     return (
       <div className="layout-main">
         <div className="layout-main-title">
-          <Icon type="file-text" /> <em>用户头像审核</em>
+          <Breadcrumb>
+            <Breadcrumb.Item href="#/manager/index">
+              <Icon type="home" />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#/manager/index">
+              <span>主页</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#">
+              <span>用户管理</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>用户头像审核</Breadcrumb.Item>
+          </Breadcrumb>
         </div>
 
-        <div className="admin-article layout-card-view">
-          <div className="admin-article-bar">
-            <Form layout="inline">
-              <FormItem label="状态">
-                <Select
-                  className="select-view"
-                  value={status_val}
-                  onChange={value => {
-                    this.changeVal(value, 'status_val')
-                  }}
-                >
-                  {status_list.map((item, key) => (
-                    <Option value={key} key={key}>
-                      {item}
-                    </Option>
-                  ))}
-                </Select>
-              </FormItem>
-              <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={this.fetchAvatarReviewList}
-                >
-                  搜索
-                </Button>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={this.resetBarFrom}
-                >
-                  重置
-                </Button>
-              </Form.Item>
-            </Form>
+        <div className="card admin-article layout-card-view">
+          <div className="card-body">
+            <div className="admin-article-bar">
+              <Form layout="inline">
+                <FormItem label="状态">
+                  <Select
+                    className="select-view"
+                    value={status_val}
+                    onChange={value => {
+                      this.changeVal(value, 'status_val')
+                    }}
+                  >
+                    {status_list.map((item, key) => (
+                      <Option value={key} key={key}>
+                        {item}
+                      </Option>
+                    ))}
+                  </Select>
+                </FormItem>
+                <Form.Item>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={this.fetchAvatarReviewList}
+                  >
+                    搜索
+                  </Button>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={this.resetBarFrom}
+                  >
+                    重置
+                  </Button>
+                </Form.Item>
+              </Form>
+            </div>
           </div>
-
           <Modal
             footer={null}
             onCancel={() => {

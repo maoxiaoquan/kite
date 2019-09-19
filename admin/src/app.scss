@@ -8,10 +8,131 @@
  * 2. Prevent adjustments of font size after orientation changes in iOS.
  */
 
+:root {
+  --blue: #2c8ef8;
+  --indigo: #727cf5;
+  --purple: #6b5eae;
+  --pink: #ff679b;
+  --red: #fa5c7c;
+  --orange: #fd7e14;
+  --yellow: #ffbc00;
+  --green: #0acf97;
+  --teal: #02a8b5;
+  --cyan: #39afd1;
+  --white: #fff;
+  --gray: #98a6ad;
+  --gray-dark: #343a40;
+  --primary: #727cf5;
+  --secondary: #6c757d;
+  --success: #0acf97;
+  --info: #39afd1;
+  --warning: #ffbc00;
+  --danger: #fa5c7c;
+  --light: #e3eaef;
+  --dark: #313a46;
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --font-family-sans-serif: 'Nunito', sans-serif;
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+}
+
 html {
-  line-height: 1.15; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
-  font-family: Helvetica Neue For Number, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-family: Helvetica Neue For Number, -apple-system, BlinkMacSystemFont,
+    Segoe UI, Roboto, PingFang SC, Hiragino Sans GB, Microsoft YaHei,
+    Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+*,
+::after,
+::before {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+article,
+aside,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section {
+  display: block;
+}
+body {
+  margin: 0;
+  font-family: Nunito, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #6c757d;
+  text-align: left;
+  background-color: #fafbfe;
+}
+[tabindex='-1']:focus {
+  outline: 0 !important;
+}
+hr {
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+  line-height: 1.1;
+}
+.h1,
+h1 {
+  font-size: 2.25rem;
+}
+.h2,
+h2 {
+  font-size: 1.875rem;
+}
+.h3,
+h3 {
+  font-size: 1.5rem;
+}
+.h4,
+h4 {
+  font-size: 1.125rem;
+}
+.h5,
+h5 {
+  font-size: 0.9375rem;
+}
+.h6,
+h6 {
+  font-size: 0.75rem;
 }
 
 /* Sections
@@ -21,11 +142,18 @@ html {
  * Remove the margin in all browsers.
  */
 
-body, p, dt, dd {
+body,
+p,
+dt,
+dd {
   margin: 0;
 }
 
-ul, ol, li, dl, dd {
+ul,
+ol,
+li,
+dl,
+dd {
   padding: 0;
 }
 
@@ -33,7 +161,8 @@ div ul {
   margin: 0;
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none outside none;
 }
 
@@ -179,7 +308,8 @@ textarea {
  */
 
 button,
-input { /* 1 */
+input {
+  /* 1 */
   overflow: visible;
 }
 
@@ -189,7 +319,8 @@ input { /* 1 */
  */
 
 button,
-select { /* 1 */
+select {
+  /* 1 */
   text-transform: none;
 }
 
@@ -198,9 +329,9 @@ select { /* 1 */
  */
 
 button,
-[type="button"],
-[type="reset"],
-[type="submit"] {
+[type='button'],
+[type='reset'],
+[type='submit'] {
   -webkit-appearance: button;
 }
 
@@ -209,9 +340,9 @@ button,
  */
 
 button::-moz-focus-inner,
-[type="button"]::-moz-focus-inner,
-[type="reset"]::-moz-focus-inner,
-[type="submit"]::-moz-focus-inner {
+[type='button']::-moz-focus-inner,
+[type='reset']::-moz-focus-inner,
+[type='submit']::-moz-focus-inner {
   border-style: none;
   padding: 0;
 }
@@ -221,9 +352,9 @@ button::-moz-focus-inner,
  */
 
 button:-moz-focusring,
-[type="button"]:-moz-focusring,
-[type="reset"]:-moz-focusring,
-[type="submit"]:-moz-focusring {
+[type='button']:-moz-focusring,
+[type='reset']:-moz-focusring,
+[type='submit']:-moz-focusring {
   outline: 1px dotted ButtonText;
 }
 
@@ -272,8 +403,8 @@ textarea {
  * 2. Remove the padding in IE 10.
  */
 
-[type="checkbox"],
-[type="radio"] {
+[type='checkbox'],
+[type='radio'] {
   box-sizing: border-box; /* 1 */
   padding: 0; /* 2 */
 }
@@ -282,8 +413,8 @@ textarea {
  * Correct the cursor style of increment and decrement buttons in Chrome.
  */
 
-[type="number"]::-webkit-inner-spin-button,
-[type="number"]::-webkit-outer-spin-button {
+[type='number']::-webkit-inner-spin-button,
+[type='number']::-webkit-outer-spin-button {
   height: auto;
 }
 
@@ -292,7 +423,7 @@ textarea {
  * 2. Correct the outline style in Safari.
  */
 
-[type="search"] {
+[type='search'] {
   -webkit-appearance: textfield; /* 1 */
   outline-offset: -2px; /* 2 */
 }
@@ -301,7 +432,7 @@ textarea {
  * Remove the inner padding in Chrome and Safari on macOS.
  */
 
-[type="search"]::-webkit-search-decoration {
+[type='search']::-webkit-search-decoration {
   -webkit-appearance: none;
 }
 
@@ -354,16 +485,19 @@ template {
 }
 
 /*border-box*/
-div, p, input {
+div,
+p,
+input {
   box-sizing: border-box;
 }
 
 body {
   color: #333;
-  font-size: 16px;
   height: 100%;
-  background: #F7F9FF !important;
-  font-family: Montserrat, "Helvetica Neue", Arial, sans-serif !important;
+  background: #fafbfe !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !important;
 }
 
 a {
@@ -391,11 +525,16 @@ a:focus {
   height: 0;
   visibility: hidden;
 }
-
+.ant-layout-footer {
+  background: #fff !important;
+}
 #app {
   width: 100%;
   height: 100%;
   overflow-y: hidden;
+  .ant-layout {
+    background: #fafbfe !important;
+  }
 }
 
 .admin-manager {
@@ -414,14 +553,17 @@ a:focus {
     overflow-y: scroll;
     overflow-x: hidden;
     padding-top: 70px;
-    &::-webkit-scrollbar-track-piece { //滚动条凹槽的颜色，还可以设置边框属性
+    &::-webkit-scrollbar-track-piece {
+      //滚动条凹槽的颜色，还可以设置边框属性
       background-color: #fff;
     }
-    &::-webkit-scrollbar { //滚动条的宽度
+    &::-webkit-scrollbar {
+      //滚动条的宽度
       width: 8px;
       height: 8px;
     }
-    &::-webkit-scrollbar-thumb { //滚动条的设置
+    &::-webkit-scrollbar-thumb {
+      //滚动条的设置
       background-color: #dddddd;
       background-clip: padding-box;
       min-height: 28px;
@@ -446,45 +588,35 @@ a:focus {
   .layout-main-title {
     text-align: left;
     margin-bottom: 20px;
-    i {
-      font-size: 18px;
-      color: #14C0FF;
-    }
-    em {
-      font-size: 16px;
-      font-style: normal;
-      letter-spacing: 1px;
-      margin-left: 10px;
-    }
   }
   .layout-nav-btn {
     margin-bottom: 20px;
   }
   .layout-btn {
     border-radius: 50px;
-    box-shadow: 0 0 20px #F2F3F6;
+    box-shadow: 0 0 20px #f2f3f6;
     &.ant-btn {
       .anticon {
-        color: #14C0FF;
+        color: #14c0ff;
       }
     }
   }
   .layout-card-view {
     padding: 45px 30px;
-    background: #FFFFFF;
+    background: #ffffff;
   }
 }
 
 .layout-table {
   padding: 45px 30px;
-  background: #FFFFFF;
-  box-shadow: 0 0 20px #F2F3F6;
+  background: #ffffff;
+  box-shadow: 0 0 20px #f2f3f6;
   /*-webkit-box-shadow: 2px 2px 20px 0 rgba(221, 221, 221, 0.75);
   box-shadow: 2px 2px 20px 0 rgba(221, 221, 221, 0.75);*/
   .ant-table {
     tbody {
       tr {
-        background: #FFFFFF;
+        background: #ffffff;
       }
     }
   }
@@ -507,13 +639,118 @@ a:focus {
   }
 }
 
+.text-muted {
+  color: #98a6ad !important;
+}
+
+.float-right {
+  float: right !important;
+}
+
+.float-left {
+  float: left !important;
+}
+.widget-icon {
+  color: #727cf5 !important;
+  font-size: 18px;
+  background-color: rgba(114, 124, 245, 0.25);
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  line-height: 40px !important;
+  border-radius: 3px;
+  display: inline-block;
+}
+.mb-0,
+.my-0 {
+  margin-bottom: 0 !important;
+}
+
+.mb-3,
+.my-3 {
+  margin-bottom: 1.5rem !important;
+}
+.mt-3,
+.my-3 {
+  margin-top: 1.5rem !important;
+}
+
+.widget-flat {
+  position: relative;
+  overflow: hidden;
+}
+.xsb-card {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid #e3eaef;
+  border-radius: 0.25rem;
+  border: none;
+  -webkit-box-shadow: 0 0 35px 0 rgba(154, 161, 171, 0.15);
+  box-shadow: 0 0 35px 0 rgba(154, 161, 171, 0.15);
+  margin-bottom: 30px;
+  .xsb-card-head {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    position: relative;
+    padding: 0 25px;
+    border-bottom: 1px solid #ebedf2;
+    min-height: 60px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    &.xsb-card-head--noborder {
+      border-bottom: 0;
+    }
+
+    .xsb-card-label {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -ms-flex-line-pack: flex-first;
+      align-content: flex-first;
+      .xsb-card-title {
+        margin: 0;
+        padding: 0;
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: #48465b;
+      }
+    }
+  }
+  .xsb-card-body {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.5rem;
+  }
+}
+
 .box-card {
   margin-bottom: 30px;
-  transition: .5s;
+  transition: 0.5s;
   display: inline-block;
   position: relative;
   background: #fff;
-  box-shadow: 0 0 20px #F2F3F6;
+  box-shadow: 0 0 20px #f2f3f6;
   width: 100%;
   .box-card-header {
     padding: 30px 30px 0;
@@ -588,25 +825,6 @@ a:focus {
 
 .box-tree-title {
   width: 100%;
-}
-
-.ant-btn {
-  &.box-btn-primary {
-    color: #fff;
-    background-color: #108ee9;
-    border-color: #108ee9;
-  }
-
-  &.box-btn-orange {
-    color: #fff;
-    background-color: #fa8c16;
-    border-color: #fa8c16;
-  }
-  &.box-btn-red {
-    color: #fff;
-    background-color: #f5222d;
-    border-color: #f5222d;
-  }
 }
 
 /* reset */

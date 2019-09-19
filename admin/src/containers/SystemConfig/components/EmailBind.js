@@ -102,8 +102,8 @@ class SystemConfig extends React.Component {
 
         <div className="layout-nav-btn"></div>
 
-        <div className="layout-card-view">
-          <div className="sc-content-view">
+        <div className="card layout-card-view">
+          <div className="card-body sc-content-view">
             <Form className="from-view" onSubmit={this.handleSubmit.bind(this)}>
               <FormItem {...formItemLayout} label="系统类型">
                 {getFieldDecorator('type', {

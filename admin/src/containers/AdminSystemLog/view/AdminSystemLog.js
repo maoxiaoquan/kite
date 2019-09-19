@@ -8,7 +8,7 @@ import {
   Form,
   Input,
   Select,
-  Switch,
+  Breadcrumb,
   Tag
 } from 'antd'
 import { Link } from 'react-router-dom'
@@ -174,11 +174,22 @@ class AdminSystemLog extends React.Component {
     return (
       <div className="layout-main">
         <div className="layout-main-title">
-          <Icon type="setting" /> <em>系统日志</em>
+          <Breadcrumb>
+            <Breadcrumb.Item href="#/manager/index">
+              <Icon type="home" />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#/manager/index">
+              <span>主页</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#">
+              <span>系统管理</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>系统日志</Breadcrumb.Item>
+          </Breadcrumb>
         </div>
 
-        <div className="admin-system-tag">
-          <div className="layout-table">
+        <div className="card admin-system-tag">
+          <div className="card-body layout-table">
             <Table
               columns={this.state.columns}
               dataSource={stateAdminSystemLog.list}

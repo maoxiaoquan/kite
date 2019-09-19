@@ -212,8 +212,11 @@ class Aside extends Component {
       >
         <div className="admin-aside-menu-view">
           <div className="admin-aside-header">
-            <Link className="admin-logo-text" to="/manager/index">
-              {stateMange.website && stateMange.website.website_name}
+            <Link className="admin-logo-view" to="/manager/index">
+              <Icon type="heat-map" className="login-icon" />
+              <span className="logo-text">
+                {stateMange.website && stateMange.website.website_name}
+              </span>
             </Link>
           </div>
 
@@ -231,9 +234,15 @@ class Aside extends Component {
                 mode="inline"
               >
                 <Menu.Item>
+                  <Link to="#">
+                    <Icon type=" " />
+                    <span>NAVIGATION</span>
+                  </Link>
+                </Menu.Item>
+                <Menu.Item>
                   <Link to="/manager/index">
-                    <Icon type="home" />
-                    <span>首页</span>
+                    <Icon type="dashboard" />
+                    <span>仪表盘</span>
                   </Link>
                 </Menu.Item>
                 {aside_list.map(item => {

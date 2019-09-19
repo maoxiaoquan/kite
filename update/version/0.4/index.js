@@ -49,6 +49,10 @@ class update0_4 {
           'ALTER TABLE article_blog add COLUMN rejection_reason VARCHAR(160) comment "驳回，或者文章审核不通过的原因";'
         )
 
+        await models.sequelize.query(
+          'ALTER TABLE article_blog CHANGE description description text(0) comment "描述";'
+        )
+
         await models.admin_authority.bulkCreate(newAdminAuthorityList)
         await models.user_authority.bulkCreate(newUserAuthorityList)
         console.log(`${CURRENT_VERSION}版本升级完成`)

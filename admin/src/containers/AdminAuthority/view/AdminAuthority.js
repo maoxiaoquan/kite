@@ -9,6 +9,7 @@ import {
   Modal,
   InputNumber,
   Tree,
+  Breadcrumb,
   Switch
 } from 'antd'
 import { Link } from 'react-router-dom'
@@ -293,7 +294,18 @@ class AdminAuthority extends React.Component {
     return (
       <div className="layout-main">
         <div className="layout-main-title">
-          <Icon type="setting" /> <em>权限菜单</em>
+          <Breadcrumb>
+            <Breadcrumb.Item href="#/manager/index">
+              <Icon type="home" />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#/manager/index">
+              <span>主页</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#">
+              <span>系统管理</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>管理员权限菜单</Breadcrumb.Item>
+          </Breadcrumb>
         </div>
 
         <div className="layout-nav-btn">
@@ -307,126 +319,126 @@ class AdminAuthority extends React.Component {
           </Button>
         </div>
 
-        <div className="admin-authority">
-          <Modal
-            footer={null}
-            onCancel={this.handleCancel}
-            title="权限"
-            visible={this.state.visible}
-          >
-            <Form className="login-form" onSubmit={this.handleSubmit}>
-              {authority_parent_name ? (
-                <FormItem {...formItemLayout} label="父权限名称">
-                  <Input
-                    disabled={true}
-                    type="text"
-                    value={this.state.authority_parent_name}
-                  />
-                </FormItem>
-              ) : (
-                ''
-              )}
-
-              <FormItem {...formItemLayout} hasFeedback label="权限名称">
-                {getFieldDecorator('authority_name', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入权限名称'
-                    }
-                  ]
-                })(<Input type="text" />)}
-              </FormItem>
-
-              <FormItem {...formItemLayout} hasFeedback label="权限类型">
-                {getFieldDecorator('authority_type', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请选择权限类型！'
-                    }
-                  ]
-                })(
-                  <Select
-                    onChange={this.authorityTypeChange}
-                    placeholder="请选择权限类型！"
-                  >
-                    <Option value="1">基础菜单</Option>
-                    <Option value="2">操作和功能</Option>
-                  </Select>
+        <div className="card admin-authority">
+          <div className="card-body">
+            <Modal
+              footer={null}
+              onCancel={this.handleCancel}
+              title="权限"
+              visible={this.state.visible}
+            >
+              <Form className="login-form" onSubmit={this.handleSubmit}>
+                {authority_parent_name ? (
+                  <FormItem {...formItemLayout} label="父权限名称">
+                    <Input
+                      disabled={true}
+                      type="text"
+                      value={this.state.authority_parent_name}
+                    />
+                  </FormItem>
+                ) : (
+                  ''
                 )}
-              </FormItem>
 
-              {Number(authority_type_select) === 2 ? (
-                <FormItem {...formItemLayout} hasFeedback label="权限路径">
-                  {getFieldDecorator('authority_url', {
+                <FormItem {...formItemLayout} hasFeedback label="权限名称">
+                  {getFieldDecorator('authority_name', {
                     rules: [
                       {
                         required: true,
-                        message: '请输入权限路径'
+                        message: '请输入权限名称'
+                      }
+                    ]
+                  })(<Input type="text" />)}
+                </FormItem>
+
+                <FormItem {...formItemLayout} hasFeedback label="权限类型">
+                  {getFieldDecorator('authority_type', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请选择权限类型！'
                       }
                     ]
                   })(
-                    <Input
-                      addonBefore="/api-admin/v1"
-                      placeholder="请输入权限路径"
-                      type="text"
-                    />
+                    <Select
+                      onChange={this.authorityTypeChange}
+                      placeholder="请选择权限类型！"
+                    >
+                      <Option value="1">基础菜单</Option>
+                      <Option value="2">操作和功能</Option>
+                    </Select>
                   )}
                 </FormItem>
-              ) : (
-                <FormItem {...formItemLayout} hasFeedback label="权限Key">
-                  {getFieldDecorator('authority_url', {
+
+                {Number(authority_type_select) === 2 ? (
+                  <FormItem {...formItemLayout} hasFeedback label="权限路径">
+                    {getFieldDecorator('authority_url', {
+                      rules: [
+                        {
+                          required: true,
+                          message: '请输入权限路径'
+                        }
+                      ]
+                    })(
+                      <Input
+                        addonBefore="/api-admin/v1"
+                        placeholder="请输入权限路径"
+                        type="text"
+                      />
+                    )}
+                  </FormItem>
+                ) : (
+                  <FormItem {...formItemLayout} hasFeedback label="权限Key">
+                    {getFieldDecorator('authority_url', {
+                      rules: [
+                        {
+                          required: true,
+                          message: '请输入权限Key'
+                        }
+                      ]
+                    })(<Input placeholder="请输入权限Key" type="text" />)}
+                  </FormItem>
+                )}
+
+                <FormItem {...formItemLayout} label="排序">
+                  {getFieldDecorator('authority_sort')(<InputNumber />)}
+                </FormItem>
+
+                <FormItem {...formItemLayout} hasFeedback label="权限描述">
+                  {getFieldDecorator('authority_description', {
                     rules: [
                       {
                         required: true,
-                        message: '请输入权限Key'
+                        message: '请输入权限描述'
                       }
                     ]
-                  })(<Input placeholder="请输入权限Key" type="text" />)}
+                  })(<Input placeholder="请输入权限描述" type="text" />)}
                 </FormItem>
-              )}
 
-              <FormItem {...formItemLayout} label="排序">
-                {getFieldDecorator('authority_sort')(<InputNumber />)}
-              </FormItem>
-
-              <FormItem {...formItemLayout} hasFeedback label="权限描述">
-                {getFieldDecorator('authority_description', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入权限描述'
-                    }
-                  ]
-                })(<Input placeholder="请输入权限描述" type="text" />)}
-              </FormItem>
-
-              {Number(authority_type_select) !== 2 ? (
-                <FormItem {...formItemLayout} label="是否显示">
-                  {getFieldDecorator('enable', { valuePropName: 'checked' })(
-                    <Switch />
-                  )}
+                {Number(authority_type_select) !== 2 ? (
+                  <FormItem {...formItemLayout} label="是否显示">
+                    {getFieldDecorator('enable', { valuePropName: 'checked' })(
+                      <Switch />
+                    )}
+                  </FormItem>
+                ) : (
+                  ''
+                )}
+                <FormItem {...tailFormItemLayout}>
+                  <Button
+                    className="login-form-button"
+                    htmlType="submit"
+                    type="primary"
+                  >
+                    {this.state.is_create ? '提交' : '修改'}
+                  </Button>
+                  <Button onClick={this.handleReset} style={{ marginLeft: 8 }}>
+                    重置
+                  </Button>
                 </FormItem>
-              ) : (
-                ''
-              )}
-              <FormItem {...tailFormItemLayout}>
-                <Button
-                  className="login-form-button"
-                  htmlType="submit"
-                  type="primary"
-                >
-                  {this.state.is_create ? '提交' : '修改'}
-                </Button>
-                <Button onClick={this.handleReset} style={{ marginLeft: 8 }}>
-                  重置
-                </Button>
-              </FormItem>
-            </Form>
-          </Modal>
+              </Form>
+            </Modal>
 
-          <div className="layout-card-view">
             <Tree defaultExpandAll={true} showLine ref="tree">
               {stateAdminAuthority.admin_authority_list.map(item => {
                 return (

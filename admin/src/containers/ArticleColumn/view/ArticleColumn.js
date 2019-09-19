@@ -10,6 +10,7 @@ import {
   Select,
   Switch,
   InputNumber,
+  Breadcrumb,
   Tag,
   Alert
 } from 'antd'
@@ -393,7 +394,18 @@ class ArticleColumn extends React.Component {
     return (
       <div className="layout-main">
         <div className="layout-main-title">
-          <Icon type="file-text" /> <em>文章专栏</em>
+          <Breadcrumb>
+            <Breadcrumb.Item href="#/manager/index">
+              <Icon type="home" />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#/manager/index">
+              <span>主页</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#">
+              <span>文章管理</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>文章专栏</Breadcrumb.Item>
+          </Breadcrumb>
         </div>
 
         <div className="layout-nav-btn">
@@ -407,109 +419,112 @@ class ArticleColumn extends React.Component {
           </Button>
         </div>
 
-        <div className="article-column">
-          <Modal
-            footer={null}
-            onCancel={() => {
-              this.setState({
-                modal_visible_edit: false
-              })
-            }}
-            title="填写专栏"
-            visible={this.state.modal_visible_edit}
-          >
-            <Form className="from-view" onSubmit={this.handleSubmit}>
-              <FormItem {...formItemLayout} label="专栏名">
-                {getFieldDecorator('article_column_name', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入专栏名！',
-                      whitespace: true
-                    }
-                  ]
-                })(<Input placeholder="专栏名" />)}
-              </FormItem>
+        <div className="card article-column">
+          <div className="card-body">
+            <Modal
+              footer={null}
+              onCancel={() => {
+                this.setState({
+                  modal_visible_edit: false
+                })
+              }}
+              title="填写专栏"
+              visible={this.state.modal_visible_edit}
+            >
+              <Form className="from-view" onSubmit={this.handleSubmit}>
+                <FormItem {...formItemLayout} label="专栏名">
+                  {getFieldDecorator('article_column_name', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入专栏名！',
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input placeholder="专栏名" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="专栏名单词">
-                {getFieldDecorator('article_column_en_name', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入专栏名单词！',
-                      whitespace: true
-                    }
-                  ]
-                })(<Input placeholder="专栏名单词" />)}
-              </FormItem>
+                <FormItem {...formItemLayout} label="专栏名单词">
+                  {getFieldDecorator('article_column_en_name', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入专栏名单词！',
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input placeholder="专栏名单词" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="专栏名图标">
-                {getFieldDecorator('article_column_icon', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入专栏名图标！',
-                      whitespace: true
-                    }
-                  ]
-                })(<Input placeholder="专栏名图标" />)}
-              </FormItem>
+                <FormItem {...formItemLayout} label="专栏名图标">
+                  {getFieldDecorator('article_column_icon', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入专栏名图标！',
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input placeholder="专栏名图标" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="专栏下属专题">
-                {getFieldDecorator('article_tag_ids', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请选择文章专栏下属专题!',
-                      type: 'array'
-                    }
-                  ]
-                })(
-                  <Select mode="multiple" placeholder="请选择文章专栏下属专题">
-                    {this.state.article_tag_all.map(item => (
-                      <Option key={item.article_tag_id}>
-                        {item.article_tag_name}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
+                <FormItem {...formItemLayout} label="专栏下属专题">
+                  {getFieldDecorator('article_tag_ids', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请选择文章专栏下属专题!',
+                        type: 'array'
+                      }
+                    ]
+                  })(
+                    <Select
+                      mode="multiple"
+                      placeholder="请选择文章专栏下属专题"
+                    >
+                      {this.state.article_tag_all.map(item => (
+                        <Option key={item.article_tag_id}>
+                          {item.article_tag_name}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="排序">
-                {getFieldDecorator('sort')(<InputNumber />)}
-              </FormItem>
+                <FormItem {...formItemLayout} label="排序">
+                  {getFieldDecorator('sort')(<InputNumber />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} hasFeedback label="专栏描述">
-                {getFieldDecorator('article_column_description', {
-                  rules: [{ required: true, message: '请输入专栏描述' }]
-                })(<TextArea placeholder="请输入专栏描述" type="text" />)}
-              </FormItem>
+                <FormItem {...formItemLayout} hasFeedback label="专栏描述">
+                  {getFieldDecorator('article_column_description', {
+                    rules: [{ required: true, message: '请输入专栏描述' }]
+                  })(<TextArea placeholder="请输入专栏描述" type="text" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="是否首页显示">
-                {getFieldDecorator('is_home', { valuePropName: 'checked' })(
-                  <Switch />
-                )}
-              </FormItem>
+                <FormItem {...formItemLayout} label="是否首页显示">
+                  {getFieldDecorator('is_home', { valuePropName: 'checked' })(
+                    <Switch />
+                  )}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="是否有效">
-                {getFieldDecorator('enable', { valuePropName: 'checked' })(
-                  <Switch />
-                )}
-              </FormItem>
+                <FormItem {...formItemLayout} label="是否有效">
+                  {getFieldDecorator('enable', { valuePropName: 'checked' })(
+                    <Switch />
+                  )}
+                </FormItem>
 
-              <FormItem {...tailFormItemLayout}>
-                <Button
-                  className="register-btn"
-                  htmlType="submit"
-                  type="primary"
-                >
-                  {is_create ? '创建专栏' : '更新'}
-                </Button>
-              </FormItem>
-            </Form>
-          </Modal>
+                <FormItem {...tailFormItemLayout}>
+                  <Button
+                    className="register-btn"
+                    htmlType="submit"
+                    type="primary"
+                  >
+                    {is_create ? '创建专栏' : '更新'}
+                  </Button>
+                </FormItem>
+              </Form>
+            </Modal>
 
-          <div className="layout-table">
             <Table
               columns={this.state.columns}
               dataSource={stateArticleColumn.list}
@@ -518,16 +533,16 @@ class ArticleColumn extends React.Component {
               pagination={this.state.pagination}
               rowKey="article_column_id"
             />
-          </div>
 
-          <Alert
-            style={{ marginTop: '20px' }}
-            message="备注信息"
-            description="文章专栏与文章标题之间的关系是，文章专栏下可以有多个文章标签，一个文章标签可以从属于多个文章专栏，
+            <Alert
+              style={{ marginTop: '20px' }}
+              message="备注信息"
+              description="文章专栏与文章标题之间的关系是，文章专栏下可以有多个文章标签，一个文章标签可以从属于多个文章专栏，
     创建的文章专栏如果不选择下属标题，默认是关闭状态，只有下属标题大于0，才会开放"
-            type="info"
-            showIcon
-          />
+              type="info"
+              showIcon
+            />
+          </div>
         </div>
       </div>
     )

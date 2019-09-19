@@ -9,6 +9,7 @@ import {
   Input,
   Select,
   Switch,
+  Breadcrumb,
   Tag
 } from 'antd'
 import { Link } from 'react-router-dom'
@@ -293,61 +294,74 @@ class ArticleComment extends React.Component {
     return (
       <div className="layout-main">
         <div className="layout-main-title">
-          <Icon type="user" /> <em>用户评论管理</em>
+          <Breadcrumb>
+            <Breadcrumb.Item href="#/manager/index">
+              <Icon type="home" />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#/manager/index">
+              <span>主页</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#">
+              <span>文章管理</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>文章评论管理</Breadcrumb.Item>
+          </Breadcrumb>
         </div>
 
-        <div className="admin-comment layout-card-view">
-          <div className="admin-comment-bar">
-            <Form layout="inline">
-              <FormItem label="文章标题">
-                <Input
-                  value={content_val}
-                  onChange={e => {
-                    this.changeVal(e.target.value, 'content_val')
-                  }}
-                />
-              </FormItem>
-              <FormItem label="状态">
-                <Select
-                  className="select-view"
-                  value={status_val}
-                  onChange={value => {
-                    this.changeVal(value, 'status_val')
-                  }}
-                >
-                  <Option value="">全部</Option>
-                  {this.state.status.map((item, key) =>
-                    item ? <Option key={key}>{item}</Option> : ''
-                  )}
-                </Select>
-              </FormItem>
-              <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={this.fetchCommentList}
-                >
-                  搜索
-                </Button>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={this.resetBarFrom}
-                >
-                  重置
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
+        <div className="card admin-comment layout-card-view">
+          <div className="card-body">
+            <div className="admin-comment-bar">
+              <Form layout="inline">
+                <FormItem label="文章标题">
+                  <Input
+                    value={content_val}
+                    onChange={e => {
+                      this.changeVal(e.target.value, 'content_val')
+                    }}
+                  />
+                </FormItem>
+                <FormItem label="状态">
+                  <Select
+                    className="select-view"
+                    value={status_val}
+                    onChange={value => {
+                      this.changeVal(value, 'status_val')
+                    }}
+                  >
+                    <Option value="">全部</Option>
+                    {this.state.status.map((item, key) =>
+                      item ? <Option key={key}>{item}</Option> : ''
+                    )}
+                  </Select>
+                </FormItem>
+                <Form.Item>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={this.fetchCommentList}
+                  >
+                    搜索
+                  </Button>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={this.resetBarFrom}
+                  >
+                    重置
+                  </Button>
+                </Form.Item>
+              </Form>
+            </div>
 
-          <Table
-            columns={this.state.columns}
-            dataSource={stateArticleComment.list}
-            loading={loading}
-            onChange={this.TablePageChange.bind(this)}
-            pagination={this.state.pagination}
-            rowKey="id"
-          />
+            <Table
+              columns={this.state.columns}
+              dataSource={stateArticleComment.list}
+              loading={loading}
+              onChange={this.TablePageChange.bind(this)}
+              pagination={this.state.pagination}
+              rowKey="id"
+            />
+          </div>
         </div>
 
         <Modal

@@ -8,7 +8,7 @@ import {
   Form,
   Input,
   Select,
-  Switch,
+  Breadcrumb,
   Tag
 } from 'antd'
 import { Link } from 'react-router-dom'
@@ -282,7 +282,18 @@ class ArticleBlog extends React.Component {
     return (
       <div className="layout-main">
         <div className="layout-main-title">
-          <Icon type="file-text" /> <em>个人专栏</em>
+          <Breadcrumb>
+            <Breadcrumb.Item href="#/manager/index">
+              <Icon type="home" />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#/manager/index">
+              <span>主页</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#">
+              <span>文章管理</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>个人专栏</Breadcrumb.Item>
+          </Breadcrumb>
         </div>
 
         <div className="layout-nav-btn"></div>
@@ -358,79 +369,81 @@ class ArticleBlog extends React.Component {
             </Form>
           </Modal>
 
-          <div className="layout-table">
-            <div className="dynamic-article-bar">
-              <Form layout="inline">
-                <FormItem label="个人专题标题">
-                  <Input
-                    value={name_val}
-                    onChange={e => {
-                      this.changeVal(e.target.value, 'name_val')
-                    }}
-                  />
-                </FormItem>
-                <FormItem label="状态">
-                  <Select
-                    className="select-view"
-                    value={status_val}
-                    onChange={value => {
-                      this.changeVal(value, 'status_val')
-                    }}
-                  >
-                    <Option value="">全部</Option>
-                    {status_list.map((item, key) =>
-                      item ? (
-                        <Option value={key} key={key}>
-                          {item}
-                        </Option>
-                      ) : (
-                        ''
-                      )
-                    )}
-                  </Select>
-                </FormItem>
+          <div className="card">
+            <div className="card-body">
+              <div className="dynamic-article-bar">
+                <Form layout="inline">
+                  <FormItem label="个人专题标题">
+                    <Input
+                      value={name_val}
+                      onChange={e => {
+                        this.changeVal(e.target.value, 'name_val')
+                      }}
+                    />
+                  </FormItem>
+                  <FormItem label="状态">
+                    <Select
+                      className="select-view"
+                      value={status_val}
+                      onChange={value => {
+                        this.changeVal(value, 'status_val')
+                      }}
+                    >
+                      <Option value="">全部</Option>
+                      {status_list.map((item, key) =>
+                        item ? (
+                          <Option value={key} key={key}>
+                            {item}
+                          </Option>
+                        ) : (
+                          ''
+                        )
+                      )}
+                    </Select>
+                  </FormItem>
 
-                <FormItem hasFeedback label="是否公开">
-                  <Select
-                    placeholder="状态"
-                    value={is_public_val}
-                    onChange={value => {
-                      this.changeVal(value, 'is_public_val')
-                    }}
-                  >
-                    <Option value="">全部</Option>
-                    <Option value={0}>个人</Option>
-                    <Option value={1}>公开</Option>
-                  </Select>
-                </FormItem>
+                  <FormItem hasFeedback label="是否公开">
+                    <Select
+                      placeholder="状态"
+                      value={is_public_val}
+                      onChange={value => {
+                        this.changeVal(value, 'is_public_val')
+                      }}
+                    >
+                      <Option value="">全部</Option>
+                      <Option value={0}>个人</Option>
+                      <Option value={1}>公开</Option>
+                    </Select>
+                  </FormItem>
 
-                <Form.Item>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    onClick={this.fetchArticleBlogList}
-                  >
-                    搜索
-                  </Button>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    onClick={this.resetBarFrom}
-                  >
-                    重置
-                  </Button>
-                </Form.Item>
-              </Form>
+                  <Form.Item>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      onClick={this.fetchArticleBlogList}
+                    >
+                      搜索
+                    </Button>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      onClick={this.resetBarFrom}
+                    >
+                      重置
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </div>
+
+              <Table
+                columns={this.state.columns}
+                dataSource={stateArticleBlog.list}
+                loading={loading}
+                onChange={this.TablePageChange.bind(this)}
+                pagination={this.state.pagination}
+                rowKey="blog_id"
+              />
             </div>
-
-            <Table
-              columns={this.state.columns}
-              dataSource={stateArticleBlog.list}
-              loading={loading}
-              onChange={this.TablePageChange.bind(this)}
-              pagination={this.state.pagination}
-              rowKey="blog_id"
-            />
           </div>
         </div>
       </div>

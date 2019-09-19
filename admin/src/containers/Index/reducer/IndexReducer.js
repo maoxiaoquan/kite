@@ -1,8 +1,13 @@
 const initState = {
-  count: '',
+  articleBlogCount: {},
+  articleCommentCount: {},
+  articleCount: {},
+  count: {},
+  dynamicCommentCount: {},
+  dynamicCount: {},
   new_article: [],
-  new_user: [],
-  new_comment: []
+  new_comment: [],
+  new_user: []
 }
 
 function reducer (state = initState, action) {
@@ -10,10 +15,7 @@ function reducer (state = initState, action) {
     case 'SET_ADMIN_COUNT':
       return {
         ...state,
-        count: action.data.count,
-        new_article: action.data.new_article,
-        new_user: action.data.new_user,
-        new_comment: action.data.new_comment
+        ...action.data
       }
     default:
       return state

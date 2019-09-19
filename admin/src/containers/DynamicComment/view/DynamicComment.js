@@ -9,6 +9,7 @@ import {
   Input,
   Select,
   Switch,
+  Breadcrumb,
   Tag
 } from 'antd'
 import { Link } from 'react-router-dom'
@@ -293,93 +294,110 @@ class DynamicComment extends React.Component {
     return (
       <div className="layout-main">
         <div className="layout-main-title">
-          <Icon type="user" /> <em>用户动态评论管理</em>
+          <Breadcrumb>
+            <Breadcrumb.Item href="#/manager/index">
+              <Icon type="home" />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#/manager/index">
+              <span>主页</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#">
+              <span>动态管理</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>动态评论管理</Breadcrumb.Item>
+          </Breadcrumb>
         </div>
 
-        <div className="admin-comment layout-card-view">
-          <div className="admin-comment-bar">
-            <Form layout="inline">
-              <FormItem label="文章标题">
-                <Input
-                  value={content_val}
-                  onChange={e => {
-                    this.changeVal(e.target.value, 'content_val')
-                  }}
-                />
-              </FormItem>
-              <FormItem label="状态">
-                <Select
-                  className="select-view"
-                  value={status_val}
-                  onChange={value => {
-                    this.changeVal(value, 'status_val')
-                  }}
-                >
-                  <Option value="">全部</Option>
-                  {this.state.status.map((item, key) =>
-                    item ? <Option key={key}>{item}</Option> : ''
-                  )}
-                </Select>
-              </FormItem>
-              <Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={this.fetchCommentList}
-                >
-                  搜索
-                </Button>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={this.resetBarFrom}
-                >
-                  重置
-                </Button>
-              </Form.Item>
-            </Form>
+        <div className="card">
+          <div className="card-body">
+            <div className="admin-comment-bar">
+              <Form layout="inline">
+                <FormItem label="文章标题">
+                  <Input
+                    value={content_val}
+                    onChange={e => {
+                      this.changeVal(e.target.value, 'content_val')
+                    }}
+                  />
+                </FormItem>
+                <FormItem label="状态">
+                  <Select
+                    className="select-view"
+                    value={status_val}
+                    onChange={value => {
+                      this.changeVal(value, 'status_val')
+                    }}
+                  >
+                    <Option value="">全部</Option>
+                    {this.state.status.map((item, key) =>
+                      item ? <Option key={key}>{item}</Option> : ''
+                    )}
+                  </Select>
+                </FormItem>
+                <Form.Item>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={this.fetchCommentList}
+                  >
+                    搜索
+                  </Button>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={this.resetBarFrom}
+                  >
+                    重置
+                  </Button>
+                </Form.Item>
+              </Form>
+            </div>
+
+            <Table
+              columns={this.state.columns}
+              dataSource={stateDynamicComment.list}
+              loading={loading}
+              onChange={this.TablePageChange.bind(this)}
+              pagination={this.state.pagination}
+              rowKey="id"
+            />
           </div>
 
-          <Table
-            columns={this.state.columns}
-            dataSource={stateDynamicComment.list}
-            loading={loading}
-            onChange={this.TablePageChange.bind(this)}
-            pagination={this.state.pagination}
-            rowKey="id"
-          />
+          <Modal
+            footer={null}
+            onCancel={() => {
+              this.setState({
+                modal_visible_edit: false
+              })
+            }}
+            title="修改"
+            visible={this.state.modal_visible_edit}
+          >
+            <Form className="from-view" onSubmit={this.handleSubmit}>
+              <FormItem {...formItemLayout} hasFeedback label="状态">
+                {getFieldDecorator('status', {
+                  rules: [{ required: true, message: '请选择状态！' }]
+                })(
+                  <Select placeholder="状态">
+                    {this.state.status.map((item, key) =>
+                      item ? <Option key={key}>{item}</Option> : ''
+                    )}
+                  </Select>
+                )}
+              </FormItem>
+
+              <FormItem {...tailFormItemLayout}>
+                <Button
+                  className="register-btn"
+                  htmlType="submit"
+                  type="primary"
+                >
+                  确定
+                </Button>
+              </FormItem>
+            </Form>
+          </Modal>
         </div>
-
-        <Modal
-          footer={null}
-          onCancel={() => {
-            this.setState({
-              modal_visible_edit: false
-            })
-          }}
-          title="修改"
-          visible={this.state.modal_visible_edit}
-        >
-          <Form className="from-view" onSubmit={this.handleSubmit}>
-            <FormItem {...formItemLayout} hasFeedback label="状态">
-              {getFieldDecorator('status', {
-                rules: [{ required: true, message: '请选择状态！' }]
-              })(
-                <Select placeholder="状态">
-                  {this.state.status.map((item, key) =>
-                    item ? <Option key={key}>{item}</Option> : ''
-                  )}
-                </Select>
-              )}
-            </FormItem>
-
-            <FormItem {...tailFormItemLayout}>
-              <Button className="register-btn" htmlType="submit" type="primary">
-                确定
-              </Button>
-            </FormItem>
-          </Form>
-        </Modal>
       </div>
     )
   }

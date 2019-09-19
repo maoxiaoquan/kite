@@ -9,6 +9,7 @@ import {
   Input,
   Select,
   Switch,
+  Breadcrumb,
   Tag
 } from 'antd'
 
@@ -356,99 +357,113 @@ class User extends React.Component {
     return (
       <div className="layout-main">
         <div className="layout-main-title">
-          <Icon type="user" /> <em>用户管理</em>
+          <Breadcrumb>
+            <Breadcrumb.Item href="#/manager/index">
+              <Icon type="home" />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#/manager/index">
+              <span>主页</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#">
+              <span>用户管理</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>用户管理</Breadcrumb.Item>
+          </Breadcrumb>
         </div>
 
         <div className="layout-nav-btn" />
 
-        <div className="admin-web-user">
-          <Modal
-            footer={null}
-            onCancel={() => {
-              this.setState({
-                modal_visible_edit: false
-              })
-            }}
-            title="修改用户"
-            visible={this.state.modal_visible_edit}
-          >
-            <Form className="from-view" onSubmit={this.handleSubmit.bind(this)}>
-              <FormItem {...formItemLayout} label="昵称">
-                {getFieldDecorator('nickname', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入昵称！',
-                      whitespace: true
-                    }
-                  ]
-                })(<Input disabled={true} placeholder="昵称" />)}
-              </FormItem>
+        <div className="card admin-web-user">
+          <div className="card-body">
+            <Modal
+              footer={null}
+              onCancel={() => {
+                this.setState({
+                  modal_visible_edit: false
+                })
+              }}
+              title="修改用户"
+              visible={this.state.modal_visible_edit}
+            >
+              <Form
+                className="from-view"
+                onSubmit={this.handleSubmit.bind(this)}
+              >
+                <FormItem {...formItemLayout} label="昵称">
+                  {getFieldDecorator('nickname', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入昵称！',
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input disabled={true} placeholder="昵称" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="用户角色标签">
-                {getFieldDecorator('user_role_ids', {
-                  rules: [
-                    {
-                      required: false,
-                      message: '请选择用户角色标签!',
-                      type: 'array'
-                    }
-                  ]
-                })(
-                  <Select mode="multiple" placeholder="请选择用户角色标签">
-                    {this.state.user_role_all.map(item => (
-                      <Option key={item.user_role_id}>
-                        {item.user_role_name}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
+                <FormItem {...formItemLayout} label="用户角色标签">
+                  {getFieldDecorator('user_role_ids', {
+                    rules: [
+                      {
+                        required: false,
+                        message: '请选择用户角色标签!',
+                        type: 'array'
+                      }
+                    ]
+                  })(
+                    <Select mode="multiple" placeholder="请选择用户角色标签">
+                      {this.state.user_role_all.map(item => (
+                        <Option key={item.user_role_id}>
+                          {item.user_role_name}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="是否可登录">
-                {getFieldDecorator('enable', { valuePropName: 'checked' })(
-                  <Switch />
-                )}
-              </FormItem>
+                <FormItem {...formItemLayout} label="是否可登录">
+                  {getFieldDecorator('enable', { valuePropName: 'checked' })(
+                    <Switch />
+                  )}
+                </FormItem>
 
-              <FormItem {...tailFormItemLayout}>
-                <Button
-                  className="register-btn"
-                  htmlType="submit"
-                  type="primary"
-                >
-                  确定
-                </Button>
-              </FormItem>
-            </Form>
-          </Modal>
+                <FormItem {...tailFormItemLayout}>
+                  <Button
+                    className="register-btn"
+                    htmlType="submit"
+                    type="primary"
+                  >
+                    确定
+                  </Button>
+                </FormItem>
+              </Form>
+            </Modal>
 
-          <Modal
-            onOk={() => {
-              this.banUser({ type: 'article' })
-            }}
-            onCancel={() => {
-              this.setState({
-                isBanVisible: false
-              })
-            }}
-            title="禁言用户"
-            visible={this.state.isBanVisible}
-          >
-            <div>
-              <DatePicker
-                onOk={Result => {
-                  this.setState({
-                    banDate: format(Result, 'YYYY-MM-DD HH:mm:ss')
-                  })
-                }}
-                format="YYYY-MM-DD HH:mm:ss"
-                showTime={{ defaultValue: format('00:00:00', 'HH:mm:ss') }}
-              />
-            </div>
-          </Modal>
+            <Modal
+              onOk={() => {
+                this.banUser({ type: 'article' })
+              }}
+              onCancel={() => {
+                this.setState({
+                  isBanVisible: false
+                })
+              }}
+              title="禁言用户"
+              visible={this.state.isBanVisible}
+            >
+              <div>
+                <DatePicker
+                  onOk={Result => {
+                    this.setState({
+                      banDate: format(Result, 'YYYY-MM-DD HH:mm:ss')
+                    })
+                  }}
+                  format="YYYY-MM-DD HH:mm:ss"
+                  showTime={{ defaultValue: format('00:00:00', 'HH:mm:ss') }}
+                />
+              </div>
+            </Modal>
 
-          <div className="layout-table">
             <Table
               columns={this.state.columns}
               dataSource={stateUser.user_list}

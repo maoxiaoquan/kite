@@ -1,8 +1,17 @@
-
 .admin-aside-menu {
   position: relative;
   z-index: 101;
-  box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+  &.ant-layout-sider {
+    background: linear-gradient(135deg, #8f75da 0, #727cf5 60%);
+  }
+  .ant-menu-dark {
+    background: transparent;
+  }
+  .ant-menu-dark .ant-menu-sub {
+    background: transparent;
+    box-shadow: none;
+  }
+
   .admin-aside-menu-view {
     display: -ms-flexbox;
     display: flex;
@@ -10,18 +19,34 @@
     flex-direction: column;
     -ms-flex-pack: justify;
     justify-content: space-between;
+
     .admin-aside-header {
       height: 70px;
-      text-align: center;
+      padding-left: 30px;
       line-height: 70px;
-      background: #002140;
+      display: flex;
       overflow: hidden;
-      a {
-        font-size: 25px;
-        color: #FFFFFF;
+      justify-content: space-between;
+      .login-icon {
+        font-size: 30px;
+        color: #fff;
+        display: inline-block;
+        margin-right: 15px;
+        vertical-align: middle;
+      }
+      .logo-text {
+        font-size: 18px;
+        font-weight: 500;
+        display: inline-block;
+        vertical-align: middle;
+        color: #ffffff;
       }
     }
     .admin-aside-content {
+      .ant-menu.ant-menu-dark .ant-menu-item-selected,
+      .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
+        background-color: rgba(0, 0, 0, 0.09);
+      }
       height: calc(100vh - 70px);
       overflow-x: hidden;
       -ms-flex: 1 1;

@@ -9,6 +9,7 @@ import {
   Input,
   Select,
   Switch,
+  Breadcrumb,
   Tag,
   Upload
 } from 'antd'
@@ -367,7 +368,18 @@ class Picture extends React.Component {
     return (
       <div className="layout-main">
         <div className="layout-main-title">
-          <Icon type="desktop" /> <em>图片管理</em>
+          <Breadcrumb>
+            <Breadcrumb.Item href="#/manager/index">
+              <Icon type="home" />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#/manager/index">
+              <span>主页</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#">
+              <span>网站管理</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>图片管理</Breadcrumb.Item>
+          </Breadcrumb>
         </div>
 
         <div className="layout-nav-btn">
@@ -381,73 +393,77 @@ class Picture extends React.Component {
           </Button>
         </div>
 
-        <div className="picture-view">
-          <Modal
-            footer={null}
-            onCancel={() => {
-              this.setState({
-                modal_visible_edit: false
-              })
-            }}
-            title="填写内容"
-            visible={this.state.modal_visible_edit}
-          >
-            <Form className="from-view" onSubmit={this.handleSubmit}>
-              <FormItem {...formItemLayout} label="图片标题">
-                {getFieldDecorator('picture_title', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入图片标题！',
-                      whitespace: true
-                    }
-                  ]
-                })(<Input placeholder="图片标题" />)}
-              </FormItem>
+        <div className="card picture-view">
+          <div className="card-body">
+            <Modal
+              footer={null}
+              onCancel={() => {
+                this.setState({
+                  modal_visible_edit: false
+                })
+              }}
+              title="填写内容"
+              visible={this.state.modal_visible_edit}
+            >
+              <Form className="from-view" onSubmit={this.handleSubmit}>
+                <FormItem {...formItemLayout} label="图片标题">
+                  {getFieldDecorator('picture_title', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入图片标题！',
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input placeholder="图片标题" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="图片说明">
-                {getFieldDecorator('description', {
-                  rules: [
-                    { required: true, message: '图片说明！', whitespace: true }
-                  ]
-                })(<Input placeholder="图片说明" />)}
-              </FormItem>
+                <FormItem {...formItemLayout} label="图片说明">
+                  {getFieldDecorator('description', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '图片说明！',
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input placeholder="图片说明" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="Upload">
-                {getFieldDecorator('picture_url', {
-                  getValueFromEvent: this.normFile
-                })(
-                  <Upload
-                    {...this.state.upload_prop}
-                    fileList={this.state.fileList}
+                <FormItem {...formItemLayout} label="Upload">
+                  {getFieldDecorator('picture_url', {
+                    getValueFromEvent: this.normFile
+                  })(
+                    <Upload
+                      {...this.state.upload_prop}
+                      fileList={this.state.fileList}
+                    >
+                      <div>
+                        <Icon type="plus" />
+                        <div className="ant-upload-text">Upload</div>
+                      </div>
+                    </Upload>
+                  )}
+                </FormItem>
+
+                <FormItem {...formItemLayout} label="是否有效">
+                  {getFieldDecorator('enable', { valuePropName: 'checked' })(
+                    <Switch />
+                  )}
+                </FormItem>
+
+                <FormItem {...tailFormItemLayout}>
+                  <Button
+                    className="register-btn"
+                    htmlType="submit"
+                    type="primary"
                   >
-                    <div>
-                      <Icon type="plus" />
-                      <div className="ant-upload-text">Upload</div>
-                    </div>
-                  </Upload>
-                )}
-              </FormItem>
+                    {is_create ? '创建标签' : '更新'}
+                  </Button>
+                </FormItem>
+              </Form>
+            </Modal>
 
-              <FormItem {...formItemLayout} label="是否有效">
-                {getFieldDecorator('enable', { valuePropName: 'checked' })(
-                  <Switch />
-                )}
-              </FormItem>
-
-              <FormItem {...tailFormItemLayout}>
-                <Button
-                  className="register-btn"
-                  htmlType="submit"
-                  type="primary"
-                >
-                  {is_create ? '创建标签' : '更新'}
-                </Button>
-              </FormItem>
-            </Form>
-          </Modal>
-
-          <div className="layout-table">
             <Table
               columns={this.state.columns}
               dataSource={statePicture.list}

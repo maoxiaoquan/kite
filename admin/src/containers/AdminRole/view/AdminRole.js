@@ -1,6 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Icon, Table, Button, Modal, Form, Input, Select, Tree } from 'antd'
+import {
+  Icon,
+  Table,
+  Button,
+  Modal,
+  Breadcrumb,
+  Form,
+  Input,
+  Select,
+  Tree
+} from 'antd'
 import { Link } from 'react-router-dom'
 import alert from '../../../utils/alert'
 import './AdminRole.scss'
@@ -354,7 +364,18 @@ class AdminRole extends React.Component {
     return (
       <div className="layout-main">
         <div className="layout-main-title">
-          <Icon type="setting" /> <em>角色管理</em>
+          <Breadcrumb>
+            <Breadcrumb.Item href="#/manager/index">
+              <Icon type="home" />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#/manager/index">
+              <span>主页</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#">
+              <span>系统管理</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>管理员角色管理</Breadcrumb.Item>
+          </Breadcrumb>
         </div>
 
         <div className="layout-nav-btn">
@@ -368,90 +389,90 @@ class AdminRole extends React.Component {
           </Button>
         </div>
 
-        <div className="admin-role">
-          <Modal
-            footer={null}
-            onCancel={this.handleCancel}
-            title="创建角色"
-            visible={this.state.visible_create_role_modal}
-          >
-            <FormItem {...formItemLayout} label="角色名">
-              <Input
-                className="input-view"
-                onChange={e => {
-                  this.setState({ role_name: e.target.value })
-                }}
-                placeholder="请填写角色名"
-                value={role_name}
-              />
-            </FormItem>
-
-            <FormItem {...formItemLayout} label="角色描述">
-              <TextArea
-                autosize={{ minRows: 2, maxRows: 6 }}
-                onChange={e => {
-                  this.setState({ role_description: e.target.value })
-                }}
-                placeholder="请填写角色描述"
-                value={role_description}
-              />
-            </FormItem>
-
-            <FormItem {...tailFormItemLayout}>
-              <Button
-                className="register-btn"
-                htmlType="submit"
-                onClick={this.handleOk}
-                type="primary"
-              >
-                {is_create ? '创建' : '更新'}
-              </Button>
-            </FormItem>
-          </Modal>
-
-          <Modal
-            footer={null}
-            onCancel={() => {
-              this.setState({
-                visible_set_authority_modal: false
-              })
-            }}
-            title="设置权限"
-            visible={this.state.visible_set_authority_modal}
-          >
-            <Tree
-              checkable
-              checkedKeys={this.state.role_authority_list}
-              onCheck={this.onCheck}
-              defaultExpandAll={true}
-              ref="tree"
-              showLine
+        <div className="card admin-role">
+          <div className="card-body">
+            <Modal
+              footer={null}
+              onCancel={this.handleCancel}
+              title="创建角色"
+              visible={this.state.visible_create_role_modal}
             >
-              {this.renderTreeNodes(stateAdminAuthority.admin_authority_list)}
-            </Tree>
-            <div className="admin-role-foot">
-              <Button
-                icon="save"
-                onClick={() => {
-                  this.fetchSetAdminRoleAuthority()
-                }}
-                type="primary"
-              >
-                确定
-              </Button>
-              <Button
-                onClick={() => {
-                  this.setState({
-                    visible_set_authority_modal: false
-                  })
-                }}
-              >
-                取消
-              </Button>
-            </div>
-          </Modal>
+              <FormItem {...formItemLayout} label="角色名">
+                <Input
+                  className="input-view"
+                  onChange={e => {
+                    this.setState({ role_name: e.target.value })
+                  }}
+                  placeholder="请填写角色名"
+                  value={role_name}
+                />
+              </FormItem>
 
-          <div className="layout-table">
+              <FormItem {...formItemLayout} label="角色描述">
+                <TextArea
+                  autosize={{ minRows: 2, maxRows: 6 }}
+                  onChange={e => {
+                    this.setState({ role_description: e.target.value })
+                  }}
+                  placeholder="请填写角色描述"
+                  value={role_description}
+                />
+              </FormItem>
+
+              <FormItem {...tailFormItemLayout}>
+                <Button
+                  className="register-btn"
+                  htmlType="submit"
+                  onClick={this.handleOk}
+                  type="primary"
+                >
+                  {is_create ? '创建' : '更新'}
+                </Button>
+              </FormItem>
+            </Modal>
+
+            <Modal
+              footer={null}
+              onCancel={() => {
+                this.setState({
+                  visible_set_authority_modal: false
+                })
+              }}
+              title="设置权限"
+              visible={this.state.visible_set_authority_modal}
+            >
+              <Tree
+                checkable
+                checkedKeys={this.state.role_authority_list}
+                onCheck={this.onCheck}
+                defaultExpandAll={true}
+                ref="tree"
+                showLine
+              >
+                {this.renderTreeNodes(stateAdminAuthority.admin_authority_list)}
+              </Tree>
+              <div className="admin-role-foot">
+                <Button
+                  icon="save"
+                  onClick={() => {
+                    this.fetchSetAdminRoleAuthority()
+                  }}
+                  type="primary"
+                >
+                  确定
+                </Button>
+                <Button
+                  onClick={() => {
+                    this.setState({
+                      visible_set_authority_modal: false
+                    })
+                  }}
+                >
+                  取消
+                </Button>
+              </div>
+            </Modal>
+
             <Table
               columns={this.state.columns}
               dataSource={stateAdminRole.admin_role_list}

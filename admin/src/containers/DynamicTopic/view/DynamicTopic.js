@@ -10,6 +10,7 @@ import {
   Select,
   Switch,
   Tag,
+  Breadcrumb,
   InputNumber
 } from 'antd'
 import { Link } from 'react-router-dom'
@@ -359,7 +360,18 @@ class DynamicTopic extends React.Component {
     return (
       <div className="layout-main">
         <div className="layout-main-title">
-          <Icon type="file-text" /> <em>文章专题</em>
+          <Breadcrumb>
+            <Breadcrumb.Item href="#/manager/index">
+              <Icon type="home" />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#/manager/index">
+              <span>主页</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#">
+              <span>动态管理</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>动态专题</Breadcrumb.Item>
+          </Breadcrumb>
         </div>
 
         <div className="layout-nav-btn">
@@ -373,95 +385,95 @@ class DynamicTopic extends React.Component {
           </Button>
         </div>
 
-        <div className="article-tag">
-          <Modal
-            footer={null}
-            onCancel={() => {
-              this.setState({
-                modal_visible_edit: false
-              })
-            }}
-            title="填写专题"
-            visible={this.state.modal_visible_edit}
-          >
-            <Form className="from-view" onSubmit={this.handleSubmit}>
-              <FormItem {...formItemLayout} label="专题名">
-                {getFieldDecorator('name', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入专题名！',
-                      whitespace: true
-                    }
-                  ]
-                })(<Input placeholder="专题名" />)}
-              </FormItem>
+        <div className="card article-tag">
+          <div className="card-body">
+            <Modal
+              footer={null}
+              onCancel={() => {
+                this.setState({
+                  modal_visible_edit: false
+                })
+              }}
+              title="填写专题"
+              visible={this.state.modal_visible_edit}
+            >
+              <Form className="from-view" onSubmit={this.handleSubmit}>
+                <FormItem {...formItemLayout} label="专题名">
+                  {getFieldDecorator('name', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入专题名！',
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input placeholder="专题名" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="专题名单词">
-                {getFieldDecorator('en_name', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入专题单词！',
-                      whitespace: true
-                    }
-                  ]
-                })(<Input placeholder="专题单词" />)}
-              </FormItem>
+                <FormItem {...formItemLayout} label="专题名单词">
+                  {getFieldDecorator('en_name', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入专题单词！',
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input placeholder="专题单词" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="专题图标地址">
-                {getFieldDecorator('icon', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入专题图标！',
-                      whitespace: true
-                    }
-                  ]
-                })(<Input placeholder="专题图标地址" />)}
-              </FormItem>
+                <FormItem {...formItemLayout} label="专题图标地址">
+                  {getFieldDecorator('icon', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入专题图标！',
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input placeholder="专题图标地址" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} hasFeedback label="专题描述">
-                {getFieldDecorator('description', {
-                  rules: [{ required: true, message: '请输入专题描述' }]
-                })(<TextArea placeholder="请输入专题描述" type="text" />)}
-              </FormItem>
+                <FormItem {...formItemLayout} hasFeedback label="专题描述">
+                  {getFieldDecorator('description', {
+                    rules: [{ required: true, message: '请输入专题描述' }]
+                  })(<TextArea placeholder="请输入专题描述" type="text" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="首页显示">
-                {getFieldDecorator('is_show', { valuePropName: 'checked' })(
-                  <Switch />
-                )}
-              </FormItem>
+                <FormItem {...formItemLayout} label="首页显示">
+                  {getFieldDecorator('is_show', { valuePropName: 'checked' })(
+                    <Switch />
+                  )}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="是否有效">
-                {getFieldDecorator('enable', { valuePropName: 'checked' })(
-                  <Switch />
-                )}
-              </FormItem>
+                <FormItem {...formItemLayout} label="是否有效">
+                  {getFieldDecorator('enable', { valuePropName: 'checked' })(
+                    <Switch />
+                  )}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="是否加入首页或者推荐">
-                {getFieldDecorator('is_push', { valuePropName: 'checked' })(
-                  <Switch />
-                )}
-              </FormItem>
+                <FormItem {...formItemLayout} label="是否加入首页或者推荐">
+                  {getFieldDecorator('is_push', { valuePropName: 'checked' })(
+                    <Switch />
+                  )}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="排序">
-                {getFieldDecorator('sort')(<InputNumber />)}
-              </FormItem>
+                <FormItem {...formItemLayout} label="排序">
+                  {getFieldDecorator('sort')(<InputNumber />)}
+                </FormItem>
 
-              <FormItem {...tailFormItemLayout}>
-                <Button
-                  className="register-btn"
-                  htmlType="submit"
-                  type="primary"
-                >
-                  {is_create ? '创建专题' : '更新'}
-                </Button>
-              </FormItem>
-            </Form>
-          </Modal>
+                <FormItem {...tailFormItemLayout}>
+                  <Button
+                    className="register-btn"
+                    htmlType="submit"
+                    type="primary"
+                  >
+                    {is_create ? '创建专题' : '更新'}
+                  </Button>
+                </FormItem>
+              </Form>
+            </Modal>
 
-          <div className="layout-table">
             <Table
               columns={this.state.columns}
               dataSource={stateDynamicTopic.list}

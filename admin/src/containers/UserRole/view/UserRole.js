@@ -9,6 +9,7 @@ import {
   Input,
   Select,
   Switch,
+  Breadcrumb,
   Tag,
   Tree
 } from 'antd'
@@ -456,7 +457,18 @@ class UserRole extends React.Component {
     return (
       <div className="layout-main">
         <div className="layout-main-title">
-          <Icon type="user" /> <em>角色管理</em>
+          <Breadcrumb>
+            <Breadcrumb.Item href="#/manager/index">
+              <Icon type="home" />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#/manager/index">
+              <span>主页</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="#">
+              <span>用户管理</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>用户角色</Breadcrumb.Item>
+          </Breadcrumb>
         </div>
 
         <div className="layout-nav-btn">
@@ -470,138 +482,138 @@ class UserRole extends React.Component {
           </Button>
         </div>
 
-        <div className="user-role">
-          <Modal
-            footer={null}
-            onCancel={() => {
-              this.setState({
-                modal_visible_edit: false
-              })
-            }}
-            title="填写角色"
-            visible={this.state.modal_visible_edit}
-          >
-            <Form className="from-view" onSubmit={this.handleSubmit}>
-              <FormItem {...formItemLayout} label="角色名">
-                {getFieldDecorator('user_role_name', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入角色名！',
-                      whitespace: true
-                    }
-                  ]
-                })(<Input placeholder="角色名" />)}
-              </FormItem>
+        <div className="card user-role">
+          <div className="card-body">
+            <Modal
+              footer={null}
+              onCancel={() => {
+                this.setState({
+                  modal_visible_edit: false
+                })
+              }}
+              title="填写角色"
+              visible={this.state.modal_visible_edit}
+            >
+              <Form className="from-view" onSubmit={this.handleSubmit}>
+                <FormItem {...formItemLayout} label="角色名">
+                  {getFieldDecorator('user_role_name', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入角色名！',
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input placeholder="角色名" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} hasFeedback label="角色类型">
-                {getFieldDecorator('user_role_type', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请选择角色类型！'
-                    }
-                  ]
-                })(
-                  <Select placeholder="请选择角色类型！">
-                    {user_role_type_list.map((item, key) => (
-                      <Option value={key} key={key}>
-                        {item}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
+                <FormItem {...formItemLayout} hasFeedback label="角色类型">
+                  {getFieldDecorator('user_role_type', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请选择角色类型！'
+                      }
+                    ]
+                  })(
+                    <Select placeholder="请选择角色类型！">
+                      {user_role_type_list.map((item, key) => (
+                        <Option value={key} key={key}>
+                          {item}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="角色名图标">
-                {getFieldDecorator('user_role_icon', {
-                  rules: [
-                    {
-                      message: '请输入角色名图标！',
-                      whitespace: true
-                    }
-                  ]
-                })(<Input placeholder="角色名图标" />)}
-              </FormItem>
+                <FormItem {...formItemLayout} label="角色名图标">
+                  {getFieldDecorator('user_role_icon', {
+                    rules: [
+                      {
+                        message: '请输入角色名图标！',
+                        whitespace: true
+                      }
+                    ]
+                  })(<Input placeholder="角色名图标" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} hasFeedback label="角色描述">
-                {getFieldDecorator('user_role_description', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入角色描述'
-                    }
-                  ]
-                })(<TextArea placeholder="请输入角色描述" type="text" />)}
-              </FormItem>
+                <FormItem {...formItemLayout} hasFeedback label="角色描述">
+                  {getFieldDecorator('user_role_description', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入角色描述'
+                      }
+                    ]
+                  })(<TextArea placeholder="请输入角色描述" type="text" />)}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="是否显示">
-                {getFieldDecorator('is_show', { valuePropName: 'checked' })(
-                  <Switch />
-                )}
-              </FormItem>
+                <FormItem {...formItemLayout} label="是否显示">
+                  {getFieldDecorator('is_show', { valuePropName: 'checked' })(
+                    <Switch />
+                  )}
+                </FormItem>
 
-              <FormItem {...formItemLayout} label="是否有效">
-                {getFieldDecorator('enable', { valuePropName: 'checked' })(
-                  <Switch />
-                )}
-              </FormItem>
+                <FormItem {...formItemLayout} label="是否有效">
+                  {getFieldDecorator('enable', { valuePropName: 'checked' })(
+                    <Switch />
+                  )}
+                </FormItem>
 
-              <FormItem {...tailFormItemLayout}>
+                <FormItem {...tailFormItemLayout}>
+                  <Button
+                    className="register-btn"
+                    htmlType="submit"
+                    type="primary"
+                  >
+                    {is_create ? '创建角色' : '更新'}
+                  </Button>
+                </FormItem>
+              </Form>
+            </Modal>
+
+            <Modal
+              footer={null}
+              onCancel={() => {
+                this.setState({
+                  visible_set_authority_modal: false
+                })
+              }}
+              title="设置权限"
+              visible={this.state.visible_set_authority_modal}
+            >
+              <Tree
+                checkable
+                checkedKeys={this.state.role_authority_list}
+                onCheck={this.onCheck}
+                defaultExpandAll={true}
+                ref="tree"
+                showLine
+              >
+                {this.renderTreeNodes(stateUserAuthority.user_authority_list)}
+              </Tree>
+              <div className="admin-role-foot">
                 <Button
-                  className="register-btn"
-                  htmlType="submit"
+                  icon="save"
+                  onClick={() => {
+                    this.fetch_set_user_role_authority()
+                  }}
                   type="primary"
                 >
-                  {is_create ? '创建角色' : '更新'}
+                  确定
                 </Button>
-              </FormItem>
-            </Form>
-          </Modal>
+                <Button
+                  onClick={() => {
+                    this.setState({
+                      visible_set_authority_modal: false
+                    })
+                  }}
+                >
+                  取消
+                </Button>
+              </div>
+            </Modal>
 
-          <Modal
-            footer={null}
-            onCancel={() => {
-              this.setState({
-                visible_set_authority_modal: false
-              })
-            }}
-            title="设置权限"
-            visible={this.state.visible_set_authority_modal}
-          >
-            <Tree
-              checkable
-              checkedKeys={this.state.role_authority_list}
-              onCheck={this.onCheck}
-              defaultExpandAll={true}
-              ref="tree"
-              showLine
-            >
-              {this.renderTreeNodes(stateUserAuthority.user_authority_list)}
-            </Tree>
-            <div className="admin-role-foot">
-              <Button
-                icon="save"
-                onClick={() => {
-                  this.fetch_set_user_role_authority()
-                }}
-                type="primary"
-              >
-                确定
-              </Button>
-              <Button
-                onClick={() => {
-                  this.setState({
-                    visible_set_authority_modal: false
-                  })
-                }}
-              >
-                取消
-              </Button>
-            </div>
-          </Modal>
-
-          <div className="layout-table">
             <Table
               columns={this.state.columns}
               dataSource={stateUserRole.list}

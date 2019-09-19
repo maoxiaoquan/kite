@@ -35,7 +35,7 @@ module.exports = {
     },
     description: {
       // 个人专栏描述
-      type: Seq.STRING(100),
+      type: Seq.TEXT,
       comment: '描述',
       field: 'description'
     },

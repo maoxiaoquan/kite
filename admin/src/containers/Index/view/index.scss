@@ -1,29 +1,25 @@
 .layout-index {
-  .layout-count {
-    .box-card {
-      padding: 20px;
-      .anticon {
-        float: left;
-        font-size: 35px;
-        margin-left: 25px;
-        margin-top: 13px;
+  .layout-statistics {
+    .left-view {
+      .separate-card {
+        height: 160px;
+        overflow: hidden;
       }
-      .content {
-        margin-left: 100px;
-        p {
-          margin-bottom: 5px;
-        }
-        strong {
-          font-size: 30px;
-          font-weight: normal;
-          line-height: 25px;
-        }
+    }
+    .right-view {
+      .total-card {
+        height: 350px;
+        overflow: hidden;
+      }
+      .header-title {
+        padding-bottom: 15px;
+        font-size: 16px;
       }
     }
   }
 
   .layout-detailed {
-    .box-card .box-card-body {
+    .card .card-body {
       height: 500px;
       .limit-height {
         height: 430px;
