@@ -1,5 +1,5 @@
 <template>
-  <div class="view setting-view">
+  <div class="view setting-view client-card">
     <div class="sub-view-box setting-profile-view">
 
       <h1>个人资料</h1>
@@ -189,8 +189,8 @@ export default {
 
 <style scoped lang="scss">
 .setting-view {
-  box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
+  // box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.1);
+  // border-radius: 5px;
   padding: 30px;
   background: #ffffff;
   .sub-view-box {

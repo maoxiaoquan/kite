@@ -8,7 +8,7 @@
 
           <div class="article-blog-view">
 
-            <div class="article-blog-header clinet-card">
+            <div class="article-blog-header client-card">
               <div class="user-article-blog-top">
                 <div class="article-blog-icon">
                   <el-image class="article-blog-icon-img"
@@ -77,7 +77,7 @@
 
             </div>
 
-            <div class="article-blog-main clinet-card">
+            <div class="article-blog-main client-card">
               <div class="article-view">
                 <div class="article-item"
                      v-for="(item,key) in articleBlog.blogArticleList.list"

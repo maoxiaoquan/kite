@@ -10,7 +10,7 @@
       <div class="col-xs-12 col-sm-6 col-md-6"
            v-for="(articleBlogItem,key) in user.articleBlog.list"
            :key="key">
-        <div class="user-article-blog-item clinet-card">
+        <div class="user-article-blog-item client-card">
           <div class="user-article-blog-top">
             <router-link class="article-blog-icon"
                          :to="{name:'articleBlog',params:{blogId:articleBlogItem.blog_id}}">

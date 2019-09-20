@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col-xs-12 col-sm-8 col-md-8">
-          <div class="dynamic-content-main">
+          <div class="dynamic-content-main client-card">
             <dynamic-item :dynamicItem="dynamicView"
                           :dfIsCommnet="false" />
             <div class="dynamic-comment-part"
@@ -28,7 +28,7 @@
         </div>
         <div class="col-xs-12 col-sm-4 col-md-4">
           <div class="sidebar shadow">
-            <div class="related-dynamic-block">
+            <div class="related-dynamic-block client-card">
               <header class="title">相关推荐</header>
               <ul class="dynamic-list">
                 <li class="item"
@@ -168,9 +168,8 @@ export default {
   padding-top: 25px;
   margin-bottom: 15px;
   .dynamic-content-main {
-    box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
+    // box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
     margin-bottom: 8px;
-    border-radius: 6px;
     padding: 15px;
   }
   .dynamic-comment-part {

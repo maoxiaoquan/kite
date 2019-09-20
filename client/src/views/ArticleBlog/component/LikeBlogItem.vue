@@ -1,5 +1,5 @@
 <template>
-  <div class="user-article-blog-item clinet-card">
+  <div class="user-article-blog-item client-card">
 
     <template v-if="articleBlogItem.articleBlog">
       <div class="user-article-blog-top">

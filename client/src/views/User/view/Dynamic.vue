@@ -1,7 +1,7 @@
 <template>
   <div class="user-dynamic">
 
-    <div class="user-dynamic-item clinet-card"
+    <div class="user-dynamic-item client-card"
          v-for="(dynamicItem,key) in user.dynamicList.list"
          :key="key">
       <div class="dynamic-header-row">

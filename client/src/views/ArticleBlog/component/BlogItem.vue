@@ -1,5 +1,5 @@
 <template>
-  <div class="user-article-blog-item clinet-card">
+  <div class="user-article-blog-item client-card">
 
     <div class="user-article-blog-top">
       <router-link class="article-blog-icon"

@@ -37,7 +37,7 @@
       </div>
       <div class="row dynamic-main">
         <div class="col-xs-12 col-sm-8 col-md-8">
-          <div class="stream-wrapper clinet-card"
+          <div class="stream-wrapper client-card"
                v-if="personalInfo.islogin">
             <dynamic-write @changeDynamicWrite="dynamicSubmit" />
           </div>
@@ -45,7 +45,7 @@
             <scroll-loading @scroll-loading="infiniteHandler"
                             :isLoading="isLoading"
                             :isMore="isMore">
-              <div class="dy-item clinet-card"
+              <div class="dy-item client-card"
                    v-for="(dynamicItem,key) in dynamic.dynamicList.list"
                    :key="key">
                 <dynamic-item :dynamicItem="dynamicItem" />

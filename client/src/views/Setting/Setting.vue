@@ -6,7 +6,7 @@
       <div class="row">
 
         <div class="col-xs-12 col-sm-4 col-md-4">
-          <div class="user-setting-aside">
+          <div class="user-setting-aside client-card">
             <h2 class="title"><i class="el-icon-setting"></i>设置</h2>
             <ul class="setting-tap-list">
               <li>
@@ -61,9 +61,9 @@ export default {
 <style scoped lang="scss">
 .user-setting-lay.layout-content {
   .user-setting-aside {
-    box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.1);
-    background: #ffffff;
-    border-radius: 5px;
+    // box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.1);
+    // background: #ffffff;
+    // border-radius: 5px;
     padding: 10px 0;
     .title {
       padding: 10px 20px;

@@ -1,6 +1,6 @@
 <template>
   <aside class="dynamic-aside">
-    <div class="profile-box"
+    <div class="profile-box client-card"
          v-if="personalInfo.islogin">
       <div class="profile">
         <a>
@@ -28,7 +28,7 @@
       </ul>
     </div>
 
-    <div class="related-dynamic-block dynamic-block">
+    <div class="related-dynamic-block dynamic-block client-card">
       <header class="title">推荐片刻</header>
       <ul class="dynamic-list">
         <li class="item"
@@ -47,7 +47,7 @@
       </ul>
     </div>
 
-    <div class="topic-sidebar shadow topics"
+    <div class="topic-sidebar shadow topics client-card"
          v-if="personalInfo.islogin">
       <div class="title"><span>关注的话题</span>
         <router-link :to="{name:'dynamicTopic'}">
@@ -127,7 +127,7 @@ export default {
   background: #f8f8f8;
   border-radius: 6px;
   overflow: hidden;
-  margin-bottom: 8px;
+
   font-size: 13px;
   .profile {
     display: flex;
@@ -186,16 +186,13 @@ export default {
   }
 }
 
-.dynamic-block {
-  margin-bottom: 8px;
-}
 .shadow {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .related-dynamic-block {
   background: #f8f8f8;
-  border-radius: 6px;
+
   overflow: hidden;
   padding: 22px;
   .title {

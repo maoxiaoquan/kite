@@ -1,5 +1,5 @@
 <template>
-  <div class="tag">
+  <div class="tag client-card">
     <div class="info-box">
 
       <router-link :to='{name:"article_tag",params:{article_tag_en_name:articleTagItem.article_tag_en_name}}'>
@@ -87,8 +87,7 @@ export default {
   transition: border-color 0.3s;
   text-align: center;
   padding: 15px 0 20px;
-  border: 1px solid hsla(0, 0%, 59%, 0.2);
-  border-radius: 10px;
+
   .thumb {
     width: 75px;
     height: 75px;

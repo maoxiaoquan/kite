@@ -1,7 +1,7 @@
 <template>
   <div class="home-lay layout-aside">
 
-    <div class="notice"
+    <div class="notice client-card"
          v-if="website.notice.length>0">
       <a class="notice-item"
          v-for="(item,key) in website.notice"
@@ -10,7 +10,7 @@
          :key="key">{{item.title}}</a>
     </div>
 
-    <div class="aside-component">
+    <div class="aside-component client-card">
       <h3 class="title">写下你想说的</h3>
       <div class="issue-btn">
         <router-link class="btn-dynamic js-publish-btn"
@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <div class="advertise"
+    <div class="advertise client-card"
          v-if="website.advertise.length>0">
       <div class="advertise-item"
            v-for="(advertiseItem,key) in website.advertise"
@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <div class="hot-tags-for-sidebar ">
+    <div class="hot-tags-for-sidebar client-card">
       <header class="heading u-clearfix heading--borderedBottom heading--allCaps heading--normal heading--simple xzl-margin-bottom15">
         <div class="u-clearfix">
           <div class="heading-content hot-tags-header u-floatLeft">
@@ -123,9 +123,9 @@ export default {
 .layout-aside {
   .notice {
     padding: 15px 12px;
-    margin-bottom: 20px;
-    border: 1px solid transparent;
-    border-radius: 12px;
+    // margin-bottom: 20px;
+    // border: 1px solid transparent;
+    // border-radius: 12px;
     background-color: #fcf8e3;
     border-color: #faebcc;
     color: #8a6d3b;

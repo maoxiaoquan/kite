@@ -3,7 +3,7 @@
     <div class="container dynamic-container">
       <div class="row dynamic-main">
         <div class="col-xs-12 col-sm-8 col-md-8 left">
-          <div class="stream-wrapper">
+          <div class="stream-wrapper client-card">
             <div class="edit-view"
                  v-if="personalInfo.islogin">
               <dynamic-write @changeDynamicWrite="dynamicSubmit"
@@ -32,9 +32,9 @@
           </div>
         </div>
         <div class="col-xs-12 col-sm-4 col-md-4">
-          <aside class="topic-side topic-side sidebar"
+          <aside class="topic-side topic-side sidebar client-card"
                  v-loading="isLoadingTopicInfo">
-            <div class="topic-box shadow">
+            <div class="topic-box">
               <div class="wallpaper">
                 <span :style="`background-image: url(${topicInfo.icon});`"></span>
               </div>
@@ -202,9 +202,9 @@ export default {
   margin-bottom: 15px;
   .dynamic-main {
     .stream-wrapper {
-      box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
+      // box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
       padding: 15px;
-      border-radius: 6px;
+      // border-radius: 6px;
       .edit-view {
         border-bottom: 1px solid rgba(92, 96, 102, 0.1);
       }

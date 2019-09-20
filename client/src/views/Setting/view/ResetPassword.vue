@@ -1,5 +1,5 @@
 <template>
-  <div class="view setting-view">
+  <div class=" setting-view client-card">
     <div class="sub-view-box setting-password-view">
       <h1>修改密码</h1>
       <ul class="setting-list">
@@ -83,8 +83,8 @@ export default {
 
 <style scoped lang="scss">
 .setting-view {
-  box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
+  // box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.1);
+  // border-radius: 5px;
   padding: 30px;
   background: #ffffff;
   .sub-view-box {
