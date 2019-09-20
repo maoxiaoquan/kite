@@ -309,14 +309,14 @@ class AdminAuthority extends React.Component {
         </div>
 
         <div className="layout-nav-btn">
-          <Button
-            className="admin-authority-create-btn layout-btn"
+          <button
+            className="btn btn-danger"
             icon="plus"
             onClick={() => this.showCreateModal()}
             type="primary"
           >
             创建权限
-          </Button>
+          </button>
         </div>
 
         <div className="card admin-authority">

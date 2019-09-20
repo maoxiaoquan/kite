@@ -8,7 +8,7 @@
 
           <div class="article-blog-view">
 
-            <div class="article-blog-header">
+            <div class="article-blog-header clinet-card">
               <div class="user-article-blog-top">
                 <div class="article-blog-icon">
                   <el-image class="article-blog-icon-img"
@@ -77,7 +77,7 @@
 
             </div>
 
-            <div class="article-blog-main">
+            <div class="article-blog-main clinet-card">
               <div class="article-view">
                 <div class="article-item"
                      v-for="(item,key) in articleBlog.blogArticleList.list"
@@ -212,10 +212,7 @@ export default {
   }
   .article-blog-header {
     padding: 24px;
-    box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
-    border-radius: 6px;
     overflow: hidden;
-    margin-bottom: 15px;
     // border-bottom: 1px solid rgba(178, 186, 194, 0.15);
     .user-article-blog-top {
       display: flex;
@@ -401,8 +398,6 @@ export default {
       center / 40px 40px;
   }
   .article-blog-main {
-    box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
-    border-radius: 6px;
     overflow: hidden;
     padding: 20px;
     .article-view {

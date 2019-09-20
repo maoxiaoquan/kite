@@ -104,25 +104,26 @@ class _Notice extends React.Component {
         key: 'action',
         render: (text, record) => {
           return (
-            <div className="table--btn">
-              <Button
+            <div className="operation-btn">
+              <button
                 onClick={() => {
                   this._edit(record)
                 }}
                 size="small"
                 type="primary"
+                className="btn btn-info"
               >
-                修改
-              </Button>
-              <Button
-                className="box-btn-red"
+                <Icon type="edit" />
+              </button>
+              <button
+                className="btn btn-light"
                 onClick={() => {
                   this._delete(record)
                 }}
                 size="small"
               >
-                删除
-              </Button>
+                <Icon type="delete" />
+              </button>
             </div>
           )
         }
@@ -256,17 +257,16 @@ class _Notice extends React.Component {
     return (
       <div className="card layout-main" id="system-config">
         <div className="card-body">
-          <h3>系统通知</h3>
-
-          <Button
-            className="article-tag-user-create-btn layout-btn"
+          <h4 class="header-title">系统通知</h4>
+          <button
+            className="btn btn-danger"
             icon="plus"
             type="primary"
             style={{ marginBottom: '15px' }}
             onClick={() => this.showModal(0)}
           >
             创建通知公告
-          </Button>
+          </button>
 
           <Modal
             footer={null}

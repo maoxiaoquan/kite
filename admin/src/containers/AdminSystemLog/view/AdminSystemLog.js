@@ -78,16 +78,16 @@ class AdminSystemLog extends React.Component {
           key: 'action',
           render: (text, record) => {
             return (
-              <div className="table-right-btn">
-                <Button
-                  className="box-btn-red"
+              <div className="operation-btn">
+                <button
+                  className="btn btn-light"
                   onClick={() => {
                     this._delete(record)
                   }}
                   size="small"
                 >
                   删除
-                </Button>
+                </button>
               </div>
             )
           }

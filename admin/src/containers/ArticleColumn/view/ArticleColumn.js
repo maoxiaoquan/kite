@@ -156,25 +156,26 @@ class ArticleColumn extends React.Component {
           key: 'action',
           render: (text, record) => {
             return (
-              <div className="table--btn">
-                <Button
+              <div className="operation-btn">
+                <button
                   onClick={() => {
                     this._edit(record)
                   }}
+                  className="btn btn-info"
                   size="small"
                   type="primary"
                 >
-                  修改
-                </Button>
-                <Button
-                  className="box-btn-red"
+                  <Icon type="edit" />
+                </button>
+                <button
+                  className="btn btn-light"
                   onClick={() => {
                     this._delete(record)
                   }}
                   size="small"
                 >
-                  删除
-                </Button>
+                  <Icon type="delete" />
+                </button>
               </div>
             )
           }
@@ -409,14 +410,14 @@ class ArticleColumn extends React.Component {
         </div>
 
         <div className="layout-nav-btn">
-          <Button
-            className="article-tag-user-create-btn layout-btn"
+          <button
+            className="btn btn-danger"
             icon="plus"
             type="primary"
             onClick={() => this.showModal(0)}
           >
             创建专栏
-          </Button>
+          </button>
         </div>
 
         <div className="card article-column">

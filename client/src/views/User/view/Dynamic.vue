@@ -1,20 +1,19 @@
 <template>
   <div class="user-dynamic">
 
-    <div class="user-dynamic-item"
+    <div class="user-dynamic-item clinet-card"
          v-for="(dynamicItem,key) in user.dynamicList.list"
          :key="key">
       <div class="dynamic-header-row">
         <div class="account-group">
           <div class="user-popover-box">
-            <a href="/user/57ac00985bbb500062b20476"
-               target="_blank"
-               class="user-link">
+            <router-link :to='{name:"user",params:{uid:dynamicItem.user.uid}}'
+                         class="user-link">
               <el-image class="avatar"
                         size="size"
                         :src="dynamicItem.user.avatar">
               </el-image>
-            </a>
+            </router-link>
           </div>
           <div class="dynamic-header-content">
             <div class="user-popover-box">
@@ -242,10 +241,8 @@ export default {
 
 <style scoped lang="scss">
 .user-dynamic {
+  padding-top: 20px;
   .user-dynamic-item {
-    box-shadow: 0 0px 3px rgba(67, 38, 100, 0.15);
-    margin-top: 15px;
-    border-radius: 12px;
     padding-bottom: 12px;
     position: relative;
     .dynamic-content-row,

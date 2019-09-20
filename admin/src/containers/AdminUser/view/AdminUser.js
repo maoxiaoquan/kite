@@ -65,7 +65,7 @@ class AdminUser extends React.Component {
           key: 'rule_name',
           render: (text, record) => {
             return (
-              <div className="table-right-btn">
+              <div className="operation-btn">
                 {/* <Tag color="orange">超级管理员</Tag>*/}
                 {this.currentUserRole(record) ? (
                   <Tag color="orange">
@@ -129,27 +129,28 @@ class AdminUser extends React.Component {
           key: 'action',
           render: (text, record) => {
             return (
-              <div className="table-right-btn">
-                <Button
+              <div className="operation-btn" style={{ width: '250px' }}>
+                <button
                   onClick={() => {
                     this.editUser(record)
                   }}
                   size="small"
                   type="primary"
+                  className="btn btn-info"
                 >
-                  修改
-                </Button>
-                <Button
-                  className="box-btn-red"
+                  <Icon type="edit" />
+                </button>
+                <button
+                  className="btn btn-light"
                   onClick={() => {
                     this.deleteUser(record)
                   }}
                   size="small"
                 >
-                  删除
-                </Button>
-                <Button
-                  className="box-btn-orange"
+                  <Icon type="delete" />
+                </button>
+                <button
+                  className="btn btn-primary"
                   onClick={async () => {
                     await this.props.dispatch({
                       type: 'SET_ADMIN_CURRENT_USER_INFO',
@@ -162,7 +163,7 @@ class AdminUser extends React.Component {
                   size="small"
                 >
                   设置角色
-                </Button>
+                </button>
               </div>
             )
           }
@@ -445,14 +446,14 @@ class AdminUser extends React.Component {
         </div>
 
         <div className="layout-nav-btn">
-          <Button
-            className="admin-user-create-btn layout-btn"
+          <button
+            className="btn btn-danger"
             icon="plus"
             type="primary"
             onClick={() => this.showModal(0)}
           >
             创建管理员
-          </Button>
+          </button>
         </div>
 
         <div className="card admin-user">

@@ -1,5 +1,5 @@
 <template>
-  <div class="user-article-blog-item">
+  <div class="user-article-blog-item clinet-card">
 
     <div class="user-article-blog-top">
       <router-link class="article-blog-icon"
@@ -14,27 +14,38 @@
           <router-link class="name"
                        :to="{name:'articleBlog',params:{blogId:articleBlogItem.blog_id}}">
             {{articleBlogItem.name}}
-            <span class="article-count"> {{articleBlogItem.articleCount}}</span>
           </router-link>
-          <ul class="statistics">
-            <li class="item item-icon read-count">
-              <i class="el-icon-reading"></i>
-              <span v-text="articleBlogItem.read_count||0"></span>
-            </li>
-            <li class="item item-icon like-article">
-              <i class="el-icon-star-off"></i>
-              <span v-text="articleBlogItem.likeCount||0"></span>
-            </li>
-            <li class="item attention"
-                v-if="~[2,4].indexOf(articleBlogItem.status)&&personalInfo.islogin&&articleBlogItem.is_public"
-                @click="setLikeArticleBlog(articleBlogItem.blog_id)">
-              <span :class="{'active':isLike(articleBlogItem).status}">{{isLike(articleBlogItem).text}}</span>
-            </li>
-          </ul>
-        </div>
 
+          <div class="statistics-info">
+            <ul class="statistics">
+              <li class="item item-icon like-article">
+                <i class="el-icon-document"></i>
+                <span class="article-count"> {{articleBlogItem.articleCount}}</span>
+              </li>
+              <li class="item item-icon read-count">
+                <i class="el-icon-view"></i>
+                <span v-text="articleBlogItem.read_count||0"></span>
+              </li>
+              <li class="item item-icon like-article">
+                <i class="el-icon-star-off"></i>
+                <span v-text="articleBlogItem.likeCount||0"></span>
+              </li>
+              <li class="item item-icon like-article">
+                <span class="attention"
+                      v-if="~[2,4].indexOf(articleBlogItem.status)&&personalInfo.islogin&&articleBlogItem.is_public"
+                      @click="setLikeArticleBlog(articleBlogItem.blog_id)"
+                      :class="{'active':isLike(articleBlogItem).status}">{{isLike(articleBlogItem).text}}</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
       </div>
 
+    </div>
+
+    <div class="user-article-blog-main">
+      <p class="description">介绍：{{articleBlogItem.description||'暂时没有简介，输入简介更直观表达专栏内容'}}</p>
     </div>
 
     <div class="user-article-blog-tag">
@@ -53,9 +64,8 @@
       </div>
     </div>
 
-    <div class="user-article-blog-main">
-      <p class="description">介绍：{{articleBlogItem.description||'暂时没有简介，输入简介更直观表达专栏内容'}}</p>
-      <ul>
+    <div class="user-article-blog-footer">
+      <ul class="user-info">
         <li class="item item-icon read-count">
           <el-image class="user-avatar"
                     :src="articleBlogItem.user.avatar"
@@ -143,8 +153,6 @@ export default {
 
 <style scoped lang="scss">
 .user-article-blog-item {
-  box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
-  background: #f8f8f8;
   overflow: hidden;
   transition: all 0.3s ease;
   margin-top: 25px;
@@ -152,8 +160,8 @@ export default {
   padding-bottom: 12px;
   position: relative;
   display: block;
-  height: 250px;
-  padding: 20px;
+  height: 215px;
+  padding: 15px;
   .user-article-blog-top {
     display: flex;
     .article-blog-icon {
@@ -169,59 +177,52 @@ export default {
     .user-article-blog-info {
       flex: 1;
       padding-left: 10px;
+      position: relative;
       .info-content {
         .name {
           color: #333;
+          display: block;
           font-size: 13px;
           line-height: 18px;
           &:hover {
             color: #0c7d9d;
           }
-          .article-count {
-            display: inline-block;
-            font-weight: 400;
-            color: rgba(0, 0, 0, 0.88);
-            background: #ffd600;
-            border-radius: 4px;
-            padding: 0 6px;
-            margin-left: 10px;
-          }
         }
-        .statistics {
-          li {
-            display: inline-block;
+        .statistics-info {
+          .statistics {
+            li {
+              display: inline-block;
 
-            span {
-              display: inline-block;
-              font-size: 12px;
-              color: #999;
-              margin-right: 5px;
-              vertical-align: middle;
-            }
-            i {
-              font-size: 14px;
-              color: #999;
-            }
-            .type {
-              font-size: 12px;
-              display: inline-block;
-              margin-left: 3px;
-            }
-            .type {
-              background: #fd763a;
-              color: #fff;
-              border-radius: 10px;
-              line-height: 15px;
-              padding: 1px 3px;
-              &.true {
-                background: #41b883;
-              }
-            }
-            &.attention {
-              cursor: pointer;
               span {
+                display: inline-block;
+                font-size: 12px;
+                color: #999;
+                margin-right: 5px;
+                vertical-align: middle;
+              }
+              i {
+                font-size: 14px;
+                color: #999;
+              }
+              .type {
                 font-size: 12px;
                 display: inline-block;
+                margin-left: 3px;
+              }
+              .type {
+                background: #fd763a;
+                color: #fff;
+                border-radius: 10px;
+                line-height: 15px;
+                padding: 1px 3px;
+                &.true {
+                  background: #41b883;
+                }
+              }
+              .attention {
+                cursor: pointer;
+                display: inline-block;
+                font-size: 12px;
                 margin-left: 3px;
                 color: #333;
                 border-radius: 3px;
@@ -285,45 +286,51 @@ export default {
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
       overflow: hidden;
-      height: 56px;
+      height: 35px;
     }
-    .item {
-      display: inline-block;
-      color: #b3bac1;
-      font-size: 12px;
-      &:after {
+  }
+
+  .user-article-blog-footer {
+    .user-info {
+      margin-bottom: 10px;
+      .item {
         display: inline-block;
-        content: "\B7";
-        margin: 0 1px;
-        color: #b2bac2;
-      }
-      &:last-of-type {
+        color: #b3bac1;
+        font-size: 12px;
         &:after {
-          content: "";
+          display: inline-block;
+          content: "\B7";
+          margin: 0 1px;
+          color: #b2bac2;
         }
-      }
-      .user-avatar {
-        width: 28px;
-        height: 28px;
-        border-radius: 20px;
-        vertical-align: middle;
-        margin-right: 1px;
-      }
-      strong {
-        font-weight: normal;
-      }
-      .nickname {
-        white-space: nowrap;
-        overflow: hidden;
-        font-size: 12px;
-        color: #777;
-        text-overflow: ellipsis;
-        width: 50px;
-        display: inline-block;
-        vertical-align: middle;
-      }
-      .time {
-        font-size: 12px;
+        &:last-of-type {
+          &:after {
+            content: "";
+          }
+        }
+        .user-avatar {
+          width: 28px;
+          height: 28px;
+          border-radius: 20px;
+          vertical-align: middle;
+          margin-right: 1px;
+        }
+        strong {
+          font-weight: normal;
+        }
+        .nickname {
+          white-space: nowrap;
+          overflow: hidden;
+          font-size: 12px;
+          color: #777;
+          text-overflow: ellipsis;
+          width: 50px;
+          display: inline-block;
+          vertical-align: middle;
+        }
+        .time {
+          font-size: 12px;
+        }
       }
     }
   }

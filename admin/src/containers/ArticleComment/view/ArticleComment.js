@@ -91,25 +91,26 @@ class ArticleComment extends React.Component {
           key: 'action',
           render: (text, record) => {
             return (
-              <div className="table--btn">
-                <Button
+              <div className="operation-btn">
+                <button
                   onClick={() => {
                     this._edit(record)
                   }}
                   size="small"
+                  className="btn btn-info"
                   type="primary"
                 >
-                  修改
-                </Button>
-                <Button
-                  className="box-btn-red"
+                  <Icon type="edit" />
+                </button>
+                <button
+                  className="btn btn-light"
                   onClick={() => {
                     this._delete(record)
                   }}
                   size="small"
                 >
-                  删除
-                </Button>
+                  <Icon type="delete" />
+                </button>
               </div>
             )
           }
@@ -308,9 +309,9 @@ class ArticleComment extends React.Component {
           </Breadcrumb>
         </div>
 
-        <div className="card admin-comment layout-card-view">
+        <div className="card">
           <div className="card-body">
-            <div className="admin-comment-bar">
+            <div className="xsb-operation-menu">
               <Form layout="inline">
                 <FormItem label="文章标题">
                   <Input
@@ -335,20 +336,22 @@ class ArticleComment extends React.Component {
                   </Select>
                 </FormItem>
                 <Form.Item>
-                  <Button
+                  <button
                     type="primary"
                     htmlType="submit"
+                    className="btn btn-danger"
                     onClick={this.fetchCommentList}
                   >
                     搜索
-                  </Button>
-                  <Button
+                  </button>
+                  <button
                     type="primary"
                     htmlType="submit"
+                    className="btn btn-primary"
                     onClick={this.resetBarFrom}
                   >
                     重置
-                  </Button>
+                  </button>
                 </Form.Item>
               </Form>
             </div>

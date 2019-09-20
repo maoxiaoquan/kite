@@ -62,7 +62,7 @@ class ArticleBlog extends React.Component {
           dataIndex: 'icon',
           key: 'icon',
           render: (text, record) => (
-            <div className="avatar">
+            <div className="avatar img-preview">
               {record.icon ? <img src={record.icon} alt="" /> : ''}
             </div>
           )
@@ -102,17 +102,18 @@ class ArticleBlog extends React.Component {
           key: 'action',
           render: (text, record) => {
             return (
-              <div className="table-right-btn">
+              <div className="operation-btn">
                 {record.is_public ? (
-                  <Button
+                  <button
                     onClick={() => {
                       this._edit(record)
                     }}
+                    className="btn btn-info"
                     size="small"
                     type="primary"
                   >
-                    修改
-                  </Button>
+                    <Icon type="edit" />
+                  </button>
                 ) : (
                   ''
                 )}
@@ -296,154 +297,148 @@ class ArticleBlog extends React.Component {
           </Breadcrumb>
         </div>
 
-        <div className="layout-nav-btn"></div>
+        <Modal
+          footer={null}
+          onCancel={() => {
+            this.setState({
+              modal_visible_edit: false
+            })
+          }}
+          title="修改个人专栏"
+          visible={this.state.modal_visible_edit}
+        >
+          <Form className="from-view" onSubmit={this.handleSubmit}>
+            <FormItem {...formItemLayout} label="个人专栏名">
+              {getFieldDecorator('name', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入个人专栏名！',
+                    whitespace: true
+                  }
+                ]
+              })(<Input disabled placeholder="个人专栏名" />)}
+            </FormItem>
 
-        <div className="article-blog">
-          <Modal
-            footer={null}
-            onCancel={() => {
-              this.setState({
-                modal_visible_edit: false
-              })
-            }}
-            title="修改个人专栏"
-            visible={this.state.modal_visible_edit}
-          >
-            <Form className="from-view" onSubmit={this.handleSubmit}>
-              <FormItem {...formItemLayout} label="个人专栏名">
-                {getFieldDecorator('name', {
+            <FormItem {...formItemLayout} hasFeedback label="状态">
+              {getFieldDecorator('status', {
+                rules: [{ required: true, message: '请选择状态！' }]
+              })(
+                <Select
+                  placeholder="状态"
+                  onChange={value => {
+                    this.setState({
+                      edit_status_val: value
+                    })
+                  }}
+                >
+                  {this.state.status_list.map((item, key) =>
+                    item ? <Option key={key}>{item}</Option> : ''
+                  )}
+                </Select>
+              )}
+            </FormItem>
+
+            {~[3, 4, 5].indexOf(Number(edit_status_val)) ? (
+              <FormItem {...formItemLayout} label="拒绝的原因">
+                {getFieldDecorator('rejection_reason', {
                   rules: [
                     {
                       required: true,
-                      message: '请输入个人专栏名！',
+                      message: '请输入拒绝的原因！',
                       whitespace: true
                     }
                   ]
-                })(<Input disabled placeholder="个人专栏名" />)}
+                })(<Input placeholder="文章被拒绝的原因" />)}
               </FormItem>
+            ) : (
+              ''
+            )}
 
-              <FormItem {...formItemLayout} hasFeedback label="状态">
-                {getFieldDecorator('status', {
-                  rules: [{ required: true, message: '请选择状态！' }]
-                })(
+            <FormItem {...tailFormItemLayout}>
+              <Button className="register-btn" htmlType="submit" type="primary">
+                {is_create ? '创建专栏' : '更新'}
+              </Button>
+            </FormItem>
+          </Form>
+        </Modal>
+
+        <div className="card">
+          <div className="card-body">
+            <div className="xsb-operation-menu">
+              <Form layout="inline">
+                <FormItem label="个人专题标题">
+                  <Input
+                    value={name_val}
+                    onChange={e => {
+                      this.changeVal(e.target.value, 'name_val')
+                    }}
+                  />
+                </FormItem>
+                <FormItem label="状态">
                   <Select
-                    placeholder="状态"
+                    className="select-view"
+                    value={status_val}
                     onChange={value => {
-                      this.setState({
-                        edit_status_val: value
-                      })
+                      this.changeVal(value, 'status_val')
                     }}
                   >
-                    {this.state.status_list.map((item, key) =>
-                      item ? <Option key={key}>{item}</Option> : ''
+                    <Option value="">全部</Option>
+                    {status_list.map((item, key) =>
+                      item ? (
+                        <Option value={key} key={key}>
+                          {item}
+                        </Option>
+                      ) : (
+                        ''
+                      )
                     )}
                   </Select>
-                )}
-              </FormItem>
-
-              {~[3, 4, 5].indexOf(Number(edit_status_val)) ? (
-                <FormItem {...formItemLayout} label="拒绝的原因">
-                  {getFieldDecorator('rejection_reason', {
-                    rules: [
-                      {
-                        required: true,
-                        message: '请输入拒绝的原因！',
-                        whitespace: true
-                      }
-                    ]
-                  })(<Input placeholder="文章被拒绝的原因" />)}
                 </FormItem>
-              ) : (
-                ''
-              )}
 
-              <FormItem {...tailFormItemLayout}>
-                <Button
-                  className="register-btn"
-                  htmlType="submit"
-                  type="primary"
-                >
-                  {is_create ? '创建专栏' : '更新'}
-                </Button>
-              </FormItem>
-            </Form>
-          </Modal>
+                <FormItem hasFeedback label="是否公开">
+                  <Select
+                    placeholder="状态"
+                    value={is_public_val}
+                    onChange={value => {
+                      this.changeVal(value, 'is_public_val')
+                    }}
+                  >
+                    <Option value="">全部</Option>
+                    <Option value={0}>个人</Option>
+                    <Option value={1}>公开</Option>
+                  </Select>
+                </FormItem>
 
-          <div className="card">
-            <div className="card-body">
-              <div className="dynamic-article-bar">
-                <Form layout="inline">
-                  <FormItem label="个人专题标题">
-                    <Input
-                      value={name_val}
-                      onChange={e => {
-                        this.changeVal(e.target.value, 'name_val')
-                      }}
-                    />
-                  </FormItem>
-                  <FormItem label="状态">
-                    <Select
-                      className="select-view"
-                      value={status_val}
-                      onChange={value => {
-                        this.changeVal(value, 'status_val')
-                      }}
-                    >
-                      <Option value="">全部</Option>
-                      {status_list.map((item, key) =>
-                        item ? (
-                          <Option value={key} key={key}>
-                            {item}
-                          </Option>
-                        ) : (
-                          ''
-                        )
-                      )}
-                    </Select>
-                  </FormItem>
-
-                  <FormItem hasFeedback label="是否公开">
-                    <Select
-                      placeholder="状态"
-                      value={is_public_val}
-                      onChange={value => {
-                        this.changeVal(value, 'is_public_val')
-                      }}
-                    >
-                      <Option value="">全部</Option>
-                      <Option value={0}>个人</Option>
-                      <Option value={1}>公开</Option>
-                    </Select>
-                  </FormItem>
-
-                  <Form.Item>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      onClick={this.fetchArticleBlogList}
-                    >
-                      搜索
-                    </Button>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      onClick={this.resetBarFrom}
-                    >
-                      重置
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </div>
-
-              <Table
-                columns={this.state.columns}
-                dataSource={stateArticleBlog.list}
-                loading={loading}
-                onChange={this.TablePageChange.bind(this)}
-                pagination={this.state.pagination}
-                rowKey="blog_id"
-              />
+                <Form.Item>
+                  <button
+                    type="primary"
+                    htmlType="submit"
+                    className="btn btn-danger"
+                    onClick={this.fetchArticleBlogList}
+                  >
+                    搜索
+                  </button>
+                  <button
+                    type="primary"
+                    htmlType="submit"
+                    className="btn btn-primary"
+                    onClick={this.resetBarFrom}
+                  >
+                    重置
+                  </button>
+                </Form.Item>
+              </Form>
             </div>
+
+            <Table
+              columns={this.state.columns}
+              dataSource={stateArticleBlog.list}
+              loading={loading}
+              onChange={this.TablePageChange.bind(this)}
+              pagination={this.state.pagination}
+              rowKey="blog_id"
+            />
           </div>
         </div>
       </div>

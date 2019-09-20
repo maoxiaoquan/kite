@@ -10,7 +10,7 @@
       <div class="col-xs-12 col-sm-6 col-md-6"
            v-for="(articleBlogItem,key) in user.articleBlog.list"
            :key="key">
-        <div class="user-article-blog-item">
+        <div class="user-article-blog-item clinet-card">
           <div class="user-article-blog-top">
             <router-link class="article-blog-icon"
                          :to="{name:'articleBlog',params:{blogId:articleBlogItem.blog_id}}">
@@ -72,9 +72,12 @@
 
           <div class="user-article-blog-footer">
             <ul class="statistics">
-              <li class="item">文章数：<span class="article-count">{{articleBlogItem.articleCount}}</span> </li>
+              <li class="item">
+                <i class="el-icon-document"></i>
+                <span class="article-count">{{articleBlogItem.articleCount}}</span>
+              </li>
               <li class="item item-icon read-count">
-                <i class="el-icon-reading"></i>
+                <i class="el-icon-view"></i>
                 <span v-text="articleBlogItem.read_count||0"></span>
               </li>
               <li class="item item-icon like-article">
@@ -369,11 +372,8 @@ export default {
 .user-article-blog {
   padding-top: 20px;
   .user-article-blog-view {
+    padding-top: 20px;
     .user-article-blog-item {
-      box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
-      margin-top: 15px;
-      border-radius: 12px;
-      padding-bottom: 12px;
       position: relative;
       display: block;
       height: 210px;

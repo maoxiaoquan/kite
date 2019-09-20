@@ -1,5 +1,5 @@
 <template>
-  <div class="user-article-blog-item">
+  <div class="user-article-blog-item clinet-card">
 
     <template v-if="articleBlogItem.articleBlog">
       <div class="user-article-blog-top">
@@ -15,7 +15,6 @@
             <router-link class="name"
                          :to="{name:'articleBlog',params:{blogId:articleBlogItem.articleBlog.blog_id}}">
               {{articleBlogItem.articleBlog.name}}
-              <span class="article-count"> {{articleBlogItem.articleCount}}</span>
             </router-link>
           </div>
         </div>
@@ -40,8 +39,12 @@
 
       <div class="user-article-blog-footer">
         <ul class="statistics">
+          <li class="item item-icon">
+            <i class="el-icon-document"></i>
+            <span v-text="articleBlogItem.articleCount||0"></span>
+          </li>
           <li class="item item-icon read-count">
-            <i class="el-icon-reading"></i>
+            <i class="el-icon-view"></i>
             <span v-text="articleBlogItem.read_count||0"></span>
           </li>
           <li class="item item-icon like-article">
@@ -135,8 +138,6 @@ export default {
 
 <style scoped lang="scss">
 .user-article-blog-item {
-  box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
-  background: #f8f8f8;
   overflow: hidden;
   transition: all 0.3s ease;
   margin-top: 25px;
@@ -167,15 +168,6 @@ export default {
           font-size: 13px;
           &:hover {
             color: #0c7d9d;
-          }
-          .article-count {
-            display: inline-block;
-            font-weight: 400;
-            color: rgba(0, 0, 0, 0.88);
-            background: #ffd600;
-            border-radius: 4px;
-            padding: 0 6px;
-            margin-left: 10px;
           }
         }
       }
@@ -255,7 +247,7 @@ export default {
         display: inline-block;
         font-size: 12px;
         color: #999;
-        .article-count,
+
         span {
           display: inline-block;
           font-size: 12px;

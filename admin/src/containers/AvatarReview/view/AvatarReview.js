@@ -82,7 +82,7 @@ class AvatarReview extends React.Component {
         render: (text, record) => {
           return record.avatar_review_status === 1 ||
             record.avatar_review_status === 3 ? (
-            <div className="table--btn">
+            <div className="operation-btn">
               <Button
                 onClick={() => {
                   this.editUser(record)
@@ -249,9 +249,9 @@ class AvatarReview extends React.Component {
           </Breadcrumb>
         </div>
 
-        <div className="card admin-article layout-card-view">
+        <div className="card">
           <div className="card-body">
-            <div className="admin-article-bar">
+            <div className="xsb-operation-menu">
               <Form layout="inline">
                 <FormItem label="状态">
                   <Select
@@ -269,74 +269,76 @@ class AvatarReview extends React.Component {
                   </Select>
                 </FormItem>
                 <Form.Item>
-                  <Button
+                  <button
                     type="primary"
                     htmlType="submit"
+                    className="btn btn-danger"
                     onClick={this.fetchAvatarReviewList}
                   >
                     搜索
-                  </Button>
-                  <Button
+                  </button>
+                  <button
                     type="primary"
                     htmlType="submit"
+                    className="btn btn-primary"
                     onClick={this.resetBarFrom}
                   >
                     重置
-                  </Button>
+                  </button>
                 </Form.Item>
               </Form>
             </div>
+
+            <Modal
+              footer={null}
+              onCancel={() => {
+                this.setState({
+                  modal_visible_edit: false
+                })
+              }}
+              title="修改文章"
+              visible={this.state.modal_visible_edit}
+            >
+              <Form className="from-view" onSubmit={this.handleSubmit}>
+                <FormItem {...formItemLayout} hasFeedback label="状态">
+                  {getFieldDecorator('status', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请选择状态！'
+                      }
+                    ]
+                  })(
+                    <Select placeholder="状态">
+                      {this.state.status_list.map((item, key) => (
+                        <Option key={key}>{item}</Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
+
+                <FormItem {...tailFormItemLayout}>
+                  <Button
+                    className="register-btn"
+                    htmlType="submit"
+                    type="primary"
+                  >
+                    更新
+                  </Button>
+                </FormItem>
+              </Form>
+            </Modal>
+
+            <Table
+              columns={this.state.columns}
+              dataSource={stateUserAvatarReview.list}
+              loading={loading}
+              onChange={this.TablePageChange.bind(this)}
+              pagination={this.state.pagination}
+              rowKey="uid"
+            />
           </div>
-          <Modal
-            footer={null}
-            onCancel={() => {
-              this.setState({
-                modal_visible_edit: false
-              })
-            }}
-            title="修改文章"
-            visible={this.state.modal_visible_edit}
-          >
-            <Form className="from-view" onSubmit={this.handleSubmit}>
-              <FormItem {...formItemLayout} hasFeedback label="状态">
-                {getFieldDecorator('status', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请选择状态！'
-                    }
-                  ]
-                })(
-                  <Select placeholder="状态">
-                    {this.state.status_list.map((item, key) => (
-                      <Option key={key}>{item}</Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
-
-              <FormItem {...tailFormItemLayout}>
-                <Button
-                  className="register-btn"
-                  htmlType="submit"
-                  type="primary"
-                >
-                  更新
-                </Button>
-              </FormItem>
-            </Form>
-          </Modal>
-
-          <Table
-            columns={this.state.columns}
-            dataSource={stateUserAvatarReview.list}
-            loading={loading}
-            onChange={this.TablePageChange.bind(this)}
-            pagination={this.state.pagination}
-            rowKey="uid"
-          />
         </div>
-
         <Alert
           style={{ marginTop: '20px' }}
           message="备注信息"

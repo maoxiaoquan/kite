@@ -43,7 +43,7 @@
                   <img :src="article.user.avatar"
                        alt />
                 </router-link>
-                <a class="btn btn-success follow attention-article"
+                <a class="btn btn-info follow attention-article"
                    v-if="personalInfo.user.uid !== article.uid"
                    :class="{'active':currUserInfo.attention_uid_arr.indexOf(article.uid)!==-1}"
                    @click="onUserAttention"

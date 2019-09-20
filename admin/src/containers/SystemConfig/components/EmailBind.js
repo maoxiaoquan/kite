@@ -97,7 +97,7 @@ class SystemConfig extends React.Component {
     return (
       <div className="layout-main" id="system-config">
         <div className="layout-main-title">
-          <Icon type="setting" /> <em>邮箱修改or绑定</em>
+          <h4 class="header-title">邮箱修改or绑定</h4>
         </div>
 
         <div className="layout-nav-btn"></div>
@@ -203,8 +203,8 @@ class SystemConfig extends React.Component {
 
               <FormItem {...tailFormItemLayout}>
                 {!is_edit ? (
-                  <Button
-                    className="edit-btn"
+                  <button
+                    className="btn btn-info"
                     onClick={() => {
                       this.setState({
                         is_edit: true
@@ -213,20 +213,20 @@ class SystemConfig extends React.Component {
                     type="primary"
                   >
                     修改
-                  </Button>
+                  </button>
                 ) : (
                   <div>
-                    <Button
-                      className="enter-btn"
+                    <button
+                      className="btn btn-primary"
                       htmlType="submit"
                       type="primary"
                       style={{ marginRight: '10px' }}
                     >
                       确定
-                    </Button>
+                    </button>
 
-                    <Button
-                      className="cancel-btn"
+                    <button
+                      className="btn btn-light"
                       onClick={() => {
                         this.system_config_info()
                         this.setState({
@@ -236,7 +236,7 @@ class SystemConfig extends React.Component {
                       type="primary"
                     >
                       取消
-                    </Button>
+                    </button>
                   </div>
                 )}
               </FormItem>

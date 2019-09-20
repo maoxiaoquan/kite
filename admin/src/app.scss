@@ -492,7 +492,7 @@ input {
 }
 
 body {
-  color: #333;
+  color: #6c757d;
   height: 100%;
   background: #fafbfe !important;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
@@ -622,7 +622,7 @@ a:focus {
   }
 }
 
-.table--btn {
+.operation-btn {
   width: 120px;
   button {
     margin: 0 5px;
@@ -660,19 +660,6 @@ a:focus {
   line-height: 40px !important;
   border-radius: 3px;
   display: inline-block;
-}
-.mb-0,
-.my-0 {
-  margin-bottom: 0 !important;
-}
-
-.mb-3,
-.my-3 {
-  margin-bottom: 1.5rem !important;
-}
-.mt-3,
-.my-3 {
-  margin-top: 1.5rem !important;
 }
 
 .widget-flat {
@@ -830,4 +817,49 @@ a:focus {
 /* reset */
 .ant-drawer-body {
   padding: 0 !important;
+}
+
+// 2019.9.20 新增
+.ant-table-wrapper .ant-table-thead > tr > th {
+  background-color: #f1f3fa;
+  border-color: #e3eaef;
+}
+.ant-breadcrumb {
+  font-weight: bold;
+}
+.xsb-operation-menu {
+  padding-bottom: 20px;
+  .ant-input,
+  .ant-select-selection--single {
+    border: 1px solid #dee2e6;
+    height: 37px;
+  }
+  .ant-form-item-control {
+    width: 150px;
+  }
+  .ant-select-selection__rendered {
+    line-height: 35px;
+  }
+  .ant-form-item-label > label {
+    color: #6c757d;
+    margin-right: 10px;
+  }
+  .btn {
+    vertical-align: top;
+    margin-right: 15px;
+    cursor: pointer;
+  }
+}
+.operation-btn {
+  width: 180px;
+  .btn {
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+}
+.img-preview {
+  img {
+    width: 60px;
+  }
 }

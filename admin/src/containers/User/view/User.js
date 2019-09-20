@@ -129,27 +129,28 @@ class User extends React.Component {
           key: 'action',
           render: (text, record) => {
             return (
-              <div className="table--btn">
-                <Button
+              <div className="operation-btn" style={{ width: '200px' }}>
+                <button
                   onClick={() => {
                     this.editUser(record)
                   }}
                   size="small"
                   type="primary"
+                  className="btn btn-info"
                 >
-                  修改
-                </Button>
-                <Button
-                  className="box-btn-red"
+                  <Icon type="edit" />
+                </button>
+                <button
+                  className="btn btn-light"
                   onClick={() => {
                     this.deleteUser(record)
                   }}
                   size="small"
                 >
-                  删除
-                </Button>
-                <Button
-                  className="table--btn"
+                  <Icon type="delete" />
+                </button>
+                <button
+                  className="btn btn-primary"
                   onClick={() => {
                     this.props.dispatch({
                       type: 'SET_CURRENT_USER_INFO',
@@ -163,7 +164,7 @@ class User extends React.Component {
                   type="primary"
                 >
                   禁言
-                </Button>
+                </button>
               </div>
             )
           }

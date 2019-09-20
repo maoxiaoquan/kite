@@ -64,8 +64,8 @@ class AdminRole extends React.Component {
           key: 'action',
           render: (text, record) => {
             return (
-              <div className="table-right-btn">
-                <Button
+              <div className="operation-btn" style={{ width: '250px' }}>
+                <button
                   onClick={async () => {
                     this.editRole(record)
                     await this.props.dispatch({
@@ -74,13 +74,14 @@ class AdminRole extends React.Component {
                     })
                   }}
                   size="small"
+                  className="btn btn-info"
                   type="primary"
                 >
                   修改
-                </Button>
+                </button>
 
-                <Button
-                  className="box-btn-red"
+                <button
+                  className="btn btn-light"
                   onClick={async () => {
                     await this.props.dispatch({
                       type: 'SET_CURRENT_ADMIN_ROLE_INFO',
@@ -91,10 +92,10 @@ class AdminRole extends React.Component {
                   size="small"
                 >
                   删除
-                </Button>
+                </button>
 
-                <Button
-                  className="box-btn-orange"
+                <button
+                  className="btn btn-primary"
                   onClick={async () => {
                     this.setState({
                       visible_set_authority_modal: true,
@@ -112,7 +113,7 @@ class AdminRole extends React.Component {
                   size="small"
                 >
                   设置权限
-                </Button>
+                </button>
               </div>
             )
           }
@@ -379,14 +380,14 @@ class AdminRole extends React.Component {
         </div>
 
         <div className="layout-nav-btn">
-          <Button
-            className="admin-role-create-btn layout-btn"
+          <button
+            className="btn btn-danger"
             icon="plus"
             onClick={this.showModal}
             type="primary"
           >
             创建角色
-          </Button>
+          </button>
         </div>
 
         <div className="card admin-role">

@@ -135,30 +135,31 @@ class UserRole extends React.Component {
           key: 'action',
           render: (text, record) => {
             return (
-              <div className="table--btn">
-                <Button
+              <div className="operation-btn" style={{ width: '250px' }}>
+                <button
                   onClick={() => {
                     this._edit(record)
                   }}
+                  className="btn btn-info"
                   size="small"
                   type="primary"
                 >
-                  修改
-                </Button>
+                  <Icon type="edit" />
+                </button>
 
-                <Button
-                  className="box-btn-red"
+                <button
+                  className="btn btn-light"
                   onClick={() => {
                     this._delete(record)
                   }}
                   size="small"
                 >
-                  删除
-                </Button>
+                  <Icon type="delete" />
+                </button>
 
                 {record.user_role_type !== 2 ? (
-                  <Button
-                    className="box-btn-orange"
+                  <button
+                    className="btn btn-primary"
                     onClick={async () => {
                       this.setState({
                         visible_set_authority_modal: true,
@@ -176,7 +177,7 @@ class UserRole extends React.Component {
                     size="small"
                   >
                     设置权限
-                  </Button>
+                  </button>
                 ) : (
                   ''
                 )}
@@ -472,14 +473,14 @@ class UserRole extends React.Component {
         </div>
 
         <div className="layout-nav-btn">
-          <Button
-            className="article-tag-user-create-btn layout-btn"
+          <button
+            className="btn btn-danger"
             icon="plus"
             type="primary"
             onClick={() => this.showModal(0)}
           >
             创建用户角色
-          </Button>
+          </button>
         </div>
 
         <div className="card user-role">

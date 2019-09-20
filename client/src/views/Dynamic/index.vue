@@ -37,7 +37,7 @@
       </div>
       <div class="row dynamic-main">
         <div class="col-xs-12 col-sm-8 col-md-8">
-          <div class="stream-wrapper"
+          <div class="stream-wrapper clinet-card"
                v-if="personalInfo.islogin">
             <dynamic-write @changeDynamicWrite="dynamicSubmit" />
           </div>
@@ -45,7 +45,7 @@
             <scroll-loading @scroll-loading="infiniteHandler"
                             :isLoading="isLoading"
                             :isMore="isMore">
-              <div class="dy-item"
+              <div class="dy-item clinet-card"
                    v-for="(dynamicItem,key) in dynamic.dynamicList.list"
                    :key="key">
                 <dynamic-item :dynamicItem="dynamicItem" />
@@ -157,7 +157,8 @@ export default {
     background: #fff;
     border-radius: 3px;
     transition: all 0.3s ease;
-    box-shadow: 0 0px 3px rgba(67, 38, 100, 0.15);
+    border: 1px solid #edf2f9;
+    box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
     .nav-list {
       height: 100%;
       display: flex;
@@ -194,18 +195,8 @@ export default {
   .dynamic-main {
     padding-left: 135px;
     margin-top: 25px;
-    .stream-wrapper {
-      margin-bottom: 8px;
-      .dynamic-editor {
-        box-shadow: 0 0px 3px rgba(67, 38, 100, 0.15);
-        border-radius: 6px;
-      }
-    }
     .dy-item {
       position: relative;
-      box-shadow: 0 0px 3px rgba(67, 38, 100, 0.15);
-      border-radius: 6px;
-      margin-bottom: 8px;
     }
   }
 }
