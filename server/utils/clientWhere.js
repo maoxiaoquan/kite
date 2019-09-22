@@ -16,7 +16,11 @@ module.exports = {
         { status: 6 },
         { status: 7 }
       ] // 状态(1:审核中;2:审核通过;3:审核失败，4回收站，5已删除，6无需审核,7:草稿;
-    }
+    },
+    type: {
+      [Op.or]: [1, 2]
+    },
+    isPublic: true
   },
   comment: {
     [Op.or]: [{ status: 1 }, { status: 2 }, { status: 3 }, { status: 5 }]

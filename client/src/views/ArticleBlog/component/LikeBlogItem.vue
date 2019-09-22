@@ -61,7 +61,7 @@
     </template>
     <template v-else>
       <div class="user-article-blog-null">
-        <span class="info">此专栏由于未知原因，专栏被个人或者官方下架</span>
+        <span class="info">此专栏暂时不可见，原因有，1.专栏主人正在装修专栏中，2.由于未知原因，专栏被个人或者官方下架，你可以等待，或者点击下方的</span>
         <span class="cancel-attention"
               @click="setLikeArticleBlog(articleBlogItem.blog_id)">取消关注</span>
       </div>

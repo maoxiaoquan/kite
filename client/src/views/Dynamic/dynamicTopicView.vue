@@ -82,12 +82,12 @@ export default {
   name: 'dynamic',
   metaInfo () {
     return {
-      title: this.topicInfo.name || "",
+      title: this.topicInfo.name + '-话题' || "",
       meta: [
         {
           // set meta
           name: "description",
-          content: `${this.topicInfo.name || ""}`
+          content: `${this.topicInfo.name || ""}-话题`
         }
       ],
       htmlAttrs: {

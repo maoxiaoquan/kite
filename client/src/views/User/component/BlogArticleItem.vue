@@ -5,7 +5,21 @@
         <router-link class="title"
                      :to="{name:'article',params:{aid:articleItem.aid}}">{{articleItem.title}}</router-link>
       </div>
-
+      <div class="operat-view"
+           v-if="personalInfo.islogin&&personalInfo.user.uid===user_info.user.uid">
+        <el-dropdown trigger="click"
+                     @command="commandChange">
+          <div class="operat-view-icon el-dropdown-link">
+            <i class="el-icon-more"></i>
+          </div>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item icon="el-icon-edit"
+                              :command="{name:'Write',params:{type:articleItem.aid}}">修改</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-delete"
+                              :command="{name:'delete'}">删除</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
       <div class="info-row meta-row">
         <ul class="meta-list">
           <li class="item username clickable">
@@ -13,7 +27,7 @@
                          class="name">{{articleItem.user.nickname}}</router-link>
           </li>
           <li class="item item-icon read-count">
-            <i class="el-icon-reading"></i>
+            <i class="el-icon-view"></i>
             <strong v-text="articleItem.read_count"></strong>
           </li>
           <li class="item item-icon like-article">
@@ -33,24 +47,18 @@
                          :key="key"
                          :to="{name:'article_tag',params:{article_tag_en_name:itemArticleTag.article_tag_en_name}}">{{itemArticleTag.article_tag_name}}</router-link>
           </li>
-          <li class="item operat-view"
-              v-if="personalInfo.islogin&&personalInfo.user.uid===user_info.user.uid">
-            <el-dropdown trigger="click"
-                         @command="commandChange">
-              <div class="el-dropdown-link">
-                <i class="el-icon-more"></i>
-              </div>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item icon="el-icon-edit"
-                                  :command="{name:'Write',params:{type:articleItem.aid}}">修改</el-dropdown-item>
-                <el-dropdown-item icon="el-icon-delete"
-                                  :command="{name:'delete'}">删除</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+          <li class="item"
+              v-if="String(articleItem.type)==='2'||String(articleItem.type)==='3'">
+            {{articleTypeList[String(articleItem.type)]}}
+          </li>
+          <li class="item public-status"
+              v-if="!articleItem.is_public">
+            <span>仅自己可见</span>
           </li>
           <li class="item"
               style="color:#F07178"
               v-if="~[3,4,5].indexOf(articleItem.status)">{{statusList[articleItem.status]}}:{{articleItem.rejection_reason}}</li>
+
         </ul>
       </div>
     </div>
@@ -79,7 +87,12 @@ export default {
         "审核失败",
         "回收站",
         "已删除"
-      ]
+      ],
+      articleTypeList: { // 文章类型列表
+        '1': '文章',
+        '2': '日记',
+        '3': '草稿',
+      },
     };
   },
   methods: {
@@ -152,6 +165,22 @@ export default {
   align-items: center;
   padding: 0.8rem 0;
   min-height: 5.75rem;
+  position: relative;
+  padding-right: 30px;
+  .operat-view {
+    position: absolute;
+    right: -6px;
+    top: 10px;
+    width: 30px;
+    cursor: pointer;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    .operat-view-icon {
+      display: block;
+      width: 30px;
+    }
+  }
   .info-box {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -244,6 +273,16 @@ export default {
             }
           }
         }
+        .public-status {
+          span {
+            display: inline-block;
+            background: salmon;
+            padding: 0 3px;
+            line-height: 18px;
+            color: #fff;
+            border-radius: 3px;
+          }
+        }
         .item-icon {
           display: inline-block;
           font-size: 12px;
@@ -261,11 +300,6 @@ export default {
           &.like-article-off {
             color: #00bb29;
           }
-        }
-
-        .operat-view {
-          position: relative;
-          cursor: pointer;
         }
       }
     }

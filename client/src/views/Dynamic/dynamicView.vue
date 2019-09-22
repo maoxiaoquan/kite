@@ -67,12 +67,12 @@ export default {
   name: 'dynamic-view',
   metaInfo () {
     return {
-      title: this.dynamic.dynamicView.content || "动态不存在",
+      title: this.dynamic.dynamicView.content + '-片刻' || "",
       meta: [
         {
           // set meta
           name: "description",
-          content: `${this.dynamic.dynamicView.content || "动态不存在"}`
+          content: `${this.dynamic.dynamicView.content || ""}-片刻`
         }
       ],
       htmlAttrs: {

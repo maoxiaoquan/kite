@@ -25,6 +25,10 @@
                     <span class="comments-count">评论 {{articleComment.count}}</span>
                     <span class="likes-count">喜欢 {{article.like_count}}</span>
                     <span class="source">{{typeList[article.type]}}</span>
+                    <span class="item"
+                          v-if="String(article.type)==='2'">
+                      {{articleTypeList[String(article.type)]}}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -135,7 +139,12 @@ export default {
       articleUserInfo: {
         attention_uid_arr: [],
         user_like_aid_arr: []
-      }
+      },
+      articleTypeList: { // 文章类型列表
+        '1': '文章',
+        '2': '日记',
+        '3': '草稿',
+      },
     };
   },
   created () {

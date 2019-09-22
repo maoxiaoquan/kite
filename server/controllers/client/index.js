@@ -19,7 +19,9 @@ class Index {
       // where
       whereArticleParams = {
         // 默认全部导入的专题
-        ...clientWhere.article.otherList
+        type: clientWhere.article.type,
+        ...clientWhere.article.otherList,
+        is_public: clientWhere.article.isPublic
       }
 
       if (!columnEnName) {

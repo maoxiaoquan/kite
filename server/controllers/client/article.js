@@ -151,7 +151,8 @@ class Article {
         source: reqData.source, // 来源 （1原创 2转载）
         cover_img: result ? result[2] : '',
         status, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败;4:回收站;5:已删除;6:无需审核)'
-        type: reqData.type, // 类型 （1文章 2说说 3视频 4公告 ）
+        is_public: Number(reqData.is_public), // 是否公开
+        type: reqData.type, // 类型 （1文章 2日记 3草稿 ）
         blog_ids: reqData.blog_ids,
         article_tag_ids: reqData.article_tag_ids
       })
@@ -193,6 +194,8 @@ class Article {
             article_tag_ids: {
               [Op.like]: `%${oneArticleTag.article_tag_id}%`
             },
+            type: clientWhere.article.type,
+            is_public: clientWhere.article.isPublic,
             ...clientWhere.article.otherList // web 表示前台  公共文章限制文件
           }, // 为空，获取全部，也可以自己添加条件
           offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
@@ -369,7 +372,12 @@ class Article {
     let { aid } = ctx.query
     try {
       let article = await models.article.findOne({
-        where: { aid, ...clientWhere.article.otherView }
+        where: {
+          aid,
+          ...clientWhere.article.otherView,
+          type: clientWhere.article.type,
+          is_public: clientWhere.article.isPublic
+        }
       })
 
       if (article) {
@@ -574,7 +582,8 @@ class Article {
           source: reqData.source, // 来源 （1原创 2转载）
           cover_img: result ? result[2] : '',
           status, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败;4:回收站;5:已删除;6:无需审核)'
-          type: reqData.type, // 类型 （1文章 2说说 3视频 4公告 ）
+          is_public: Number(reqData.is_public), // 是否公开
+          type: reqData.type, // 类型 （1文章 2日记 3草稿 ）
           blog_ids: reqData.blog_ids,
           article_tag_ids: reqData.article_tag_ids,
           update_date: moment(date.setHours(date.getHours())).format(
@@ -672,6 +681,8 @@ class Article {
       let { count, rows } = await models.article.findAndCountAll({
         where: {
           title: { [Op.like]: `%${search}%` },
+          type: clientWhere.article.type,
+          is_public: clientWhere.article.isPublic,
           ...clientWhere.article.otherList // web 表示前台  公共文章限制文件
         }, // 为空，获取全部，也可以自己添加条件 // status: 2 限制只有 审核通过的显示
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目

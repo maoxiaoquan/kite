@@ -14,7 +14,7 @@
                          class="name">{{articleItem.user.nickname}}</router-link>
           </li>
           <li class="item item-icon read-count">
-            <i class="el-icon-reading"></i>
+            <i class="el-icon-view"></i>
             <strong v-text="articleItem.read_count"></strong>
           </li>
           <li class="item item-icon like-article">
@@ -34,6 +34,10 @@
                          :key="key"
                          :to="{name:'article_tag',params:{article_tag_en_name:item_article_tag.article_tag_en_name}}">{{item_article_tag.article_tag_name}}</router-link>
           </li>
+          <li class="item"
+              v-if="String(articleItem.type)==='2'">
+            {{articleTypeList[String(articleItem.type)]}}
+          </li>
         </ul>
       </div>
     </div>
@@ -52,6 +56,15 @@ export default {
     articleItem: {
       type: Object,
       default: {}
+    }
+  },
+  data () {
+    return {
+      articleTypeList: { // 文章类型列表
+        '1': '文章',
+        '2': '日记',
+        '3': '草稿',
+      },
     }
   },
   methods: {

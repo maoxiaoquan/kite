@@ -1,7 +1,7 @@
 <template>
   <div class="website-notice">
 
-    <div class="notice"
+    <div class="notice client-card"
          v-if="website.notice.length>0">
       <a class="notice-item"
          v-for="(item,key) in website.notice"
@@ -10,7 +10,7 @@
          :key="key">{{item.title}}</a>
     </div>
 
-    <div class="advertise"
+    <div class="advertise client-card"
          v-if="website.advertise.length>0">
       <div class="advertise-item"
            v-for="(advertiseItem,key) in website.advertise"
@@ -47,10 +47,7 @@ export default {
   .notice {
     padding: 15px 12px;
     margin-bottom: 20px;
-    border: 1px solid transparent;
-    border-radius: 12px;
     background-color: #fcf8e3;
-    border-color: #faebcc;
     color: #8a6d3b;
     .notice-item {
       display: block;

@@ -20,11 +20,14 @@
                   <div class="info-content">
                     <div class="name">
                       {{articleBlog.blogInfo.name}}
-                      <span class="article-count"> {{articleBlog.blogInfo.articleCount}}</span>
                     </div>
                     <ul class="statistics">
+                      <li class="item item-icon like-article">
+                        <i class="el-icon-document"></i>
+                        <span class="article-count"> {{articleBlog.blogInfo.articleCount}}</span>
+                      </li>
                       <li class="item item-icon read-count">
-                        <i class="el-icon-reading"></i>
+                        <i class="el-icon-view"></i>
                         <span v-text="articleBlog.blogInfo.read_count||0"></span>
                       </li>
                       <li class="item item-icon like-article">
@@ -111,12 +114,12 @@ import websiteNotice from '@views/Parts/websiteNotice'
 export default {
   metaInfo () {
     return {
-      title: this.articleBlog.blogInfo.name || "",
+      title: this.articleBlog.blogInfo.name + '-专栏' || "",
       meta: [
         {
           // set meta
           name: "description",
-          content: `${this.articleBlog.blogInfo.name || ""}`
+          content: `${this.articleBlog.blogInfo.name || ""}-专栏`
         }
       ],
       htmlAttrs: {
@@ -235,15 +238,6 @@ export default {
             font-size: 13px;
             &:hover {
               color: #0c7d9d;
-            }
-            .article-count {
-              display: inline-block;
-              font-weight: 400;
-              color: rgba(0, 0, 0, 0.88);
-              background: #ffd600;
-              border-radius: 4px;
-              padding: 0 6px;
-              margin-left: 10px;
             }
           }
           .statistics {

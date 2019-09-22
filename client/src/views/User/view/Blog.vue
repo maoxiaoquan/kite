@@ -84,9 +84,10 @@
                 <i class="el-icon-star-off"></i>
                 <span v-text="articleBlogItem.likeCount||0"></span>
               </li>
-              <li class="item">
+              <li class="item"
+                  v-if="!articleBlogItem.is_public">
                 <span class="type"
-                      :class="{'true':articleBlogItem.is_public}"> {{ articleBlogItem.is_public?'公开':'个人' }}</span>
+                      :class="{'true':articleBlogItem.is_public}">仅自己可见</span>
               </li>
               <li class="item attention"
                   v-if="~[2,4].indexOf(articleBlogItem.status)&&personalInfo.islogin&&articleBlogItem.is_public"
@@ -137,7 +138,7 @@
                    name="sex"
                    :value="false"
                    class="form-input-radio"
-                   v-model="blogForm.is_public"><span>仅自己</span>
+                   v-model="blogForm.is_public"><span>仅自己可见</span>
           </div>
         </div>
 

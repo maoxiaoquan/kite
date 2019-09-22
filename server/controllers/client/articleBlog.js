@@ -383,7 +383,9 @@ class dynamicBlog {
     let sort = ctx.query.sort
     let blogId = ctx.query.blogId
     let whereParams = {
-      blog_ids: blogId
+      blog_ids: blogId,
+      type: clientWhere.article.type,
+      is_public: clientWhere.article.isPublic
     }
 
     let orderParams = []

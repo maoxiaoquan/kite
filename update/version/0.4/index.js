@@ -31,6 +31,10 @@ class update0_4 {
         )
 
         await models.sequelize.query(
+          'ALTER TABLE article add COLUMN is_public tinyint(1) DEFAULT 1 comment "是否公开";'
+        )
+
+        await models.sequelize.query(
           'ALTER TABLE article_blog add COLUMN like_count bigint(20) DEFAULT 0 comment "个人专栏like数量";'
         )
 

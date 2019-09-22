@@ -19,7 +19,8 @@
                      class="avatar">
           <span class="name">{{ item.name }}</span>
           <i class="is-public"
-             :class="{'true':item.is_public}">{{ item.is_public?'公开':'个人' }}</i>
+             v-if="!item.is_public"
+             :class="{'true':item.is_public}">专栏仅自己可见</i>
         </router-link>
       </li>
 
@@ -31,6 +32,16 @@
           </router-link>
         </li>
       </template>
+    </ul>
+
+    <ul class="article-type">
+      <li v-for="(articleItem,key) in articleTypeList"
+          :class="{'active':$route.query.type===key,'index-active':!$route.query.type&&key==='1'}"
+          :key="key">
+        <router-link :to='{name:"userArticle",query:{blog_id:$route.query.blog_id||"all",type:key}}'>
+          <span class="name">{{articleItem}}</span>
+        </router-link>
+      </li>
     </ul>
 
     <div class="list-container">
@@ -71,13 +82,19 @@ export default {
     return store.dispatch('user/USER_MY_ARTICLE', {
       uid: route.params.uid,
       blog_id: route.query.blog_id || 'all',
+      type: route.query.type || '1',
       page: route.query.page || 1,
       pageSize: route.query.pageSize || 10,
     })
   },
   data () {
     return {
-      isCreateBlogShow: false
+      isCreateBlogShow: false,
+      articleTypeList: {
+        '1': '文章',
+        '2': '日记',
+        '3': '草稿',
+      }
     }
   },
   created () {
@@ -88,6 +105,7 @@ export default {
       this.$store.dispatch('user/USER_MY_ARTICLE', {
         uid: this.$route.params.uid,
         blog_id: this.$route.query.blog_id || 'all',
+        type: this.$route.query.type || '1',
         page: this.$route.query.page || 1,
         pageSize: 10,
       })
@@ -138,6 +156,35 @@ export default {
   margin-top: 20px;
 }
 
+.article-type {
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0;
+  list-style: none;
+  li {
+    position: relative;
+    display: inline-block;
+    padding: 8px 0;
+    margin-bottom: -1px;
+    &.index-active,
+    &.active {
+      border-bottom: 2px solid #646464;
+      a {
+        color: #646464;
+      }
+    }
+    a {
+      padding: 13px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #969696;
+      line-height: 25px;
+      &:hover {
+        color: #646464;
+      }
+    }
+  }
+}
+
 .blog-list {
   .blog-list-item {
     display: inline-block;
@@ -167,7 +214,9 @@ export default {
           background: #41b883;
         }
       }
-      &.exact-active {
+    }
+    &.current {
+      a {
         background: #eb6f5a;
         border: 1px solid #eb6f5a;
         .name {

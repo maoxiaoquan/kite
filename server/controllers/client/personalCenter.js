@@ -17,17 +17,17 @@ class PersonalCenter {
   static async userMyArticle (ctx) {
     let uid = ctx.query.uid
     let blog_id = ctx.query.blog_id || 'all'
+    let type = ctx.query.type || '1'
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
+    let whereParams = {
+      uid,
+      type,
+      ...clientWhere.article.me
+    }
     try {
-      let whereParams =
-        blog_id === 'all'
-          ? { uid, ...clientWhere.article.me }
-          : {
-            uid,
-            blog_ids: blog_id,
-            ...clientWhere.article.me
-          }
+      blog_id !== 'all' && (whereParams.blog_ids = blog_id)
+
       let { count, rows } = await models.article.findAndCountAll({
         where: whereParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目

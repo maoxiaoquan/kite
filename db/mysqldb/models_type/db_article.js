@@ -58,9 +58,9 @@ module.exports = {
       field: 'status'
     },
     type: {
-      // 类型 0:提问1:文章;2:说说 ）保留字段
+      // 类型 1:文章;2:日记;3:说说
       type: Seq.INTEGER(10),
-      comment: '类型 （1:文章;2:提问）',
+      comment: '类型 （1:文章;2:日记;3:说说）',
       field: 'type'
     },
     cover_img: {
@@ -113,6 +113,15 @@ module.exports = {
       comment: '更新时间',
       field: 'update_date',
       defaultValue: Seq.NOW /* 时间 */
+    },
+    is_public: {
+      // 是否公开
+      type: Seq.BOOLEAN,
+      comment: '是否公开',
+      field: 'is_public',
+      defaultValue: () => {
+        return true
+      }
     },
     update_timestamp: {
       // 更新时间戳

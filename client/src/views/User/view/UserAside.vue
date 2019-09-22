@@ -47,6 +47,14 @@
         </template>
       </div>
     </div>
+
+    <div class="client-card article-info">
+      <p class="info">
+        如果专栏仅自己可见，不会影响专栏内的文章，
+        只有文章设为仅自己可见或者草稿，才不会被首页和推荐收录，其余均可被收录，文章不会被专栏所影响，
+        专栏是文章的一个集合，类似与一个小册。
+      </p>
+    </div>
   </div>
 </template>
 
@@ -158,6 +166,13 @@ export default {
   .new-collection-btn {
     font-size: 13px;
     color: #42c02e;
+  }
+  .article-info {
+    padding: 15px;
+    background: #f9f9f9;
+    p {
+      font-size: 13px;
+    }
   }
 }
 

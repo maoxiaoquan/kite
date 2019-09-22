@@ -95,12 +95,12 @@ import BlogItem from './component/BlogItem'
 export default {
   metaInfo () {
     return {
-      title: '专栏',
+      title: `专栏-${this.website.meta.website_name}`,
       meta: [
         {
           // set meta
           name: "description",
-          content: `专栏`
+          content: `专栏-${this.website.meta.website_name}`
         }
       ],
       htmlAttrs: {

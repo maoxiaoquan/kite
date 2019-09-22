@@ -35,6 +35,16 @@
                       :key="key">{{item.text}}</option>
             </select>
           </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
+            <label class="box-label"
+                   for="">是否公开</label>
+            <select class="box-select"
+                    v-model="write.is_public">
+              <option :value="key"
+                      v-for="(item,key) in publicTypeList"
+                      :key="key">{{item}}</option>
+            </select>
+          </div>
         </div>
 
         <div class="row mrg-bm20">
@@ -62,6 +72,16 @@
                       v-show="!isCreateBlogShow"
                       @click="isCreateBlogShow=true">创建新个人专栏</button>
             </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
+            <label class="box-label"
+                   for="">文章类型</label>
+            <select class="box-select"
+                    v-model="write.type">
+              <option :value="key"
+                      v-for="(item,key) in articleTypeList"
+                      :key="key">{{item}}</option>
+            </select>
           </div>
         </div>
 
@@ -142,9 +162,17 @@ export default {
     return {
       write: {
         title: '', // 文章的标题
-        source: '', // 文章的来源
+        source: '1', // 文章的来源
         content: '', // 文章的内容
         blog_ids: '', // 文章所属专栏ID
+        type: '1', // 文章的累心
+        is_public: 1, // 是否公开 1公开 0仅自己可见
+      },
+      publicTypeList: ['仅自己可见', '公开'], // 文章类型列表
+      articleTypeList: { // 文章类型列表
+        '1': '文章',
+        '2': '日记',
+        '3': '草稿',
       },
       blog: {
         name: ''
@@ -233,6 +261,7 @@ export default {
             this.write.source = result.data.article.source;
             this.write.content = result.data.article.origin_content;
             this.write.blog_ids = result.data.article.blog_ids;
+            this.write.type = result.data.article.type;
             this.editArticleInfo = result.data.article
 
             this.articleTagAll.map(item => {
@@ -352,7 +381,8 @@ export default {
         content: marked(this.write.content, { breaks: true }) /*主内容*/,
         origin_content: this.write.content /*源内容*/,
         source: this.write.source, // 来源 （1原创 2转载）
-        type: 1, // 类型 （1:文章;2:提问,3:说说 ）
+        type: this.write.type, // 类型 （1:文章;2:日记,3:草稿 ）
+        is_public: this.write.is_public,
         blog_ids: this.write.blog_ids,
         article_tag_ids: this
           .getObjectValues(this.currentArticleTagArr)
