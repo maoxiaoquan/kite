@@ -190,7 +190,7 @@ export default {
   .dynamic-list {
     padding: 0 16px;
     .item {
-      padding: 12px 0;
+      padding: 6px 0;
     }
     .item:not(:last-child) {
       border-bottom: 1px solid hsla(0, 0%, 59.2%, 0.1);

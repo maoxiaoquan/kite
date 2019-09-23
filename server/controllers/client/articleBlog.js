@@ -488,6 +488,24 @@ class dynamicBlog {
 
     let orderParams = []
 
+    let allArticleTagId = [] // 全部禁止某些文章标签推送的id
+    let allArticleTag = await models.article_tag.findAll({
+      where: {
+        is_push: false
+      } // 为空，获取全部，也可以自己添加条件
+    })
+
+    if (allArticleTag && allArticleTag.length > 0) {
+      for (let item in allArticleTag) {
+        allArticleTagId.push(allArticleTag[item].article_tag_id)
+      }
+
+      console.log('allArticleTag', allArticleTagId)
+      whereParams['tag_ids'] = {
+        [Op.notRegexp]: `${allArticleTagId.join('|')}`
+      }
+    }
+
     if (columnEnName && columnEnName !== 'all') {
       if (!tagId) {
         let oneArticleColumn = await models.article_column.findOne({
