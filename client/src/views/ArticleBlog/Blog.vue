@@ -246,6 +246,7 @@ export default {
           .nav-item {
             display: inline-block;
             margin-right: 10px;
+            margin-bottom: 8px;
             a {
               display: block;
               border: 1px solid #e0e0e0;
