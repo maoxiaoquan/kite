@@ -275,7 +275,6 @@ export default {
         a {
           padding: 13px 20px;
           font-size: 15px;
-          font-weight: 700;
           color: #969696;
           line-height: 25px;
           &:hover {

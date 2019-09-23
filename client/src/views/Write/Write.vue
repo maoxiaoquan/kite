@@ -61,6 +61,7 @@
               <div class="create-blog-view"
                    v-show="isCreateBlogShow">
                 <input class="create-blog-input box-input"
+                       placeholder="请输入专栏名字"
                        v-model="blog.name"
                        type="text" />
                 <button class="btn btn-primary btn-sm"
@@ -607,6 +608,8 @@ export default {
     margin-top: 10px;
     .create-blog-input {
       height: 36px;
+      padding: 0 12px;
+      font-size: 14px;
     }
   }
 

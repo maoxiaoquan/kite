@@ -3,15 +3,15 @@
     <div class="container dynamic-container">
       <div class="row dynamic-main">
         <div class="col-xs-12 col-sm-8 col-md-8 left">
-          <div class="stream-wrapper client-card">
-            <div class="edit-view"
+          <div class="stream-wrapper">
+            <div class="edit-view client-card"
                  v-if="personalInfo.islogin">
               <dynamic-write @changeDynamicWrite="dynamicSubmit"
                              v-if="personalInfo.islogin"
                              :afferentTopic="afferentTopic" />
             </div>
 
-            <div class="sort">
+            <div class="sort client-card">
               <router-link :to='{name:"dynamicTopicView",params:{dynamicTopicId:afferentTopic}}'
                            class="topic-title">推荐</router-link>
               <router-link :to='{name:"dynamicTopicView",params:{dynamicTopicId:afferentTopic},query:{sort:"new"}}'
@@ -22,7 +22,7 @@
               <scroll-loading @scroll-loading="infiniteHandler"
                               :isLoading="isLoading"
                               :isMore="isMore">
-                <div class="dy-item"
+                <div class="dy-item client-card"
                      v-for="(dynamicItem,key) in list"
                      :key="key">
                   <dynamic-item :dynamicItem="dynamicItem" />
@@ -211,6 +211,7 @@ export default {
       .sort {
         border-bottom: 1px solid rgba(92, 96, 102, 0.1);
         display: flex;
+        flex-direction: row;
         a {
           flex: 1;
           text-align: center;
@@ -220,9 +221,6 @@ export default {
             color: #37c701;
           }
         }
-      }
-      /deep/.action-box {
-        border-bottom: 1px solid rgba(92, 96, 102, 0.1);
       }
     }
   }

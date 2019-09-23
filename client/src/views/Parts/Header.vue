@@ -292,7 +292,6 @@ export default {
               padding: 20px 15px;
               display: block;
               font-size: 15px;
-              font-weight: bold;
               color: rgba(0, 0, 0, 0.56);
             }
             i {

@@ -24,7 +24,7 @@
                     <span class="views-count">阅读 {{article.read_count}}</span>
                     <span class="comments-count">评论 {{articleComment.count}}</span>
                     <span class="likes-count">喜欢 {{article.like_count}}</span>
-                    <span class="source">{{typeList[article.type]}}</span>
+                    <span class="source">{{sourceTypeList[article.source]}}</span>
                     <span class="item"
                           v-if="String(article.type)==='2'">
                       {{articleTypeList[String(article.type)]}}
@@ -131,7 +131,7 @@ export default {
   },
   data () {
     return {
-      typeList: ["", "原创", "转载"],
+      sourceTypeList: ["", "原创", "转载"],
       currUserInfo: {
         attention_uid_arr: [],
         user_like_aid_arr: []

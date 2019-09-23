@@ -9,7 +9,7 @@ const multer = require('koa-multer')
 const upload = require('../../utils/upload') // 上传工具类
 const fs = require('fs')
 const path = require('path')
-
+const Op = require('sequelize').Op
 function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
@@ -28,20 +28,60 @@ class Upload {
         let filename = ctx.req.file.filename
         let origin = ctx.request.header.origin
         let { user = '' } = ctx.request
-        await models.user_info.update(
-          {
-            avatar_review: `${origin}${destination}/${filename}`,
-            avatar_review_status: 1
-          },
-          {
-            where: {
-              uid: user.uid // 查询条件
-            }
+
+        let userRoleAll = await models.user_role.findAll({
+          where: {
+            user_role_id: {
+              [Op.or]: user.user_role_ids.split(',')
+            },
+            user_role_type: 1 // 用户角色类型1是默认角色
           }
-        )
+        })
+        let userAuthorityIds = ''
+        userRoleAll.map(roleItem => {
+          userAuthorityIds += roleItem.user_authority_ids + ','
+        })
+        let message = ''
+        if (~userAuthorityIds.indexOf(config.USER.dfUserAvatarNoReviewId)) {
+          message = '上传用户头像成功'
+          await models.user.update(
+            {
+              avatar: `${origin}${destination}/${filename}`
+            },
+            {
+              where: {
+                uid: user.uid // 查询条件
+              }
+            }
+          )
+          await models.user_info.update(
+            {
+              avatar_review_status: 2
+            },
+            {
+              where: {
+                uid: user.uid // 查询条件
+              }
+            }
+          )
+        } else {
+          message = '上传用户头像成功，头像正在审核中'
+          await models.user_info.update(
+            {
+              avatar_review: `${origin}${destination}/${filename}`,
+              avatar_review_status: 1
+            },
+            {
+              where: {
+                uid: user.uid // 查询条件
+              }
+            }
+          )
+        }
+
         resClientJson(ctx, {
           state: 'success',
-          message: '上传用户头像成功，头像正在审核中'
+          message: message
         })
       } else {
         resClientJson(ctx, {

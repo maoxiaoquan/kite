@@ -110,13 +110,36 @@ class dynamicBlog {
         .read()
         .get('website')
         .value()
-      if (~tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
-        if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
-          throw new ErrorMessage(
-            `${oneArticleTag.article_tag_name}只有${website.website_name}管理团队才能使用`
-          )
+
+      if (tag_ids) {
+        if (~tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
+          if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
+            throw new ErrorMessage(
+              `${oneArticleTag.article_tag_name}只有${website.website_name}管理团队才能使用`
+            )
+          }
         }
       }
+
+      let userRoleALL = await models.user_role.findAll({
+        where: {
+          user_role_id: {
+            [Op.or]: user.user_role_ids.split(',')
+          },
+          user_role_type: 1 // 用户角色类型1是默认角色
+        }
+      })
+
+      let userAuthorityIds = ''
+      userRoleALL.map(roleItem => {
+        userAuthorityIds += roleItem.user_authority_ids + ','
+      })
+
+      let status = ~userAuthorityIds.indexOf(
+        config.ARTICLE_BLOG.dfNoReviewArticleBlogId
+      )
+        ? 4
+        : 1
 
       if (oneUserArticleBlog) {
         throw new ErrorMessage('不能创建自己已有的专题')
@@ -131,7 +154,7 @@ class dynamicBlog {
         enable: enable || false,
         is_public: is_public || false,
         tag_ids: tag_ids || '',
-        status: 1
+        status
       })
       resClientJson(ctx, {
         state: 'success',
