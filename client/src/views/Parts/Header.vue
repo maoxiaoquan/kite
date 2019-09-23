@@ -27,7 +27,7 @@
                                         :command="{name:'home'}">主页</el-dropdown-item>
                       <el-dropdown-item icon="el-icon-chat-line-round"
                                         :command="{name:'dynamics',params:{dynamicTopicId:'newest'}}">片刻</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-chat-line-round"
+                      <el-dropdown-item icon="el-icon-tickets"
                                         :command="{name:'articleBlogs'}">专栏</el-dropdown-item>
                       <el-dropdown-item icon="el-icon-chat-line-square"
                                         v-if="personalInfo.islogin"
