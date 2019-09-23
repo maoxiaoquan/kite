@@ -216,6 +216,7 @@ export default {
         .nav-item {
           display: inline-block;
           margin-right: 10px;
+          margin-bottom: 8px;
           a {
             display: block;
             border: 1px solid #e0e0e0;
@@ -236,7 +237,7 @@ export default {
       border-top: 1px solid rgba(178, 186, 194, 0.15);
       padding: 15px 0 0;
       border-radius: 3px;
-      margin-top: 20px;
+      margin-top: 15px;
       .column-tag-menu {
         margin-bottom: 15px;
         padding-bottom: 15px;
