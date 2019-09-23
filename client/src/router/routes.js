@@ -139,17 +139,17 @@ export default [
       {
         path: 'blogs/:columnEnName',
         name: 'articleBlogs',
-        component: () => import('@views/articleBlog/Blog') // 个人专栏
+        component: () => import('@views/ArticleBlog/Blog') // 个人专栏
       },
       {
         path: 'blog/:blogId',
         name: 'articleBlog',
-        component: () => import('@views/articleBlog/BlogView') // 个人专栏内容
+        component: () => import('@views/ArticleBlog/BlogView') // 个人专栏内容
       },
       {
         path: 'blogs-like',
         name: 'articleBlogsLike',
-        component: () => import('@views/articleBlog/myLikeBlog') // 个人用户like的个人专栏
+        component: () => import('@views/ArticleBlog/myLikeBlog') // 个人用户like的个人专栏
       }
     ]
   }
