@@ -57,7 +57,7 @@
     </div>
 
     <div class="dynamic-content-row">
-      <div class="content-box content-box">
+      <div class="content-box">
         <div v-html="contentRender(dynamicItem.content)"></div>
         <div class="limit-ctl-box"></div>
       </div>
@@ -325,7 +325,7 @@ export default {
     margin-top: 5px;
     margin-bottom: 5px;
     .content-box {
-      font-size: 15px;
+      font-size: 14px;
       line-height: 20px;
       white-space: pre-line;
       color: #17181a;
