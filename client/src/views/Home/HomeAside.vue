@@ -275,7 +275,6 @@ export default {
   }
 
   .website-information {
-    margin-top: 50px;
     border-top: 1px solid #ededed;
     padding-top: 10px;
     ul {
