@@ -179,10 +179,9 @@ class Article extends React.Component {
       '审核失败',
       '回收站',
       '已删除',
-      '无需审核',
-      '草稿'
+      '无需审核'
     ],
-    type_list: ['', '文章', '提问', '说说'],
+    type_list: ['', '文章', '日记', '草稿'],
     source_list: ['', '原创', '转载'],
     title_val: '',
     status_val: '',
