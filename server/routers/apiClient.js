@@ -13,6 +13,7 @@ const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
 const dynamic = require('../controllers/client/dynamic') // 动态
 const dynamicComment = require('../controllers/client/dynamicComment') // 动态评论
 const dynamicTopic = require('../controllers/client/dynamicTopic') // 动态专题
+const books = require('../controllers/client/books') // 小书
 
 /**
  * 获取标签列表操作
@@ -311,5 +312,15 @@ router.get('/personal/dynamic-list', personalCenter.getDynamicListMe) // 个人�
 router.get('/dynamic-topic/info', dynamicTopic.getDynamicTopicInfo) // 获取动态话题的信息
 
 router.get('/personal/article-blog-list', personalCenter.userArticleBlogList) // 用户自己的个人专栏列表
+
+// 小书
+router.post(
+  '/book/upload-book-picture',
+  tokens.ClientVerifyToken,
+  upload.uploadBookPicture
+) // 动态图片上传
+
+// 小书创建
+router.post('/books/create', tokens.ClientVerifyToken, books.createBooks) // 动态图片上传
 
 module.exports = router

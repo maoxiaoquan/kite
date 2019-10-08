@@ -192,6 +192,32 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
 
+  // book
+
+  const book = sequelize.define(
+    require('./models_type/db_book').NAME,
+    require('./models_type/db_book').TABLE,
+    SEQ_PARAMETER
+  )
+
+  const books = sequelize.define(
+    require('./models_type/db_books').NAME,
+    require('./models_type/db_books').TABLE,
+    SEQ_PARAMETER
+  )
+
+  const book_comment = sequelize.define(
+    require('./models_type/db_book_comment').NAME,
+    require('./models_type/db_book_comment').TABLE,
+    SEQ_PARAMETER
+  )
+
+  const books_comment = sequelize.define(
+    require('./models_type/db_books_comment').NAME,
+    require('./models_type/db_books_comment').TABLE,
+    SEQ_PARAMETER
+  )
+
   const _define = {
     user,
     user_info,
@@ -217,6 +243,10 @@ module.exports = sequelize => {
     admin_role,
     admin_authority,
     system_log,
+    book,
+    books,
+    book_comment,
+    books_comment,
     picture,
     options
   }

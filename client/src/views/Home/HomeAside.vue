@@ -19,9 +19,13 @@
         </router-link>
         <a href="javascript:;"
            @click="switchRouter"
-           class="btn-note"
-           id="js-btn-note">
+           class="btn-note">
           <i class="el-icon-edit"></i>写文章
+        </a>
+        <a href="javascript:;"
+           @click="switchBooksCreate"
+           class="btn-note">
+          <i class="el-icon-edit"></i>创建小书
         </a>
       </div>
     </div>
@@ -100,6 +104,13 @@ import { mapState } from 'vuex'
 export default {
   name: 'HomeAside',
   methods: {
+    switchBooksCreate () {
+      if (!this.$store.state.personalInfo.islogin) {
+        this.$store.commit('SET_IS_LOGIN', true)
+      } else {
+        this.$router.push({ name: 'booksWrite', params: { type: 'create' } })
+      }
+    },
     switchRouter () {
       if (!this.$store.state.personalInfo.islogin) {
         this.$store.commit('SET_IS_LOGIN', true)

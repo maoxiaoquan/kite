@@ -150,6 +150,11 @@ export default [
         path: 'blogs-like',
         name: 'articleBlogsLike',
         component: () => import('@views/ArticleBlog/myLikeBlog') // 个人用户like的个人专栏
+      },
+      {
+        path: 'books-write/:type',
+        name: 'booksWrite',
+        component: () => import('@views/Books/WriteBooks') // 小书创建修改
       }
     ]
   }

@@ -3,7 +3,7 @@ const shortid = require('shortid')
 const time = require('../time')
 
 module.exports = {
-  NAME: 'books_comment' /* 表名 */,
+  NAME: 'book_comment' /* 表名 */,
   TABLE: {
     /* 表结构 */
     id: {
@@ -21,10 +21,16 @@ module.exports = {
       field: 'parent_id'
     },
     books_id: {
-      // 文章id
+      // 书的id
       type: Seq.BIGINT(20),
       comment: '书的id',
       field: 'books_id'
+    },
+    book_id: {
+      // 书的章节的id
+      type: Seq.BIGINT(20),
+      comment: '书的章节的id',
+      field: 'book_id'
     },
     uid: {
       // 评论用户ID

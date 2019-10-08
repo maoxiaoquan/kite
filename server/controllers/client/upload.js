@@ -132,6 +132,39 @@ class Upload {
   }
 
   /**
+   * 小书图片上传
+   * @param   {object} ctx 上下文对象
+   */
+  static async uploadBookPicture (ctx) {
+    try {
+      await upload('bookImg').single('file')(ctx)
+      if (ctx.req.file) {
+        let destination = ctx.req.file.destination.split('static')[1]
+        let filename = ctx.req.file.filename
+        let origin = ctx.request.header.origin
+        resClientJson(ctx, {
+          state: 'success',
+          message: '小书图片上传成功',
+          data: {
+            img: `${origin}${destination}/${filename}`
+          }
+        })
+      } else {
+        resClientJson(ctx, {
+          state: 'error',
+          message: '小书图片上传成功失败，文件格式有误'
+        })
+      }
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '上传图片大于1m'
+      })
+      return false
+    }
+  }
+
+  /**
    * 动态图片上传
    * @param   {object} ctx 上下文对象
    */
@@ -164,6 +197,7 @@ class Upload {
     }
   }
 
+  // 个人专栏图片上传
   static async uploadArticleBlogPicture (ctx) {
     try {
       await upload('articleBlogImg').single('file')(ctx)

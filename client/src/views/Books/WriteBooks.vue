@@ -5,12 +5,25 @@
       <client-only>
         <!-- this component will only be rendered on client-side -->
 
+        <div class="row mrg-bm20">
+          <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
+            <label class="box-label"
+                   for="">是否公开</label>
+            <select class="box-select"
+                    v-model="write.is_public">
+              <option :value="key"
+                      v-for="(item,key) in publicTypeList"
+                      :key="key">{{item}}</option>
+            </select>
+          </div>
+        </div>
+
         <div class="write-top  box-form-group">
 
           <input class="box-input title"
                  v-model="write.title"
                  type="text"
-                 placeholder="请输入文章标题">
+                 placeholder="请输入小书标题">
 
         </div>
 
@@ -27,16 +40,6 @@
         <div class="row mrg-bm20">
           <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
             <label class="box-label"
-                   for="">来源</label>
-            <select class="box-select"
-                    v-model="write.source">
-              <option :value="item.id"
-                      v-for="(item,key) in sourceList"
-                      :key="key">{{item.text}}</option>
-            </select>
-          </div>
-          <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
-            <label class="box-label"
                    for="">是否公开</label>
             <select class="box-select"
                     v-model="write.is_public">
@@ -47,48 +50,9 @@
           </div>
         </div>
 
-        <div class="row mrg-bm20">
-          <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
-            <label class="box-label"
-                   for="">个人专栏</label>
-            <select class="box-select"
-                    v-model="write.blog_ids">
-              <option :value="item.blog_id"
-                      v-for="(item,key) in userArticleBlogAll"
-                      :key="key">{{item.name}}</option>
-            </select>
-            <div class="create-blog">
-              <div class="create-blog-view"
-                   v-show="isCreateBlogShow">
-                <input class="create-blog-input box-input"
-                       placeholder="请输入专栏名字"
-                       v-model="blog.name"
-                       type="text" />
-                <button class="btn btn-primary btn-sm"
-                        @click="saveCreateBlog">保存</button>
-                <button class="btn btn-primary btn-sm"
-                        @click="isCreateBlogShow=false">取消</button>
-              </div>
-              <button class="btn btn-primary btn-sm"
-                      v-show="!isCreateBlogShow"
-                      @click="isCreateBlogShow=true">创建新个人专栏</button>
-            </div>
-          </div>
-          <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
-            <label class="box-label"
-                   for="">文章类型</label>
-            <select class="box-select"
-                    v-model="write.type">
-              <option :value="key"
-                      v-for="(item,key) in articleTypeList"
-                      :key="key">{{item}}</option>
-            </select>
-          </div>
-        </div>
-
         <div class="tag-warp">
           <p class="common-title">
-            文章标签
+            小书标签
             <span>
               <em id="chosen_tag_num">{{currentArticleTagArr.length}}</em>/3
             </span>
@@ -127,7 +91,7 @@
 
         <div class="write-footer clearfix">
           <button class="send-article"
-                  @click="saveArticle">发布文章</button>
+                  @click="saveArticle">发布小书</button>
         </div>
 
       </client-only>
@@ -146,7 +110,7 @@ export default {
   name: 'write',
   metaInfo () {
     return {
-      title: "文章编辑",
+      title: "小书编辑",
       htmlAttrs: {
         lang: "zh"
       }
@@ -162,39 +126,15 @@ export default {
   data () {
     return {
       write: {
-        title: '', // 文章的标题
-        source: '1', // 文章的来源
-        content: '', // 文章的内容
-        blog_ids: '', // 文章所属专栏ID
-        type: '1', // 文章的类型
+        title: '', // 小书的标题
+        content: '', // 小书的内容
         is_public: 1, // 是否公开 1公开 0仅自己可见
       },
-      publicTypeList: ['仅自己可见', '公开'], // 文章类型列表
-      articleTypeList: { // 文章类型列表
-        '1': '文章',
-        '2': '日记',
-        '3': '草稿',
-      },
-      blog: {
-        name: ''
-      },
-      userArticleBlogAll: [], // 用户全部专栏
-      sourceList: [ // 文章来源
-        // whether to display create blog btn and input 文章类型列表
-        {
-          id: "1",
-          text: "原创"
-        },
-        {
-          id: "2",
-          text: "转载"
-        }
-      ],
-      isCreateBlogShow: false, // 是否显示创建blog
+      publicTypeList: ['仅自己可见', '公开'], // 小书类型列表
       searchArticleTag: "",
-      currentArticleTagArr: [], // 用户选中的文章标签
+      currentArticleTagArr: [], // 用户选中的小书标签
       isSearchResultShow: false, // 搜索结果显示
-      searchShowArticleTagAll: [], // 搜索栏内呈现的文章标题
+      searchShowArticleTagAll: [], // 搜索栏内呈现的小书标题
       searchBoxWidth: "100%",
       toolbars: {
         bold: true, // 粗体
@@ -219,12 +159,11 @@ export default {
         /* 1.4.2 */
         navigation: true // 导航目录
       },
-      editArticleInfo: {} // 修改文章的信息
+      editArticleInfo: {} // 修改小书的信息
     }
   },
   created () {
     this.initArticleTagAll()
-    this.getUserArticleBlogAll()
     if (this.$route.params.type !== "create") {
       this.isEditArticle()
     }
@@ -259,12 +198,8 @@ export default {
           })
           .then(result => {
             this.write.title = result.data.article.title;
-            this.write.source = result.data.article.source;
             this.write.content = result.data.article.origin_content;
-            this.write.blog_ids = result.data.article.blog_ids;
-            this.write.type = result.data.article.type;
             this.editArticleInfo = result.data.article
-
             this.articleTagAll.map(item => {
               if (
                 ~this.editArticleInfo.article_tag_ids
@@ -280,20 +215,6 @@ export default {
     },
     initArticleTagAll () {
       this.searchShowArticleTagAll = this.articleTagAll;
-    },
-    getUserArticleBlogAll () {
-      if (!this.$store.state.personalInfo.islogin) {
-        this.$message.warning("当前用户未登陆，请前往首页登陆后尝试");
-        this.$router.push({ name: "home" });
-        return false;
-      }
-      this.$store
-        .dispatch("editor/GET_USER_BLOG", {
-          uid: this.$store.state.personalInfo.user.uid
-        })
-        .then(res => {
-          this.userArticleBlogAll = res.data.list;
-        });
     },
     addArticleTag (val) {
       this.search_article_tag = "";
@@ -336,25 +257,10 @@ export default {
       }
       return values;
     },
-    saveCreateBlog () {
-      this.$store
-        .dispatch("editor/CREATE_ARTICLE_BLOG", {
-          blog_name: this.blog.name
-        })
-        .then(res => {
-          if (res.state === "success") {
-            this.$message.success("创建文章专题成功");
-            this.blog.name = "";
-            this.getUserArticleBlogAll();
-            this.isCreateBlogShow = false;
-          } else {
-            this.$message.warning(res.message);
-          }
-        });
-    },
+
     imageFilter (file) {
       if (file.size > 1 * 1024 * 1024) {
-        this.$message.success("上传文章图片应该小于1M");
+        this.$message.success("上传小书图片应该小于1M");
         return false
       } else {
         return true
@@ -368,7 +274,7 @@ export default {
         .dispatch("editor/UPLOAD_ARTICLE_PICTURE", formData)
         .then(res => {
           if (res.state === "success") {
-            this.$message.success("上传文章图片成功");
+            this.$message.success("上传小书图片成功");
             this.$refs.mavonEditor.$img2Url(pos, res.data.img);
           } else {
             this.$message.warning(res.message);
@@ -378,13 +284,10 @@ export default {
     },
     saveArticle () {
       var params = {
-        title: this.write.title, //文章的标题
+        title: this.write.title, //小书的标题
         content: marked(this.write.content, { breaks: true }) /*主内容*/,
         origin_content: this.write.content /*源内容*/,
-        source: this.write.source, // 来源 （1原创 2转载）
-        type: this.write.type, // 类型 （1:文章;2:日记,3:草稿 ）
         is_public: this.write.is_public,
-        blog_ids: this.write.blog_ids,
         article_tag_ids: this
           .getObjectValues(this.currentArticleTagArr)
           .join(",")
@@ -403,11 +306,7 @@ export default {
           if (res.state === "success") {
             this.create_show_modal = false;
             this.$message.warning(res.message);
-            this.$router.push({
-              name: "userArticle",
-              params: { uid: this.personalInfo.user.uid },
-              query: { blog_id: "all" }
-            });
+
           } else {
             this.$message.warning(res.message);
           }
@@ -459,74 +358,6 @@ export default {
   }
   .box-select {
     height: 36px;
-  }
-
-  .blog-warp {
-    margin-bottom: 15px;
-    .common-title {
-      margin-bottom: 8px;
-      font-weight: 700;
-      font-size: 14px;
-      color: #1c1f21;
-      line-height: 22px;
-    }
-    .common-select-box {
-      position: relative;
-      background: #fff;
-      border: 1px solid #9199a1;
-      border-radius: 6px;
-      color: #1c1f21;
-      cursor: pointer;
-      font-size: 14px;
-      width: 200px;
-      i {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        font-size: 20px;
-        color: #9199a1;
-        line-height: 20px;
-      }
-      .common-select-name {
-        display: block;
-        padding: 0 40px 0 12px;
-        height: 32px;
-        line-height: 32px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        box-sizing: border-box;
-      }
-      .common-select-ul {
-        position: absolute;
-        max-height: 250px;
-        z-index: 1;
-        top: 33px;
-        padding: 8px 0;
-        width: 100%;
-        box-sizing: border-box;
-        background: #fff;
-        box-shadow: 0 8px 16px 0 rgba(28, 31, 33, 0.2);
-        border-radius: 8px;
-        overflow-y: auto;
-        li {
-          padding: 0 16px;
-          height: 33px;
-          line-height: 33px;
-          box-sizing: border-box;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          &.active,
-          &:hover {
-            background: #f3f5f6;
-          }
-        }
-      }
-    }
-    &.blog-warp-blog {
-      float: left;
-    }
   }
 
   .tag-warp {
@@ -601,15 +432,6 @@ export default {
       height: auto !important;
       max-height: 300px;
       overflow-y: auto;
-    }
-  }
-
-  .create-blog {
-    margin-top: 10px;
-    .create-blog-input {
-      height: 36px;
-      padding: 0 12px;
-      font-size: 14px;
     }
   }
 
