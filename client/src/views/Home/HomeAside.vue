@@ -24,8 +24,8 @@
         </a>
         <a href="javascript:;"
            @click="switchBooksCreate"
-           class="btn-note">
-          <i class="el-icon-edit"></i>创建小书
+           class="btn-book">
+          <i class="el-icon-notebook-2"></i>创建小书
         </a>
       </div>
     </div>
@@ -213,6 +213,10 @@ export default {
         color: rgba(0, 0, 0, 0.88);
         background: #ffd600;
         border: 1px solid #ffd600;
+      }
+      .btn-book {
+        color: #db5000;
+        border: 1px solid #db5000;
       }
     }
   }

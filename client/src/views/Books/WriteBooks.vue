@@ -1,97 +1,113 @@
 <template>
-  <section class="write-lay layout-content">
+  <section class="books-write-lay layout-content">
     <div class="container">
 
       <client-only>
         <!-- this component will only be rendered on client-side -->
 
-        <div class="row mrg-bm20">
-          <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
-            <label class="box-label"
-                   for="">是否公开</label>
-            <select class="box-select"
-                    v-model="write.is_public">
-              <option :value="key"
-                      v-for="(item,key) in publicTypeList"
-                      :key="key">{{item}}</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="write-top  box-form-group">
-
-          <input class="box-input title"
-                 v-model="write.title"
-                 type="text"
-                 placeholder="请输入小书标题">
-
-        </div>
-
-        <div class="write mrg-bm20">
-          <mavon-editor defaultOpen="edit"
-                        :boxShadow="false"
-                        v-model="write.content"
-                        :toolbars="toolbars"
-                        ref="mavonEditor"
-                        :imageFilter="imageFilter"
-                        @imgAdd="$imgAdd" />
-        </div>
-
-        <div class="row mrg-bm20">
-          <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
-            <label class="box-label"
-                   for="">是否公开</label>
-            <select class="box-select"
-                    v-model="write.is_public">
-              <option :value="key"
-                      v-for="(item,key) in publicTypeList"
-                      :key="key">{{item}}</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="tag-warp">
-          <p class="common-title">
-            小书标签
-            <span>
-              <em id="chosen_tag_num">{{currentArticleTagArr.length}}</em>/3
-            </span>
-          </p>
-          <div class="search-box clearfix"
-               ref="search_box">
-            <div class="clearfix js-chosen-tags"
-                 ref="js_chosen_tags"
-                 v-show="currentArticleTagArr.length>0">
-              <span class="tag-item"
-                    v-for="(item,key) in currentArticleTagArr"
-                    :key="key"
-                    @click="deleteCurrentArticleTag(item)">{{item.article_tag_name}}</span>
-            </div>
-            <input class="search-input"
-                   v-show="currentArticleTagArr.length<3"
-                   placeholder="选择下列热门标签或输入关键词检索标签"
-                   :style="{'width':searchBoxWidth}"
-                   v-model="searchArticleTag" />
-          </div>
-          <p class="search-result js-search-result"
-             v-show="isSearchResultShow">
-            相关“
-            <span class="js-search-text">{{searchArticleTag}}</span>”的搜索
-            <span class="js-search-num">{{searchShowArticleTagAll.length}}</span> 个
-          </p>
-          <div class="tag-list-view js-tag-nano has-scrollbar">
-            <div class="clearfix js-tag-list">
-              <span class="tag-item"
-                    v-for="(item,key) in searchShowArticleTagAll"
-                    :key="key"
-                    @click="addArticleTag(item)">{{item.article_tag_name}}</span>
+        <div class="row mrg-bm20 books-write-content">
+          <div class="col-xs-12 col-sm-4 col-md-3 box-form-group">
+            <div class="cover-img">
+              <el-image class="cover-img-view"
+                        :src="write.cover_img"
+                        v-if="write.cover_img"
+                        lazy></el-image>
+              <div class="cover-img-view cover-img-null"
+                   v-else>
+                <p>封面图片为空，如果未上传，将采用默认图片</p>
+              </div>
+              <upload-image class="upload-cover-image"
+                            @changeUpload="changeUploadCoverImg">上传封面</upload-image>
             </div>
           </div>
-        </div>
+          <div class="col-xs-12 col-sm-8 col-md-9 book-info">
+            <div class="box-form-group books-name-view">
+              <label class="box-label"
+                     for="">书名</label>
+              <input class="box-input title"
+                     v-model="write.name"
+                     type="text"
+                     placeholder="请输入小书标题">
+            </div>
+            <div class="box-form-group">
+              <label class="box-label"
+                     for="">简介</label>
+              <textarea class="box-input title"
+                        v-model="write.description"
+                        type="text"
+                        placeholder="请输入小书标题"></textarea>
+            </div>
 
-        <div class="write-footer clearfix">
-          <button class="send-article"
-                  @click="saveArticle">发布小书</button>
+            <div class="write mrg-bm20 box-form-group">
+              <label class="box-label"
+                     for="">详情</label>
+              <mavon-editor defaultOpen="edit"
+                            :boxShadow="false"
+                            v-model="write.content"
+                            :toolbars="toolbars"
+                            ref="mavonEditor"
+                            :imageFilter="imageFilter"
+                            @imgAdd="$imgAdd" />
+            </div>
+
+            <div class="row mrg-bm20">
+              <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
+                <label class="box-label"
+                       for="">是否公开</label>
+                <select class="box-select"
+                        v-model="write.is_public">
+                  <option :value="key"
+                          v-for="(item,key) in publicTypeList"
+                          :key="key">{{item}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="tag-warp">
+              <p class="common-title">
+                小书标签
+                <span>
+                  <em id="chosen_tag_num">{{currentArticleTagArr.length}}</em>/3
+                </span>
+              </p>
+              <div class="search-box clearfix"
+                   ref="search_box">
+                <div class="clearfix js-chosen-tags"
+                     ref="js_chosen_tags"
+                     v-show="currentArticleTagArr.length>0">
+                  <span class="tag-item"
+                        v-for="(item,key) in currentArticleTagArr"
+                        :key="key"
+                        @click="deleteCurrentArticleTag(item)">{{item.article_tag_name}}</span>
+                </div>
+                <input class="search-input"
+                       v-show="currentArticleTagArr.length<3"
+                       placeholder="选择下列热门标签或输入关键词检索标签"
+                       :style="{'width':searchBoxWidth}"
+                       v-model="searchArticleTag" />
+              </div>
+              <p class="search-result js-search-result"
+                 v-show="isSearchResultShow">
+                相关“
+                <span class="js-search-text">{{searchArticleTag}}</span>”的搜索
+                <span class="js-search-num">{{searchShowArticleTagAll.length}}</span> 个
+              </p>
+              <div class="tag-list-view js-tag-nano has-scrollbar">
+                <div class="clearfix js-tag-list">
+                  <span class="tag-item"
+                        v-for="(item,key) in searchShowArticleTagAll"
+                        :key="key"
+                        @click="addArticleTag(item)">{{item.article_tag_name}}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="write-footer clearfix">
+              <button class="send-article"
+                      @click="saveArticle">发布小书</button>
+            </div>
+
+          </div>
         </div>
 
       </client-only>
@@ -102,6 +118,7 @@
 
 <script>
 // Local Registration
+import { UploadImage } from '@components'
 import { mavonEditor } from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import ClientOnly from 'vue-client-only'
@@ -126,8 +143,10 @@ export default {
   data () {
     return {
       write: {
-        title: '', // 小书的标题
-        content: '', // 小书的内容
+        cover_img: '', // 小书封面图片
+        name: '', // 小书的标题
+        description: '', // 小书的简介
+        content: '', // 小书的详情
         is_public: 1, // 是否公开 1公开 0仅自己可见
       },
       publicTypeList: ['仅自己可见', '公开'], // 小书类型列表
@@ -213,6 +232,17 @@ export default {
           });
       }
     },
+    changeUploadCoverImg ({ formData, config }) { // 上传封面图片
+      this.$store.dispatch('books/UPLOAD_BOOKS_COVER_IMG', formData)
+        .then(result => {
+          if (result.state === 'success') {
+            this.write.cover_img = result.data.img
+            this.$message.success('上传封面成功')
+          } else {
+            this.$message.warning(result.message)
+          }
+        })
+    },
     initArticleTagAll () {
       this.searchShowArticleTagAll = this.articleTagAll;
     },
@@ -284,11 +314,12 @@ export default {
     },
     saveArticle () {
       var params = {
-        title: this.write.title, //小书的标题
+        name: this.write.name, //小书的标题
+        description: this.write.description, //小书的简介
         content: marked(this.write.content, { breaks: true }) /*主内容*/,
         origin_content: this.write.content /*源内容*/,
         is_public: this.write.is_public,
-        article_tag_ids: this
+        tag_ids: this
           .getObjectValues(this.currentArticleTagArr)
           .join(",")
       };
@@ -297,7 +328,7 @@ export default {
 
       let dispatch_url =
         this.$route.params.type === "create"
-          ? "editor/SAVE_ARTICLE"
+          ? "books/CREATE_BOOKS"
           : "editor/UPDATE_ARTICLE";
 
       this.$store
@@ -318,6 +349,7 @@ export default {
   },
   components: {
     'mavon-editor': mavonEditor,
+    UploadImage,
     ClientOnly
   },
   computed: {
@@ -333,17 +365,51 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.write-lay {
-  .write-top {
-    margin: 30px 0;
-    .title {
-      width: 100%;
-      padding: 10px 15px;
+.books-write-lay {
+  padding-top: 30px;
+  .books-write-content {
+    .cover-img {
+      .cover-img-view {
+        width: 160px;
+        height: 200px;
+        border: 1px solid #e0e0e0;
+        border-radius: 3px;
+        margin-bottom: 10px;
+        display: block;
+        overflow: hidden;
+        p {
+          font-size: 14px;
+          padding: 30px;
+        }
+      }
+      .upload-cover-image {
+        width: 160px;
+        display: block;
+        line-height: 30px;
+        font-size: 12px;
+        border: 1px solid #2daebf;
+        color: #2daebf;
+        text-align: center;
+        font-weight: 500;
+        letter-spacing: 2px;
+        border-radius: 3px;
+      }
+    }
+    .book-info {
+      .box-label {
+        display: block;
+      }
+      .box-input {
+        font-size: 14px;
+        border: 1px solid #e0e0e0;
+        border-radius: 3px;
+        padding: 8px 16px;
+      }
     }
   }
   .write {
     /deep/.v-note-wrapper {
-      min-height: 700px;
+      min-height: 300px;
       z-index: 249;
       &.fullscreen {
         z-index: 251;
@@ -353,8 +419,8 @@ export default {
 
   .box-input,
   .box-select {
-    border: 1px solid #9199a1;
-    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
   }
   .box-select {
     height: 36px;
@@ -377,8 +443,8 @@ export default {
       padding-left: 12px;
       margin-right: 12px;
       background: #fff;
-      border: 1px solid #9199a1;
-      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+      border-radius: 3px;
       box-sizing: border-box;
       .search-input {
         width: 100%;

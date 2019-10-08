@@ -40,14 +40,19 @@ export default [
             component: () => import('@views/User/view/Article') // 文章内容页
           },
           {
-            path: 'blog',
-            name: 'userBlog',
-            component: () => import('@views/User/view/Blog') // 用户自己的个人专栏
-          },
-          {
             path: 'user-dynamic',
             name: 'userDynamic',
             component: () => import('@views/User/view/Dynamic') // 个人发送的动态列表
+          },
+          {
+            path: 'books',
+            name: 'userBooks',
+            component: () => import('@views/User/view/books') // 用户的小书
+          },
+          {
+            path: 'blog',
+            name: 'userBlog',
+            component: () => import('@views/User/view/Blog') // 用户自己的个人专栏
           },
           {
             path: 'attention',

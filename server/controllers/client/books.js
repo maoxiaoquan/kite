@@ -64,7 +64,7 @@ class Books {
     let { user = '' } = ctx.request
     try {
       if (!reqData.name) {
-        throw new ErrorMessage('请输入小书标题')
+        throw new ErrorMessage('请输入小书名字')
       }
 
       if (reqData.name.length > 150) {
@@ -72,11 +72,11 @@ class Books {
       }
 
       if (!reqData.description) {
-        throw new ErrorMessage('请输入小书内容')
+        throw new ErrorMessage('请输入小书简介')
       }
 
       if (!reqData.content) {
-        throw new ErrorMessage('请输入小书内容')
+        throw new ErrorMessage('请输入小书详情')
       }
 
       if (!reqData.tag_ids) {
@@ -105,9 +105,7 @@ class Books {
         .read()
         .get('website')
         .value()
-      if (
-        ~reqData.article_tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)
-      ) {
+      if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
             `${oneArticleTag.article_tag_name}只有${website.website_name}管理团队才能发布小书`
@@ -150,199 +148,6 @@ class Books {
       resClientJson(ctx, {
         state: 'success',
         message: '创建成功'
-      })
-    } catch (err) {
-      resClientJson(ctx, {
-        state: 'error',
-        message: '错误信息：' + err.message
-      })
-      return false
-    }
-  }
-
-  /**
-   * 小书的标签页面
-   * @param   {object} ctx 上下文对象
-   */
-
-  static async getArticleTag (ctx) {
-    let qyData = ctx.query
-
-    let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 25
-
-    try {
-      let oneArticleTag = await models.article_tag.findOne({
-        where: {
-          article_tag_en_name: qyData.article_tag_en_name
-        }
-      })
-      if (oneArticleTag) {
-        let { count, rows } = await models.article.findAndCountAll({
-          where: {
-            article_tag_ids: {
-              [Op.like]: `%${oneArticleTag.article_tag_id}%`
-            },
-            type: clientWhere.article.type,
-            is_public: clientWhere.article.isPublic,
-            ...clientWhere.article.otherList // web 表示前台  公共小书限制文件
-          }, // 为空，获取全部，也可以自己添加条件
-          offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-          limit: pageSize, // 每页限制返回的数据条数
-          order: [['create_timestamp', 'desc']]
-        })
-
-        for (let i in rows) {
-          rows[i].setDataValue(
-            'create_dt',
-            await TimeDistance(rows[i].create_date)
-          )
-          rows[i].setDataValue(
-            'user',
-            await models.user.findOne({
-              where: { uid: rows[i].uid },
-              attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-            })
-          )
-        }
-
-        let subscribeArticleTagCount = await models.rss_article_tag.count({
-          where: { article_tag_id: oneArticleTag.article_tag_id }
-        })
-
-        /* 所有小书专题 */
-        let articleTagAll = await models.article_tag.findAll({
-          attributes: [
-            'article_tag_id',
-            'article_tag_name',
-            'article_tag_en_name'
-          ]
-        })
-
-        await resClientJson(ctx, {
-          state: 'success',
-          message: 'user',
-          data: {
-            page,
-            count,
-            pageSize,
-            article_tag_en_name: qyData.article_tag_en_name,
-            subscribe_count: subscribeArticleTagCount,
-            article_tag: oneArticleTag,
-            tag_all: articleTagAll,
-            article_list: rows
-          }
-        })
-      } else {
-        throw new ErrorMessage('当前小书标签不存在')
-      }
-    } catch (err) {
-      resClientJson(ctx, {
-        state: 'error',
-        message: '错误信息：' + err.message
-      })
-      return false
-    }
-  }
-
-  /**
-   * 获取热门小书标签
-   * @param   {object} ctx 上下文对象
-   */
-  static async getPopularArticleTag (ctx) {
-    try {
-      let articleTagAll = await models.article_tag.findAll({
-        attributes: [
-          'article_tag_id',
-          'article_tag_name',
-          'article_tag_en_name',
-          'article_tag_icon',
-          'article_tag_description'
-        ],
-        where: { enable: true },
-        limit: 20, // 为空，获取全部，也可以自己添加条件
-        order: [
-          ['attention_count', 'DESC'] // ASC
-        ]
-      })
-
-      for (let i in articleTagAll) {
-        articleTagAll[i].setDataValue(
-          'subscribe_count',
-          await models.rss_article_tag.count({
-            where: { article_tag_id: articleTagAll[i].article_tag_id }
-          })
-        )
-        articleTagAll[i].setDataValue(
-          'article_count',
-          await models.article.count({
-            where: {
-              article_tag_ids: {
-                [Op.like]: `%${articleTagAll[i].article_tag_id}%`
-              }
-            }
-          })
-        )
-      }
-
-      resClientJson(ctx, {
-        state: 'success',
-        message: '获取所有小书标签成功',
-        data: {
-          list: articleTagAll
-        }
-      })
-    } catch (err) {
-      resClientJson(ctx, {
-        state: 'error',
-        message: '错误信息：' + err.message
-      })
-      return false
-    }
-  }
-
-  /**
-   * 获取所有小书标签get
-   * @param   {object} ctx 上下文对象
-   */
-  static async getArticleTagAll (ctx) {
-    try {
-      let articleTagAll = await models.article_tag.findAll({
-        attributes: [
-          'article_tag_id',
-          'article_tag_name',
-          'article_tag_en_name',
-          'article_tag_icon',
-          'article_tag_description'
-        ],
-        where: { enable: true } // 为空，获取全部，也可以自己添加条件
-      })
-
-      for (let i in articleTagAll) {
-        articleTagAll[i].setDataValue(
-          'subscribe_count',
-          await models.rss_article_tag.count({
-            where: { article_tag_id: articleTagAll[i].article_tag_id }
-          })
-        )
-        articleTagAll[i].setDataValue(
-          'article_count',
-          await models.article.count({
-            where: {
-              article_tag_ids: {
-                [Op.like]: `%${articleTagAll[i].article_tag_id}%`
-              }
-            }
-          })
-        )
-      }
-
-      resClientJson(ctx, {
-        state: 'success',
-        message: '获取所有小书标签成功',
-        data: {
-          list: articleTagAll
-        }
       })
     } catch (err) {
       resClientJson(ctx, {
@@ -502,7 +307,7 @@ class Books {
         throw new ErrorMessage('请选择小书来源类型')
       }
 
-      if (!reqData.article_tag_ids) {
+      if (!reqData.tag_ids) {
         throw new ErrorMessage('请选择小书标签')
       }
 
@@ -528,9 +333,7 @@ class Books {
         .read()
         .get('website')
         .value()
-      if (
-        ~reqData.article_tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)
-      ) {
+      if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
             `${oneArticleTag.article_tag_name}只有${website.website_name}管理团队才能更新小书`
@@ -574,7 +377,7 @@ class Books {
           is_public: Number(reqData.is_public), // 是否公开
           type: reqData.type, // 类型 （1小书 2日记 3草稿 ）
           blog_ids: reqData.blog_ids,
-          article_tag_ids: reqData.article_tag_ids,
+          tag_ids: reqData.tag_ids,
           update_date: moment(date.setHours(date.getHours())).format(
             'YYYY-MM-DD HH:mm:ss'
           ) /* 时间 */,
@@ -708,121 +511,6 @@ class Books {
           search,
           tag_all: allArticleTag,
           article_list: rows
-        }
-      })
-    } catch (err) {
-      resClientJson(ctx, {
-        state: 'error',
-        message: '错误信息：' + err.message
-      })
-      return false
-    }
-  }
-
-  /**
-   * 获取小书专栏
-   * @param   {object} ctx 上下文对象
-   */
-
-  static async getArticleColumn (ctx) {
-    try {
-      let allArticleColumn = await models.article_column.findAll({
-        attributes: [
-          'article_column_id',
-          'article_column_name',
-          'article_column_en_name',
-          'article_column_icon',
-          'article_tag_ids',
-          'article_column_description'
-        ],
-        where: {
-          enable: true,
-          is_home: true
-        }, // 为空，获取全部，也可以自己添加条件
-        order: [
-          ['sort', 'ASC'] // asc
-        ]
-      })
-
-      for (let i in allArticleColumn) {
-        if (allArticleColumn[i].article_tag_ids) {
-          allArticleColumn[i].setDataValue(
-            'tag',
-            await models.article_tag.findAll({
-              where: {
-                article_tag_id: {
-                  [Op.or]: allArticleColumn[i].article_tag_ids.split(',')
-                }
-              }
-            })
-          )
-        }
-      }
-
-      resClientJson(ctx, {
-        state: 'success',
-        message: '获取所有小书专栏成功',
-        data: {
-          list: allArticleColumn
-        }
-      })
-    } catch (err) {
-      resClientJson(ctx, {
-        state: 'error',
-        message: '错误信息：' + err.message
-      })
-      return false
-    }
-  }
-
-  /**
-   * 获取小书专栏分页列表
-   * @param   {object} ctx 上下文对象
-   */
-
-  static async getArticleColumnList (ctx) {
-    let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 25
-
-    let whereParams = {
-      enable: 1
-    }
-    try {
-      let { count, rows } = await models.article_column.findAndCountAll({
-        attributes: [
-          'article_column_id',
-          'article_column_name',
-          'article_column_en_name',
-          'article_column_icon',
-          'article_tag_ids',
-          'article_column_description'
-        ],
-        where: whereParams, // 为空，获取全部，也可以自己添加条件
-        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-        limit: pageSize // 每页限制返回的数据条数
-      })
-
-      for (let i in rows) {
-        let article_tag_id =
-          rows[i].article_tag_ids.length === 1
-            ? rows[i].article_tag_ids
-            : { [Op.in]: rows[i].article_tag_ids.split(',') }
-        rows[i].setDataValue(
-          'tag',
-          await models.article_tag.findAll({
-            where: { article_tag_id }
-          })
-        )
-      }
-
-      await resClientJson(ctx, {
-        state: 'success',
-        message: 'column',
-        data: {
-          page,
-          count,
-          pageSize,
-          list: rows
         }
       })
     } catch (err) {

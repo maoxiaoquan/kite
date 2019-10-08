@@ -10,18 +10,18 @@ class update {
       try {
         console.log(`正在升级中，当前版本是${CURRENT_VERSION}....`)
 
-        // await models.book.sync({
-        //   force: true
-        // })
-        // await models.books.sync({
-        //   force: true
-        // })
-        // await models.book_comment.sync({
-        //   force: true
-        // })
-        // await models.books_comment.sync({
-        //   force: true
-        // })
+        await models.book.sync({
+          force: true
+        })
+        await models.books.sync({
+          force: true
+        })
+        await models.book_comment.sync({
+          force: true
+        })
+        await models.books_comment.sync({
+          force: true
+        })
 
         await models.user_authority.bulkCreate(newUserAuthorityList)
         console.log(`${CURRENT_VERSION}版本升级完成`)

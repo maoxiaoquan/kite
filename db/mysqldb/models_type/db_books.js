@@ -51,11 +51,11 @@ module.exports = {
       comment: '书阅读数量',
       field: 'read_count'
     },
-    icon: {
+    cover_img: {
       // 书图标
-      type: Seq.STRING(200),
-      comment: '图标（预留）',
-      field: 'icon',
+      type: Seq.STRING(220),
+      comment: '封面',
+      field: 'cover_img',
       defaultValue: () => {
         return config.DF_ICON
       }

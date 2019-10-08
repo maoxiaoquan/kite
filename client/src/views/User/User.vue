@@ -69,14 +69,19 @@
                 文章
               </router-link>
             </li>
-            <li :class="{'active':$route.name==='userBlog'}">
-              <router-link :to='{name:"userBlog"}'>
-                专栏
-              </router-link>
-            </li>
             <li :class="{'active':$route.name==='userDynamic'}">
               <router-link :to='{name:"userDynamic"}'>
                 片刻
+              </router-link>
+            </li>
+            <li :class="{'active':$route.name==='userBooks'}">
+              <router-link :to='{name:"userBooks"}'>
+                小书
+              </router-link>
+            </li>
+            <li :class="{'active':$route.name==='userBlog'}">
+              <router-link :to='{name:"userBlog"}'>
+                专栏
               </router-link>
             </li>
             <li :class="{'active':$route.name==='userAttention'}">

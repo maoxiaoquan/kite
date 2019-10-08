@@ -13,6 +13,7 @@ import search from './search'
 import website from './website'
 import dynamic from './dynamic'
 import rss from './rss'
+import books from './books'
 
 export default {
   sign,
@@ -29,5 +30,6 @@ export default {
   search,
   website,
   dynamic,
-  rss
+  rss,
+  books
 }

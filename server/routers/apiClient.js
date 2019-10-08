@@ -315,7 +315,7 @@ router.get('/personal/article-blog-list', personalCenter.userArticleBlogList) //
 
 // 小书
 router.post(
-  '/book/upload-book-picture',
+  '/book/upload-books-picture',
   tokens.ClientVerifyToken,
   upload.uploadBookPicture
 ) // 动态图片上传
