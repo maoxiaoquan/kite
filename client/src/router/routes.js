@@ -47,7 +47,7 @@ export default [
           {
             path: 'books',
             name: 'userBooks',
-            component: () => import('@views/User/view/books') // 用户的小书
+            component: () => import('@views/User/view/Books') // 用户的小书
           },
           {
             path: 'blog',
@@ -160,6 +160,16 @@ export default [
         path: 'books-write/:type',
         name: 'booksWrite',
         component: () => import('@views/Books/WriteBooks') // 小书创建修改
+      },
+      {
+        path: 'books/:columnEnName',
+        name: 'books',
+        component: () => import('@views/Books/Books') // 小书首页
+      },
+      {
+        path: 'book/:books_id',
+        name: 'book',
+        component: () => import('@views/Books/Book') // 小书内容
       }
     ]
   }

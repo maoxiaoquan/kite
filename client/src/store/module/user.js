@@ -72,6 +72,13 @@ const state = () => ({
     page: 1,
     pageSize: 10
   },
+  books: {
+    // 个人中心小书列表
+    count: 0,
+    list: [],
+    page: 1,
+    pageSize: 10
+  },
   unread_message_count: 0 // 用户未读
 })
 
@@ -115,6 +122,10 @@ const mutations = {
   SET_USER_ARTICLE_BLOG_LIST (state, data) {
     // 设置用户个人专栏列表
     state.articleBlog = data
+  },
+  SET_BOOKS_LIST (state, data) {
+    // 设置用户个人小书列表
+    state.books = data
   }
 }
 
@@ -291,6 +302,17 @@ const actions = {
       parameter: { params: parameter }
     }).then(result => {
       commit('SET_USER_ARTICLE_BLOG_LIST', result.data)
+      return result
+    })
+  },
+  GET_BOOKS_LIST ({ commit, dispatch, state }, parameter) {
+    // 获取用户的个人专栏列表
+    return fetch({
+      url: '/personal/books-list',
+      method: 'get',
+      parameter: { params: parameter }
+    }).then(result => {
+      commit('SET_BOOKS_LIST', result.data)
       return result
     })
   }

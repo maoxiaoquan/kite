@@ -27,8 +27,10 @@
                                         :command="{name:'home'}">主页</el-dropdown-item>
                       <el-dropdown-item icon="el-icon-chat-line-round"
                                         :command="{name:'dynamics',params:{dynamicTopicId:'newest'}}">片刻</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-notebook-2"
+                                        :command="{name:'books',params:{columnEnName:'all'}}">小书</el-dropdown-item>
                       <el-dropdown-item icon="el-icon-tickets"
-                                        :command="{name:'articleBlogs'}">专栏</el-dropdown-item>
+                                        :command="{name:'articleBlogs',params:{columnEnName:'all'}}">专栏</el-dropdown-item>
                       <el-dropdown-item icon="el-icon-chat-line-square"
                                         v-if="personalInfo.islogin"
                                         :command="{name:'userMessage',params:{uid:personalInfo.user.uid}}">消息</el-dropdown-item>
@@ -44,6 +46,10 @@
                   <li class="nav-item">
                     <router-link :to="{name:'dynamics',params:{dynamicTopicId:'newest'}}"
                                  class="nav-link">片刻</router-link>
+                  </li>
+                  <li class="nav-item">
+                    <router-link :to="{name:'books',params:{columnEnName:'all'}}"
+                                 class="nav-link">小书</router-link>
                   </li>
                   <li class="nav-item">
                     <router-link :to="{name:'articleBlogs',params:{columnEnName:'all'}}"

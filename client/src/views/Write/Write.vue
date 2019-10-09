@@ -45,6 +45,7 @@
                       :key="key">{{item}}</option>
             </select>
           </div>
+
         </div>
 
         <div class="row mrg-bm20">
@@ -251,20 +252,17 @@ export default {
   },
   methods: {
     isEditArticle () {
-      if (this.$route.params.editor_type !== "create") {
+      if (this.$route.params.type !== "create") {
         // 判断是不是创建，不是则是修改，同时赋值
         this.$store
           .dispatch("editor/GET_USER_ARTICLE", {
             aid: this.$route.params.type
           })
           .then(result => {
-            this.write.title = result.data.article.title;
-            this.write.source = result.data.article.source;
-            this.write.content = result.data.article.origin_content;
-            this.write.blog_ids = result.data.article.blog_ids;
-            this.write.type = result.data.article.type;
+            this.write = result.data.article;
             this.editArticleInfo = result.data.article
-
+            this.write.is_public = Number(result.data.article.is_public)
+            this.write.content = result.data.article.origin_content;
             this.articleTagAll.map(item => {
               if (
                 ~this.editArticleInfo.article_tag_ids

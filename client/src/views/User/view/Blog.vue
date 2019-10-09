@@ -303,12 +303,8 @@ export default {
       if (val.type === 'edit') {
         this.isCreateBlogShow = true
         this.isCreate = false
-        this.blogForm.blog_id = val.articleBlogItem.blog_id
+        this.blogForm = val.articleBlogItem
         this.blogForm.blog_name = val.articleBlogItem.name
-        this.blogForm.en_name = val.articleBlogItem.en_name
-        this.blogForm.description = val.articleBlogItem.description
-        this.blogForm.is_public = val.articleBlogItem.is_public
-        this.blogForm.icon = val.articleBlogItem.icon
         val.articleBlogItem.tag_ids && (this.blogForm.tag_ids = val.articleBlogItem.tag_ids.split(','))
       } else if (val.type === 'delete') {
         this.deleteArticleBlog(val.articleBlogItem.blog_id);

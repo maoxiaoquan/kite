@@ -323,4 +323,14 @@ router.post(
 // 小书创建
 router.post('/books/create', tokens.ClientVerifyToken, books.createBooks) // 动态图片上传
 
+router.get('/personal/books-list', personalCenter.userBooksList) // 获取用户个人小书的列表
+
+router.get('/books/user-info', tokens.ClientVerifyToken, books.getUserBooks) // 获取用户自己的小书信息
+
+router.post('/books/update', tokens.ClientVerifyToken, books.updateBooks) // 更新用户自己的小书
+
+router.post('/books/delete', tokens.ClientVerifyToken, books.deleteBooks) // 删除用户自己的小书
+
+router.get('/books/list', books.getBooksList) // 首页小书的列表
+
 module.exports = router

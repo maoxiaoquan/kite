@@ -178,13 +178,13 @@ export default {
         /* 1.4.2 */
         navigation: true // 导航目录
       },
-      editArticleInfo: {} // 修改小书的信息
+      editInfo: {} // 修改小书的信息
     }
   },
   created () {
     this.initArticleTagAll()
     if (this.$route.params.type !== "create") {
-      this.isEditArticle()
+      this.isEdit()
     }
   },
   watch: {
@@ -208,20 +208,21 @@ export default {
     }
   },
   methods: {
-    isEditArticle () {
-      if (this.$route.params.editor_type !== "create") {
+    isEdit () {
+      if (this.$route.params.type !== "create") {
         // 判断是不是创建，不是则是修改，同时赋值
         this.$store
-          .dispatch("editor/GET_USER_ARTICLE", {
-            aid: this.$route.params.type
+          .dispatch("books/GET_USER_BOOKS_INFO", {
+            books_id: this.$route.query.books_id
           })
           .then(result => {
-            this.write.title = result.data.article.title;
-            this.write.content = result.data.article.origin_content;
-            this.editArticleInfo = result.data.article
+            this.write = result.data.books;
+            this.write.is_public = Number(result.data.books.is_public)
+            this.write.content = result.data.books.origin_content;
+            this.editInfo = result.data.books
             this.articleTagAll.map(item => {
               if (
-                ~this.editArticleInfo.article_tag_ids
+                ~this.editInfo.tag_ids
                   .split(",")
                   .indexOf(String(item.article_tag_id))
               ) {
@@ -316,6 +317,7 @@ export default {
       var params = {
         name: this.write.name, //小书的标题
         description: this.write.description, //小书的简介
+        cover_img: this.write.cover_img,//小书的封面
         content: marked(this.write.content, { breaks: true }) /*主内容*/,
         origin_content: this.write.content /*源内容*/,
         is_public: this.write.is_public,
@@ -324,12 +326,12 @@ export default {
           .join(",")
       };
       this.$route.params.type !== "create" &&
-        (params.aid = this.$route.params.type);
+        (params.books_id = this.$route.query.books_id);
 
       let dispatch_url =
         this.$route.params.type === "create"
           ? "books/CREATE_BOOKS"
-          : "editor/UPDATE_ARTICLE";
+          : "books/UPDATE_BOOKS";
 
       this.$store
         .dispatch(dispatch_url, params)
@@ -337,7 +339,10 @@ export default {
           if (res.state === "success") {
             this.create_show_modal = false;
             this.$message.warning(res.message);
-
+            this.$router.push({
+              name: "userBooks",
+              params: { uid: this.personalInfo.user.uid }
+            });
           } else {
             this.$message.warning(res.message);
           }
