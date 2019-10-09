@@ -1,12 +1,12 @@
 <template>
-  <div class="book-view">
+  <div class="book-info">
 
   </div>
 </template>
 
 <script>
 export default {
-  name: "NavSort",
+  name: "BookInfo",
   data () {
     return {
 
@@ -14,11 +14,12 @@ export default {
   },
   methods: {
 
+  },
+  components: {
+
   }
 };
 </script>
 
 <style scoped lang="scss">
-.book-view {
-}
 </style>
