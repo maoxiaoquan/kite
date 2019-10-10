@@ -68,7 +68,7 @@ module.exports = {
       defaultValue: 0
     },
     tag_ids: {
-      /* 文章所属的标签名字 可多个 */
+      /* 小书所属的标签名字 可多个 */
       type: Seq.STRING(180),
       comment: '书所属的标签id',
       field: 'tag_ids'
@@ -89,9 +89,9 @@ module.exports = {
       }
     },
     rejection_reason: {
-      /* 驳回，或者文章审核不通过的原因 */
+      /* 驳回，或者小书审核不通过的原因 */
       type: Seq.STRING(160),
-      comment: '驳回，或者文章审核不通过的原因',
+      comment: '驳回，或者小书审核不通过的原因',
       field: 'rejection_reason'
     },
     update_date: {

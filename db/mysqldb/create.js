@@ -16,19 +16,36 @@ async function sql () {
   // await models.sequelize.query(
   //   'ALTER TABLE article add COLUMN is_public tinyint(1) DEFAULT 1 comment "是否公开";'
   // )
-  await models.user_authority.bulkCreate([
-    {
-      authority_description: '用户修改头像不需要审核',
-      authority_id: 'dfUserAvatarNoReviewId',
-      authority_name: '用户修改头像不需要审核',
-      authority_parent_id: 'vckA5WVEG',
-      authority_parent_name: '用户模块',
-      authority_sort: 1,
-      authority_type: '2',
-      authority_url: '',
-      enable: true
-    }
-  ])
+  await models.books
+    .sync({
+      force: true
+    })
+    .then(() => {
+      console.log('所有数据表创建完成')
+    })
+  await models.book
+    .sync({
+      force: true
+    })
+    .then(() => {
+      console.log('所有数据表创建完成')
+    })
+
+  await models.book_comment
+    .sync({
+      force: true
+    })
+    .then(() => {
+      console.log('所有数据表创建完成')
+    })
+
+  await models.books_comment
+    .sync({
+      force: true
+    })
+    .then(() => {
+      console.log('所有数据表创建完成')
+    })
 
   process.exit()
 }

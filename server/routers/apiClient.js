@@ -321,10 +321,15 @@ router.post(
   '/books/upload-books-picture',
   tokens.ClientVerifyToken,
   upload.uploadBooksPicture
-) // 动态图片上传
+) // 小书图片上传
 
 // 小书创建
-router.post('/books/create', tokens.ClientVerifyToken, books.createBooks) // 动态图片上传
+router.post(
+  '/books/create',
+  tokens.ClientVerifyToken,
+  verifyAuthority.ClientCheck,
+  books.createBooks
+)
 
 router.get('/personal/books-list', personalCenter.userBooksList) // 获取用户个人小书的列表
 
@@ -340,7 +345,12 @@ router.post('/books/delete', tokens.ClientVerifyToken, books.deleteBooks) // 删
 
 router.get('/books/list', books.getBooksList) // 首页小书的列表
 
-router.post('/book/create', tokens.ClientVerifyToken, book.createBook) // 创建小书的章节
+router.post(
+  '/book/create',
+  tokens.ClientVerifyToken,
+  verifyAuthority.ClientCheck,
+  book.createBook
+) // 创建小书的章节
 
 router.post('/book/update', tokens.ClientVerifyToken, book.updateBook) // 编辑小书的章节
 
@@ -354,6 +364,40 @@ router.post(
   '/book/upload-book-picture',
   tokens.ClientVerifyToken,
   upload.uploadBookPicture
-) // 动态图片上传
+) // 小书章节图片上传
+
+// 小书评论
+
+router.get('/books-comment/list', booksComment.getBooksCommentList) // 获取用户发表小书评论的评论列表 TYPE:AJAX get
+
+router.post(
+  '/books-comment/create',
+  tokens.ClientVerifyToken,
+  verifyAuthority.ClientCheck,
+  booksComment.createBooksComment
+) // 用户小书发表评论 TYPE:AJAX post
+
+router.post(
+  '/books-comment/delete',
+  tokens.ClientVerifyToken,
+  booksComment.deleteBooksComment
+) // 删除小书评论 TYPE:AJAX post
+
+// 小书章节评论
+
+router.get('/book-comment/list', bookComment.getBookCommentList) // 获取用户发表小书章节评论的评论列表 TYPE:AJAX get
+
+router.post(
+  '/book-comment/create',
+  tokens.ClientVerifyToken,
+  verifyAuthority.ClientCheck,
+  bookComment.createBookComment
+) // 用户小书章节评论发表评论 TYPE:AJAX post
+
+router.post(
+  '/book-comment/delete',
+  tokens.ClientVerifyToken,
+  bookComment.deleteBookComment
+) // 删除小书章节评论 TYPE:AJAX post
 
 module.exports = router

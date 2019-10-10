@@ -17,7 +17,7 @@
           </template>
         </h4>
         <div class="comment-text"
-             v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===5"
+             v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===4"
              v-html="commentRender(childCommentItem.content)"></div>
         <div class="comment-text"
              v-else-if="Number(childCommentItem.status)===1"
@@ -30,7 +30,7 @@
         <span>{{childCommentItem.create_dt}}</span>
         <span class="comment-reply"
               v-show="personalInfo.islogin"
-              v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===5"
+              v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===4"
               @click="isComment=!isComment;reply_uid=childCommentItem.uid">{{isComment?'取消回复':'回复'}}</span>
         <span class="comment-delete"
               v-if="personalInfo.user.uid===childCommentItem.uid"
@@ -68,8 +68,8 @@ export default {
     },
     deleteComment (id) {
       this.$store
-        .dispatch("articleComment/ARTICLE_COMMENT_DELETE", {
-          aid: this.article.aid,
+        .dispatch("books/BOOKS_COMMENT_DELETE", {
+          books_id: this.$route.params.books_id,
           comment_id: id
         })
         .then(res => {

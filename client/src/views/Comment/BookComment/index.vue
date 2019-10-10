@@ -6,7 +6,7 @@
         <span>发表评论</span>
         <small>
           已发布评论
-          <em>{{articleComment.count}}</em> 条
+          <em>{{comment.count}}</em> 条
         </small>
         <router-link class="comment-rule"
                      :to="{'name':'comment_rule'}">《点我查看评论规范》</router-link>
@@ -16,7 +16,7 @@
            v-loading="isLoadingComment">
         <div id="commentlist">
           <comment-item :comment-item="item"
-                        v-for="(item,key) in articleComment.comment_list"
+                        v-for="(item,key) in comment.comment_list"
                         :key="key" />
         </div>
 
@@ -39,17 +39,22 @@ export default {
   name: "index",
   data () {
     return {
-      comment_page: 1,
-      comment_pageSize: 10,
-      comment_count: 0,
-      comment_list: [], // 用户评论的列表
-      comment_content: "", // 顶级输入框
-      comment_loading_btn: true,
+      comment: {
+        comment_list: [],
+        count: 0,
+        page: "1",
+        pageSize: "10",
+      },
       isLoadingComment: false
     };
   },
   created () {
     this.getCommentList(); // 获取用户的评论
+  },
+  watch: {
+    $route (to, from) {
+      this.getCommentList()
+    }
   },
   methods: {
     getCommentList () {
@@ -57,12 +62,13 @@ export default {
       this.isLoadingComment = true;
       var that = this;
       this.$store
-        .dispatch("articleComment/ARTICLE_COMMENT_LIST", {
-          aid: this.article.aid,
-          page: this.comment_page,
-          pageSize: this.comment_pageSize
+        .dispatch("book/BOOK_COMMENT_LIST", {
+          book_id: this.$route.params.book_id,
+          page: this.comment.page,
+          pageSize: this.comment.pageSize,
         })
         .then(result => {
+          this.comment = result.data
           this.isLoadingComment = false;
         })
         .catch(err => {
@@ -72,12 +78,13 @@ export default {
     pageChange (val) {
       this.isLoadingComment = true;
       this.$store
-        .dispatch("articleComment/ARTICLE_COMMENT_LIST", {
-          aid: this.article.aid,
+        .dispatch("book/BOOK_COMMENT_LIST", {
+          book_id: this.$route.params.book_id,
           page: val,
-          pageSize: this.comment_pageSize
+          pageSize: this.comment.pageSize,
         })
         .then(result => {
+          this.comment = result.data
           this.isLoadingComment = false;
         })
         .catch(err => {
@@ -87,9 +94,8 @@ export default {
     commentChange (res) {
       if (res.state === "success") {
         this.$message.success(res.message);
-        this.comment_content = ""; // 评论输入框为空
-        this.$store.commit("articleComment/SET_ARTICLE_COMMENT_UNSHIFT", res.data);
-        this.$store.commit("articleComment/SET_ARTICLE_COMMENT_COUNT_ADD");
+        this.comment.comment_list.unshift(res.data)
+        this.comment.count += 1
       } else {
         this.$message.warning(res.message);
       }
@@ -101,18 +107,11 @@ export default {
       // 登录后的个人信息
       return this.$store.state.personalInfo || {};
     },
-    article () {
-      return this.$store.state.article.article || {};
-    },
     pagination () {
       // 分页
       return Math.ceil(
-        this.articleComment.count / this.articleComment.pageSize
+        this.comment.count / this.comment.pageSize
       );
-    },
-    articleComment () {
-      // 文章的评论
-      return this.$store.state.articleComment.article_comment || {};
     }
   },
   components: {

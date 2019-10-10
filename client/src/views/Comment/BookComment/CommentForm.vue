@@ -67,7 +67,8 @@ export default {
   methods: {
     getParams () {
       return {
-        aid: this.article.aid,
+        books_id: this.$route.params.books_id,
+        book_id: this.$route.params.book_id,
         content: this.commentContent,
         reply_uid: this.reply_uid,
         parent_id: this.child_comment_id,
@@ -80,7 +81,7 @@ export default {
     submitComment () { // 提交评论
       var params = this.getParams()
       this.isCommentSubmit = true
-      this.$store.dispatch("articleComment/ARTICLE_COMMENT_CREATE", params)
+      this.$store.dispatch("book/BOOK_COMMENT_CREATE", params)
         .then(result => {
           this.commentContent = ''
           this.isCommentSubmit = false

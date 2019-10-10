@@ -6,9 +6,9 @@
 
         <div class="col-xs-12 col-sm-8 col-md-8">
 
-          <div class="article-blog-view">
+          <div class="article-blog-view client-card">
 
-            <div class="article-blog-header client-card">
+            <div class="article-blog-header">
               <div class="user-article-blog-top">
                 <div class="article-blog-icon">
                   <el-image class="article-blog-icon-img"
@@ -80,7 +80,7 @@
 
             </div>
 
-            <div class="article-blog-main client-card">
+            <div class="article-blog-main">
               <div class="article-view">
                 <div class="article-item"
                      v-for="(item,key) in articleBlog.blogArticleList.list"
@@ -216,7 +216,7 @@ export default {
   .article-blog-header {
     padding: 24px;
     overflow: hidden;
-    // border-bottom: 1px solid rgba(178, 186, 194, 0.15);
+    border-bottom: 1px solid rgba(178, 186, 194, 0.15);
     .user-article-blog-top {
       display: flex;
       .article-blog-icon {
@@ -393,7 +393,7 @@ export default {
   }
   .article-blog-main {
     overflow: hidden;
-    padding: 20px;
+    padding: 0 20px 20px;
     .article-view {
       /deep/ .article-item {
         border-bottom: 1px solid rgba(178, 186, 194, 0.15);

@@ -21,7 +21,7 @@ module.exports = {
       field: 'parent_id'
     },
     books_id: {
-      // 文章id
+      // 小书id
       type: Seq.BIGINT(20),
       comment: '书的id',
       field: 'books_id'
@@ -43,6 +43,12 @@ module.exports = {
       type: Seq.TEXT,
       comment: '评论内容',
       field: 'content'
+    },
+    star: {
+      // 评价星星
+      type: Seq.INTEGER(10),
+      comment: '评价星星',
+      field: 'star'
     },
     status: {
       // 状态

@@ -15,19 +15,21 @@ function ErrorMessage (message) {
 
 /* 评论模块 */
 
-class ArticleComment {
-  static async getArticleComment (ctx) {
-    let aid = ctx.query.aid
+class BookComment {
+  static async getBookCommentList (ctx) {
+    let book_id = ctx.query.book_id
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10
 
     try {
-      let { count, rows } = await models.article_comment.findAndCountAll({
+      let { count, rows } = await models.book_comment.findAndCountAll({
         // 默认一级评论
         where: {
-          aid,
+          book_id,
           parent_id: 0,
-          ...clientWhere.comment
+          status: {
+            [Op.or]: [2, 4]
+          }
         }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize), // 每页限制返回的数据条数
@@ -56,8 +58,13 @@ class ArticleComment {
 
       for (let item in rows) {
         // 循环取子评论
-        let childAllComment = await models.article_comment.findAll({
-          where: { parent_id: rows[item].id, ...clientWhere.comment }
+        let childAllComment = await models.book_comment.findAll({
+          where: {
+            parent_id: rows[item].id,
+            status: {
+              [Op.or]: [2, 4]
+            }
+          }
         })
         rows[item].setDataValue('children', childAllComment)
         for (let childCommentItem in childAllComment) {
@@ -112,7 +119,7 @@ class ArticleComment {
    * 新建评论post提交
    * @param   {object} ctx 上下文对象
    */
-  static async createArticleComment (ctx) {
+  static async createBookComment (ctx) {
     let reqData = ctx.request.body
     let { user = '' } = ctx.request
 
@@ -125,8 +132,6 @@ class ArticleComment {
       let currDate = moment(date.setHours(date.getHours())).format(
         'YYYY-MM-DD HH:mm:ss'
       )
-
-      let oneArticle = await models.article.findOne({ aid: reqData.aid })
 
       if (new Date(currDate).getTime() < new Date(user.ban_dt).getTime()) {
         throw new ErrorMessage(
@@ -149,34 +154,23 @@ class ArticleComment {
         userAuthorityIds += roleItem.user_authority_ids + ','
       })
       let status = ~userAuthorityIds.indexOf(
-        config.USER_AUTHORITY.dfNoReviewArticleCommentId
+        config.BOOK.dfNoReviewBookCommentId
       )
-        ? 5
+        ? 4
         : 1
 
-      await models.article_comment
+      await models.book_comment
         .create({
           parent_id: reqData.parent_id || 0,
-          aid: reqData.aid,
+          books_id: reqData.books_id,
+          book_id: reqData.book_id,
+          star: reqData.star,
           uid: user.uid,
           reply_uid: reqData.reply_uid || 0,
           content: xss(reqData.content),
           status
         })
         .then(async data => {
-          await models.article.update(
-            {
-              // 更新文章评论数
-              comment_count: await models.article_comment.count({
-                where: {
-                  aid: reqData.aid,
-                  parent_id: 0
-                }
-              })
-            },
-            { where: { aid: reqData.aid } }
-          )
-
           const oneUser = await models.user.findOne({
             where: { uid: user.uid }
           }) // 查询当前评论用户的信息
@@ -203,37 +197,11 @@ class ArticleComment {
 
           _data['create_dt'] = await TimeDistance(_data.create_date)
 
-          await models.user_message.create({
-            // 用户行为记录
-            uid: oneArticle.uid,
-            type: 5, // 1:系统 2:喜欢文章  3:关注标签 4:关注用户 5:评论
-            content: JSON.stringify({
-              other_uid: user.uid,
-              comment_id: _data.id,
-              aid: reqData.aid,
-              title: '文章有新的评论'
-            })
-          })
-
-          if (reqData.reply_uid) {
-            await models.user_message.create({
-              // 用户行为记录
-              uid: reqData.reply_uid,
-              type: 5, // 类型 1:系统 2:喜欢文章  3:关注标签 4:用户关注 5:评论
-              content: JSON.stringify({
-                other_uid: user.uid,
-                comment_id: _data.id,
-                aid: reqData.aid,
-                title: `你的评论有新的回复`
-              })
-            })
-          }
-
           resClientJson(ctx, {
             state: 'success',
             data: _data,
             message:
-              Number(status) === 5
+              Number(status) === 4
                 ? '评论成功'
                 : '评论成功,但是由于此前您发表的评论存在问题，管理员已把你加入受限用户组，评论需要审核才能被第三人看见'
           })
@@ -257,12 +225,12 @@ class ArticleComment {
    * 删除评论post提交
    * @param   {object} ctx 上下文对象
    */
-  static async deleteArticleComment (ctx) {
+  static async deleteBookComment (ctx) {
     let reqData = ctx.request.body
     let { user = '' } = ctx.request
 
     try {
-      let allComment = await models.article_comment
+      let allComment = await models.book_comment
         .findAll({ where: { parent_id: reqData.comment_id } })
         .then(res => {
           return res.map((item, key) => {
@@ -272,7 +240,7 @@ class ArticleComment {
 
       if (allComment.length > 0) {
         // 判断当前评论下是否有子评论,有则删除子评论
-        await models.article_comment.destroy({
+        await models.book_comment.destroy({
           where: {
             id: { [Op.in]: allComment },
             uid: user.uid
@@ -280,25 +248,12 @@ class ArticleComment {
         })
       }
 
-      await models.article_comment.destroy({
+      await models.book_comment.destroy({
         where: {
           id: reqData.comment_id,
           uid: user.uid
         }
       })
-
-      await models.article.update(
-        {
-          // 更新文章评论数
-          comment_count: await models.article_comment.count({
-            where: {
-              aid: reqData.aid,
-              parent_id: 0
-            }
-          })
-        },
-        { where: { aid: reqData.aid } }
-      )
 
       resClientJson(ctx, {
         state: 'success',
@@ -314,4 +269,4 @@ class ArticleComment {
   }
 }
 
-module.exports = ArticleComment
+module.exports = BookComment

@@ -31,7 +31,7 @@ const mutations = {
 
 const actions = {
   GET_BOOKS_LIST ({ commit, dispatch, state }, parameter) {
-    // 获取文章
+    // 获取小书
     return fetch({
       url: '/books/list',
       method: 'get',
@@ -101,6 +101,31 @@ const actions = {
     }).then(result => {
       commit('SET_BOOKS_BOOK_ALL', result.data.list)
       return result
+    })
+  },
+  // 小书评论开始
+  BOOKS_COMMENT_LIST ({ commit, dispatch, state }, parameter) {
+    // 获取小书评论列表
+    return fetch({
+      url: '/books-comment/list',
+      method: 'get',
+      parameter: { params: parameter }
+    })
+  },
+  BOOKS_COMMENT_CREATE ({ commit, dispatch, state }, parameter) {
+    // 获取小书评论列表
+    return fetch({
+      url: '/books-comment/create',
+      method: 'post',
+      parameter: parameter
+    })
+  },
+  BOOKS_COMMENT_DELETE ({ commit, dispatch, state }, parameter) {
+    // 删除小书评论
+    return fetch({
+      url: '/books-comment/delete',
+      method: 'post',
+      parameter: parameter
     })
   }
 }

@@ -62,6 +62,31 @@ const actions = {
       method: 'post',
       parameter: parameter
     })
+  },
+  // 小书章节评论开始
+  BOOK_COMMENT_LIST ({ commit, dispatch, state }, parameter) {
+    // 获取小书章节评论列表
+    return fetch({
+      url: '/book-comment/list',
+      method: 'get',
+      parameter: { params: parameter }
+    })
+  },
+  BOOK_COMMENT_CREATE ({ commit, dispatch, state }, parameter) {
+    // 获取小书章节评论列表
+    return fetch({
+      url: '/book-comment/create',
+      method: 'post',
+      parameter: parameter
+    })
+  },
+  BOOK_COMMENT_DELETE ({ commit, dispatch, state }, parameter) {
+    // 删除小书章节评论
+    return fetch({
+      url: '/book-comment/delete',
+      method: 'post',
+      parameter: parameter
+    })
   }
 }
 

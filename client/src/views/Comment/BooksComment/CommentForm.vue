@@ -31,6 +31,15 @@
           </el-popover>
         </div>
         <div class="right-view">
+          <select name=""
+                  id=""
+                  v-model="star">
+            <option value="5">5星</option>
+            <option value="4">4星</option>
+            <option value="3">3星</option>
+            <option value="2">2星</option>
+            <option value="1">1星</option>
+          </select>
           <button type="submit"
                   class="form-btn"
                   @click="submitComment">提交评论</button>
@@ -48,6 +57,7 @@ export default {
   data () {
     return {
       commentContent: '', // 顶级输入框
+      star: "",
       faceVisible: false,
       isCommentSubmit: false
     }
@@ -67,7 +77,8 @@ export default {
   methods: {
     getParams () {
       return {
-        aid: this.article.aid,
+        books_id: this.$route.params.books_id,
+        star: this.star,
         content: this.commentContent,
         reply_uid: this.reply_uid,
         parent_id: this.child_comment_id,
@@ -80,7 +91,7 @@ export default {
     submitComment () { // 提交评论
       var params = this.getParams()
       this.isCommentSubmit = true
-      this.$store.dispatch("articleComment/ARTICLE_COMMENT_CREATE", params)
+      this.$store.dispatch("books/BOOKS_COMMENT_CREATE", params)
         .then(result => {
           this.commentContent = ''
           this.isCommentSubmit = false
