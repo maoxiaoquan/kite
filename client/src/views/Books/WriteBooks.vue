@@ -25,7 +25,7 @@
               <label class="box-label"
                      for="">书名</label>
               <input class="box-input title"
-                     v-model="write.name"
+                     v-model="write.title"
                      type="text"
                      placeholder="请输入小书标题">
             </div>
@@ -144,7 +144,7 @@ export default {
     return {
       write: {
         cover_img: '', // 小书封面图片
-        name: '', // 小书的标题
+        title: '', // 小书的标题
         description: '', // 小书的简介
         content: '', // 小书的详情
         is_public: 1, // 是否公开 1公开 0仅自己可见
@@ -315,7 +315,7 @@ export default {
     },
     saveArticle () {
       var params = {
-        name: this.write.name, //小书的标题
+        title: this.write.title, //小书的标题
         description: this.write.description, //小书的简介
         cover_img: this.write.cover_img,//小书的封面
         content: marked(this.write.content, { breaks: true }) /*主内容*/,
@@ -337,8 +337,7 @@ export default {
         .dispatch(dispatch_url, params)
         .then(res => {
           if (res.state === "success") {
-            this.create_show_modal = false;
-            this.$message.warning(res.message);
+            this.$message.success(res.message);
             this.$router.push({
               name: "userBooks",
               params: { uid: this.personalInfo.user.uid }
@@ -348,7 +347,7 @@ export default {
           }
         })
         .catch(function (err) {
-          this.$message.warning("出现错误：" + err);
+          this.$message.error("出现错误：" + err);
         });
     },
   },

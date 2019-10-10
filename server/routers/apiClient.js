@@ -14,6 +14,9 @@ const dynamic = require('../controllers/client/dynamic') // 动态
 const dynamicComment = require('../controllers/client/dynamicComment') // 动态评论
 const dynamicTopic = require('../controllers/client/dynamicTopic') // 动态专题
 const books = require('../controllers/client/books') // 小书
+const book = require('../controllers/client/book') // 小书章节
+const booksComment = require('../controllers/client/booksComment') // 小书评价
+const bookComment = require('../controllers/client/bookComment') // 小书章节评论
 
 /**
  * 获取标签列表操作
@@ -315,9 +318,9 @@ router.get('/personal/article-blog-list', personalCenter.userArticleBlogList) //
 
 // 小书
 router.post(
-  '/book/upload-books-picture',
+  '/books/upload-books-picture',
   tokens.ClientVerifyToken,
-  upload.uploadBookPicture
+  upload.uploadBooksPicture
 ) // 动态图片上传
 
 // 小书创建
@@ -325,12 +328,32 @@ router.post('/books/create', tokens.ClientVerifyToken, books.createBooks) // 动
 
 router.get('/personal/books-list', personalCenter.userBooksList) // 获取用户个人小书的列表
 
-router.get('/books/user-info', tokens.ClientVerifyToken, books.getUserBooks) // 获取用户自己的小书信息
+router.get('/user-books/info', tokens.ClientVerifyToken, books.getUserBooksInfo) // 获取用户自己的小书信息
+
+router.get('/books/info', books.getBooksInfo) // 获取小书信息
+
+router.get('/books/book-all', books.getBooksBookAll) // 获取小书章节列表
 
 router.post('/books/update', tokens.ClientVerifyToken, books.updateBooks) // 更新用户自己的小书
 
 router.post('/books/delete', tokens.ClientVerifyToken, books.deleteBooks) // 删除用户自己的小书
 
 router.get('/books/list', books.getBooksList) // 首页小书的列表
+
+router.post('/book/create', tokens.ClientVerifyToken, book.createBook) // 创建小书的章节
+
+router.post('/book/update', tokens.ClientVerifyToken, book.updateBook) // 编辑小书的章节
+
+router.get('/user-book/info', tokens.ClientVerifyToken, book.getUserBookInfo) // 获取用户自己的小书章节信息
+
+router.get('/book/info', book.getBookInfo) // 获取小书章节信息
+
+router.post('/book/delete', tokens.ClientVerifyToken, book.deleteBook) // 删除用户自己的小书章节
+
+router.post(
+  '/book/upload-book-picture',
+  tokens.ClientVerifyToken,
+  upload.uploadBookPicture
+) // 动态图片上传
 
 module.exports = router

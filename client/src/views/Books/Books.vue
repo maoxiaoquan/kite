@@ -75,7 +75,7 @@
                   <div class="library-item__title">
                     <router-link class="link-dark-major"
                                  :to="{name:'book',params:{books_id:booksItem.books_id}}">
-                      {{booksItem.name}}
+                      {{booksItem.title}}
                     </router-link>
                   </div>
                   <div class="library-item-tag">

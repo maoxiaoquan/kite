@@ -27,21 +27,18 @@
             </el-dropdown>
           </div>
           <div class="library-item__thumb">
-            <a href="/doc/3627"
-               class=""
-               target="_blank">
+            <router-link :to="{name:'book',params:{books_id:booksItem.books_id}}">
               <img :src="booksItem.cover_img"
                    class="img-full"
                    lazy="loaded">
-            </a>
+            </router-link>
           </div>
           <div class="library-item__body">
             <div class="library-item__title">
-              <a href="/doc/3627"
-                 class="link-dark-major"
-                 target="_blank">
-                {{booksItem.name}}
-              </a>
+
+              <router-link class="link-dark-major"
+                           :to="{name:'book',params:{books_id:booksItem.books_id}}">{{booksItem.title}}</router-link>
+
             </div>
             <div class="library-item-tag">
               <template v-if="booksItem.tag">

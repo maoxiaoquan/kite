@@ -400,7 +400,7 @@ export default {
         .then(res => {
           if (res.state === "success") {
             this.create_show_modal = false;
-            this.$message.warning(res.message);
+            this.$message.success(res.message);
             this.$router.push({
               name: "userArticle",
               params: { uid: this.personalInfo.user.uid },
@@ -411,7 +411,7 @@ export default {
           }
         })
         .catch(function (err) {
-          this.$message.warning("出现错误：" + err);
+          this.$message.error("出现错误：" + err);
         });
     },
   },

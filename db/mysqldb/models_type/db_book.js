@@ -68,6 +68,18 @@ module.exports = {
       comment: '排序',
       field: 'sort'
     },
+    read_count: {
+      // 书章节阅读数量
+      type: Seq.INTEGER(10),
+      comment: '书章节阅读数量',
+      field: 'read_count'
+    },
+    read_time: {
+      // 阅读时间
+      type: Seq.INTEGER(10),
+      comment: '阅读时间',
+      field: 'read_time'
+    },
     update_date: {
       // 更新时间
       type: Seq.DATE,

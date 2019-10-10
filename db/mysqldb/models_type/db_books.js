@@ -21,11 +21,11 @@ module.exports = {
       comment: 'uid',
       field: 'uid'
     },
-    name: {
+    title: {
       // 书名字
       type: Seq.STRING(20),
-      comment: '名字',
-      field: 'name'
+      comment: '书名',
+      field: 'title'
     },
     description: {
       // 描述
@@ -59,6 +59,13 @@ module.exports = {
       defaultValue: () => {
         return config.DF_ICON
       }
+    },
+    comment_count: {
+      // 评论数
+      type: Seq.BIGINT(20),
+      comment: '评论数',
+      field: 'comment_count',
+      defaultValue: 0
     },
     tag_ids: {
       /* 文章所属的标签名字 可多个 */

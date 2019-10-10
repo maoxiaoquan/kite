@@ -7,13 +7,25 @@ const state = () => ({
     list: [],
     page: 1,
     pageSize: 25
-  }
+  },
+  booksInfo: {
+    cover_img: ''
+  }, // 小书的信息
+  booksBookAll: [] // 小书的所有章节
 })
 
 const mutations = {
   SET_BOOKS_LIST (state, data) {
     // 设置小书列表
     state.booksList = data
+  },
+  SET_BOOKS_INFO (state, data) {
+    // 设置小书列表
+    state.booksInfo = data
+  },
+  SET_BOOKS_BOOK_ALL (state, data) {
+    // 设置小书所有的章节
+    state.booksBookAll = data
   }
 }
 
@@ -32,7 +44,7 @@ const actions = {
   UPLOAD_BOOKS_COVER_IMG ({ commit, dispatch, state }, parameter) {
     // 上传小书封面图片
     return fetch({
-      url: '/book/upload-books-picture',
+      url: '/books/upload-books-picture',
       method: 'post',
       parameter: parameter
     })
@@ -48,7 +60,7 @@ const actions = {
   GET_USER_BOOKS_INFO: ({ commit, dispatch, state }, parameter) => {
     // 获取用户自己的小书
     return fetch({
-      url: '/books/user-info',
+      url: '/user-books/info',
       method: 'get',
       parameter: { params: parameter }
     })
@@ -67,6 +79,28 @@ const actions = {
       url: '/books/delete',
       method: 'post',
       parameter: parameter
+    })
+  },
+  GET_BOOKS_INFO: ({ commit, dispatch, state }, parameter) => {
+    // 获取小书
+    return fetch({
+      url: '/books/info',
+      method: 'get',
+      parameter: { params: parameter }
+    }).then(result => {
+      commit('SET_BOOKS_INFO', result.data.books)
+      return result
+    })
+  },
+  GET_BOOKS_BOOK_ALL: ({ commit, dispatch, state }, parameter) => {
+    // 获取小书的所有章节列表
+    return fetch({
+      url: '/books/book-all',
+      method: 'get',
+      parameter: { params: parameter }
+    }).then(result => {
+      commit('SET_BOOKS_BOOK_ALL', result.data.list)
+      return result
     })
   }
 }

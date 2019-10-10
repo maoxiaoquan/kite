@@ -1,22 +1,24 @@
 <template>
   <div class="book-list">
+    <router-link :to="{name:'WriteBookView',params: { books_id: $route.params.books_id, book_id: 'create' }}">新增章节</router-link>
     <div class="book-content-head">小书章节</div>
-    <span @click="writeChapter('add')">新增小书章节</span>
+    <span @click="writeChapter('create')">新增小书章节</span>
     <div class="book-directory section-of-info">
       <div class="section"
-           v-for="x in 10 ">
+           v-for="(bookItem,key) in books.booksBookAll"
+           :key="key">
         <div class="step">
-          <div class="step-btn">{{x}}</div>
+          <div class="step-btn">{{key+1}}</div>
         </div>
         <div class="center">
           <div class="title"
-               @click="openChapter">开篇词 —— 小册食用指南</div>
+               @click="lookChapter(bookItem.book_id)">{{bookItem.title}}</div>
           <div class="sub-line">
             <div class="statistics">
-              <span class="duration">时长: 3分30秒</span>
-              <span class="readed">1637次学习</span><span class="comment">7条评论</span>
-              <span @click="writeChapter('update')">编辑</span>
-              <span>删除</span>
+              <span class="duration">时长: {{bookItem.read_time}}</span>
+              <span class="readed">{{bookItem.read_count||0}}次学习</span><span class="comment">{{bookItem.commentCount||0}}条评论</span>
+              <span @click="writeChapter(bookItem.book_id)">编辑章节</span>
+              <span @click="deleteChapter(bookItem.book_id)">删除</span>
             </div>
           </div>
         </div>
@@ -26,6 +28,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: "BookList",
   data () {
@@ -34,12 +37,35 @@ export default {
     };
   },
   methods: {
-    openChapter () {
-      this.$router.push({ name: 'BookView', params: { books_id: 555, book_id: 666 } })
+    lookChapter (book_id) {
+      this.$router.push({ name: 'BookView', params: { books_id: this.$route.params.books_id, book_id: book_id } })
     },
-    writeChapter (type) {
-      this.$router.push({ name: 'WriteBookView', params: { books_id: 555, book_id: 666 }, query: { type: type } })
+    writeChapter (book_id) {
+      this.$router.push({ name: 'WriteBookView', params: { books_id: this.$route.params.books_id, book_id: book_id } })
     },
+    deleteChapter (book_id) {
+      this.$confirm('此操作将永久删除该小书, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('book/DELETE_BOOK', {
+          book_id
+        })
+          .then(result => {
+            if (result.state === 'success') {
+              this.$message.success(result.message);
+              this.$store.dispatch("books/GET_BOOKS_BOOK_ALL", { books_id: this.$route.params.books_id })
+            } else {
+              this.$message.warning(result.message);
+            }
+          })
+      }).catch(() => {
+      });
+    }
+  },
+  computed: {
+    ...mapState(['books', 'personalInfo'])
   },
   components: {
 

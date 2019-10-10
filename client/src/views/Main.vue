@@ -2,14 +2,12 @@
   <div class="app-view">
     <box-header />
     <router-view />
-    <global-alert />
+
   </div>
 </template>
 
 <script>
 import header from '@views/Parts/Header'
-import globalAlert from '@views/Parts/GlobalAlert'
-
 export default {
   name: 'Main',
   asyncData ({ store, route, accessToken = '' }) {
@@ -23,7 +21,6 @@ export default {
   },
   components: {
     'box-header': header,
-    'global-alert': globalAlert
   }
 }
 </script>

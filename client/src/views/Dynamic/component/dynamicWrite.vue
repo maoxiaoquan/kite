@@ -305,7 +305,7 @@ export default {
       }
       this.$store.dispatch('dynamic/CREATE_DYNAMIC', params).then(result => {
         if (result.state === 'success') {
-          this.$message.warning("动态创建成功");
+          this.$message.success("动态创建成功");
           this.content = ''
           this.coverImage = ''
           this.currentTopic = ''

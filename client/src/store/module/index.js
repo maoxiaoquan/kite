@@ -14,6 +14,7 @@ import website from './website'
 import dynamic from './dynamic'
 import rss from './rss'
 import books from './books'
+import book from './book'
 
 export default {
   sign,
@@ -31,5 +32,6 @@ export default {
   website,
   dynamic,
   rss,
-  books
+  books,
+  book
 }

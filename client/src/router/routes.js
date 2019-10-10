@@ -170,18 +170,18 @@ export default [
         path: 'book/:books_id',
         name: 'book',
         component: () => import('@views/Book/Book') // 小书内容
-      },
-      {
-        path: 'book/:books_id/section/:book_id',
-        name: 'BookView',
-        component: () => import('@views/BookView/BookView') // 查看小书内容
-      },
-      {
-        path: 'book/:books_id/write/:book_id',
-        name: 'WriteBookView',
-        component: () => import('@views/BookView/WriteBookView') // 编辑小书内容
       }
     ]
+  },
+  {
+    path: '/book/:books_id/section/:book_id',
+    name: 'BookView',
+    component: () => import('@views/BookView/BookView') // 查看小书内容
+  },
+  {
+    path: '/book/:books_id/write/:book_id',
+    name: 'WriteBookView',
+    component: () => import('@views/BookView/WriteBookView') // 编辑小书内容
   }
   // {
   //   path: '/editor/:editor_type',

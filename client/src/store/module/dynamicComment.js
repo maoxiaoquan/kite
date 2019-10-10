@@ -14,7 +14,7 @@ const actions = {
     })
   },
   DYNAMIC_COMMENT_ALL ({ commit, dispatch, state }, parameter) {
-    // 获取动态评论列表
+    // 获取动态评论列表全部
     return fetch({
       url: '/dynamic-comment/all',
       method: 'get',
@@ -22,7 +22,7 @@ const actions = {
     })
   },
   DYNAMIC_COMMENT_CREATE ({ commit, dispatch, state }, parameter) {
-    // 获取动态评论列表
+    // 动态评论创建
     return fetch({
       url: '/dynamic-comment/create',
       method: 'post',

@@ -1,11 +1,16 @@
 <template>
-  <div class="app">
-    <router-view/>
+  <div id="app">
+    <router-view />
+    <global-alert />
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'App',
+import globalAlert from '@views/Parts/GlobalAlert'
+export default {
+  name: 'App',
+  components: {
+    'global-alert': globalAlert
   }
+}
 </script>

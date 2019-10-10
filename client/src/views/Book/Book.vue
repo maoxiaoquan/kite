@@ -6,37 +6,30 @@
           <div class="client-card">
             <div class="book-info">
               <div class="poster">
-                <img src="https://user-gold-cdn.xitu.io/2019/6/12/16b49d5cb7263893?w=1950&amp;h=2730&amp;f=png&amp;s=1316972">
+                <img :src="books.booksInfo.cover_img||''">
               </div>
               <div class="info">
                 <div class="title-line">
                   <a href=""
                      class="title">
-                    <span>深入理解 TCP 协议：从原理到实战</span>
+                    <span>{{books.booksInfo.title}}</span>
                   </a>
                 </div>
                 <div class="media">
-                  <div class="desc">用实验和图解的方式带你深入理解 TCP 协议，让 TCP 协议不再是拦路虎</div>
+                  <div class="desc">{{books.booksInfo.description}}</div>
                   <div class="author">
                     <div class="author-info">
                       <a href=""
                          target="_blank"
                          class="user">
-                        <div class="lazy avatar hero loaded"
-                             style="background-image: url(&quot;https://user-gold-cdn.xitu.io/2019/1/11/1683a78ae7d12c82?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1&quot;);">
-                        </div>
+                        <img class="lazy avatar hero loaded"
+                             :src="books.booksInfo.user.avatar"
+                             alt="">
                         <a href=""
                            target="_blank"
                            rel=""
                            class="username username">
-                          挖坑的张师傅
-                          <a href=""
-                             target="_blank"
-                             rel=""
-                             class="rank">
-                            <img src="https://b-gold-cdn.xitu.io/v3/static/img/lv-2.f597b88.svg"
-                                 alt="lv-2">
-                          </a>
+                          {{books.booksInfo.user.nickname}}
                         </a>
                       </a>
                     </div>
@@ -44,7 +37,11 @@
                 </div>
                 <div class="other">
                   <div class="not-buy">
-                    <button class="button--buy"> 购买 ￥29.9</button>
+                    <button class="button--buy"
+                            @click="lookChapter"> 查看</button>
+                    <router-link :to="{ name: 'booksWrite', params: { type: 'update' }, query: { books_id: books.booksInfo.books_id }}"
+                                 class="button--buy"
+                                 @click="lookChapter"> 修改</router-link>
                   </div>
                 </div>
               </div>
@@ -89,6 +86,7 @@ import websiteNotice from '@views/Parts/websiteNotice'
 import BookList from './component/BookList'
 import BookInfo from './component/BookInfo'
 import BookComment from './component/BookComment'
+import { mapState } from 'vuex'
 export default {
   name: "NavSort",
   data () {
@@ -96,8 +94,26 @@ export default {
       currentType: "BookList"
     };
   },
+  asyncData ({ store, route }) {
+    // 触发 action 后，会返回 Promise
+    return Promise.all([
+      store.dispatch("books/GET_BOOKS_INFO", { books_id: route.params.books_id }),
+    ]);
+  },
+  mounted () {
+    this.$store.dispatch("books/GET_BOOKS_BOOK_ALL", { books_id: this.$route.params.books_id })
+  },
   methods: {
-
+    lookChapter () {
+      if (this.books.booksBookAll.length > 0) {
+        this.$router.push({ name: 'BookView', params: { books_id: this.$route.params.books_id, book_id: this.books.booksBookAll[0].book_id } })
+      } else {
+        this.$message.warning('当前章节为空');
+      }
+    },
+  },
+  computed: {
+    ...mapState(['books', 'personalInfo'])
   },
   components: {
     websiteNotice,

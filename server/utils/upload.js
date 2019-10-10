@@ -11,6 +11,7 @@ module.exports = type => {
   let destination_url = {
     avatarImg: `static/upload/avatar-img-service/${year}/${month}`,
     articleImg: `static/upload/article-img-service/${year}/${month}`,
+    booksImg: `static/upload/books-img-service/${year}/${month}`,
     bookImg: `static/upload/book-img-service/${year}/${month}`,
     admin: `static/upload/admin-img-service/${year}/${month}`,
     dynamic: `static/upload/dynamic-img-service/${year}/${month}`,
