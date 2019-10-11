@@ -22,6 +22,11 @@ import stateDynamicTopic from '../../containers/DynamicTopic/reducer/DynamicTopi
 import stateDynamicComment from '../../containers/DynamicComment/reducer'
 import stateDynamic from '../../containers/Dynamic/reducer'
 
+import stateBook from '../../containers/Book/reducer'
+import stateBooks from '../../containers/Books/reducer'
+import stateBookComment from '../../containers/BookComment/reducer'
+import stateBooksComment from '../../containers/BooksComment/reducer'
+
 const rootReducer = {
   stateTitle,
   stateMange,
@@ -45,7 +50,12 @@ const rootReducer = {
   stateWebsiteConfig,
   stateDynamic,
   stateDynamicTopic,
-  stateDynamicComment
+  stateDynamicComment,
+  // 2019.10.11
+  stateBook,
+  stateBooks,
+  stateBookComment,
+  stateBooksComment
 }
 
 export default rootReducer

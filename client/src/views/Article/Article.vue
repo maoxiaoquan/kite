@@ -100,7 +100,7 @@
     </div>
   </section>
   <!--home-lay layout-content end-->
-</template>
+</template> 
 
 <script>
 import ArticleComment from "@views/Comment/ArticleComment";

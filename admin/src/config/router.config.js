@@ -141,6 +141,35 @@ export default [
         title: '动态的评论管理',
         component: () =>
           import('../containers/DynamicComment/view/DynamicComment') // 动态的评论管理
+      },
+      // 2019.10.11
+      {
+        // 2019.8.24 新增动态评论管理
+        path: '/manager/books',
+        name: 'books',
+        title: '小书章节',
+        component: () => import('../containers/Books/view/Books') // 小书章节
+      },
+      {
+        // 2019.8.24 新增动态评论管理
+        path: '/manager/book',
+        name: 'book',
+        title: '小书章节',
+        component: () => import('../containers/Book/view/Book') // 小书章节
+      },
+      {
+        // 2019.8.24 新增动态评论管理
+        path: '/manager/books-comment',
+        name: 'booksComment',
+        title: '小书评价',
+        component: () => import('../containers/BooksComment/view/BooksComment') // 小书评价
+      },
+      {
+        // 2019.8.24 新增动态评论管理
+        path: '/manager/book-comment',
+        name: 'bookComment',
+        title: '小书评价',
+        component: () => import('../containers/BookComment/view/BookComment') // 小书评价
       }
     ]
   }

@@ -19,6 +19,11 @@ const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
 const dynamicTopic = require('../controllers/admin/dynamicTopic') // 动态专题
 const dynamicComment = require('../controllers/admin/dynamicComment') // 动态专评论
 const dynamics = require('../controllers/admin/dynamics') // 动态
+
+const book = require('../controllers/admin/book') // 小书章节
+const books = require('../controllers/admin/books') // 小书
+const bookComment = require('../controllers/admin/bookComment') // 小书章节评论
+const booksComment = require('../controllers/admin/booksComment') // 小书评价
 // 此文件所有接口都是后台管理员操作前后台数据所用
 
 /* 前台用户 */
@@ -596,6 +601,101 @@ router.post(
   tokens.AdminVerifyToken,
   verifyAuthority.AdminCheck,
   dynamicComment.deleteComment
+)
+
+// 2019.10.11 新增
+
+// ---- 小书章节
+
+/* 小书章节管理 */
+router.post(
+  '/book/list',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  book.getBookList
+)
+// 更新小书章节
+router.post(
+  '/book/update',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  book.updateBook
+)
+// 删除小书章节
+router.post(
+  '/book/delete',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  book.deleteBook
+)
+
+// ---- 小书
+
+router.post(
+  '/books/list',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  books.getBooksList
+)
+// 更新小书章节
+router.post(
+  '/books/update',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  books.updateBooks
+)
+// 删除小书章节
+router.post(
+  '/books/delete',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  books.deleteBooks
+)
+
+// 小书评论模块
+// 小书评论分页列表
+router.post(
+  '/books-comment/list',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  booksComment.getCommentList
+)
+// 小书文章评论数据更新
+router.post(
+  '/books-comment/update',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  booksComment.updateComment
+)
+// 小书文章评论数据删除
+router.post(
+  '/books-comment/delete',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  booksComment.deleteComment
+)
+
+// 小书章节评论模块
+// 小书评论分页列表
+router.post(
+  '/book-comment/list',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  bookComment.getCommentList
+)
+// 小书文章评论数据更新
+router.post(
+  '/book-comment/update',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  bookComment.updateComment
+)
+// 小书文章评论数据删除
+router.post(
+  '/book-comment/delete',
+  tokens.AdminVerifyToken,
+  verifyAuthority.AdminCheck,
+  bookComment.deleteComment
 )
 
 module.exports = router

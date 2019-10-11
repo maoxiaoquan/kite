@@ -80,6 +80,33 @@ class Aside extends Component {
         ]
       },
       {
+        title: '小书管理',
+        key: 'bookManager',
+        icon: 'book',
+        children: [
+          {
+            title: '小书',
+            key: 'books',
+            link: '/manager/books'
+          },
+          {
+            title: '小书章节',
+            key: 'book',
+            link: '/manager/book'
+          },
+          {
+            title: '小书评论',
+            key: 'booksComment',
+            link: '/manager/books-comment'
+          },
+          {
+            title: '小书章节评论',
+            key: 'bookComment',
+            link: '/manager/book-comment'
+          }
+        ]
+      },
+      {
         title: '用户管理',
         key: 'user_manger',
         icon: 'user',
