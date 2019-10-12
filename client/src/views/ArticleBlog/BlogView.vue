@@ -366,7 +366,6 @@ export default {
           font-size: 12px;
           color: #777;
           text-overflow: ellipsis;
-          width: 50px;
           display: inline-block;
           vertical-align: middle;
         }

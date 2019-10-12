@@ -504,6 +504,7 @@ export default {
           position: relative;
           background-color: #e6e7e9;
           padding-bottom: env(safe-area-inset-bottom);
+          padding-bottom: 30px;
           .section-content {
             max-width: 800px;
             margin-left: auto;
@@ -513,12 +514,15 @@ export default {
             background-color: #fff;
             border-radius: 2px;
             box-sizing: border-box;
+            position: relative;
             .edit-outline {
               color: rgba(0, 0, 0, 0.88);
               background: #ffd600;
               border-color: #ffd600;
               margin-bottom: 20px;
-              float: right;
+              position: absolute;
+              right: 20px;
+              top: 20px;
               cursor: pointer;
             }
             .article-content {

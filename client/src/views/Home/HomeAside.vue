@@ -13,17 +13,18 @@
     <div class="aside-component client-card">
       <h3 class="title">写下你想说的</h3>
       <div class="issue-btn">
-        <router-link class="btn-dynamic js-publish-btn"
-                     :to="{name:'dynamics',params:{dynamicTopicId:'newest'}}">
-          <i class="el-icon-chat-line-round"></i>发说说
-        </router-link>
         <a href="javascript:;"
-           @click="switchRouter"
+           @click="createDynamic"
+           class="btn-dynamic">
+          <i class="el-icon-chat-line-round"></i>发说说
+        </a>
+        <a href="javascript:;"
+           @click="createArticle"
            class="btn-note">
           <i class="el-icon-edit"></i>写文章
         </a>
         <a href="javascript:;"
-           @click="switchBooksCreate"
+           @click="createBooks"
            class="btn-book">
           <i class="el-icon-notebook-2"></i>创建小书
         </a>
@@ -104,14 +105,21 @@ import { mapState } from 'vuex'
 export default {
   name: 'HomeAside',
   methods: {
-    switchBooksCreate () {
+    createDynamic () {
+      if (!this.$store.state.personalInfo.islogin) {
+        this.$store.commit('SET_IS_LOGIN', true)
+      } else {
+        this.$router.push({ name: 'dynamics', params: { dynamicTopicId: 'newest' } })
+      }
+    },
+    createBooks () {
       if (!this.$store.state.personalInfo.islogin) {
         this.$store.commit('SET_IS_LOGIN', true)
       } else {
         this.$router.push({ name: 'booksWrite', params: { type: 'create' } })
       }
     },
-    switchRouter () {
+    createArticle () {
       if (!this.$store.state.personalInfo.islogin) {
         this.$store.commit('SET_IS_LOGIN', true)
       } else {
@@ -206,17 +214,21 @@ export default {
         }
       }
       .btn-dynamic {
-        color: #db5000;
-        border: 1px solid rgba(219, 80, 0, 0.7);
+        // color: #db5000;
+        // border: 1px solid rgba(219, 80, 0, 0.7);
+        color: rgba(0, 0, 0, 0.88);
+        background: #ffb84f;
+        border: 1px solid #ffb84f;
       }
       .btn-note {
         color: rgba(0, 0, 0, 0.88);
-        background: #ffd600;
-        border: 1px solid #ffd600;
+        background: #f4e0bd;
+        border: 1px solid #f4e0bd;
       }
       .btn-book {
-        color: #db5000;
-        border: 1px solid #db5000;
+        color: rgba(0, 0, 0, 0.88);
+        background: #64abd3;
+        border: 1px solid #64abd3;
       }
     }
   }

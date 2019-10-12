@@ -307,7 +307,14 @@ export default {
         this.blogForm.blog_name = val.articleBlogItem.name
         val.articleBlogItem.tag_ids && (this.blogForm.tag_ids = val.articleBlogItem.tag_ids.split(','))
       } else if (val.type === 'delete') {
-        this.deleteArticleBlog(val.articleBlogItem.blog_id);
+        this.$confirm('此操作将永久删除该个人专栏, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.deleteArticleBlog(val.articleBlogItem.blog_id);
+        }).catch(() => {
+        });
       }
     },
     setLikeArticleBlog (blog_id) { // 用户关注blog

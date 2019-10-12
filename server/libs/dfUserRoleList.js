@@ -2,8 +2,8 @@ const config = require('../config')
 const dfUserAuthorityList = require('./dfUserAuthorityList')
 let operatingArr = []
 let limitArr = [
-  config.USER_AUTHORITY.dfNoReviewArticleId,
-  config.USER_AUTHORITY.dfNoReviewDynamicId
+  // config.USER_AUTHORITY.dfNoReviewArticleId, 默认所有无需审核
+  // config.USER_AUTHORITY.dfNoReviewDynamicId
 ]
 dfUserAuthorityList.map(item => {
   if (item.authority_type === '2' && !~limitArr.indexOf(item.authority_id)) {

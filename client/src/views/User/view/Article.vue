@@ -20,7 +20,7 @@
           <span class="name">{{ item.name }}</span>
           <i class="is-public"
              v-if="!item.is_public"
-             :class="{'true':item.is_public}">专栏仅自己可见</i>
+             :class="{'true':item.is_public}">仅自己可见</i>
         </router-link>
       </li>
 

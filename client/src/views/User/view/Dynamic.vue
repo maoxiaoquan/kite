@@ -159,16 +159,23 @@ export default {
       return content;
     },
     deleteDynamic (id) { // 删除动态
-      this.$store.dispatch('dynamic/DELETE_DYNAMIC', {
-        id
-      }).then(result => {
-        if (result.state === 'success') {
-          this.$message.success(result.message)
-          this.getPersonalDynamicList()
-        } else {
-          this.$message.error(result.message)
-        }
-      })
+      this.$confirm('此操作将永久删除该动态, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('dynamic/DELETE_DYNAMIC', {
+          id
+        }).then(result => {
+          if (result.state === 'success') {
+            this.$message.success(result.message)
+            this.getPersonalDynamicList()
+          } else {
+            this.$message.error(result.message)
+          }
+        })
+      }).catch(() => {
+      });
     },
     setUserLikeDynamic (dynamicItem) {
       if (!this.personalInfo.islogin) {

@@ -141,11 +141,11 @@ export default [
         name: 'dynamicTopicView',
         component: () => import('@views/Dynamic/dynamicTopicView') // 动态内容页
       },
-      {
-        path: 'blogs/:columnEnName',
-        name: 'articleBlogs',
-        component: () => import('@views/ArticleBlog/Blog') // 个人专栏
-      },
+      // {
+      //   path: 'blogs/:columnEnName', 屏蔽，此功能不开放
+      //   name: 'articleBlogs',
+      //   component: () => import('@views/ArticleBlog/Blog') // 个人专栏
+      // },
       {
         path: 'blog/:blogId',
         name: 'articleBlog',

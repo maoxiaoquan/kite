@@ -50,13 +50,13 @@
                 <div class="nav-item auth"
                      v-if="!personalInfo.islogin">
                   <div class="nav-item-view"
-                       @click="show_login"
+                       @click="showLogin"
                        v-if="website.config.on_login==='yes'">
                     <a class="btn btn-sm sign-btn btn-block"
                        href="javascript:;">登录</a>
                   </div>
                   <div class="nav-item-view"
-                       @click="show_register"
+                       @click="showRegister"
                        v-if="website.config.on_register==='yes'">
                     <a class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
                        href="javascript:;">注册</a>
@@ -87,15 +87,19 @@
             <div class="book-body transition--next">
               <div class="section-content"
                    v-loading="isLoadingEdit">
-                <div class="operating">
+                <div class="operating clearfix">
                   <button class="btn btn-save"
                           @click="saveBook">{{$route.params.book_id==='create'?'新建小书章节':'更新当前章节'}}</button>
                   <button class="btn btn-cancel"
                           v-if="$route.params.book_id!=='create'"
-                          @click="initEdit">恢复默认稿</button>
+                          @click="resetBook">恢复默认稿</button>
                   <button class="btn btn-look"
                           v-if="$route.params.book_id!=='create'"
                           @click="lookChapter(editDataInfo.book_id)">查看演示</button>
+
+                  <button class="btn btn-delete"
+                          v-if="$route.params.book_id!=='create'"
+                          @click="deleteChapter(editDataInfo.book_id)"><i class="el-icon-delete"></i></button>
                 </div>
 
                 <div class="content-edit">
@@ -215,13 +219,44 @@ export default {
       cookie.delete("accessToken");
       window.location.reload();
     },
-    show_login () {
+    showLogin () {
       // 显示登录
       this.$store.commit("SET_IS_LOGIN", true);
     },
-    show_register () {
+    showRegister () {
       // 显示注册
       this.$store.commit("SET_IS_REGISTER", true);
+    },
+    resetBook () { // 回复默认
+      this.$confirm('此操作将恢复到初始编辑状态, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.initEdit()
+      }).catch(() => {
+      });
+    },
+    deleteChapter (book_id) {
+      this.$confirm('此操作将永久删除该小书章节, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('book/DELETE_BOOK', {
+          book_id
+        })
+          .then(result => {
+            if (result.state === 'success') {
+              this.$message.success(result.message, ',前往创建');
+              this.$store.dispatch("books/GET_BOOKS_BOOK_ALL", { books_id: this.$route.params.books_id })
+              this.writeChapter('create')
+            } else {
+              this.$message.warning(result.message);
+            }
+          })
+      }).catch(() => {
+      });
     },
     initEdit () {
       if (this.$route.params.book_id !== "create") {
@@ -255,7 +290,7 @@ export default {
         return true
       }
     },
-    lookChapter (book_id) {
+    lookChapter (book_id) { // 查看小书章节
       this.$router.push({ name: 'BookView', params: { books_id: this.$route.params.books_id, book_id: book_id } })
     },
     $imgAdd (pos, $file) {
@@ -274,7 +309,7 @@ export default {
           }
         });
     },
-    writeChapter (book_id) {
+    writeChapter (book_id) { // 编辑或新增小书章节
       this.$router.push({ name: 'WriteBookView', params: { books_id: this.$route.params.books_id, book_id: book_id } })
     },
     saveBook () {
@@ -640,6 +675,13 @@ export default {
                 border: 1px solid rgba(219, 80, 0, 0.7);
                 transition: all 0.3s ease;
                 background: #fff;
+              }
+              .btn-delete {
+                color: #ffa200;
+                border: 1px solid rgba(219, 80, 0, 0.7);
+                transition: all 0.3s ease;
+                background: #fff;
+                float: right;
               }
             }
             .content-edit {

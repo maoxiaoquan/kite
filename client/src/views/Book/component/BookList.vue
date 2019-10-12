@@ -191,6 +191,7 @@ export default {
         .title {
           color: #000;
           font-size: 16px;
+          cursor: pointer;
         }
         .sub-line {
           display: flex;

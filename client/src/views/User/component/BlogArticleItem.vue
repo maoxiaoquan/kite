@@ -22,10 +22,6 @@
       </div>
       <div class="info-row meta-row">
         <ul class="meta-list">
-          <li class="item username clickable">
-            <router-link :to="{name:'user',params:{uid:articleItem.user.uid}}"
-                         class="name">{{articleItem.user.nickname}}</router-link>
-          </li>
           <li class="item item-icon read-count">
             <i class="el-icon-view"></i>
             <strong v-text="articleItem.read_count"></strong>
@@ -61,6 +57,21 @@
 
         </ul>
       </div>
+
+      <div class="info-row footer-view"
+           v-if="articleItem.article_blog">
+        <router-link :to="{name:'user',params:{uid:articleItem.user.uid}}"
+                     class="name">{{articleItem.user.nickname}}</router-link>
+        <span>发布于专栏</span>
+        <router-link class="article-blog"
+                     v-if="articleItem.article_blog"
+                     :to="{name:'articleBlog',params:{blogId:articleItem.article_blog.blog_id}}">
+          {{articleItem.article_blog.name}}
+        </router-link>
+        <span class="article-blog"
+              v-else>正在审核中的专栏</span>
+      </div>
+
     </div>
     <div class="lazy thumb thumb loaded"
          v-if="articleItem.cover_img">
@@ -301,6 +312,18 @@ export default {
             color: #00bb29;
           }
         }
+      }
+    }
+
+    .footer-view {
+      span,
+      a {
+        font-size: 12px;
+        color: #999;
+      }
+      .name,
+      .article-blog {
+        color: #009a61;
       }
     }
   }
