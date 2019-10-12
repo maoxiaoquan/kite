@@ -6,9 +6,7 @@
         <div class="col-xs-12 col-sm-8 col-md-8">
 
           <div class="article-blog-menu">
-            <router-link :to="{name:'articleBlogs',params:{columnEnName:'all'}}"
-                         class="menu-blog-home">专栏主页</router-link>
-            <span class="menu-like-blog">我的关注</span>
+            <span class="menu-like-blog">我关注的个人专栏</span>
           </div>
 
           <div class="article-blog-list row">

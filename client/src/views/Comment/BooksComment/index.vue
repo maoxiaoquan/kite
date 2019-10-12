@@ -3,15 +3,16 @@
     <div class="box-comment-part"
          v-if="website.config.on_comment==='yes'">
       <div class="box-comment-part-title">
-        <span>发表评论</span>
+        <span>发表评价</span>
         <small>
-          已发布评论
+          已发布评价
           <em>{{comment.count}}</em> 条
         </small>
         <router-link class="comment-rule"
                      :to="{'name':'comment_rule'}">《点我查看评论规范》</router-link>
       </div>
-      <comment-form @commentChange="commentChange" />
+      <comment-form :isStar="true"
+                    @commentChange="commentChange" />
       <div class="comment-list"
            v-loading="isLoadingComment">
         <div id="commentlist">
@@ -25,7 +26,7 @@
       </div>
     </div>
     <div v-else>
-      <p class="no-comment">评论模块已关闭</p>
+      <p class="no-comment">评价模块已关闭</p>
     </div>
   </div>
 </template>
@@ -128,10 +129,10 @@ export default {
 .box-comment {
   margin-bottom: 100px;
   .box-comment-part {
-    margin-top: 60px;
+    margin-top: 30px;
     margin-bottom: 60px;
     .box-comment-part-title {
-      font-size: 20px;
+      font-size: 16px;
       color: #393939;
       font-weight: bold;
       line-height: 1.1;

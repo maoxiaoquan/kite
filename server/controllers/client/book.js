@@ -328,6 +328,52 @@ class Book {
       return false
     }
   }
+
+  /**
+   * 获取小书的上一页下一页
+   * @param   {object} ctx 上下文对象
+   */
+  static async getNextPrevBook (ctx) {
+    const resData = ctx.request.body
+    try {
+      let prev = await models.book.findOne({
+        where: {
+          books_id: resData.books_id,
+          book_id: {
+            [Op.lt]: resData.book_id
+          } // 查询条件
+        },
+        limit: 1,
+        order: [['book_id', 'DESC']]
+      })
+
+      let next = await models.book.findOne({
+        where: {
+          books_id: resData.books_id,
+          book_id: {
+            [Op.gt]: resData.book_id
+          } // 查询条件
+        },
+        limit: 1,
+        order: [['book_id', 'ASC']]
+      })
+
+      resClientJson(ctx, {
+        state: 'success',
+        message: '获取上一页，下一页成功',
+        data: {
+          prev,
+          next
+        }
+      })
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
 }
 
 module.exports = Book

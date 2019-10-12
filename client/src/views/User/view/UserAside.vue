@@ -31,7 +31,12 @@
         v-if="personalInfo.islogin&&personalInfo.user.uid===userInfo.user.uid">
       <li>
         <router-link :to='{name:"subscribe_tag",params:{type:"my"}}'>
-          <span class="collection-name">我关注的文章标签</span>
+          <span class="collection-name">关注的文章标签</span>
+        </router-link>
+      </li>
+      <li>
+        <router-link :to='{name:"articleBlogsLike"}'>
+          <span class="collection-name">关注的个人专栏</span>
         </router-link>
       </li>
     </ul>

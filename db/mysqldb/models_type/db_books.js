@@ -22,8 +22,8 @@ module.exports = {
       field: 'uid'
     },
     title: {
-      // 书名字
-      type: Seq.STRING(20),
+      // 书名
+      type: Seq.TEXT,
       comment: '书名',
       field: 'title'
     },

@@ -7,10 +7,11 @@
                @click="createBooks">创建小书</el-button>
 
     <div class="user-books-view row">
-      <div class="col-xs-12 col-sm-4 col-md-4"
+      <div class="col-xs-12 col-sm-6 col-md-6"
            v-for="(booksItem,key) in user.books.list"
            :key="key">
-        <div class="library-item bbt-clearfix">
+
+        <div class="library-item clearfix client-card">
           <div class="operat-view"
                v-if="personalInfo.islogin&&personalInfo.user.uid===booksItem.user.uid">
             <el-dropdown trigger="click"
@@ -35,10 +36,16 @@
           </div>
           <div class="library-item__body">
             <div class="library-item__title">
-
               <router-link class="link-dark-major"
-                           :to="{name:'book',params:{books_id:booksItem.books_id}}">{{booksItem.title}}</router-link>
-
+                           :to="{name:'book',params:{books_id:booksItem.books_id}}">
+                {{booksItem.title}}
+              </router-link>
+            </div>
+            <div class="library-item__info">
+              <span><i class="el-icon-view"></i> {{booksItem.read_count||0}}
+              </span><span style="margin-left: 8px;">
+                <i class="el-icon-notebook-2"></i> {{booksItem.bookCount||0}}
+              </span>
             </div>
             <div class="library-item-tag">
               <template v-if="booksItem.tag">
@@ -54,15 +61,9 @@
               </template>
 
             </div>
-            <div class="library-item__info"><span>
-                <i class="el-icon-view"></i> {{booksItem.read_count||0}}
-              </span><span style="margin-left: 8px;">
-                <i class="el-icon-notebook-2"></i> {{booksItem.bookCount||0}}
-              </span>
-            </div>
-
           </div>
         </div>
+
       </div>
     </div>
 
@@ -201,36 +202,22 @@ export default {
     margin-top: 20px;
   }
   .user-books-view {
-    padding-top: 35px;
+    padding-top: 20px;
+
     .library-item {
-      margin-bottom: 30px;
+      margin-bottom: 24px;
+      padding: 16px;
       background: #fff;
-      border-radius: 4px;
-      position: relative;
       transition: all 0.3s ease;
-      &:after,
-      &:before {
-        transition: all 0.3s ease;
-        position: absolute;
-        display: table;
-        height: 240px;
-        background: #fff;
-        border-radius: 4px;
-        content: "";
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06),
-          0 1px 10px 0 rgba(0, 0, 0, 0.04), 0 0 3px -1px rgba(0, 0, 0, 0.08);
-      }
-      &:before {
-        width: 95%;
-        top: -8px;
-        left: 2.5%;
-        z-index: -1;
-      }
-      &:after {
-        width: 90%;
-        top: -16px;
-        left: 5%;
-        z-index: -2;
+      .library-item__thumb {
+        float: left;
+        width: 88px;
+        margin-right: 8px;
+        img {
+          border-radius: 4px;
+          border: 1px solid #f1f1f1;
+          height: 120px;
+        }
       }
       .operat-view {
         position: absolute;
@@ -246,62 +233,47 @@ export default {
           color: #fff;
         }
       }
-      .library-item__thumb {
-        width: 100%;
-        height: 220px;
-        overflow: hidden;
-        border: 1px solid #f1f1f1;
-        border-radius: 4px;
-        img {
-          height: 100%;
-        }
-      }
       .library-item__body {
         .library-item__title {
-          height: 22px;
-          margin: 8px 0;
-          font-size: 13px;
+          height: 50px;
+          margin-bottom: 8px;
+          font-size: 14px;
           line-height: 22px;
           font-weight: 700;
           word-break: break-all;
           display: -webkit-box;
           text-overflow: ellipsis;
           overflow: hidden;
-          -webkit-line-clamp: 2;
+          -webkit-line-clamp: 3;
           -webkit-box-orient: vertical;
           -moz-box-orient: vertical;
-          .link-dark-major {
-            color: rgba(0, 0, 0, 0.88);
-            transition: all 0.3s ease;
+        }
+        .library-item-tag {
+          height: 50px;
+          .title {
+            display: inline-block;
+            font-size: 12px;
+          }
+          a {
+            display: inline-block;
+            border: 1px solid #e0e0e0;
+            font-size: 12px;
+            color: #666;
+            border-radius: 3px;
+            line-height: 15px;
+            padding: 2px 5px;
+            margin-right: 5px;
+          }
+          .hint {
+            font-size: 12px;
+            color: #999;
           }
         }
-      }
-      .library-item-tag {
-        height: 50px;
-        .title {
-          display: inline-block;
+        .library-item__info {
           font-size: 12px;
+          line-height: 20px;
+          color: rgba(0, 0, 0, 0.56);
         }
-        a {
-          display: inline-block;
-          background: #fd763a;
-          font-size: 12px;
-          color: #fff;
-          border-radius: 10px;
-          line-height: 15px;
-          padding: 1px 3px;
-          margin-right: 5px;
-        }
-        .hint {
-          font-size: 12px;
-          color: #999;
-        }
-      }
-      .library-item__info {
-        font-size: 12px;
-        line-height: 20px;
-        color: rgba(0, 0, 0, 0.56);
-        margin-bottom: 8px;
       }
     }
   }

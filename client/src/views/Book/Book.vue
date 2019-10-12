@@ -19,30 +19,25 @@
                   <div class="desc">{{books.booksInfo.description}}</div>
                   <div class="author">
                     <div class="author-info">
-                      <a href=""
-                         target="_blank"
-                         class="user">
+                      <router-link :to="{name:'user',params:{uid:books.booksInfo.user.uid}}"
+                                   class="user">
                         <img class="lazy avatar hero loaded"
                              :src="books.booksInfo.user.avatar"
                              alt="">
-                        <a href=""
-                           target="_blank"
-                           rel=""
-                           class="username username">
+                        <span class="username username">
                           {{books.booksInfo.user.nickname}}
-                        </a>
-                      </a>
+                        </span>
+                      </router-link>
                     </div>
                   </div>
                 </div>
                 <div class="other">
-                  <div class="not-buy">
-                    <button class="button--buy"
-                            @click="lookChapter"> 查看</button>
-                    <router-link :to="{ name: 'booksWrite', params: { type: 'update' }, query: { books_id: books.booksInfo.books_id }}"
-                                 class="button--buy"
-                                 @click="lookChapter"> 修改</router-link>
-                  </div>
+                  <button class="btn button-look"
+                          @click="lookChapter"> 查看</button>
+                  <router-link v-if="personalInfo.islogin"
+                               :to="{ name: 'booksWrite', params: { type: 'update' }, query: { books_id: books.booksInfo.books_id }}"
+                               class="btn button-update"
+                               @click="lookChapter"> 修改</router-link>
                 </div>
               </div>
             </div>
@@ -89,6 +84,21 @@ import BookComment from './component/BookComment'
 import { mapState } from 'vuex'
 export default {
   name: "NavSort",
+  metaInfo () {
+    return {
+      title: this.books.booksInfo.title || "",
+      meta: [
+        {
+          // set meta
+          name: "description",
+          content: `${this.books.booksInfo.title || ""}`
+        }
+      ],
+      htmlAttrs: {
+        lang: "zh"
+      }
+    };
+  },
   data () {
     return {
       currentType: "BookList"
@@ -139,7 +149,6 @@ export default {
     .info {
       margin-left: 150px;
       font-size: 14px;
-      min-height: 182px;
       .title-line {
         .title {
           font-size: 20px;
@@ -183,20 +192,22 @@ export default {
       }
     }
     .other {
-      margin-top: 25px;
+      margin-top: 15px;
       position: relative;
-      .not-buy {
-        position: relative;
-        .button--buy {
-          height: 40px;
-          font-size: 16px;
-          padding-left: 30px;
-          padding-right: 30px;
-          background-color: #007fff;
-          color: #fff;
-          border: none;
-          text-align: center;
-        }
+      .button-look {
+        padding: 5px 13px;
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.88);
+        background: #ffd600;
+        border-color: #ffd600;
+        margin-right: 10px;
+      }
+      .button-update {
+        background: #fff;
+        border: 1px solid #e67e7e;
+        color: #e67e7e;
+        font-size: 14px;
+        padding: 5px 12px;
       }
     }
   }

@@ -31,18 +31,23 @@
           </el-popover>
         </div>
         <div class="right-view">
-          <select name=""
-                  id=""
-                  v-model="star">
-            <option value="5">5星</option>
-            <option value="4">4星</option>
-            <option value="3">3星</option>
-            <option value="2">2星</option>
-            <option value="1">1星</option>
-          </select>
+          <div class="star-view"
+               v-if="isStar">
+            <label for=""
+                   class="star-label">评价星级：</label>
+            <select class="star-select"
+                    v-model="star"
+                    placeholder="请选择星级">
+              <option value="5">5星</option>
+              <option value="4">4星</option>
+              <option value="3">3星</option>
+              <option value="2">2星</option>
+              <option value="1">1星</option>
+            </select>
+          </div>
           <button type="submit"
                   class="form-btn"
-                  @click="submitComment">提交评论</button>
+                  @click="submitComment">提交评价</button>
         </div>
       </div>
     </div>
@@ -63,6 +68,9 @@ export default {
     }
   },
   props: {
+    isStar: {
+      default: false
+    },
     type: {
       type: String,
       default: 'parent'
@@ -157,7 +165,7 @@ export default {
       float: left;
       font-family: "Microsoft Yahei", sans-serif;
       &.textarea {
-        height: 100px;
+        height: 80px;
         border-radius: 20px;
       }
     }
@@ -176,6 +184,15 @@ export default {
     .right-view {
       float: right;
       padding-top: 15px;
+      .star-view {
+        display: inline-block;
+        .star-label {
+        }
+        .star-select {
+          width: 120px;
+          height: 30px;
+        }
+      }
     }
     .form-btn {
       display: inline-block;
@@ -185,9 +202,10 @@ export default {
       background: #f50;
       color: #fff;
       text-align: center;
-      line-height: 40px;
+      line-height: 30px;
       cursor: pointer;
       padding: 0 30px;
+      font-size: 14px;
       margin-left: 10px;
       outline: none;
       &.btn-cancel {

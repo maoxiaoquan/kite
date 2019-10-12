@@ -1,6 +1,5 @@
 module.exports = [
   {
-    id: '96',
     authority_id: 'wpyZ52Ask',
     authority_name: '小书管理',
     authority_type: '1',
@@ -9,12 +8,9 @@ module.exports = [
     authority_url: 'bookManager',
     authority_sort: 5,
     authority_description: '小书管理',
-    enable: true,
-    create_date: '2019-10-11T08:32:39.000Z',
-    create_timestamp: '1570782759'
+    enable: true
   },
   {
-    id: '97',
     authority_id: 'moEnRcr5M',
     authority_name: '小书列表',
     authority_type: '1',
@@ -23,12 +19,9 @@ module.exports = [
     authority_url: 'books',
     authority_sort: 0,
     authority_description: '小书列表',
-    enable: true,
-    create_date: '2019-10-11T08:33:30.000Z',
-    create_timestamp: '1570782810'
+    enable: true
   },
   {
-    id: '98',
     authority_id: '_ZSgNTq5d',
     authority_name: '获取小书列表',
     authority_type: '2',
@@ -37,12 +30,9 @@ module.exports = [
     authority_url: '/books/list',
     authority_sort: 0,
     authority_description: '获取小书列表',
-    enable: false,
-    create_date: '2019-10-11T08:37:22.000Z',
-    create_timestamp: '1570783042'
+    enable: false
   },
   {
-    id: '99',
     authority_id: 'G86RMnRid',
     authority_name: '更新小书',
     authority_type: '2',
@@ -51,12 +41,9 @@ module.exports = [
     authority_url: '/books/update',
     authority_sort: 1,
     authority_description: '更新小书',
-    enable: false,
-    create_date: '2019-10-11T08:38:24.000Z',
-    create_timestamp: '1570783104'
+    enable: false
   },
   {
-    id: '100',
     authority_id: 'QIMrkPCZO',
     authority_name: '删除小书',
     authority_type: '2',
@@ -65,12 +52,9 @@ module.exports = [
     authority_url: '/books/delete',
     authority_sort: 2,
     authority_description: '删除小书',
-    enable: false,
-    create_date: '2019-10-11T08:39:04.000Z',
-    create_timestamp: '1570783144'
+    enable: false
   },
   {
-    id: '101',
     authority_id: '8FMSzgXe-',
     authority_name: '小书章节列表',
     authority_type: '1',
@@ -79,12 +63,9 @@ module.exports = [
     authority_url: 'book',
     authority_sort: 1,
     authority_description: '小书章节列表',
-    enable: true,
-    create_date: '2019-10-11T09:43:45.000Z',
-    create_timestamp: '1570787025'
+    enable: true
   },
   {
-    id: '102',
     authority_id: 'weDr040gv',
     authority_name: '获取小书章节列表',
     authority_type: '2',
@@ -93,12 +74,9 @@ module.exports = [
     authority_url: '/book/list',
     authority_sort: 0,
     authority_description: '获取小书章节列表',
-    enable: false,
-    create_date: '2019-10-11T09:44:31.000Z',
-    create_timestamp: '1570787071'
+    enable: false
   },
   {
-    id: '103',
     authority_id: 'ZkXVh7yVL',
     authority_name: '更新小书章节',
     authority_type: '2',
@@ -107,12 +85,9 @@ module.exports = [
     authority_url: '/book/update',
     authority_sort: 1,
     authority_description: '更新小书章节',
-    enable: false,
-    create_date: '2019-10-11T09:44:54.000Z',
-    create_timestamp: '1570787094'
+    enable: false
   },
   {
-    id: '104',
     authority_id: 'iQ2icICPg',
     authority_name: '删除小书章节',
     authority_type: '2',
@@ -121,12 +96,9 @@ module.exports = [
     authority_url: '/book/delete',
     authority_sort: 2,
     authority_description: '删除小书章节',
-    enable: false,
-    create_date: '2019-10-11T09:46:49.000Z',
-    create_timestamp: '1570787209'
+    enable: false
   },
   {
-    id: '105',
     authority_id: 'jefJfRgfU',
     authority_name: '小书评价',
     authority_type: '1',
@@ -135,12 +107,9 @@ module.exports = [
     authority_url: 'booksComment',
     authority_sort: 2,
     authority_description: '小书评价',
-    enable: true,
-    create_date: '2019-10-11T10:43:22.000Z',
-    create_timestamp: '1570790602'
+    enable: true
   },
   {
-    id: '106',
     authority_id: 'VCTZEXPCI',
     authority_name: '获取小书评价列表',
     authority_type: '2',
@@ -149,12 +118,9 @@ module.exports = [
     authority_url: '/books-comment/list',
     authority_sort: 0,
     authority_description: '获取小书评价列表',
-    enable: false,
-    create_date: '2019-10-11T11:01:28.000Z',
-    create_timestamp: '1570791688'
+    enable: false
   },
   {
-    id: '107',
     authority_id: 'p6WXhPmqU',
     authority_name: '更新小书评价',
     authority_type: '2',
@@ -163,12 +129,9 @@ module.exports = [
     authority_url: '/books-comment/update',
     authority_sort: 1,
     authority_description: '更新小书评价',
-    enable: false,
-    create_date: '2019-10-11T11:01:49.000Z',
-    create_timestamp: '1570791709'
+    enable: false
   },
   {
-    id: '108',
     authority_id: 'keJadFOOt',
     authority_name: '删除小书评价',
     authority_type: '2',
@@ -177,12 +140,9 @@ module.exports = [
     authority_url: '/books-comment/delete',
     authority_sort: 2,
     authority_description: '删除小书评价',
-    enable: false,
-    create_date: '2019-10-11T11:02:09.000Z',
-    create_timestamp: '1570791729'
+    enable: false
   },
   {
-    id: '109',
     authority_id: 'bNZIZU8_k',
     authority_name: '小书章节评价',
     authority_type: '1',
@@ -191,12 +151,9 @@ module.exports = [
     authority_url: 'bookComment',
     authority_sort: 3,
     authority_description: '小书章节评价',
-    enable: true,
-    create_date: '2019-10-11T11:02:50.000Z',
-    create_timestamp: '1570791770'
+    enable: true
   },
   {
-    id: '110',
     authority_id: 'j05QIMrKY',
     authority_name: '获取小书章节评论列表',
     authority_type: '2',
@@ -205,12 +162,9 @@ module.exports = [
     authority_url: '/book-comment/list',
     authority_sort: 0,
     authority_description: '获取小书章节评论列表',
-    enable: false,
-    create_date: '2019-10-11T11:04:01.000Z',
-    create_timestamp: '1570791841'
+    enable: false
   },
   {
-    id: '111',
     authority_id: 'b-Kv51Dit',
     authority_name: '更新小书章节评论',
     authority_type: '2',
@@ -219,12 +173,9 @@ module.exports = [
     authority_url: '/book-comment/update',
     authority_sort: 1,
     authority_description: '更新小书章节评论',
-    enable: false,
-    create_date: '2019-10-11T11:04:41.000Z',
-    create_timestamp: '1570791881'
+    enable: false
   },
   {
-    id: '112',
     authority_id: '4G1J-sZwB',
     authority_name: '删除小书章节评论',
     authority_type: '2',
@@ -233,8 +184,6 @@ module.exports = [
     authority_url: '/book-comment/delete',
     authority_sort: 2,
     authority_description: '删除小书章节评论',
-    enable: false,
-    create_date: '2019-10-11T11:06:02.000Z',
-    create_timestamp: '1570791962'
+    enable: false
   }
 ]

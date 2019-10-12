@@ -9,7 +9,8 @@
 
       <div class="info-row meta-row">
         <ul class="meta-list">
-          <li class="item username clickable">
+          <li class="item"
+              v-if="!articleItem.article_blog">
             <router-link :to="{name:'user',params:{uid:articleItem.user.uid}}"
                          class="name">{{articleItem.user.nickname}}</router-link>
           </li>
@@ -25,14 +26,16 @@
             <i class="el-icon-chat-dot-round"></i>
             <strong v-text="articleItem.comment_count"></strong>
           </li>
-          <li class="item"
-              v-text="articleItem.create_dt"></li>
+          <li class="item">
+            <time>{{articleItem.create_dt}}</time>
+          </li>
           <li class="item"
               v-if="articleItem.article_tag_ids">
-            <router-link v-for="(item_article_tag,key) in articleTagFilter(articleItem.article_tag_ids)"
+            <router-link v-for="(itemArticleTag,key) in articleItem.tag"
                          class="tag-class frontend"
                          :key="key"
-                         :to="{name:'article_tag',params:{article_tag_en_name:item_article_tag.article_tag_en_name}}">{{item_article_tag.article_tag_name}}</router-link>
+                         :to="{name:'article_tag',params:{article_tag_en_name:itemArticleTag.article_tag_en_name}}">{{itemArticleTag.article_tag_name}}</router-link>
+
           </li>
           <li class="item"
               v-if="String(articleItem.type)==='2'">
@@ -40,6 +43,21 @@
           </li>
         </ul>
       </div>
+
+      <div class="info-row footer-view"
+           v-if="articleItem.article_blog">
+        <router-link :to="{name:'user',params:{uid:articleItem.user.uid}}"
+                     class="name">{{articleItem.user.nickname}}</router-link>
+        <span>发布于专栏</span>
+        <router-link class="article-blog"
+                     v-if="articleItem.article_blog"
+                     :to="{name:'articleBlog',params:{blogId:articleItem.article_blog.blog_id}}">
+          {{articleItem.article_blog.name}}
+        </router-link>
+        <span class="article-blog"
+              v-else>正在审核中的专栏</span>
+      </div>
+
     </div>
     <div class="thumb"
          v-if="articleItem.cover_img">
@@ -66,24 +84,8 @@ export default {
         '3': '草稿',
       },
     }
-  },
-  methods: {
-    articleTagFilter (val) {
-      var _arr = [];
-      this.articleTagAll.map((item, key) => {
-        if (val.split(",").indexOf(String(item.article_tag_id)) !== -1) {
-          _arr.push(item);
-        }
-      });
-      return _arr;
-    }
-  },
-  computed: {
-    articleTagAll () {
-      return this.$store.state.articleTag.article_tag_all;
-    }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
@@ -206,6 +208,17 @@ export default {
             color: #00bb29;
           }
         }
+      }
+    }
+    .footer-view {
+      span,
+      a {
+        font-size: 12px;
+        color: #999;
+      }
+      .name,
+      .article-blog {
+        color: #009a61;
       }
     }
   }

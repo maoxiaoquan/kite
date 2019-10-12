@@ -2,20 +2,26 @@
   <div class="book-read-view">
     <client-only>
       <!-- this component will only be rendered on client-side -->
-      <div class="book-section">
+      <div class="book-section"
+           :class="{'fold-pc':!isShowAside}">
         <div class="book-summary">
           <div class="book-summary-inner">
             <div class="book-summary__header">
-              <a href="/"
-                 class="logo"><img src="https://b-gold-cdn.xitu.io/v3/static/img/logo.a7995ad.svg">
-              </a>
-              <div class="label">小册</div>
+              <router-link :to="{name:'home'}"
+                           class="navbar-brand logo"
+                           v-if="website.meta.logo"
+                           :style="{'background-image':'url('+website.meta.logo+')'}"></router-link>
+              <router-link :to="{name:'home'}"
+                           class="navbar-brand logo-text"
+                           v-else>{{website.meta.website_name}}</router-link>
+              <div class="label">小书</div>
             </div>
             <div class="book-summary-btn">
               <div class="section-buy"
-                   @click="writeChapter('create')">创建</div>
+                   @click="writeChapter('create')">创建新章节</div>
             </div>
-            <div class="book-directory bought">
+            <div class="book-directory"
+                 :class="{'bought':personalInfo.islogin}">
               <router-link class="section"
                            :to="{name:'WriteBookView', params: { books_id: $route.params.books_id, book_id: bookItem.book_id}}"
                            v-for="(bookItem,key) in books.booksBookAll"
@@ -35,45 +41,80 @@
         <div class="book-content">
           <div class="book-content-inner">
             <div class="book-content__header">
-              <div class="switch"><img src="https://b-gold-cdn.xitu.io/v3/static/img/icon.3e69d5a.svg"></div>
-              <div class="menu"><img src="https://b-gold-cdn.xitu.io/v3/static/img/menu.74b9add.svg"></div>
+              <div class="menu"
+                   @click="isShowAside=!isShowAside"><i class="el-icon-s-operation"></i></div>
               <div class="title">
                 <router-link :to="{name:'book',params:{books_id:$route.params.books_id}}">{{books.booksInfo.title}}</router-link>
               </div>
-              <div class="user-auth user-auth">
-                <div class="nav-item auth">
-                  <span class="login">登录</span>
-                  <span class="register">注册</span>
+              <div class="user-auth">
+                <div class="nav-item auth"
+                     v-if="!personalInfo.islogin">
+                  <div class="nav-item-view"
+                       @click="show_login"
+                       v-if="website.config.on_login==='yes'">
+                    <a class="btn btn-sm sign-btn btn-block"
+                       href="javascript:;">登录</a>
+                  </div>
+                  <div class="nav-item-view"
+                       @click="show_register"
+                       v-if="website.config.on_register==='yes'">
+                    <a class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
+                       href="javascript:;">注册</a>
+                  </div>
+                </div>
+                <div class="nav-item dropdown"
+                     v-else>
+                  <el-dropdown trigger="click"
+                               @command="commandChange">
+                    <div class="el-dropdown-link">
+                      <div class="avatar-img">
+                        <el-image :src="personalInfo.user.avatar"
+                                  lazy></el-image>
+                      </div>
+                    </div>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item icon="el-icon-user"
+                                        :command="{name:'user',params:{uid:personalInfo.user.uid}}">我的主页</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-setting"
+                                        :command="{name:'setting'}">设置</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-right"
+                                        :command="{name:'esc'}">退出</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
                 </div>
               </div>
             </div>
             <div class="book-body transition--next">
-              <div class="section-view book-section-content">
-                <div class="section-content">
-                  <div class="section-page book-section-view">
-                    <div class="entry-content article-content">
-                      <div class="operating">
-                        <button @click="saveBook">{{$route.params.book_id==='create'?'保存当前新建章节':'更新当前章节'}}</button>
-                        <button>恢复默认</button>
-                        <button v-if="$route.params.book_id!=='create'"
-                                @click="lookChapter(editDataInfo.book_id)">查看演示</button>
-                      </div>
-                      <input type="text"
-                             v-model="write.title">
-                      <mavon-editor defaultOpen="edit"
-                                    :boxShadow="false"
-                                    v-model="write.content"
-                                    :toolbars="toolbars"
-                                    ref="mavonEditor"
-                                    :imageFilter="imageFilter"
-                                    @imgAdd="$imgAdd" />
-                    </div>
-                  </div>
+              <div class="section-content"
+                   v-loading="isLoadingEdit">
+                <div class="operating">
+                  <button class="btn btn-save"
+                          @click="saveBook">{{$route.params.book_id==='create'?'新建小书章节':'更新当前章节'}}</button>
+                  <button class="btn btn-cancel"
+                          v-if="$route.params.book_id!=='create'"
+                          @click="initEdit">恢复默认稿</button>
+                  <button class="btn btn-look"
+                          v-if="$route.params.book_id!=='create'"
+                          @click="lookChapter(editDataInfo.book_id)">查看演示</button>
                 </div>
+
+                <div class="content-edit">
+                  <input type="text"
+                         class="title-input"
+                         v-model="write.title">
+                  <mavon-editor defaultOpen="edit"
+                                :boxShadow="false"
+                                v-model="write.content"
+                                :toolbars="toolbars"
+                                ref="mavonEditor"
+                                :imageFilter="imageFilter"
+                                @imgAdd="$imgAdd" />
+                </div>
+
               </div>
             </div>
-          </div>
 
+          </div>
         </div>
       </div>
     </client-only>
@@ -83,12 +124,28 @@
 <script>
 import { UploadImage } from '@components'
 import { mavonEditor } from 'mavon-editor'
+import { cookie } from "../../../../server/utils/cookie";
 import 'mavon-editor/dist/css/index.css'
 import ClientOnly from 'vue-client-only'
 import marked from "marked";
 import { mapState } from 'vuex'
 export default {
   name: "WriteBookView",
+  metaInfo () {
+    return {
+      title: this.$route.params.book_id === "create" ? '创建小书章节' : `编辑-${this.editDataInfo.title || ''}` || "",
+      meta: [
+        {
+          // set meta
+          name: "description",
+          content: this.$route.params.book_id === "create" ? '创建小书章节' : `编辑-${this.editDataInfo.title || ''}` || "",
+        }
+      ],
+      htmlAttrs: {
+        lang: "zh"
+      }
+    };
+  },
   async asyncData ({ store, route, accessToken = "" }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
@@ -112,6 +169,8 @@ export default {
         content: "",
         sort: 0
       },
+      isShowAside: true, // 是否显示侧栏
+      isLoadingEdit: false, // 加载修改的数据
       toolbars: {
         bold: true, // 粗体
         italic: true, // 斜体
@@ -144,17 +203,41 @@ export default {
     }
   },
   methods: {
+    commandChange (val) {
+      if (val.name !== "esc") {
+        this.$router.push(val);
+      } else {
+        this.escLogin();
+      }
+    },
+    escLogin () {
+      this.$message.warning("已退出当前账户，请重新登录");
+      cookie.delete("accessToken");
+      window.location.reload();
+    },
+    show_login () {
+      // 显示登录
+      this.$store.commit("SET_IS_LOGIN", true);
+    },
+    show_register () {
+      // 显示注册
+      this.$store.commit("SET_IS_REGISTER", true);
+    },
     initEdit () {
       if (this.$route.params.book_id !== "create") {
         // 判断是不是创建，不是则是修改，同时赋值
+        this.isLoadingEdit = true
         this.$store
           .dispatch("book/GET_USER_BOOK_INFO", {
             book_id: this.$route.params.book_id
           })
           .then(result => {
+            this.isLoadingEdit = false
             this.write = result.data.book
             this.editDataInfo = result.data.book
             this.write.content = result.data.book.origin_content;
+          }).catch(err => {
+            this.isLoadingEdit = false
           });
       } else {
         this.write = {
@@ -195,6 +278,14 @@ export default {
       this.$router.push({ name: 'WriteBookView', params: { books_id: this.$route.params.books_id, book_id: book_id } })
     },
     saveBook () {
+      if (!this.write.title) {
+        this.$message.warning('小书章节标题不能为空！');
+        return false
+      }
+      if (!this.write.content) {
+        this.$message.warning('小书章节内容不能为空！');
+        return false
+      }
       var params = {
         books_id: this.$route.params.books_id,
         title: this.write.title, //小书的标题
@@ -230,7 +321,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(['books', 'personalInfo'])
+    ...mapState(['books', 'personalInfo', 'website'])
   },
   components: {
     'mavon-editor': mavonEditor,
@@ -247,6 +338,18 @@ export default {
   .book-section {
     position: relative;
     display: flex;
+
+    &.fold-pc .book-summary {
+      left: -320px;
+    }
+    &.fold-pc .book-content {
+      margin-left: 0;
+      .book-content-inner {
+        .book-content__header {
+          left: 0;
+        }
+      }
+    }
     .book-summary {
       width: 320px;
       position: fixed;
@@ -273,10 +376,15 @@ export default {
           background-color: #fff;
           border-bottom: 1px solid #ddd;
           .logo {
-            height: 30px;
-            img {
-              height: 100%;
-            }
+            background-size: 100% 100%;
+            display: block;
+            width: 90px;
+            height: 32px;
+            left: 10%;
+          }
+          .logo-text {
+            font-size: 25px;
+            color: #e67e7e;
           }
           .label {
             margin-left: 13px;
@@ -311,7 +419,7 @@ export default {
             cursor: pointer;
             background-color: #007fff;
             color: #fff;
-            font-size: 18px;
+            font-size: 14px;
             line-height: 60px;
             text-align: center;
           }
@@ -321,7 +429,7 @@ export default {
           overflow-y: auto;
           box-sizing: border-box;
           -webkit-overflow-scrolling: touch;
-          height: calc(100% - 180px);
+          height: calc(100% - 60px);
           &.bought {
             height: calc(100% - 120px);
           }
@@ -341,11 +449,10 @@ export default {
           .section {
             min-height: 60px;
             padding-left: 16px;
-            &.section-link {
-              cursor: pointer;
-            }
-            &.read {
+            cursor: pointer;
+            &.current-active {
               color: #333;
+              background: rgba(0, 0, 0, 0.1);
             }
             .step {
               align-items: center;
@@ -437,7 +544,7 @@ export default {
           left: 319px;
           min-width: 320px;
           background-color: #fff;
-          z-index: 2;
+          z-index: 2000;
           border-bottom: 1px solid #ddd;
           height: 60px;
           display: flex;
@@ -447,19 +554,6 @@ export default {
           padding-right: 20px;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           font-size: 18px;
-          .switch {
-            display: none;
-            padding-left: 15px;
-            margin-right: 10px;
-            background-image: url(https://b-gold-cdn.xitu.io/v3/static/img/more.3f349bb.svg);
-            background-repeat: no-repeat;
-            background-position: 0;
-            background-size: 16px;
-            img {
-              width: 30px;
-              vertical-align: middle;
-            }
-          }
           .menu {
             width: auto;
             height: 20px;
@@ -493,6 +587,22 @@ export default {
               justify-content: center;
               align-items: center;
               cursor: pointer;
+              .avatar-img {
+                display: inline-block;
+                position: relative;
+                width: 36px;
+                height: 36px;
+                border-radius: 72px;
+                /deep/ .el-image {
+                  width: 36px;
+                  height: 36px;
+                  img {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 80px;
+                  }
+                }
+              }
             }
           }
         }
@@ -503,21 +613,45 @@ export default {
           position: relative;
           background-color: #e6e7e9;
           padding-bottom: env(safe-area-inset-bottom);
-          .section-page {
+          .section-content {
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
-            padding: 20px 60px 40px;
+            padding: 30px;
             box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.15);
             background-color: #fff;
             border-radius: 2px;
             box-sizing: border-box;
-            .article-content {
-              word-break: break-word;
-              line-height: 1.75;
-              font-weight: 400;
-              font-size: 15px;
-              overflow-x: hidden;
+            .operating {
+              margin-bottom: 20px;
+              .btn {
+                margin-right: 10px;
+                font-size: 14px;
+              }
+              .btn-save {
+                color: rgba(0, 0, 0, 0.88);
+                background: #ffd600;
+                border-color: #ffd600;
+              }
+              .btn-cancel {
+              }
+              .btn-look {
+                color: #db5000;
+                border: 1px solid rgba(219, 80, 0, 0.7);
+                transition: all 0.3s ease;
+                background: #fff;
+              }
+            }
+            .content-edit {
+              .title-input {
+                border: 1px solid #d7dce2;
+                border-radius: 4px;
+                width: 100%;
+                height: 45px;
+                margin-bottom: 20px;
+                padding-left: 20px;
+                padding-right: 20px;
+              }
             }
           }
         }

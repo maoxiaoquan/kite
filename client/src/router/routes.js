@@ -142,11 +142,6 @@ export default [
         component: () => import('@views/Dynamic/dynamicTopicView') // 动态内容页
       },
       {
-        path: 'blogs/:columnEnName',
-        name: 'articleBlogs',
-        component: () => import('@views/ArticleBlog/Blog') // 个人专栏
-      },
-      {
         path: 'blog/:blogId',
         name: 'articleBlog',
         component: () => import('@views/ArticleBlog/BlogView') // 个人专栏内容

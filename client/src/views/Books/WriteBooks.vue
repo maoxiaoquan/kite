@@ -314,6 +314,14 @@ export default {
         });
     },
     saveArticle () {
+      if (!this.write.title) {
+        this.$message.warning('小书标题不能为空！');
+        return false
+      }
+      if (!this.write.content) {
+        this.$message.warning('小书内容不能为空！');
+        return false
+      }
       var params = {
         title: this.write.title, //小书的标题
         description: this.write.description, //小书的简介

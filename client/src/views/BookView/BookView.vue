@@ -1,19 +1,26 @@
 <template>
   <div class="book-read-view">
-    <div class="book-section">
+    <div class="book-section"
+         :class="{'fold-pc':!isShowAside}">
       <div class="book-summary">
         <div class="book-summary-inner">
           <div class="book-summary__header">
-            <a href="/"
-               class="logo"><img src="https://b-gold-cdn.xitu.io/v3/static/img/logo.a7995ad.svg">
-            </a>
-            <div class="label">小册</div>
+            <router-link :to="{name:'home'}"
+                         class="navbar-brand logo"
+                         v-if="website.meta.logo"
+                         :style="{'background-image':'url('+website.meta.logo+')'}"></router-link>
+            <router-link :to="{name:'home'}"
+                         class="navbar-brand logo-text"
+                         v-else>{{website.meta.website_name}}</router-link>
+            <div class="label">小书</div>
           </div>
-          <div class="book-summary-btn">
+          <div class="book-summary-btn"
+               v-if="personalInfo.islogin">
             <div class="section-buy"
-                 @click="writeChapter('create')">创建</div>
+                 @click="writeChapter('create')">创建新章节</div>
           </div>
-          <div class="book-directory bought">
+          <div class="book-directory"
+               :class="{'bought':personalInfo.islogin}">
             <router-link class="section"
                          :to="{name:'BookView', params: { books_id: $route.params.books_id, book_id: bookItem.book_id}}"
                          v-for="(bookItem,key) in books.booksBookAll"
@@ -22,8 +29,7 @@
                 <div class="step-btn">{{key+1}}</div>
               </div>
               <div class="center">
-                <div class="title">{{bookItem.title}} <i class="el-icon-edit-outline"
-                     @click="writeChapter(bookItem.book_id)"></i> </div>
+                <div class="title">{{bookItem.title}} </div>
               </div>
             </router-link>
           </div>
@@ -34,47 +40,82 @@
       <div class="book-content">
         <div class="book-content-inner">
           <div class="book-content__header">
-            <div class="switch"><img src="https://b-gold-cdn.xitu.io/v3/static/img/icon.3e69d5a.svg"></div>
-            <div class="menu"><img src="https://b-gold-cdn.xitu.io/v3/static/img/menu.74b9add.svg"></div>
+            <div class="menu"
+                 @click="isShowAside=!isShowAside"><i class="el-icon-s-operation"></i></div>
             <div class="title">
               <router-link :to="{name:'book',params:{books_id:$route.params.books_id}}">{{books.booksInfo.title}}</router-link>
             </div>
-            <div class="user-auth user-auth">
-              <div class="nav-item auth">
-                <span class="login">登录</span>
-                <span class="register">注册</span>
+            <div class="user-auth">
+              <div class="nav-item auth"
+                   v-if="!personalInfo.islogin">
+                <div class="nav-item-view"
+                     @click="show_login"
+                     v-if="website.config.on_login==='yes'">
+                  <a class="btn btn-sm sign-btn btn-block"
+                     href="javascript:;">登录</a>
+                </div>
+                <div class="nav-item-view"
+                     @click="show_register"
+                     v-if="website.config.on_register==='yes'">
+                  <a class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
+                     href="javascript:;">注册</a>
+                </div>
+              </div>
+              <div class="nav-item dropdown"
+                   v-else>
+                <el-dropdown trigger="click"
+                             @command="commandChange">
+                  <div class="el-dropdown-link">
+                    <div class="avatar-img">
+                      <el-image :src="personalInfo.user.avatar"
+                                lazy></el-image>
+                    </div>
+                  </div>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item icon="el-icon-user"
+                                      :command="{name:'user',params:{uid:personalInfo.user.uid}}">我的主页</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-setting"
+                                      :command="{name:'setting'}">设置</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-right"
+                                      :command="{name:'esc'}">退出</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </div>
             </div>
           </div>
           <div class="book-body transition--next">
-            <div class="section-view book-section-content">
-              <div class="section-content">
-                <div class="section-page book-section-view">
-                  <div class="entry-content article-content box-article-view"
-                       v-html="book.bookInfo.content">
-                  </div>
-                  <div class="book-comments">
-                    <div class="box-title">留言</div>
-                    <div class="comment-box">
-                      <div class="comment-form comment-form unauthorized"
-                           id="comment">
-                        <div class="unauthorized-panel">
-                          <button class="authorize-btn">登录</button>
-                          <div class="placeholder">评论将在后台进行审核，审核通过后对所有人可见</div>
-                        </div>
-                      </div>
+            <div class="section-content">
+              <div class="btn edit-outline"
+                   v-if="personalInfo.islogin"
+                   @click="writeChapter(book.bookInfo.book_id)">
+                编辑当前章节
+              </div>
+              <div class="entry-content article-content box-article-view"
+                   v-html="book.bookInfo.content">
+              </div>
+              <div class="book-comments">
+                <div class="comment-box"
+                     v-if="!personalInfo.islogin">
+                  <div class="comment-form comment-form unauthorized"
+                       id="comment">
+                    <div class="unauthorized-panel">
+                      <button class="authorize-btn"
+                              @click="show_login">登录</button>
+                      <div class="placeholder">评论将在后台进行审核，审核通过后对所有人可见</div>
                     </div>
-
-                    <BookComment />
-
                   </div>
                 </div>
+                <BookComment />
               </div>
             </div>
           </div>
           <div class="book-handle book-direction">
-            <div class="step-btn step-btn--prev"><img src="https://b-gold-cdn.xitu.io/v3/static/img/prev.87ad47e.svg"></div>
-            <div class="step-btn step-btn--next"><img src="https://b-gold-cdn.xitu.io/v3/static/img/next.54d8a35.svg"></div>
+            <div class="step-btn step-btn--prev"
+                 v-show="bookInfoOther.prev"
+                 @click="lookChapter(bookInfoOther.prev.book_id)"><i class="el-icon-arrow-left"></i></div>
+            <div class="step-btn step-btn--next"
+                 v-show="bookInfoOther.next"
+                 @click="lookChapter(bookInfoOther.next.book_id)"><i class="el-icon-arrow-right"></i></div>
           </div>
         </div>
 
@@ -86,31 +127,89 @@
 <script>
 import { mapState } from 'vuex'
 import BookComment from "@views/Comment/BookComment";
+import { cookie } from "../../../../server/utils/cookie";
 export default {
   name: "BookInfo",
+  metaInfo () {
+    return {
+      title: this.book.bookInfo.title || "",
+      meta: [
+        {
+          // set meta
+          name: "description",
+          content: `${this.book.bookInfo.title || ""}`
+        }
+      ],
+      htmlAttrs: {
+        lang: "zh"
+      }
+    };
+  },
   async asyncData ({ store, route, accessToken = "" }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
       store.dispatch("PERSONAL_INFO", { accessToken }),
       store.dispatch('website/GET_WEBSITE_INFO'),
+      store.dispatch("books/GET_BOOKS_INFO", { books_id: route.params.books_id }),
       store.dispatch("book/GET_BOOK_INFO", { book_id: route.params.book_id }),
     ]);
   },
   data () {
     return {
-      BookInfo: {}
+      isShowAside: true, // 是否显示侧栏
+      bookInfoOther: { // 当前小书章节的其他信息
+        prev: {},
+        next: {}
+      }
     };
   },
+  watch: {
+    $route (to, from) {
+      this.getBookNextPrev()
+    }
+  },
   mounted () {
-    this.$store.dispatch("books/GET_BOOKS_BOOK_ALL", { books_id: this.$route.params.books_id })
+    this.getBooksBookAll()
+    this.getBookNextPrev()
   },
   methods: {
+    commandChange (val) {
+      if (val.name !== "esc") {
+        this.$router.push(val);
+      } else {
+        this.escLogin();
+      }
+    },
+    escLogin () {
+      this.$message.warning("已退出当前账户，请重新登录");
+      cookie.delete("accessToken");
+      window.location.reload();
+    },
+    show_login () {
+      // 显示登录
+      this.$store.commit("SET_IS_LOGIN", true);
+    },
+    show_register () {
+      // 显示注册
+      this.$store.commit("SET_IS_REGISTER", true);
+    },
+    lookChapter (book_id) {
+      this.$router.push({ name: 'BookView', params: { books_id: this.$route.params.books_id, book_id: book_id } })
+    },
     writeChapter (book_id) {
       this.$router.push({ name: 'WriteBookView', params: { books_id: this.$route.params.books_id, book_id: book_id } })
     },
+    getBooksBookAll () {
+      this.$store.dispatch("books/GET_BOOKS_BOOK_ALL", { books_id: this.$route.params.books_id })
+    },
+    getBookNextPrev () {
+      this.$store.dispatch("book/BOOK_NEXT_PREV", { book_id: this.$route.params.book_id, books_id: this.$route.params.books_id }).then(result => {
+        this.bookInfoOther = result.data
+      })
+    }
   },
   computed: {
-    ...mapState(['books', 'book', 'personalInfo'])
+    ...mapState(['books', 'book', 'personalInfo', 'website'])
   },
   components: {
     BookComment
@@ -125,6 +224,23 @@ export default {
   .book-section {
     position: relative;
     display: flex;
+    &.fold-pc .book-summary {
+      left: -320px;
+    }
+    &.fold-pc .book-content {
+      margin-left: 0;
+      .book-content-inner {
+        .book-content__header {
+          left: 0;
+        }
+      }
+      .book-content-inner .book-handle .step-btn.step-btn--prev {
+        left: -150px;
+      }
+      .book-content-inner .book-handle .step-btn.step-btn--next {
+        right: 170px;
+      }
+    }
     .book-summary {
       width: 320px;
       position: fixed;
@@ -151,10 +267,15 @@ export default {
           background-color: #fff;
           border-bottom: 1px solid #ddd;
           .logo {
-            height: 30px;
-            img {
-              height: 100%;
-            }
+            background-size: 100% 100%;
+            display: block;
+            width: 90px;
+            height: 32px;
+            left: 10%;
+          }
+          .logo-text {
+            font-size: 25px;
+            color: #e67e7e;
           }
           .label {
             margin-left: 13px;
@@ -189,7 +310,7 @@ export default {
             cursor: pointer;
             background-color: #007fff;
             color: #fff;
-            font-size: 18px;
+            font-size: 14px;
             line-height: 60px;
             text-align: center;
           }
@@ -199,7 +320,7 @@ export default {
           overflow-y: auto;
           box-sizing: border-box;
           -webkit-overflow-scrolling: touch;
-          height: calc(100% - 180px);
+          height: calc(100% - 60px);
           &.bought {
             height: calc(100% - 120px);
           }
@@ -219,11 +340,10 @@ export default {
           .section {
             min-height: 60px;
             padding-left: 16px;
-            &.section-link {
-              cursor: pointer;
-            }
-            &.read {
+            cursor: pointer;
+            &.current-active {
               color: #333;
+              background: rgba(0, 0, 0, 0.1);
             }
             .step {
               align-items: center;
@@ -325,19 +445,6 @@ export default {
           padding-right: 20px;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           font-size: 18px;
-          .switch {
-            display: none;
-            padding-left: 15px;
-            margin-right: 10px;
-            background-image: url(https://b-gold-cdn.xitu.io/v3/static/img/more.3f349bb.svg);
-            background-repeat: no-repeat;
-            background-position: 0;
-            background-size: 16px;
-            img {
-              width: 30px;
-              vertical-align: middle;
-            }
-          }
           .menu {
             width: auto;
             height: 20px;
@@ -371,6 +478,22 @@ export default {
               justify-content: center;
               align-items: center;
               cursor: pointer;
+              .avatar-img {
+                display: inline-block;
+                position: relative;
+                width: 36px;
+                height: 36px;
+                border-radius: 72px;
+                /deep/ .el-image {
+                  width: 36px;
+                  height: 36px;
+                  img {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 80px;
+                  }
+                }
+              }
             }
           }
         }
@@ -381,15 +504,23 @@ export default {
           position: relative;
           background-color: #e6e7e9;
           padding-bottom: env(safe-area-inset-bottom);
-          .section-page {
+          .section-content {
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
-            padding: 20px 60px 40px;
+            padding: 30px;
             box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.15);
             background-color: #fff;
             border-radius: 2px;
             box-sizing: border-box;
+            .edit-outline {
+              color: rgba(0, 0, 0, 0.88);
+              background: #ffd600;
+              border-color: #ffd600;
+              margin-bottom: 20px;
+              float: right;
+              cursor: pointer;
+            }
             .article-content {
               word-break: break-word;
               line-height: 1.75;
@@ -399,18 +530,11 @@ export default {
             }
             .book-comments {
               padding-top: 30px;
-              .box-title {
-                margin: 1.3rem 0;
-                text-align: center;
-                color: #909090;
-                font-weight: 500;
-                font-size: 16px;
-              }
               .comment-box {
                 padding-bottom: 1rem;
                 .comment-form {
                   position: relative;
-                  padding: 1.3rem 1.3rem 1.3rem 6rem;
+                  padding: 30px;
                   background-color: #f8f9fa;
                   border: 1px solid #f1f1f1;
                   border-radius: 4px;
@@ -418,9 +542,8 @@ export default {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    padding: 2.5rem 1rem;
                     .authorize-btn {
-                      padding: 0.5rem 1rem;
+                      padding: 5px 13px;
                       font-size: 1rem;
                       color: #007fff;
                       background-color: transparent;
@@ -429,7 +552,7 @@ export default {
                     }
                     .placeholder {
                       margin-left: 1.3rem;
-                      font-size: 1.167rem;
+                      font-size: 14px;
                       font-weight: 500;
                       color: #4a4a4a;
                     }

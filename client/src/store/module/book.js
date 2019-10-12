@@ -87,6 +87,14 @@ const actions = {
       method: 'post',
       parameter: parameter
     })
+  },
+  BOOK_NEXT_PREV ({ commit, dispatch, state }, parameter) {
+    // 获取小书章节的上一篇，下一篇
+    return fetch({
+      url: '/book/next-prev',
+      method: 'post',
+      parameter: parameter
+    })
   }
 }
 

@@ -95,6 +95,26 @@ class Index {
           'create_dt',
           await TimeDistance(rows[i].create_date)
         )
+
+        let oneArticleBlog = await models.article_blog.findOne({
+          where: { blog_id: rows[i].blog_ids }
+        })
+
+        if (oneArticleBlog && ~[2, 4].indexOf(oneArticleBlog.status)) {
+          rows[i].setDataValue('article_blog', oneArticleBlog)
+        }
+
+        if (rows[i].article_tag_ids) {
+          rows[i].setDataValue(
+            'tag',
+            await models.article_tag.findAll({
+              where: {
+                article_tag_id: { [Op.or]: rows[i].article_tag_ids.split(',') }
+              }
+            })
+          )
+        }
+
         rows[i].setDataValue(
           'user',
           await models.user.findOne({

@@ -1,9 +1,11 @@
 <template>
   <div class="book-list">
-    <router-link :to="{name:'WriteBookView',params: { books_id: $route.params.books_id, book_id: 'create' }}">新增章节</router-link>
+    <router-link class="btn create-book"
+                 v-if="personalInfo.islogin"
+                 :to="{name:'WriteBookView',params: { books_id: $route.params.books_id, book_id: 'create' }}">新增小书章节</router-link>
     <div class="book-content-head">小书章节</div>
-    <span @click="writeChapter('create')">新增小书章节</span>
-    <div class="book-directory section-of-info">
+    <div class="book-directory section-of-info"
+         v-if="books.booksBookAll.length">
       <div class="section"
            v-for="(bookItem,key) in books.booksBookAll"
            :key="key">
@@ -17,12 +19,20 @@
             <div class="statistics">
               <span class="duration">时长: {{bookItem.read_time}}</span>
               <span class="readed">{{bookItem.read_count||0}}次学习</span><span class="comment">{{bookItem.commentCount||0}}条评论</span>
-              <span @click="writeChapter(bookItem.book_id)">编辑章节</span>
-              <span @click="deleteChapter(bookItem.book_id)">删除</span>
+              <span class="edit"
+                    @click="writeChapter(bookItem.book_id)"
+                    v-if="personalInfo.islogin">编辑章节</span>
+              <span class="delete"
+                    @click="deleteChapter(bookItem.book_id)"
+                    v-if="personalInfo.islogin">删除</span>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div v-else
+         class="book-directory-null">
+      当前小书章节为空，请等待作者新增章节......
     </div>
   </div>
 </template>
@@ -31,11 +41,6 @@
 import { mapState } from 'vuex'
 export default {
   name: "BookList",
-  data () {
-    return {
-
-    };
-  },
   methods: {
     lookChapter (book_id) {
       this.$router.push({ name: 'BookView', params: { books_id: this.$route.params.books_id, book_id: book_id } })
@@ -44,7 +49,7 @@ export default {
       this.$router.push({ name: 'WriteBookView', params: { books_id: this.$route.params.books_id, book_id: book_id } })
     },
     deleteChapter (book_id) {
-      this.$confirm('此操作将永久删除该小书, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该小书章节, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -75,7 +80,15 @@ export default {
 
 <style scoped lang="scss">
 .book-list {
-  padding: 30px 30px 0;
+  padding: 30px 30px 60px;
+  .create-book {
+    padding: 5px 13px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.88);
+    background: #ffd600;
+    border-color: #ffd600;
+    margin-bottom: 10px;
+  }
   .book-content-head {
     position: relative;
     font-weight: 700;
@@ -190,11 +203,37 @@ export default {
             flex-wrap: wrap;
             span {
               margin-right: 12px;
+              display: inline-block;
+              vertical-align: middle;
+            }
+            .edit {
+              color: #fff;
+              background: #ffd600;
+              font-size: 12px;
+              border-radius: 3px;
+              line-height: 18px;
+              padding: 1px 3px;
+              cursor: pointer;
+            }
+            .delete {
+              background: #db5000;
+              color: #fff;
+              font-size: 12px;
+              border-radius: 3px;
+              line-height: 18px;
+              padding: 1px 3px;
+              cursor: pointer;
             }
           }
         }
       }
     }
+  }
+  .book-directory-null {
+    font-size: 14px;
+    padding: 20px 0;
+    color: #666;
+    text-align: center;
   }
 }
 </style>

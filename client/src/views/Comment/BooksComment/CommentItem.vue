@@ -11,7 +11,7 @@
         <h4>
           <router-link class="user-info"
                        :to="{name:'user',params:{uid:commentItem.user.uid}}">{{commentItem.user.nickname}}</router-link>
-          <span>{{commentItem.star}}星</span>
+          <span>小书评价星级 {{commentItem.star}} 星</span>
         </h4>
         <div class="comment-text"
              v-if="Number(commentItem.status)===2||Number(commentItem.status)===4"
@@ -37,7 +37,8 @@
       <div class="comment-form-view"
            v-if="isComment"
            :id="'comment-reply'+commentItem.id">
-        <comment-form reply_uid=""
+        <comment-form :isStar="false"
+                      reply_uid=""
                       :child_comment_id="commentItem.id"
                       @commentChange="commentChange" />
       </div>

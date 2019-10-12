@@ -3,7 +3,7 @@
     <div class="container  box-container">
       <div class="row">
 
-        <div class="col-xs-12 col-sm-8 col-md-8">
+        <div class="col-xs-12 col-sm-12 col-md-12">
 
           <div class="books-menu">
 
@@ -63,7 +63,7 @@
             <div class="col-xs-4 col-sm-4 col-md-4"
                  v-for="(booksItem,key) in books.booksList.list"
                  :key="key">
-              <div class="library-item bbt-clearfix">
+              <div class="library-item clearfix client-card">
                 <div class="library-item__thumb">
                   <router-link :to="{name:'book',params:{books_id:booksItem.books_id}}">
                     <img :src="booksItem.cover_img"
@@ -77,6 +77,12 @@
                                  :to="{name:'book',params:{books_id:booksItem.books_id}}">
                       {{booksItem.title}}
                     </router-link>
+                  </div>
+                  <div class="library-item__info">
+                    <span><i class="el-icon-view"></i> {{booksItem.read_count||0}}
+                    </span><span style="margin-left: 8px;">
+                      <i class="el-icon-notebook-2"></i> {{booksItem.bookCount||0}}
+                    </span>
                   </div>
                   <div class="library-item-tag">
                     <template v-if="booksItem.tag">
@@ -92,13 +98,6 @@
                     </template>
 
                   </div>
-                  <div class="library-item__info"><span>
-                      <i class="el-icon-view"></i> {{booksItem.read_count||0}}
-                    </span><span style="margin-left: 8px;">
-                      <i class="el-icon-notebook-2"></i> {{booksItem.bookCount||0}}
-                    </span>
-                  </div>
-
                 </div>
               </div>
             </div>
@@ -108,10 +107,6 @@
                 :page="Number($route.query.page)||1"
                 @pageChange="pageChange"></Page>
 
-        </div>
-
-        <div class="col-xs-12 col-sm-4 col-md-4">
-          <website-notice />
         </div>
 
       </div>
@@ -128,12 +123,12 @@ import websiteNotice from '../Parts/websiteNotice'
 export default {
   metaInfo () {
     return {
-      title: `专栏-${this.website.meta.website_name}`,
+      title: `小书-${this.website.meta.website_name}`,
       meta: [
         {
           // set meta
           name: "description",
-          content: `专栏-${this.website.meta.website_name}`
+          content: `小书-${this.website.meta.website_name}`
         }
       ],
       htmlAttrs: {
@@ -316,109 +311,65 @@ export default {
     }
   }
   .books-list {
-    padding-top: 40px;
+    padding-top: 20px;
   }
 
   .library-item {
-    margin-bottom: 30px;
+    margin-bottom: 24px;
+    padding: 16px;
     background: #fff;
-    border-radius: 4px;
-    position: relative;
     transition: all 0.3s ease;
-    &:after,
-    &:before {
-      transition: all 0.3s ease;
-      position: absolute;
-      display: table;
-      height: 240px;
-      background: #fff;
-      border-radius: 4px;
-      content: "";
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06),
-        0 1px 10px 0 rgba(0, 0, 0, 0.04), 0 0 3px -1px rgba(0, 0, 0, 0.08);
-    }
-    &:before {
-      width: 95%;
-      top: -8px;
-      left: 2.5%;
-      z-index: -1;
-    }
-    &:after {
-      width: 90%;
-      top: -16px;
-      left: 5%;
-      z-index: -2;
-    }
-    .operat-view {
-      position: absolute;
-      width: 30px;
-      height: 28px;
-      top: 10px;
-      right: 15px;
-      text-align: center;
-      cursor: pointer;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 3px;
-      i {
-        color: #fff;
-      }
-    }
     .library-item__thumb {
-      width: 100%;
-      height: 220px;
-      overflow: hidden;
-      border: 1px solid #f1f1f1;
-      border-radius: 4px;
+      float: left;
+      width: 88px;
+      margin-right: 8px;
       img {
-        height: 100%;
+        border-radius: 4px;
+        border: 1px solid #f1f1f1;
+        height: 120px;
       }
     }
     .library-item__body {
       .library-item__title {
-        height: 22px;
-        margin: 8px 0;
-        font-size: 13px;
+        height: 50px;
+        margin-bottom: 8px;
+        font-size: 14px;
         line-height: 22px;
         font-weight: 700;
         word-break: break-all;
         display: -webkit-box;
         text-overflow: ellipsis;
         overflow: hidden;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         -moz-box-orient: vertical;
-        .link-dark-major {
-          color: rgba(0, 0, 0, 0.88);
-          transition: all 0.3s ease;
+      }
+      .library-item-tag {
+        height: 50px;
+        .title {
+          display: inline-block;
+          font-size: 12px;
+        }
+        a {
+          display: inline-block;
+          border: 1px solid #e0e0e0;
+          font-size: 12px;
+          color: #666;
+          border-radius: 3px;
+          line-height: 15px;
+          padding: 2px 5px;
+          margin-right: 5px;
+        }
+        .hint {
+          font-size: 12px;
+          color: #999;
         }
       }
-    }
-    .library-item-tag {
-      height: 50px;
-      .title {
-        display: inline-block;
+      .library-item__info {
         font-size: 12px;
+        line-height: 20px;
+        color: rgba(0, 0, 0, 0.56);
       }
-      a {
-        display: inline-block;
-        background: #fd763a;
-        font-size: 12px;
-        color: #fff;
-        border-radius: 10px;
-        line-height: 15px;
-        padding: 1px 3px;
-        margin-right: 5px;
-      }
-      .hint {
-        font-size: 12px;
-        color: #999;
-      }
-    }
-    .library-item__info {
-      font-size: 12px;
-      line-height: 20px;
-      color: rgba(0, 0, 0, 0.56);
-      margin-bottom: 8px;
     }
   }
 }

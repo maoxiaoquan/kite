@@ -358,6 +358,8 @@ router.get('/user-book/info', tokens.ClientVerifyToken, book.getUserBookInfo) //
 
 router.get('/book/info', book.getBookInfo) // 获取小书章节信息
 
+router.post('/book/next-prev', book.getNextPrevBook) // 获取小书上一页，下一页
+
 router.post('/book/delete', tokens.ClientVerifyToken, book.deleteBook) // 删除用户自己的小书章节
 
 router.post(
