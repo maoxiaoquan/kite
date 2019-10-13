@@ -17,7 +17,7 @@
                @click="lookChapter(bookItem.book_id)">{{bookItem.title}}</div>
           <div class="sub-line">
             <div class="statistics">
-              <span class="duration">时长: {{bookItem.read_time}}</span>
+              <span class="duration">时长: {{bookItem.rTime}}</span>
               <span class="readed">{{bookItem.read_count||0}}次学习</span><span class="comment">{{bookItem.commentCount||0}}条评论</span>
               <span class="edit"
                     @click="writeChapter(bookItem.book_id)"

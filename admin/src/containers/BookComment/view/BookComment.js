@@ -82,7 +82,7 @@ class BookComment extends React.Component {
                 target="_blank"
                 href={`/book/${record.books_id}/section/${record.book_id}`}
               >
-                {record.book.book_id}
+                {record.book.title}
               </a>
             </div>
           )

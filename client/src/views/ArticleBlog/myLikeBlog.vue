@@ -1,39 +1,42 @@
 <template>
   <div class="article-blog">
-    <div class="container  box-container">
-      <div class="row">
+    <client-only>
+      <div class="container  box-container">
+        <div class="row">
 
-        <div class="col-xs-12 col-sm-8 col-md-8">
+          <div class="col-xs-12 col-sm-8 col-md-8">
 
-          <div class="article-blog-menu">
-            <span class="menu-like-blog">我关注的个人专栏</span>
-          </div>
-
-          <div class="article-blog-list row">
-            <div class="col-xs-6 col-sm-6 col-md-6"
-                 v-for="(articleBlogItem,key) in articleBlog.likeBlogArticleList.list"
-                 :key="key">
-              <LikeBlogItem :articleBlogItem="articleBlogItem" />
+            <div class="article-blog-menu">
+              <span class="menu-like-blog">我关注的个人专栏</span>
             </div>
+
+            <div class="article-blog-list row">
+              <div class="col-xs-6 col-sm-6 col-md-6"
+                   v-for="(articleBlogItem,key) in articleBlog.likeBlogArticleList.list"
+                   :key="key">
+                <LikeBlogItem :articleBlogItem="articleBlogItem" />
+              </div>
+            </div>
+
+            <Page :count="pagination"
+                  :page="Number($route.query.page)||1"
+                  @pageChange="pageChange"></Page>
+
           </div>
 
-          <Page :count="pagination"
-                :page="Number($route.query.page)||1"
-                @pageChange="pageChange"></Page>
+          <div class="col-xs-12 col-sm-4 col-md-4">
+            <website-notice />
+          </div>
 
-        </div>
-
-        <div class="col-xs-12 col-sm-4 col-md-4">
-          <website-notice />
         </div>
 
       </div>
-
-    </div>
+    </client-only>
   </div>
 </template>
 
 <script>
+import ClientOnly from 'vue-client-only'
 import { share } from '@utils'
 import { mapState } from 'vuex'
 import { Page } from "@components";
@@ -100,7 +103,8 @@ export default {
   components: {
     websiteNotice,
     LikeBlogItem,
-    Page
+    Page,
+    ClientOnly
   }
 };
 </script>

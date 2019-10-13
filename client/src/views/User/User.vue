@@ -2,123 +2,125 @@
 
   <section class="user-lay layout-content"
            id="user-center-article">
-    <div class="container  box-container">
-      <div class="row">
+    <client-only>
+      <div class="container  box-container">
+        <div class="row">
 
-        <div class="col-xs-12 col-sm-8 col-md-8 main">
-          <div class="main-top clearfix">
-            <router-link :to='{name:"user",params:{uid:user.user_info.user.uid}}'
-                         class="avatar">
-              <div class="avatar-img">
-                <el-image :src="user.user_info.user.avatar"
-                          lazy></el-image>
-              </div>
-            </router-link>
-
-            <div class="title">
+          <div class="col-xs-12 col-sm-8 col-md-8 main">
+            <div class="main-top clearfix">
               <router-link :to='{name:"user",params:{uid:user.user_info.user.uid}}'
-                           class="name">
-                {{ user.user_info.user.nickname }}
+                           class="avatar">
+                <div class="avatar-img">
+                  <el-image :src="user.user_info.user.avatar"
+                            lazy></el-image>
+                </div>
               </router-link>
+
+              <div class="title">
+                <router-link :to='{name:"user",params:{uid:user.user_info.user.uid}}'
+                             class="name">
+                  {{ user.user_info.user.nickname }}
+                </router-link>
+              </div>
+
+              <button v-if="(user.user_info.user.uid !== personalInfo.user.uid)&&personalInfo.islogin"
+                      class="user-follow-button"
+                      @click="onUserAttention($route.params.uid,~user.user_attention.other_attention.indexOf(personalInfo.user.uid||''))"
+                      :class="~user.user_attention.other_attention.indexOf(personalInfo.user.uid||'')?'has':'no'">
+                <i class="iconfont"></i>
+                <span v-if="~user.user_attention.other_attention.indexOf(personalInfo.user.uid||'')">已关注</span>
+                <span v-else>关注</span>
+              </button>
+
+              <div class="info">
+                <ul>
+                  <li>
+                    <div class="meta-block">
+                      <router-link :to='{name:"userAttention",query:{any:"me"}}'>
+                        <p>{{user.user_info.user_attention_other_count}}</p>
+                        <strong>
+                          {{user.user_info.user.uid === personalInfo.user.uid?'我关注的人':'他关注的人'}}
+                        </strong>
+                      </router-link>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="meta-block">
+                      <router-link :to='{name:"userAttention",query:{any:"other"}}'>
+                        <p>{{user.user_info.other_user_attention_count}}</p>
+                        <strong>粉丝</strong>
+                      </router-link>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="meta-block">
+                      <router-link :to='{name:"userArticle",query:{blog_id:"all"}}'>
+                        <p>{{user.user_info.user_article_count}}</p>
+                        <strong>文章</strong>
+                      </router-link>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
 
-            <button v-if="(user.user_info.user.uid !== personalInfo.user.uid)&&personalInfo.islogin"
-                    class="user-follow-button"
-                    @click="onUserAttention($route.params.uid,~user.user_attention.other_attention.indexOf(personalInfo.user.uid||''))"
-                    :class="~user.user_attention.other_attention.indexOf(personalInfo.user.uid||'')?'has':'no'">
-              <i class="iconfont"></i>
-              <span v-if="~user.user_attention.other_attention.indexOf(personalInfo.user.uid||'')">已关注</span>
-              <span v-else>关注</span>
-            </button>
+            <ul class="trigger-menu">
+              <li :class="{'active':$route.name==='userArticle'}">
+                <router-link :to='{name:"userArticle",query:{blog_id:"all"}}'>
+                  文章
+                </router-link>
+              </li>
+              <li :class="{'active':$route.name==='userDynamic'}">
+                <router-link :to='{name:"userDynamic"}'>
+                  片刻
+                </router-link>
+              </li>
+              <li :class="{'active':$route.name==='userBooks'}">
+                <router-link :to='{name:"userBooks"}'>
+                  小书
+                </router-link>
+              </li>
+              <li :class="{'active':$route.name==='userBlog'}">
+                <router-link :to='{name:"userBlog"}'>
+                  专栏
+                </router-link>
+              </li>
+              <li :class="{'active':$route.name==='userAttention'}">
+                <router-link :to='{name:"userAttention"}'>
+                  关注
+                </router-link>
+              </li>
+              <li :class="{'active':$route.name==='userLike'}">
+                <router-link :to='{name:"userLike"}'>
+                  喜欢
+                </router-link>
+              </li>
 
-            <div class="info">
-              <ul>
-                <li>
-                  <div class="meta-block">
-                    <router-link :to='{name:"userAttention",query:{any:"me"}}'>
-                      <p>{{user.user_info.user_attention_other_count}}</p>
-                      <strong>
-                        {{user.user_info.user.uid === personalInfo.user.uid?'我关注的人':'他关注的人'}}
-                      </strong>
-                    </router-link>
-                  </div>
-                </li>
-                <li>
-                  <div class="meta-block">
-                    <router-link :to='{name:"userAttention",query:{any:"other"}}'>
-                      <p>{{user.user_info.other_user_attention_count}}</p>
-                      <strong>粉丝</strong>
-                    </router-link>
-                  </div>
-                </li>
-                <li>
-                  <div class="meta-block">
-                    <router-link :to='{name:"userArticle",query:{blog_id:"all"}}'>
-                      <p>{{user.user_info.user_article_count}}</p>
-                      <strong>文章</strong>
-                    </router-link>
-                  </div>
-                </li>
-              </ul>
-            </div>
+              <li :class="{'active':$route.name==='userMessage'}"
+                  v-if="personalInfo.islogin&&personalInfo.user.uid===user.user_info.user.uid">
+                <router-link :to='{name:"userMessage"}'>
+                  消息
+                </router-link>
+              </li>
+            </ul>
+
+            <router-view />
           </div>
 
-          <ul class="trigger-menu">
-            <li :class="{'active':$route.name==='userArticle'}">
-              <router-link :to='{name:"userArticle",query:{blog_id:"all"}}'>
-                文章
-              </router-link>
-            </li>
-            <li :class="{'active':$route.name==='userDynamic'}">
-              <router-link :to='{name:"userDynamic"}'>
-                片刻
-              </router-link>
-            </li>
-            <li :class="{'active':$route.name==='userBooks'}">
-              <router-link :to='{name:"userBooks"}'>
-                小书
-              </router-link>
-            </li>
-            <li :class="{'active':$route.name==='userBlog'}">
-              <router-link :to='{name:"userBlog"}'>
-                专栏
-              </router-link>
-            </li>
-            <li :class="{'active':$route.name==='userAttention'}">
-              <router-link :to='{name:"userAttention"}'>
-                关注
-              </router-link>
-            </li>
-            <li :class="{'active':$route.name==='userLike'}">
-              <router-link :to='{name:"userLike"}'>
-                喜欢
-              </router-link>
-            </li>
+          <div class="col-xs-12 col-sm-4 col-md-4 box-aside">
+            <UserAside />
+          </div>
 
-            <li :class="{'active':$route.name==='userMessage'}"
-                v-if="personalInfo.islogin&&personalInfo.user.uid===user.user_info.user.uid">
-              <router-link :to='{name:"userMessage"}'>
-                消息
-              </router-link>
-            </li>
-          </ul>
-
-          <router-view />
         </div>
-
-        <div class="col-xs-12 col-sm-4 col-md-4 box-aside">
-          <UserAside />
-        </div>
-
       </div>
-    </div>
+    </client-only>
   </section>
 </template>
 
 <script>
 import UserAside from './view/UserAside'
 import { mapState } from 'vuex'
-
+import ClientOnly from 'vue-client-only'
 export default {
   name: 'User',
   metaInfo () {
@@ -170,7 +172,8 @@ export default {
     ...mapState(['personalInfo', 'user']),  // personalInfo:个人信息  user:登录后的个人信息当前用户
   },
   components: {
-    UserAside
+    UserAside,
+    ClientOnly
   }
 }
 </script>

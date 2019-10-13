@@ -14,6 +14,24 @@ function ErrorMessage (message) {
   this.name = 'UserException'
 }
 
+function computedReadTime (s) {
+  // 计算分钟
+  // 算法：将秒数除以60，然后下舍入，既得到分钟数
+  var slookTextNum = 5 // 一秒能看多少文字
+  var h
+  h = Math.floor(s / (60 * slookTextNum))
+  // 计算秒
+  // 算法：取得秒%60的余数，既得到秒数
+  s = s % 60
+  // 将变量转换为字符串
+  h += ''
+  s += ''
+  // 如果只有一位数，前面增加一个0
+  h = h.length == 1 ? '0' + h : h
+  s = s.length == 1 ? '0' + s : s
+  return h + '分' + s + '秒'
+}
+
 function getNoMarkupStr (markupStr) {
   /* markupStr 源码</> */
   // console.log(markupStr);
@@ -551,6 +569,10 @@ class Books {
             await models.book_comment.count({
               where: { book_id: allBook[i].book_id }
             })
+          )
+          allBook[i].setDataValue(
+            'rTime',
+            await computedReadTime(allBook[i].read_time)
           )
         }
 

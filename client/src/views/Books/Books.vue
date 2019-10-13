@@ -246,14 +246,13 @@ export default {
           margin-bottom: 8px;
           a {
             display: block;
-            border: 1px solid #e0e0e0;
+            border: 1px solid #fff;
             padding: 2px 10px;
             font-size: 14px;
-            border-radius: 3px;
             &.current-active {
-              background: #fd763a;
-              color: #fff;
-              border: 1px solid #fd763a;
+              color: #fd763a;
+              font-weight: bold;
+              border-bottom: 1px solid #fd763a;
             }
           }
         }

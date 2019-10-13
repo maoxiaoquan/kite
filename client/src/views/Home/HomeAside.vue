@@ -16,7 +16,7 @@
         <a href="javascript:;"
            @click="createDynamic"
            class="btn-dynamic">
-          <i class="el-icon-chat-line-round"></i>发说说
+          <i class="el-icon-chat-line-round"></i>发片刻
         </a>
         <a href="javascript:;"
            @click="createArticle"
@@ -26,7 +26,7 @@
         <a href="javascript:;"
            @click="createBooks"
            class="btn-book">
-          <i class="el-icon-notebook-2"></i>创建小书
+          <i class="el-icon-notebook-2"></i>撰小书
         </a>
       </div>
     </div>
@@ -222,13 +222,13 @@ export default {
       }
       .btn-note {
         color: rgba(0, 0, 0, 0.88);
-        background: #f4e0bd;
-        border: 1px solid #f4e0bd;
+        background: #c1e4de;
+        border: 1px solid #c1e4de;
       }
       .btn-book {
         color: rgba(0, 0, 0, 0.88);
-        background: #64abd3;
-        border: 1px solid #64abd3;
+        background: #b7d6ec;
+        border: 1px solid #b7d6ec;
       }
     }
   }

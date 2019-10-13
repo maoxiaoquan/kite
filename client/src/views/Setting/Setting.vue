@@ -2,39 +2,42 @@
   <!--article-list-lay layout-content start-->
   <section class="user-setting-lay layout-content"
            id="user-setting-profile">
-    <div class="container box-container">
-      <div class="row">
+    <client-only>
+      <div class="container box-container">
+        <div class="row">
 
-        <div class="col-xs-12 col-sm-4 col-md-4">
-          <div class="user-setting-aside client-card">
-            <h2 class="title"><i class="el-icon-setting"></i>设置</h2>
-            <ul class="setting-tap-list">
-              <li>
-                <router-link :to='{name:"settingProfile"}'
-                             class="dropdown-item">
-                  <i class="el-icon-user-solid"></i>个人资料
-                </router-link>
-              </li>
-              <li>
-                <router-link :to='{name:"settingResetPassword"}'
-                             class="dropdown-item">
-                  <i class="el-icon-lock"></i> 密码修改
-                </router-link>
-              </li>
-            </ul>
+          <div class="col-xs-12 col-sm-4 col-md-4">
+            <div class="user-setting-aside client-card">
+              <h2 class="title"><i class="el-icon-setting"></i>设置</h2>
+              <ul class="setting-tap-list">
+                <li>
+                  <router-link :to='{name:"settingProfile"}'
+                               class="dropdown-item">
+                    <i class="el-icon-user-solid"></i>个人资料
+                  </router-link>
+                </li>
+                <li>
+                  <router-link :to='{name:"settingResetPassword"}'
+                               class="dropdown-item">
+                    <i class="el-icon-lock"></i> 密码修改
+                  </router-link>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-8 col-md-8">
+            <router-view />
           </div>
         </div>
-
-        <div class="col-xs-12 col-sm-8 col-md-8">
-          <router-view />
-        </div>
       </div>
-    </div>
+    </client-only>
   </section>
   <!--article-list-lay layout-content end-->
 </template>
 
 <script>
+import ClientOnly from 'vue-client-only'
 export default {
   name: 'Setting',
   metaInfo () {
@@ -54,6 +57,9 @@ export default {
     personalInfo () { // 登录后的个人信息
       return this.$store.state.personalInfo || {}
     }
+  },
+  components: {
+    ClientOnly
   }
 }
 </script>
