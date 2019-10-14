@@ -27,6 +27,15 @@
       </li>
     </ul>
 
+    <ul class="aside-operat">
+      <li>
+        <router-link class="collection"
+                     :to='{name:"personalCollect"}'>
+          <span class="collection-name"> <i class="el-icon-s-management"></i> 收藏集</span>
+        </router-link>
+      </li>
+    </ul>
+
     <ul class="list user-dynamic"
         v-if="personalInfo.islogin&&personalInfo.user.uid===userInfo.user.uid">
       <li>
@@ -175,6 +184,28 @@ export default {
     background: #f9f9f9;
     p {
       font-size: 13px;
+    }
+  }
+}
+
+.aside-operat {
+  li {
+    display: block;
+    margin-bottom: 10px;
+    a {
+      padding: 5px 13px;
+      display: block;
+      background: #f3f3f3;
+      font-size: 14px;
+      border-radius: 5px;
+      color: rgba(0, 0, 0, 0.88);
+      i {
+        display: inline-block;
+        margin-right: 15px;
+      }
+      &.collection {
+        background: #ffe699;
+      }
     }
   }
 }

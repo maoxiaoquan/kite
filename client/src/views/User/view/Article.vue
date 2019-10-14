@@ -54,7 +54,8 @@
                            :articleItem="item" />
         </div>
       </div>
-      <Page :count="pagination"
+      <Page :total="myArticle.count"
+            :pageSize="myArticle.pageSize"
             :page="Number($route.query.page)||1"
             @pageChange="pageChange"></Page>
     </div>
@@ -67,7 +68,7 @@
 
 import BlogArticleItem from '../component/BlogArticleItem'
 import { Page, UploadImage } from '@components'
-
+import { mapState } from 'vuex'
 export default {
   name: 'Blog',
   metaInfo () {
@@ -124,14 +125,9 @@ export default {
     }
   },
   computed: {
-    personalInfo () { // 登录后的个人信息
-      return this.$store.state.personalInfo || {}
-    },
+    ...mapState(["personalInfo"]),
     userInfo () { // 登录后的个人信息
       return this.$store.state.user.user_info || {}
-    },
-    pagination () { // 分页
-      return Math.ceil(this.myArticle.count / this.myArticle.pageSize)
     },
     myArticle () { // 用户个人的文章
       return this.$store.state.user.my_article || {}

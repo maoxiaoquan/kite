@@ -55,7 +55,8 @@
         </div>
       </div>
 
-      <Page :count="pagination"
+      <Page :total="subscribe.count"
+            :pageSize="subscribe.pageSize"
             :page="Number($route.query.page)||1"
             @pageChange="pageChange"></Page>
     </div>
@@ -129,10 +130,6 @@ export default {
   },
   computed: {
     ...mapState(["website"]),
-    pagination () {
-      // 分页
-      return Math.ceil(this.subscribe.count / this.subscribe.pageSize);
-    },
     subscribe () {
       return this.$store.state.articleTag.subscribe || [];
     },

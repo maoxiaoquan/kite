@@ -10,10 +10,14 @@
               </div>
               <div class="info">
                 <div class="title-line">
-                  <a href=""
+                  <a href="javascript:;"
                      class="title">
                     <span>{{books.booksInfo.title}}</span>
                   </a>
+                  <span class="attention"
+                        v-if="~[2,4].indexOf(books.booksInfo.status)&&personalInfo.islogin"
+                        @click="collectBooks(books.booksInfo.books_id)"
+                        :class="{'active':isCollect(books.booksInfo).status}">{{isCollect(books.booksInfo).text}}</span>
                 </div>
                 <div class="media">
                   <div class="desc">{{books.booksInfo.description}}</div>
@@ -114,6 +118,43 @@ export default {
     this.$store.dispatch("books/GET_BOOKS_BOOK_ALL", { books_id: this.$route.params.books_id })
   },
   methods: {
+    collectBooks (books_id) { // 用户收藏小书
+      this.$store.dispatch('books/COLLECT_BOOKS', {
+        books_id,
+      })
+        .then(result => {
+          if (result.state === 'success') {
+            this.$message.success(result.message);
+            window.location.reload()
+          } else {
+            this.$message.warning(result.message);
+          }
+        })
+    },
+    isCollect (item) { // 是否收藏
+      let collectUserIds = []
+      if (item.collectUserIds && item.collectUserIds.length > 0) {
+        item.collectUserIds.map(item => {
+          collectUserIds.push(item.uid)
+        })
+        if (~collectUserIds.indexOf(Number(this.personalInfo.user.uid))) {
+          return {
+            status: true,
+            text: '已收藏'
+          }
+        } else {
+          return {
+            status: false,
+            text: '收藏'
+          }
+        }
+      } else {
+        return {
+          status: false,
+          text: '收藏'
+        }
+      }
+    },
     lookChapter () {
       if (this.books.booksBookAll.length > 0) {
         this.$router.push({ name: 'BookView', params: { books_id: this.$route.params.books_id, book_id: this.books.booksBookAll[0].book_id } })
@@ -154,6 +195,22 @@ export default {
           font-size: 20px;
           font-weight: 700;
           color: #333;
+        }
+        .attention {
+          cursor: pointer;
+          display: inline-block;
+          font-size: 12px;
+          margin-left: 3px;
+          color: #333;
+          border-radius: 3px;
+          border: 1px solid #e0e0e0;
+          line-height: 12px;
+          padding: 2px 3px;
+          &.active {
+            color: #fff;
+            background: #41b883;
+            border: 1px solid #41b883;
+          }
         }
       }
       .media {

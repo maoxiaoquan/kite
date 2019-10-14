@@ -1,21 +1,22 @@
 <template>
   <div class="page-bar">
-    <template v-if="count>0">
+    <template v-if="numPage>0">
       <ul>
-        <li v-if="cur>1"><a href="javascript:;"
-             @click="cur--;pageClick()"> <i class="el-icon-arrow-left"></i></a></li>
-        <li v-if="cur==1"><a class="banclick"><i class="el-icon-arrow-left"></i></a></li>
+        <li v-if="_page>1"><a href="javascript:;"
+             @click="_page--;pageClick()"> <i class="el-icon-arrow-left"></i></a></li>
+        <li v-if="_page==1"><a class="banclick"><i class="el-icon-arrow-left"></i></a></li>
         <li v-for="index in indexs"
             :key="index"
-            v-bind:class="{ 'active': cur == index}">
+            v-bind:class="{ 'active': _page == index}">
           <a @click="btnClick(index)">{{ index }}</a>
         </li>
-        <li v-if="cur!=count"><a href="javascript:;"
-             @click="cur++;pageClick()"><i class="el-icon-arrow-right"></i></a></li>
-        <li v-if="cur == count"><a class="banclick"><i class="el-icon-arrow-right"></i></a></li>
-        <li><a>共<i>{{count}}</i>页</a></li>
+        <li v-if="_page!=numPage"><a href="javascript:;"
+             @click="_page++;pageClick()"><i class="el-icon-arrow-right"></i></a></li>
+        <li v-if="_page == numPage"><a class="banclick"><i class="el-icon-arrow-right"></i></a></li>
+        <li><a>共<i>{{numPage}}</i>页</a></li>
       </ul>
     </template>
+
     <div class="page-null"
          v-else>
       <i class="icon-font el-icon-document"></i>
@@ -27,9 +28,13 @@
 <script>
 export default {
   props: {
-    count: {
+    total: {
       type: Number,
       default: 0
+    },
+    pageSize: {
+      type: Number,
+      default: 10
     },
     page: {
       type: Number,
@@ -39,45 +44,48 @@ export default {
   name: 'Page',
   data () {
     return {
-      cur: 1//当前页码
+      _page: 1//当前页码
     }
   },
   created () {
-    this.cur = this.page
+    this._page = this.page
   },
   watch: {
-    cur (oldValue, newValue) {
+    _page (oldValue, newValue) {
       console.log(arguments)
     }
   },
   methods: {
     btnClick (data) {//页码点击事件
-      if (data != this.cur) {
-        this.cur = data
+      if (data != this._page) {
+        this._page = data
       }
-      this.$emit('pageChange', this.cur || 1)
+      this.$emit('pageChange', this._page || 1)
     },
     pageClick () {
-      this.$emit('pageChange', this.cur || 1)
+      this.$emit('pageChange', this._page || 1)
     }
   },
 
   computed: {
+    numPage () {
+      return Math.ceil(this.total / this.pageSize)
+    },
     indexs () {
       var left = 1
-      var right = this.count
+      var right = this.numPage
       var ar = []
-      if (this.count >= 5) {
-        if (this.cur > 3 && this.cur < this.count - 2) {
-          left = this.cur - 2
-          right = this.cur + 2
+      if (this.numPage >= 5) {
+        if (this._page > 3 && this._page < this.numPage - 2) {
+          left = this._page - 2
+          right = this._page + 2
         } else {
-          if (this.cur <= 3) {
+          if (this._page <= 3) {
             left = 1
             right = 5
           } else {
-            right = this.count
-            left = this.count - 4
+            right = this.numPage
+            left = this.numPage - 4
           }
         }
       }

@@ -73,6 +73,18 @@ export default [
         redirect: { name: 'userArticle' }
       },
       {
+        path: 'personal/:uid',
+        name: 'personal',
+        component: () => import('@views/User/Personal'), // 文章内容页
+        children: [
+          {
+            path: 'collect',
+            name: 'personalCollect',
+            component: () => import('@views/User/PersonalView/Collect') // 收藏
+          }
+        ]
+      },
+      {
         path: 'user/setting',
         name: 'setting',
         component: () => import('@views/Setting/Setting'), // 文章内容页

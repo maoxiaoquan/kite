@@ -6,7 +6,8 @@
                        :key="key"
                        @delete-change="deleteChange" />
     </div>
-    <Page :count="pagination"
+    <Page :total="userMessage.count"
+          :pageSize="userMessage.pageSize"
           :page="Number($route.query.page)||1"
           @pageChange="pageChange"></Page>
   </div>
@@ -16,6 +17,7 @@
 
 import UserMessageItem from '../component/UserMessageItem'
 import { Page } from '@components'
+import { mapState } from 'vuex'
 export default {
   name: 'UserMessage',
   metaInfo () {
@@ -52,14 +54,9 @@ export default {
     },
   },
   computed: {
-    personalInfo () { // 登录后的个人信息
-      return this.$store.state.personalInfo || {}
-    },
+    ...mapState(["personalInfo"]),
     userInfo () { // 登录后的个人信息
       return this.$store.state.user.user_info || {}
-    },
-    pagination () { // 分页
-      return Math.ceil(this.userMessage.count / this.userMessage.pageSize)
     },
     userMessage () { // 用户的消息
       return this.$store.state.user.user_message || {}

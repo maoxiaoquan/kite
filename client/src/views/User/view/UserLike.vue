@@ -9,7 +9,8 @@
       </li>
     </ul>
 
-    <Page :count="pagination"
+    <Page :total="userLikeArticle.count"
+          :pageSize="userLikeArticle.pageSize"
           :page="Number($route.query.page)||1"
           @pageChange="pageChange"></Page>
 
@@ -19,7 +20,7 @@
 <script>
 import LikeArticleItem from '../component/LikeArticleItem'
 import { Page } from '@components'
-
+import { mapState } from 'vuex'
 export default {
   name: 'UserLike',
   metaInfo () {
@@ -48,14 +49,9 @@ export default {
     },
   },
   computed: {
-    personalInfo () { // 登录后的个人信息
-      return this.$store.state.personalInfo || {}
-    },
+    ...mapState(["personalInfo"]),
     userInfo () { // 登录后的个人信息
       return this.$store.state.user.user_info || {}
-    },
-    pagination () { // 分页
-      return Math.ceil(this.userLikeArticle.count / this.userLikeArticle.pageSize)
     },
     userLikeArticle () { // 用户的like
       return this.$store.state.user.user_like_article || {}

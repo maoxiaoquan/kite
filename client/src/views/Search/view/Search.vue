@@ -30,7 +30,8 @@
                 </div>
               </div>
 
-              <Page :count="pagination"
+              <Page :total="searchArticle.count"
+                    :pageSize="searchArticle.pageSize"
                     :page="Number($route.query.page)||1"
                     @pageChange="pageChange"></Page>
             </div>
@@ -84,9 +85,6 @@ export default {
   },
   computed: {
     ...mapState(['home', 'website']),
-    pagination () { // 分页
-      return Math.ceil(this.searchArticle.count / this.searchArticle.pageSize)
-    },
     searchArticle () {
       return this.$store.state.search.searchArticle
     },

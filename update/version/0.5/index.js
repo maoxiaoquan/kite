@@ -22,7 +22,11 @@ class update {
         await models.books_comment.sync({
           force: true
         })
+        await models.collect_books.sync({
+          force: true
+        })
 
+        await models.admin_authority.bulkCreate(newAdminAuthorityList)
         await models.user_authority.bulkCreate(newUserAuthorityList)
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb

@@ -101,7 +101,8 @@
       </div>
     </div>
 
-    <Page :count="pagination"
+    <Page :total="user.articleBlog.count"
+          :pageSize="user.articleBlog.pageSize"
           :page="Number($route.query.page)||1"
           @pageChange="pageChange"></Page>
 
@@ -358,9 +359,6 @@ export default {
   },
   computed: {
     ...mapState(['user', 'personalInfo']),
-    pagination () { // 分页
-      return Math.ceil(this.user.articleBlog.count / this.user.articleBlog.pageSize)
-    },
     articleTagAll () {
       return this.$store.state.articleTag.article_tag_all;
     },

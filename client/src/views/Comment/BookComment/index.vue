@@ -20,7 +20,8 @@
                         :key="key" />
         </div>
 
-        <Page :count="pagination"
+        <Page :total="comment.count"
+              :pageSize="comment.pageSize"
               @pageChange="pageChange"></Page>
       </div>
     </div>
@@ -102,17 +103,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["website"]),
-    personalInfo () {
-      // 登录后的个人信息
-      return this.$store.state.personalInfo || {};
-    },
-    pagination () {
-      // 分页
-      return Math.ceil(
-        this.comment.count / this.comment.pageSize
-      );
-    }
+    ...mapState(["website", "personalInfo"])
   },
   components: {
     "comment-item": commentItem,

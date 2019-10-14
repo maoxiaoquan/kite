@@ -35,7 +35,8 @@
 
         </div>
 
-        <Page :count="pagination"
+        <Page :total="articleColumn.column_list.count"
+              :pageSize="articleColumn.column_list.pageSize"
               :page="Number($route.query.page)||1"
               @pageChange="pageChange"></Page>
 
@@ -83,9 +84,6 @@ export default {
   },
   computed: {
     ...mapState(['articleColumn', 'website']),
-    pagination () { // 分页
-      return Math.ceil(this.articleColumn.column_list.count / this.articleColumn.column_list.pageSize)
-    },
   },
   components: {
     Page

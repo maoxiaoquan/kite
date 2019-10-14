@@ -38,7 +38,8 @@
                                :key="key" />
                 </div>
               </div>
-              <Page :count="pagination"
+              <Page :total="tag.count"
+                    :pageSize="tag.pageSize"
                     :page="Number($route.query.page)||1"
                     @pageChange="pageChange"></Page>
             </div>
@@ -102,9 +103,6 @@ export default {
     },
     subscribeCount () {
       return this.$store.state.articleTag.tag.subscribe_count
-    },
-    pagination () { // 分页
-      return Math.ceil(this.tag.count / this.tag.pageSize)
     },
     tag () {
       return this.$store.state.articleTag.tag

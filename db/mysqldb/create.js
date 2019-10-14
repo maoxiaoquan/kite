@@ -16,37 +16,9 @@ async function sql () {
   // await models.sequelize.query(
   //   'ALTER TABLE article add COLUMN is_public tinyint(1) DEFAULT 1 comment "是否公开";'
   // )
-  await models.books
-    .sync({
-      force: true
-    })
-    .then(() => {
-      console.log('所有数据表创建完成')
-    })
-  await models.book
-    .sync({
-      force: true
-    })
-    .then(() => {
-      console.log('所有数据表创建完成')
-    })
-
-  await models.book_comment
-    .sync({
-      force: true
-    })
-    .then(() => {
-      console.log('所有数据表创建完成')
-    })
-
-  await models.books_comment
-    .sync({
-      force: true
-    })
-    .then(() => {
-      console.log('所有数据表创建完成')
-    })
-
+  await models.collect_books.sync({
+    force: true
+  })
   process.exit()
 }
 sql()

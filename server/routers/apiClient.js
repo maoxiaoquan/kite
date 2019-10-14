@@ -402,4 +402,12 @@ router.post(
   bookComment.deleteBookComment
 ) // 删除小书章节评论 TYPE:AJAX post
 
+router.post('/collect/books', tokens.ClientVerifyToken, books.collectBooks) // 收藏小书
+
+router.get(
+  '/collect/books-list',
+  tokens.ClientVerifyToken,
+  books.getCollectBooksList
+) // 收藏小书
+
 module.exports = router

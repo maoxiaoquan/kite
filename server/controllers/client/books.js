@@ -448,6 +448,13 @@ class Books {
           })
         )
 
+        rows[i].setDataValue(
+          'collectUserIds',
+          await models.collect_books.findAll({
+            where: { books_id: rows[i].books_id, is_like: true }
+          })
+        )
+
         if (rows[i].tag_ids) {
           rows[i].setDataValue(
             'tag',
@@ -505,6 +512,13 @@ class Books {
         )
 
         books.setDataValue('create_dt', await TimeDistance(books.create_date))
+
+        books.setDataValue(
+          'collectUserIds',
+          await models.collect_books.findAll({
+            where: { books_id: books.books_id, is_like: true }
+          })
+        )
 
         books.setDataValue(
           'bookCount',
@@ -587,6 +601,134 @@ class Books {
           message: '获取小书章节失败，小书不存在'
         })
       }
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
+  // 收藏小书
+  static async collectBooks (ctx) {
+    const { books_id } = ctx.request.body
+    let { user = '' } = ctx.request
+    let type = ''
+    try {
+      let oneCollectBooks = await models.collect_books.findOne({
+        where: {
+          uid: user.uid,
+          books_id
+        }
+      })
+
+      if (oneCollectBooks) {
+        /* 判断是否关注了 */
+        type = oneCollectBooks.is_like ? 'cancel' : 'attention'
+        await models.collect_books.update(
+          {
+            is_like: !oneCollectBooks.is_like
+          },
+          {
+            where: {
+              uid: user.uid,
+              books_id
+            }
+          }
+        )
+      } else {
+        type = 'attention'
+        await models.collect_books.create({
+          uid: user.uid,
+          books_id,
+          is_like: true
+        })
+      }
+
+      resClientJson(ctx, {
+        state: 'success',
+        message: type === 'attention' ? '收藏成功' : '取消收藏成功',
+        data: {
+          type
+        }
+      })
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
+  // 获取用户收藏的小书列表
+
+  static async getCollectBooksList (ctx) {
+    let page = ctx.query.page || 1
+    let pageSize = ctx.query.pageSize || 24
+    let { user = '' } = ctx.request
+    let whereParams = {
+      is_public: true,
+      status: {
+        [Op.or]: [2, 4]
+      }
+    }
+
+    try {
+      let { count, rows } = await models.collect_books.findAndCountAll({
+        where: { is_like: true, uid: user.uid }, // 为空，获取全部，也可以自己添加条件
+        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: pageSize // 每页限制返回的数据条数
+        // order: orderParams
+      })
+      for (let i in rows) {
+        const oneBooks = await models.books.findOne({
+          where: { books_id: rows[i].books_id, ...whereParams }
+        })
+
+        rows[i].setDataValue(
+          'bookCount',
+          await models.book.count({
+            where: { books_id: rows[i].books_id }
+          })
+        )
+
+        if (oneBooks.tag_ids) {
+          oneBooks.setDataValue(
+            'tag',
+            await models.article_tag.findAll({
+              where: {
+                article_tag_id: { [Op.or]: oneBooks.tag_ids.split(',') }
+              }
+            })
+          )
+        }
+
+        if (oneBooks) {
+          oneBooks.setDataValue(
+            'create_dt',
+            await TimeDistance(oneBooks.create_date)
+          )
+
+          oneBooks.setDataValue(
+            'update_dt',
+            await TimeDistance(oneBooks.update_date)
+          )
+          rows[i].setDataValue('books', oneBooks)
+        }
+      }
+
+      await resClientJson(ctx, {
+        state: 'success',
+        message: 'success',
+        data: {
+          page,
+          count,
+          pageSize,
+          list: rows
+        }
+      })
     } catch (err) {
       resClientJson(ctx, {
         state: 'error',

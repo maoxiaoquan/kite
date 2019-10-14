@@ -83,6 +83,10 @@
                     </span><span style="margin-left: 8px;">
                       <i class="el-icon-notebook-2"></i> {{booksItem.bookCount||0}}
                     </span>
+                    <span class="attention"
+                          v-if="~[2,4].indexOf(booksItem.status)&&personalInfo.islogin"
+                          @click="collectBooks(booksItem.books_id)"
+                          :class="{'active':isCollect(booksItem).status}">{{isCollect(booksItem).text}}</span>
                   </div>
                   <div class="library-item-tag">
                     <template v-if="booksItem.tag">
@@ -103,7 +107,8 @@
             </div>
           </div>
 
-          <Page :count="pagination"
+          <Page :total="books.booksList.count"
+                :pageSize="books.booksList.pageSize"
                 :page="Number($route.query.page)||1"
                 @pageChange="pageChange"></Page>
 
@@ -170,6 +175,43 @@ export default {
         this.childNavItem = {}
       }
     },
+    collectBooks (books_id) { // 用户收藏小书
+      this.$store.dispatch('books/COLLECT_BOOKS', {
+        books_id,
+      })
+        .then(result => {
+          if (result.state === 'success') {
+            this.$message.success(result.message);
+            window.location.reload()
+          } else {
+            this.$message.warning(result.message);
+          }
+        })
+    },
+    isCollect (item) { // 是否收藏
+      let collectUserIds = []
+      if (item.collectUserIds && item.collectUserIds.length > 0) {
+        item.collectUserIds.map(item => {
+          collectUserIds.push(item.uid)
+        })
+        if (~collectUserIds.indexOf(Number(this.personalInfo.user.uid))) {
+          return {
+            status: true,
+            text: '已收藏'
+          }
+        } else {
+          return {
+            status: false,
+            text: '收藏'
+          }
+        }
+      } else {
+        return {
+          status: false,
+          text: '收藏'
+        }
+      }
+    },
     switchColumn (val) {
       this.articleColumn.homeColumn.map(item => {
         console.log(item.article_column_en_name, val)
@@ -187,7 +229,6 @@ export default {
       if (this.$route.query.tagId) {
         query.tagId = this.$route.query.tagId
       }
-
       return query
     },
     shareChange (val) { // 分享到其他
@@ -218,14 +259,6 @@ export default {
     }
   },
   computed: {
-    pagination () {
-      // 分页
-      return Math.ceil(this.books.booksList.count / this.books.booksList.pageSize);
-    },
-    personalInfo () {
-      // 登录后的个人信息
-      return this.$store.state.personalInfo || {};
-    },
     ...mapState(['website', 'books', 'articleColumn', 'personalInfo'])
   },
   components: {
@@ -368,6 +401,22 @@ export default {
         font-size: 12px;
         line-height: 20px;
         color: rgba(0, 0, 0, 0.56);
+      }
+      .attention {
+        cursor: pointer;
+        display: inline-block;
+        font-size: 12px;
+        margin-left: 3px;
+        color: #333;
+        border-radius: 3px;
+        border: 1px solid #e0e0e0;
+        line-height: 12px;
+        padding: 2px 3px;
+        &.active {
+          color: #fff;
+          background: #41b883;
+          border: 1px solid #41b883;
+        }
       }
     }
   }

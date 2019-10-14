@@ -218,6 +218,13 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
 
+  const collect_books = sequelize.define(
+    // 收藏------书
+    require('./models_type/db_collect_books').NAME,
+    require('./models_type/db_collect_books').TABLE,
+    SEQ_PARAMETER
+  )
+
   const _define = {
     user,
     user_info,
@@ -248,7 +255,8 @@ module.exports = sequelize => {
     book_comment,
     books_comment,
     picture,
-    options
+    options,
+    collect_books
   }
 
   return {

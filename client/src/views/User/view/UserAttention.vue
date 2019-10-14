@@ -36,7 +36,8 @@
     </ul>
 
     <div class="pagination">
-      <Page :count="pagination"
+      <Page :total="userAttention.count"
+            :pageSize="userAttention.pageSize"
             :page="Number($route.query.page)||1"
             @pageChange="pageChange"></Page>
     </div>
@@ -45,7 +46,7 @@
 
 <script>
 import { Page } from "@components";
-
+import { mapState } from 'vuex'
 export default {
   name: "UserAttention",
   metaInfo () {
@@ -92,19 +93,10 @@ export default {
     }
   },
   computed: {
-    personalInfo () {
-      // 登录后的个人信息
-      return this.$store.state.personalInfo || {};
-    },
+    ...mapState(['personalInfo']),
     userInfo () {
       // 登录后的个人信息
       return this.$store.state.user.user_info || {};
-    },
-    pagination () {
-      // 分页
-      return Math.ceil(
-        this.userAttention.count / this.userAttention.pageSize
-      );
     },
     userAttention () {
       // 用户个人的文章

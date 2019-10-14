@@ -20,7 +20,9 @@
                         :key="key" />
         </div>
 
-        <Page :count="pagination"
+        <Page :total="articleComment.count"
+              :page="articleComment.page"
+              :pageSize="articleComment.pageSize"
               @pageChange="pageChange"></Page>
       </div>
     </div>
@@ -39,12 +41,6 @@ export default {
   name: "index",
   data () {
     return {
-      comment_page: 1,
-      comment_pageSize: 10,
-      comment_count: 0,
-      comment_list: [], // 用户评论的列表
-      comment_content: "", // 顶级输入框
-      comment_loading_btn: true,
       isLoadingComment: false
     };
   },
@@ -103,12 +99,6 @@ export default {
     },
     article () {
       return this.$store.state.article.article || {};
-    },
-    pagination () {
-      // 分页
-      return Math.ceil(
-        this.articleComment.count / this.articleComment.pageSize
-      );
     },
     articleComment () {
       // 文章的评论

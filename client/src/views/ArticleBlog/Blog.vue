@@ -70,7 +70,8 @@
             </div>
           </div>
 
-          <Page :count="pagination"
+          <Page :total="articleBlog.blogs.count"
+                :pageSize="articleBlog.blogs.pageSize"
                 :page="Number($route.query.page)||1"
                 @pageChange="pageChange"></Page>
 
@@ -190,14 +191,6 @@ export default {
     }
   },
   computed: {
-    pagination () {
-      // 分页
-      return Math.ceil(this.articleBlog.blogs.count / this.articleBlog.blogs.pageSize);
-    },
-    personalInfo () {
-      // 登录后的个人信息
-      return this.$store.state.personalInfo || {};
-    },
     ...mapState(['website', 'articleBlog', 'articleColumn', 'personalInfo'])
   },
   components: {

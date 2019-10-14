@@ -105,7 +105,8 @@
 
     </div>
 
-    <Page :count="pagination"
+    <Page :total="user.dynamicList.count"
+          :pageSize="user.dynamicList.pageSize"
           :page="Number($route.query.page)||1"
           @pageChange="pageChange"></Page>
   </div>
@@ -230,12 +231,6 @@ export default {
   },
   computed: {
     ...mapState(['user', 'personalInfo']),
-    personalInfo () { // 登录后的个人信息
-      return this.$store.state.personalInfo || {}
-    },
-    pagination () { // 分页
-      return Math.ceil(this.user.dynamicList.count / this.user.dynamicList.pageSize)
-    },
     userAside () { // user 侧栏信息
       return this.$store.state.user.user_aside || {}
     },
