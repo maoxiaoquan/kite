@@ -1,6 +1,6 @@
 <h1 align="center" style="margin: 30px 0 35px;">Kite</h3>
 
-<h3 align="center" style="margin: 30px 0 35px;">这是一个前台 vue ssr 服务端渲染  + 后台 react spa + 接口层 node koa 的项目</h3>
+<h3 align="center" style="margin: 30px 0 35px;">这是一个前台 vue 服务端渲染(ssr)  + 后台 react单页（spa） + 接口层 node koa 的项目</h3>
 
 <p align="center">
 <a href="https://github.com/maoxiaoquan/kite/stargazers">
@@ -17,8 +17,6 @@
 
 后台演示网站账户：kitetest 密码：q123456 （资源有点大，可能要加载一段时间）
 
-兼容方面会兼容大部分浏览器，过于古老的将放弃
-
 ## 😊 前台界面
 
 <img alt="client" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi.png">
@@ -26,15 +24,15 @@
 ## 💼 最新版本更新记录
 
 ```
-更新时间：2019.9.23 17:20:00
-外部版本号：v0.10.7 内部版本号：0.4
+更新时间：2019.10.14 19:57:00
+外部版本号：v0.10.8 内部版本号：0.5
 运行：npm run kite-update
 (此次更新需要 cnpm i or npm i or yarn)
 
-1.新增专栏页面、个人公开的专栏可以出现在专栏页面
-2.前台后台页面UI优化
-3.sql表字段优化
-4.其他优化、文章发布优化、文章新增可以发布隐私文章
+1.新增小书，方面用户编写大型内容
+2.删除专栏，更换专栏的表现形式，还未移除完成，在0.6版本上会继续完善
+3.前台页面UI优化
+4.sql表字段优化
 5.修改现存的bug
 6.seo 优化
 ```
@@ -110,7 +108,7 @@ admin 文件夹和 server 文件夹 变量多为下划线居多，主要是与my
 
 ```
 
-## 😊 前后台界面
+## 😊 后台界面
 
 <img alt="admin" src="https://github.com/maoxiaoquan/kite/blob/master/docs/img/xiaosuibi_admin.png">
 
