@@ -72,12 +72,12 @@
                   </router-link>
                 </div>
                 <div class="library-item__body">
-                  <div class="library-item__title">
-                    <router-link class="link-dark-major"
-                                 :to="{name:'book',params:{books_id:booksItem.books_id}}">
-                      {{booksItem.title}}
-                    </router-link>
-                  </div>
+
+                  <router-link class="library-item__title"
+                               :to="{name:'book',params:{books_id:booksItem.books_id}}">
+                    {{booksItem.title}}
+                  </router-link>
+
                   <div class="library-item__info">
                     <span><i class="el-icon-view"></i> {{booksItem.read_count||0}}
                     </span><span style="margin-left: 8px;">
@@ -363,7 +363,7 @@ export default {
     }
     .library-item__body {
       .library-item__title {
-        height: 50px;
+        height: 48px;
         margin-bottom: 8px;
         font-size: 14px;
         line-height: 22px;
@@ -372,9 +372,9 @@ export default {
         display: -webkit-box;
         text-overflow: ellipsis;
         overflow: hidden;
-        -webkit-line-clamp: 3;
+        display: -webkit-box;
         -webkit-box-orient: vertical;
-        -moz-box-orient: vertical;
+        -webkit-line-clamp: 2;
       }
       .library-item-tag {
         height: 50px;
