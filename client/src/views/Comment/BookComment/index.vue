@@ -20,8 +20,8 @@
                         :key="key" />
         </div>
 
-        <Page :total="comment.count"
-              :pageSize="comment.pageSize"
+        <Page :total="Number(comment.count)"
+              :pageSize="Number(comment.pageSize)"
               @pageChange="pageChange"></Page>
       </div>
     </div>
@@ -43,8 +43,8 @@ export default {
       comment: {
         comment_list: [],
         count: 0,
-        page: "1",
-        pageSize: "10",
+        page: 1,
+        pageSize: 10,
       },
       isLoadingComment: false
     };

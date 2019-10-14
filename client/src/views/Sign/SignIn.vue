@@ -12,7 +12,7 @@
             <input placeholder="邮箱"
                    type="text"
                    v-model="formData.email"
-                   @keyup.enter.native="login"
+                   @keyup.enter="login"
                    value="">
             <i class="el-icon-user-solid"></i>
           </div>
@@ -22,7 +22,7 @@
                    type="password"
                    v-model="formData.password"
                    name="password"
-                   @keyup.enter.native="login"
+                   @keyup.enter="login"
                    value="">
             <i class="el-icon-key"></i>
           </div>

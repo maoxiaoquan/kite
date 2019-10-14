@@ -20,8 +20,8 @@
                         :key="key" />
         </div>
 
-        <Page :total="articleComment.count"
-              :page="articleComment.page"
+        <Page :total="Number(articleComment.count)"
+              :page="Number(articleComment.page)"
               :pageSize="articleComment.pageSize"
               @pageChange="pageChange"></Page>
       </div>

@@ -105,8 +105,8 @@
 
     </div>
 
-    <Page :total="user.dynamicList.count"
-          :pageSize="user.dynamicList.pageSize"
+    <Page :total="Number(user.dynamicList.count)"
+          :pageSize="Number(user.dynamicList.pageSize)"
           :page="Number($route.query.page)||1"
           @pageChange="pageChange"></Page>
   </div>

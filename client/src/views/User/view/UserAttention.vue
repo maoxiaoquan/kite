@@ -36,8 +36,8 @@
     </ul>
 
     <div class="pagination">
-      <Page :total="userAttention.count"
-            :pageSize="userAttention.pageSize"
+      <Page :total="Number(userAttention.count)"
+            :pageSize="Number(userAttention.pageSize)"
             :page="Number($route.query.page)||1"
             @pageChange="pageChange"></Page>
     </div>

@@ -81,6 +81,10 @@ export default {
       this.commentContent = this.commentContent + val.face_text
     },
     submitComment () { // 提交评论
+      if (!this.commentContent) {
+        this.$message.warning('请填写评论内容')
+        return false
+      }
       var params = this.getParams()
       this.isCommentSubmit = true
       this.$store.dispatch("dynamicComment/DYNAMIC_COMMENT_CREATE", params)

@@ -35,8 +35,8 @@
 
         </div>
 
-        <Page :total="articleColumn.column_list.count"
-              :pageSize="articleColumn.column_list.pageSize"
+        <Page :total="Number(articleColumn.column_list.count)"
+              :pageSize="Number(articleColumn.column_list.pageSize)"
               :page="Number($route.query.page)||1"
               @pageChange="pageChange"></Page>
 

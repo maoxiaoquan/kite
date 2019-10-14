@@ -89,8 +89,8 @@
                                    :key="key" />
                 </div>
               </div>
-              <Page :total="articleBlog.blogArticleList.count"
-                    :pageSize="articleBlog.blogArticleList.pageSize"
+              <Page :total="Number(articleBlog.blogArticleList.count)"
+                    :pageSize="Number(articleBlog.blogArticleList.pageSize)"
                     :page="Number($route.query.page)||1"
                     @pageChange="pageChange"></Page>
             </div>

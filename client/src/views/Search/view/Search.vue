@@ -30,8 +30,8 @@
                 </div>
               </div>
 
-              <Page :total="searchArticle.count"
-                    :pageSize="searchArticle.pageSize"
+              <Page :total="Number(searchArticle.count)"
+                    :pageSize="Number(searchArticle.pageSize)"
                     :page="Number($route.query.page)||1"
                     @pageChange="pageChange"></Page>
             </div>

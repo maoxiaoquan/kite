@@ -107,8 +107,8 @@
             </div>
           </div>
 
-          <Page :total="books.booksList.count"
-                :pageSize="books.booksList.pageSize"
+          <Page :total="Number(books.booksList.count)"
+                :pageSize="Number(books.booksList.pageSize)"
                 :page="Number($route.query.page)||1"
                 @pageChange="pageChange"></Page>
 

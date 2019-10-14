@@ -7,7 +7,8 @@ module.exports = [
     article_tag_icon: config.DF_ARTICLE_TAG_IMG,
     article_tag_description: '默认的文章标签',
     attention_count: 0,
-    enable: true
+    enable: true,
+    is_push: true
   },
   {
     // 初始化文章标签，并且只有一个超管的角色，否则会报错
@@ -17,6 +18,7 @@ module.exports = [
     article_tag_icon: config.DF_ARTICLE_TAG_IMG,
     article_tag_description: '官方标签发布文章专属标签',
     attention_count: 0,
-    enable: true
+    enable: true,
+    is_push: true
   }
 ]

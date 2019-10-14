@@ -70,8 +70,8 @@
             </div>
           </div>
 
-          <Page :total="articleBlog.blogs.count"
-                :pageSize="articleBlog.blogs.pageSize"
+          <Page :total="Number(articleBlog.blogs.count)"
+                :pageSize="Number(articleBlog.blogs.pageSize)"
                 :page="Number($route.query.page)||1"
                 @pageChange="pageChange"></Page>
 

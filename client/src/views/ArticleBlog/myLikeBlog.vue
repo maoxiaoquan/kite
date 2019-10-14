@@ -18,8 +18,8 @@
               </div>
             </div>
 
-            <Page :total="articleBlog.likeBlogArticleList.count"
-                  :pageSize="articleBlog.likeBlogArticleList.pageSize"
+            <Page :total="Number(articleBlog.likeBlogArticleList.count)"
+                  :pageSize="Number(articleBlog.likeBlogArticleList.pageSize)"
                   :page="Number($route.query.page)||1"
                   @pageChange="pageChange"></Page>
 

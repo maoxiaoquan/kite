@@ -192,7 +192,7 @@ export default {
       font-size: 14px;
       .title-line {
         .title {
-          font-size: 20px;
+          font-size: 18px;
           font-weight: 700;
           color: #333;
         }

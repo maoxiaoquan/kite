@@ -8,7 +8,8 @@ module.exports = [
     description: '默认的动态话题',
     sort: 0,
     is_show: true,
-    enable: true
+    enable: true,
+    is_push: true
   },
   {
     // 初始化文章标签，并且只有一个超管的角色，否则会报错
@@ -19,7 +20,8 @@ module.exports = [
     description: '官方动态话题',
     sort: 1,
     is_show: true,
-    enable: true
+    enable: true,
+    is_push: true
   },
   {
     // 初始化文章标签，并且只有一个超管的角色，否则会报错
@@ -30,6 +32,7 @@ module.exports = [
     description: '树洞',
     sort: 2,
     is_show: true,
-    enable: true
+    enable: true,
+    is_push: true
   }
 ]

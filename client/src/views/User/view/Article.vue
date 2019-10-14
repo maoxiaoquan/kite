@@ -54,8 +54,8 @@
                            :articleItem="item" />
         </div>
       </div>
-      <Page :total="myArticle.count"
-            :pageSize="myArticle.pageSize"
+      <Page :total="Number(myArticle.count)"
+            :pageSize="Number(myArticle.pageSize)"
             :page="Number($route.query.page)||1"
             @pageChange="pageChange"></Page>
     </div>

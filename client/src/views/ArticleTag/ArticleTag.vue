@@ -38,8 +38,8 @@
                                :key="key" />
                 </div>
               </div>
-              <Page :total="tag.count"
-                    :pageSize="tag.pageSize"
+              <Page :total="Number(tag.count)"
+                    :pageSize="Number(tag.pageSize)"
                     :page="Number($route.query.page)||1"
                     @pageChange="pageChange"></Page>
             </div>

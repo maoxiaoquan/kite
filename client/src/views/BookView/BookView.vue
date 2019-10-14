@@ -1,126 +1,130 @@
 <template>
   <div class="book-read-view">
-    <div class="book-section"
-         :class="{'fold-pc':!isShowAside}">
-      <div class="book-summary">
-        <div class="book-summary-inner">
-          <div class="book-summary__header">
-            <router-link :to="{name:'home'}"
-                         class="navbar-brand logo"
-                         v-if="website.meta.logo"
-                         :style="{'background-image':'url('+website.meta.logo+')'}"></router-link>
-            <router-link :to="{name:'home'}"
-                         class="navbar-brand logo-text"
-                         v-else>{{website.meta.website_name}}</router-link>
-            <div class="label">小书</div>
+    <client-only>
+      <div class="book-section"
+           :class="{'fold-pc':!isShowAside}">
+        <div class="book-summary">
+          <div class="book-summary-inner">
+            <div class="book-summary__header">
+              <router-link :to="{name:'home'}"
+                           class="navbar-brand logo"
+                           v-if="website.meta.logo"
+                           :style="{'background-image':'url('+website.meta.logo+')'}"></router-link>
+              <router-link :to="{name:'home'}"
+                           class="navbar-brand logo-text"
+                           v-else>{{website.meta.website_name}}</router-link>
+              <div class="label">小书</div>
+            </div>
+            <div class="book-summary-btn"
+                 v-if="personalInfo.islogin">
+              <div class="section-buy"
+                   @click="writeChapter('create')">创建新章节</div>
+            </div>
+            <div class="book-directory"
+                 :class="{'bought':personalInfo.islogin}">
+              <router-link class="section"
+                           :to="{name:'BookView', params: { books_id: $route.params.books_id, book_id: bookItem.book_id}}"
+                           v-for="(bookItem,key) in books.booksBookAll"
+                           :key="key">
+                <div class="step">
+                  <div class="step-btn">{{key+1}}</div>
+                </div>
+                <div class="center">
+                  <div class="title">{{bookItem.title}} </div>
+                </div>
+              </router-link>
+            </div>
+            <div class="book-summary__footer"></div>
           </div>
-          <div class="book-summary-btn"
-               v-if="personalInfo.islogin">
-            <div class="section-buy"
-                 @click="writeChapter('create')">创建新章节</div>
-          </div>
-          <div class="book-directory"
-               :class="{'bought':personalInfo.islogin}">
-            <router-link class="section"
-                         :to="{name:'BookView', params: { books_id: $route.params.books_id, book_id: bookItem.book_id}}"
-                         v-for="(bookItem,key) in books.booksBookAll"
-                         :key="key">
-              <div class="step">
-                <div class="step-btn">{{key+1}}</div>
-              </div>
-              <div class="center">
-                <div class="title">{{bookItem.title}} </div>
-              </div>
-            </router-link>
-          </div>
-          <div class="book-summary__footer"></div>
-        </div>
 
-      </div>
-      <div class="book-content">
-        <div class="book-content-inner">
-          <div class="book-content__header">
-            <div class="menu"
-                 @click="isShowAside=!isShowAside"><i class="el-icon-s-operation"></i></div>
-            <div class="title">
-              <router-link :to="{name:'book',params:{books_id:$route.params.books_id}}">{{books.booksInfo.title}}</router-link>
-            </div>
-            <div class="user-auth">
-              <div class="nav-item auth"
-                   v-if="!personalInfo.islogin">
-                <div class="nav-item-view"
-                     @click="show_login"
-                     v-if="website.config.on_login==='yes'">
-                  <a class="btn btn-sm sign-btn btn-block"
-                     href="javascript:;">登录</a>
-                </div>
-                <div class="nav-item-view"
-                     @click="show_register"
-                     v-if="website.config.on_register==='yes'">
-                  <a class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
-                     href="javascript:;">注册</a>
-                </div>
+        </div>
+        <div class="book-content">
+          <div class="book-content-inner">
+            <div class="book-content__header">
+              <div class="menu"
+                   @click="isShowAside=!isShowAside"><i class="el-icon-s-operation"></i></div>
+              <div class="title">
+                <router-link :to="{name:'book',params:{books_id:$route.params.books_id}}">{{books.booksInfo.title}}</router-link>
               </div>
-              <div class="nav-item dropdown"
-                   v-else>
-                <el-dropdown trigger="click"
-                             @command="commandChange">
-                  <div class="el-dropdown-link">
-                    <div class="avatar-img">
-                      <el-image :src="personalInfo.user.avatar"
-                                lazy></el-image>
-                    </div>
-                  </div>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item icon="el-icon-user"
-                                      :command="{name:'user',params:{uid:personalInfo.user.uid}}">我的主页</el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-setting"
-                                      :command="{name:'setting'}">设置</el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-right"
-                                      :command="{name:'esc'}">退出</el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </div>
-            </div>
-          </div>
-          <div class="book-body transition--next">
-            <div class="section-content">
-              <div class="btn edit-outline"
-                   v-if="personalInfo.islogin"
-                   @click="writeChapter(book.bookInfo.book_id)">
-                编辑当前章节
-              </div>
-              <div class="entry-content article-content box-article-view"
-                   v-html="book.bookInfo.content">
-              </div>
-              <div class="book-comments">
-                <div class="comment-box"
+              <div class="user-auth">
+                <div class="nav-item auth"
                      v-if="!personalInfo.islogin">
-                  <div class="comment-form comment-form unauthorized"
-                       id="comment">
-                    <div class="unauthorized-panel">
-                      <button class="authorize-btn"
-                              @click="show_login">登录</button>
-                      <div class="placeholder">评论将在后台进行审核，审核通过后对所有人可见</div>
-                    </div>
+                  <div class="nav-item-view"
+                       @click="show_login"
+                       v-if="website.config.on_login==='yes'">
+                    <a class="btn btn-sm sign-btn btn-block"
+                       href="javascript:;">登录</a>
+                  </div>
+                  <div class="nav-item-view"
+                       @click="show_register"
+                       v-if="website.config.on_register==='yes'">
+                    <a class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
+                       href="javascript:;">注册</a>
                   </div>
                 </div>
-                <BookComment />
+                <div class="nav-item dropdown"
+                     v-else>
+                  <el-dropdown trigger="click"
+                               @command="commandChange">
+                    <div class="el-dropdown-link">
+                      <div class="avatar-img">
+                        <el-image :src="personalInfo.user.avatar"
+                                  lazy></el-image>
+                      </div>
+                    </div>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item icon="el-icon-user"
+                                        :command="{name:'user',params:{uid:personalInfo.user.uid}}">我的主页</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-setting"
+                                        :command="{name:'setting'}">设置</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-right"
+                                        :command="{name:'esc'}">退出</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </div>
               </div>
             </div>
+            <div class="book-body transition--next">
+              <div class="section-content">
+                <div class="clearfix">
+                  <div class="btn edit-outline"
+                       v-if="personalInfo.islogin"
+                       @click="writeChapter(book.bookInfo.book_id)">
+                    编辑当前章节
+                  </div>
+                </div>
+                <div class="entry-content article-content box-article-view"
+                     v-html="book.bookInfo.content">
+                </div>
+                <div class="book-comments">
+                  <div class="comment-box"
+                       v-if="!personalInfo.islogin">
+                    <div class="comment-form comment-form unauthorized"
+                         id="comment">
+                      <div class="unauthorized-panel">
+                        <button class="authorize-btn"
+                                @click="show_login">登录</button>
+                        <div class="placeholder">评论将在后台进行审核，审核通过后对所有人可见</div>
+                      </div>
+                    </div>
+                  </div>
+                  <BookComment />
+                </div>
+              </div>
+            </div>
+            <div class="book-handle book-direction">
+              <div class="step-btn step-btn--prev"
+                   v-show="bookInfoOther.prev"
+                   @click="lookChapter(bookInfoOther.prev.book_id)"><i class="el-icon-arrow-left"></i></div>
+              <div class="step-btn step-btn--next"
+                   v-show="bookInfoOther.next"
+                   @click="lookChapter(bookInfoOther.next.book_id)"><i class="el-icon-arrow-right"></i></div>
+            </div>
           </div>
-          <div class="book-handle book-direction">
-            <div class="step-btn step-btn--prev"
-                 v-show="bookInfoOther.prev"
-                 @click="lookChapter(bookInfoOther.prev.book_id)"><i class="el-icon-arrow-left"></i></div>
-            <div class="step-btn step-btn--next"
-                 v-show="bookInfoOther.next"
-                 @click="lookChapter(bookInfoOther.next.book_id)"><i class="el-icon-arrow-right"></i></div>
-          </div>
-        </div>
 
+        </div>
       </div>
-    </div>
+    </client-only>
   </div>
 </template>
 
@@ -128,6 +132,7 @@
 import { mapState } from 'vuex'
 import BookComment from "@views/Comment/BookComment";
 import { cookie } from "../../../../server/utils/cookie";
+import ClientOnly from 'vue-client-only'
 export default {
   name: "BookInfo",
   metaInfo () {
@@ -212,7 +217,8 @@ export default {
     ...mapState(['books', 'book', 'personalInfo', 'website'])
   },
   components: {
-    BookComment
+    BookComment,
+    ClientOnly
   }
 };
 </script>
@@ -519,10 +525,10 @@ export default {
               color: rgba(0, 0, 0, 0.88);
               background: #ffd600;
               border-color: #ffd600;
-              margin-bottom: 20px;
-              position: absolute;
-              right: 20px;
-              top: 20px;
+              margin-bottom: 15px;
+              padding: 5px 10px;
+              font-size: 14px;
+              float: right;
               cursor: pointer;
             }
             .article-content {

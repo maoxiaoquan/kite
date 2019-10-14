@@ -97,6 +97,14 @@ export default {
       this.commentContent = this.commentContent + val.face_text
     },
     submitComment () { // 提交评论
+      if (!this.commentContent) {
+        this.$message.warning('请填写评论内容')
+        return false
+      }
+      if (!this.star) {
+        this.$message.warning('请选择星级')
+        return false
+      }
       var params = this.getParams()
       this.isCommentSubmit = true
       this.$store.dispatch("books/BOOKS_COMMENT_CREATE", params)

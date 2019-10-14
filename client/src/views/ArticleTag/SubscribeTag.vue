@@ -55,8 +55,8 @@
         </div>
       </div>
 
-      <Page :total="subscribe.count"
-            :pageSize="subscribe.pageSize"
+      <Page :total="Number(subscribe.count)"
+            :pageSize="Number(subscribe.pageSize)"
             :page="Number($route.query.page)||1"
             @pageChange="pageChange"></Page>
     </div>
