@@ -78,8 +78,12 @@ import dynamicWrite from './component/dynamicWrite'
 import dynamicAside from './component/dynamicAside'
 import { mapState } from 'vuex'
 import { ScrollLoading } from "@components";
+import { baidu, google } from '@utils'
+import googleMixin from '@mixins/google'
+
 export default {
   name: 'dynamic',
+  minixs: [googleMixin], //混合谷歌分析
   metaInfo () {
     return {
       title: this.topicInfo.name + '-话题' || "",
@@ -92,7 +96,14 @@ export default {
       ],
       htmlAttrs: {
         lang: "zh"
-      }
+      },
+      script: [
+        ...baidu.resource(this.$route),
+        ...google.statisticsCode({
+          route: this.$route, googleCode: this.website.config.googleCode, random: ''
+        })
+      ],
+      __dangerouslyDisableSanitizers: ['script']
     };
   },
   data () {
@@ -178,7 +189,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['personalInfo', 'dynamic', 'user']),
+    ...mapState(['personalInfo', 'dynamic', 'user', 'website']),
     isRssDynamicTopic () {
       if (this.personalInfo.islogin) {
         return ~this.user.user_info.allRssDynamicTopicId.indexOf(this.$route.params.dynamicTopicId)

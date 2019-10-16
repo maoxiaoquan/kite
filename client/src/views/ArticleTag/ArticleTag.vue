@@ -60,8 +60,12 @@
 import ArticleItem from '@views/Article/component/ArticleItem'
 import { Page } from '@components'
 import { mapState } from 'vuex'
+import { share, baidu, google } from '@utils'
+import googleMixin from '@mixins/google'
+
 export default {
   name: 'ArticleTag',
+  minixs: [googleMixin], //混合谷歌分析
   metaInfo () {
     return {
       title: '标签',
@@ -72,7 +76,14 @@ export default {
       }],
       htmlAttrs: {
         lang: 'zh'
-      }
+      },
+      script: [
+        ...baidu.resource(this.$route),
+        ...google.statisticsCode({
+          route: this.$route, googleCode: this.website.config.googleCode, random: this.books.booksInfo.books_id
+        })
+      ],
+      __dangerouslyDisableSanitizers: ['script']
     }
   },
   async asyncData ({ store, route }) {

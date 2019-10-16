@@ -86,8 +86,12 @@ import BookList from './component/BookList'
 import BookInfo from './component/BookInfo'
 import BookComment from './component/BookComment'
 import { mapState } from 'vuex'
+import { share, baidu, google } from '@utils'
+import googleMixin from '@mixins/google'
+
 export default {
   name: "NavSort",
+  mixins: [googleMixin], //混合谷歌分析  
   metaInfo () {
     return {
       title: this.books.booksInfo.title || "",
@@ -100,7 +104,14 @@ export default {
       ],
       htmlAttrs: {
         lang: "zh"
-      }
+      },
+      script: [
+        ...baidu.resource(this.$route, this.books.booksInfo.books_id),
+        ...google.statisticsCode({
+          route: this.$route, googleCode: this.website.config.googleCode, random: this.books.booksInfo.books_id
+        })
+      ],
+      __dangerouslyDisableSanitizers: ['script']
     };
   },
   data () {
@@ -111,7 +122,7 @@ export default {
   asyncData ({ store, route }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
-      store.dispatch("books/GET_BOOKS_INFO", { books_id: route.params.books_id }),
+      store.dispatch("books/GET_BOOKS_INFO", { books_id: route.params.books_id, type: 'look' }),
     ]);
   },
   mounted () {
@@ -164,7 +175,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(['books', 'personalInfo'])
+    ...mapState(['books', 'personalInfo', 'website'])
   },
   components: {
     websiteNotice,

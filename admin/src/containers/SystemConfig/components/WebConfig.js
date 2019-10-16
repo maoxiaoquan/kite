@@ -55,7 +55,13 @@ class SystemConfig extends React.Component {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let { on_login, on_register, on_comment, admin_url } = values
+        let {
+          on_login,
+          on_register,
+          on_comment,
+          admin_url,
+          googleCode
+        } = values
         this.props.dispatch(
           updateSystemConfigInfo(
             {
@@ -64,7 +70,8 @@ class SystemConfig extends React.Component {
                 on_login,
                 on_register,
                 on_comment,
-                admin_url
+                admin_url,
+                googleCode
               }
             },
             result => {
@@ -203,6 +210,18 @@ class SystemConfig extends React.Component {
                     placeholder="后台管理界面访问地址"
                   />
                 )}
+              </FormItem>
+
+              <FormItem {...formItemLayout} label="google统计code">
+                {getFieldDecorator('googleCode', {
+                  rules: [
+                    {
+                      required: true,
+                      message: '请输入google统计code！',
+                      whitespace: true
+                    }
+                  ]
+                })(<Input disabled={!is_edit} placeholder="google统计code" />)}
               </FormItem>
 
               <FormItem {...tailFormItemLayout}>

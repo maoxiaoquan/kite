@@ -133,8 +133,12 @@ import 'mavon-editor/dist/css/index.css'
 import ClientOnly from 'vue-client-only'
 import marked from "marked";
 import { mapState } from 'vuex'
+import { baidu, google } from '@utils'
+import googleMixin from '@mixins/google'
+
 export default {
   name: "WriteBookView",
+  minixs: [googleMixin], //混合谷歌分析
   metaInfo () {
     return {
       title: this.$route.params.book_id === "create" ? '创建小书章节' : `编辑-${this.editDataInfo.title || ''}` || "",
@@ -147,7 +151,13 @@ export default {
       ],
       htmlAttrs: {
         lang: "zh"
-      }
+      },
+      script: [
+        ...google.statisticsCode({
+          route: this.$route, googleCode: this.website.config.googleCode, random: ''
+        })
+      ],
+      __dangerouslyDisableSanitizers: ['script']
     };
   },
   async asyncData ({ store, route, accessToken = "" }) {
@@ -155,7 +165,7 @@ export default {
     return Promise.all([
       store.dispatch("PERSONAL_INFO", { accessToken }),
       store.dispatch('website/GET_WEBSITE_INFO'),
-      store.dispatch("books/GET_BOOKS_INFO", { books_id: route.params.books_id }),
+      store.dispatch("books/GET_BOOKS_INFO", { books_id: route.params.books_id, type: 'info' }),
     ]);
   },
   created () {

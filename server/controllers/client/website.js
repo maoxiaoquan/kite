@@ -18,7 +18,7 @@ class Website {
         .read()
         .get('website')
         .value()
-      const { on_login, on_register, on_comment } = lowdb
+      const { on_login, on_register, on_comment, googleCode } = lowdb
         .read()
         .get('config')
         .value()
@@ -40,7 +40,8 @@ class Website {
           config: {
             on_login,
             on_register,
-            on_comment
+            on_comment,
+            googleCode
           },
           notice: noticeAll,
           advertise: advertiseAll

@@ -67,14 +67,25 @@ import dynamicWrite from './component/dynamicWrite'
 import dynamicAside from './component/dynamicAside'
 import { mapState } from "vuex";
 import { ScrollLoading } from "@components";
+import { baidu, google } from '@utils'
+import googleMixin from '@mixins/google'
+
 export default {
   name: 'dynamic',
+  mixins: [googleMixin], //混合谷歌分析
   metaInfo () {
     return {
       title: `片刻-${this.website.meta.website_name}`,
       htmlAttrs: {
         lang: "zh"
-      }
+      },
+      script: [
+        ...baidu.resource(this.$route),
+        ...google.statisticsCode({
+          route: this.$route, googleCode: this.website.config.googleCode, random: ''
+        })
+      ],
+      __dangerouslyDisableSanitizers: ['script']
     };
   },
   data () {

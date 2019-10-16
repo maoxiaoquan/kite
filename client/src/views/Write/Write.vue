@@ -143,6 +143,7 @@ import { mavonEditor } from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import ClientOnly from 'vue-client-only'
 import marked from "marked";
+import { share, baidu, google } from '@utils'
 export default {
   name: 'write',
   metaInfo () {

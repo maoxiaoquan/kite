@@ -120,17 +120,28 @@
 // Local Registration
 import { UploadImage } from '@components'
 import { mavonEditor } from 'mavon-editor'
+import { share, baidu, google } from '@utils'
 import 'mavon-editor/dist/css/index.css'
 import ClientOnly from 'vue-client-only'
 import marked from "marked";
+import { mapState } from 'vuex'
+import googleMixin from '@mixins/google'
+
 export default {
   name: 'write',
+  minixs: [googleMixin], //混合谷歌分析
   metaInfo () {
     return {
       title: "小书编辑",
       htmlAttrs: {
         lang: "zh"
-      }
+      },
+      script: [
+        ...google.statisticsCode({
+          route: this.$route, googleCode: this.website.config.googleCode, random: ''
+        })
+      ],
+      __dangerouslyDisableSanitizers: ['script']
     };
   },
   async asyncData ({ store, route, accessToken = "" }) {
@@ -368,10 +379,7 @@ export default {
     articleTagAll () {
       return this.$store.state.articleTag.article_tag_all;
     },
-    personalInfo () {
-      // 登录后的个人信息
-      return this.$store.state.personalInfo;
-    }
+    ...mapState(['website', 'personalInfo'])
   },
 }
 </script>

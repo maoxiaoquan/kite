@@ -104,9 +104,13 @@
 
 <script>
 import ArticleComment from "@views/Comment/ArticleComment";
-import { share } from '@utils'
+import { share, baidu, google } from '@utils'
 import { mapState } from 'vuex'
+import googleMixin from '@mixins/google'
+
 export default {
+  name: "Article",
+  mixins: [googleMixin], //混合谷歌分析 
   metaInfo () {
     return {
       title: this.article.title || "",
@@ -119,10 +123,16 @@ export default {
       ],
       htmlAttrs: {
         lang: "zh"
-      }
+      },
+      script: [
+        ...baidu.resource(this.$route, this.article.aid),
+        ...google.statisticsCode({
+          route: this.$route, googleCode: this.website.config.googleCode, random: this.$route.params.blogId
+        })
+      ],
+      __dangerouslyDisableSanitizers: ['script']
     };
   },
-  name: "Article",
   asyncData ({ store, route }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([

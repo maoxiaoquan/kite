@@ -108,13 +108,28 @@
 
 <script>
 import { UploadImage } from '@components'
+import { share, baidu, google } from '@utils'
+import { mapState } from 'vuex'
+import googleMixin from '@mixins/google'
 
 export default {
-  title () {
-    return 'BLOG'
-  },
   name: 'profile',
-  data: function () {
+  mixins: [googleMixin], //混合谷歌分析
+  metaInfo () {
+    return {
+      title: '个人设置-修改信息',
+      htmlAttrs: {
+        lang: 'zh'
+      },
+      script: [
+        ...google.statisticsCode({
+          route: this.$route, googleCode: this.website.config.googleCode, random: ''
+        })
+      ],
+      __dangerouslyDisableSanitizers: ['script']
+    }
+  },
+  data () {
     return {
       user_info: '',
       formData: {
@@ -177,9 +192,7 @@ export default {
     },
   },
   computed: {
-    personalInfo () { // 登录后的个人信息
-      return this.$store.state.personalInfo || {}
-    }
+    ...mapState(['personalInfo', 'website'])
   },
   components: {
     UploadImage

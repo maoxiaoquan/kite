@@ -49,6 +49,14 @@
 import { cookie } from '../../../../../server/utils/cookie'
 export default {
   name: 'ResetPassword',
+  metaInfo () {
+    return {
+      title: '个人设置-重置密码',
+      htmlAttrs: {
+        lang: 'zh'
+      }
+    }
+  },
   data () {
     return {
       formData: {

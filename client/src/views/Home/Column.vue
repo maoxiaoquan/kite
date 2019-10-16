@@ -43,9 +43,12 @@ import NavSort from "@views/Home/NavSort";
 import ArticleItem from "@views/Article/component/ArticleItem";
 import { mapState } from "vuex";
 import { ScrollLoading } from "@components";
+import { baidu, google } from '@utils'
+import googleMixin from '@mixins/google'
 
 export default {
   name: "column",
+  mixins: [googleMixin], //混合谷歌分析
   metaInfo () {
     return {
       title: this.website.meta.website_name,
@@ -59,7 +62,14 @@ export default {
       ],
       htmlAttrs: {
         lang: "zh"
-      }
+      },
+      script: [
+        ...baidu.resource(this.$route, this.$route.params.article_column_en_name),
+        ...google.statisticsCode({
+          route: this.$route, googleCode: this.website.config.googleCode, random: ''
+        })
+      ],
+      __dangerouslyDisableSanitizers: ['script']
     };
   },
   async asyncData ({ store, route, accessToken = "" }) {

@@ -61,10 +61,13 @@ import dynamicAside from './component/dynamicAside'
 import commentItem from "../Comment/DynamicComment/CommentItem";
 import { Page, ScrollLoading } from "@components";
 import commentForm from "../Comment/DynamicComment/CommentForm";
-
+import { share, baidu, google } from '@utils'
 import { mapState } from 'vuex'
+import googleMixin from '@mixins/google'
+
 export default {
   name: 'dynamic-view',
+  minixs: [googleMixin], //混合谷歌分析
   metaInfo () {
     return {
       title: this.dynamic.dynamicView.content + '-片刻' || "",
@@ -77,7 +80,14 @@ export default {
       ],
       htmlAttrs: {
         lang: "zh"
-      }
+      },
+      script: [
+        ...baidu.resource(this.$route, this.$route.params.dynamicId),
+        ...google.statisticsCode({
+          route: this.$route, googleCode: this.website.config.googleCode, random: this.$route.params.dynamicId
+        })
+      ],
+      __dangerouslyDisableSanitizers: ['script']
     };
   },
   async asyncData ({ store, route, accessToken = "" }) {

@@ -146,12 +146,12 @@ export default [
       {
         path: 'topics',
         name: 'dynamicTopic',
-        component: () => import('@views/Dynamic/dynamicTopic') // 动态内容页
+        component: () => import('@views/Dynamic/dynamicTopic') // 动态专题
       },
       {
         path: 'topic/:dynamicTopicId',
         name: 'dynamicTopicView',
-        component: () => import('@views/Dynamic/dynamicTopicView') // 动态内容页
+        component: () => import('@views/Dynamic/dynamicTopicView') // 动态专题内容页
       },
       // {
       //   path: 'blogs/:columnEnName', 屏蔽，此功能不开放

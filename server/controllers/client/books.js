@@ -497,7 +497,8 @@ class Books {
    * @param   {object} ctx 上下文对象
    */
   static async getBooksInfo (ctx) {
-    let { books_id } = ctx.query
+    let { books_id, type } = ctx.query
+
     try {
       let books = await models.books.findOne({
         where: {
@@ -506,10 +507,12 @@ class Books {
       })
 
       if (books) {
-        await models.books.update(
-          { read_count: Number(books.read_count) + 1 },
-          { where: { books_id } } // 为空，获取全部，也可以自己添加条件
-        )
+        if (type === 'look') {
+          await models.books.update(
+            { read_count: Number(books.read_count) + 1 },
+            { where: { books_id } } // 为空，获取全部，也可以自己添加条件
+          )
+        }
 
         books.setDataValue('create_dt', await TimeDistance(books.create_date))
 
@@ -542,7 +545,8 @@ class Books {
         } else {
           resClientJson(ctx, {
             state: 'error',
-            message: '获取小书失败'
+            message: '获取小书失败',
+            data: { books: {} }
           })
         }
       } else {
@@ -667,7 +671,7 @@ class Books {
   static async getCollectBooksList (ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 24
-    let { user = '' } = ctx.request
+    let uid = ctx.query.uid || ''
     let whereParams = {
       is_public: true,
       status: {
@@ -677,7 +681,7 @@ class Books {
 
     try {
       let { count, rows } = await models.collect_books.findAndCountAll({
-        where: { is_like: true, uid: user.uid }, // 为空，获取全部，也可以自己添加条件
+        where: { is_like: true, uid }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize // 每页限制返回的数据条数
         // order: orderParams

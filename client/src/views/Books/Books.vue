@@ -121,11 +121,15 @@
 </template>
 
 <script>
-import { share } from '@utils'
+import { share, baidu, google } from '@utils'
 import { mapState } from 'vuex'
 import { Page } from "@components";
 import websiteNotice from '../Parts/websiteNotice'
+import googleMixin from '@mixins/google'
+
 export default {
+  name: "books",
+  mixins: [googleMixin], //混合谷歌分析 
   metaInfo () {
     return {
       title: `小书-${this.website.meta.website_name}`,
@@ -138,10 +142,16 @@ export default {
       ],
       htmlAttrs: {
         lang: "zh"
-      }
+      },
+      script: [
+        ...baidu.resource(this.$route),
+        ...google.statisticsCode({
+          route: this.$route, googleCode: this.website.config.googleCode, random: ''
+        })
+      ],
+      __dangerouslyDisableSanitizers: ['script']
     };
   },
-  name: "books",
   asyncData ({ store, route }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([

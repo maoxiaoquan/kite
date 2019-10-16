@@ -191,6 +191,11 @@ class Book {
       })
 
       if (oneBook) {
+        await models.book.update(
+          { read_count: Number(oneBook.read_count) + 1 },
+          { where: { book_id } } // 为空，获取全部，也可以自己添加条件
+        )
+
         if (oneBook) {
           resClientJson(ctx, {
             state: 'success',

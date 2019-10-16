@@ -90,14 +90,15 @@ export default {
     },
     getCollectBooksList (page) {
       this.$store.dispatch('books/GET_COLLECT_BOOKS_LIST', {
-        page: this.collectBooksInfo.page || 1
+        page: this.collectBooksInfo.page || 1,
+        uid: this.$route.params.uid
       }).then(result => {
         this.collectBooksInfo = result.data
       })
     },
     collectBooks (books_id) { // 用户收藏小书
       this.$store.dispatch('books/COLLECT_BOOKS', {
-        books_id,
+        books_id
       })
         .then(result => {
           if (result.state === 'success') {

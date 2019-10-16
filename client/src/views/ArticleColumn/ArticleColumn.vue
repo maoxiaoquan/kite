@@ -49,9 +49,12 @@
 <script>
 import { mapState } from 'vuex'
 import { Page } from '@components'
+import { share, baidu, google } from '@utils'
+import googleMixin from '@mixins/google'
 
 export default {
   name: 'ArticleColumn',
+  minixs: [googleMixin], //混合谷歌分析
   metaInfo () {
     return {
       title: '专栏',
@@ -62,7 +65,14 @@ export default {
       }],
       htmlAttrs: {
         lang: 'zh'
-      }
+      },
+      script: [
+        ...baidu.resource(this.$route),
+        ...google.statisticsCode({
+          route: this.$route, googleCode: this.website.config.googleCode, random: this.books.booksInfo.books_id
+        })
+      ],
+      __dangerouslyDisableSanitizers: ['script']
     }
   },
   async asyncData ({ store, route, accessToken = '' }) {
