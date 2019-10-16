@@ -86,12 +86,12 @@ export default {
   minixs: [googleMixin], //混合谷歌分析
   metaInfo () {
     return {
-      title: this.topicInfo.name + '-话题' || "",
+      title: this.topicInfo.name + '-话题-' + this.website.meta.website_name || "",
       meta: [
         {
           // set meta
           name: "description",
-          content: `${this.topicInfo.name || ""}-话题`
+          content: `${this.topicInfo.name}-${this.topicInfo.description || ""}`
         }
       ],
       htmlAttrs: {
@@ -213,9 +213,6 @@ export default {
   margin-bottom: 15px;
   .dynamic-main {
     .stream-wrapper {
-      // box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);
-      padding: 15px;
-      // border-radius: 6px;
       .edit-view {
         border-bottom: 1px solid rgba(92, 96, 102, 0.1);
       }

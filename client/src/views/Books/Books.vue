@@ -45,7 +45,7 @@
                 </ul>
               </nav>
 
-              <nav class="sort-list-menu">
+              <nav class="sort-list-menu clearfix">
                 <router-link class="nav-item"
                              :to="{name:'books',query:sortMenu('')}">热门</router-link>
                 <router-link class="nav-item"
@@ -54,6 +54,8 @@
                              :to="{name:'books',query:sortMenu('30day')}">近30天</router-link>
                 <router-link class="nav-item"
                              :to="{name:'books',query:sortMenu('7day')}">近7天</router-link>
+                <span class="nav-item add-book"
+                      @click="createBook">新增小书</span>
               </nav>
             </div>
 
@@ -198,6 +200,13 @@ export default {
           }
         })
     },
+    createBook () {
+      if (!this.$store.state.personalInfo.islogin) {
+        this.$store.commit('SET_IS_LOGIN', true)
+      } else {
+        this.$router.push({ name: 'booksWrite', params: { type: 'create' } })
+      }
+    },
     isCollect (item) { // 是否收藏
       let collectUserIds = []
       if (item.collectUserIds && item.collectUserIds.length > 0) {
@@ -335,19 +344,28 @@ export default {
       }
 
       .sort-list-menu {
-        display: flex;
+        display: block;
         padding-bottom: 15px;
         border-bottom: 1px solid rgba(178, 186, 194, 0.15);
         .nav-item {
           align-items: center;
           line-height: 1;
           position: relative;
-          display: flex;
+          display: inline-block;
           font-size: 13px;
           margin-right: 15px;
           &.exact-active {
             color: #ea6f5a;
           }
+        }
+        .add-book {
+          float: right;
+          color: rgba(0, 0, 0, 0.88);
+          background: #b7d6ec;
+          border: 1px solid #b7d6ec;
+          cursor: pointer;
+          padding: 5px 12px;
+          border-radius: 3px;
         }
       }
     }

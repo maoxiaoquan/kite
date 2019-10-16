@@ -91,7 +91,7 @@ export default {
       script: [
         ...baidu.resource(this.$route),
         ...google.statisticsCode({
-          route: this.$route, googleCode: this.website.config.googleCode, random: this.books.booksInfo.books_id
+          route: this.$route, googleCode: this.website.config.googleCode, random: ''
         })
       ],
       __dangerouslyDisableSanitizers: ['script']

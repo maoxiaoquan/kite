@@ -35,7 +35,7 @@
                         <span v-text="articleBlog.blogInfo.likeCount||0"></span>
                       </li>
                       <li class="item attention"
-                          v-if="~[2,4].indexOf(articleBlog.blogInfo.status)&&personalInfo.islogin&&articleBlog.blogInfo.is_public"
+                          v-if="~[2,4].indexOf(Number(articleBlog.blogInfo.status))&&personalInfo.islogin&&articleBlog.blogInfo.is_public"
                           @click="setLikeArticleBlog(articleBlog.blogInfo.blog_id)">
                         <span :class="{'active':isLike(articleBlog.blogInfo).status}">{{isLike(articleBlog.blogInfo).text}}</span>
                       </li>
@@ -80,7 +80,8 @@
 
             </div>
 
-            <div class="article-blog-main">
+            <div class="article-blog-main"
+                 v-if="articleBlog.blogInfo.is_public">
               <div class="article-view">
                 <div class="article-item"
                      v-for="(item,key) in articleBlog.blogArticleList.list"
@@ -94,6 +95,11 @@
                     :page="Number($route.query.page)||1"
                     @pageChange="pageChange"></Page>
             </div>
+
+            <div class="article-blog-null-public">
+              <p class="info">当前个人专栏未公开,请等待作者公开</p>
+            </div>
+
           </div>
         </div>
 
@@ -119,12 +125,12 @@ export default {
   mixins: [googleMixin], //混合谷歌分析  
   metaInfo () {
     return {
-      title: this.articleBlog.blogInfo.name + '-专栏' || "",
+      title: this.articleBlog.blogInfo.name + '-' + this.website.meta.website_name || "",
       meta: [
         {
           // set meta
           name: "description",
-          content: `${this.articleBlog.blogInfo.name || ""}-专栏`
+          content: `${this.website.meta.description || ""}`
         }
       ],
       htmlAttrs: {
@@ -405,6 +411,14 @@ export default {
       /deep/ .article-item {
         border-bottom: 1px solid rgba(178, 186, 194, 0.15);
       }
+    }
+  }
+  .article-blog-null-public {
+    .info {
+      text-align: center;
+      font-size: 14px;
+      padding: 15px;
+      color: #666;
     }
   }
 }
