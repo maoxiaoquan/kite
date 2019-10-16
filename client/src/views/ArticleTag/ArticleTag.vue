@@ -68,11 +68,11 @@ export default {
   minixs: [googleMixin], //混合谷歌分析
   metaInfo () {
     return {
-      title: '标签',
+      title: this.articleTag.article_tag_name,
       titleTemplate: `%s - ${this.website.meta.website_name}`,
       meta: [{                 // set meta
         name: 'description',
-        content: `标签-${this.website.meta.website_name}`,
+        content: `${this.articleTag.article_tag_name}-${this.articleTag.article_tag_description}`,
       }],
       htmlAttrs: {
         lang: 'zh'
@@ -80,7 +80,7 @@ export default {
       script: [
         ...baidu.resource(this.$route),
         ...google.statisticsCode({
-          route: this.$route, googleCode: this.website.config.googleCode, random: this.books.booksInfo.books_id
+          route: this.$route, googleCode: this.website.config.googleCode, random: this.$route.params.article_tag_en_name
         })
       ],
       __dangerouslyDisableSanitizers: ['script']

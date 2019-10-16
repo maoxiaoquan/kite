@@ -27,12 +27,12 @@ const mutations = {
 }
 
 const actions = {
-  GET_ARTICLE_COLUMN ({ commit, dispatch, state }) {
+  GET_ARTICLE_COLUMN ({ commit, dispatch, state }, parameter) {
     // 获取文章专栏
     return fetch({
       url: '/article/column',
       method: 'get',
-      parameter: ''
+      parameter: { params: parameter }
     }).then(result => {
       commit('SET_ARTICLE_COLUMN', result.data)
       return result

@@ -51,13 +51,13 @@ export default {
   mixins: [googleMixin], //混合谷歌分析
   metaInfo () {
     return {
-      title: this.website.meta.website_name,
-      titleTemplate: `%s - ${this.website.meta.introduction}`,
+      title: this.currentColumn().article_column_name,
+      titleTemplate: `%s - ${this.website.meta.website_name}`,
       meta: [
         {
-          // set meta
+          // set meta 
           name: "description",
-          content: `${this.website.meta.website_name} - ${this.website.meta.introduction}`
+          content: `${this.currentColumn().article_column_name} - ${this.currentColumn().article_column_description}`
         }
       ],
       htmlAttrs: {
@@ -114,6 +114,15 @@ export default {
       this.isMore = true;
       this.page = 1;
       this.infiniteHandler();
+    },
+    currentColumn () {
+      let _currentColumn = {}
+      this.articleColumn.homeColumn.map(item => {
+        if (item.article_column_en_name === this.$route.params.article_column_en_name) {
+          _currentColumn = item
+        }
+      })
+      return _currentColumn
     },
     infiniteHandler () {
       this.isLoading = true;

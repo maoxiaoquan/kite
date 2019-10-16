@@ -6,7 +6,7 @@ module.exports = [
     article_column_en_name: 'suggest',
     article_column_icon: config.DF_ARTICLE_TAG_IMG,
     article_tag_ids: '',
-    article_column_description: '',
+    article_column_description: '推荐一些热门的文章',
     sort: 0,
     is_home: true,
     enable: true
