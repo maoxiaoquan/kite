@@ -25,10 +25,10 @@
 
               <button v-if="(user.user_info.user.uid !== personalInfo.user.uid)&&personalInfo.islogin"
                       class="user-follow-button"
-                      @click="onUserAttention($route.params.uid,~user.user_attention.other_attention.indexOf(personalInfo.user.uid||''))"
-                      :class="~user.user_attention.other_attention.indexOf(personalInfo.user.uid||'')?'has':'no'">
+                      @click="onUserAttention($route.params.uid,~user.attention_user.other_attention.indexOf(personalInfo.user.uid||''))"
+                      :class="~user.attention_user.other_attention.indexOf(personalInfo.user.uid||'')?'has':'no'">
                 <i class="iconfont"></i>
-                <span v-if="~user.user_attention.other_attention.indexOf(personalInfo.user.uid||'')">已关注</span>
+                <span v-if="~user.attention_user.other_attention.indexOf(personalInfo.user.uid||'')">已关注</span>
                 <span v-else>关注</span>
               </button>
 
@@ -90,12 +90,6 @@
                   关注
                 </router-link>
               </li>
-              <li :class="{'active':$route.name==='userLike'}">
-                <router-link :to='{name:"userLike"}'>
-                  喜欢
-                </router-link>
-              </li>
-
               <li :class="{'active':$route.name==='userMessage'}"
                   v-if="personalInfo.islogin&&personalInfo.user.uid===user.user_info.user.uid">
                 <router-link :to='{name:"userMessage"}'>

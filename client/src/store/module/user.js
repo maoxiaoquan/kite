@@ -30,7 +30,7 @@ const state = () => ({
     page: 1,
     pageSize: 10
   },
-  user_attention: {
+  attention_user: {
     // 用户关注用户
     any: 'me',
     count: 0,
@@ -39,13 +39,6 @@ const state = () => ({
     page: 1,
     pageSize: 10,
     user_list: []
-  },
-  user_like_article: {
-    // 用户like文章
-    article_list: [],
-    count: 0,
-    page: 1,
-    pageSize: 10
   },
   user_message: {
     // 用户消息
@@ -97,11 +90,7 @@ const mutations = {
   },
   SET_USER_ATTENTION_LIST (state, data) {
     // 用户关注用户
-    state.user_attention = data
-  },
-  SET_USER_LIKE_ARTICLE_LIST (state, data) {
-    // 用户like文章
-    state.user_like_article = data
+    state.attention_user = data
   },
   SET_USER_MESSAGE (state, data) {
     // 用户消息
@@ -237,9 +226,6 @@ const actions = {
       url: '/user/like-article-list',
       method: 'get',
       parameter: { params: data }
-    }).then(result => {
-      commit('SET_USER_LIKE_ARTICLE_LIST', result.data)
-      return result
     })
   },
   GET_USER_MESSAGE_LIST: ({ commit, dispatch, state }, data) => {

@@ -1,8 +1,9 @@
 const Seq = require('sequelize')
 const shortid = require('shortid')
 const time = require('../time')
+
 module.exports = {
-  NAME: 'rss_article_blog' /* 表名 */,
+  NAME: 'attention_user' /* 表名 */,
   TABLE: {
     /* 表结构 */
     id: {
@@ -15,21 +16,22 @@ module.exports = {
     },
     uid: {
       // 用户ID
-      type: Seq.INTEGER(10),
+      type: Seq.BIGINT(20),
       comment: 'uid',
       field: 'uid'
     },
-    blog_id: {
-      // 标签ID
+    attention_uid: {
+      // 关注的用户ID
       type: Seq.BIGINT(20),
-      comment: '专题ID',
-      field: 'blog_id'
+      comment: 'attention_uid',
+      field: 'attention_uid'
     },
-    is_like: {
+    is_attention: {
       // 是否like
       type: Seq.BOOLEAN,
-      comment: '是否like',
-      field: 'is_like'
-    }
+      comment: '是否关注',
+      field: 'is_attention'
+    },
+    ...time.create_date
   }
 }

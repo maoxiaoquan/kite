@@ -43,11 +43,6 @@
           <span class="collection-name">关注的文章标签</span>
         </router-link>
       </li>
-      <li>
-        <router-link :to='{name:"articleBlogsLike"}'>
-          <span class="collection-name">关注的个人专栏</span>
-        </router-link>
-      </li>
     </ul>
 
     <div class="title">个人介绍</div>

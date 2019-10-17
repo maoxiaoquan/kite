@@ -100,7 +100,7 @@ export default {
     },
     userAttention () {
       // 用户个人的文章
-      return this.$store.state.user.user_attention || {};
+      return this.$store.state.user.attention_user || {};
     }
   },
   components: {

@@ -16,9 +16,11 @@ async function sql () {
   // await models.sequelize.query(
   //   'ALTER TABLE article add COLUMN is_public tinyint(1) DEFAULT 1 comment "是否公开";'
   // )
-  await models.collect_books.sync({
-    force: true
-  })
+  await models.sequelize.query(
+    'rename TABLE rss_dynamic_topic to attention_topic;'
+  )
+
+  await models.sequelize.query('rename TABLE rss_article_tag to attention_tag;')
   process.exit()
 }
 sql()

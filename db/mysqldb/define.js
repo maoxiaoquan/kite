@@ -18,24 +18,24 @@ module.exports = sequelize => {
       initialAutoIncrement: 10000
     }
   )
-  const user_attention = sequelize.define(
+  const attention_user = sequelize.define(
     /* 前台用户关注用户表 */
-    require('./models_type/db_user_attention').NAME,
-    require('./models_type/db_user_attention').TABLE,
+    require('./models_type/db_attention_user').NAME,
+    require('./models_type/db_attention_user').TABLE,
     SEQ_PARAMETER
   )
 
   /* 前台用户关注文章标签表 */
-  const rss_article_tag = sequelize.define(
-    require('./models_type/db_rss_article_tag').NAME,
-    require('./models_type/db_rss_article_tag').TABLE,
+  const attention_tag = sequelize.define(
+    require('./models_type/db_attention_tag').NAME,
+    require('./models_type/db_attention_tag').TABLE,
     SEQ_PARAMETER
   )
 
   /* 前台用户喜欢文章表 */
-  const article_like = sequelize.define(
-    require('./models_type/db_article_like').NAME,
-    require('./models_type/db_article_like').TABLE,
+  const like_article = sequelize.define(
+    require('./models_type/db_like_article').NAME,
+    require('./models_type/db_like_article').TABLE,
     SEQ_PARAMETER
   )
 
@@ -180,15 +180,15 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
 
-  const rss_dynamic_topic = sequelize.define(
-    require('./models_type/db_rss_dynamic_topic').NAME,
-    require('./models_type/db_rss_dynamic_topic').TABLE,
+  const attention_topic = sequelize.define(
+    require('./models_type/db_attention_topic').NAME,
+    require('./models_type/db_attention_topic').TABLE,
     SEQ_PARAMETER
   )
 
-  const rss_article_blog = sequelize.define(
-    require('./models_type/db_rss_article_blog').NAME,
-    require('./models_type/db_rss_article_blog').TABLE,
+  const collect_blog = sequelize.define(
+    require('./models_type/db_collect_blog').NAME,
+    require('./models_type/db_collect_blog').TABLE,
     SEQ_PARAMETER
   )
 
@@ -228,24 +228,24 @@ module.exports = sequelize => {
   const _define = {
     user,
     user_info,
-    user_attention,
+    attention_user,
     user_role,
     user_authority,
     user_message,
-    rss_article_tag,
+    attention_tag,
     verify_code,
     article,
     article_tag,
     article_column,
     article_blog,
-    article_like,
+    like_article,
     article_comment,
-    rss_article_blog,
+    collect_blog,
     dynamic,
     dynamic_topic,
     dynamic_comment,
     dynamic_like,
-    rss_dynamic_topic,
+    attention_topic,
     admin_user,
     admin_role,
     admin_authority,

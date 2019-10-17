@@ -60,11 +60,6 @@ export default [
             component: () => import('@views/User/view/UserAttention') // 用户关注用户
           },
           {
-            path: 'like',
-            name: 'userLike',
-            component: () => import('@views/User/view/UserLike') // 用户like文章
-          },
-          {
             path: 'message',
             name: 'userMessage',
             component: () => import('@views/User/view/UserMessage') // 用户消息
@@ -162,11 +157,6 @@ export default [
         path: 'blog/:blogId',
         name: 'articleBlog',
         component: () => import('@views/ArticleBlog/BlogView') // 个人专栏内容
-      },
-      {
-        path: 'blogs-like',
-        name: 'articleBlogsLike',
-        component: () => import('@views/ArticleBlog/myLikeBlog') // 个人用户like的个人专栏
       },
       {
         path: 'books-write/:type',

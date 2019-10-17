@@ -380,7 +380,7 @@ class User {
         where: { uid }
       })
 
-      let allUserAttention = await models.user_attention
+      let allUserAttention = await models.attention_user
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((attention_item, key) => {
@@ -388,15 +388,15 @@ class User {
           })
         })
 
-      let userAttentionCount = await models.user_attention.count({
+      let userAttentionCount = await models.attention_user.count({
         // 关注了多少人
         where: {
           uid
         }
       })
 
-      let allUserLikeArticleAid = await models.article_like
-        .findAll({ where: { uid } })
+      let allUserLikeArticleAid = await models.like_article
+        .findAll({ where: { uid, is_like: true } })
         .then(res => {
           return res.map((item, key) => {
             return item.aid
@@ -411,7 +411,7 @@ class User {
           })
         })
 
-      let allSubscribeArticleTagId = await models.rss_article_tag
+      let allSubscribeArticleTagId = await models.attention_tag
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((item, key) => {
@@ -419,7 +419,7 @@ class User {
           })
         })
 
-      let allRssDynamicTopicId = await models.rss_dynamic_topic
+      let allRssDynamicTopicId = await models.attention_topic
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((item, key) => {
@@ -427,7 +427,7 @@ class User {
           })
         })
 
-      let otherUserAttentionCount = await models.user_attention.count({
+      let otherUserAttentionCount = await models.attention_user.count({
         // 多少人关注了
         where: {
           attention_uid: uid

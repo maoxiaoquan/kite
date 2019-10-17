@@ -29,10 +29,11 @@
               v-text="articleItem.create_dt"></li>
           <li class="item"
               v-if="articleItem.article_tag_ids">
-            <router-link v-for="(item_article_tag,key) in articleTagFilter(articleItem.article_tag_ids)"
+            <router-link v-for="(itemArticleTag,key) in articleItem.tag"
                          class="tag-class frontend"
                          :key="key"
-                         :to="{name:'article_tag',params:{article_tag_en_name:item_article_tag.article_tag_en_name}}">{{item_article_tag.article_tag_name}}</router-link>
+                         :to="{name:'article_tag',params:{article_tag_en_name:itemArticleTag.article_tag_en_name}}">{{itemArticleTag.article_tag_name}}</router-link>
+
           </li>
           <li class="item operat-view"
               @click="isOperating=!isOperating"
@@ -59,6 +60,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: "TopArticleItem",
   props: {
@@ -72,14 +74,6 @@ export default {
     };
   },
   methods: {
-    /*cancel_article_like () {
-      this.$store.dispatch('user/DELETE_ARTICLE', {
-        aid: this.articleItem.aid
-      })
-        .then(result => {
-          this.$emit('like-change',this.articleItem.aid)
-        })
-    },*/
     commandChange (val) {
       if (val.type === "cancel") {
         this.$confirm("此操作将永久取消关注此文章?", "提示", {
@@ -100,7 +94,7 @@ export default {
         .dispatch("user/USER_LIKE_ARTICLE", { aid: this.articleItem.aid })
         .then(res => {
           if (res.state === "success") {
-            window.location.reload();
+            this.$emit('likeArticle')
           } else {
             this.$message.warning(res.message);
           }
@@ -109,24 +103,9 @@ export default {
           console.log(err);
         });
     },
-    articleTagFilter: function (val) {
-      var _arr = [];
-      this.articleTagAll.map(function (item, key) {
-        if (val.split(",").indexOf(String(item.article_tag_id)) !== -1) {
-          _arr.push(item);
-        }
-      });
-      return _arr;
-    }
   },
   computed: {
-    articleTagAll () {
-      return this.$store.state.articleTag.article_tag_all;
-    },
-    personalInfo () {
-      // 登录后的个人信息
-      return this.$store.state.personalInfo || {};
-    },
+    ...mapState(['personalInfo']),
     userInfo () {
       // 登录后的个人信息
       return this.$store.state.user.user_info || {};

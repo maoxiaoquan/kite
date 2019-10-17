@@ -110,14 +110,14 @@ class PersonalCenter {
 
     let userAttentionUidArr
     try {
-      let meAttention = await models.user_attention
+      let meAttention = await models.attention_user
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((attention_item, tag_key) => {
             return attention_item.attention_uid
           })
         })
-      let otherAttention = await models.user_attention
+      let otherAttention = await models.attention_user
         .findAll({ where: { attention_uid: uid } })
         .then(res => {
           return res.map((attention_item, tag_key) => {
@@ -180,7 +180,7 @@ class PersonalCenter {
       if (attention_uid === user.uid) {
         throw new ErrorMessage('关注用户失败，自己不能关注自己')
       }
-      let oneUserAttention = await models.user_attention.findOne({
+      let oneUserAttention = await models.attention_user.findOne({
         where: {
           uid: user.uid,
           attention_uid
@@ -190,7 +190,7 @@ class PersonalCenter {
       if (oneUserAttention) {
         /* 判断是否关注了，是则取消，否则添加 */
 
-        await models.user_attention.destroy({
+        await models.attention_user.destroy({
           where: {
             uid: user.uid,
             attention_uid
@@ -201,7 +201,7 @@ class PersonalCenter {
           message: '取消关注用户成功'
         })
       } else {
-        await models.user_attention.create({
+        await models.attention_user.create({
           uid: user.uid,
           attention_uid
         })
@@ -238,8 +238,8 @@ class PersonalCenter {
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
     try {
-      let allUserLikeArticle = await models.article_like
-        .findAll({ where: { uid } })
+      let allUserLikeArticle = await models.like_article
+        .findAll({ where: { uid, is_like: true } })
         .then(res => {
           return res.map((item, key) => {
             return item.aid
@@ -260,6 +260,18 @@ class PersonalCenter {
           'create_dt',
           await TimeDistance(rows[i].create_date)
         )
+
+        if (rows[i].article_tag_ids) {
+          rows[i].setDataValue(
+            'tag',
+            await models.article_tag.findAll({
+              where: {
+                article_tag_id: { [Op.or]: rows[i].article_tag_ids.split(',') }
+              }
+            })
+          )
+        }
+
         rows[i].setDataValue(
           'user',
           await models.user.findOne({
@@ -297,7 +309,7 @@ class PersonalCenter {
     let { user = '' } = ctx.request
     let type = ''
     try {
-      let oneUserLikeArticle = await models.article_like.findOne({
+      let oneUserLikeArticle = await models.like_article.findOne({
         where: {
           uid: user.uid,
           aid
@@ -305,35 +317,42 @@ class PersonalCenter {
       })
 
       if (oneUserLikeArticle) {
-        /* 判断是否like文章，是则取消，否则添加 */
-        type = 'cancel'
-        await models.article_like.destroy({
-          where: {
-            uid: user.uid,
-            aid
+        /* 判断是否关注了 */
+        type = oneUserLikeArticle.is_like ? 'cancel' : 'attention'
+        await models.like_article.update(
+          {
+            is_like: !oneUserLikeArticle.is_like
+          },
+          {
+            where: {
+              uid: user.uid,
+              aid
+            }
           }
-        })
+        )
       } else {
-        type = 'like'
-        await models.article_like.create({
-          uid: user.uid,
-          aid
-        })
+        type = 'attention' // 只在第一次关注的时候提交推送
         await models.user_message.create({
           // 用户行为记录
           uid: uid,
           type: 2, // 1:系统消息 2:喜欢文章  3:关注标签 4:用户关注 5:评论
           content: JSON.stringify({
             other_uid: user.uid,
-            aid: aid,
+            aid,
             title: '文章有新的喜欢'
           })
         })
+        await models.like_article.create({
+          uid: user.uid,
+          aid,
+          is_like: true
+        })
       }
 
-      let articleLikeCount = await models.article_like.count({
+      let articleLikeCount = await models.like_article.count({
         where: {
-          aid
+          aid,
+          is_like: true
         }
       })
 
@@ -346,10 +365,10 @@ class PersonalCenter {
 
       resClientJson(ctx, {
         state: 'success',
+        message: type === 'attention' ? '收藏成功' : '取消收藏成功',
         data: {
           type
-        },
-        message: type === 'like' ? 'like文章成功' : '取消like文章成功'
+        }
       })
     } catch (err) {
       resClientJson(ctx, {
@@ -551,7 +570,7 @@ class PersonalCenter {
 
         rows[i].setDataValue(
           'likeCount',
-          await models.rss_article_blog.count({
+          await models.collect_blog.count({
             where: { blog_id: rows[i].blog_id, is_like: true }
           })
         )
@@ -575,7 +594,7 @@ class PersonalCenter {
 
         rows[i].setDataValue(
           'likeUserIds',
-          await models.rss_article_blog.findAll({
+          await models.collect_blog.findAll({
             where: { blog_id: rows[i].blog_id, is_like: true }
           })
         )

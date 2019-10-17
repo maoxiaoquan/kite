@@ -26,26 +26,6 @@ class update0_2 {
 
         await models.sequelize.query('rename TABLE comment to article_comment;')
 
-        // await models.sequelize.query(
-        //   'rename TABLE article_like to user_like_article;'
-        // )
-
-        // await models.sequelize.query(
-        //   'rename TABLE rss_article_tag  to subscribe_article_tag;'
-        // )
-
-        // await models.sequelize.query(
-        //   'rename TABLE system_log  to admin_system_log;'
-        // )
-
-        // await models.sequelize.query(
-        //   'rename TABLE article_blog  to user_article_topic;'
-        // )
-
-        // await models.sequelize.query('rename TABLE article_comment to comment;')
-
-        // ALTER TABLE 表名 CHANGE 旧字段名 新字段名 新数据类型;
-
         await models.sequelize.query(
           'ALTER TABLE article_blog CHANGE topic_id blog_id bigint(20) auto_increment comment "用户文章专栏的id";'
         )

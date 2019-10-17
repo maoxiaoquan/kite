@@ -96,7 +96,7 @@ export default {
         .then(result => {
           if (result.state === 'success') {
             this.$message.success(result.message);
-            window.location.reload()
+            this.$emit('changeLike')
           } else {
             this.$message.warning(result.message);
           }

@@ -342,14 +342,14 @@ class dynamicBlog {
 
       oneArticleBlog.setDataValue(
         'likeCount',
-        await models.rss_article_blog.count({
+        await models.collect_blog.count({
           where: { blog_id: oneArticleBlog.blog_id }
         })
       )
 
       oneArticleBlog.setDataValue(
         'likeUserIds',
-        await models.rss_article_blog.findAll({
+        await models.collect_blog.findAll({
           where: { blog_id: oneArticleBlog.blog_id, is_like: true }
         })
       )
@@ -570,7 +570,7 @@ class dynamicBlog {
 
         rows[i].setDataValue(
           'likeCount',
-          await models.rss_article_blog.count({
+          await models.collect_blog.count({
             where: { blog_id: rows[i].blog_id, is_like: true }
           })
         )
@@ -594,7 +594,7 @@ class dynamicBlog {
 
         rows[i].setDataValue(
           'likeUserIds',
-          await models.rss_article_blog.findAll({
+          await models.collect_blog.findAll({
             where: { blog_id: rows[i].blog_id, is_like: true }
           })
         )
@@ -625,7 +625,7 @@ class dynamicBlog {
     let { user = '' } = ctx.request
     let type = ''
     try {
-      let oneSubscribeArticleBlog = await models.rss_article_blog.findOne({
+      let oneSubscribeArticleBlog = await models.collect_blog.findOne({
         where: {
           uid: user.uid,
           blog_id
@@ -635,7 +635,7 @@ class dynamicBlog {
       if (oneSubscribeArticleBlog) {
         /* 判断是否关注了 */
         type = oneSubscribeArticleBlog.is_like ? 'cancel' : 'attention'
-        await models.rss_article_blog.update(
+        await models.collect_blog.update(
           {
             is_like: !oneSubscribeArticleBlog.is_like
           },
@@ -648,14 +648,14 @@ class dynamicBlog {
         )
       } else {
         type = 'attention'
-        await models.rss_article_blog.create({
+        await models.collect_blog.create({
           uid: user.uid,
           blog_id,
           is_like: true
         })
       }
 
-      let articleBlogRssCount = await models.rss_article_blog.count({
+      let articleBlogRssCount = await models.collect_blog.count({
         where: {
           blog_id,
           is_like: true
@@ -694,7 +694,7 @@ class dynamicBlog {
   static async getLikeArticleBlogList (ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 24
-    let { user = '' } = ctx.request
+    let uid = ctx.query.uid || ''
     let whereParams = {
       is_public: true,
       status: {
@@ -703,10 +703,10 @@ class dynamicBlog {
     }
 
     try {
-      let { count, rows } = await models.rss_article_blog.findAndCountAll({
-        where: { is_like: true, uid: user.uid }, // 为空，获取全部，也可以自己添加条件
-        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-        limit: pageSize // 每页限制返回的数据条数
+      let { count, rows } = await models.collect_blog.findAndCountAll({
+        where: { is_like: true, uid }, // 为空，获取全部，也可以自己添加条件
+        offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: Number(pageSize) // 每页限制返回的数据条数
         // order: orderParams
       })
       for (let i in rows) {
@@ -743,14 +743,14 @@ class dynamicBlog {
 
         rows[i].setDataValue(
           'likeCount',
-          await models.rss_article_blog.count({
+          await models.collect_blog.count({
             where: { blog_id: rows[i].blog_id, is_like: true }
           })
         )
 
         rows[i].setDataValue(
           'likeUserIds',
-          await models.rss_article_blog.findAll({
+          await models.collect_blog.findAll({
             where: { blog_id: rows[i].blog_id, is_like: true }
           })
         )
@@ -774,7 +774,7 @@ class dynamicBlog {
 
       //   rows[i].setDataValue(
       //     'likeCount',
-      //     await models.rss_article_blog.count({
+      //     await models.collect_blog.count({
       //       where: { blog_id: rows[i].blog_id, is_like: true }
       //     })
       //   )
@@ -798,7 +798,7 @@ class dynamicBlog {
 
       //   rows[i].setDataValue(
       //     'likeUserIds',
-      //     await models.rss_article_blog.findAll({
+      //     await models.collect_blog.findAll({
       //       where: { blog_id: rows[i].blog_id, is_like: true }
       //     })
       //   )

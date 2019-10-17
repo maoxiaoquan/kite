@@ -239,7 +239,7 @@ class Article {
           )
         }
 
-        let subscribeArticleTagCount = await models.rss_article_tag.count({
+        let subscribeArticleTagCount = await models.attention_tag.count({
           where: { article_tag_id: oneArticleTag.article_tag_id }
         })
 
@@ -302,7 +302,7 @@ class Article {
       for (let i in articleTagAll) {
         articleTagAll[i].setDataValue(
           'subscribe_count',
-          await models.rss_article_tag.count({
+          await models.attention_tag.count({
             where: { article_tag_id: articleTagAll[i].article_tag_id }
           })
         )
@@ -354,7 +354,7 @@ class Article {
       for (let i in articleTagAll) {
         articleTagAll[i].setDataValue(
           'subscribe_count',
-          await models.rss_article_tag.count({
+          await models.attention_tag.count({
             where: { article_tag_id: articleTagAll[i].article_tag_id }
           })
         )
@@ -431,6 +431,13 @@ class Article {
             })
           )
         }
+
+        article.setDataValue(
+          'likeUserIds',
+          await models.like_article.findAll({
+            where: { aid: article.aid, is_like: true }
+          })
+        )
 
         article.setDataValue(
           'user',

@@ -3,7 +3,7 @@ const shortid = require('shortid')
 const time = require('../time')
 
 module.exports = {
-  NAME: 'article_like' /* 表名 */,
+  NAME: 'like_article' /* 表名 */,
   TABLE: {
     /* 表结构 */
     id: {
@@ -25,6 +25,12 @@ module.exports = {
       type: Seq.BIGINT(20),
       comment: '文章id',
       field: 'aid'
+    },
+    is_like: {
+      // 是否like
+      type: Seq.BOOLEAN,
+      comment: '是否like',
+      field: 'is_like'
     },
     ...time.create_date
   }

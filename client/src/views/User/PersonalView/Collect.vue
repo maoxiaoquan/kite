@@ -4,10 +4,20 @@
       <a class="filter-item"
          @click="type='BooksCollect'"
          :class="{'active':type==='BooksCollect'}"
-         href="javascript">小书</a>
+         href="javascript:;">小书</a>
+      <a class="filter-item"
+         @click="type='ArticleLike'"
+         :class="{'active':type==='ArticleLike'}"
+         href="javascript:;">文章</a>
+      <a class="filter-item"
+         @click="type='ArticleBlogLike'"
+         :class="{'active':type==='ArticleBlogLike'}"
+         href="javascript:;">专栏</a>
     </div>
     <div class="content">
       <BooksCollect v-show="type==='BooksCollect'" />
+      <ArticleLike v-show="type==='ArticleLike'" />
+      <ArticleBlogLike v-show="type==='ArticleBlogLike'" />
     </div>
   </section>
 </template>
@@ -16,6 +26,8 @@
 
 import { mapState } from 'vuex'
 import BooksCollect from './BooksCollect'
+import ArticleLike from './ArticleLike'
+import ArticleBlogLike from './ArticleBlogLike'
 export default {
   name: 'Collect',
   metaInfo () {
@@ -35,7 +47,9 @@ export default {
     ...mapState(['personalInfo', 'user']),  // personalInfo:个人信息  user:登录后的个人信息当前用户
   },
   components: {
-    BooksCollect
+    BooksCollect,
+    ArticleLike,
+    ArticleBlogLike
   }
 }
 </script>

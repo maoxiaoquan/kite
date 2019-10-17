@@ -22,7 +22,7 @@
                   <div class="meta">
                     <span class="publish-time">{{article.create_dt}}</span>
                     <span class="views-count">阅读 {{article.read_count}}</span>
-                    <span class="comments-count">评论 {{articleComment.count}}</span>
+                    <span class="comments-count">评论 {{article.comment_count}}</span>
                     <span class="likes-count">喜欢 {{article.like_count}}</span>
                     <span class="source">{{sourceTypeList[article.source]}}</span>
                     <span class="item"
@@ -40,37 +40,11 @@
               <div class="copyright">© 著作权归作者所有</div>
             </div>
 
-            <div class="follow-detail">
-              <div class="info">
-                <router-link :to="{name:'user',params:{uid:article.user.uid}}"
-                             class="avatar">
-                  <img :src="article.user.avatar"
-                       alt />
-                </router-link>
-                <a class="btn btn-info follow attention-article"
-                   v-if="personalInfo.user.uid !== article.uid"
-                   :class="{'active':currUserInfo.attention_uid_arr.indexOf(article.uid)!==-1}"
-                   @click="onUserAttention"
-                   href="javascript:;">
-                  <i class="el-icon-plus"></i>
-                  <span>关注</span>
-                </a>
-                <router-link :to="{name:'user',params:{uid:article.user.uid}}"
-                             class="title">{{article.user.nickname }}</router-link>
-                <p>
-                  一共有 {{articleUserInfo.user_article_count}} 篇文章 ，被
-                  {{articleUserInfo.other_user_attention_count}} 人关注
-                </p>
-              </div>
-              <div class="signature"
-                   v-if="article.user.introduction">{{article.user.introduction }}</div>
-            </div>
-
             <div class="meta-bottom clearfix">
               <div class="meta-bottom-item like"
                    @click="onUserLikeArticle"
-                   :class="{'active':~currUserInfo.user_like_aid_arr.indexOf(String(article.aid))}">
-                <i :class="~currUserInfo.user_like_aid_arr.indexOf(String(article.aid))?'el-icon-star-on':'el-icon-star-off'"></i>
+                   :class="{'active':isCollect(article)}">
+                <i :class="isCollect(article)?'el-icon-star-on':'el-icon-star-off'"></i>
               </div>
               <div class="meta-bottom-item share">
                 <el-dropdown trigger="click"
@@ -142,14 +116,6 @@ export default {
   data () {
     return {
       sourceTypeList: ["", "原创", "转载"],
-      currUserInfo: {
-        attention_uid_arr: [],
-        user_like_aid_arr: []
-      },
-      articleUserInfo: {
-        attention_uid_arr: [],
-        user_like_aid_arr: []
-      },
       articleTypeList: { // 文章类型列表
         '1': '文章',
         '2': '日记',
@@ -157,60 +123,25 @@ export default {
       },
     };
   },
-  created () {
-    if (this.article.aid) {
-      this.getCurrUserInfo(); // 获取当前登录用户信息
-      this.getArticleUserInfo(); // 获取当前文章用户信息
-      /*this.getCommentList()*/ // 获取用户的评论
-    }
-  },
   methods: {
-    getCurrUserInfo () {
-      // 获取当前登录用户信息
-      var that = this;
-      this.$store
-        .dispatch("article/GET_USER_INFO_ALL", {
-          uid: this.personalInfo.user.uid
-        })
-        .then(function (res) {
-          that.$nextTick(function () {
-            if (res.state === "success") {
-              that.currUserInfo = res.data;
-            }
-          });
-        });
+    getArticle () {
+      this.$store.dispatch("article/GET_ARTICLE", { aid: this.$route.params.aid })
     },
-    getArticleUserInfo () {
-      // 获取当前文章用户信息
-      var that = this;
-      this.$store
-        .dispatch("article/GET_USER_INFO_ALL", { uid: this.article.user.uid })
-        .then(function (res) {
-          that.$nextTick(function () {
-            if (res.state === "success") {
-              that.articleUserInfo = res.data;
-            }
-          });
-        });
-    },
-    onUserAttention () {
-      /*用户关注用户*/
-      this.$store
-        .dispatch("user/USER_ATTENTION", {
-          attention_uid: this.article.user.uid
+    isCollect (item) { // 是否收藏
+      console.log('item', item)
+      let likeUserIds = []
+      if (item.likeUserIds && item.likeUserIds.length > 0) {
+        item.likeUserIds.map(item => {
+          likeUserIds.push(Number(item.uid))
         })
-        .then(res => {
-          if (res.state === "success") {
-            this.getCurrUserInfo();
-            this.getArticleUserInfo();
-            /*获取当前文章用户信息*/
-          } else {
-            this.$message.warning(res.message);
-          }
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
+        if (~likeUserIds.indexOf(Number(this.personalInfo.user.uid))) {
+          return true
+        } else {
+          return false
+        }
+      } else {
+        return false
+      }
     },
     onUserLikeArticle () {
       /*用户like 文章*/
@@ -219,20 +150,14 @@ export default {
           aid: this.article.aid,
           uid: this.article.uid
         })
-        .then(res => {
-          if (res.state === "success") {
-            this.getCurrUserInfo();
-            if (res.data.type === "like") {
-              this.$store.state.article.article.like_count =
-                Number(this.$store.state.article.article.like_count) + 1;
-            } else if (res.data.type === "cancel") {
-              this.$store.state.article.article.like_count -= 1;
-            }
+        .then(result => {
+          if (result.state === "success") {
+            this.getArticle()
           } else {
-            this.$message.warning(res.message);
+            this.$message.warning(result.message);
           }
         })
-        .catch(function (err) {
+        .catch(err => {
           console.log(err);
         });
     },
@@ -251,14 +176,7 @@ export default {
     article () {
       return this.$store.state.article.article || {};
     },
-    articleComment () {
-      return this.$store.state.articleComment.article_comment || {};
-    },
-    personalInfo () {
-      // 登录后的个人信息
-      return this.$store.state.personalInfo || {};
-    },
-    ...mapState(['website'])
+    ...mapState(['website', 'personalInfo'])
   },
   components: {
     ArticleComment
@@ -376,63 +294,6 @@ export default {
           > a {
             color: #c8c8c8;
           }
-        }
-      }
-      .follow-detail {
-        padding: 20px;
-        background: #f7f7f7;
-        border-radius: 10px;
-        font-size: 12px;
-        .info {
-          min-height: 47px;
-          .avatar {
-            float: left;
-            margin-right: 10px;
-            width: 48px;
-            height: 48px;
-            img {
-              width: 100%;
-              height: 100%;
-              border: 1px solid #ddd;
-              border-radius: 50%;
-            }
-          }
-          .btn {
-            float: right;
-            margin-top: 4px;
-            padding: 8px 0;
-            width: 100px;
-            font-size: 16px;
-            line-height: 1.2;
-            border-radius: 20px;
-            color: #fff;
-            border-color: #42c02e;
-            background: #42c02e;
-            &.active {
-              background: #999999;
-              border-color: #999999;
-            }
-          }
-          .title {
-            margin-right: 3px;
-            font-size: 17px;
-            line-height: 1.8;
-            vertical-align: middle;
-          }
-          p {
-            margin-bottom: 0;
-            color: #969696;
-            font-size: 12px;
-          }
-        }
-        .signature {
-          margin-top: 20px;
-          padding-top: 20px;
-          border-top: 1px solid #e1e1e1;
-          color: #969696;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
         }
       }
       .meta-bottom {
