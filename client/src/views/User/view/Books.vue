@@ -233,18 +233,17 @@ export default {
       }
       .library-item__body {
         .library-item__title {
-          height: 50px;
+          height: 48px;
           margin-bottom: 8px;
           font-size: 14px;
           line-height: 22px;
           font-weight: 700;
           word-break: break-all;
-          display: -webkit-box;
           text-overflow: ellipsis;
           overflow: hidden;
-          -webkit-line-clamp: 3;
+          display: -webkit-box;
           -webkit-box-orient: vertical;
-          -moz-box-orient: vertical;
+          -webkit-line-clamp: 2;
         }
         .library-item-tag {
           height: 50px;

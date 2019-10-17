@@ -127,7 +127,7 @@ class ArticleBlog extends React.Component {
       },
       loading: false,
       modal_visible_edit: false,
-      status_list: ['未知', '审核中', '审核通过', '审核失败', '无需审核'],
+      status_list: ['', '审核中', '审核通过', '审核失败', '无需审核'],
       is_create: true,
       edit_status_val: '',
       status_val: '',
@@ -339,7 +339,7 @@ class ArticleBlog extends React.Component {
               )}
             </FormItem>
 
-            {~[3, 4, 5].indexOf(Number(edit_status_val)) ? (
+            {~[3].indexOf(Number(edit_status_val)) ? (
               <FormItem {...formItemLayout} label="拒绝的原因">
                 {getFieldDecorator('rejection_reason', {
                   rules: [
