@@ -15,7 +15,7 @@ export default [
         component: () => import('@views/Home/Home') // 主页
       },
       {
-        path: 'column/:article_column_en_name',
+        path: 'column/:en_name',
         name: 'column',
         component: () => import('@views/Home/Column') // 主页
       },
@@ -108,7 +108,7 @@ export default [
         component: () => import('@views/ArticleTag/SubscribeTag') // 文章标签订阅页
       },
       {
-        path: 'tag/:article_tag_en_name',
+        path: 'tag/:en_name',
         name: 'article_tag',
         component: () => import('@views/ArticleTag/ArticleTag') // 文章标签内容页
       },

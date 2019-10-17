@@ -19,11 +19,11 @@ module.exports = {
       comment: 'uid',
       field: 'uid'
     },
-    article_tag_id: {
+    tag_id: {
       // 标签ID
       type: Seq.STRING(20),
       comment: 'id 主键，自增',
-      field: 'article_tag_id'
+      field: 'tag_id'
     }
   }
 }

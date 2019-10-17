@@ -30,11 +30,11 @@
             <time>{{articleItem.create_dt}}</time>
           </li>
           <li class="item"
-              v-if="articleItem.article_tag_ids">
-            <router-link v-for="(itemArticleTag,key) in articleItem.tag"
+              v-if="articleItem.tag_ids">
+            <router-link v-for="(itemTag,key) in articleItem.tag"
                          class="tag-class frontend"
                          :key="key"
-                         :to="{name:'article_tag',params:{article_tag_en_name:itemArticleTag.article_tag_en_name}}">{{itemArticleTag.article_tag_name}}</router-link>
+                         :to="{name:'article_tag',params:{en_name:itemTag.en_name}}">{{itemTag.name}}</router-link>
 
           </li>
           <li class="item"

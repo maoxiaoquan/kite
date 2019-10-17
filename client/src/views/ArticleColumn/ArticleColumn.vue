@@ -19,14 +19,14 @@
                v-for="(item_column,key) in articleColumn.column_list.list"
                :key="key">
             <div class="column-item-box">
-              <h2 class="title">{{item_column.article_column_name}}</h2>
+              <h2 class="title">{{item_column.name}}</h2>
               <ul class="tag-body">
                 <li class="tag-popup"
                     v-for="(item_tag,key) in item_column.tag"
                     :key="key">
                   <router-link class="tag"
-                               :to="{name:'article_tag',params:{article_tag_en_name:item_tag.article_tag_en_name}}">
-                    {{item_tag.article_tag_name}}
+                               :to="{name:'article_tag',params:{en_name:item_tag.en_name}}">
+                    {{item_tag.name}}
                   </router-link>
                 </li>
               </ul>

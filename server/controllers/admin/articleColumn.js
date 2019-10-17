@@ -18,32 +18,32 @@ class ArticleColumn {
 
     try {
       let oneArticleColumnName = await models.article_column.findOne({
-        where: { article_column_name: reqData.article_column_name }
+        where: { name: reqData.name }
       })
       if (oneArticleColumnName) {
         throw new ErrorMessage('专栏名已存在!')
       }
       let oneArticleColumnEnName = await models.article_column.findOne({
-        where: { article_column_en_name: reqData.article_column_en_name }
+        where: { en_name: reqData.en_name }
       })
       if (oneArticleColumnEnName) {
         throw new ErrorMessage('专栏英文名已存在!')
       }
 
-      if (reqData.article_column_en_name === 'all') {
+      if (reqData.en_name === 'all') {
         throw new ErrorMessage('英文名字不能等于all')
       }
 
       await models.article_column.create({
         ...reqData,
-        article_tag_ids: reqData.article_tag_ids.join(',')
+        tag_ids: reqData.tag_ids.join(',')
       })
 
       await createAdminSystemLog({
         // 写入日志
         uid: ctx.request.userInfo.uid,
         type: 3,
-        content: `成功创建了‘${reqData.article_column_name}’文章专栏`
+        content: `成功创建了‘${reqData.name}’文章专栏`
       })
 
       resAdminJson(ctx, {
@@ -68,12 +68,12 @@ class ArticleColumn {
     try {
       let { count, rows } = await models.article_column.findAndCountAll({
         attributes: [
-          'article_column_id',
-          'article_column_name',
-          'article_column_en_name',
-          'article_column_icon',
-          'article_tag_ids',
-          'article_column_description',
+          'column_id',
+          'name',
+          'en_name',
+          'icon',
+          'tag_ids',
+          'description',
           'sort',
           'is_home',
           'enable'
@@ -112,11 +112,11 @@ class ArticleColumn {
       await models.article_column.update(
         {
           ...reqData,
-          article_tag_ids: reqData.article_tag_ids.join(',')
+          tag_ids: reqData.tag_ids.join(',')
         },
         {
           where: {
-            article_column_id: reqData.article_column_id // 查询条件
+            column_id: reqData.column_id // 查询条件
           }
         }
       )
@@ -137,10 +137,10 @@ class ArticleColumn {
    * 删除标签
    */
   static async deleteArticleColumn (ctx) {
-    const { article_column_id } = ctx.request.body
+    const { column_id } = ctx.request.body
 
     await models.article_column
-      .destroy({ where: { article_column_id } })
+      .destroy({ where: { column_id } })
       .then(data => {
         resAdminJson(ctx, {
           state: 'success',

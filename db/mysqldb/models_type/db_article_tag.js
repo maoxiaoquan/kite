@@ -14,36 +14,36 @@ module.exports = {
       comment: 'id',
       field: 'id'
     },
-    article_tag_id: {
+    tag_id: {
       // 文章标签
-      type: Seq.STRING(20),
+      type: Seq.STRING(50),
       comment: '文章标签',
       defaultValue: shortid.generate,
-      field: 'article_tag_id'
+      field: 'tag_id'
     },
-    article_tag_name: {
+    name: {
       // 标签名字
       type: Seq.STRING(50),
       comment: '标签名字',
-      field: 'article_tag_name'
+      field: 'name'
     },
-    article_tag_en_name: {
+    en_name: {
       // 标签英文名字
       type: Seq.STRING(100),
       comment: '标签英文名字',
-      field: 'article_tag_en_name'
+      field: 'en_name'
     },
-    article_tag_icon: {
+    icon: {
       // 标签图标地址
       type: Seq.STRING(200),
       comment: '标签图标地址',
-      field: 'article_tag_icon'
+      field: 'icon'
     },
-    article_tag_description: {
+    description: {
       // 标签描述
-      type: Seq.STRING(100),
+      type: Seq.STRING(200),
       comment: '标签描述',
-      field: 'article_tag_description'
+      field: 'description'
     },
     attention_count: {
       // 关注数统计

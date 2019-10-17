@@ -95,11 +95,11 @@ module.exports = {
       comment: '文章所属的用户专栏id',
       field: 'blog_ids'
     },
-    article_tag_ids: {
+    tag_ids: {
       /* 文章所属的标签名字 可多个 */
       type: Seq.STRING(180),
       comment: '文章所属的标签id',
-      field: 'article_tag_ids'
+      field: 'tag_ids'
     },
     rejection_reason: {
       /* 驳回，或者文章审核不通过的原因 */

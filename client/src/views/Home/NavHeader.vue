@@ -11,10 +11,10 @@
       </li>
       <li class="nav-item"
           v-for="column_item in navItem"
-          :key="column_item.article_column_id"
-          @click="switchNav({name:'column',params:{article_column_en_name:column_item.article_column_en_name}})"
-          :class="{'active':currColumnEnName===column_item.article_column_en_name}">
-        <span class="collection-name">{{column_item.article_column_name}}</span>
+          :key="column_item.column_id"
+          @click="switchNav({name:'column',params:{en_name:column_item.en_name}})"
+          :class="{'active':currColumnEnName===column_item.en_name}">
+        <span class="collection-name">{{column_item.name}}</span>
       </li>
       <li class="nav-item more">
         <a href="javascript:;"

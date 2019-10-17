@@ -116,7 +116,7 @@ class Books {
 
       let oneArticleTag = await models.article_tag.findOne({
         where: {
-          article_tag_id: config.ARTICLE_TAG.dfOfficialExclusive
+          tag_id: config.ARTICLE_TAG.dfOfficialExclusive
         }
       })
       const website = lowdb
@@ -126,7 +126,7 @@ class Books {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.article_tag_name}只有${website.website_name}管理团队才能发布小书`
+            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布小书`
           )
         }
       }
@@ -260,7 +260,7 @@ class Books {
 
       let oneArticleTag = await models.article_tag.findOne({
         where: {
-          article_tag_id: config.ARTICLE_TAG.dfOfficialExclusive
+          tag_id: config.ARTICLE_TAG.dfOfficialExclusive
         }
       })
       const website = lowdb
@@ -270,7 +270,7 @@ class Books {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.article_tag_name}只有${website.website_name}管理团队才能发布小书`
+            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布小书`
           )
         }
       }
@@ -380,7 +380,7 @@ class Books {
 
     if (allArticleTag && allArticleTag.length > 0) {
       for (let item in allArticleTag) {
-        allArticleTagId.push(allArticleTag[item].article_tag_id)
+        allArticleTagId.push(allArticleTag[item].tag_id)
       }
 
       console.log('allArticleTag', allArticleTagId)
@@ -393,10 +393,10 @@ class Books {
       if (!tagId) {
         let oneArticleColumn = await models.article_column.findOne({
           where: {
-            article_column_en_name: columnEnName
+            en_name: columnEnName
           } // 为空，获取全部，也可以自己添加条件
         })
-        tagIdArr = oneArticleColumn.article_tag_ids.split(',')
+        tagIdArr = oneArticleColumn.tag_ids.split(',')
       } else {
         tagIdArr = [tagId]
       }
@@ -459,7 +459,7 @@ class Books {
           rows[i].setDataValue(
             'tag',
             await models.article_tag.findAll({
-              where: { article_tag_id: { [Op.or]: rows[i].tag_ids.split(',') } }
+              where: { tag_id: { [Op.or]: rows[i].tag_ids.split(',') } }
             })
           )
         }
@@ -703,7 +703,7 @@ class Books {
             'tag',
             await models.article_tag.findAll({
               where: {
-                article_tag_id: { [Op.or]: oneBooks.tag_ids.split(',') }
+                tag_id: { [Op.or]: oneBooks.tag_ids.split(',') }
               }
             })
           )

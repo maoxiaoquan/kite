@@ -51,20 +51,20 @@ export default {
   mixins: [googleMixin], //混合谷歌分析
   metaInfo () {
     return {
-      title: this.currentColumn().article_column_name,
+      title: this.currentColumn().name,
       titleTemplate: `%s - ${this.website.meta.website_name}`,
       meta: [
         {
           // set meta 
           name: "description",
-          content: `${this.currentColumn().article_column_name} - ${this.currentColumn().article_column_description}`
+          content: `${this.currentColumn().name} - ${this.currentColumn().description}`
         }
       ],
       htmlAttrs: {
         lang: "zh"
       },
       script: [
-        ...baidu.resource(this.$route, this.$route.params.article_column_en_name),
+        ...baidu.resource(this.$route, this.$route.params.en_name),
         ...google.statisticsCode({
           route: this.$route, googleCode: this.website.config.googleCode, random: ''
         })
@@ -77,12 +77,12 @@ export default {
     return Promise.all([
       store.commit(
         "articleColumn/SET_CURRENT_ARTICLE_COLUMN",
-        route.params.article_column_en_name || ""
+        route.params.en_name || ""
       ),
       store.commit("home/SET_INIT_INDEX_ARTICLE_LIST"), // 重置文章列表数据
       store.dispatch("articleColumn/GET_ARTICLE_COLUMN"),
       store.dispatch("home/GET_INDEX_ARTICLE_LIST", {
-        columnEnName: route.params.article_column_en_name || ""
+        columnEnName: route.params.en_name || ""
       })
     ]);
   },
@@ -118,7 +118,7 @@ export default {
     currentColumn () {
       let _currentColumn = {}
       this.articleColumn.homeColumn.map(item => {
-        if (item.article_column_en_name === this.$route.params.article_column_en_name) {
+        if (item.en_name === this.$route.params.en_name) {
           _currentColumn = item
         }
       })
@@ -128,7 +128,7 @@ export default {
       this.isLoading = true;
       this.$store
         .dispatch("home/GET_INDEX_ARTICLE_LIST", {
-          columnEnName: this.$route.params.article_column_en_name,
+          columnEnName: this.$route.params.en_name,
           sort: this.sort,
           page: this.page
         })

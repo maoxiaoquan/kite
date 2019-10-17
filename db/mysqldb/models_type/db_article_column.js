@@ -15,42 +15,42 @@ module.exports = {
       comment: 'id',
       field: 'id'
     },
-    article_column_id: {
+    column_id: {
       // 文章专栏
-      type: Seq.STRING(20),
+      type: Seq.STRING(50),
       comment: '文章专栏',
       defaultValue: shortid.generate,
-      field: 'article_column_id'
+      field: 'column_id'
     },
-    article_column_name: {
+    name: {
       // 专栏名字
       type: Seq.STRING(50),
       comment: '专栏名字',
-      field: 'article_column_name'
+      field: 'name'
     },
-    article_column_en_name: {
+    en_name: {
       // 标签英文名字
       type: Seq.STRING(100),
       comment: '专栏英文名字',
-      field: 'article_column_en_name'
+      field: 'en_name'
     },
-    article_column_icon: {
+    icon: {
       // 专栏图标
       type: Seq.STRING(200),
       comment: '专栏地址',
-      field: 'article_column_icon'
+      field: 'icon'
     },
-    article_tag_ids: {
+    tag_ids: {
       // 专栏下属的标签名，以逗号隔开
       type: Seq.TEXT('long'),
       comment: '专栏下属的标签名，以逗号隔开',
-      field: 'article_tag_ids'
+      field: 'tag_ids'
     },
-    article_column_description: {
+    description: {
       // 专栏描述
-      type: Seq.STRING(100),
+      type: Seq.STRING(200),
       comment: '专栏描述',
-      field: 'article_column_description'
+      field: 'description'
     },
     sort: {
       // 排序

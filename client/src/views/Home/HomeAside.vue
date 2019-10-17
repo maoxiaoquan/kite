@@ -68,8 +68,8 @@
         <li v-for="(item,key) in home.popular_article_tag"
             :key="key">
           <router-link class="link xzl-link-color"
-                       :to="{name:'article_tag',params:{article_tag_en_name:item.article_tag_en_name}}">
-            {{item.article_tag_name}}
+                       :to="{name:'article_tag',params:{en_name:item.en_name}}">
+            {{item.name}}
           </router-link>
         </li>
       </ul>

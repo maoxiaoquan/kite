@@ -53,18 +53,18 @@ class ArticleColumn extends React.Component {
         },
         {
           title: '专栏名',
-          dataIndex: 'article_column_name',
-          key: 'article_column_name'
+          dataIndex: 'name',
+          key: 'name'
         },
         {
           title: '专栏单词',
-          dataIndex: 'article_column_en_name',
-          key: 'article_column_en_name'
+          dataIndex: 'en_name',
+          key: 'en_name'
         },
         {
           title: '专栏图标',
-          dataIndex: 'article_column_icon',
-          key: 'article_column_icon'
+          dataIndex: 'icon',
+          key: 'icon'
         },
         {
           title: '排序',
@@ -73,38 +73,34 @@ class ArticleColumn extends React.Component {
         },
         {
           title: '专栏图标演示',
-          dataIndex: 'article_column_icon',
+          dataIndex: 'icon',
           key: 'article_column_icon_demo',
           render: (value, record) => {
             return (
               <div className="type">
-                <img
-                  className="tag-img-icon"
-                  src={record.article_column_icon}
-                  alt=""
-                />
+                <img className="tag-img-icon" src={record.icon} alt="" />
               </div>
             )
           }
         },
         {
           title: '下属专题',
-          dataIndex: 'article_tag_ids',
-          key: 'article_tag_ids',
+          dataIndex: 'tag_ids',
+          key: 'tag_ids',
           render: (value, record) => {
             return (
               <div className="table-article-tag-view">
                 {this.state.article_tag_all.map((item, key) => {
-                  let tags = record.article_tag_ids.split(',')
+                  let tags = record.tag_ids.split(',')
                   return tags.map((child_item, child_key) => {
-                    if (item.article_tag_id === child_item) {
+                    if (item.tag_id === child_item) {
                       return (
                         <Tag
                           className="table-article-tag-list"
                           key={child_key}
                           color="orange"
                         >
-                          {item.article_tag_name}
+                          {item.name}
                         </Tag>
                       )
                     }
@@ -116,8 +112,8 @@ class ArticleColumn extends React.Component {
         },
         {
           title: '备注',
-          dataIndex: 'article_column_description',
-          key: 'article_column_description'
+          dataIndex: 'description',
+          key: 'description'
         },
         {
           title: '是否首页显示',
@@ -216,9 +212,7 @@ class ArticleColumn extends React.Component {
     this.props.dispatch({ type: 'SET_ARTICLE_COLUMN_INFO', data: data })
     this.props.form.setFieldsValue({
       ...data,
-      article_tag_ids: data.article_tag_ids
-        ? data.article_tag_ids.split(',')
-        : []
+      tag_ids: data.tag_ids ? data.tag_ids.split(',') : []
     })
   }
 
@@ -232,8 +226,7 @@ class ArticleColumn extends React.Component {
       cancelText: 'No',
       onOk: () => {
         this.fetchDeleteArticleColumn({
-          article_column_id: this.props.stateArticleColumn.current_info
-            .article_column_id
+          column_id: this.props.stateArticleColumn.current_info.column_id
         })
         /*删除专栏*/
       },
@@ -319,8 +312,7 @@ class ArticleColumn extends React.Component {
     this.props.dispatch(
       updateArticleColumn(
         {
-          article_column_id: this.props.stateArticleColumn.current_info
-            .article_column_id,
+          column_id: this.props.stateArticleColumn.current_info.column_id,
           ...values
         },
         res => {
@@ -434,7 +426,7 @@ class ArticleColumn extends React.Component {
             >
               <Form className="from-view" onSubmit={this.handleSubmit}>
                 <FormItem {...formItemLayout} label="专栏名">
-                  {getFieldDecorator('article_column_name', {
+                  {getFieldDecorator('name', {
                     rules: [
                       {
                         required: true,
@@ -446,7 +438,7 @@ class ArticleColumn extends React.Component {
                 </FormItem>
 
                 <FormItem {...formItemLayout} label="专栏名单词">
-                  {getFieldDecorator('article_column_en_name', {
+                  {getFieldDecorator('en_name', {
                     rules: [
                       {
                         required: true,
@@ -458,7 +450,7 @@ class ArticleColumn extends React.Component {
                 </FormItem>
 
                 <FormItem {...formItemLayout} label="专栏名图标">
-                  {getFieldDecorator('article_column_icon', {
+                  {getFieldDecorator('icon', {
                     rules: [
                       {
                         required: true,
@@ -470,7 +462,7 @@ class ArticleColumn extends React.Component {
                 </FormItem>
 
                 <FormItem {...formItemLayout} label="专栏下属专题">
-                  {getFieldDecorator('article_tag_ids', {
+                  {getFieldDecorator('tag_ids', {
                     rules: [
                       {
                         required: true,
@@ -484,9 +476,7 @@ class ArticleColumn extends React.Component {
                       placeholder="请选择文章专栏下属专题"
                     >
                       {this.state.article_tag_all.map(item => (
-                        <Option key={item.article_tag_id}>
-                          {item.article_tag_name}
-                        </Option>
+                        <Option key={item.tag_id}>{item.name}</Option>
                       ))}
                     </Select>
                   )}
@@ -497,7 +487,7 @@ class ArticleColumn extends React.Component {
                 </FormItem>
 
                 <FormItem {...formItemLayout} hasFeedback label="专栏描述">
-                  {getFieldDecorator('article_column_description', {
+                  {getFieldDecorator('description', {
                     rules: [{ required: true, message: '请输入专栏描述' }]
                   })(<TextArea placeholder="请输入专栏描述" type="text" />)}
                 </FormItem>
@@ -532,7 +522,7 @@ class ArticleColumn extends React.Component {
               loading={loading}
               onChange={this.TablePageChange.bind(this)}
               pagination={this.state.pagination}
-              rowKey="article_column_id"
+              rowKey="column_id"
             />
 
             <Alert

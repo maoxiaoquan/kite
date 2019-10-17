@@ -37,11 +37,12 @@
           <li class="item"
               v-text="articleItem.create_dt"></li>
           <li class="item"
-              v-if="articleItem.article_tag_ids">
-            <router-link v-for="(itemArticleTag,key) in articleTagFilter(articleItem.article_tag_ids)"
+              v-if="articleItem.tag_ids">
+            <router-link v-for="(itemTag,key) in articleItem.tag"
                          class="tag-class frontend"
                          :key="key"
-                         :to="{name:'article_tag',params:{article_tag_en_name:itemArticleTag.article_tag_en_name}}">{{itemArticleTag.article_tag_name}}</router-link>
+                         :to="{name:'article_tag',params:{en_name:itemTag.en_name}}">{{itemTag.name}}</router-link>
+
           </li>
           <li class="item"
               v-if="String(articleItem.type)==='2'||String(articleItem.type)==='3'">
@@ -82,8 +83,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  name: "TopArticleItem",
+  name: "ArticleItem",
   props: {
     articleItem: {
       type: Object
@@ -140,24 +142,9 @@ export default {
         this.deleteArticle();
       }
     },
-    articleTagFilter: function (val) {
-      var _arr = [];
-      this.articleTagAll.map(function (item, key) {
-        if (val.split(",").indexOf(String(item.article_tag_id)) !== -1) {
-          _arr.push(item);
-        }
-      });
-      return _arr;
-    }
   },
   computed: {
-    articleTagAll () {
-      return this.$store.state.articleTag.article_tag_all;
-    },
-    personalInfo () {
-      // 登录后的个人信息
-      return this.$store.state.personalInfo || {};
-    },
+    ...mapState(['personalInfo']),
     user_info () {
       // 登录后的个人信息
       return this.$store.state.user.user_info || {};

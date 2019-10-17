@@ -54,7 +54,7 @@
           <router-link v-for="(itemArticleTag,key) in articleBlogItem.tag"
                        class="tag-class frontend"
                        :key="key"
-                       :to="{name:'article_tag',params:{article_tag_en_name:itemArticleTag.article_tag_en_name}}">{{itemArticleTag.article_tag_name}}</router-link>
+                       :to="{name:'article_tag',params:{en_name:itemArticleTag.en_name}}">{{itemArticleTag.name}}</router-link>
         </template>
         <template v-else>
           <span class="hint">

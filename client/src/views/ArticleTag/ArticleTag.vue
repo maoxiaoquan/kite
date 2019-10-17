@@ -9,14 +9,14 @@
                v-if="articleTag">
             <div class="main-top">
               <div class="thumb">
-                <el-image :src="articleTag.article_tag_icon"
+                <el-image :src="articleTag.icon"
                           lazy></el-image>
               </div>
 
               <div class="title">
                 <a class="name"
                    href="javascript:;">
-                  {{articleTag.article_tag_name}}</a>
+                  {{articleTag.name}}</a>
               </div>
               <div class="info">
                 收录了
@@ -68,11 +68,11 @@ export default {
   minixs: [googleMixin], //混合谷歌分析
   metaInfo () {
     return {
-      title: this.articleTag.article_tag_name,
+      title: this.articleTag.name,
       titleTemplate: `%s - ${this.website.meta.website_name}`,
       meta: [{                 // set meta
         name: 'description',
-        content: `${this.articleTag.article_tag_name}-${this.articleTag.article_tag_description}`,
+        content: `${this.articleTag.name}-${this.articleTag.description}`,
       }],
       htmlAttrs: {
         lang: 'zh'
@@ -80,7 +80,7 @@ export default {
       script: [
         ...baidu.resource(this.$route),
         ...google.statisticsCode({
-          route: this.$route, googleCode: this.website.config.googleCode, random: this.$route.params.article_tag_en_name
+          route: this.$route, googleCode: this.website.config.googleCode, random: this.$route.params.en_name
         })
       ],
       __dangerouslyDisableSanitizers: ['script']
@@ -89,7 +89,7 @@ export default {
   async asyncData ({ store, route }) {
     return store.dispatch('articleTag/GET_ARTICLE_TAG',
       {
-        article_tag_en_name: route.params.article_tag_en_name,
+        en_name: route.params.en_name,
         page: route.query.page || 1,
       }
     )
@@ -99,7 +99,7 @@ export default {
       this.$router.push({
         name: 'article_tag',
         params: {
-          article_tag_en_name: this.$route.params.article_tag_en_name,
+          en_name: this.$route.params.en_name,
         },
         query: {
           page: val

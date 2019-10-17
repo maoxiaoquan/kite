@@ -14,17 +14,17 @@ class Subscribe {
     }
     try {
       tag_name &&
-        (whereParams['article_tag_name'] = {
+        (whereParams['name'] = {
           [Op.like]: `%${tag_name}%`
         })
 
       let { count, rows } = await models.article_tag.findAndCountAll({
         attributes: [
-          'article_tag_id',
-          'article_tag_name',
-          'article_tag_en_name',
-          'article_tag_icon',
-          'article_tag_description',
+          'tag_id',
+          'name',
+          'en_name',
+          'icon',
+          'description',
           'attention_count'
         ],
         where: whereParams, // 为空，获取全部，也可以自己添加条件
@@ -39,15 +39,15 @@ class Subscribe {
         rows[i].setDataValue(
           'subscribe_count',
           await models.attention_tag.count({
-            where: { article_tag_id: rows[i].article_tag_id }
+            where: { tag_id: rows[i].tag_id }
           })
         )
         rows[i].setDataValue(
           'article_count',
           await models.article.count({
             where: {
-              article_tag_ids: {
-                [Op.like]: `%${rows[i].article_tag_id}%`
+              tag_ids: {
+                [Op.like]: `%${rows[i].tag_id}%`
               },
               ...clientWhere.article.otherList
             }
@@ -92,21 +92,21 @@ class Subscribe {
 
       if (allSubscribeArticleTag.length > 0) {
         let myArticleTag = allSubscribeArticleTag.map(result => {
-          return result.article_tag_id
+          return result.tag_id
         })
 
         myArticleTag &&
-          (whereParams['article_tag_id'] = {
+          (whereParams['tag_id'] = {
             [Op.regexp]: `${myArticleTag.join('|')}`
           })
 
         let { count, rows } = await models.article_tag.findAndCountAll({
           attributes: [
-            'article_tag_id',
-            'article_tag_name',
-            'article_tag_en_name',
-            'article_tag_icon',
-            'article_tag_description',
+            'tag_id',
+            'name',
+            'en_name',
+            'icon',
+            'description',
             'attention_count'
           ],
           where: whereParams, // 为空，获取全部，也可以自己添加条件
@@ -121,15 +121,15 @@ class Subscribe {
           rows[i].setDataValue(
             'subscribe_count',
             await models.attention_tag.count({
-              where: { article_tag_id: rows[i].article_tag_id }
+              where: { tag_id: rows[i].tag_id }
             })
           )
           rows[i].setDataValue(
             'article_count',
             await models.article.count({
               where: {
-                article_tag_ids: {
-                  [Op.like]: `%${rows[i].article_tag_id}%`
+                tag_ids: {
+                  [Op.like]: `%${rows[i].tag_id}%`
                 },
                 ...clientWhere.article.otherList
               }
@@ -198,14 +198,14 @@ class Subscribe {
   }
 
   static async setSubscribeTag (ctx) {
-    const { article_tag_id } = ctx.request.body
+    const { tag_id } = ctx.request.body
     let { user = '' } = ctx.request
     let type = ''
     try {
       let oneSubscribeArticleTag = await models.attention_tag.findOne({
         where: {
           uid: user.uid,
-          article_tag_id
+          tag_id
         }
       })
 
@@ -215,20 +215,20 @@ class Subscribe {
         await models.attention_tag.destroy({
           where: {
             uid: user.uid,
-            article_tag_id
+            tag_id
           }
         })
       } else {
         type = 'attention'
         await models.attention_tag.create({
           uid: user.uid,
-          article_tag_id
+          tag_id
         })
       }
 
       let articleTagRssCount = await models.attention_tag.count({
         where: {
-          article_tag_id
+          tag_id
         }
       })
 
@@ -238,7 +238,7 @@ class Subscribe {
         },
         {
           where: {
-            article_tag_id
+            tag_id
           }
         }
       )

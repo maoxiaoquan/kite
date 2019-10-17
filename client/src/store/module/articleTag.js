@@ -13,7 +13,7 @@ const state = () => ({
   tag: {
     article_tag: {},
     article_list: [],
-    article_tag_id: '',
+    tag_id: '',
     count: 0,
     page: 1,
     pageSize: 25,
@@ -111,7 +111,7 @@ const getters = {
   userArticleTag: state => {
     return state.user_article_tag
       ? state.user_article_tag.map(result => {
-        return result.article_tag_id
+        return result.tag_id
       })
       : []
   }

@@ -58,12 +58,12 @@ class PersonalCenter {
           rows[i].setDataValue('article_blog', oneArticleBlog)
         }
 
-        if (rows[i].article_tag_ids) {
+        if (rows[i].tag_ids) {
           rows[i].setDataValue(
             'tag',
             await models.article_tag.findAll({
               where: {
-                article_tag_id: { [Op.or]: rows[i].article_tag_ids.split(',') }
+                tag_id: { [Op.or]: rows[i].tag_ids.split(',') }
               }
             })
           )
@@ -261,12 +261,12 @@ class PersonalCenter {
           await TimeDistance(rows[i].create_date)
         )
 
-        if (rows[i].article_tag_ids) {
+        if (rows[i].tag_ids) {
           rows[i].setDataValue(
             'tag',
             await models.article_tag.findAll({
               where: {
-                article_tag_id: { [Op.or]: rows[i].article_tag_ids.split(',') }
+                tag_id: { [Op.or]: rows[i].tag_ids.split(',') }
               }
             })
           )
@@ -579,7 +579,7 @@ class PersonalCenter {
           rows[i].setDataValue(
             'tag',
             await models.article_tag.findAll({
-              where: { article_tag_id: { [Op.or]: rows[i].tag_ids.split(',') } }
+              where: { tag_id: { [Op.or]: rows[i].tag_ids.split(',') } }
             })
           )
         }
@@ -665,7 +665,7 @@ class PersonalCenter {
           rows[i].setDataValue(
             'tag',
             await models.article_tag.findAll({
-              where: { article_tag_id: { [Op.or]: rows[i].tag_ids.split(',') } }
+              where: { tag_id: { [Op.or]: rows[i].tag_ids.split(',') } }
             })
           )
         }

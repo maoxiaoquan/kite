@@ -18,23 +18,23 @@ class ArticleTag {
 
     try {
       let oneArticleTagName = await models.article_tag.findOne({
-        where: { article_tag_name: reqData.article_tag_name }
+        where: { name: reqData.name }
       })
       if (oneArticleTagName) {
         throw new ErrorMessage('标签名已存在!')
       }
       let oneArticleTagEnName = await models.article_tag.findOne({
-        where: { article_tag_en_name: reqData.article_tag_en_name }
+        where: { en_name: reqData.en_name }
       })
       if (oneArticleTagEnName) {
         throw new ErrorMessage('标签名英文已存在!')
       }
 
       await models.article_tag.create({
-        article_tag_name: reqData.article_tag_name,
-        article_tag_en_name: reqData.article_tag_en_name,
-        article_tag_icon: reqData.article_tag_icon || '/default/img/tag.webp',
-        article_tag_description: reqData.article_tag_description,
+        name: reqData.name,
+        en_name: reqData.en_name,
+        icon: reqData.icon || '/default/img/tag.webp',
+        description: reqData.description,
         enable: reqData.enable,
         is_push: reqData.is_push
       })
@@ -42,7 +42,7 @@ class ArticleTag {
         // 写入日志
         uid: ctx.request.userInfo.uid,
         type: 1,
-        content: `成功创建了‘${reqData.article_tag_name}’文章标签`
+        content: `成功创建了‘${reqData.name}’文章标签`
       })
 
       resAdminJson(ctx, {
@@ -121,16 +121,16 @@ class ArticleTag {
     try {
       await models.article_tag.update(
         {
-          article_tag_name: reqData.article_tag_name,
-          article_tag_en_name: reqData.article_tag_en_name,
-          article_tag_icon: reqData.article_tag_icon,
-          article_tag_description: reqData.article_tag_description,
+          name: reqData.name,
+          en_name: reqData.en_name,
+          icon: reqData.icon,
+          description: reqData.description,
           enable: reqData.enable,
           is_push: reqData.is_push
         },
         {
           where: {
-            article_tag_id: reqData.article_tag_id // 查询条件
+            tag_id: reqData.tag_id // 查询条件
           }
         }
       )
@@ -138,7 +138,7 @@ class ArticleTag {
         // 写入日志
         uid: ctx.request.userInfo.uid,
         type: 1,
-        content: `成功更新了id为‘${reqData.article_tag_id}’的文章标签名字为‘${reqData.article_tag_name}’`
+        content: `成功更新了id为‘${reqData.tag_id}’的文章标签名字为‘${reqData.name}’`
       })
 
       resAdminJson(ctx, {
@@ -158,18 +158,18 @@ class ArticleTag {
    * 删除标签
    */
   static async deleteArticleTag (ctx) {
-    const { article_tag_id } = ctx.request.body
+    const { tag_id } = ctx.request.body
     try {
       let oneArticleTag = await models.article_tag.findOne({
-        where: { article_tag_id }
+        where: { tag_id }
       })
 
-      await models.article_tag.destroy({ where: { article_tag_id } })
+      await models.article_tag.destroy({ where: { tag_id } })
       await createAdminSystemLog({
         // 写入日志
         uid: ctx.request.userInfo.uid,
         type: 1,
-        content: `成功删除了‘${oneArticleTag.article_tag_name}’文章标签`
+        content: `成功删除了‘${oneArticleTag.name}’文章标签`
       })
 
       resAdminJson(ctx, {

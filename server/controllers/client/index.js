@@ -35,33 +35,26 @@ class Index {
 
         if (allArticleTag && allArticleTag.length > 0) {
           for (let item in allArticleTag) {
-            allArticleTagId.push(allArticleTag[item].article_tag_id)
+            allArticleTagId.push(allArticleTag[item].tag_id)
           }
 
           console.log('allArticleTag', allArticleTagId)
-          whereArticleParams['article_tag_ids'] = {
+          whereArticleParams['tag_ids'] = {
             [Op.notRegexp]: `${allArticleTagId.join('|')}`
           }
         }
       } else {
-        whereArticleColumnParams['article_column_en_name'] = columnEnName
+        whereArticleColumnParams['en_name'] = columnEnName
         let oneArticleColumn = await models.article_column.findOne({
-          attributes: [
-            'article_column_id',
-            'article_column_name',
-            'article_column_icon',
-            'article_tag_ids'
-          ],
+          attributes: ['column_id', 'name', 'icon', 'tag_ids'],
           where: whereArticleColumnParams // 为空，获取全部，也可以自己添加条件
         })
 
         // 判断专栏下方是否有专题
         columnEnName &&
-          oneArticleColumn.article_tag_ids &&
-          (whereArticleParams['article_tag_ids'] = {
-            [Op.regexp]: `${oneArticleColumn.article_tag_ids
-              .split(',')
-              .join('|')}`
+          oneArticleColumn.tag_ids &&
+          (whereArticleParams['tag_ids'] = {
+            [Op.regexp]: `${oneArticleColumn.tag_ids.split(',').join('|')}`
           })
       }
 
@@ -104,12 +97,12 @@ class Index {
           rows[i].setDataValue('article_blog', oneArticleBlog)
         }
 
-        if (rows[i].article_tag_ids) {
+        if (rows[i].tag_ids) {
           rows[i].setDataValue(
             'tag',
             await models.article_tag.findAll({
               where: {
-                article_tag_id: { [Op.or]: rows[i].article_tag_ids.split(',') }
+                tag_id: { [Op.or]: rows[i].tag_ids.split(',') }
               }
             })
           )

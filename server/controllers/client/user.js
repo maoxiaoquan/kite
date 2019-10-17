@@ -415,7 +415,7 @@ class User {
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((item, key) => {
-            return item.article_tag_id
+            return item.tag_id
           })
         })
 

@@ -83,12 +83,12 @@ export default {
       store.commit(
         "articleColumn/SET_CURRENT_ARTICLE_COLUMN",
         ""
-        // route.params.article_column_en_name || ''
+        // route.params.en_name || ''
       ),
       store.commit("home/SET_INIT_INDEX_ARTICLE_LIST"), // 重置文章列表数据
       store.dispatch("articleColumn/GET_ARTICLE_COLUMN"),
       store.dispatch("home/GET_INDEX_ARTICLE_LIST", {
-        // column_en_name: route.params.article_column_en_name || ''
+        // column_en_name: route.params.en_name || ''
       })
     ]);
   },
@@ -125,7 +125,7 @@ export default {
       this.isLoading = true;
       this.$store
         .dispatch("home/GET_INDEX_ARTICLE_LIST", {
-          // column_en_name: this.$route.params.article_column_en_name,
+          // column_en_name: this.$route.params.en_name,
           sort: this.sort,
           page: this.page
         })

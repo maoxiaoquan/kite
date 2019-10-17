@@ -2,13 +2,13 @@
   <div class="tag client-card">
     <div class="info-box">
 
-      <router-link :to='{name:"article_tag",params:{article_tag_en_name:articleTagItem.article_tag_en_name}}'>
+      <router-link :to='{name:"article_tag",params:{en_name:articleTagItem.en_name}}'>
         <div class="thumb">
-          <el-image :src="articleTagItem.article_tag_icon"
+          <el-image :src="articleTagItem.icon"
                     lazy></el-image>
         </div>
         <div class="title"
-             v-text="articleTagItem.article_tag_name"></div>
+             v-text="articleTagItem.name"></div>
       </router-link>
       <div class="meta-box">
         <div class="meta article">
@@ -24,7 +24,7 @@
          v-if="islogin">
 
       <button @click="subscribeTag"
-              v-if="~userArticleTag.indexOf(articleTagItem.article_tag_id)"
+              v-if="~userArticleTag.indexOf(articleTagItem.tag_id)"
               class="subscribe-btn already-subscribe">已关注
       </button>
       <button @click="subscribeTag"
@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     async subscribeTag () { // 订阅标签
-      await this.$store.dispatch('articleTag/SUBSCRIBE_TAG', { article_tag_id: this.articleTagItem.article_tag_id })
+      await this.$store.dispatch('articleTag/SUBSCRIBE_TAG', { tag_id: this.articleTagItem.tag_id })
         .then(res => {
           this.$store.dispatch('articleTag/MY_SUBSCRIBE_TAG_LIST')
           if (res.state === 'success') {

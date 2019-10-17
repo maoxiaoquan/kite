@@ -78,7 +78,7 @@
                   <span class="tag-item"
                         v-for="(item,key) in currentArticleTagArr"
                         :key="key"
-                        @click="deleteCurrentArticleTag(item)">{{item.article_tag_name}}</span>
+                        @click="deleteCurrentArticleTag(item)">{{item.name}}</span>
                 </div>
                 <input class="search-input"
                        v-show="currentArticleTagArr.length<3"
@@ -97,7 +97,7 @@
                   <span class="tag-item"
                         v-for="(item,key) in searchShowArticleTagAll"
                         :key="key"
-                        @click="addArticleTag(item)">{{item.article_tag_name}}</span>
+                        @click="addArticleTag(item)">{{item.name}}</span>
                 </div>
               </div>
             </div>
@@ -203,7 +203,7 @@ export default {
       let _arr = [];
       for (let item in this.articleTagAll) {
         if (
-          this.articleTagAll[item].article_tag_name
+          this.articleTagAll[item].name
             .toLowerCase()
             .indexOf(this.searchArticleTag.toLowerCase()) >= 0
         ) {
@@ -235,7 +235,7 @@ export default {
               if (
                 ~this.editInfo.tag_ids
                   .split(",")
-                  .indexOf(String(item.article_tag_id))
+                  .indexOf(String(item.tag_id))
               ) {
                 this.currentArticleTagArr.push(item);
               }
@@ -262,11 +262,11 @@ export default {
       this.search_article_tag = "";
       let _arr = [];
       for (var item in this.currentArticleTagArr) {
-        _arr.push(this.currentArticleTagArr[item].article_tag_name);
+        _arr.push(this.currentArticleTagArr[item].name);
       }
       if (
         this.currentArticleTagArr.length < 3 &&
-        _arr.indexOf(val.article_tag_name) === -1
+        _arr.indexOf(val.name) === -1
       ) {
         this.currentArticleTagArr.push(val);
       }
@@ -275,8 +275,8 @@ export default {
     deleteCurrentArticleTag (val) {
       for (var item in this.currentArticleTagArr) {
         if (
-          val.article_tag_name ===
-          this.currentArticleTagArr[item].article_tag_name
+          val.name ===
+          this.currentArticleTagArr[item].name
         ) {
           this.currentArticleTagArr.splice(item, 1);
         }
@@ -295,7 +295,7 @@ export default {
     getObjectValues (object) {
       var values = [];
       for (var property in object) {
-        values.push(object[property].article_tag_id);
+        values.push(object[property].tag_id);
       }
       return values;
     },

@@ -49,39 +49,35 @@ class ArticleTag extends React.Component {
         },
         {
           title: '标签名',
-          dataIndex: 'article_tag_name',
-          key: 'article_tag_name'
+          dataIndex: 'name',
+          key: 'name'
         },
         {
           title: '标签单词',
-          dataIndex: 'article_tag_en_name',
-          key: 'article_tag_en_name'
+          dataIndex: 'en_name',
+          key: 'en_name'
         },
         {
           title: '标签图标地址',
-          dataIndex: 'article_tag_icon',
-          key: 'article_tag_icon'
+          dataIndex: 'icon',
+          key: 'icon'
         },
         {
           title: '标签演示',
-          dataIndex: 'article_tag_icon',
+          dataIndex: 'icon',
           key: 'article_tag_demo',
           render: (value, record) => {
             return (
               <div className="type">
-                <img
-                  className="tag-img-icon"
-                  src={record.article_tag_icon}
-                  alt=""
-                />
+                <img className="tag-img-icon" src={record.icon} alt="" />
               </div>
             )
           }
         },
         {
           title: '备注',
-          dataIndex: 'article_tag_description',
-          key: 'article_tag_description'
+          dataIndex: 'description',
+          key: 'description'
         },
         {
           title: '是否可以用',
@@ -184,7 +180,7 @@ class ArticleTag extends React.Component {
       cancelText: 'No',
       onOk: () => {
         this.fetchDeleteArticleTag({
-          article_tag_id: this.props.stateArticleTag.current_info.article_tag_id
+          tag_id: this.props.stateArticleTag.current_info.tag_id
         })
         /*删除标签*/
       },
@@ -268,8 +264,7 @@ class ArticleTag extends React.Component {
     this.props.dispatch(
       updateArticleTag(
         {
-          article_tag_id: this.props.stateArticleTag.current_info
-            .article_tag_id,
+          tag_id: this.props.stateArticleTag.current_info.tag_id,
           ...values
         },
         res => {
@@ -383,7 +378,7 @@ class ArticleTag extends React.Component {
             >
               <Form className="from-view" onSubmit={this.handleSubmit}>
                 <FormItem {...formItemLayout} label="标签名">
-                  {getFieldDecorator('article_tag_name', {
+                  {getFieldDecorator('name', {
                     rules: [
                       {
                         required: true,
@@ -395,7 +390,7 @@ class ArticleTag extends React.Component {
                 </FormItem>
 
                 <FormItem {...formItemLayout} label="标签名单词">
-                  {getFieldDecorator('article_tag_en_name', {
+                  {getFieldDecorator('en_name', {
                     rules: [
                       {
                         required: true,
@@ -407,7 +402,7 @@ class ArticleTag extends React.Component {
                 </FormItem>
 
                 <FormItem {...formItemLayout} label="标签图标地址">
-                  {getFieldDecorator('article_tag_icon', {
+                  {getFieldDecorator('icon', {
                     rules: [
                       {
                         required: true,
@@ -419,7 +414,7 @@ class ArticleTag extends React.Component {
                 </FormItem>
 
                 <FormItem {...formItemLayout} hasFeedback label="标签描述">
-                  {getFieldDecorator('article_tag_description', {
+                  {getFieldDecorator('description', {
                     rules: [{ required: true, message: '请输入标签描述' }]
                   })(<TextArea placeholder="请输入标签描述" type="text" />)}
                 </FormItem>
@@ -454,7 +449,7 @@ class ArticleTag extends React.Component {
               loading={loading}
               onChange={this.TablePageChange.bind(this)}
               pagination={this.state.pagination}
-              rowKey="article_tag_id"
+              rowKey="tag_id"
             />
           </div>
         </div>

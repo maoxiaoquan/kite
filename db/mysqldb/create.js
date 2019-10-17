@@ -16,11 +16,26 @@ async function sql () {
   // await models.sequelize.query(
   //   'ALTER TABLE article add COLUMN is_public tinyint(1) DEFAULT 1 comment "是否公开";'
   // )
+
   await models.sequelize.query(
-    'rename TABLE rss_dynamic_topic to attention_topic;'
+    'ALTER TABLE article_column CHANGE article_column_id column_id VARCHAR(50) comment "文章专栏";'
   )
 
-  await models.sequelize.query('rename TABLE rss_article_tag to attention_tag;')
+  await models.sequelize.query(
+    'ALTER TABLE article_column CHANGE article_column_name name VARCHAR(50) comment "专栏名字";'
+  )
+
+  await models.sequelize.query(
+    'ALTER TABLE article_column CHANGE article_column_en_name en_name VARCHAR(100) comment "专栏英文名字";'
+  )
+
+  await models.sequelize.query(
+    'ALTER TABLE article_column CHANGE article_column_icon icon VARCHAR(200) comment "专栏图标地址";'
+  )
+
+  await models.sequelize.query(
+    'ALTER TABLE article_column CHANGE article_column_description description VARCHAR(200) comment "专栏描述";'
+  )
   process.exit()
 }
 sql()

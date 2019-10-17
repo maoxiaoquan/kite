@@ -14,9 +14,9 @@
                 </li>
                 <li class="nav-item"
                     v-for="column_item in articleColumn.homeColumn"
-                    :key="column_item.article_column_id">
-                  <router-link :to="{name:'articleBlogs',params:{columnEnName:column_item.article_column_en_name}}">
-                    {{column_item.article_column_name}}
+                    :key="column_item.column_id">
+                  <router-link :to="{name:'articleBlogs',params:{columnEnName:column_item.en_name}}">
+                    {{column_item.name}}
                   </router-link>
                 </li>
                 <li class="nav-item more">
@@ -37,9 +37,9 @@
                   <li class="nav-item"
                       v-for="(item,key) in childNavItem.tag"
                       :key="key"
-                      :class="{'active':item.article_tag_id===$route.query.tagId}">
-                    <router-link :to="{name:'articleBlogs',query:{tagId:item.article_tag_id}}">
-                      {{item.article_tag_name}}
+                      :class="{'active':item.tag_id===$route.query.tagId}">
+                    <router-link :to="{name:'articleBlogs',query:{tagId:item.tag_id}}">
+                      {{item.name}}
                     </router-link>
                   </li>
                 </ul>
@@ -145,8 +145,8 @@ export default {
     },
     switchColumn (val) {
       this.articleColumn.homeColumn.map(item => {
-        console.log(item.article_column_en_name, val)
-        if (item.article_column_en_name === val) {
+        console.log(item.en_name, val)
+        if (item.en_name === val) {
           this.childNavItem = item || {}
         }
       })

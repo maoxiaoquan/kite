@@ -28,11 +28,11 @@
           <li class="item"
               v-text="articleItem.create_dt"></li>
           <li class="item"
-              v-if="articleItem.article_tag_ids">
-            <router-link v-for="(item_article_tag,key) in articleTagFilter(articleItem.article_tag_ids)"
+              v-if="articleItem.tag_ids">
+            <router-link v-for="(item_article_tag,key) in articleTagFilter(articleItem.tag_ids)"
                          class="tag-class frontend"
                          :key="key"
-                         :to="{name:'article_tag',params:{article_tag_en_name:item_article_tag.article_tag_en_name}}">{{item_article_tag.article_tag_name}}</router-link>
+                         :to="{name:'article_tag',params:{en_name:item_article_tag.en_name}}">{{item_article_tag.name}}</router-link>
           </li>
           <li class="item"
               v-if="String(articleItem.type)==='2'">
@@ -71,7 +71,7 @@ export default {
     articleTagFilter (val) {
       var _arr = [];
       this.articleTagAll.map((item, key) => {
-        if (val.split(",").indexOf(String(item.article_tag_id)) !== -1) {
+        if (val.split(",").indexOf(String(item.tag_id)) !== -1) {
           _arr.push(item);
         }
       });

@@ -83,7 +83,7 @@ class Article {
         throw new ErrorMessage('请选择文章来源类型')
       }
 
-      if (!reqData.article_tag_ids) {
+      if (!reqData.tag_ids) {
         throw new ErrorMessage('请选择文章标签')
       }
 
@@ -102,19 +102,17 @@ class Article {
 
       let oneArticleTag = await models.article_tag.findOne({
         where: {
-          article_tag_id: config.ARTICLE_TAG.dfOfficialExclusive
+          tag_id: config.ARTICLE_TAG.dfOfficialExclusive
         }
       })
       const website = lowdb
         .read()
         .get('website')
         .value()
-      if (
-        ~reqData.article_tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)
-      ) {
+      if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.article_tag_name}只有${website.website_name}管理团队才能发布文章`
+            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布文章`
           )
         }
       }
@@ -154,7 +152,7 @@ class Article {
         is_public: Number(reqData.is_public), // 是否公开
         type: reqData.type, // 类型 （1文章 2日记 3草稿 ）
         blog_ids: reqData.blog_ids,
-        article_tag_ids: reqData.article_tag_ids
+        tag_ids: reqData.tag_ids
       })
 
       resClientJson(ctx, {
@@ -185,14 +183,14 @@ class Article {
     try {
       let oneArticleTag = await models.article_tag.findOne({
         where: {
-          article_tag_en_name: qyData.article_tag_en_name
+          en_name: qyData.en_name
         }
       })
       if (oneArticleTag) {
         let { count, rows } = await models.article.findAndCountAll({
           where: {
-            article_tag_ids: {
-              [Op.like]: `%${oneArticleTag.article_tag_id}%`
+            tag_ids: {
+              [Op.like]: `%${oneArticleTag.tag_id}%`
             },
             type: clientWhere.article.type,
             is_public: clientWhere.article.isPublic,
@@ -217,13 +215,13 @@ class Article {
             rows[i].setDataValue('article_blog', oneArticleBlog)
           }
 
-          if (rows[i].article_tag_ids) {
+          if (rows[i].tag_ids) {
             rows[i].setDataValue(
               'tag',
               await models.article_tag.findAll({
                 where: {
-                  article_tag_id: {
-                    [Op.or]: rows[i].article_tag_ids.split(',')
+                  tag_id: {
+                    [Op.or]: rows[i].tag_ids.split(',')
                   }
                 }
               })
@@ -240,16 +238,12 @@ class Article {
         }
 
         let subscribeArticleTagCount = await models.attention_tag.count({
-          where: { article_tag_id: oneArticleTag.article_tag_id }
+          where: { tag_id: oneArticleTag.tag_id }
         })
 
         /* 所有文章专题 */
         let articleTagAll = await models.article_tag.findAll({
-          attributes: [
-            'article_tag_id',
-            'article_tag_name',
-            'article_tag_en_name'
-          ]
+          attributes: ['tag_id', 'name', 'en_name']
         })
 
         await resClientJson(ctx, {
@@ -259,7 +253,7 @@ class Article {
             page,
             count,
             pageSize,
-            article_tag_en_name: qyData.article_tag_en_name,
+            en_name: qyData.en_name,
             subscribe_count: subscribeArticleTagCount,
             article_tag: oneArticleTag,
             tag_all: articleTagAll,
@@ -285,13 +279,7 @@ class Article {
   static async getPopularArticleTag (ctx) {
     try {
       let articleTagAll = await models.article_tag.findAll({
-        attributes: [
-          'article_tag_id',
-          'article_tag_name',
-          'article_tag_en_name',
-          'article_tag_icon',
-          'article_tag_description'
-        ],
+        attributes: ['tag_id', 'name', 'en_name', 'icon', 'description'],
         where: { enable: true },
         limit: 20, // 为空，获取全部，也可以自己添加条件
         order: [
@@ -303,15 +291,15 @@ class Article {
         articleTagAll[i].setDataValue(
           'subscribe_count',
           await models.attention_tag.count({
-            where: { article_tag_id: articleTagAll[i].article_tag_id }
+            where: { tag_id: articleTagAll[i].tag_id }
           })
         )
         articleTagAll[i].setDataValue(
           'article_count',
           await models.article.count({
             where: {
-              article_tag_ids: {
-                [Op.like]: `%${articleTagAll[i].article_tag_id}%`
+              tag_ids: {
+                [Op.like]: `%${articleTagAll[i].tag_id}%`
               }
             }
           })
@@ -341,13 +329,7 @@ class Article {
   static async getArticleTagAll (ctx) {
     try {
       let articleTagAll = await models.article_tag.findAll({
-        attributes: [
-          'article_tag_id',
-          'article_tag_name',
-          'article_tag_en_name',
-          'article_tag_icon',
-          'article_tag_description'
-        ],
+        attributes: ['tag_id', 'name', 'en_name', 'icon', 'description'],
         where: { enable: true } // 为空，获取全部，也可以自己添加条件
       })
 
@@ -355,15 +337,15 @@ class Article {
         articleTagAll[i].setDataValue(
           'subscribe_count',
           await models.attention_tag.count({
-            where: { article_tag_id: articleTagAll[i].article_tag_id }
+            where: { tag_id: articleTagAll[i].tag_id }
           })
         )
         articleTagAll[i].setDataValue(
           'article_count',
           await models.article.count({
             where: {
-              article_tag_ids: {
-                [Op.like]: `%${articleTagAll[i].article_tag_id}%`
+              tag_ids: {
+                [Op.like]: `%${articleTagAll[i].tag_id}%`
               }
             }
           })
@@ -421,12 +403,12 @@ class Article {
           article.setDataValue('article_blog', oneArticleBlog)
         }
 
-        if (article.article_tag_ids) {
+        if (article.tag_ids) {
           article.setDataValue(
             'tag',
             await models.article_tag.findAll({
               where: {
-                article_tag_id: { [Op.or]: article.article_tag_ids.split(',') }
+                tag_id: { [Op.or]: article.tag_ids.split(',') }
               }
             })
           )
@@ -561,7 +543,7 @@ class Article {
         throw new ErrorMessage('请选择文章来源类型')
       }
 
-      if (!reqData.article_tag_ids) {
+      if (!reqData.tag_ids) {
         throw new ErrorMessage('请选择文章标签')
       }
 
@@ -580,19 +562,17 @@ class Article {
 
       let oneArticleTag = await models.article_tag.findOne({
         where: {
-          article_tag_id: config.ARTICLE_TAG.dfOfficialExclusive
+          tag_id: config.ARTICLE_TAG.dfOfficialExclusive
         }
       })
       const website = lowdb
         .read()
         .get('website')
         .value()
-      if (
-        ~reqData.article_tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)
-      ) {
+      if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.article_tag_name}只有${website.website_name}管理团队才能更新文章`
+            `${oneArticleTag.name}只有${website.website_name}管理团队才能更新文章`
           )
         }
       }
@@ -633,7 +613,7 @@ class Article {
           is_public: Number(reqData.is_public), // 是否公开
           type: reqData.type, // 类型 （1文章 2日记 3草稿 ）
           blog_ids: reqData.blog_ids,
-          article_tag_ids: reqData.article_tag_ids,
+          tag_ids: reqData.tag_ids,
           update_date: moment(date.setHours(date.getHours())).format(
             'YYYY-MM-DD HH:mm:ss'
           ) /* 时间 */,
@@ -752,12 +732,12 @@ class Article {
           rows[i].setDataValue('article_blog', oneArticleBlog)
         }
 
-        if (rows[i].article_tag_ids) {
+        if (rows[i].tag_ids) {
           rows[i].setDataValue(
             'tag',
             await models.article_tag.findAll({
               where: {
-                article_tag_id: { [Op.or]: rows[i].article_tag_ids.split(',') }
+                tag_id: { [Op.or]: rows[i].tag_ids.split(',') }
               }
             })
           )
@@ -774,7 +754,7 @@ class Article {
 
       /* 所有文章专题 */
       let allArticleTag = await models.article_tag.findAll({
-        attributes: ['article_tag_id', 'article_tag_name']
+        attributes: ['tag_id', 'name']
       })
 
       await resClientJson(ctx, {
@@ -807,12 +787,12 @@ class Article {
     try {
       let allArticleColumn = await models.article_column.findAll({
         attributes: [
-          'article_column_id',
-          'article_column_name',
-          'article_column_en_name',
-          'article_column_icon',
-          'article_tag_ids',
-          'article_column_description'
+          'column_id',
+          'name',
+          'en_name',
+          'icon',
+          'tag_ids',
+          'description'
         ],
         where: {
           enable: true,
@@ -824,13 +804,13 @@ class Article {
       })
 
       for (let i in allArticleColumn) {
-        if (allArticleColumn[i].article_tag_ids) {
+        if (allArticleColumn[i].tag_ids) {
           allArticleColumn[i].setDataValue(
             'tag',
             await models.article_tag.findAll({
               where: {
-                article_tag_id: {
-                  [Op.or]: allArticleColumn[i].article_tag_ids.split(',')
+                tag_id: {
+                  [Op.or]: allArticleColumn[i].tag_ids.split(',')
                 }
               }
             })
@@ -869,12 +849,12 @@ class Article {
     try {
       let { count, rows } = await models.article_column.findAndCountAll({
         attributes: [
-          'article_column_id',
-          'article_column_name',
-          'article_column_en_name',
-          'article_column_icon',
-          'article_tag_ids',
-          'article_column_description'
+          'column_id',
+          'name',
+          'en_name',
+          'icon',
+          'tag_ids',
+          'description'
         ],
         where: whereParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
@@ -882,14 +862,14 @@ class Article {
       })
 
       for (let i in rows) {
-        let article_tag_id =
-          rows[i].article_tag_ids.length === 1
-            ? rows[i].article_tag_ids
-            : { [Op.in]: rows[i].article_tag_ids.split(',') }
+        let tag_id =
+          rows[i].tag_ids.length === 1
+            ? rows[i].tag_ids
+            : { [Op.in]: rows[i].tag_ids.split(',') }
         rows[i].setDataValue(
           'tag',
           await models.article_tag.findAll({
-            where: { article_tag_id }
+            where: { tag_id }
           })
         )
       }
