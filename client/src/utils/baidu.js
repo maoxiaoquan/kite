@@ -2,9 +2,9 @@ import isProduction from './isProduction' // process.env.NODE_ENV === 'productio
 
 class Baidu {
   // 百度的自动推送
-  static resource (route, random = '') {
+  static resource ({ route, config = {}, random = '' }) {
     let resourceArray = []
-    if (isProduction) {
+    if (isProduction && config.isBaiduAuthPush === 'yes') {
       // 百度seo方面 连接自动推送
       resourceArray.push({
         src: `https://zz.bdstatic.com/linksubmit/push.js?_random=${route.name +

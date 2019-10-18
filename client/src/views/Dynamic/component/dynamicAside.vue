@@ -20,10 +20,10 @@
           <div class="count">{{userInfo.dynamicCount}}</div>
         </a><a class="item">
           <div class="title">关注</div>
-          <div class="count">{{userInfo.user_attention_other_count}}</div>
+          <div class="count">{{userInfo.userAttentionCount}}</div>
         </a><a class="item">
           <div class="title">关注者</div>
-          <div class="count">{{userInfo.other_user_attention_count}}</div>
+          <div class="count">{{userInfo.otherUserAttentionCount}}</div>
         </a>
       </ul>
     </div>

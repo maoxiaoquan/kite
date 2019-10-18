@@ -86,7 +86,7 @@ class PersonalCenter {
           blog_id,
           page,
           pageSize,
-          article_list: rows
+          list: rows
         }
       })
     } catch (err) {
@@ -107,55 +107,55 @@ class PersonalCenter {
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
     let any = ctx.query.any || 'me'
-
-    let userAttentionUidArr
+    let whereParmas = {}
     try {
-      let meAttention = await models.attention_user
-        .findAll({ where: { uid } })
-        .then(res => {
-          return res.map((attention_item, tag_key) => {
-            return attention_item.attention_uid
-          })
-        })
-      let otherAttention = await models.attention_user
-        .findAll({ where: { attention_uid: uid } })
-        .then(res => {
-          return res.map((attention_item, tag_key) => {
-            return attention_item.uid
-          })
-        })
-
       if (any === 'me') {
-        userAttentionUidArr = meAttention
+        whereParmas = {
+          uid: uid,
+          is_attention: true
+        }
       } else {
-        userAttentionUidArr = otherAttention
+        whereParmas = {
+          attention_uid: uid,
+          is_attention: true
+        }
       }
 
-      let { count, rows } = await models.user.findAndCountAll({
-        where: { uid: { [Op.in]: userAttentionUidArr } }, // 为空，获取全部，也可以自己添加条件
-        attributes: [
-          'uid',
-          'avatar',
-          'nickname',
-          'sex',
-          'introduction',
-          'user_role_ids'
-        ],
+      let { count, rows } = await models.attention_user.findAndCountAll({
+        where: whereParmas, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, // 每页限制返回的数据条数
         order: [['create_timestamp', 'desc']]
       })
 
+      for (let i in rows) {
+        rows[i].setDataValue(
+          'user',
+          await models.user.findOne({
+            where: { uid: any === 'me' ? rows[i].attention_uid : rows[i].uid },
+            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+          })
+        )
+
+        rows[i].setDataValue(
+          'userAttentionIds',
+          await models.attention_user.findAll({
+            where: {
+              attention_uid: any === 'me' ? rows[i].attention_uid : rows[i].uid,
+              is_attention: true
+            }
+          })
+        )
+      }
+
       await resClientJson(ctx, {
         state: 'success',
-        message: 'home',
+        message: '获取列表成功',
         data: {
           count,
           page,
           pageSize,
-          user_list: rows,
-          me_attention: meAttention,
-          other_attention: otherAttention,
+          list: rows,
           any
         }
       })
@@ -175,11 +175,12 @@ class PersonalCenter {
   static async setUserAttention (ctx) {
     const { attention_uid } = ctx.request.body
     let { user = '' } = ctx.request
-
+    let type = ''
     try {
       if (attention_uid === user.uid) {
         throw new ErrorMessage('关注用户失败，自己不能关注自己')
       }
+
       let oneUserAttention = await models.attention_user.findOne({
         where: {
           uid: user.uid,
@@ -188,38 +189,45 @@ class PersonalCenter {
       })
 
       if (oneUserAttention) {
-        /* 判断是否关注了，是则取消，否则添加 */
-
-        await models.attention_user.destroy({
-          where: {
-            uid: user.uid,
-            attention_uid
+        /* 判断是否关注了 */
+        type = oneUserAttention.is_attention ? 'cancel' : 'attention'
+        await models.attention_user.update(
+          {
+            is_attention: !oneUserAttention.is_attention
+          },
+          {
+            where: {
+              uid: user.uid,
+              attention_uid
+            }
           }
-        })
-        resClientJson(ctx, {
-          state: 'success',
-          message: '取消关注用户成功'
-        })
+        )
       } else {
-        await models.attention_user.create({
-          uid: user.uid,
-          attention_uid
-        })
+        type = 'attention' // 只在第一次关注的时候提交推送
         await models.user_message.create({
           // 用户行为记录
           uid: attention_uid,
           type: 4, // 1:系统消息 2:喜欢文章  3:关注标签 4:用户关注 5:评论
           content: JSON.stringify({
             other_uid: user.uid,
+            attention_uid,
             title: '有新的关注'
           })
         })
-
-        resClientJson(ctx, {
-          state: 'success',
-          message: '关注用户成功'
+        await models.attention_user.create({
+          uid: user.uid,
+          attention_uid,
+          is_attention: true
         })
       }
+
+      resClientJson(ctx, {
+        state: 'success',
+        message: type === 'attention' ? '关注成功' : '取消关注成功',
+        data: {
+          type
+        }
+      })
     } catch (err) {
       resClientJson(ctx, {
         state: 'error',
@@ -496,6 +504,16 @@ class PersonalCenter {
           await models.user.findOne({
             where: { uid: rows[i].uid },
             attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+          })
+        )
+
+        rows[i].setDataValue(
+          'userAttentionIds',
+          await models.attention_user.findAll({
+            where: {
+              attention_uid: rows[i].uid,
+              is_attention: true
+            }
           })
         )
       }

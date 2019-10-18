@@ -106,7 +106,11 @@ export default {
         lang: "zh"
       },
       script: [
-        ...baidu.resource(this.$route, this.books.booksInfo.books_id),
+        ...baidu.resource({
+          route: this.$route,
+          config: this.website.config,
+          random: this.books.booksInfo.books_id
+        }),
         ...google.statisticsCode({
           route: this.$route, googleCode: this.website.config.googleCode, random: this.books.booksInfo.books_id
         })

@@ -3,76 +3,21 @@ import { fetch } from '@request'
 const state = () => ({
   user_info: {
     // 用户的信息
-    attention_uid_arr: [],
-    other_user_attention_count: 0,
-    subscribe_article_tag_id_arr: [],
-    user_article_count: 0,
-    user_attention_other_count: 0,
+    otherUserAttentionCount: 0,
+    userArticleCount: 0,
+    userAttentionCount: 0,
     dynamicCount: 0,
     allLikeDymaicId: [], // 关注的所有动态ID
     allRssDynamicTopicId: [], // 订阅的所有动态话题ID
     user_info: {},
-    user_like_aid_arr: [],
-    user: {
-      avatar: '',
-      introduction: '',
-      nickname: '',
-      sex: 0,
-      uid: 0,
-      user_role_ids: ''
-    }
+    user: {}
   },
   user_article_blog: [], // 用户的文章专题
-  my_article: {
-    // 用户的文章
-    article_list: [],
-    count: 0,
-    page: 1,
-    pageSize: 10
-  },
-  attention_user: {
-    // 用户关注用户
-    any: 'me',
-    count: 0,
-    me_attention: [],
-    other_attention: [],
-    page: 1,
-    pageSize: 10,
-    user_list: []
-  },
-  user_message: {
-    // 用户消息
-    user_message_list: [],
-    count: 0,
-    page: 1,
-    pageSize: 10
-  },
   user_aside: {
     // 侧栏
     user_role_all: []
   },
-  dynamicList: {
-    // 个人中心动态列表
-    count: 0,
-    list: [],
-    page: 1,
-    pageSize: 10
-  },
-  articleBlog: {
-    // 个人中心个人专栏列表
-    count: 0,
-    list: [],
-    page: 1,
-    pageSize: 10
-  },
-  books: {
-    // 个人中心小书列表
-    count: 0,
-    list: [],
-    page: 1,
-    pageSize: 10
-  },
-  unread_message_count: 0 // 用户未读
+  messageCount: 0 // 用户未读
 })
 
 const mutations = {
@@ -84,37 +29,13 @@ const mutations = {
     // 设置获取的全部的个人文章专栏
     state.user_article_blog = data.list
   },
-  SET_MY_ARTICLE_LIST (state, data) {
-    // 设置获取用户的文章
-    state.my_article = data
-  },
-  SET_USER_ATTENTION_LIST (state, data) {
-    // 用户关注用户
-    state.attention_user = data
-  },
-  SET_USER_MESSAGE (state, data) {
-    // 用户消息
-    state.user_message = data
-  },
   SET_USER_ROLE_ALL (state, data) {
     // 用户标签全部
     state.user_aside.user_role_all = data.user_role_all
   },
   SET_UNREAD_MESSAGE_COUNT (state, data) {
     // 用户消息数量
-    state.unread_message_count = data
-  },
-  SET_PERSONAL_DYNAMIC_LIST (state, data) {
-    // 设置动态列表
-    state.dynamicList = data
-  },
-  SET_USER_ARTICLE_BLOG_LIST (state, data) {
-    // 设置用户个人专栏列表
-    state.articleBlog = data
-  },
-  SET_BOOKS_LIST (state, data) {
-    // 设置用户个人小书列表
-    state.books = data
+    state.messageCount = data
   }
 }
 
@@ -204,9 +125,6 @@ const actions = {
       url: '/user/my-article',
       method: 'get',
       parameter: { params: data }
-    }).then(result => {
-      commit('SET_MY_ARTICLE_LIST', result.data)
-      return result
     })
   },
   GET_USER_ATTENTION_LIST: ({ commit, dispatch, state }, data) => {
@@ -215,9 +133,6 @@ const actions = {
       url: '/user/attention-list',
       method: 'get',
       parameter: { params: data }
-    }).then(result => {
-      commit('SET_USER_ATTENTION_LIST', result.data)
-      return result
     })
   },
   GET_USER_LIKE_ARTICLE_LIST: ({ commit, dispatch, state }, data) => {
@@ -234,9 +149,6 @@ const actions = {
       url: '/personal/message-list',
       method: 'get',
       parameter: { params: data }
-    }).then(result => {
-      commit('SET_USER_MESSAGE', result.data)
-      return result
     })
   },
   DELETE_USER_MESSAGE: ({ commit, dispatch, state }, data) => {
@@ -275,9 +187,6 @@ const actions = {
       url: '/personal/dynamic-list',
       method: 'get',
       parameter: { params: parameter }
-    }).then(result => {
-      commit('SET_PERSONAL_DYNAMIC_LIST', result.data)
-      return result
     })
   },
   GET_USER_ARTICLE_BLOG_LIST ({ commit, dispatch, state }, parameter) {
@@ -286,9 +195,6 @@ const actions = {
       url: '/personal/article-blog-list',
       method: 'get',
       parameter: { params: parameter }
-    }).then(result => {
-      commit('SET_USER_ARTICLE_BLOG_LIST', result.data)
-      return result
     })
   },
   GET_BOOKS_LIST ({ commit, dispatch, state }, parameter) {
@@ -297,9 +203,6 @@ const actions = {
       url: '/personal/books-list',
       method: 'get',
       parameter: { params: parameter }
-    }).then(result => {
-      commit('SET_BOOKS_LIST', result.data)
-      return result
     })
   }
 }

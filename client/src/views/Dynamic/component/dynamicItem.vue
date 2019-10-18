@@ -51,8 +51,8 @@
       <div class="header-action"
            v-if="dynamicItem.user.uid!=='tree'&&personalInfo.islogin">
         <button class="subscribe-btn follow-button"
-                :class="{'active':~user.user_info.attention_uid_arr.indexOf(dynamicItem.user.uid||'')}"
-                @click="setUserAttention">关注</button>
+                :class="[{'active':isAttention(dynamicItem||'')},`user-attention-${dynamicItem.user.uid}`]"
+                @click="setUserAttention">{{isAttention(dynamicItem)?'已关注':'关注'}}</button>
       </div>
     </div>
 
@@ -169,10 +169,38 @@ export default {
         if (result.state === 'success') {
           this.$message.success(result.message)
           this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
+          this.selectAttentionUserClass(result.data.type)
         } else {
           this.$message.error(result.message)
         }
       })
+    },
+    selectAttentionUserClass (type) {
+      let userAttentionAll = document.querySelectorAll(`.user-attention-${this.dynamicItem.user.uid}`)
+      for (let i = 0; i < userAttentionAll.length; i++) {
+        if (type === 'attention') {
+          userAttentionAll[i].classList.add('active')
+          userAttentionAll[i].innerHTML = '已关注'
+        } else {
+          userAttentionAll[i].classList.remove('active')
+          userAttentionAll[i].innerHTML = '关注'
+        }
+      }
+    },
+    isAttention (item) { // 是否收藏
+      let userAttentionIds = []
+      if (item.userAttentionIds && item.userAttentionIds.length > 0) {
+        item.userAttentionIds.map(item => {
+          userAttentionIds.push(Number(item.uid))
+        })
+        if (~userAttentionIds.indexOf(Number(this.personalInfo.user.uid))) {
+          return true
+        } else {
+          return false
+        }
+      } else {
+        return false
+      }
     },
     isShowDeleteBtn () { // 是否显示删除按钮
       return this.personalInfo.islogin && this.personalInfo.user.uid === this.dynamicItem.user.uid && this.$route.name !== 'dynamicView'

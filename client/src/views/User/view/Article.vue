@@ -48,7 +48,7 @@
       <!-- 文章列表模块 -->
       <div class="article-view">
         <div class="article-item"
-             v-for="(item,key) in myArticle.article_list"
+             v-for="(item,key) in myArticle.list"
              :key="key">
           <BlogArticleItem @delete-change="updateArticleList"
                            :articleItem="item" />
@@ -95,13 +95,41 @@ export default {
         '1': '文章',
         '2': '日记',
         '3': '草稿',
+      },
+      myArticle: {
+        // 用户的文章
+        list: [],
+        count: 0,
+        page: 1,
+        pageSize: 10
       }
     }
   },
   created () {
     this.getUserArticleBlogList()
+    this.getMyArticleList()
+  },
+  watch: {
+    $route (to, from) {
+      this.getMyArticleList()
+    }
   },
   methods: {
+    getMyArticleList () {
+      this.$store.dispatch('user/USER_MY_ARTICLE', {
+        uid: this.$route.params.uid,
+        blog_id: this.$route.query.blog_id || 'all',
+        type: this.$route.query.type || '1',
+        page: this.myArticle.page || 1,
+        pageSize: this.myArticle.pageSize || 10,
+      }).then(result => {
+        this.myArticle = result.data
+      })
+    },
+    pageChange (val) {
+      this.myArticle.page = val
+      this.getMyArticleList()
+    },
     updateArticleList () {
       this.$store.dispatch('user/USER_MY_ARTICLE', {
         uid: this.$route.params.uid,
@@ -114,23 +142,11 @@ export default {
     async getUserArticleBlogList () {
       await this.$store.dispatch('user/GET_USER_ARTICLE_BLOG_ALL', { uid: this.$route.params.uid })
     },
-    pageChange (val) {
-      this.$router.push({
-        name: 'userArticle',
-        query: {
-          blog_id: this.currentBlogId,
-          page: val
-        }
-      })
-    }
   },
   computed: {
     ...mapState(["personalInfo"]),
     userInfo () { // 登录后的个人信息
       return this.$store.state.user.user_info || {}
-    },
-    myArticle () { // 用户个人的文章
-      return this.$store.state.user.my_article || {}
     },
     currentBlogId () {
       return this.$route.query.blog_id || 'all'

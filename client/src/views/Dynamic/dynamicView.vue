@@ -82,7 +82,11 @@ export default {
         lang: "zh"
       },
       script: [
-        ...baidu.resource(this.$route, this.$route.params.dynamicId),
+        ...baidu.resource({
+          route: this.$route,
+          config: this.website.config,
+          random: this.$route.params.dynamicId
+        }),
         ...google.statisticsCode({
           route: this.$route, googleCode: this.website.config.googleCode, random: this.$route.params.dynamicId
         })

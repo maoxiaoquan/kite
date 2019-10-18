@@ -1,14 +1,14 @@
 <template>
   <div class="user-message">
     <div class="user-message-view">
-      <UserMessageItem v-for="(item,key) in userMessage.user_message_list"
+      <UserMessageItem v-for="(item,key) in userMessage.list"
                        :MessageItem="item"
                        :key="key"
                        @delete-change="deleteChange" />
     </div>
     <Page :total="userMessage.count"
           :pageSize="userMessage.pageSize"
-          :page="Number($route.query.page)||1"
+          :page="Number(userMessage.page)||1"
           @pageChange="pageChange"></Page>
   </div>
 </template>
@@ -28,38 +28,44 @@ export default {
       }
     }
   },
+  data () {
+    return {
+      userMessage: {
+        // 用户消息
+        list: [],
+        count: 0,
+        page: 1,
+        pageSize: 10
+      },
+    }
+  },
   created () {
     this.$store.dispatch('user/GET_UNREAD_MESSAGE_COUNT')
   },
-  async asyncData ({ store, route, accessToken }) {
-    return store.dispatch('user/GET_USER_MESSAGE_LIST', {
-      accessToken,
-      page: route.query.page || 1,
-      pageSize: route.query.pageSize || 10,
-    })
+  mounted () {
+    this.getUserMessageList()
   },
   methods: {
-    deleteChange () {
+    getUserMessageList () {
       this.$store.dispatch('user/GET_USER_MESSAGE_LIST', {
-        page: Number(this.$route.query.page) || 1
+        page: this.userMessage.page || 1,
+        pageSize: this.userMessage.pageSize || 10,
+      }).then(result => {
+        this.userMessage = result.data
       })
     },
+    deleteChange () {
+      this.getUserMessageList()
+    },
     pageChange (val) {
-      this.$router.push({
-        name: 'userMessage',
-        query: {
-          page: val
-        }
-      })
+      this.userMessage.page = val
+      this.getUserMessageList()
     },
   },
   computed: {
     ...mapState(["personalInfo"]),
     userInfo () { // 登录后的个人信息
       return this.$store.state.user.user_info || {}
-    },
-    userMessage () { // 用户的消息
-      return this.$store.state.user.user_message || {}
     },
   },
   components: {

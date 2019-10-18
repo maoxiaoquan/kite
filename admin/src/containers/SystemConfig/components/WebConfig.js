@@ -60,7 +60,8 @@ class SystemConfig extends React.Component {
           on_register,
           on_comment,
           admin_url,
-          googleCode
+          googleCode,
+          isBaiduAuthPush
         } = values
         this.props.dispatch(
           updateSystemConfigInfo(
@@ -71,7 +72,8 @@ class SystemConfig extends React.Component {
                 on_register,
                 on_comment,
                 admin_url,
-                googleCode
+                googleCode,
+                isBaiduAuthPush
               }
             },
             result => {
@@ -216,12 +218,27 @@ class SystemConfig extends React.Component {
                 {getFieldDecorator('googleCode', {
                   rules: [
                     {
-                      required: true,
                       message: '请输入google统计code！',
                       whitespace: true
                     }
                   ]
                 })(<Input disabled={!is_edit} placeholder="google统计code" />)}
+              </FormItem>
+
+              <FormItem {...formItemLayout} label="开启百度自动推送">
+                {getFieldDecorator('isBaiduAuthPush', {
+                  rules: [
+                    {
+                      message: '请选择是否开启百度自动推送！',
+                      whitespace: true
+                    }
+                  ]
+                })(
+                  <Select disabled={!is_edit}>
+                    <Option value="yes">开启</Option>
+                    <Option value="no">关闭</Option>
+                  </Select>
+                )}
               </FormItem>
 
               <FormItem {...tailFormItemLayout}>

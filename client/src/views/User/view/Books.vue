@@ -8,7 +8,7 @@
 
     <div class="user-books-view row">
       <div class="col-xs-12 col-sm-6 col-md-6"
-           v-for="(booksItem,key) in user.books.list"
+           v-for="(booksItem,key) in books.list"
            :key="key">
 
         <div class="library-item clearfix client-card">
@@ -67,9 +67,9 @@
       </div>
     </div>
 
-    <Page :total="Number(user.books.count)"
-          :pageSize="Number(user.books.pageSize)"
-          :page="Number($route.query.page)||1"
+    <Page :total="Number(books.count)"
+          :pageSize="Number(books.pageSize)"
+          :page="Number(books.page)||1"
           @pageChange="pageChange"></Page>
 
     <!-- use the modal component, pass in the prop -->
@@ -90,23 +90,33 @@ export default {
       }
     }
   },
-  async asyncData ({ store, route }) {
-    return store.dispatch('user/GET_BOOKS_LIST', {
-      uid: route.params.uid,
-      page: route.query.page || 1,
-      pageSize: route.query.pageSize || 10,
-    })
-  },
   data () {
     return {
       isCreateBlogShow: false,
       isCreate: true,
+      books: {
+        // 个人中心小书列表
+        count: 0,
+        list: [],
+        page: 1,
+        pageSize: 10
+      },
     }
   },
   mounted () {
+    this.getBooksList()
     this.$store.dispatch("articleTag/GET_ARTICLE_TAG_ALL")
   },
   methods: {
+    getBooksList () {
+      this.$store.dispatch('user/GET_BOOKS_LIST', {
+        uid: this.$route.params.uid,
+        page: this.books.page || 1,
+        pageSize: this.books.pageSize || 10,
+      }).then(result => {
+        this.books = result.data
+      })
+    },
     createBooks () {
       if (!this.$store.state.personalInfo.islogin) {
         this.$store.commit('SET_IS_LOGIN', true)
@@ -158,7 +168,6 @@ export default {
         return `更新于：${item.update_dt}`
       }
     },
-
     deleteArticleBlog (blog_id) { // 删除文章的个人专栏
       this.$store.dispatch('user/DELETE_ARTICLE_BLOG', {
         blog_id,
@@ -173,12 +182,8 @@ export default {
         })
     },
     pageChange (val) {
-      this.$router.push({
-        name: 'userBlog',
-        query: {
-          page: val
-        }
-      })
+      this.books.page = val
+      this.getBooksList()
     }
   },
   computed: {

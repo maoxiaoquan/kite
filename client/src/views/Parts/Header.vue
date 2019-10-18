@@ -59,8 +59,8 @@
                       v-if="personalInfo.islogin">
                     <router-link :to="{name:'userMessage',params:{uid:personalInfo.user.uid}}">
                       消息
-                      <span v-if="unread_message_count.count>0"
-                            class="unread-message-count">{{unread_message_count.count}}</span>
+                      <span v-if="messageCount.count>0"
+                            class="unread-message-count">{{messageCount.count}}</span>
                     </router-link>
                   </li>
                 </ul>
@@ -181,9 +181,9 @@ export default {
   },
   computed: {
     ...mapState(["website", "personalInfo"]), // home:主页  article_column:文章的专栏
-    unread_message_count () {
-      // 登录后的个人信息
-      return this.$store.state.user.unread_message_count;
+    messageCount () {
+      // 登录后的未读消息数量
+      return this.$store.state.user.messageCount;
     }
   }
 };

@@ -9,36 +9,30 @@
 
     <ul class="user-article-attention-view">
       <li class="item"
-          v-for="(item,key) in userAttention.user_list"
+          v-for="(item,key) in userAttentionList.list"
           :key="key">
         <div class="user">
           <div class="lazy avatar avatar loaded"
                title
-               :style="{'background-image':'url('+item.avatar+')'}"></div>
+               :style="{'background-image':'url('+item.user.avatar+')'}"></div>
           <div class="info-box">
             <div class="username">
-              <router-link :to="{name:'user',params:{uid:item.uid}}"
-                           class="link">{{item.nickname }}</router-link>
+              <router-link :to="{name:'user',params:{uid:item.user.uid}}"
+                           class="link">{{item.user.nickname }}</router-link>
             </div>
-            <div class="detail">{{item.introduction }}</div>
+            <div class="detail">{{item.user.introduction }}</div>
           </div>
-          <button class="follow-btn active"
-                  v-if="$route.query.any==='me'||!$route.query.any"
-                  v-show="item.uid!==personalInfo.user.uid"
-                  @click="onUserAttention(item.uid,~userAttention.other_attention.indexOf(item.uid))">{{~userAttention.other_attention.indexOf(item.uid)?'互相关注':'关注'}}</button>
-
-          <button class="follow-btn active"
-                  v-show="item.uid!==personalInfo.user.uid"
-                  v-else
-                  @click="onUserAttention(item.uid,~userAttention.me_attention.indexOf(item.uid))">{{~userAttention.me_attention.indexOf(item.uid)?'互相关注':'关注'}}</button>
+          <button class="follow-btn"
+                  @click="onUserAttention(item)"
+                  :class="{'active':isAttention(item)}">{{isAttention(item)?'已关注':'关注'}}</button>
         </div>
       </li>
     </ul>
 
     <div class="pagination">
-      <Page :total="Number(userAttention.count)"
-            :pageSize="Number(userAttention.pageSize)"
-            :page="Number($route.query.page)||1"
+      <Page :total="Number(userAttentionList.count)"
+            :pageSize="Number(userAttentionList.pageSize)"
+            :page="Number(userAttentionList.page||1)"
             @pageChange="pageChange"></Page>
     </div>
   </div>
@@ -57,34 +51,63 @@ export default {
       }
     };
   },
-  async asyncData ({ store, route }) {
-    return store.dispatch("user/GET_USER_ATTENTION_LIST", {
-      uid: route.params.uid,
-      page: route.query.page || 1,
-      any: route.query.any || "me",
-      pageSize: route.query.pageSize || 10
-    });
+  data () {
+    return {
+      userAttentionList: {
+        count: 0,
+        page: 1,
+        pageSize: 10,
+        list: []
+      }
+    }
+  },
+  watch: {
+    $route (to, from) {
+      this.getUserAttentionList()
+    }
+  },
+  mounted () {
+    this.getUserAttentionList()
   },
   methods: {
-    pageChange (val) {
-      this.$router.push({
-        name: "userAttention",
-        query: {
-          any: this.$route.query.any || "me",
-          page: val
-        }
-      });
+    getUserAttentionList () {
+      this.$store.dispatch("user/GET_USER_ATTENTION_LIST", {
+        uid: this.$route.params.uid,
+        page: this.userAttentionList.page || 1,
+        any: this.$route.query.any || "me",
+        pageSize: this.userAttentionList.pageSize || 10
+      }).then(result => {
+        this.userAttentionList = result.data
+      })
     },
-    onUserAttention (attention_uid, type) {
+    pageChange (val) {
+      this.userAttentionList.page = val
+      this.getUserAttentionList()
+    },
+    isAttention (item) { // 是否收藏
+      console.log('item', item)
+      let userAttentionIds = []
+      if (item.userAttentionIds && item.userAttentionIds.length > 0) {
+        item.userAttentionIds.map(item => {
+          userAttentionIds.push(Number(item.uid))
+        })
+        if (~userAttentionIds.indexOf(Number(this.personalInfo.user.uid))) {
+          return true
+        } else {
+          return false
+        }
+      } else {
+        return false
+      }
+    },
+    onUserAttention (item) {
       this.$store
         .dispatch("user/USER_ATTENTION", {
-          attention_uid: attention_uid,
+          attention_uid: item.user.uid,
           moreConfig: { direct: true }
         })
         .then(result => {
-          this.$store.dispatch("user/GET_USER_ATTENTION_LIST", {
-            uid: this.$route.params.uid
-          });
+          this.getUserAttentionList()
           this.$message.warning(result.message);
         })
         .catch(function (err) {
@@ -93,15 +116,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['personalInfo']),
-    userInfo () {
-      // 登录后的个人信息
-      return this.$store.state.user.user_info || {};
-    },
-    userAttention () {
-      // 用户个人的文章
-      return this.$store.state.user.attention_user || {};
-    }
+    ...mapState(['personalInfo'])
   },
   components: {
     Page

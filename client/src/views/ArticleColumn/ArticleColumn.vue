@@ -67,7 +67,10 @@ export default {
         lang: 'zh'
       },
       script: [
-        ...baidu.resource(this.$route),
+        ...baidu.resource({
+          route: this.$route,
+          config: this.website.config
+        }),
         ...google.statisticsCode({
           route: this.$route, googleCode: this.website.config.googleCode, random: ''
         })

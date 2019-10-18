@@ -21,7 +21,7 @@ const pordWebpackConfig = merge(baseWebpackConfig, {
     rules: utils.styleLoaders({
       sourceMap: false,
       // 将css样式单独提取出文件
-      extract: false, // 使用 vue-style-loader 处理css
+      extract: true, // 使用 vue-style-loader 处理css
       usePostCSS: true
     })
   },

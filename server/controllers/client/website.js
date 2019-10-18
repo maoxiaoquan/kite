@@ -18,7 +18,13 @@ class Website {
         .read()
         .get('website')
         .value()
-      const { on_login, on_register, on_comment, googleCode } = lowdb
+      const {
+        on_login,
+        on_register,
+        on_comment,
+        googleCode,
+        isBaiduAuthPush
+      } = lowdb
         .read()
         .get('config')
         .value()
@@ -41,7 +47,8 @@ class Website {
             on_login,
             on_register,
             on_comment,
-            googleCode
+            googleCode,
+            isBaiduAuthPush
           },
           notice: noticeAll,
           advertise: advertiseAll

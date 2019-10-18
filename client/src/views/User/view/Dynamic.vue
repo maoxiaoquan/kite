@@ -2,7 +2,7 @@
   <div class="user-dynamic">
 
     <div class="user-dynamic-item client-card"
-         v-for="(dynamicItem,key) in user.dynamicList.list"
+         v-for="(dynamicItem,key) in dynamicList.list"
          :key="key">
       <div class="dynamic-header-row">
         <div class="account-group">
@@ -51,8 +51,8 @@
         <div class="header-action"
              v-if="personalInfo.user.uid!==dynamicItem.user.uid">
           <button class="subscribe-btn follow-button"
-                  :class="{'active':~user.user_info.attention_uid_arr.indexOf(dynamicItem.user.uid||'')}"
-                  @click="setUserAttention">关注</button>
+                  :class="[{'active':isAttention(dynamicItem||'')},`user-attention-${dynamicItem.user.uid}`]"
+                  @click="setUserAttention">{{isAttention(dynamicItem)?'已关注':'关注'}}</button>
         </div>
 
       </div>
@@ -105,9 +105,9 @@
 
     </div>
 
-    <Page :total="Number(user.dynamicList.count)"
-          :pageSize="Number(user.dynamicList.pageSize)"
-          :page="Number($route.query.page)||1"
+    <Page :total="Number(dynamicList.count)"
+          :pageSize="Number(dynamicList.pageSize)"
+          :page="Number(dynamicList.page)||1"
           @pageChange="pageChange"></Page>
   </div>
 </template>
@@ -119,6 +119,13 @@ export default {
   name: 'Dynamic',
   data () {
     return {
+      dynamicList: {
+        // 个人中心动态列表
+        count: 0,
+        list: [],
+        page: 1,
+        pageSize: 10
+      },
     }
   },
   created () {
@@ -141,10 +148,23 @@ export default {
         if (result.state === 'success') {
           this.$message.success(result.message)
           this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
+          this.selectAttentionUserClass(result.data.type)
         } else {
           this.$message.error(result.message)
         }
       })
+    },
+    selectAttentionUserClass (type) {
+      let userAttentionAll = document.querySelectorAll(`.user-attention-${this.dynamicItem.user.uid}`)
+      for (let i = 0; i < userAttentionAll.length; i++) {
+        if (type === 'attention') {
+          userAttentionAll[i].classList.add('active')
+          userAttentionAll[i].innerHTML = '已关注'
+        } else {
+          userAttentionAll[i].classList.remove('active')
+          userAttentionAll[i].innerHTML = '关注'
+        }
+      }
     },
     commandChange (val) {
       this.deleteDynamic(val.id);
@@ -204,6 +224,21 @@ export default {
           console.log(err);
         });
     },
+    isAttention (item) { // 是否收藏
+      let userAttentionIds = []
+      if (item.userAttentionIds && item.userAttentionIds.length > 0) {
+        item.userAttentionIds.map(item => {
+          userAttentionIds.push(Number(item.uid))
+        })
+        if (~userAttentionIds.indexOf(Number(this.personalInfo.user.uid))) {
+          return true
+        } else {
+          return false
+        }
+      } else {
+        return false
+      }
+    },
     imgAnalyze (attach) {
       let urlArr = attach.split(',') || []
       let length = attach.split(',').length
@@ -221,8 +256,10 @@ export default {
       this.$store.dispatch('user/GET_PERSONAL_DYNAMIC_LIST',
         {
           uid: this.$route.params.uid,
-          page: this.$route.query.page || 1,
-          pageSize: this.$route.query.pageSize || 10,
+          page: this.dynamicList.page || 1,
+          pageSize: this.dynamicList.pageSize || 10,
+        }).then(result => {
+          this.dynamicList = result.data
         })
     },
   },
@@ -231,12 +268,6 @@ export default {
   },
   computed: {
     ...mapState(['user', 'personalInfo']),
-    userAside () { // user 侧栏信息
-      return this.$store.state.user.user_aside || {}
-    },
-    userInfo () { // 登录后的个人信息
-      return this.$store.state.user.user_info || {}
-    },
   },
 }
 </script>

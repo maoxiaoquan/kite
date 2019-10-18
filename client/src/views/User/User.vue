@@ -25,11 +25,10 @@
 
               <button v-if="(user.user_info.user.uid !== personalInfo.user.uid)&&personalInfo.islogin"
                       class="user-follow-button"
-                      @click="onUserAttention($route.params.uid,~user.attention_user.other_attention.indexOf(personalInfo.user.uid||''))"
-                      :class="~user.attention_user.other_attention.indexOf(personalInfo.user.uid||'')?'has':'no'">
+                      @click="onUserAttention(isAttention.is_attention)"
+                      :class="isAttention.is_attention?'has':'no'">
                 <i class="iconfont"></i>
-                <span v-if="~user.attention_user.other_attention.indexOf(personalInfo.user.uid||'')">已关注</span>
-                <span v-else>关注</span>
+                <span>{{isAttention.text}}</span>
               </button>
 
               <div class="info">
@@ -37,7 +36,7 @@
                   <li>
                     <div class="meta-block">
                       <router-link :to='{name:"userAttention",query:{any:"me"}}'>
-                        <p>{{user.user_info.user_attention_other_count}}</p>
+                        <p>{{user.user_info.userAttentionCount}}</p>
                         <strong>
                           {{user.user_info.user.uid === personalInfo.user.uid?'我关注的人':'他关注的人'}}
                         </strong>
@@ -47,7 +46,7 @@
                   <li>
                     <div class="meta-block">
                       <router-link :to='{name:"userAttention",query:{any:"other"}}'>
-                        <p>{{user.user_info.other_user_attention_count}}</p>
+                        <p>{{user.user_info.otherUserAttentionCount}}</p>
                         <strong>粉丝</strong>
                       </router-link>
                     </div>
@@ -55,7 +54,7 @@
                   <li>
                     <div class="meta-block">
                       <router-link :to='{name:"userArticle",query:{blog_id:"all"}}'>
-                        <p>{{user.user_info.user_article_count}}</p>
+                        <p>{{user.user_info.userArticleCount}}</p>
                         <strong>文章</strong>
                       </router-link>
                     </div>
@@ -127,31 +126,31 @@ export default {
   },
   async asyncData ({ store, route }) {
     return Promise.all([
-      store.dispatch('user/GET_USER_INFO_ALL', { uid: route.params.uid }),
-      store.dispatch('user/GET_USER_ATTENTION_LIST', {
-        uid: route.params.uid
-      })
+      store.dispatch('user/GET_USER_INFO_ALL', { uid: route.params.uid })
     ])
   },
+  data () {
+    return {
+      personalUser: {}
+    }
+  },
   methods: {
-    onUserAttention (attention_uid, type) { /*用户关注用户*/
+    onUserAttention (type) { /*用户关注用户*/
       this.$confirm(type ? '是否取消关注?' : '是否关注?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.$store.dispatch('user/USER_ATTENTION', { attention_uid: attention_uid })
+          this.$store.dispatch('user/USER_ATTENTION', { attention_uid: this.$route.params.uid })
             .then(result => {
               if (result.state === 'success') {
                 // window.location.reload()
-                this.$store.dispatch('user/GET_USER_ATTENTION_LIST', {
-                  uid: this.$route.params.uid
-                })
-                this.$message.success(res.message)
+                this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.$route.params.uid })
+                this.$message.success(result.message)
                 /*获取当前文章用户信息*/
               } else {
-                this.$message.warning(res.message)
+                this.$message.warning(result.message)
               }
             })
             .catch(function (err) {
@@ -164,6 +163,25 @@ export default {
   },
   computed: {
     ...mapState(['personalInfo', 'user']),  // personalInfo:个人信息  user:登录后的个人信息当前用户
+    isAttention () { // 是否收藏
+      let userAttentionIds = [] // 当前用户被其他的用户所关注的其他用户 所有 id
+
+      this.user.user_info.user.userAttentionIds.map(item => {
+        userAttentionIds.push(Number(item.uid))
+      })
+
+      if (~userAttentionIds.indexOf(Number(this.personalInfo.user.uid))) {
+        return {
+          is_attention: true,
+          text: '已关注'
+        }
+      } else {
+        return {
+          is_attention: false,
+          text: '关注'
+        }
+      }
+    },
   },
   components: {
     UserAside,

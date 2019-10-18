@@ -8,7 +8,7 @@
 
     <div class="user-article-blog-view row">
       <div class="col-xs-12 col-sm-6 col-md-6"
-           v-for="(articleBlogItem,key) in user.articleBlog.list"
+           v-for="(articleBlogItem,key) in articleBlog.list"
            :key="key">
         <div class="user-article-blog-item client-card">
           <div class="user-article-blog-top">
@@ -101,9 +101,9 @@
       </div>
     </div>
 
-    <Page :total="Number(user.articleBlog.count)"
-          :pageSize="Number(user.articleBlog.pageSize)"
-          :page="Number($route.query.page)||1"
+    <Page :total="Number(articleBlog.count)"
+          :pageSize="Number(articleBlog.pageSize)"
+          :page="Number(articleBlog.page)||1"
           @pageChange="pageChange"></Page>
 
     <!-- use the modal component, pass in the prop -->
@@ -223,6 +223,13 @@ export default {
     return {
       isCreateBlogShow: false,
       isCreate: true,
+      articleBlog: {
+        // 个人中心个人专栏列表
+        count: 0,
+        list: [],
+        page: 1,
+        pageSize: 10
+      },
       blogForm: {
         blog_id: '',
         blog_name: '',
@@ -236,8 +243,22 @@ export default {
   },
   mounted () {
     this.$store.dispatch("articleTag/GET_ARTICLE_TAG_ALL")
+    this.getArticleBlogList()
   },
   methods: {
+    getArticleBlogList () {
+      this.$store.dispatch('user/GET_USER_ARTICLE_BLOG_LIST', {
+        uid: this.$route.params.uid,
+        page: this.articleBlog.page || 1,
+        pageSize: this.articleBlog.pageSize || 10,
+      }).then(result => {
+        this.articleBlog = result.data
+      })
+    },
+    pageChange (val) {
+      this.articleBlog.page = val
+      this.getArticleBlogList()
+    },
     createEditArticleBlog (type) { // 触发创建文章个人专栏
       this.isCreateBlogShow = true
       this.isCreate = true
@@ -281,7 +302,7 @@ export default {
             this.isEdit = false
             this.$message.success(result.message);
             this.isCreateBlogShow = false
-            window.location.reload()
+            this.getArticleBlogList()
           } else {
             this.$message.warning(result.message);
           }
@@ -347,14 +368,6 @@ export default {
           text: '关注'
         }
       }
-    },
-    pageChange (val) {
-      this.$router.push({
-        name: 'userBlog',
-        query: {
-          page: val
-        }
-      })
     }
   },
   computed: {

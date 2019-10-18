@@ -80,7 +80,10 @@ export default {
         lang: "zh"
       },
       script: [
-        ...baidu.resource(this.$route),
+        ...baidu.resource({
+          route: this.$route,
+          config: this.website.config
+        }),
         ...google.statisticsCode({
           route: this.$route, googleCode: this.website.config.googleCode, random: ''
         })
@@ -92,7 +95,8 @@ export default {
     return {
       page: 2,
       isLoading: false,
-      isMore: true
+      isMore: true,
+      loginUserInfo: {}
     }
   },
   async asyncData ({ store, route, accessToken = "" }) {
@@ -114,6 +118,9 @@ export default {
     this.$store.dispatch("dynamic/GET_DYNAMIC_TOPIC_INDEX") // 获取首页动态专题列表
   },
   methods: {
+    getLoginUserInfo () {
+
+    },
     dynamicSubmit () { // 评论提交的回调
       if (this.$route.params.dynamicTopicId !== 'following') { // 判断是不是关注页面，是则直接刷新
         this.$router.push({ name: 'dynamics', params: { dynamicTopicId: 'following' } })

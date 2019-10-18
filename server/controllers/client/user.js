@@ -380,42 +380,35 @@ class User {
         where: { uid }
       })
 
-      let allUserAttention = await models.attention_user
-        .findAll({ where: { uid } })
-        .then(res => {
-          return res.map((attention_item, key) => {
-            return attention_item.attention_uid
-          })
+      oneUser.setDataValue(
+        // 我关注了哪些用户的信息
+        'attentionUserIds',
+        await models.attention_user.findAll({
+          where: { uid: oneUser.uid, is_attention: true }
         })
+      )
+
+      oneUser.setDataValue(
+        // 哪些用户关注了我
+        'userAttentionIds',
+        await models.attention_user.findAll({
+          where: { attention_uid: oneUser.uid, is_attention: true }
+        })
+      )
 
       let userAttentionCount = await models.attention_user.count({
         // 关注了多少人
         where: {
-          uid
+          uid,
+          is_attention: true
         }
       })
-
-      let allUserLikeArticleAid = await models.like_article
-        .findAll({ where: { uid, is_like: true } })
-        .then(res => {
-          return res.map((item, key) => {
-            return item.aid
-          })
-        })
 
       let allLikeDymaicId = await models.dynamic_like
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((item, key) => {
             return item.dynamic_id
-          })
-        })
-
-      let allSubscribeArticleTagId = await models.attention_tag
-        .findAll({ where: { uid } })
-        .then(res => {
-          return res.map((item, key) => {
-            return item.tag_id
           })
         })
 
@@ -430,7 +423,8 @@ class User {
       let otherUserAttentionCount = await models.attention_user.count({
         // 多少人关注了
         where: {
-          attention_uid: uid
+          attention_uid: uid,
+          is_attention: true
         }
       })
 
@@ -456,11 +450,8 @@ class User {
         data: {
           user: oneUser,
           user_info: oneUserInfo,
-          attention_uid_arr: allUserAttention,
-          user_like_aid_arr: allUserLikeArticleAid,
-          subscribe_article_tag_id_arr: allSubscribeArticleTagId,
-          other_user_attention_count: otherUserAttentionCount,
-          user_attention_other_count: userAttentionCount,
+          otherUserAttentionCount: otherUserAttentionCount,
+          userAttentionCount: userAttentionCount,
           user_article_count: articleCount,
           dynamicCount,
           allLikeDymaicId,
@@ -767,7 +758,7 @@ class User {
         message: '数据返回成功',
         data: {
           count,
-          user_message_list: rows,
+          list: rows,
           page,
           pageSize
         }

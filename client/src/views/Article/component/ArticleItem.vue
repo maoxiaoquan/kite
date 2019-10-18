@@ -14,6 +14,9 @@
             <router-link :to="{name:'user',params:{uid:articleItem.user.uid}}"
                          class="name">{{articleItem.user.nickname}}</router-link>
           </li>
+          <li class="item">
+            <time>{{articleItem.create_dt}}</time>
+          </li>
           <li class="item item-icon read-count">
             <i class="el-icon-view"></i>
             <strong v-text="articleItem.read_count"></strong>
@@ -25,9 +28,6 @@
           <li class="item item-icon comment-count">
             <i class="el-icon-chat-dot-round"></i>
             <strong v-text="articleItem.comment_count"></strong>
-          </li>
-          <li class="item">
-            <time>{{articleItem.create_dt}}</time>
           </li>
           <li class="item"
               v-if="articleItem.tag_ids">
@@ -46,6 +46,11 @@
 
       <div class="info-row footer-view"
            v-if="articleItem.article_blog">
+        <router-link :to="{name:'user',params:{uid:articleItem.user.uid}}"
+                     class="avatar">
+          <img :src="articleItem.user.avatar"
+               alt="">
+        </router-link>
         <router-link :to="{name:'user',params:{uid:articleItem.user.uid}}"
                      class="name">{{articleItem.user.nickname}}</router-link>
         <span>发布于专栏</span>
@@ -137,6 +142,7 @@ export default {
       overflow: hidden;
     }
     .meta-row {
+      margin-bottom: 5px;
       .meta-list {
         display: -webkit-box;
         display: -ms-flexbox;
@@ -211,14 +217,27 @@ export default {
       }
     }
     .footer-view {
+      display: flex;
+      align-items: center;
       span,
       a {
         font-size: 12px;
+        display: inline-block;
         color: #999;
+        margin-right: 10px;
       }
       .name,
       .article-blog {
         color: #009a61;
+      }
+      .avatar {
+        margin-right: 6px;
+        img {
+          width: 26px;
+          height: 26px;
+          border-radius: 52px;
+          overflow: hidden;
+        }
       }
     }
   }
