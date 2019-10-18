@@ -452,7 +452,7 @@ class User {
           user_info: oneUserInfo,
           otherUserAttentionCount: otherUserAttentionCount,
           userAttentionCount: userAttentionCount,
-          user_article_count: articleCount,
+          userArticleCount: articleCount,
           dynamicCount,
           allLikeDymaicId,
           allRssDynamicTopicId
