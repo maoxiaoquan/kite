@@ -206,16 +206,24 @@ export default {
       return this.personalInfo.islogin && this.personalInfo.user.uid === this.dynamicItem.user.uid && this.$route.name !== 'dynamicView'
     },
     deleteDynamic () { // 删除动态
-      this.$store.dispatch('dynamic/DELETE_DYNAMIC', {
-        id: this.dynamicItem.id
-      }).then(result => {
-        if (result.state === 'success') {
-          this.$message.success(result.message)
-          this.isShowDynamic = false
-        } else {
-          this.$message.error(result.message)
-        }
+      this.$confirm("此操作将永久删除此条片刻?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       })
+        .then(() => {
+          this.$store.dispatch('dynamic/DELETE_DYNAMIC', {
+            id: this.dynamicItem.id
+          }).then(result => {
+            if (result.state === 'success') {
+              this.$message.success(result.message)
+              this.isShowDynamic = false
+            } else {
+              this.$message.error(result.message)
+            }
+          })
+        })
+        .catch(() => { });
     },
     dynamicCommentChange () { // 动态一级子评论提交成功
       this.dynamicItem.comment_count = Number(this.dynamicItem.comment_count) + 1

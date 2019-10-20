@@ -63,7 +63,7 @@ const pordWebpackConfig = merge(baseWebpackConfig, {
         },
         commons: {
           name: 'commons',
-          minChunks: 2, // Math.ceil(pages.length / 3), 当你有多个页面时，获取pages.length，至少被1/3页面的引入才打入common包
+          minChunks: 3, // Math.ceil(pages.length / 3), 当你有多个页面时，获取pages.length，至少被1/3页面的引入才打入common包
           chunks: 'all',
           reuseExistingChunk: true
         }

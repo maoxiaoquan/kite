@@ -27,7 +27,7 @@ module.exports = {
   entry: resolve('src/entryClient.js'),
   output: {
     path: config.client.assetsRoot,
-    filename: '[name].js',
+    // filename: '[name].js',
     publicPath: config.client.publicPath
   },
   resolve: {
