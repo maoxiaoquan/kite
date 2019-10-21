@@ -97,7 +97,7 @@ module.exports = {
     },
     tag_ids: {
       /* 文章所属的标签名字 可多个 */
-      type: Seq.STRING(180),
+      type: Seq.TEXT,
       comment: '文章所属的标签id',
       field: 'tag_ids'
     },

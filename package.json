@@ -19,7 +19,7 @@
     "admin-lint": "eslint --ext .js --ext .jsx admin/",
     "server-lint": "eslint --ext .js server/",
     "lint-fix": "eslint --fix --ext .js --ext .jsx --ext .vue /",
-    "test-mysql": "node db/mysqldb/create.js",
+    "test-mysql": "node db/mysqldb/test.js",
     "kite-update": "node update"
   },
   "author": "xiaoquan",

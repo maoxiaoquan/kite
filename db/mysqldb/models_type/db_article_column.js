@@ -42,7 +42,7 @@ module.exports = {
     },
     tag_ids: {
       // 专栏下属的标签名，以逗号隔开
-      type: Seq.TEXT('long'),
+      type: Seq.TEXT,
       comment: '专栏下属的标签名，以逗号隔开',
       field: 'tag_ids'
     },
