@@ -62,14 +62,6 @@ class update {
           'ALTER TABLE article_tag CHANGE article_tag_description description VARCHAR(200) comment "标签描述";'
         )
 
-        await models.sequelize.query(
-          'ALTER TABLE article_column CHANGE article_tag_ids tag_ids longtext comment "标签id";'
-        )
-
-        await models.sequelize.query(
-          'ALTER TABLE article CHANGE CHANGE article_tag_ids tag_ids longtext comment "标签id";'
-        )
-
         // 2019.10.18 0:46
 
         await models.sequelize.query(
@@ -91,6 +83,14 @@ class update {
         await models.sequelize.query(
           'ALTER TABLE article_column CHANGE article_column_description description VARCHAR(200) comment "专栏描述";'
         )
+
+        // await models.sequelize.query(
+        //   'ALTER TABLE article_column CHANGE article_tag_ids tag_ids longtext comment "标签id";'
+        // )
+
+        // await models.sequelize.query(
+        //   'ALTER TABLE article CHANGE CHANGE article_tag_ids tag_ids longtext comment "标签id";'
+        // )
 
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb
