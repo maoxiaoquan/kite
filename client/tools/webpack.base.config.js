@@ -5,6 +5,7 @@ const config = require('../../kite.config')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 // 服务端渲染用到的插件、默认生成JSON
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
+const isProduction = process.env.NODE_ENV === 'production'
 
 // 用于返回文件相对于根目录的绝对路径
 const resolve = dir => path.resolve(__dirname, '..', dir)
@@ -51,6 +52,8 @@ module.exports = {
         loader: 'vue-loader',
         options: {
           // 配置哪些引入路径按照模块方式查找
+          // enable CSS extraction
+          extractCSS: isProduction,
           transformAssetUrls: {
             video: ['src', 'poster'],
             source: 'src',

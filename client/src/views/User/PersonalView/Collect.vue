@@ -57,7 +57,6 @@ export default {
 <style scoped lang="scss">
 .collect-lay {
   .filter {
-    margin-bottom: 20px;
     padding-top: 20px;
     .filter-item {
       display: inline-block;

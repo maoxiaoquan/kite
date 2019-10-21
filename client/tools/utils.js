@@ -28,7 +28,9 @@ exports.cssLoaders = function (options) {
 
   // webpack4.0版本以上采用MiniCssExtractPlugin 而不使用extract-text-webpack-plugin
   function generateLoaders (loader, loaderOptions) {
-    const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]
+    const loaders = options.usePostCSS
+      ? [cssLoader, postcssLoader]
+      : [cssLoader]
 
     if (loader) {
       loaders.push({
@@ -81,13 +83,12 @@ exports.createNotifierCallback = () => {
     if (severity !== 'error') return
 
     const error = errors[0]
-    const filename = error.file && error.file.split('!')
-      .pop()
+    const filename = error.file && error.file.split('!').pop()
 
     notifier.notify({
       title: 'kite',
       message: severity + ': ' + error.name,
-      subtitle: filename || '',
+      subtitle: filename || ''
     })
   }
 }
