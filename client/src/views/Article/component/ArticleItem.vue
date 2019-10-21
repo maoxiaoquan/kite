@@ -225,6 +225,7 @@ export default {
         display: inline-block;
         color: #999;
         margin-right: 10px;
+        line-height: 18px;
       }
       .name,
       .article-blog {

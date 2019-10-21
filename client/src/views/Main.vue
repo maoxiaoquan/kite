@@ -2,12 +2,13 @@
   <div class="app-view">
     <box-header />
     <router-view />
-
+    <global-view />
   </div>
 </template>
 
 <script>
 import header from '@views/Parts/Header'
+import GlobalView from '@views/Parts/GlobalView'
 export default {
   name: 'Main',
   asyncData ({ store, route, accessToken = '' }) {
@@ -21,6 +22,7 @@ export default {
   },
   components: {
     'box-header': header,
+    GlobalView
   }
 }
 </script>

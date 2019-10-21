@@ -1,7 +1,7 @@
 export default [
   {
     path: '/',
-    component: () => import('@views/Main'), // main
+    component: require('@views/Main').default, // main
     children: [
       {
         path: '/',
@@ -12,57 +12,57 @@ export default [
       {
         path: '',
         name: 'home',
-        component: () => import('@views/Home/Home') // 主页
+        component: require('@views/Home/Home').default // 主页
       },
       {
         path: 'column/:en_name',
         name: 'column',
-        component: () => import('@views/Home/Column') // 主页
+        component: require('@views/Home/Column').default // 主页
       },
       {
         path: 'p/:aid',
         name: 'article',
-        component: () => import('@views/Article/Article') // 文章内容页
+        component: require('@views/Article/Article').default // 文章内容页
       },
       {
         path: 'search',
         name: 'search',
-        component: () => import('@views/Search/view/Search') // 搜索页
+        component: require('@views/Search/view/Search').default // 搜索页
       },
       {
         path: 'user/:uid',
         name: 'user',
-        component: () => import('@views/User/User'), // 文章内容页
+        component: require('@views/User/User').default, // 文章内容页
         children: [
           {
             path: 'article',
             name: 'userArticle',
-            component: () => import('@views/User/view/Article') // 文章内容页
+            component: require('@views/User/view/Article').default // 文章内容页
           },
           {
             path: 'user-dynamic',
             name: 'userDynamic',
-            component: () => import('@views/User/view/Dynamic') // 个人发送的动态列表
+            component: require('@views/User/view/Dynamic').default // 个人发送的动态列表
           },
           {
             path: 'books',
             name: 'userBooks',
-            component: () => import('@views/User/view/Books') // 用户的小书
+            component: require('@views/User/view/Books').default // 用户的小书
           },
           {
             path: 'blog',
             name: 'userBlog',
-            component: () => import('@views/User/view/Blog') // 用户自己的个人专栏
+            component: require('@views/User/view/Blog').default // 用户自己的个人专栏
           },
           {
             path: 'attention',
             name: 'userAttention',
-            component: () => import('@views/User/view/UserAttention') // 用户关注用户
+            component: require('@views/User/view/UserAttention').default // 用户关注用户
           },
           {
             path: 'message',
             name: 'userMessage',
-            component: () => import('@views/User/view/UserMessage') // 用户消息
+            component: require('@views/User/view/UserMessage').default // 用户消息
           }
         ],
         redirect: { name: 'userArticle' }
@@ -70,29 +70,29 @@ export default [
       {
         path: 'personal/:uid',
         name: 'personal',
-        component: () => import('@views/User/Personal'), // 文章内容页
+        component: require('@views/User/Personal').default, // 个人页
         children: [
           {
             path: 'collect',
             name: 'personalCollect',
-            component: () => import('@views/User/PersonalView/Collect') // 收藏
+            component: require('@views/User/PersonalView/Collect').default // 收藏
           }
         ]
       },
       {
         path: 'user/setting',
         name: 'setting',
-        component: () => import('@views/Setting/Setting'), // 文章内容页
+        component: require('@views/Setting/Setting').default, // 文章内容页
         children: [
           {
             path: 'profile',
             name: 'settingProfile',
-            component: () => import('@views/Setting/view/Profile') // 修改资料
+            component: require('@views/Setting/view/Profile').default // 修改资料
           },
           {
             path: 'reset-password',
             name: 'settingResetPassword',
-            component: () => import('@views/Setting/view/ResetPassword') // 重置密码
+            component: require('@views/Setting/view/ResetPassword').default // 重置密码
           }
         ],
         redirect: { name: 'settingProfile' }
@@ -100,27 +100,27 @@ export default [
       {
         path: 'column-all',
         name: 'columnAll',
-        component: () => import('@views/ArticleColumn/ArticleColumn') // 文章专栏
+        component: require('@views/ArticleColumn/ArticleColumn').default // 文章专栏
       },
       {
         path: 'subscribe/:type',
         name: 'subscribe_tag',
-        component: () => import('@views/ArticleTag/SubscribeTag') // 文章标签订阅页
+        component: require('@views/ArticleTag/SubscribeTag').default // 文章标签订阅页
       },
       {
         path: 'tag/:en_name',
         name: 'article_tag',
-        component: () => import('@views/ArticleTag/ArticleTag') // 文章标签内容页
+        component: require('@views/ArticleTag/ArticleTag').default // 文章标签内容页
       },
       {
         path: 'article-rule',
         name: 'article_rule',
-        component: () => import('@views/Rule/ArticleRule') // 文章编写规则
+        component: require('@views/Rule/ArticleRule').default // 文章编写规则
       },
       {
         path: 'comment-rule',
         name: 'comment_rule',
-        component: () => import('@views/Rule/CommentRule') // 评论规则
+        component: require('@views/Rule/CommentRule').default // 评论规则
       },
       {
         path: 'write/:type',
@@ -131,22 +131,22 @@ export default [
         //动态 2019.8.1 12:11开发
         path: 'dynamics/:dynamicTopicId',
         name: 'dynamics',
-        component: () => import('@views/Dynamic/index') // 动态首页
+        component: require('@views/Dynamic/index').default // 动态首页
       },
       {
         path: 'dynamic/:dynamicId',
         name: 'dynamicView',
-        component: () => import('@views/Dynamic/dynamicView') // 动态内容页
+        component: require('@views/Dynamic/dynamicView').default // 动态内容页
       },
       {
         path: 'topics',
         name: 'dynamicTopic',
-        component: () => import('@views/Dynamic/dynamicTopic') // 动态专题
+        component: require('@views/Dynamic/dynamicTopic').default // 动态专题
       },
       {
         path: 'topic/:dynamicTopicId',
         name: 'dynamicTopicView',
-        component: () => import('@views/Dynamic/dynamicTopicView') // 动态专题内容页
+        component: require('@views/Dynamic/dynamicTopicView').default // 动态专题内容页
       },
       // {
       //   path: 'blogs/:columnEnName', 屏蔽，此功能不开放
@@ -156,7 +156,7 @@ export default [
       {
         path: 'blog/:blogId',
         name: 'articleBlog',
-        component: () => import('@views/ArticleBlog/BlogView') // 个人专栏内容
+        component: require('@views/ArticleBlog/BlogView').default // 个人专栏内容
       },
       {
         path: 'books-write/:type',
@@ -166,19 +166,19 @@ export default [
       {
         path: 'books/:columnEnName',
         name: 'books',
-        component: () => import('@views/Books/Books') // 小书首页
+        component: require('@views/Books/Books').default // 小书首页
       },
       {
         path: 'book/:books_id',
         name: 'book',
-        component: () => import('@views/Book/Book') // 小书内容
+        component: require('@views/Book/Book').default // 小书内容
       }
     ]
   },
   {
     path: '/book/:books_id/section/:book_id',
     name: 'BookView',
-    component: () => import('@views/BookView/BookView') // 查看小书内容
+    component: require('@views/BookView/BookView').default // 查看小书内容
   },
   {
     path: '/book/:books_id/write/:book_id',
