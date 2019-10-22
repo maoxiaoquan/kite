@@ -18,12 +18,19 @@ const pordWebpackConfig = merge(baseWebpackConfig, {
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   module: {
-    rules: utils.styleLoaders({
-      sourceMap: false,
-      // 将css样式单独提取出文件
-      extract: true, // 使用 vue-style-loader 处理css
-      usePostCSS: true
-    })
+    rules: [
+      {
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader
+          },
+          'css-loader',
+          'postcss-loader',
+          'sass-loader'
+        ]
+      }
+    ]
   },
   resolve: {
     alias: {

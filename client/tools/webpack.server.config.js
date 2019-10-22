@@ -18,12 +18,18 @@ module.exports = merge(baseWebpackConfig, {
     libraryTarget: 'commonjs2'
   },
   module: {
-    rules: utils.styleLoaders({
-      sourceMap: false,
-      // 将css样式单独提取出文件
-      extract: false, // 使用 vue-style-loader 处理css
-      usePostCSS: true
-    })
+    rules: [
+      {
+        // 此处打包时是有点却别的，因为seo 支持对内容seo, 所
+        // 以这里我和一般的vue ssr 处理的不一样，直接全部略过了生成的所有样式
+        test: /\.(sa|sc|c)ss$/,
+        use: ['ignore-loader']
+      }
+      // {
+      //   test: /\.(sa|sc|c)ss$/,
+      //   use: ['vue-style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+      // }
+    ]
   },
   resolve: {
     alias: {
