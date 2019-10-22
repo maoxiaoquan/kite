@@ -14,16 +14,13 @@
       "admin",
       "db",
       "views",
-      "static/_admin", 
+      "static/_admin",
       "static/_cli",
       "static/_client",
       "static/default"
     ],
-    "ignore_watch": [
-      "node_modules",
-      "static/upload"
-    ],
-    "env": { 
+    "ignore_watch": ["node_modules", "static/upload"],
+    "env": {
       "NODE_ENV": "production"
     }
   }
