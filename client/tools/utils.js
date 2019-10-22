@@ -42,7 +42,7 @@ exports.cssLoaders = function (options) {
     }
 
     if (options.extract) {
-      return [MiniCssExtractPlugin.loader].concat(loaders)
+      return ['vue-style-loader', MiniCssExtractPlugin.loader].concat(loaders)
     } else {
       return ['vue-style-loader'].concat(loaders)
     }
