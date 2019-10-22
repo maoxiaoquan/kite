@@ -43,17 +43,18 @@
       <div class="toolbar editor-toolbar">
         <div class="tool">
           <div class="emoji picker">
-            <el-popover placement="bottom-start"
-                        width="500"
-                        v-model="faceVisible">
+            
+            <Popover :visible.sync="faceVisible">
               <face @changeFace="changeFace"
-                    v-if="faceVisible" />
-              <div class="emoji-box"
-                   slot="reference">
-                <i class="el-icon-picture-outline-round"></i>
-                <span class="tool-text">表情</span>
-              </div>
-            </el-popover>
+                      v-if="faceVisible" />
+                <div class="emoji-box"
+                    slot="button">
+                  <i class="el-icon-picture-outline-round"></i>
+                  <span class="tool-text">表情</span>
+                </div>
+            </Popover>
+
+
           </div>
 
           <div class="file-picker picker"
@@ -73,6 +74,7 @@
           </div>
           <div class="link-picker picker"
                :class="{'no-click':type===2}">
+               
             <el-popover ref="popoverLink"
                         placement="bottom"
                         popper-class="link-view"
@@ -158,7 +160,7 @@
 </template>
 
 <script>
-import { UploadImage, Face } from '@components'
+import { UploadImage, Face, Popover } from '@components'
 import { mapState } from 'vuex'
 export default {
   name: 'dynamicWrite',
@@ -325,7 +327,8 @@ export default {
   },
   components: {
     UploadImage,
-    Face
+    Face,
+    Popover
   }
 }
 </script>

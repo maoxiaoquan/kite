@@ -7,14 +7,10 @@ import { sync } from 'vuex-router-sync'
 import {
   Message,
   MessageBox,
-  Dialog,
   Dropdown,
   DropdownMenu,
   DropdownItem,
-  Popover,
-  Select,
-  Option,
-  OptionGroup
+  Popover
 } from 'element-ui'
 
 import './assets/css/box_layout.scss'
@@ -27,14 +23,10 @@ Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$prompt = MessageBox.prompt
 Vue.prototype.$message = Message
 
-Vue.component('el-dialog', Dialog)
 Vue.component('el-dropdown', Dropdown)
 Vue.component('el-dropdown-menu', DropdownMenu)
 Vue.component('el-dropdown-item', DropdownItem)
 Vue.component('el-popover', Popover)
-Vue.component('el-select', Select)
-Vue.component('el-option', Option)
-Vue.component('el-option-group', OptionGroup)
 
 export function createApp (context) {
   // 创建 router 和 store 实例

@@ -22,14 +22,12 @@
 
       <div class="form-item form-btns clearfix">
         <div class="left-view">
-          <el-popover placement="top-start"
-                      width="500"
-                      v-model="faceVisible">
-            <comment-face @changeFace="changeFace"
-                          v-if="faceVisible" />
-            <i slot="reference"
+          <Popover :visible.sync="faceVisible">
+            <Face @changeFace="changeFace"
+                  v-if="faceVisible" />
+            <i slot="button"
                class="face-icon el-icon-picture-outline-round"></i>
-          </el-popover>
+          </Popover>
         </div>
         <div class="right-view">
           <button type="submit"
@@ -42,8 +40,7 @@
 </template>
 
 <script>
-import commentFace from './CommentFace'
-
+import { Popover, Face } from "@components";
 export default {
   name: 'CommentForm',
   data () {
@@ -102,7 +99,8 @@ export default {
     }
   },
   components: {
-    'comment-face': commentFace
+    Face,
+    Popover
   }
 }
 </script>

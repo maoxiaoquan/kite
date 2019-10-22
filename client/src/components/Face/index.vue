@@ -48,6 +48,7 @@ export default {
 
 <style scoped lang="scss">
 .face {
+  width: 500px;
   .face-switch {
     border-bottom: 1px solid #f0f0f0;
     padding-bottom: 5px;

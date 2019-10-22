@@ -63,7 +63,7 @@
 <script>
 
 import commentForm from "./CommentForm";
-import faceqq from "./face/qq";
+import { faceQQ } from '@components'
 import commentChildItem from "./CommentChildItem";
 
 export default {
@@ -119,7 +119,7 @@ export default {
     },
     commentRender (val) {
       let newComment = val;
-      faceqq.map(faceItem => {
+      faceQQ.map(faceItem => {
         newComment = newComment.replace(
           new RegExp("\\" + faceItem.face_text, "g"),
           faceItem.face_view

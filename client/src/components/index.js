@@ -6,6 +6,7 @@ import UploadImage from './Upload/UploadImage.vue'
 import Face from './Face'
 import faceQQ from './Face/face/qq'
 import Dialog from './Dialog'
+import Popover from './Popover'
 export {
   sendCode, // 发送验证码
   ArticleItem, // 文章列表内容页
@@ -14,5 +15,6 @@ export {
   UploadImage,
   Face,
   faceQQ,
-  Dialog
+  Dialog,
+  Popover
 }
