@@ -9,10 +9,10 @@
           <div class="user-popover-box">
             <router-link :to='{name:"user",params:{uid:dynamicItem.user.uid}}'
                          class="user-link">
-              <el-image class="avatar"
-                        size="size"
-                        :src="dynamicItem.user.avatar">
-              </el-image>
+              <img class="avatar"
+                   size="size"
+                   :src="dynamicItem.user.avatar"
+                   alt="">
             </router-link>
           </div>
           <div class="dynamic-header-content">
@@ -67,14 +67,13 @@
 
       <div class="dynamic-image-row"
            v-if="dynamicItem.type===2">
-        <el-image class="preview-picture"
-                  style="width: 100px; height: 100px"
-                  :src="url"
-                  v-for="(url,key) in imgAnalyze(dynamicItem.attach)"
-                  :key="key"
-                  v-if="url"
-                  :preview-src-list="imgAnalyze(dynamicItem.attach)">
-        </el-image>
+        <img class="preview-picture"
+             style="width: 100px; height: 100px"
+             :src="url"
+             v-for="(url,key) in imgAnalyze(dynamicItem.attach)"
+             :key="key"
+             v-if="url"
+             alt="">
       </div>
 
       <div class="dynamic-link-row"

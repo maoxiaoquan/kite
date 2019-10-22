@@ -9,20 +9,18 @@
           <router-link class="user-link"
                        :to="{name:'user',params:{uid:dynamicItem.user.uid}}"
                        v-if="dynamicItem.user.uid!=='tree'">
-            <el-image class="avatar"
-                      size="size"
-                      :src="dynamicItem.user.avatar">
-            </el-image>
+            <img :src="dynamicItem.user.avatar"
+                 class="avatar"
+                 alt="">
           </router-link>
 
           <a href="javascript:;"
              target="_blank"
              class="user-link"
              v-else>
-            <el-image class="avatar"
-                      size="size"
-                      :src="dynamicItem.user.avatar">
-            </el-image>
+            <img :src="dynamicItem.user.avatar"
+                 class="avatar"
+                 alt="">
           </a>
         </div>
         <div class="dynamic-header-content">
@@ -65,14 +63,13 @@
 
     <div class="dynamic-image-row"
          v-if="dynamicItem.type===2">
-      <el-image class="preview-picture"
-                style="width: 100px; height: 100px"
-                :src="url"
-                v-for="(url,key) in imgAnalyze(dynamicItem.attach)"
-                :key="key"
-                v-if="url"
-                :preview-src-list="imgAnalyze(dynamicItem.attach)">
-      </el-image>
+      <img style="width: 100px; height: 100px"
+           class="preview-picture"
+           :src="url"
+           v-for="(url,key) in imgAnalyze(dynamicItem.attach)"
+           :key="key"
+           v-if="url"
+           alt="">
     </div>
 
     <div class="dynamic-link-row"

@@ -12,8 +12,7 @@
                      :to="{'name':'comment_rule'}">《点我查看评论规范》</router-link>
       </div>
       <comment-form @commentChange="commentChange" />
-      <div class="comment-list"
-           v-loading="isLoadingComment">
+      <div class="comment-list">
         <div id="commentlist">
           <comment-item :comment-item="item"
                         v-for="(item,key) in articleComment.comment_list"
@@ -39,18 +38,12 @@ import commentForm from "./CommentForm";
 import { mapState } from "vuex";
 export default {
   name: "index",
-  data () {
-    return {
-      isLoadingComment: false
-    };
-  },
   created () {
     this.getCommentList(); // 获取用户的评论
   },
   methods: {
     getCommentList () {
       // 获取评论列表
-      this.isLoadingComment = true;
       var that = this;
       this.$store
         .dispatch("articleComment/ARTICLE_COMMENT_LIST", {
@@ -58,27 +51,14 @@ export default {
           page: this.comment_page,
           pageSize: this.comment_pageSize
         })
-        .then(result => {
-          this.isLoadingComment = false;
-        })
-        .catch(err => {
-          this.isLoadingComment = false;
-        });
     },
     pageChange (val) {
-      this.isLoadingComment = true;
       this.$store
         .dispatch("articleComment/ARTICLE_COMMENT_LIST", {
           aid: this.article.aid,
           page: val,
           pageSize: this.comment_pageSize
         })
-        .then(result => {
-          this.isLoadingComment = false;
-        })
-        .catch(err => {
-          this.isLoadingComment = false;
-        });
     },
     commentChange (res) {
       if (res.state === "success") {

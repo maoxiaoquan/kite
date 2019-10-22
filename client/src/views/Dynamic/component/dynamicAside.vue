@@ -3,11 +3,10 @@
     <div class="profile-box client-card"
          v-if="personalInfo.islogin">
       <div class="profile">
-        <a>
-          <el-image class="avatar"
-                    size="size"
-                    :src="userInfo.user.avatar">
-          </el-image>
+        <a href="javascript:;">
+          <img :src="userInfo.user.avatar"
+               class="avatar"
+               alt="">
         </a>
         <div class="user-info">
           <a class="username ellipsis">{{userInfo.user.nickname}}</a>
@@ -61,12 +60,10 @@
               :key="key">
             <router-link class="topic-item"
                          :to='{name:"dynamicTopicView",params:{dynamicTopicId:item.topic_id}}'>
-              <el-image class="lazy icon loaded immediate"
-                        size="size"
-                        :src="item.icon">
-              </el-image>
+              <img :src="item.icon"
+                   class="lazy icon loaded immediate"
+                   alt="">
               <div class="content"><span>{{item.name}}</span><span>{{item.rss_count}} 关注 · {{item.dynamicCount}} 片刻</span>
-                <!---->
               </div>
             </router-link>
           </li>

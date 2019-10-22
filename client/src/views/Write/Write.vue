@@ -1,8 +1,8 @@
 <template>
-  <section class="write-lay layout-content">
-    <div class="container">
+  <client-only>
+    <section class="write-lay layout-content">
+      <div class="container">
 
-      <client-only>
         <!-- this component will only be rendered on client-side -->
 
         <div class="write-top  box-form-group">
@@ -131,10 +131,9 @@
                   @click="saveArticle">发布文章</button>
         </div>
 
-      </client-only>
-
-    </div>
-  </section>
+      </div>
+    </section>
+  </client-only>
 </template>
 
 <script>

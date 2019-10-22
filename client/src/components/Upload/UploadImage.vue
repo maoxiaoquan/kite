@@ -1,6 +1,5 @@
 <template>
-  <div class="UploadImage"
-       v-loading='loading'>
+  <div class="UploadImage">
     <slot></slot>
     <input type="file"
            name="fileImg"
@@ -12,7 +11,7 @@
 
 <script>
 export default {
-  props: ['uploadUrl', 'loading'],
+  props: ['uploadUrl'],
   data () {
     return {
       picavalue: "",

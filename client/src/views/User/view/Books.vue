@@ -1,10 +1,8 @@
 <template>
   <div class="user-books">
 
-    <el-button size="small"
-               class="create-book"
-               type="primary"
-               @click="createBooks">创建小书</el-button>
+    <button class="btn create-book"
+            @click="createBooks">创建小书</button>
 
     <div class="user-books-view row">
       <div class="col-xs-12 col-sm-6 col-md-6"
@@ -119,7 +117,7 @@ export default {
     },
     createBooks () {
       if (!this.$store.state.personalInfo.islogin) {
-        this.$store.commit('SET_IS_LOGIN', true)
+        this.$router.push({ name: 'signIn' })
       } else {
         this.$router.push({ name: 'booksWrite', params: { type: 'create' } })
       }
@@ -202,6 +200,12 @@ export default {
 <style scoped lang="scss">
 .user-books {
   .create-book {
+    border-radius: 15px;
+    background: #ffd600;
+    padding: 3px 13px;
+    font-size: 14px;
+    border-color: #ffd600;
+    color: #333;
     margin-top: 20px;
   }
   .user-books-view {

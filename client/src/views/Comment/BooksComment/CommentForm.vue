@@ -2,17 +2,18 @@
   <div class="comment-form"
        id="comment_form">
     <div class="comment-avatar">
-      <el-image v-if="personalInfo.islogin"
-                :src="personalInfo.user.avatar"
-                lazy></el-image>
-      <el-image v-else
-                src="/default/img/avatar.jpeg"
-                lazy></el-image>
+      <img v-if="personalInfo.islogin"
+           :src="personalInfo.user.avatar"
+           class="box-image"
+           alt="">
+      <img v-else
+           src="/default/img/avatar.jpeg"
+           class="box-image"
+           alt="">
     </div>
 
     <div class="form-item"
-         style="margin-left: 50px;"
-         v-loading="isCommentSubmit">
+         style="margin-left: 50px;">
       <div class="input-view">
         <textarea name="comment"
                   v-model="commentContent"
@@ -63,8 +64,7 @@ export default {
     return {
       commentContent: '', // 顶级输入框
       star: "",
-      faceVisible: false,
-      isCommentSubmit: false
+      faceVisible: false
     }
   },
   props: {
@@ -106,16 +106,13 @@ export default {
         return false
       }
       var params = this.getParams()
-      this.isCommentSubmit = true
       this.$store.dispatch("books/BOOKS_COMMENT_CREATE", params)
         .then(result => {
           this.commentContent = ''
-          this.isCommentSubmit = false
           this.$emit('commentChange', result)
         })
         .catch(err => {
           this.commentContent = ''
-          this.isCommentSubmit = false
         })
     }
   },
@@ -141,9 +138,11 @@ export default {
     height: 40px;
     overflow: hidden;
     border-radius: 35px;
-    /deep/ .el-image {
+    .box-image {
       width: 40px;
       height: 40px;
+      border-radius: 4px;
+      overflow: hidden;
       img {
         width: 100%;
         height: 100%;

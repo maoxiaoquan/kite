@@ -3,8 +3,9 @@
        :id="'comment'+commentItem.id"
        ref="comment_list">
     <div class="avatar">
-      <el-image :src="commentItem.user.avatar"
-                lazy></el-image>
+      <img :src="commentItem.user.avatar"
+           class="box-image"
+           alt="">
     </div>
     <div class="comment-body">
       <div class="comment-main">
@@ -138,9 +139,11 @@ export default {
     float: left;
     margin: 0 13px 10px 0;
     margin-right: 0;
-    /deep/ .el-image {
+    .box-image {
       width: 40px;
       height: 40px;
+      border-radius: 4px;
+      overflow: hidden;
       img {
         width: 100%;
         height: 100%;

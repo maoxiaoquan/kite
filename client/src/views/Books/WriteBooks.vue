@@ -1,17 +1,16 @@
 <template>
-  <section class="books-write-lay layout-content">
-    <div class="container">
-
-      <client-only>
+  <client-only>
+    <section class="books-write-lay layout-content">
+      <div class="container">
         <!-- this component will only be rendered on client-side -->
 
         <div class="row mrg-bm20 books-write-content">
           <div class="col-xs-12 col-sm-4 col-md-3 box-form-group">
             <div class="cover-img">
-              <el-image class="cover-img-view"
-                        :src="write.cover_img"
-                        v-if="write.cover_img"
-                        lazy></el-image>
+              <img :src="write.cover_img"
+                   v-if="write.cover_img"
+                   class="cover-img-view"
+                   alt="">
               <div class="cover-img-view cover-img-null"
                    v-else>
                 <p>封面图片为空，如果未上传，将采用默认图片</p>
@@ -109,11 +108,9 @@
 
           </div>
         </div>
-
-      </client-only>
-
-    </div>
-  </section>
+      </div>
+    </section>
+  </client-only>
 </template>
 
 <script>

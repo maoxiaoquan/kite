@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const utils = require('./utils')
 const merge = require('webpack-merge')
 const nodeExternals = require('webpack-node-externals')
 const baseWebpackConfig = require('./webpack.base.config')
@@ -19,10 +20,8 @@ module.exports = merge(baseWebpackConfig, {
   module: {
     rules: [
       {
-        // 此处打包时是有点却别的，因为seo 支持对内容seo, 所
-        // 以这里我和一般的vue ssr 处理的不一样，直接全部略过了生成的所有样式
         test: /\.(sa|sc|c)ss$/,
-        use: ['ignore-loader']
+        use: ['vue-style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
       }
     ]
   },

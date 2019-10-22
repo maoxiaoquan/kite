@@ -1,7 +1,6 @@
 <template>
-
-  <section class="personal-lay layout-content">
-    <client-only>
+  <client-only>
+    <section class="personal-lay layout-content">
       <div class="container  box-container">
         <div class="row">
 
@@ -27,8 +26,9 @@
 
         </div>
       </div>
-    </client-only>
-  </section>
+
+    </section>
+  </client-only>
 </template>
 
 <script>

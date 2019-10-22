@@ -16,7 +16,7 @@
             <ul class="navbar-item-content mr-auto">
               <li class="navbar-menu-content active">
                 <div class="navbar-toggler"
-                     @click="is_navbar_menu=!is_navbar_menu">
+                     @click="isNavbarMenu=!isNavbarMenu">
                   <el-dropdown trigger="click"
                                @command="commandChange">
                     <div class="el-dropdown-link">
@@ -38,7 +38,7 @@
                   </el-dropdown>
                 </div>
                 <ul class="navbar-menu"
-                    :class="{show:is_navbar_menu}">
+                    :class="{show:isNavbarMenu}">
                   <li class="nav-item">
                     <router-link :to="{name:'home'}"
                                  class="nav-link">主页</router-link>
@@ -70,7 +70,7 @@
                   <input class="form-control form-search-view"
                          type="text"
                          required="true"
-                         v-model="search_val"
+                         v-model="searchVal"
                          name="search"
                          placeholder="搜索文章"
                          aria-label="Search" />
@@ -92,8 +92,9 @@
                                @command="commandChange">
                     <div class="el-dropdown-link">
                       <div class="avatar-img">
-                        <el-image :src="personalInfo.user.avatar"
-                                  lazy></el-image>
+                        <img :src="personalInfo.user.avatar"
+                             class="box-image"
+                             alt="">
                       </div>
                     </div>
                     <el-dropdown-menu slot="dropdown">
@@ -109,13 +110,13 @@
               </template>
               <template v-else>
                 <li class="nav-item"
-                    @click="show_login"
+                    @click="onLogin"
                     v-if="website.config.on_login==='yes'">
                   <a class="btn btn-sm sign-btn btn-block"
                      href="javascript:;">登录</a>
                 </li>
                 <li class="nav-item"
-                    @click="show_register"
+                    @click="onRegister"
                     v-if="website.config.on_register==='yes'">
                   <a class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
                      href="javascript:;">注册</a>
@@ -137,25 +138,29 @@ export default {
   name: "Header",
   data () {
     return {
-      is_navbar_menu: false, // 主菜单栏是否显示
-      is_dropdown_menu: false, // 个人下拉菜单栏是否显示
-      search_val: ""
+      isNavbarMenu: false, // 主菜单栏是否显示
+      isDropdownMenu: false, // 个人下拉菜单栏是否显示
+      searchVal: ""
     };
   },
   methods: {
     search () {
-      if (!this.search_val) {
+      if (!this.searchVal) {
         this.$message.warning("请输入搜索内容");
         return false;
       }
       this.$router.push({
         name: "search",
-        query: { query: this.search_val }
+        query: { query: this.searchVal }
       });
     },
-    show_login () {
+    onLogin () {
       // 显示登录
-      this.$store.commit("SET_IS_LOGIN", true);
+      this.$router.push({ name: 'signIn' })
+    },
+    onRegister () {
+      // 显示注册
+      this.$router.push({ name: 'signUp' })
     },
     commandChange (val) {
       if (val.name !== "esc") {
@@ -168,10 +173,6 @@ export default {
       // dropdown_menu 导航事件
       this[type] = false;
       this.$router.push(val);
-    },
-    show_register () {
-      // 显示注册
-      this.$store.commit("SET_IS_REGISTER", true);
     },
     escLogin () {
       this.$message.warning("已退出当前账户，请重新登录");
@@ -344,9 +345,11 @@ export default {
                 width: 36px;
                 height: 36px;
                 border-radius: 72px;
-                /deep/ .el-image {
+                .box-image {
                   width: 36px;
                   height: 36px;
+                  border-radius: 4px;
+                  overflow: hidden;
                   img {
                     width: 100%;
                     height: 100%;

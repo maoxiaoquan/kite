@@ -82,12 +82,10 @@
                      class="link-input"
                      placeholder="请输入连接地址">
               <div style="text-align: right; margin: 0">
-                <el-button size="mini"
-                           type="text"
-                           @click="onLink('delete')">取消</el-button>
-                <el-button type="primary"
-                           size="mini"
-                           @click="onLink('enter')">确定</el-button>
+                <button class="btn btn-default btn-sm" 
+                           @click="onLink('delete')">取消</button>
+                <button class="btn btn-primary btn-sm"  
+                           @click="onLink('enter')">确定</button>
               </div>
             </el-popover>
             <div class="emoji-box"
@@ -151,11 +149,8 @@
           </div>
         </div>
         <div class="submit">
-          <!-- <div class="tip">Ctrl or ⌘ + Enter</div> -->
-          <el-button size="mini"
-                     type="primary"
-                     @click="send"
-                     class="send-dynamic">发布</el-button>
+          <button @click="send"
+                     class="btn send-dynamic">发布</button>
         </div>
       </div>
     </div>
@@ -511,6 +506,8 @@ export default {
         .send-dynamic {
           border-radius: 15px;
           background: #ffd600;
+          padding: 3px 13px;
+          font-size: 14px;
           border-color: #ffd600;
           color: #333;
         }

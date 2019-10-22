@@ -4,8 +4,9 @@
 
       <router-link :to='{name:"article_tag",params:{en_name:articleTagItem.en_name}}'>
         <div class="thumb">
-          <el-image :src="articleTagItem.icon"
-                    lazy></el-image>
+          <img :src="articleTagItem.icon"
+               class="box-image"
+               alt="">
         </div>
         <div class="title"
              v-text="articleTagItem.name"></div>
@@ -93,9 +94,11 @@ export default {
     height: 75px;
     margin: 10px auto 15px;
     border-radius: 20px;
-    /deep/ .el-image {
+    .box-image {
       width: 75px;
       height: 75px;
+      border-radius: 4px;
+      overflow: hidden;
       img {
         width: 100%;
         height: 100%;

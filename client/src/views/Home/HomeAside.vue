@@ -107,21 +107,21 @@ export default {
   methods: {
     createDynamic () {
       if (!this.$store.state.personalInfo.islogin) {
-        this.$store.commit('SET_IS_LOGIN', true)
+        this.$router.push({ name: 'signIn' })
       } else {
         this.$router.push({ name: 'dynamics', params: { dynamicTopicId: 'newest' } })
       }
     },
     createBooks () {
       if (!this.$store.state.personalInfo.islogin) {
-        this.$store.commit('SET_IS_LOGIN', true)
+        this.$router.push({ name: 'signIn' })
       } else {
         this.$router.push({ name: 'booksWrite', params: { type: 'create' } })
       }
     },
     createArticle () {
       if (!this.$store.state.personalInfo.islogin) {
-        this.$store.commit('SET_IS_LOGIN', true)
+        this.$router.push({ name: 'signIn' })
       } else {
         this.$router.push({ name: 'Write', params: { type: 'create' } })
       }

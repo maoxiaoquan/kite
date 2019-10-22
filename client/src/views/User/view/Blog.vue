@@ -1,10 +1,8 @@
 <template>
   <div class="user-article-blog">
 
-    <el-button size="small"
-               class="create-article-blog"
-               type="primary"
-               @click="createEditArticleBlog('create')">创建新的个人专栏</el-button>
+    <button class="btn create-article-blog"
+            @click="createEditArticleBlog('create')">创建个人专栏</button>
 
     <div class="user-article-blog-view row">
       <div class="col-xs-12 col-sm-6 col-md-6"
@@ -14,9 +12,9 @@
           <div class="user-article-blog-top">
             <router-link class="article-blog-icon"
                          :to="{name:'articleBlog',params:{blogId:articleBlogItem.blog_id}}">
-              <el-image class="article-blog-icon-img"
-                        :src="articleBlogItem.icon"
-                        lazy></el-image>
+              <img class="article-blog-icon-img"
+                   :src="articleBlogItem.icon"
+                   alt="">
             </router-link>
 
             <div class="user-article-blog-info">
@@ -107,10 +105,10 @@
           @pageChange="pageChange"></Page>
 
     <!-- use the modal component, pass in the prop -->
-    <el-dialog :visible.sync="isCreateBlogShow"
-               :close-on-click-modal="false"
-               :close-on-press-escape="false"
-               width="380px">
+    <Dialog :visible.sync="isCreateBlogShow"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            width="380px">
       <div class="blog-modal">
         <div class="form-group">
           <label for="blog-name-input">专题名字：</label>
@@ -147,9 +145,9 @@
           <label for="blog-name-input">专栏封面图片（非必传）：</label>
           <div class="avatar"
                v-if="blogForm.icon">
-            <el-image class="avatar-img"
-                      :src="blogForm.icon"
-                      lazy></el-image>
+            <img class="avatar-img"
+                 :src="blogForm.icon"
+                 alt="">
           </div>
           <div class="action-box">
             <div class="hint">支持 jpg、png 格式大小 1M 以内的图片</div>
@@ -159,18 +157,16 @@
         </div>
 
         <div class="form-group">
+          {{articleTagAll}}
           <label for="blog-name-input">选择标签：</label>
-          <el-select filterable
-                     multiple
-                     :multiple-limit="5"
-                     v-model="blogForm.tag_ids"
-                     placeholder="请选择">
-            <el-option v-for="(item,key) in articleTagAll"
-                       :key="key"
-                       :label="item.name"
-                       :value="item.tag_id">
-            </el-option>
-          </el-select>
+          <select v-model="blogForm.tag_ids"
+                  placeholder="请选择">
+            <option v-for="(item,key) in articleTagAll"
+                    :key="key"
+                    :label="item.name"
+                    :value="item.tag_id">
+            </option>
+          </select>
 
         </div>
 
@@ -194,13 +190,13 @@
         </div>
 
       </div>
-    </el-dialog>
+    </Dialog>
 
   </div>
 </template>
 
 <script>
-import { Page, UploadImage } from '@components'
+import { Page, UploadImage, Dialog } from '@components'
 import { mapState } from 'vuex'
 export default {
   name: 'Blog',
@@ -292,7 +288,7 @@ export default {
       url = this.isCreate ? 'user/CREATE_ARTICLE_BLOG' : 'user/UPDATE_ARTICLE_BLOG'
       params = {
         ...this.blogForm,
-        tag_ids: this.blogForm.tag_ids.join(',')
+        tag_ids: this.blogForm.tag_ids
       }
       this.$store.dispatch(url, {
         ...params
@@ -378,7 +374,8 @@ export default {
   },
   components: {
     Page,
-    UploadImage
+    UploadImage,
+    Dialog
   }
 }
 </script>
@@ -386,6 +383,14 @@ export default {
 <style scoped lang="scss">
 .user-article-blog {
   padding-top: 20px;
+  .create-article-blog {
+    border-radius: 15px;
+    background: #ffd600;
+    padding: 3px 13px;
+    font-size: 14px;
+    border-color: #ffd600;
+    color: #333;
+  }
   .user-article-blog-view {
     padding-top: 20px;
     .user-article-blog-item {

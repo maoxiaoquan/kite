@@ -9,8 +9,9 @@
                v-if="articleTag">
             <div class="main-top">
               <div class="thumb">
-                <el-image :src="articleTag.icon"
-                          lazy></el-image>
+                <img :src="articleTag.icon"
+                     class="box-image"
+                     alt="">
               </div>
 
               <div class="title">
@@ -148,9 +149,11 @@ export default {
       height: 100px;
       margin: 0 auto;
       border-radius: 15px;
-      /deep/ .el-image {
+      .box-image {
         width: 100px;
         height: 100px;
+        border-radius: 4px;
+        overflow: hidden;
         img {
           width: 100%;
           height: 100%;
