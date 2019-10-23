@@ -47,17 +47,26 @@
                 <i :class="isCollect(article)?'el-icon-star-on':'el-icon-star-off'"></i>
               </div>
               <div class="meta-bottom-item share">
-                <el-dropdown trigger="click"
-                             @command="shareChange">
-                  <div class="el-dropdown-link">
+                <Dropdown>
+                  <div class="el-dropdown-link"
+                       slot="button">
                     <i class="el-icon-share"></i>
                   </div>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :command="{type:'qq',data:article}">分享到QQ</el-dropdown-item>
-                    <el-dropdown-item :command="{type:'sina',data:article}">分享到新浪</el-dropdown-item>
-                    <el-dropdown-item :command="{type:'qzone',data:article}">分享到QQ空间</el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
+                  <div class="dropdown-menu-view">
+                    <div class="dropdown-menu-item"
+                         @click="shareChange({type:'qq',data:article})">
+                      分享到QQ
+                    </div>
+                    <div class="dropdown-menu-item"
+                         @click="shareChange({type:'sina',data:article})">
+                      分享到新浪
+                    </div>
+                    <div class="dropdown-menu-item"
+                         @click="shareChange({type:'qzone',data:article})">
+                      分享到QQ空间
+                    </div>
+                  </div>
+                </Dropdown>
               </div>
             </div>
             <!--article footer end-->
@@ -81,7 +90,7 @@ import ArticleComment from "@views/Comment/ArticleComment";
 import { share, baidu, google } from '@utils'
 import { mapState } from 'vuex'
 import googleMixin from '@mixins/google'
-
+import { Dropdown } from '@components'
 export default {
   name: "Article",
   mixins: [googleMixin], //混合谷歌分析 
@@ -183,7 +192,8 @@ export default {
     ...mapState(['website', 'personalInfo'])
   },
   components: {
-    ArticleComment
+    ArticleComment,
+    Dropdown
   }
 };
 </script>

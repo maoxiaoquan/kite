@@ -67,17 +67,7 @@ module.exports = {
         loader: 'babel-loader',
         exclude: file => /node_modules/.test(file) && !/\.vue\.js/.test(file),
         options: {
-          plugins: [
-            '@babel/plugin-syntax-dynamic-import',
-            'transform-vue-jsx',
-            [
-              'component',
-              {
-                libraryName: 'element-ui',
-                styleLibraryName: 'theme-chalk'
-              }
-            ]
-          ]
+          plugins: ['@babel/plugin-syntax-dynamic-import', 'transform-vue-jsx']
         }
       },
       {

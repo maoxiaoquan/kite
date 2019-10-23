@@ -17,25 +17,31 @@
               <li class="navbar-menu-content active">
                 <div class="navbar-toggler"
                      @click="isNavbarMenu=!isNavbarMenu">
-                  <el-dropdown trigger="click"
-                               @command="commandChange">
-                    <div class="el-dropdown-link">
+                  <Dropdown>
+                    <div class="el-dropdown-link"
+                         slot="button">
                       <i class="menu-icon el-icon-menu"></i>
                     </div>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item icon="el-icon-s-home"
-                                        :command="{name:'home'}">主页</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-chat-line-round"
-                                        :command="{name:'dynamics',params:{dynamicTopicId:'newest'}}">片刻</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-notebook-2"
-                                        :command="{name:'books',params:{columnEnName:'all'}}">小书</el-dropdown-item>
-                      <!-- 屏蔽，此功能不开放 <el-dropdown-item icon="el-icon-tickets"
-                                        :command="{name:'articleBlogs',params:{columnEnName:'all'}}">专栏</el-dropdown-item> -->
-                      <el-dropdown-item icon="el-icon-chat-line-square"
-                                        v-if="personalInfo.islogin"
-                                        :command="{name:'userMessage',params:{uid:personalInfo.user.uid}}">消息</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
+                    <div class="dropdown-menu-view">
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'home'})">
+                        主页
+                      </div>
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'dynamics',params:{dynamicTopicId:'newest'}})">
+                        片刻
+                      </div>
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'books',params:{columnEnName:'all'}})">
+                        小书
+                      </div>
+                      <div class="dropdown-menu-item"
+                           v-if="personalInfo.islogin"
+                           @click="commandChange({name:'userMessage',params:{uid:personalInfo.user.uid}})">
+                        消息
+                      </div>
+                    </div>
+                  </Dropdown>
                 </div>
                 <ul class="navbar-menu"
                     :class="{show:isNavbarMenu}">
@@ -88,24 +94,32 @@
                   </router-link>
                 </li>
                 <li class="nav-item dropdown">
-                  <el-dropdown trigger="click"
-                               @command="commandChange">
-                    <div class="el-dropdown-link">
+
+                  <Dropdown placement="right">
+                    <div class="el-dropdown-link"
+                         slot="button">
                       <div class="avatar-img">
                         <img :src="personalInfo.user.avatar"
                              class="box-image"
                              alt="">
                       </div>
                     </div>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item icon="el-icon-user"
-                                        :command="{name:'user',params:{uid:personalInfo.user.uid}}">我的主页</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-setting"
-                                        :command="{name:'setting'}">设置</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-right"
-                                        :command="{name:'esc'}">退出</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
+                    <div class="dropdown-menu-view">
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'user',params:{uid:personalInfo.user.uid}})">
+                        我的主页
+                      </div>
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'setting'})">
+                        设置
+                      </div>
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'esc'})">
+                        退出
+                      </div>
+                    </div>
+                  </Dropdown>
+
                 </li>
               </template>
               <template v-else>
@@ -134,6 +148,7 @@
 <script>
 import { cookie } from "../../../../server/utils/cookie";
 import { mapState } from "vuex";
+import { Dropdown } from '@components'
 export default {
   name: "Header",
   data () {
@@ -179,6 +194,9 @@ export default {
       cookie.delete("accessToken");
       window.location.reload();
     }
+  },
+  components: {
+    Dropdown
   },
   computed: {
     ...mapState(["website", "personalInfo"]), // home:主页  article_column:文章的专栏

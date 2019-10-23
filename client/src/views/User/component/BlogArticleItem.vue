@@ -7,18 +7,22 @@
       </div>
       <div class="operat-view"
            v-if="personalInfo.islogin&&personalInfo.user.uid===user_info.user.uid">
-        <el-dropdown trigger="click"
-                     @command="commandChange">
-          <div class="operat-view-icon el-dropdown-link">
+        <Dropdown>
+          <div class="operat-view-icon el-dropdown-link"
+               slot="button">
             <i class="el-icon-more"></i>
           </div>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-edit"
-                              :command="{name:'Write',params:{type:articleItem.aid}}">修改</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-delete"
-                              :command="{name:'delete'}">删除</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+          <div class="dropdown-menu-view">
+            <div class="dropdown-menu-item"
+                 @click="commandChange({name:'Write',params:{type:articleItem.aid}})">
+              修改
+            </div>
+            <div class="dropdown-menu-item"
+                 @click="commandChange({name:'delete'})">
+              删除
+            </div>
+          </div>
+        </Dropdown>
       </div>
       <div class="info-row meta-row">
         <ul class="meta-list">
@@ -85,6 +89,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { Dropdown } from '@components'
 export default {
   name: "ArticleItem",
   props: {
@@ -143,6 +148,9 @@ export default {
         this.deleteArticle();
       }
     },
+  },
+  components: {
+    Dropdown
   },
   computed: {
     ...mapState(['personalInfo']),

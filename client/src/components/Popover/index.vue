@@ -1,9 +1,11 @@
 <template>
   <div class="pop-over">
     <div @click="toggleOpen"
-         class="pop-button"
-         href="javascript: void(0);">
+         class="pop-button">
       <slot name="button"></slot>
+    </div>
+    <div class="pop-button">
+      <slot name="no-button"></slot>
     </div>
     <div v-clickoutside="close"
          v-show="visible"
@@ -15,7 +17,7 @@
 
 <script>
 export default {
-  name: 'PopOver',
+  name: 'Popover',
   props: {
     visible: {
       type: Boolean,
@@ -38,7 +40,6 @@ export default {
           if (!vnode.context || el.contains(e.target)) return;
           binding.value(e);
         };
-
         setTimeout(() => {
           document.addEventListener('click', documentHandler);
         }, 0);

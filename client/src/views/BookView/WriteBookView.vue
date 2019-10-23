@@ -64,24 +64,30 @@
                 </div>
                 <div class="nav-item dropdown"
                      v-else>
-                  <el-dropdown trigger="click"
-                               @command="commandChange">
-                    <div class="el-dropdown-link">
+                  <Dropdown placement="right">
+                    <div class="el-dropdown-link"
+                         slot="button">
                       <div class="avatar-img">
                         <img :src="personalInfo.user.avatar"
                              class="box-image"
                              alt="">
                       </div>
                     </div>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item icon="el-icon-user"
-                                        :command="{name:'user',params:{uid:personalInfo.user.uid}}">我的主页</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-setting"
-                                        :command="{name:'setting'}">设置</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-right"
-                                        :command="{name:'esc'}">退出</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
+                    <div class="dropdown-menu-view">
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'user',params:{uid:personalInfo.user.uid}})">
+                        我的主页
+                      </div>
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'setting'})">
+                        设置
+                      </div>
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'esc'})">
+                        退出
+                      </div>
+                    </div>
+                  </Dropdown>
                 </div>
               </div>
             </div>
@@ -126,7 +132,7 @@
 </template>
 
 <script>
-import { UploadImage } from '@components'
+import { UploadImage, Dropdown } from '@components'
 import { mavonEditor } from 'mavon-editor'
 import { cookie } from "../../../../server/utils/cookie";
 import 'mavon-editor/dist/css/index.css'
@@ -367,7 +373,8 @@ export default {
   components: {
     'mavon-editor': mavonEditor,
     UploadImage,
-    ClientOnly
+    ClientOnly,
+    Dropdown
   },
 };
 </script>

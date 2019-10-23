@@ -12,18 +12,22 @@
         <div class="library-item clearfix client-card">
           <div class="operat-view"
                v-if="personalInfo.islogin&&personalInfo.user.uid===booksItem.user.uid">
-            <el-dropdown trigger="click"
-                         @command="commandChange">
-              <div class="el-dropdown-link">
+            <Dropdown>
+              <div class="el-dropdown-link"
+                   slot="button">
                 <i class="el-icon-more"></i>
               </div>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item icon="el-icon-edit"
-                                  :command="{type:'edit',booksItem}">修改</el-dropdown-item>
-                <el-dropdown-item icon="el-icon-delete"
-                                  :command="{type:'delete',booksItem}">删除</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+              <div class="dropdown-menu-view">
+                <div class="dropdown-menu-item"
+                     @click="commandChange({type:'edit',booksItem})">
+                  修改
+                </div>
+                <div class="dropdown-menu-item"
+                     @click="commandChange({type:'delete',booksItem})">
+                  删除
+                </div>
+              </div>
+            </Dropdown>
           </div>
           <div class="library-item__thumb">
             <router-link :to="{name:'book',params:{books_id:booksItem.books_id}}">
@@ -76,7 +80,7 @@
 </template>
 
 <script>
-import { Page, UploadImage } from '@components'
+import { Page, UploadImage, Dropdown } from '@components'
 import { mapState } from 'vuex'
 export default {
   name: 'Books',
@@ -192,7 +196,8 @@ export default {
   },
   components: {
     Page,
-    UploadImage
+    UploadImage,
+    Dropdown
   }
 }
 </script>
