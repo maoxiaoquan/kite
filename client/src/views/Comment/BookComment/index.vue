@@ -12,8 +12,7 @@
                      :to="{'name':'comment_rule'}">《点我查看评论规范》</router-link>
       </div>
       <comment-form @commentChange="commentChange" />
-      <div class="comment-list"
-           v-loading="isLoadingComment">
+      <div class="comment-list">
         <div id="commentlist">
           <comment-item :comment-item="item"
                         v-for="(item,key) in comment.comment_list"
@@ -45,8 +44,7 @@ export default {
         count: 0,
         page: 1,
         pageSize: 10,
-      },
-      isLoadingComment: false
+      }
     };
   },
   created () {
@@ -60,7 +58,6 @@ export default {
   methods: {
     getCommentList () {
       // 获取评论列表
-      this.isLoadingComment = true;
       var that = this;
       this.$store
         .dispatch("book/BOOK_COMMENT_LIST", {
@@ -70,14 +67,9 @@ export default {
         })
         .then(result => {
           this.comment = result.data
-          this.isLoadingComment = false;
         })
-        .catch(err => {
-          this.isLoadingComment = false;
-        });
     },
     pageChange (val) {
-      this.isLoadingComment = true;
       this.$store
         .dispatch("book/BOOK_COMMENT_LIST", {
           book_id: this.$route.params.book_id,
@@ -86,11 +78,7 @@ export default {
         })
         .then(result => {
           this.comment = result.data
-          this.isLoadingComment = false;
         })
-        .catch(err => {
-          this.isLoadingComment = false;
-        });
     },
     commentChange (res) {
       if (res.state === "success") {

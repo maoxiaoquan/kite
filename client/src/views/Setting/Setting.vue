@@ -1,8 +1,8 @@
 <template>
-  <!--article-list-lay layout-content start-->
-  <section class="user-setting-lay layout-content"
-           id="user-setting-profile">
-    <client-only>
+  <client-only>
+    <!--article-list-lay layout-content start-->
+    <section class="user-setting-lay layout-content"
+             id="user-setting-profile">
       <div class="container box-container">
         <div class="row">
 
@@ -31,8 +31,9 @@
           </div>
         </div>
       </div>
-    </client-only>
-  </section>
+
+    </section>
+  </client-only>
   <!--article-list-lay layout-content end-->
 </template>
 

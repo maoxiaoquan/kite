@@ -14,15 +14,13 @@
                v-if="item.user_role_icon"
                :src="item.user_role_icon"
                alt="">
-          <span v-popover:user_role_info
-                class="tag-name">{{item.user_role_name}}</span>
-          <el-popover ref="user_role_info"
-                      placement="bottom"
-                      title="介绍"
-                      width="200"
-                      trigger="hover"
-                      :content="item.user_role_description">
-          </el-popover>
+          <Popover :visible.sync="Visible">
+            <span slot="button"
+                  @mouseenter="Visible=true"
+                  @mouseleave="Visible=false"
+                  class="tag-name">{{item.user_role_name}}</span>
+            {{item.user_role_description}}
+          </Popover>
         </a>
       </li>
     </ul>
@@ -66,6 +64,8 @@
 </template>
 
 <script>
+import { Popover, Face } from "@components";
+import { mapState } from 'vuex'
 export default {
   name: 'UserAside',
   data () {
@@ -73,16 +73,15 @@ export default {
       user_role_all: [],
       user: {},
       curr_user_role_ids: [],
-      user_role_item: []
+      user_role_item: [],
+      Visible: false
     }
   },
   created () {
     this.$store.dispatch('user/GET_USER_ROLE_ALL')
   },
   computed: {
-    personalInfo () { // 登录后的个人信息
-      return this.$store.state.personalInfo || {}
-    },
+    ...mapState(['personalInfo']),
     userAside () { // user 侧栏信息
       return this.$store.state.user.user_aside || {}
     },
@@ -90,6 +89,9 @@ export default {
       return this.$store.state.user.user_info || {}
     },
   },
+  components: {
+    Popover
+  }
 }
 </script>
 

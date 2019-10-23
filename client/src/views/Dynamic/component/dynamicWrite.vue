@@ -43,17 +43,17 @@
       <div class="toolbar editor-toolbar">
         <div class="tool">
           <div class="emoji picker">
-            <el-popover placement="bottom-start"
-                        width="500"
-                        v-model="faceVisible">
+            
+            <Popover :visible.sync="faceVisible">
               <face @changeFace="changeFace"
-                    v-if="faceVisible" />
-              <div class="emoji-box"
-                   slot="reference">
-                <i class="el-icon-picture-outline-round"></i>
-                <span class="tool-text">表情</span>
-              </div>
-            </el-popover>
+                      v-if="faceVisible" />
+                <div class="emoji-box"
+                    slot="button">
+                  <i class="el-icon-picture-outline-round"></i>
+                  <span class="tool-text">表情</span>
+                </div>
+            </Popover>
+
           </div>
 
           <div class="file-picker picker"
@@ -73,89 +73,90 @@
           </div>
           <div class="link-picker picker"
                :class="{'no-click':type===2}">
-            <el-popover ref="popoverLink"
-                        placement="bottom"
-                        popper-class="link-view"
-                        v-model="isLinkPopover">
-              <input type="text"
-                     v-model="linkContent"
-                     class="link-input"
-                     placeholder="请输入连接地址">
-              <div style="text-align: right; margin: 0">
-                <el-button size="mini"
-                           type="text"
-                           @click="onLink('delete')">取消</el-button>
-                <el-button type="primary"
-                           size="mini"
-                           @click="onLink('enter')">确定</el-button>
-              </div>
-            </el-popover>
-            <div class="emoji-box"
-                 v-popover:popoverLink
-                 v-show="Number(type)!==2">
-              <i class="el-icon-link"></i>
-              <span class="tool-text">链接</span>
-            </div>
-            <div class="emoji-box"
-                 v-show="type===2">
-              <i class="el-icon-link"></i>
-              <span class="tool-text">链接</span>
-            </div>
+              
+            <Popover :visible.sync="isLinkPopover" class="link-view">
+                <input type="text"
+                      v-model="linkContent"
+                      class="link-input"
+                      placeholder="请输入连接地址">
+                <div style="text-align: right; margin: 0">
+                  <button class="btn btn-default btn-sm" 
+                            @click="onLink('delete')">取消</button>
+                  <button class="btn btn-primary btn-sm"  
+                            @click="onLink('enter')">确定</button>
+                </div>
+                <template>
+                  <div class="emoji-box"
+                    slot="button"
+                    v-show="Number(type)!==2">
+                    <i class="el-icon-link"></i>
+                    <span class="tool-text">链接</span>
+                  </div>
+                  <div class="emoji-box"
+                      slot="no-button"
+                      v-show="type===2">
+                    <i class="el-icon-link"></i>
+                    <span class="tool-text">链接</span>
+                  </div>
+                </template>
+            </Popover>
+
           </div>
           <div class="topic-picker picker" :class="{'no-click':afferentTopic}">
-            <el-popover ref="topicView"
-                        placement="bottom"
-                        popper-class="topic-view"
-                        v-model="isTopicPopover">
-              <input type="text"
-                     v-model="searchTopicVal"
-                     class="search-input"
-                     placeholder="请输入连接地址">
-              <ul class="topic-list">
-                <li @click="onTopic">
-                  <div class="topic-item no-topic">
-                    <div class="icon">
-                      <i class="el-icon-remove-outline"></i>
-                    </div>
-                    <div class="content">
-                      <span>不添加任何话题</span>
-                    </div>
+
+            <Popover :visible.sync="isTopicPopover">
+                <div class="topic-view">
+                  <input type="text"
+                        v-model="searchTopicVal"
+                        class="search-input"
+                        placeholder="请输入连接地址">
+                  <ul class="topic-list">
+                    <li @click="onTopic">
+                      <div class="topic-item no-topic">
+                        <div class="icon">
+                          <i class="el-icon-remove-outline"></i>
+                        </div>
+                        <div class="content">
+                          <span>不添加任何话题</span>
+                        </div>
+                      </div>
+                    </li>
+                    <li v-for="(item,key) in searchTopicResultList"
+                        @click="onTopic(item)"
+                        :key="key">
+                      <div class="topic-item">
+                        <div class="lazy loaded immediate">
+                          <img class="icon"
+                              :src="item.icon"
+                              alt="">
+                        </div>
+                        <div class="content">
+                          <span>{{item.name}}</span><span>{{item.like_count}} 关注 · 0 片刻</span>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <template>
+                  <div class="emoji-box"
+                      slot="button"
+                      v-if="!afferentTopic">
+                    <i class="el-icon-collection-tag"></i>
+                    <span class="tool-text">话题</span>
                   </div>
-                </li>
-                <li v-for="(item,key) in searchTopicResultList"
-                    @click="onTopic(item)"
-                    :key="key">
-                  <div class="topic-item">
-                    <div class="lazy loaded immediate">
-                      <img class="icon"
-                           :src="item.icon"
-                           alt="">
-                    </div>
-                    <div class="content">
-                      <span>{{item.name}}</span><span>{{item.like_count}} 关注 · 0 片刻</span>
-                    </div>
+                  <div class="emoji-box"
+                      slot="no-button"
+                      v-else>
+                    <i class="el-icon-collection-tag"></i>
+                    <span class="tool-text">话题</span>
                   </div>
-                </li>
-              </ul>
-            </el-popover>
-            <div class="emoji-box"
-                 v-popover:topicView v-if="!afferentTopic">
-              <i class="el-icon-collection-tag"></i>
-              <span class="tool-text">话题</span>
-            </div>
-             <div class="emoji-box"
-                 v-else>
-              <i class="el-icon-collection-tag"></i>
-              <span class="tool-text">话题</span>
-            </div>
+                </template>
+            </Popover>
           </div>
         </div>
         <div class="submit">
-          <!-- <div class="tip">Ctrl or ⌘ + Enter</div> -->
-          <el-button size="mini"
-                     type="primary"
-                     @click="send"
-                     class="send-dynamic">发布</el-button>
+          <button @click="send"
+                     class="btn send-dynamic">发布</button>
         </div>
       </div>
     </div>
@@ -163,7 +164,7 @@
 </template>
 
 <script>
-import { UploadImage, Face } from '@components'
+import { UploadImage, Face, Popover } from '@components'
 import { mapState } from 'vuex'
 export default {
   name: 'dynamicWrite',
@@ -330,7 +331,8 @@ export default {
   },
   components: {
     UploadImage,
-    Face
+    Face,
+    Popover
   }
 }
 </script>
@@ -511,6 +513,8 @@ export default {
         .send-dynamic {
           border-radius: 15px;
           background: #ffd600;
+          padding: 3px 13px;
+          font-size: 14px;
           border-color: #ffd600;
           color: #333;
         }
@@ -521,7 +525,7 @@ export default {
 
 .link-view {
   .link-input {
-    width: 100%;
+    width: 180px;
     background-color: #fafafb;
     border: 1px solid #e5e5e5;
     border-radius: 2px;

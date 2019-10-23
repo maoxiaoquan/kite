@@ -4,42 +4,14 @@ import { createRouter } from './router'
 import { createStore } from './store'
 import { sync } from 'vuex-router-sync'
 
-import {
-  Message,
-  MessageBox,
-  Button,
-  Dialog,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-  Popover,
-  Loading,
-  Image,
-  Select,
-  Option,
-  OptionGroup
-} from 'element-ui'
+import { Message, Confirm } from './components'
 
 import './assets/css/box_layout.scss'
 import './assets/css/reset.scss'
 import './assets/css/other.scss'
-Vue.prototype.$msgbox = MessageBox
-Vue.prototype.$alert = MessageBox.alert
-Vue.prototype.$confirm = MessageBox.confirm
-Vue.prototype.$prompt = MessageBox.prompt
-Vue.prototype.$message = Message
-Vue.use(Loading)
 
-Vue.component('el-button', Button)
-Vue.component('el-dialog', Dialog)
-Vue.component('el-dropdown', Dropdown)
-Vue.component('el-dropdown-menu', DropdownMenu)
-Vue.component('el-dropdown-item', DropdownItem)
-Vue.component('el-popover', Popover)
-Vue.component('el-image', Image)
-Vue.component('el-select', Select)
-Vue.component('el-option', Option)
-Vue.component('el-option-group', OptionGroup)
+Vue.prototype.$confirm = Confirm.install
+Vue.use(Message)
 
 export function createApp (context) {
   // 创建 router 和 store 实例

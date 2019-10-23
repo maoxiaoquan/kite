@@ -17,11 +17,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   },
   module: {
     // 使用 vue-style-loader 处理css
-    rules: utils.styleLoaders({
-      sourceMap: config.client.dev.cssSourceMap,
-      usePostCSS: true,
-      extract: false
-    })
+    rules: [
+      {
+        test: /\.(sa|sc|c)ss$/,
+        use: ['vue-style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+      }
+    ]
   },
   resolve: {
     alias: {

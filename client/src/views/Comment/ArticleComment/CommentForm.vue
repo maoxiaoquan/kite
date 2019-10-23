@@ -2,17 +2,18 @@
   <div class="comment-form"
        id="comment_form">
     <div class="comment-avatar">
-      <el-image v-if="personalInfo.islogin"
-                :src="personalInfo.user.avatar"
-                lazy></el-image>
-      <el-image v-else
-                src="/default/img/avatar.jpeg"
-                lazy></el-image>
+      <img v-if="personalInfo.islogin"
+           :src="personalInfo.user.avatar"
+           class="box-image"
+           alt="">
+      <img v-else
+           src="/default/img/avatar.jpeg"
+           class="box-image"
+           alt="">
     </div>
 
     <div class="form-item"
-         style="margin-left: 50px;"
-         v-loading="isCommentSubmit">
+         style="margin-left: 50px;">
       <div class="input-view">
         <textarea name="comment"
                   v-model="commentContent"
@@ -21,14 +22,12 @@
 
       <div class="form-item form-btns clearfix">
         <div class="left-view">
-          <el-popover placement="top-start"
-                      width="500"
-                      v-model="faceVisible">
-            <comment-face @changeFace="changeFace"
-                          v-if="faceVisible" />
-            <i slot="reference"
+          <Popover :visible.sync="faceVisible">
+            <Face @changeFace="changeFace"
+                  v-if="faceVisible" />
+            <i slot="button"
                class="face-icon el-icon-picture-outline-round"></i>
-          </el-popover>
+          </Popover>
         </div>
         <div class="right-view">
           <button type="submit"
@@ -41,15 +40,13 @@
 </template>
 
 <script>
-import commentFace from './CommentFace'
-
+import { Popover, Face } from "@components";
 export default {
   name: 'CommentForm',
   data () {
     return {
       commentContent: '', // 顶级输入框
-      faceVisible: false,
-      isCommentSubmit: false
+      faceVisible: false
     }
   },
   props: {
@@ -83,16 +80,13 @@ export default {
         return false
       }
       var params = this.getParams()
-      this.isCommentSubmit = true
       this.$store.dispatch("articleComment/ARTICLE_COMMENT_CREATE", params)
         .then(result => {
           this.commentContent = ''
-          this.isCommentSubmit = false
           this.$emit('commentChange', result)
         })
         .catch(err => {
           this.commentContent = ''
-          this.isCommentSubmit = false
         })
     }
   },
@@ -105,7 +99,8 @@ export default {
     }
   },
   components: {
-    'comment-face': commentFace
+    Face,
+    Popover
   }
 }
 </script>
@@ -118,9 +113,11 @@ export default {
     height: 40px;
     overflow: hidden;
     border-radius: 35px;
-    /deep/ .el-image {
+    .box-image {
       width: 40px;
       height: 40px;
+      border-radius: 4px;
+      overflow: hidden;
       img {
         width: 100%;
         height: 100%;

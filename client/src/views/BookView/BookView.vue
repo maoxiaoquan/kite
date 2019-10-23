@@ -1,6 +1,6 @@
 <template>
-  <div class="book-read-view">
-    <client-only>
+  <client-only>
+    <div class="book-read-view">
       <div class="book-section"
            :class="{'fold-pc':!isShowAside}">
         <div class="book-summary">
@@ -64,23 +64,30 @@
                 </div>
                 <div class="nav-item dropdown"
                      v-else>
-                  <el-dropdown trigger="click"
-                               @command="commandChange">
-                    <div class="el-dropdown-link">
+                  <Dropdown placement="right">
+                    <div class="el-dropdown-link"
+                         slot="button">
                       <div class="avatar-img">
-                        <el-image :src="personalInfo.user.avatar"
-                                  lazy></el-image>
+                        <img :src="personalInfo.user.avatar"
+                             class="box-image"
+                             alt="">
                       </div>
                     </div>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item icon="el-icon-user"
-                                        :command="{name:'user',params:{uid:personalInfo.user.uid}}">我的主页</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-setting"
-                                        :command="{name:'setting'}">设置</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-right"
-                                        :command="{name:'esc'}">退出</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
+                    <div class="dropdown-menu-view">
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'user',params:{uid:personalInfo.user.uid}})">
+                        我的主页
+                      </div>
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'setting'})">
+                        设置
+                      </div>
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'esc'})">
+                        退出
+                      </div>
+                    </div>
+                  </Dropdown>
                 </div>
               </div>
             </div>
@@ -124,8 +131,8 @@
 
         </div>
       </div>
-    </client-only>
-  </div>
+    </div>
+  </client-only>
 </template>
 
 <script>
@@ -135,7 +142,7 @@ import { cookie } from "../../../../server/utils/cookie";
 import ClientOnly from 'vue-client-only'
 import { baidu, google } from '@utils'
 import googleMixin from '@mixins/google'
-
+import { Dropdown } from '@components'
 export default {
   name: "BookInfo",
   minixs: [googleMixin], //混合谷歌分析
@@ -202,11 +209,11 @@ export default {
     },
     show_login () {
       // 显示登录
-      this.$store.commit("SET_IS_LOGIN", true);
+      this.$router.push({ name: 'signIn' })
     },
     show_register () {
       // 显示注册
-      this.$store.commit("SET_IS_REGISTER", true);
+      this.$router.push({ name: 'signUp' })
     },
     lookChapter (book_id) {
       this.$router.push({ name: 'BookView', params: { books_id: this.$route.params.books_id, book_id: book_id } })
@@ -228,7 +235,8 @@ export default {
   },
   components: {
     BookComment,
-    ClientOnly
+    ClientOnly,
+    Dropdown
   }
 };
 </script>
@@ -500,9 +508,11 @@ export default {
                 width: 36px;
                 height: 36px;
                 border-radius: 72px;
-                /deep/ .el-image {
+                .box-image {
                   width: 36px;
                   height: 36px;
+                  border-radius: 4px;
+                  overflow: hidden;
                   img {
                     width: 100%;
                     height: 100%;

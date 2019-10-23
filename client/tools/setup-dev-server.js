@@ -6,7 +6,7 @@ const webpack = require('webpack')
 // 监听文件变化，兼容性更好(比fs.watch、fs.watchFile、fsevents)
 const chokidar = require('chokidar')
 const clientConfig = require('./webpack.dev.config')
-const serverConfig = require('./webpack.server.config')
+const serverConfig = require('./webpack.server.dev.config')
 // webpack热加载需要
 const webpackDevMiddleware = require('koa-webpack-dev-middleware')
 // 配合热加载实现模块热替换
@@ -21,7 +21,7 @@ const readFile = (fs, file) => {
   }
 }
 
-module.exports = function setupDevServer(app, templatePath, cb) {
+module.exports = function setupDevServer (app, templatePath, cb) {
   let bundle
   let template
   let clientManifest
@@ -44,7 +44,10 @@ module.exports = function setupDevServer(app, templatePath, cb) {
   })
 
   // 修改webpack入口配合模块热替换使用
-  clientConfig.entry.app = ['webpack-hot-middleware/client', clientConfig.entry.app]
+  clientConfig.entry.app = [
+    'webpack-hot-middleware/client',
+    clientConfig.entry.app
+  ]
 
   // 编译clinetWebpack 插入Koa中间件
   const clientCompiler = webpack(clientConfig)
@@ -60,10 +63,9 @@ module.exports = function setupDevServer(app, templatePath, cb) {
     stats.errors.forEach(err => console.error(err))
     stats.warnings.forEach(err => console.warn(err))
     if (stats.errors.length) return
-    clientManifest = JSON.parse(readFile(
-      devMiddleware.fileSystem,
-      'vue-ssr-client-manifest.json'
-    ))
+    clientManifest = JSON.parse(
+      readFile(devMiddleware.fileSystem, 'vue-ssr-client-manifest.json')
+    )
     update()
   })
 

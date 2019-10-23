@@ -11,9 +11,9 @@
             <div class="article-blog-header">
               <div class="user-article-blog-top">
                 <div class="article-blog-icon">
-                  <el-image class="article-blog-icon-img"
-                            :src="articleBlog.blogInfo.icon"
-                            lazy></el-image>
+                  <img class="box-image"
+                       :src="articleBlog.blogInfo.icon"
+                       alt="">
                 </div>
 
                 <div class="user-article-blog-info">
@@ -66,9 +66,9 @@
                 <p class="description">介绍：{{articleBlog.blogInfo.description||'暂时没有简介，输入简介更直观表达专栏内容'}}</p>
                 <ul>
                   <li class="item item-icon read-count">
-                    <el-image class="user-avatar"
-                              :src="articleBlog.blogInfo.user.avatar"
-                              lazy></el-image>
+                    <img class="user-avatar"
+                         :src="articleBlog.blogInfo.user.avatar"
+                         alt="">
                     <router-link :to='{name:"user",params:{uid:articleBlog.blogInfo.user.uid}}'
                                  class="nickname">{{articleBlog.blogInfo.user.nickname}}</router-link>
                   </li>

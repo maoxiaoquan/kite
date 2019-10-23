@@ -7,18 +7,22 @@
       </div>
       <div class="operat-view"
            v-if="personalInfo.islogin&&personalInfo.user.uid===user_info.user.uid">
-        <el-dropdown trigger="click"
-                     @command="commandChange">
-          <div class="operat-view-icon el-dropdown-link">
+        <Dropdown>
+          <div class="operat-view-icon el-dropdown-link"
+               slot="button">
             <i class="el-icon-more"></i>
           </div>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-edit"
-                              :command="{name:'Write',params:{type:articleItem.aid}}">修改</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-delete"
-                              :command="{name:'delete'}">删除</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+          <div class="dropdown-menu-view">
+            <div class="dropdown-menu-item"
+                 @click="commandChange({name:'Write',params:{type:articleItem.aid}})">
+              修改
+            </div>
+            <div class="dropdown-menu-item"
+                 @click="commandChange({name:'delete'})">
+              删除
+            </div>
+          </div>
+        </Dropdown>
       </div>
       <div class="info-row meta-row">
         <ul class="meta-list">
@@ -76,14 +80,16 @@
     </div>
     <div class="lazy thumb thumb loaded"
          v-if="articleItem.cover_img">
-      <el-image :src="articleItem.cover_img"
-                lazy></el-image>
+      <img :src="articleItem.cover_img"
+           class="box-image"
+           alt="">
     </div>
   </article>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { Dropdown } from '@components'
 export default {
   name: "ArticleItem",
   props: {
@@ -142,6 +148,9 @@ export default {
         this.deleteArticle();
       }
     },
+  },
+  components: {
+    Dropdown
   },
   computed: {
     ...mapState(['personalInfo']),
@@ -323,9 +332,11 @@ export default {
     height: 4.5rem;
     margin-left: 2rem;
     border-radius: 2px;
-    /deep/ .el-image {
+    .box-image {
       width: 7.5rem;
       height: 4.5rem;
+      border-radius: 4px;
+      overflow: hidden;
       img {
         width: 100%;
         height: 100%;
@@ -342,7 +353,7 @@ export default {
       width: 4.5rem;
       height: 4.5rem;
       border-radius: 10px;
-      .el-image {
+      .box-image {
         width: 4.5rem;
         height: 4.5rem;
       }

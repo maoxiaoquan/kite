@@ -2,8 +2,9 @@
   <div class="comment-item"
        :id="'comment'+childCommentItem.id">
     <div class="avatar">
-      <el-image :src="childCommentItem.user.avatar"
-                lazy></el-image>
+      <img :src="childCommentItem.user.avatar"
+           class="box-image"
+           alt="">
     </div>
     <div class="comment-body">
 
@@ -54,7 +55,7 @@
 
 <script>
 import commentForm from "./CommentForm";
-import faceqq from "./face/qq";
+import { faceQQ } from '@components'
 
 export default {
   name: "childrenItem",
@@ -90,7 +91,7 @@ export default {
     },
     commentRender (val) {
       let newComment = val;
-      faceqq.map(faceItem => {
+      faceQQ.map(faceItem => {
         newComment = newComment.replace(
           new RegExp("\\" + faceItem.face_text, "g"),
           faceItem.face_view
@@ -123,9 +124,11 @@ export default {
     float: left;
     margin: 0 13px 10px 0;
     margin-right: 0;
-    /deep/ .el-image {
+    .box-image {
       width: 32px;
       height: 32px;
+      border-radius: 4px;
+      overflow: hidden;
       img {
         width: 100%;
         height: 100%;

@@ -10,8 +10,9 @@
           <span class="title">头像</span>
           <div class="avatar-uploader avatar-uploader">
             <div class="avatar">
-              <el-image :src="(formData.avatar_review_status===1||formData.avatar_review_status===3)?formData.avatar_review:formData.avatar"
-                        lazy></el-image>
+              <img :src="(formData.avatar_review_status===1||formData.avatar_review_status===3)?formData.avatar_review:formData.avatar"
+                   class="box-image"
+                   alt="">
             </div>
             <div class="action-box">
               <div class="hint">支持 jpg、png 格式大小 1M 以内的图片
@@ -267,9 +268,11 @@ export default {
           width: 72px;
           height: 72px;
           margin-right: 12px;
-          /deep/ .el-image {
+          .box-image {
             width: 72px;
             height: 72px;
+            border-radius: 4px;
+            overflow: hidden;
             img {
               width: 100%;
               height: 100%;

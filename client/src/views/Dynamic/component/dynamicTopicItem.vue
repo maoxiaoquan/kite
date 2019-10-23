@@ -2,10 +2,9 @@
   <div class="topic-item">
     <router-link class="icon"
                  :to='{name:"dynamicTopicView",params:{dynamicTopicId:dynamicTopicItem.topic_id}}'>
-      <el-image class="avatar"
-                size="size"
-                :src="dynamicTopicItem.icon">
-      </el-image>
+      <img :src="dynamicTopicItem.icon"
+           class="avatar"
+           alt="">
     </router-link>
     <div class="content">
       <router-link class="icon"

@@ -1,6 +1,6 @@
 <template>
-  <div class="book-read-view">
-    <client-only>
+  <client-only>
+    <div class="book-read-view">
       <!-- this component will only be rendered on client-side -->
       <div class="book-section"
            :class="{'fold-pc':!isShowAside}">
@@ -64,29 +64,35 @@
                 </div>
                 <div class="nav-item dropdown"
                      v-else>
-                  <el-dropdown trigger="click"
-                               @command="commandChange">
-                    <div class="el-dropdown-link">
+                  <Dropdown placement="right">
+                    <div class="el-dropdown-link"
+                         slot="button">
                       <div class="avatar-img">
-                        <el-image :src="personalInfo.user.avatar"
-                                  lazy></el-image>
+                        <img :src="personalInfo.user.avatar"
+                             class="box-image"
+                             alt="">
                       </div>
                     </div>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item icon="el-icon-user"
-                                        :command="{name:'user',params:{uid:personalInfo.user.uid}}">我的主页</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-setting"
-                                        :command="{name:'setting'}">设置</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-right"
-                                        :command="{name:'esc'}">退出</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
+                    <div class="dropdown-menu-view">
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'user',params:{uid:personalInfo.user.uid}})">
+                        我的主页
+                      </div>
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'setting'})">
+                        设置
+                      </div>
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'esc'})">
+                        退出
+                      </div>
+                    </div>
+                  </Dropdown>
                 </div>
               </div>
             </div>
             <div class="book-body transition--next">
-              <div class="section-content"
-                   v-loading="isLoadingEdit">
+              <div class="section-content">
                 <div class="operating clearfix">
                   <button class="btn btn-save"
                           @click="saveBook">{{$route.params.book_id==='create'?'新建小书章节':'更新当前章节'}}</button>
@@ -121,12 +127,12 @@
           </div>
         </div>
       </div>
-    </client-only>
-  </div>
+    </div>
+  </client-only>
 </template>
 
 <script>
-import { UploadImage } from '@components'
+import { UploadImage, Dropdown } from '@components'
 import { mavonEditor } from 'mavon-editor'
 import { cookie } from "../../../../server/utils/cookie";
 import 'mavon-editor/dist/css/index.css'
@@ -184,7 +190,6 @@ export default {
         sort: 0
       },
       isShowAside: true, // 是否显示侧栏
-      isLoadingEdit: false, // 加载修改的数据
       toolbars: {
         bold: true, // 粗体
         italic: true, // 斜体
@@ -231,11 +236,11 @@ export default {
     },
     showLogin () {
       // 显示登录
-      this.$store.commit("SET_IS_LOGIN", true);
+      this.$router.push({ name: 'signIn' })
     },
     showRegister () {
       // 显示注册
-      this.$store.commit("SET_IS_REGISTER", true);
+      this.$router.push({ name: 'signUp' })
     },
     resetBook () { // 回复默认
       this.$confirm('此操作将恢复到初始编辑状态, 是否继续?', '提示', {
@@ -271,18 +276,15 @@ export default {
     initEdit () {
       if (this.$route.params.book_id !== "create") {
         // 判断是不是创建，不是则是修改，同时赋值
-        this.isLoadingEdit = true
         this.$store
           .dispatch("book/GET_USER_BOOK_INFO", {
             book_id: this.$route.params.book_id
           })
           .then(result => {
-            this.isLoadingEdit = false
             this.write = result.data.book
             this.editDataInfo = result.data.book
             this.write.content = result.data.book.origin_content;
           }).catch(err => {
-            this.isLoadingEdit = false
           });
       } else {
         this.write = {
@@ -371,7 +373,8 @@ export default {
   components: {
     'mavon-editor': mavonEditor,
     UploadImage,
-    ClientOnly
+    ClientOnly,
+    Dropdown
   },
 };
 </script>
@@ -638,9 +641,11 @@ export default {
                 width: 36px;
                 height: 36px;
                 border-radius: 72px;
-                /deep/ .el-image {
+                .box-image {
                   width: 36px;
                   height: 36px;
+                  border-radius: 4px;
+                  overflow: hidden;
                   img {
                     width: 100%;
                     height: 100%;

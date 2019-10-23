@@ -12,7 +12,6 @@
             <router-link :to="{name:'user',params:{uid:articleItem.user.uid}}"
                          class="name">{{articleItem.user.nickname}}</router-link>
           </li>
-
           <li class="item item-icon read-count">
             <i class="el-icon-reading"></i>
             <strong v-text="articleItem.read_count"></strong>
@@ -33,21 +32,22 @@
                          class="tag-class frontend"
                          :key="key"
                          :to="{name:'article_tag',params:{en_name:itemArticleTag.en_name}}">{{itemArticleTag.name}}</router-link>
-
           </li>
           <li class="item operat-view"
               @click="isOperating=!isOperating"
               v-if="personalInfo.islogin&&personalInfo.user.uid===userInfo.user.uid">
-            <el-dropdown trigger="click"
-                         @command="commandChange">
-              <div class="el-dropdown-link">
+            <Dropdown>
+              <div class="el-dropdown-link"
+                   slot="button">
                 <i class="el-icon-more"></i>
               </div>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item icon="el-icon-delete"
-                                  :command="{type:'cancel'}">取消喜欢</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+              <div class="dropdown-menu-view">
+                <div class="dropdown-menu-item"
+                     @click="commandChange({type:'cancel'})">
+                  取消喜欢
+                </div>
+              </div>
+            </Dropdown>
           </li>
         </ul>
       </div>
@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import { Dropdown } from '@components'
 import { mapState } from 'vuex'
 export default {
   name: "TopArticleItem",
@@ -103,6 +104,9 @@ export default {
           console.log(err);
         });
     },
+  },
+  components: {
+    Dropdown
   },
   computed: {
     ...mapState(['personalInfo']),

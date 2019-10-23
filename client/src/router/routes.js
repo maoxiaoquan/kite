@@ -184,6 +184,21 @@ export default [
     path: '/book/:books_id/write/:book_id',
     name: 'WriteBookView',
     component: () => import('@views/BookView/WriteBookView') // 编辑小书内容
+  },
+  {
+    path: '/sign/in',
+    name: 'signIn',
+    component: require('@views/Sign/SignIn').default // 登录
+  },
+  {
+    path: '/sign/up',
+    name: 'signUp',
+    component: require('@views/Sign/SignUp').default // 注册
+  },
+  {
+    path: '/sign/reset-password',
+    name: 'resetPassword',
+    component: require('@views/Sign/ResetPassword').default // 找回密码
   }
   // {
   //   path: '/editor/:editor_type',

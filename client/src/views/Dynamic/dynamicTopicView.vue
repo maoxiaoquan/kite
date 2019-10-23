@@ -32,16 +32,15 @@
           </div>
         </div>
         <div class="col-xs-12 col-sm-4 col-md-4">
-          <aside class="topic-side topic-side sidebar client-card"
-                 v-loading="isLoadingTopicInfo">
+          <aside class="topic-side topic-side sidebar client-card">
             <div class="topic-box">
               <div class="wallpaper">
                 <span :style="`background-image: url(${topicInfo.icon});`"></span>
               </div>
               <div class="content">
-                <el-image class="icon"
-                          :src="topicInfo.icon">
-                </el-image>
+                <img :src="topicInfo.icon"
+                     class="icon"
+                     alt="">
                 <div class="title">{{topicInfo.name}}</div>
 
                 <span class="followed"
@@ -113,7 +112,6 @@ export default {
     return {
       afferentTopic: "",
       topicInfo: {},
-      isLoadingTopicInfo: false,
       page: 1,
       isLoading: false,
       isMore: true,
@@ -169,10 +167,8 @@ export default {
       }
     },
     getDynamicTopicInfo () {
-      this.isLoadingTopicInfo = true // 表示正在加载专题信息
       this.$store.dispatch("dynamic/GET_DYNAMIC_TOPIC_INFO", { topic_id: this.$route.params.dynamicTopicId || '' }).then(result => {
         this.topicInfo = result.data.info || {}
-        this.isLoadingTopicInfo = false
       })
     },
     async subscribeDynamicTopic () { // 订阅动态话题

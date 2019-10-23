@@ -1,6 +1,5 @@
 <template>
-  <div class="user-article-like"
-       v-loading="isLoading">
+  <div class="user-article-like">
 
     <ul class="user-article-like-view">
       <li v-for="(item,key) in articleList.article_list"
@@ -41,8 +40,7 @@ export default {
         count: 0,
         page: 1,
         pageSize: 10
-      },
-      isLoading: false
+      }
     }
   },
   mounted () {
@@ -50,16 +48,12 @@ export default {
   },
   methods: {
     getUserLikeArticleList () {
-      this.isLoading = true
       this.$store.dispatch('user/GET_USER_LIKE_ARTICLE_LIST', {
         uid: this.$route.params.uid,
         page: this.articleList.page || 1,
         pageSize: this.articleList.pageSize || 10,
       }).then(result => {
         this.articleList = result.data
-        this.isLoading = false
-      }).catch(err => {
-        this.isLoading = true
       })
     },
     pageChange (val) {

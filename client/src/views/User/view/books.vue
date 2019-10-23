@@ -1,10 +1,8 @@
 <template>
   <div class="user-books">
 
-    <el-button size="small"
-               class="create-book"
-               type="primary"
-               @click="createBooks">创建小书</el-button>
+    <button class="btn create-book"
+            @click="createBooks">创建小书</button>
 
     <div class="user-books-view row">
       <div class="col-xs-12 col-sm-6 col-md-6"
@@ -14,18 +12,22 @@
         <div class="library-item clearfix client-card">
           <div class="operat-view"
                v-if="personalInfo.islogin&&personalInfo.user.uid===booksItem.user.uid">
-            <el-dropdown trigger="click"
-                         @command="commandChange">
-              <div class="el-dropdown-link">
+            <Dropdown>
+              <div class="el-dropdown-link"
+                   slot="button">
                 <i class="el-icon-more"></i>
               </div>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item icon="el-icon-edit"
-                                  :command="{type:'edit',booksItem}">修改</el-dropdown-item>
-                <el-dropdown-item icon="el-icon-delete"
-                                  :command="{type:'delete',booksItem}">删除</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+              <div class="dropdown-menu-view">
+                <div class="dropdown-menu-item"
+                     @click="commandChange({type:'edit',booksItem})">
+                  修改
+                </div>
+                <div class="dropdown-menu-item"
+                     @click="commandChange({type:'delete',booksItem})">
+                  删除
+                </div>
+              </div>
+            </Dropdown>
           </div>
           <div class="library-item__thumb">
             <router-link :to="{name:'book',params:{books_id:booksItem.books_id}}">
@@ -78,7 +80,7 @@
 </template>
 
 <script>
-import { Page, UploadImage } from '@components'
+import { Page, UploadImage, Dropdown } from '@components'
 import { mapState } from 'vuex'
 export default {
   name: 'Books',
@@ -119,7 +121,7 @@ export default {
     },
     createBooks () {
       if (!this.$store.state.personalInfo.islogin) {
-        this.$store.commit('SET_IS_LOGIN', true)
+        this.$router.push({ name: 'signIn' })
       } else {
         this.$router.push({ name: 'booksWrite', params: { type: 'create' } })
       }
@@ -194,7 +196,8 @@ export default {
   },
   components: {
     Page,
-    UploadImage
+    UploadImage,
+    Dropdown
   }
 }
 </script>
@@ -202,6 +205,12 @@ export default {
 <style scoped lang="scss">
 .user-books {
   .create-book {
+    border-radius: 15px;
+    background: #ffd600;
+    padding: 3px 13px;
+    font-size: 14px;
+    border-color: #ffd600;
+    color: #333;
     margin-top: 20px;
   }
   .user-books-view {

@@ -9,20 +9,18 @@
           <router-link class="user-link"
                        :to="{name:'user',params:{uid:dynamicItem.user.uid}}"
                        v-if="dynamicItem.user.uid!=='tree'">
-            <el-image class="avatar"
-                      size="size"
-                      :src="dynamicItem.user.avatar">
-            </el-image>
+            <img :src="dynamicItem.user.avatar"
+                 class="avatar"
+                 alt="">
           </router-link>
 
           <a href="javascript:;"
              target="_blank"
              class="user-link"
              v-else>
-            <el-image class="avatar"
-                      size="size"
-                      :src="dynamicItem.user.avatar">
-            </el-image>
+            <img :src="dynamicItem.user.avatar"
+                 class="avatar"
+                 alt="">
           </a>
         </div>
         <div class="dynamic-header-content">
@@ -65,14 +63,13 @@
 
     <div class="dynamic-image-row"
          v-if="dynamicItem.type===2">
-      <el-image class="preview-picture"
-                style="width: 100px; height: 100px"
-                :src="url"
-                v-for="(url,key) in imgAnalyze(dynamicItem.attach)"
-                :key="key"
-                v-if="url"
-                :preview-src-list="imgAnalyze(dynamicItem.attach)">
-      </el-image>
+      <img style="width: 100px; height: 100px"
+           class="preview-picture"
+           :src="url"
+           v-for="(url,key) in imgAnalyze(dynamicItem.attach)"
+           :key="key"
+           v-if="url"
+           alt="">
     </div>
 
     <div class="dynamic-link-row"
@@ -101,19 +98,26 @@
           <span class="action-title">{{dynamicItem.comment_count}}</span>
         </div>
         <div class="share-action action">
-
-          <el-dropdown trigger="click"
-                       @command="shareChange">
-            <div class="el-dropdown-link">
+          <Dropdown>
+            <div class="el-dropdown-link"
+                 slot="button">
               <i class="el-icon-share"></i>
-              <span class="action-title">分享</span>
             </div>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item :command="{type:'qq',data:dynamicItem}">分享到QQ</el-dropdown-item>
-              <el-dropdown-item :command="{type:'sina',data:dynamicItem}">分享到新浪</el-dropdown-item>
-              <el-dropdown-item :command="{type:'qzone',data:dynamicItem}">分享到QQ空间</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+            <div class="dropdown-menu-view">
+              <div class="dropdown-menu-item"
+                   @click="shareChange({type:'qq',data:dynamicItem})">
+                分享到QQ
+              </div>
+              <div class="dropdown-menu-item"
+                   @click="shareChange({type:'sina',data:dynamicItem})">
+                分享到新浪
+              </div>
+              <div class="dropdown-menu-item"
+                   @click="shareChange({type:'qzone',data:dynamicItem})">
+                分享到QQ空间
+              </div>
+            </div>
+          </Dropdown>
         </div>
         <div class="share-action action"
              v-if="isShowDeleteBtn()"
@@ -136,7 +140,7 @@
 <script>
 
 import DynamicComment from '../../Comment/DynamicComment'
-import { faceQQ } from '@components'
+import { faceQQ, Dropdown } from '@components'
 import { mapState } from 'vuex'
 import { share } from '../../../utils'
 export default {
@@ -284,7 +288,8 @@ export default {
     ...mapState(['personalInfo', 'user', 'website'])
   },
   components: {
-    DynamicComment
+    DynamicComment,
+    Dropdown
   }
 }
 </script>

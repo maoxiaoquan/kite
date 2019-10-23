@@ -16,29 +16,35 @@
             <ul class="navbar-item-content mr-auto">
               <li class="navbar-menu-content active">
                 <div class="navbar-toggler"
-                     @click="is_navbar_menu=!is_navbar_menu">
-                  <el-dropdown trigger="click"
-                               @command="commandChange">
-                    <div class="el-dropdown-link">
+                     @click="isNavbarMenu=!isNavbarMenu">
+                  <Dropdown>
+                    <div class="el-dropdown-link"
+                         slot="button">
                       <i class="menu-icon el-icon-menu"></i>
                     </div>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item icon="el-icon-s-home"
-                                        :command="{name:'home'}">主页</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-chat-line-round"
-                                        :command="{name:'dynamics',params:{dynamicTopicId:'newest'}}">片刻</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-notebook-2"
-                                        :command="{name:'books',params:{columnEnName:'all'}}">小书</el-dropdown-item>
-                      <!-- 屏蔽，此功能不开放 <el-dropdown-item icon="el-icon-tickets"
-                                        :command="{name:'articleBlogs',params:{columnEnName:'all'}}">专栏</el-dropdown-item> -->
-                      <el-dropdown-item icon="el-icon-chat-line-square"
-                                        v-if="personalInfo.islogin"
-                                        :command="{name:'userMessage',params:{uid:personalInfo.user.uid}}">消息</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
+                    <div class="dropdown-menu-view">
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'home'})">
+                        主页
+                      </div>
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'dynamics',params:{dynamicTopicId:'newest'}})">
+                        片刻
+                      </div>
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'books',params:{columnEnName:'all'}})">
+                        小书
+                      </div>
+                      <div class="dropdown-menu-item"
+                           v-if="personalInfo.islogin"
+                           @click="commandChange({name:'userMessage',params:{uid:personalInfo.user.uid}})">
+                        消息
+                      </div>
+                    </div>
+                  </Dropdown>
                 </div>
                 <ul class="navbar-menu"
-                    :class="{show:is_navbar_menu}">
+                    :class="{show:isNavbarMenu}">
                   <li class="nav-item">
                     <router-link :to="{name:'home'}"
                                  class="nav-link">主页</router-link>
@@ -70,7 +76,7 @@
                   <input class="form-control form-search-view"
                          type="text"
                          required="true"
-                         v-model="search_val"
+                         v-model="searchVal"
                          name="search"
                          placeholder="搜索文章"
                          aria-label="Search" />
@@ -88,34 +94,43 @@
                   </router-link>
                 </li>
                 <li class="nav-item dropdown">
-                  <el-dropdown trigger="click"
-                               @command="commandChange">
-                    <div class="el-dropdown-link">
+
+                  <Dropdown placement="right">
+                    <div class="el-dropdown-link"
+                         slot="button">
                       <div class="avatar-img">
-                        <el-image :src="personalInfo.user.avatar"
-                                  lazy></el-image>
+                        <img :src="personalInfo.user.avatar"
+                             class="box-image"
+                             alt="">
                       </div>
                     </div>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item icon="el-icon-user"
-                                        :command="{name:'user',params:{uid:personalInfo.user.uid}}">我的主页</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-setting"
-                                        :command="{name:'setting'}">设置</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-right"
-                                        :command="{name:'esc'}">退出</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
+                    <div class="dropdown-menu-view">
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'user',params:{uid:personalInfo.user.uid}})">
+                        我的主页
+                      </div>
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'setting'})">
+                        设置
+                      </div>
+                      <div class="dropdown-menu-item"
+                           @click="commandChange({name:'esc'})">
+                        退出
+                      </div>
+                    </div>
+                  </Dropdown>
+
                 </li>
               </template>
               <template v-else>
                 <li class="nav-item"
-                    @click="show_login"
+                    @click="onLogin"
                     v-if="website.config.on_login==='yes'">
                   <a class="btn btn-sm sign-btn btn-block"
                      href="javascript:;">登录</a>
                 </li>
                 <li class="nav-item"
-                    @click="show_register"
+                    @click="onRegister"
                     v-if="website.config.on_register==='yes'">
                   <a class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
                      href="javascript:;">注册</a>
@@ -133,29 +148,34 @@
 <script>
 import { cookie } from "../../../../server/utils/cookie";
 import { mapState } from "vuex";
+import { Dropdown } from '@components'
 export default {
   name: "Header",
   data () {
     return {
-      is_navbar_menu: false, // 主菜单栏是否显示
-      is_dropdown_menu: false, // 个人下拉菜单栏是否显示
-      search_val: ""
+      isNavbarMenu: false, // 主菜单栏是否显示
+      isDropdownMenu: false, // 个人下拉菜单栏是否显示
+      searchVal: ""
     };
   },
   methods: {
     search () {
-      if (!this.search_val) {
+      if (!this.searchVal) {
         this.$message.warning("请输入搜索内容");
         return false;
       }
       this.$router.push({
         name: "search",
-        query: { query: this.search_val }
+        query: { query: this.searchVal }
       });
     },
-    show_login () {
+    onLogin () {
       // 显示登录
-      this.$store.commit("SET_IS_LOGIN", true);
+      this.$router.push({ name: 'signIn' })
+    },
+    onRegister () {
+      // 显示注册
+      this.$router.push({ name: 'signUp' })
     },
     commandChange (val) {
       if (val.name !== "esc") {
@@ -169,15 +189,14 @@ export default {
       this[type] = false;
       this.$router.push(val);
     },
-    show_register () {
-      // 显示注册
-      this.$store.commit("SET_IS_REGISTER", true);
-    },
     escLogin () {
       this.$message.warning("已退出当前账户，请重新登录");
       cookie.delete("accessToken");
       window.location.reload();
     }
+  },
+  components: {
+    Dropdown
   },
   computed: {
     ...mapState(["website", "personalInfo"]), // home:主页  article_column:文章的专栏
@@ -344,9 +363,11 @@ export default {
                 width: 36px;
                 height: 36px;
                 border-radius: 72px;
-                /deep/ .el-image {
+                .box-image {
                   width: 36px;
                   height: 36px;
+                  border-radius: 4px;
+                  overflow: hidden;
                   img {
                     width: 100%;
                     height: 100%;

@@ -1,8 +1,7 @@
 <template>
-
-  <section class="user-lay layout-content"
-           id="user-center-article">
-    <client-only>
+  <client-only>
+    <section class="user-lay layout-content"
+             id="user-center-article">
       <div class="container  box-container">
         <div class="row">
 
@@ -11,8 +10,9 @@
               <router-link :to='{name:"user",params:{uid:user.user_info.user.uid}}'
                            class="avatar">
                 <div class="avatar-img">
-                  <el-image :src="user.user_info.user.avatar"
-                            lazy></el-image>
+                  <img :src="user.user_info.user.avatar"
+                       class="box-image"
+                       alt="">
                 </div>
               </router-link>
 
@@ -106,8 +106,8 @@
 
         </div>
       </div>
-    </client-only>
-  </section>
+    </section>
+  </client-only>
 </template>
 
 <script>
@@ -204,9 +204,11 @@ export default {
           border-radius: 160px;
           width: 80px;
           height: 80px;
-          /deep/ .el-image {
+          .box-image {
             width: 80px;
             height: 80px;
+            border-radius: 4px;
+            overflow: hidden;
             img {
               width: 100%;
               height: 100%;

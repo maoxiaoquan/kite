@@ -43,8 +43,9 @@
     </div>
     <div class="thumb"
          v-if="articleItem.cover_img">
-      <el-image :src="articleItem.cover_img"
-                lazy></el-image>
+      <img :src="articleItem.cover_img"
+           class="box-image"
+           alt="">
     </div>
   </article>
 </template>
@@ -218,9 +219,11 @@ export default {
     height: 4.5rem;
     margin-left: 2rem;
     border-radius: 2px;
-    /deep/ .el-image {
+    .box-image {
       width: 7.5rem;
       height: 4.5rem;
+      border-radius: 4px;
+      overflow: hidden;
       img {
         width: 100%;
         height: 100%;
@@ -237,7 +240,7 @@ export default {
       width: 4.5rem;
       height: 4.5rem;
       border-radius: 10px;
-      .el-image {
+      .box-image {
         width: 4.5rem;
         height: 4.5rem;
       }

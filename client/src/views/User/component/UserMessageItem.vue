@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import faceqq from "../../Comment/ArticleComment/face/qq";
+import { faceQQ } from '@components'
 export default {
   name: "UserMessageItem",
   props: {
@@ -146,7 +146,7 @@ export default {
     },
     commentRender (val) {
       let newComment = val;
-      faceqq.map(faceItem => {
+      faceQQ.map(faceItem => {
         newComment = newComment.replace(
           new RegExp("\\" + faceItem.face_text, "g"),
           faceItem.face_view

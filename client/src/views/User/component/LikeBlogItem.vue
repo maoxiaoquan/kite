@@ -5,9 +5,9 @@
       <div class="user-article-blog-top">
         <router-link class="article-blog-icon"
                      :to="{name:'articleBlog',params:{blogId:articleBlogItem.articleBlog.blog_id}}">
-          <el-image class="article-blog-icon-img"
-                    :src="articleBlogItem.articleBlog.icon"
-                    lazy></el-image>
+          <img :src="articleBlogItem.articleBlog.icon"
+               class="article-blog-icon-img"
+               alt="">
         </router-link>
 
         <div class="user-article-blog-info">
@@ -24,9 +24,9 @@
       <div class="user-article-blog-main">
         <ul class="user-info">
           <li class="item item-icon read-count">
-            <el-image class="user-avatar"
-                      :src="articleBlogItem.user.avatar"
-                      lazy></el-image>
+            <img :src="articleBlogItem.user.avatar"
+                 class="user-avatar"
+                 alt="">
             <router-link :to='{name:"user",params:{uid:articleBlogItem.user.uid}}'
                          class="nickname">{{articleBlogItem.user.nickname}}</router-link>
           </li>

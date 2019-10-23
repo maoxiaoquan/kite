@@ -205,7 +205,7 @@ export default {
     },
     createBook () {
       if (!this.$store.state.personalInfo.islogin) {
-        this.$store.commit('SET_IS_LOGIN', true)
+        this.$router.push({ name: 'signIn' })
       } else {
         this.$router.push({ name: 'booksWrite', params: { type: 'create' } })
       }

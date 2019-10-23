@@ -22,7 +22,6 @@
                    v-model="formData.new_password"
                    placeholder="请输入新密码"
                    class="input">
-            <!---->
           </div>
         </li>
         <li class="item-view">
@@ -32,7 +31,6 @@
                    v-model="formData.repeat_new_password"
                    placeholder="确认新密码"
                    class="input">
-            <!---->
           </div>
         </li>
       </ul>
@@ -68,8 +66,7 @@ export default {
   },
   methods: {
     tapResetPassword () {
-      this.$store.commit('SET_IS_LOGIN', false)
-      this.$store.commit('SET_IS_RESET_PASSWORD', true)
+      this.$router.push({ name: 'resetPassword' })
     },
     save () {
       this.$store.dispatch('setting/PERSONAL_UPLOAD_PASSWORD', this.formData)

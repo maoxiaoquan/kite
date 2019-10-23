@@ -9,10 +9,10 @@
           <div class="user-popover-box">
             <router-link :to='{name:"user",params:{uid:dynamicItem.user.uid}}'
                          class="user-link">
-              <el-image class="avatar"
-                        size="size"
-                        :src="dynamicItem.user.avatar">
-              </el-image>
+              <img class="avatar"
+                   size="size"
+                   :src="dynamicItem.user.avatar"
+                   alt="">
             </router-link>
           </div>
           <div class="dynamic-header-content">
@@ -67,14 +67,13 @@
 
       <div class="dynamic-image-row"
            v-if="dynamicItem.type===2">
-        <el-image class="preview-picture"
-                  style="width: 100px; height: 100px"
-                  :src="url"
-                  v-for="(url,key) in imgAnalyze(dynamicItem.attach)"
-                  :key="key"
-                  v-if="url"
-                  :preview-src-list="imgAnalyze(dynamicItem.attach)">
-        </el-image>
+        <img class="preview-picture"
+             style="width: 100px; height: 100px"
+             :src="url"
+             v-for="(url,key) in imgAnalyze(dynamicItem.attach)"
+             :key="key"
+             v-if="url"
+             alt="">
       </div>
 
       <div class="dynamic-link-row"
@@ -91,16 +90,18 @@
 
       <div class="operat-view"
            v-if="personalInfo.islogin&&personalInfo.user.uid===dynamicItem.user.uid">
-        <el-dropdown trigger="click"
-                     @command="commandChange">
-          <div class="el-dropdown-link">
+        <Dropdown>
+          <div class="el-dropdown-link"
+               slot="button">
             <i class="el-icon-more"></i>
           </div>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-edit"
-                              :command="{name:'Write',id:dynamicItem.id}">删除</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+          <div class="dropdown-menu-view">
+            <div class="dropdown-menu-item"
+                 @click="commandChange({name:'Write',id:dynamicItem.id})">
+              删除
+            </div>
+          </div>
+        </Dropdown>
       </div>
 
     </div>
@@ -113,7 +114,7 @@
 </template>
 
 <script>
-import { Page, faceQQ } from '@components'
+import { Page, faceQQ, Dropdown } from '@components'
 import { mapState } from "vuex"
 export default {
   name: 'Dynamic',
@@ -264,7 +265,8 @@ export default {
     },
   },
   components: {
-    Page
+    Page,
+    Dropdown
   },
   computed: {
     ...mapState(['user', 'personalInfo']),
