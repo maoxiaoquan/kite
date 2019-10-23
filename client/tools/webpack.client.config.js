@@ -40,7 +40,7 @@ const pordWebpackConfig = merge(baseWebpackConfig, {
   devtool: false,
   plugins: [
     // webpack4.0版本以上采用MiniCssExtractPlugin 而不使用extract-text-webpack-plugin
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
     new MiniCssExtractPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css'),
       chunkFilename: utils.assetsPath('css/[name].[contenthash].css')
