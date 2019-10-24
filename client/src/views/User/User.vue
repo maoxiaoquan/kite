@@ -7,7 +7,7 @@
 
           <div class="col-xs-12 col-sm-8 col-md-8 main">
             <div class="main-top clearfix">
-              <router-link :to='{name:"user",params:{uid:user.user_info.user.uid}}'
+              <router-link :to='{name:"user",params:{uid:user.user_info.user.uid,routeType:"article"}}'
                            class="avatar">
                 <div class="avatar-img">
                   <img :src="user.user_info.user.avatar"
@@ -17,7 +17,7 @@
               </router-link>
 
               <div class="title">
-                <router-link :to='{name:"user",params:{uid:user.user_info.user.uid}}'
+                <router-link :to='{name:"user",params:{uid:user.user_info.user.uid,routeType:"article"}}'
                              class="name">
                   {{ user.user_info.user.nickname }}
                 </router-link>
@@ -35,7 +35,7 @@
                 <ul>
                   <li>
                     <div class="meta-block">
-                      <router-link :to='{name:"userAttention",query:{any:"me"}}'>
+                      <router-link :to='{name:"user",params:{routeType:"attention"}, query:{any:"me"}}'>
                         <p>{{user.user_info.userAttentionCount}}</p>
                         <strong>
                           {{user.user_info.user.uid === personalInfo.user.uid?'我关注的人':'他关注的人'}}
@@ -45,7 +45,7 @@
                   </li>
                   <li>
                     <div class="meta-block">
-                      <router-link :to='{name:"userAttention",query:{any:"other"}}'>
+                      <router-link :to='{name:"user",params:{routeType:"attention"},query:{any:"other"}}'>
                         <p>{{user.user_info.otherUserAttentionCount}}</p>
                         <strong>粉丝</strong>
                       </router-link>
@@ -53,7 +53,7 @@
                   </li>
                   <li>
                     <div class="meta-block">
-                      <router-link :to='{name:"userArticle",query:{blog_id:"all"}}'>
+                      <router-link :to='{name:"user",params:{routeType:"article"}}'>
                         <p>{{user.user_info.userArticleCount}}</p>
                         <strong>文章</strong>
                       </router-link>
@@ -64,40 +64,44 @@
             </div>
 
             <ul class="trigger-menu">
-              <li :class="{'active':$route.name==='userArticle'}">
-                <router-link :to='{name:"userArticle",query:{blog_id:"all"}}'>
+              <li>
+                <router-link :to='{name:"user",params:{routeType:"article"}}'>
                   文章
                 </router-link>
               </li>
-              <li :class="{'active':$route.name==='userDynamic'}">
-                <router-link :to='{name:"userDynamic"}'>
+              <li>
+                <router-link :to='{name:"user",params:{routeType:"dynamic"}}'>
                   片刻
                 </router-link>
               </li>
-              <li :class="{'active':$route.name==='userBooks'}">
-                <router-link :to='{name:"userBooks"}'>
+              <li>
+                <router-link :to='{name:"user",params:{routeType:"books"}}'>
                   小书
                 </router-link>
               </li>
-              <li :class="{'active':$route.name==='userBlog'}">
-                <router-link :to='{name:"userBlog"}'>
+              <li>
+                <router-link :to='{name:"user",params:{routeType:"blog"}}'>
                   专栏
                 </router-link>
               </li>
-              <li :class="{'active':$route.name==='userAttention'}">
-                <router-link :to='{name:"userAttention"}'>
+              <li>
+                <router-link :to='{name:"user",params:{routeType:"attention"}}'>
                   关注
                 </router-link>
               </li>
-              <li :class="{'active':$route.name==='userMessage'}"
-                  v-if="personalInfo.islogin&&personalInfo.user.uid===user.user_info.user.uid">
-                <router-link :to='{name:"userMessage"}'>
+              <li v-if="personalInfo.islogin&&personalInfo.user.uid===user.user_info.user.uid">
+                <router-link :to='{name:"user",params:{routeType:"message"}}'>
                   消息
                 </router-link>
               </li>
             </ul>
 
-            <router-view />
+            <BlogView v-if="$route.params.routeType==='blog'" />
+            <booksView v-else-if="$route.params.routeType==='books'" />
+            <DynamicView v-else-if="$route.params.routeType==='dynamic'" />
+            <UserAttentionView v-else-if="$route.params.routeType==='attention'" />
+            <UserMessageView v-else-if="$route.params.routeType==='message'" />
+            <ArticleView v-else />
           </div>
 
           <div class="col-xs-12 col-sm-4 col-md-4 box-aside">
@@ -111,9 +115,17 @@
 </template>
 
 <script>
-import UserAside from './view/UserAside'
 import { mapState } from 'vuex'
 import ClientOnly from 'vue-client-only'
+import UserAside from './view/UserAside'
+import ArticleView from './view/Article'
+import BlogView from './view/Blog'
+import booksView from './view/books'
+import DynamicView from './view/Dynamic'
+import UserAttentionView from './view/UserAttention'
+import UserMessageView from './view/UserMessage'
+
+
 export default {
   name: 'User',
   metaInfo () {
@@ -185,7 +197,13 @@ export default {
   },
   components: {
     UserAside,
-    ClientOnly
+    ClientOnly,
+    ArticleView,
+    BlogView,
+    booksView,
+    DynamicView,
+    UserAttentionView,
+    UserMessageView
   }
 }
 </script>
@@ -288,14 +306,12 @@ export default {
         display: inline-block;
         padding: 8px 0;
         margin-bottom: -1px;
-        &.active {
+        .current-active {
           border-bottom: 2px solid #646464;
-          a {
-            color: #646464;
-          }
+          color: #646464;
         }
         a {
-          padding: 13px 20px;
+          padding: 10px 20px;
           font-size: 15px;
           color: #969696;
           line-height: 25px;

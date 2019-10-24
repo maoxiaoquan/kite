@@ -40,13 +40,14 @@
             <div class="write mrg-bm20 box-form-group">
               <label class="box-label"
                      for="">详情</label>
-              <mavon-editor defaultOpen="edit"
+              <MarkDown v-model="write.content" />
+              <!-- <mavon-editor defaultOpen="edit"
                             :boxShadow="false"
                             v-model="write.content"
                             :toolbars="toolbars"
                             ref="mavonEditor"
                             :imageFilter="imageFilter"
-                            @imgAdd="$imgAdd" />
+                            @imgAdd="$imgAdd" /> -->
             </div>
 
             <div class="row mrg-bm20">
@@ -115,7 +116,7 @@
 
 <script>
 // Local Registration
-import { UploadImage } from '@components'
+import { UploadImage, MarkDown } from '@components'
 import { mavonEditor } from 'mavon-editor'
 import { share, baidu, google } from '@utils'
 import 'mavon-editor/dist/css/index.css'
@@ -355,8 +356,8 @@ export default {
           if (res.state === "success") {
             this.$message.success(res.message);
             this.$router.push({
-              name: "userBooks",
-              params: { uid: this.personalInfo.user.uid }
+              name: "user",
+              params: { uid: this.personalInfo.user.uid, routeType: "books" }
             });
           } else {
             this.$message.warning(res.message);
@@ -370,7 +371,8 @@ export default {
   components: {
     'mavon-editor': mavonEditor,
     UploadImage,
-    ClientOnly
+    ClientOnly,
+    MarkDown
   },
   computed: {
     articleTagAll () {
@@ -426,8 +428,8 @@ export default {
     }
   }
   .write {
-    /deep/.v-note-wrapper {
-      min-height: 300px;
+    /deep/.markdown {
+      height: 500px;
       z-index: 249;
       &.fullscreen {
         z-index: 251;

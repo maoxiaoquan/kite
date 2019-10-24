@@ -50,16 +50,14 @@
                 <div class="nav-item auth"
                      v-if="!personalInfo.islogin">
                   <div class="nav-item-view"
-                       @click="showLogin"
                        v-if="website.config.on_login==='yes'">
-                    <a class="btn btn-sm sign-btn btn-block"
-                       href="javascript:;">登录</a>
+                    <router-link class="btn btn-sm sign-btn btn-block"
+                                 :to="{ name: 'signIn' }">登录</router-link>
                   </div>
                   <div class="nav-item-view"
-                       @click="showRegister"
                        v-if="website.config.on_register==='yes'">
-                    <a class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
-                       href="javascript:;">注册</a>
+                    <router-link class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
+                                 :to="{ name: 'signIn' }">注册</router-link>
                   </div>
                 </div>
                 <div class="nav-item dropdown"
@@ -74,16 +72,14 @@
                       </div>
                     </div>
                     <div class="dropdown-menu-view">
+                      <router-link class="dropdown-menu-item"
+                                   :to="{name:'user',params:{uid:personalInfo.user.uid,routeType:'article'}}">
+                        我的主页</router-link>
+                      <router-link class="dropdown-menu-item"
+                                   :to="{name:'setting'}">
+                        设置</router-link>
                       <div class="dropdown-menu-item"
-                           @click="commandChange({name:'user',params:{uid:personalInfo.user.uid}})">
-                        我的主页
-                      </div>
-                      <div class="dropdown-menu-item"
-                           @click="commandChange({name:'setting'})">
-                        设置
-                      </div>
-                      <div class="dropdown-menu-item"
-                           @click="commandChange({name:'esc'})">
+                           @click="escLogin">
                         退出
                       </div>
                     </div>
@@ -233,14 +229,6 @@ export default {
       this.$message.warning("已退出当前账户，请重新登录");
       cookie.delete("accessToken");
       window.location.reload();
-    },
-    showLogin () {
-      // 显示登录
-      this.$router.push({ name: 'signIn' })
-    },
-    showRegister () {
-      // 显示注册
-      this.$router.push({ name: 'signUp' })
     },
     resetBook () { // 回复默认
       this.$confirm('此操作将恢复到初始编辑状态, 是否继续?', '提示', {

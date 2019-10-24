@@ -246,12 +246,8 @@ export default {
       return length > 0 ? urlArr : []
     },
     pageChange (val) {
-      this.$router.push({
-        name: 'userDynamic',
-        query: {
-          page: val
-        }
-      })
+      this.dynamicList.page = val
+      this.getPersonalDynamicList()
     },
     getPersonalDynamicList () {
       this.$store.dispatch('user/GET_PERSONAL_DYNAMIC_LIST',

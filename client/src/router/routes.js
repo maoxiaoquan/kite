@@ -30,42 +30,9 @@ export default [
         component: require('@views/Search/view/Search').default // 搜索页
       },
       {
-        path: 'user/:uid',
+        path: 'user/:uid/:routeType',
         name: 'user',
-        component: require('@views/User/User').default, // 文章内容页
-        children: [
-          {
-            path: 'article',
-            name: 'userArticle',
-            component: require('@views/User/view/Article').default // 文章内容页
-          },
-          {
-            path: 'user-dynamic',
-            name: 'userDynamic',
-            component: require('@views/User/view/Dynamic').default // 个人发送的动态列表
-          },
-          {
-            path: 'books',
-            name: 'userBooks',
-            component: require('@views/User/view/Books').default // 用户的小书
-          },
-          {
-            path: 'blog',
-            name: 'userBlog',
-            component: require('@views/User/view/Blog').default // 用户自己的个人专栏
-          },
-          {
-            path: 'attention',
-            name: 'userAttention',
-            component: require('@views/User/view/UserAttention').default // 用户关注用户
-          },
-          {
-            path: 'message',
-            name: 'userMessage',
-            component: require('@views/User/view/UserMessage').default // 用户消息
-          }
-        ],
-        redirect: { name: 'userArticle' }
+        component: () => import('@views/User/User') // 用户内页
       },
       {
         path: 'personal/:uid',

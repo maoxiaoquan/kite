@@ -57,13 +57,9 @@
                     <router-link :to="{name:'books',params:{columnEnName:'all'}}"
                                  class="nav-link">小书</router-link>
                   </li>
-                  <!-- 屏蔽，此功能不开放 <li class="nav-item">
-                    <router-link :to="{name:'articleBlogs',params:{columnEnName:'all'}}"
-                                 class="nav-link">专栏</router-link>
-                  </li> -->
                   <li class="nav-item"
                       v-if="personalInfo.islogin">
-                    <router-link :to="{name:'userMessage',params:{uid:personalInfo.user.uid}}">
+                    <router-link :to="{name:'user',params:{uid:personalInfo.user.uid,routeType:'message'}}">
                       消息
                       <span v-if="messageCount.count>0"
                             class="unread-message-count">{{messageCount.count}}</span>
@@ -105,16 +101,14 @@
                       </div>
                     </div>
                     <div class="dropdown-menu-view">
+                      <router-link class="dropdown-menu-item"
+                                   :to="{name:'user',params:{uid:personalInfo.user.uid,routeType:'article'}}">
+                        我的主页</router-link>
+                      <router-link class="dropdown-menu-item"
+                                   :to="{name:'setting'}">
+                        设置</router-link>
                       <div class="dropdown-menu-item"
-                           @click="commandChange({name:'user',params:{uid:personalInfo.user.uid}})">
-                        我的主页
-                      </div>
-                      <div class="dropdown-menu-item"
-                           @click="commandChange({name:'setting'})">
-                        设置
-                      </div>
-                      <div class="dropdown-menu-item"
-                           @click="commandChange({name:'esc'})">
+                           @click="escLogin">
                         退出
                       </div>
                     </div>
@@ -124,16 +118,14 @@
               </template>
               <template v-else>
                 <li class="nav-item"
-                    @click="onLogin"
                     v-if="website.config.on_login==='yes'">
-                  <a class="btn btn-sm sign-btn btn-block"
-                     href="javascript:;">登录</a>
+                  <router-link class="btn btn-sm sign-btn btn-block"
+                               :to="{ name: 'signIn' }">登录</router-link>
                 </li>
                 <li class="nav-item"
-                    @click="onRegister"
                     v-if="website.config.on_register==='yes'">
-                  <a class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
-                     href="javascript:;">注册</a>
+                  <router-link class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
+                               :to="{ name: 'signIn' }">注册</router-link>
                 </li>
               </template>
             </ul>
@@ -169,26 +161,6 @@ export default {
         query: { query: this.searchVal }
       });
     },
-    onLogin () {
-      // 显示登录
-      this.$router.push({ name: 'signIn' })
-    },
-    onRegister () {
-      // 显示注册
-      this.$router.push({ name: 'signUp' })
-    },
-    commandChange (val) {
-      if (val.name !== "esc") {
-        this.$router.push(val);
-      } else {
-        this.escLogin();
-      }
-    },
-    dropdown_menu_route (val, type) {
-      // dropdown_menu 导航事件
-      this[type] = false;
-      this.$router.push(val);
-    },
     escLogin () {
       this.$message.warning("已退出当前账户，请重新登录");
       cookie.delete("accessToken");
@@ -213,15 +185,9 @@ export default {
   position: relative;
   height: 63px;
   .navbar-bootom-border {
-    /* border: 1px solid transparent;
-             border-color: #f0f0f0;*/
     z-index: 999;
     background: #fff;
     border-bottom: 1px solid #f1f1f1;
-    /*  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-              box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.06);*/
-    /*  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); */
   }
   .header-visible {
     transform: translateZ(0);
@@ -313,7 +279,7 @@ export default {
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            a {
+            > a {
               padding: 20px 15px;
               display: block;
               font-size: 15px;
