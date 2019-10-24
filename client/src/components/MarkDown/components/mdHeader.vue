@@ -3,24 +3,27 @@
     <slot name="left-toolbar-before" />
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.bold"
             @click="$clicks('bold')"
             class="op-icon fa fa-mavon-bold"
             aria-hidden="true"
-            :title="`粗体 (ctrl+b)`"></button>
+            :title="`${d_words.tl_bold} (ctrl+b)`"></button>
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.italic"
             @click="$clicks('italic')"
             class="op-icon fa fa-mavon-italic"
             aria-hidden="true"
-            :title="`斜体 (ctrl+i)`"></button>
+            :title="`${d_words.tl_italic} (ctrl+i)`"></button>
     <div :class="{'selected': s_header_dropdown_open}"
          :disabled="!editable"
          type="button"
+         v-if="toolbars.header"
          @mouseleave="$mouseleave_header_dropdown"
          @mouseenter="$mouseenter_header_dropdown"
          class="op-icon fa fa-mavon-header dropdown dropdown-wrapper"
          aria-hidden="true"
-         :title="`标题 (ctrl+h)`">
+         :title="`${d_words.tl_header} (ctrl+h)`">
       <transition name="fade">
         <div class="op-header popup-dropdown"
              :class="{'transition': transition}"
@@ -29,104 +32,120 @@
              @mouseleave="$mouseleave_header_dropdown">
           <div title="#"
                class="dropdown-item"
-               @click.stop="$click_header('header1')"><span>一级标题</span></div>
+               @click.stop="$click_header('header1')"><span>{{d_words.tl_header_one}}</span></div>
           <div title="## "
                class="dropdown-item"
-               @click.stop="$click_header('header2')"><span>二级标题</span></div>
+               @click.stop="$click_header('header2')"><span>{{d_words.tl_header_two}}</span></div>
           <div title="### "
                class="dropdown-item"
-               @click.stop="$click_header('header3')"><span>三级标题</span></div>
+               @click.stop="$click_header('header3')"><span>{{d_words.tl_header_three}}</span></div>
           <div title="#### "
                class="dropdown-item"
-               @click.stop="$click_header('header4')"><span>四级标题</span></div>
+               @click.stop="$click_header('header4')"><span>{{d_words.tl_header_four}}</span></div>
           <div title="##### "
                class="dropdown-item"
-               @click.stop="$click_header('header5')"><span>五级标题</span></div>
+               @click.stop="$click_header('header5')"><span>{{d_words.tl_header_five}}</span></div>
           <div title="###### "
                class="dropdown-item"
-               @click.stop="$click_header('header6')"><span>六级标题</span></div>
+               @click.stop="$click_header('header6')"><span>{{d_words.tl_header_six}}</span></div>
         </div>
       </transition>
     </div>
-    <span class="op-icon-divider"></span>
+    <span v-if="toolbars.header || toolbars.italic || toolbars.bold"
+          class="op-icon-divider"></span>
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.underline"
             @click="$clicks('underline')"
             class="op-icon fa fa-mavon-underline"
-            :title="`下划线 (ctrl+u)`"
+            :title="`${d_words.tl_underline} (ctrl+u)`"
             aria-hidden="true"></button>
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.strikethrough"
             @click="$clicks('strikethrough')"
             class="op-icon fa fa-mavon-strikethrough"
-            :title="`中划线 (ctrl+shift+d)`"
+            :title="`${d_words.tl_strikethrough} (ctrl+shift+d)`"
             aria-hidden="true"></button>
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.mark"
             @click="$clicks('mark')"
             class="op-icon fa fa-mavon-thumb-tack"
-            :title="`标记 (ctrl+m)`"
+            :title="`${d_words.tl_mark} (ctrl+m)`"
             aria-hidden="true"></button>
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.superscript"
             @click="$clicks('superscript')"
             class="op-icon fa fa-mavon-superscript"
             aria-hidden="true"
-            :title="`上角标 (ctrl+alt+s)`"></button>
+            :title="`${d_words.tl_superscript} (ctrl+alt+s)`"></button>
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.subscript"
             @click="$clicks('subscript')"
             class="op-icon fa fa-mavon-subscript"
             aria-hidden="true"
-            :title="`下角标 (ctrl+shift+s)`"></button>
+            :title="`${d_words.tl_subscript} (ctrl+shift+s)`"></button>
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.alignleft"
             @click="$clicks('alignleft')"
             class="op-icon fa fa-mavon-align-left"
             aria-hidden="true"
-            :title="`居左 (ctrl+l)`">
+            :title="`${d_words.tl_alignleft} (ctrl+l)`">
     </button>
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.aligncenter"
             @click="$clicks('aligncenter')"
             class="op-icon fa fa-mavon-align-center"
             aria-hidden="true"
-            :title="`居中 (ctrl+e)`"></button>
+            :title="`${d_words.tl_aligncenter} (ctrl+e)`"></button>
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.alignright"
             @click="$clicks('alignright')"
             class="op-icon fa fa-mavon-align-right"
             aria-hidden="true"
-            :title="`居右 (ctrl+r)`"></button>
-    <span class="op-icon-divider"></span>
+            :title="`${d_words.tl_alignright} (ctrl+r)`"></button>
+    <span v-if="toolbars.superscript || toolbars.subscript || toolbars.underline || toolbars.strikethrough || toolbars.mark"
+          class="op-icon-divider"></span>
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.quote"
             @click="$clicks('quote')"
             class="op-icon fa fa-mavon-quote-left"
             aria-hidden="true"
-            :title="`段落引用 (ctrl+q)`"></button>
+            :title="`${d_words.tl_quote} (ctrl+q)`"></button>
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.ol"
             @click="$clicks('ol')"
             class="op-icon fa fa-mavon-list-ol"
             aria-hidden="true"
-            :title="`有序列表 (ctrl+o)`"></button>
+            :title="`${d_words.tl_ol} (ctrl+o)`"></button>
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.ul"
             @click="$clicks('ul')"
             class="op-icon fa fa-mavon-list-ul"
             aria-hidden="true"
-            :title="`无序列表 (ctrl+alt+u)`"></button>
-    <span class="op-icon-divider"></span>
+            :title="`${d_words.tl_ul} (ctrl+alt+u)`"></button>
+    <span v-if="toolbars.ul || toolbars.ol || toolbars.quote"
+          class="op-icon-divider"></span>
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.link"
             @click.stop="$toggle_imgLinkAdd('link')"
             class="op-icon fa fa-mavon-link"
             aria-hidden="true"
-            :title="`链接 (ctrl+l)`"></button>
+            :title="`${d_words.tl_link} (ctrl+l)`"></button>
     <div :disabled="!editable"
          :class="{'selected': s_img_dropdown_open}"
          type="button"
+         v-if="toolbars.imagelink"
          @mouseleave="$mouseleave_img_dropdown"
          @mouseenter="$mouseenter_img_dropdown"
          class="op-icon fa fa-mavon-picture-o dropdown dropdown-wrapper"
@@ -138,40 +157,109 @@
              @mouseleave="$mouseleave_img_dropdown"
              @mouseenter="$mouseenter_img_dropdown">
           <div class="dropdown-item"
-               @click.stop="$toggle_imgLinkAdd('imagelink')"><span>添加图片链接</span></div>
+               @click.stop="$toggle_imgLinkAdd('imagelink')"><span>{{d_words.tl_image}}</span></div>
           <div class="dropdown-item"
                style="overflow: hidden">
             <input type="file"
                    accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
                    @change="$imgAdd($event)"
-                   multiple="multiple" />上传图片
+                   multiple="multiple" />{{d_words.tl_upload}}
+          </div>
+
+          <div v-for="(item, index) in img_file"
+               v-if="item && item[1]"
+               class="dropdown-item dropdown-images"
+               :title="item[1].name"
+               :key="index"
+               @click.stop="$imgFileListClick(index)">
+            <span>{{item[1].name}}</span>
+            <button slot="right"
+                    type="button"
+                    @click.stop="$imgDel(index)"
+                    class="op-icon fa fa-mavon-times"
+                    aria-hidden="true"
+                    :title="d_words.tl_upload_remove"></button>
+            <!-- 缩略图展示 -->
+            <img class="image-show"
+                 :class="{'transition': transition}"
+                 :src="item[1].miniurl"
+                 alt="none">
           </div>
         </div>
       </transition>
     </div>
-
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.code"
             @click="$clicks('code')"
             class="op-icon fa fa-mavon-code"
             aria-hidden="true"
-            :title="`代码块 (ctrl+alt+c)`"></button>
+            :title="`${d_words.tl_code} (ctrl+alt+c)`"></button>
     <button :disabled="!editable"
             type="button"
+            v-if="toolbars.table"
             @click="$clicks('table')"
             class="op-icon fa fa-mavon-table"
             aria-hidden="true"
-            :title="`表格 (ctrl+alt+t)`"></button>
-    <span class="op-icon-divider"></span>
+            :title="`${d_words.tl_table} (ctrl+alt+t)`"></button>
+    <span v-if="toolbars.link || toolbars.imagelink || toolbars.code || toolbars.table"
+          class="op-icon-divider"></span>
     <button type="button"
+            v-if="toolbars.undo"
+            @click="$clicks('undo')"
+            class="op-icon fa fa-mavon-undo"
+            aria-hidden="true"
+            :title="`${d_words.tl_undo} (ctrl+z)`"></button>
+    <button type="button"
+            v-if="toolbars.redo"
+            @click="$clicks('redo')"
+            class="op-icon fa fa-mavon-repeat"
+            aria-hidden="true"
+            :title="`${d_words.tl_redo} (ctrl+y)`"></button>
+    <button type="button"
+            v-if="toolbars.trash"
             @click="$clicks('trash')"
             class="op-icon fa fa-mavon-trash-o"
             aria-hidden="true"
-            :title="`清空 (ctrl+breakspace)`"></button>
+            :title="`${d_words.tl_trash} (ctrl+breakspace)`"></button>
+    <button type="button"
+            v-if="toolbars.save"
+            @click="$clicks('save')"
+            class="op-icon fa fa-mavon-floppy-o"
+            aria-hidden="true"
+            :title="`${d_words.tl_save} (ctrl+s)`"></button>
+    <slot name="left-toolbar-after" />
 
+    <!-- 添加image链接 -->
+    <transition name="fade">
+      <div class="add-image-link-wrapper"
+           v-if="s_img_link_open">
+        <div class="add-image-link">
+          <i @click.stop.prevent="s_img_link_open = false"
+             class="fa fa-mavon-times"
+             aria-hidden="true"></i>
+          <h3 class="title">{{link_type == 'link' ? d_words.tl_popup_link_title : d_words.tl_popup_img_link_title}}</h3>
+          <div class="link-text input-wrapper">
+            <input ref="linkTextInput"
+                   type="text"
+                   v-model="link_text"
+                   :placeholder="link_type == 'link' ? d_words.tl_popup_link_text : d_words.tl_popup_img_link_text">
+          </div>
+          <div class="link-addr input-wrapper">
+            <input type="text"
+                   v-model="link_addr"
+                   :placeholder="link_type == 'link' ? d_words.tl_popup_link_addr : d_words.tl_popup_img_link_addr">
+          </div>
+          <div class="op-btn cancel"
+               @click.stop="s_img_link_open = false">{{d_words.tl_popup_link_cancel}}</div>
+          <div class="op-btn sure"
+               @click.stop="$imgLinkAdd()">{{d_words.tl_popup_link_sure}}</div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
-<script >
+<script type="text/ecmascript-6">
 export default {
   name: 's-md-toolbar-left',
   props: {
@@ -182,6 +270,14 @@ export default {
     transition: { // TODO: 是否开启动画过渡
       type: Boolean,
       default: true
+    },
+    toolbars: { // 工具栏
+      type: Object,
+      required: true
+    },
+    d_words: {
+      type: Object,
+      required: true
     },
     image_filter: {
       type: Function,
@@ -342,215 +438,247 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.v-left-item,
-.v-right-item {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  min-height: 40px;
-  box-sizing: border-box;
-}
-.v-left-item .op-icon-divider,
-.v-note-wrapper .v-note-op .v-right-item .op-icon-divider {
-  height: 40px;
-  border-left: 1px solid #e5e5e5;
-  margin: 0 6px 0 4px;
-}
-.v-left-item .op-icon,
-.v-right-item .op-icon {
-  box-sizing: border-box;
-  display: inline-block;
-  cursor: pointer;
-  height: 28px;
-  width: 28px;
-  margin: 6px 0 5px 0px;
-  font-size: 15px;
-  padding: 4.5px 6px 5px 3.5px;
-  color: #757575;
-  border-radius: 5px;
-  text-align: center;
-  background: none;
-  border: none;
-  outline: none;
-  line-height: 1;
-}
-.v-left-item .op-icon.dropdown-wrapper,
-.v-right-item .op-icon.dropdown-wrapper {
-  line-height: 18px;
-}
-.v-left-item .op-icon.selected,
-.v-right-item .op-icon.selected {
-  color: rgba(0, 0, 0, 0.8);
-  background: #eaeaea;
-}
-.v-left-item .op-icon:hover,
-.v-right-item .op-icon:hover {
-  color: rgba(0, 0, 0, 0.8);
-  background: #e9e9eb;
-}
-.v-left-item.transition .op-icon,
-.v-right-item.transition .op-icon {
-  -webkit-transition: all 0.2s linear 0s;
-  transition: all 0.2s linear 0s;
-}
-.v-right-item {
-  text-align: right;
-  padding-right: 6px;
-  max-width: 30%;
-}
-.v-left-item {
-  text-align: left;
-  padding-left: 6px;
-}
+.op-icon.dropdown-wrapper.dropdown {
+  position: relative;
 
-@font-face {
-  font-family: "fontello";
-  src: url("../font/fontello.eot?60486047");
-  src: url("../font/fontello.eot?60486047#iefix") format("embedded-opentype"),
-    url("../font/fontello.woff?60486047") format("woff"),
-    url("../font/fontello.ttf?60486047") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
-/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
-/*
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-  @font-face {
-    font-family: 'fontello';
-    src: url('../font/fontello.svg?60486047#fontello') format('svg');
+  &[type="button"] {
+    -webkit-appearance: unset;
+  }
+
+  .popup-dropdown {
+    position: absolute;
+    display: block;
+    background: #fff;
+    top: 32px;
+    left: -45px;
+    min-width: 130px;
+    z-index: 1600;
+    border: 1px solid #ebeef5;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
+    .dropdown-item:first-child {
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+    }
+
+    .dropdown-item:last-child {
+      border-bottom-left-radius: 3px;
+      border-bottom-right-radius: 3px;
+    }
+
+    &.op-header {
+      left: -30px;
+      min-width: 90px;
+    }
+
+    &.fade-enter-active,
+    &.fade-leave-active {
+      opacity: 1;
+    }
+
+    &.fade-enter,
+    &.fade-leave-active {
+      opacity: 0;
+    }
+
+    &.transition {
+      &,
+      .dropdown-item {
+        transition: all 0.2s linear 0s;
+      }
+    }
+  }
+
+  .dropdown-item {
+    height: 40px;
+    line-height: 1.5;
+    font-size: 14px;
+    color: #606266;
+    position: relative;
+
+    &:hover {
+      color: #303133;
+      background-color: #e9e9eb;
+    }
+
+    input {
+      position: absolute;
+      font-size: 100px;
+      right: 0;
+      top: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+  }
+
+  .dropdown-images {
+    box-sizing: border-box;
+
+    button {
+      position: absolute;
+      top: -1px;
+      right: 5px;
+      font-size: 14px;
+
+      &:hover {
+        color: #f56c6c;
+        background-color: transparent;
+      }
+    }
+
+    span {
+      display: inline-block;
+      width: 80px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &:hover {
+      .image-show {
+        display: block !important;
+      }
+    }
+
+    .image-show {
+      display: none;
+      position: absolute;
+      left: -128px;
+      top: 0;
+      width: 120px;
+      height: 90px;
+      object-fit: contain;
+      border: 1px solid #f2f6fc;
+
+      &.transition {
+        transition: all 0.2s linear 0s;
+      }
+    }
+
+    &.transition {
+      transition: all 0.2s linear 0s;
+    }
   }
 }
-*/
 
-[class^="fa-mavon-"]:before,
-[class*=" fa-mavon-"]:before {
-  font-family: "fontello";
-  font-style: normal;
-  font-weight: normal;
-  speak: none;
+.add-image-link-wrapper {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1600;
+  transition: all 0.1s linear 0s;
 
-  display: inline-block;
-  text-decoration: inherit;
-  width: 1em;
-  margin-right: 0.2em;
-  text-align: center;
-  /* opacity: .8; */
+  &.fade-enter-active,
+  &.fade-leave-active {
+    opacity: 1;
+  }
 
-  /* For safety - reset parent styles, that can break glyph codes*/
-  font-variant: normal;
-  text-transform: none;
+  &.fade-enter,
+  &.fade-leave-active {
+    opacity: 0;
+  }
 
-  /* fix buttons height, for twitter bootstrap */
-  line-height: 1em;
+  .add-image-link {
+    position: fixed;
+    box-sizing: border-box;
+    text-align: center;
+    width: 24%;
+    left: 38%;
 
-  /* Animation center compensation - margins should be symmetric */
-  /* remove if not needed */
-  margin-left: 0.2em;
+    @media only screen and (max-width: 1500px) {
+      width: 34%;
+      left: 33%;
+    }
 
-  /* you can be more comfortable with increased icons size */
-  /* font-size: 120%; */
+    @media only screen and (max-width: 1000px) {
+      width: 50%;
+      left: 25%;
+    }
 
-  /* Font smoothing. That was taken from TWBS */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    @media only screen and (max-width: 600px) {
+      width: 80%;
+      left: 10%;
+    }
 
-  /* Uncomment for 3D effect */
-  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+    height: auto;
+    padding: 40px;
+    top: 25%;
+    transition: all 0.1s linear 0s;
+    z-index: 3;
+    background: #fff;
+    border-radius: 2px;
+
+    i {
+      font-size: 24px;
+      position: absolute;
+      right: 8px;
+      top: 6px;
+      color: rgba(0, 0, 0, 0.7);
+      cursor: pointer;
+    }
+
+    .title {
+      font-size: 20px;
+      margin-bottom: 30px;
+      margin-top: 10px;
+      font-weight: 500 !important;
+    }
+
+    .input-wrapper {
+      margin-top: 10px;
+      width: 80%;
+      border: 1px solid #eeece8;
+      text-align: left;
+      margin-left: 10%;
+      height: 35px;
+
+      input {
+        height: 32px;
+        line-height: 32px;
+        font-size: 15px;
+        width: 90%;
+        margin-left: 8px;
+        border: none;
+        outline: none;
+      }
+    }
+
+    .op-btn {
+      width: 100px;
+      height: 35px;
+      display: inline-block;
+      margin-top: 30px;
+      cursor: pointer;
+      text-align: center;
+      line-height: 1.5;
+      opacity: 0.9;
+      border-radius: 2px;
+      letter-spacing: 1px;
+      font-size: 15px;
+    }
+
+    .op-btn.sure {
+      background: #2185d0;
+      color: #fff;
+      margin-left: 5%;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    .op-btn.cancel {
+      border: 1px solid #bcbcbc;
+      color: #bcbcbc;
+
+      &:hover {
+        color: #000;
+      }
+    }
+  }
 }
-
-.fa-mavon-bold:before {
-  content: "\e800";
-} /* '' */
-.fa-mavon-italic:before {
-  content: "\e801";
-} /* '' */
-.fa-mavon-thumb-tack:before {
-  content: "\e802";
-} /* '' */
-.fa-mavon-link:before {
-  content: "\e803";
-} /* '' */
-.fa-mavon-picture-o:before {
-  content: "\e804";
-} /* '' */
-.fa-mavon-repeat:before {
-  content: "\e805";
-} /* '' */
-.fa-mavon-undo:before {
-  content: "\e806";
-} /* '' */
-.fa-mavon-trash-o:before {
-  content: "\e807";
-} /* '' */
-.fa-mavon-floppy-o:before {
-  content: "\e808";
-} /* '' */
-.fa-mavon-compress:before {
-  content: "\e809";
-} /* '' */
-.fa-mavon-eye:before {
-  content: "\e80a";
-} /* '' */
-.fa-mavon-eye-slash:before {
-  content: "\e80b";
-} /* '' */
-.fa-mavon-question-circle:before {
-  content: "\e80c";
-} /* '' */
-.fa-mavon-times:before {
-  content: "\e80d";
-} /* '' */
-.fa-mavon-align-left:before {
-  content: "\e80f";
-} /* '' */
-.fa-mavon-align-center:before {
-  content: "\e810";
-} /* '' */
-.fa-mavon-align-right:before {
-  content: "\e811";
-} /* '' */
-.fa-mavon-arrows-alt:before {
-  content: "\f0b2";
-} /* '' */
-.fa-mavon-bars:before {
-  content: "\f0c9";
-} /* '' */
-.fa-mavon-list-ul:before {
-  content: "\f0ca";
-} /* '' */
-.fa-mavon-list-ol:before {
-  content: "\f0cb";
-} /* '' */
-.fa-mavon-strikethrough:before {
-  content: "\f0cc";
-} /* '' */
-.fa-mavon-underline:before {
-  content: "\f0cd";
-} /* '' */
-.fa-mavon-table:before {
-  content: "\f0ce";
-} /* '' */
-.fa-mavon-columns:before {
-  content: "\f0db";
-} /* '' */
-.fa-mavon-quote-left:before {
-  content: "\f10d";
-} /* '' */
-.fa-mavon-code:before {
-  content: "\f121";
-} /* '' */
-.fa-mavon-superscript:before {
-  content: "\f12b";
-} /* '' */
-.fa-mavon-subscript:before {
-  content: "\f12c";
-} /* '' */
-.fa-mavon-header:before {
-  content: "\f1dc";
-} /* '' */
-.fa-mavon-window-maximize:before {
-  content: "\f2d0";
-} /* '' */
 </style>

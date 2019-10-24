@@ -428,7 +428,7 @@ export default {
     }
   }
   .write {
-    /deep/.markdown {
+    /deep/.markdown-panel {
       height: 500px;
       z-index: 249;
       &.fullscreen {
