@@ -129,9 +129,8 @@
 
 <script>
 import { UploadImage, Dropdown } from '@components'
-import { mavonEditor } from 'mavon-editor'
+import { mavonEditor } from '@components/MarkDown'
 import { cookie } from "../../../../server/utils/cookie";
-import 'mavon-editor/dist/css/index.css'
 import ClientOnly from 'vue-client-only'
 import marked from "marked";
 import { mapState } from 'vuex'

@@ -119,13 +119,13 @@ export default {
     padding: 0;
     overflow-y: hidden;
     color: #2c3e50;
-  }
-  &.no-border {
-    outline: 0 none;
-    border: none !important;
-  }
-  &.no-resize {
-    resize: none;
+    &.no-border {
+      outline: 0 none;
+      border: none !important;
+    }
+    &.no-resize {
+      resize: none;
+    }
   }
 }
 </style>

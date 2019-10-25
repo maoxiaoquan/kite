@@ -73,6 +73,7 @@ import {
 import autoTextara from './components/auto-textarea'
 import lang from './libs/lang'
 import { CONFIG } from './libs/config.js'
+import "./libs/css/fontello.css"
 export default {
   name: 'MarkDown',
   props: {
@@ -145,6 +146,12 @@ export default {
       s_scrollStyle: (() => {
         return this.scrollStyle
       })(),// props 是否渲染滚动条样式
+      d_history: (() => {
+        let temp_array = []
+        temp_array.push(this.value)
+        return temp_array;
+      })(), // 编辑记录
+      d_history_index: 0, // 编辑记录索引
       s_preview_switch: (() => {
         let default_open_ = this.defaultOpen;
         if (!default_open_) {
@@ -162,7 +169,7 @@ export default {
   },
   watch: {
     d_value: function (val, oldVal) {
-      // this.iRender();
+      this.iRender();
     },
     value: function (val, oldVal) {
       if (val !== this.d_value) {
@@ -176,7 +183,11 @@ export default {
   methods: {
     // 获取textarea dom节点
     init () { // 初始化
+      var $vm = this;
       this.d_words = lang
+      $vm.$render('', function (res) {
+        $vm.d_help = res;
+      })
     },
     getTextareaDom () {
       return this.$refs.vNoteTextarea.$refs.vTextarea;
@@ -191,6 +202,30 @@ export default {
       var $vm = this;
       // TODO 跳转到图片位置
     },
+    iRender () {
+      var $vm = this;
+      $vm.$render($vm.d_value, function (res) {
+        // render
+        $vm.d_render = res;
+        // change回调
+        if ($vm.change) $vm.change($vm.d_value, $vm.d_render);
+        // 改变标题导航
+        if ($vm.s_navigation) getNavigation($vm, false);
+        // v-model 语法糖
+        $vm.$emit('input', $vm.d_value)
+        // 塞入编辑记录数组
+        if ($vm.d_value === $vm.d_history[$vm.d_history_index]) return
+        window.clearTimeout($vm.currentTimeout)
+        $vm.currentTimeout = setTimeout(() => {
+          $vm.saveHistory();
+        }, 500);
+      })
+    },
+    saveHistory () {
+      this.d_history.splice(this.d_history_index + 1, this.d_history.length)
+      this.d_history.push(this.d_value)
+      this.d_history_index = this.d_history.length - 1
+    },
     $imgDel (file) {
       this.markdownIt.image_del(file[1]);
       // 删除所有markdown中的图片
@@ -203,13 +238,14 @@ export default {
     $imgAdd (pos, $file, isinsert) {
       if (isinsert === undefined) isinsert = true;
       var $vm = this;
+      console.log('$vm.markdownIt', $vm.markdownIt)
       if (this.__rFilter == null) {
         // this.__rFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
         this.__rFilter = /^image\//i;
       }
       this.__oFReader = new FileReader();
       this.__oFReader.onload = function (oFREvent) {
-        $vm.markdownIt.image_add(pos, oFREvent.target.result);
+        // $vm.markdownIt.image_add(pos, oFREvent.target.result);
         $file.miniurl = oFREvent.target.result;
         if (isinsert === true) {
           // 去除特殊字符
@@ -232,6 +268,14 @@ export default {
           this.__oFReader.readAsDataURL(oFile);
         }
       }
+    },
+    $img2Url (fileIndex, url) {
+      // x.replace(/(\[[^\[]*?\](?=\())\(\s*(\.\/2)\s*\)/g, "$1(http://path/to/png.png)")
+      var reg_str = "/(!\\[\[^\\[\]*?\\]\(?=\\(\)\)\\(\\s*\(" + fileIndex + "\)\\s*\\)/g"
+      var reg = eval(reg_str);
+      this.d_value = this.d_value.replace(reg, "$1(" + url + ")")
+      this.$refs.toolbar_left.$changeUrl(fileIndex, url)
+      this.iRender()
     },
     defaultOpen: function (val) {
       let default_open_ = val;
@@ -278,7 +322,7 @@ textarea:disabled {
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  z-index: 1500;
+  z-index: 200;
   text-align: left;
   border: 1px solid #f2f6fc;
   border-radius: 4px;
@@ -521,7 +565,7 @@ textarea:disabled {
         width: 100%;
         border-bottom: 1px solid #f2f6fc;
         flex: none;
-        line-height: 1.5;
+        line-height: 35px;
         font-size: 16px;
         box-sizing: border-box;
         padding: 0 12px 0 18px;

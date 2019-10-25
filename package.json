@@ -45,7 +45,6 @@
     "koa-views": "^6.1.1",
     "lowdb": "^1.0.0",
     "marked": "^0.3.19",
-    "mavon-editor": "^2.7.5",
     "moment": "^2.22.1",
     "mysql": "^2.15.0",
     "mysql2": "^1.5.3",

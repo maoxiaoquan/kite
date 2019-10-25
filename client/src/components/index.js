@@ -10,7 +10,6 @@ import Popover from './Popover'
 import Dropdown from './Dropdown'
 import Message from './Message'
 import Confirm from './Confirm'
-import MarkDown from './MarkDown'
 export {
   sendCode, // 发送验证码
   ArticleItem, // 文章列表内容页
@@ -23,6 +22,5 @@ export {
   Popover,
   Dropdown,
   Message,
-  Confirm,
-  MarkDown
+  Confirm
 }

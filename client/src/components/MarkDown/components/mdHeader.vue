@@ -492,7 +492,7 @@ export default {
 
   .dropdown-item {
     height: 40px;
-    line-height: 1.5;
+    line-height: 40px;
     font-size: 14px;
     color: #606266;
     position: relative;
@@ -654,7 +654,7 @@ export default {
       margin-top: 30px;
       cursor: pointer;
       text-align: center;
-      line-height: 1.5;
+      line-height: 35px;
       opacity: 0.9;
       border-radius: 2px;
       letter-spacing: 1px;

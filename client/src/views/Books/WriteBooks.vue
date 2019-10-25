@@ -40,7 +40,13 @@
             <div class="write mrg-bm20 box-form-group">
               <label class="box-label"
                      for="">详情</label>
-              <MarkDown v-model="write.content" />
+              <mavon-editor v-model="write.content"
+                            defaultOpen="edit"
+                            :boxShadow="false"
+                            :toolbars="toolbars"
+                            ref="mavonEditor"
+                            :imageFilter="imageFilter"
+                            @imgAdd="$imgAdd" />
               <!-- <mavon-editor defaultOpen="edit"
                             :boxShadow="false"
                             v-model="write.content"
@@ -116,10 +122,9 @@
 
 <script>
 // Local Registration
-import { UploadImage, MarkDown } from '@components'
-import { mavonEditor } from 'mavon-editor'
+import { UploadImage } from '@components'
+import { mavonEditor } from '@components/MarkDown'
 import { share, baidu, google } from '@utils'
-import 'mavon-editor/dist/css/index.css'
 import ClientOnly from 'vue-client-only'
 import marked from "marked";
 import { mapState } from 'vuex'
@@ -371,8 +376,7 @@ export default {
   components: {
     'mavon-editor': mavonEditor,
     UploadImage,
-    ClientOnly,
-    MarkDown
+    ClientOnly
   },
   computed: {
     articleTagAll () {
