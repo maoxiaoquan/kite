@@ -89,6 +89,7 @@ export default {
   .dropdown-menu-view {
     .dropdown-menu-item {
       list-style: none;
+      display: block;
       line-height: 36px;
       padding: 0 20px;
       margin: 0;

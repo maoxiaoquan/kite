@@ -40,13 +40,20 @@
             <div class="write mrg-bm20 box-form-group">
               <label class="box-label"
                      for="">详情</label>
-              <mavon-editor defaultOpen="edit"
+              <mavon-editor v-model="write.content"
+                            defaultOpen="edit"
+                            :boxShadow="false"
+                            :toolbars="toolbars"
+                            ref="mavonEditor"
+                            :imageFilter="imageFilter"
+                            @imgAdd="$imgAdd" />
+              <!-- <mavon-editor defaultOpen="edit"
                             :boxShadow="false"
                             v-model="write.content"
                             :toolbars="toolbars"
                             ref="mavonEditor"
                             :imageFilter="imageFilter"
-                            @imgAdd="$imgAdd" />
+                            @imgAdd="$imgAdd" /> -->
             </div>
 
             <div class="row mrg-bm20">
@@ -116,9 +123,8 @@
 <script>
 // Local Registration
 import { UploadImage } from '@components'
-import { mavonEditor } from 'mavon-editor'
+import { mavonEditor } from '@components/MarkDown'
 import { share, baidu, google } from '@utils'
-import 'mavon-editor/dist/css/index.css'
 import ClientOnly from 'vue-client-only'
 import marked from "marked";
 import { mapState } from 'vuex'
@@ -355,8 +361,8 @@ export default {
           if (res.state === "success") {
             this.$message.success(res.message);
             this.$router.push({
-              name: "userBooks",
-              params: { uid: this.personalInfo.user.uid }
+              name: "user",
+              params: { uid: this.personalInfo.user.uid, routeType: "books" }
             });
           } else {
             this.$message.warning(res.message);
@@ -426,8 +432,8 @@ export default {
     }
   }
   .write {
-    /deep/.v-note-wrapper {
-      min-height: 300px;
+    /deep/.markdown-panel {
+      height: 500px;
       z-index: 249;
       &.fullscreen {
         z-index: 251;

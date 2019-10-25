@@ -6,7 +6,7 @@
       <li class="title">个人专栏：</li>
       <li class="blog-list-item"
           :class="{'current':!$route.query.blog_id||$route.query.blog_id==='all'}">
-        <router-link :to='{name:"userArticle",query:{blog_id:"all"}}'>
+        <router-link :to='{name:"user",query:{blog_id:"all"},params:{routeType:"article"}}'>
           <span class="name">全部</span>
         </router-link>
       </li>
@@ -15,7 +15,7 @@
           v-for="(item,key) in userArticleBlogAll"
           :class="{'current':item.blog_id==$route.query.blog_id}"
           :key="key">
-        <router-link :to='{name:"userArticle",query:{blog_id:item.blog_id}}'
+        <router-link :to='{name:"user",query:{blog_id:item.blog_id},params:{routeType:"article"}}'
                      class="avatar">
           <span class="name">{{ item.name }}</span>
           <i class="is-public"
@@ -27,7 +27,7 @@
       <template v-if="personalInfo.user.uid===userInfo.user.uid">
         <li class="blog-list-item">
           <router-link class="btn-user-blog"
-                       :to='{name:"userBlog"}'>
+                       :to='{name:"user",params:{routeType:"blog"}}'>
             管理个人专栏
           </router-link>
         </li>
@@ -38,7 +38,7 @@
       <li v-for="(articleItem,key) in articleTypeList"
           :class="{'active':$route.query.type===key,'index-active':!$route.query.type&&key==='1'}"
           :key="key">
-        <router-link :to='{name:"userArticle",query:{blog_id:$route.query.blog_id||"all",type:key}}'>
+        <router-link :to='{name:"user",query:{blog_id:$route.query.blog_id||"all",type:key},params:{routeType:"article"}}'>
           <span class="name">{{articleItem}}</span>
         </router-link>
       </li>
@@ -78,15 +78,6 @@ export default {
         lang: 'zh'
       }
     }
-  },
-  async asyncData ({ store, route }) {
-    return store.dispatch('user/USER_MY_ARTICLE', {
-      uid: route.params.uid,
-      blog_id: route.query.blog_id || 'all',
-      type: route.query.type || '1',
-      page: route.query.page || 1,
-      pageSize: route.query.pageSize || 10,
-    })
   },
   data () {
     return {

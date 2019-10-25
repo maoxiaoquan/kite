@@ -40,12 +40,12 @@ const pordWebpackConfig = merge(baseWebpackConfig, {
   devtool: false,
   plugins: [
     // webpack4.0版本以上采用MiniCssExtractPlugin 而不使用extract-text-webpack-plugin
-    // new BundleAnalyzerPlugin(),
     new MiniCssExtractPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css'),
       chunkFilename: utils.assetsPath('css/[name].[contenthash].css')
     }),
     //  当vendor模块不再改变时, 根据模块的相对路径生成一个四位数的hash作为模块id
+    // new BundleAnalyzerPlugin(),
     new webpack.HashedModuleIdsPlugin()
   ],
   optimization: {

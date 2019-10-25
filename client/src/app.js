@@ -9,6 +9,7 @@ import { Message, Confirm } from './components'
 import './assets/css/box_layout.scss'
 import './assets/css/reset.scss'
 import './assets/css/other.scss'
+import './assets/fonts/icon.scss'
 
 Vue.prototype.$confirm = Confirm.install
 Vue.use(Message)
