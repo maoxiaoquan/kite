@@ -6,7 +6,7 @@
     <div class="main clearfix"
          v-if="Number(MessageItem.type)===5">
       <router-link class="user-info"
-                   :to="{name:'user',params:{uid:MessageItem.other_user.uid}}">
+                   :to="{name:'user',params:{uid:MessageItem.other_user.uid,routeType:'article'}}">
         <img class="avatar"
              :src="MessageItem.other_user.avatar"
              alt />
@@ -39,7 +39,7 @@
     <div class="main clearfix"
          v-else-if="Number(MessageItem.type)===4">
       <router-link class="user-info"
-                   :to="{name:'user',params:{uid:MessageItem.other_user.uid}}">
+                   :to="{name:'user',params:{uid:MessageItem.other_user.uid,routeType:'article'}}">
         <img class="avatar"
              :src="MessageItem.other_user.avatar"
              alt />
@@ -53,7 +53,7 @@
     <div class="main clearfix"
          v-else-if="Number(MessageItem.type)===2">
       <router-link class="user-info"
-                   :to="{name:'user',params:{uid:MessageItem.other_user.uid}}">
+                   :to="{name:'user',params:{uid:MessageItem.other_user.uid,routeType:'article'}}">
         <img class="avatar"
              :src="MessageItem.other_user.avatar"
              alt />
@@ -71,7 +71,7 @@
     <div class="main clearfix"
          v-if="Number(MessageItem.type)===6">
       <router-link class="user-info"
-                   :to="{name:'user',params:{uid:MessageItem.other_user.uid}}">
+                   :to="{name:'user',params:{uid:MessageItem.other_user.uid,routeType:'article'}}">
         <img class="avatar"
              :src="MessageItem.other_user.avatar"
              alt />

@@ -37,17 +37,10 @@ export default [
       {
         path: 'personal/:uid',
         name: 'personal',
-        component: require('@views/User/Personal').default, // 个人页
-        children: [
-          {
-            path: 'collect',
-            name: 'personalCollect',
-            component: require('@views/User/PersonalView/Collect').default // 收藏
-          }
-        ]
+        component: () => import('@views/User/Personal') // 个人页
       },
       {
-        path: 'user/setting',
+        path: 'setting',
         name: 'setting',
         component: require('@views/Setting/Setting').default, // 文章内容页
         children: [
@@ -128,7 +121,7 @@ export default [
       {
         path: 'books-write/:type',
         name: 'booksWrite',
-        component: () => import('@views/Books/WriteBooks') // 小书创建修改
+        component: require('@views/Books/WriteBooks').default // 小书创建修改
       },
       {
         path: 'books/:columnEnName',
@@ -138,19 +131,19 @@ export default [
       {
         path: 'book/:books_id',
         name: 'book',
-        component: require('@views/Book/Book').default // 小书内容
+        component: () => import('@views/Book/Book') // 小书内容
       }
     ]
   },
   {
     path: '/book/:books_id/section/:book_id',
     name: 'BookView',
-    component: require('@views/BookView/BookView').default // 查看小书内容
+    component: () => import('@views/BookView/BookView') // 查看小书内容
   },
   {
     path: '/book/:books_id/write/:book_id',
     name: 'WriteBookView',
-    component: () => import('@views/BookView/WriteBookView') // 编辑小书内容
+    component: require('@views/BookView/WriteBookView').default // 编辑小书内容
   },
   {
     path: '/sign/in',

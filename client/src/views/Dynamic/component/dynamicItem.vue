@@ -7,7 +7,7 @@
         <div class="user-popover-box">
 
           <router-link class="user-link"
-                       :to="{name:'user',params:{uid:dynamicItem.user.uid}}"
+                       :to="{name:'user',params:{uid:dynamicItem.user.uid,routeType:'article'}}"
                        v-if="dynamicItem.user.uid!=='tree'">
             <img :src="dynamicItem.user.avatar"
                  class="avatar"
@@ -25,7 +25,7 @@
         </div>
         <div class="dynamic-header-content">
           <div class="user-popover-box">
-            <router-link :to="{name:'user',params:{uid:dynamicItem.user.uid}}"
+            <router-link :to="{name:'user',params:{uid:dynamicItem.user.uid,routeType:'article'}}"
                          class="username"
                          v-if="dynamicItem.user.uid!=='tree'">{{dynamicItem.user.nickname}}</router-link>
             <a href="javascript:;"

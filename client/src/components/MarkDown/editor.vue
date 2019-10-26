@@ -74,8 +74,10 @@ import autoTextara from './components/auto-textarea'
 import lang from './libs/lang'
 import { CONFIG } from './libs/config.js'
 import "./libs/css/fontello.css"
+import markdown from './libs/mixins/markdown.js'
 export default {
   name: 'MarkDown',
+  mixins: [markdown],
   props: {
     value: {
       type: String,
@@ -227,7 +229,7 @@ export default {
       this.d_history_index = this.d_history.length - 1
     },
     $imgDel (file) {
-      this.markdownIt.image_del(file[1]);
+      // this.markdownIt.image_del(file[1]);
       // 删除所有markdown中的图片
       let fileReg = file[0]
       let reg = new RegExp(`\\!\\[${file[1]._name}\\]\\(${fileReg}\\)`, "g")
@@ -238,7 +240,6 @@ export default {
     $imgAdd (pos, $file, isinsert) {
       if (isinsert === undefined) isinsert = true;
       var $vm = this;
-      console.log('$vm.markdownIt', $vm.markdownIt)
       if (this.__rFilter == null) {
         // this.__rFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
         this.__rFilter = /^image\//i;

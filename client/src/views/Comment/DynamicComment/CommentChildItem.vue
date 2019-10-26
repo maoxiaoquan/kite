@@ -11,11 +11,11 @@
       <div class="comment-main">
         <h4>
           <router-link class="user-info"
-                       :to="{name:'user',params:{uid:childCommentItem.user.uid}}">{{childCommentItem.user.nickname}}</router-link>
+                       :to="{name:'user',params:{uid:childCommentItem.user.uid,routeType:'article'}}">{{childCommentItem.user.nickname}}</router-link>
           <template v-if="childCommentItem.reply_user">
             <i class="middle-text">回复</i>
             <router-link class="user-info"
-                         :to="{name:'user',params:{uid:childCommentItem.reply_user.uid}}">{{childCommentItem.reply_user.nickname}}</router-link>
+                         :to="{name:'user',params:{uid:childCommentItem.reply_user.uid,routeType:'article'}}">{{childCommentItem.reply_user.nickname}}</router-link>
           </template>
         </h4>
         <div class="comment-text"

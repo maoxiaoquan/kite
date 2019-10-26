@@ -17,7 +17,7 @@
                :style="{'background-image':'url('+item.user.avatar+')'}"></div>
           <div class="info-box">
             <div class="username">
-              <router-link :to="{name:'user',params:{uid:item.user.uid}}"
+              <router-link :to="{name:'user',params:{uid:item.user.uid,routeType:'article'}}"
                            class="link">{{item.user.nickname }}</router-link>
             </div>
             <div class="detail">{{item.user.introduction }}</div>

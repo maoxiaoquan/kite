@@ -11,7 +11,7 @@
         <ul class="meta-list">
           <li class="item"
               v-if="!articleItem.article_blog">
-            <router-link :to="{name:'user',params:{uid:articleItem.user.uid}}"
+            <router-link :to="{name:'user',params:{uid:articleItem.user.uid,routeType:'article'}}"
                          class="name">{{articleItem.user.nickname}}</router-link>
           </li>
           <li class="item">
@@ -46,12 +46,12 @@
 
       <div class="info-row footer-view"
            v-if="articleItem.article_blog">
-        <router-link :to="{name:'user',params:{uid:articleItem.user.uid}}"
+        <router-link :to="{name:'user',params:{uid:articleItem.user.uid,routeType:'article'}}"
                      class="avatar">
           <img :src="articleItem.user.avatar"
                alt="">
         </router-link>
-        <router-link :to="{name:'user',params:{uid:articleItem.user.uid}}"
+        <router-link :to="{name:'user',params:{uid:articleItem.user.uid,routeType:'article'}}"
                      class="name">{{articleItem.user.nickname}}</router-link>
         <span>发布于专栏</span>
         <router-link class="article-blog"

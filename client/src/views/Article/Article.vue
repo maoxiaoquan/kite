@@ -9,14 +9,14 @@
             <div class="article-title">
               <h1>{{article.title }}</h1>
               <div class="author">
-                <router-link :to="{name:'user',params:{uid:article.user.uid}}"
+                <router-link :to="{name:'user',params:{uid:article.user.uid,routeType:'article'}}"
                              class="avatar">
                   <img :src="article.user.avatar"
                        alt />
                 </router-link>
                 <div class="info">
                   <div class="name">
-                    <router-link :to="{name:'user',params:{uid:article.user.uid}}">{{article.user.nickname }}</router-link>
+                    <router-link :to="{name:'user',params:{uid:article.user.uid,routeType:'article'}}">{{article.user.nickname }}</router-link>
                   </div>
                   <!-- 文章数据信息 -->
                   <div class="meta">

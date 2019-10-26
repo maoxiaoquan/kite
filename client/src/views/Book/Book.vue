@@ -23,7 +23,7 @@
                   <div class="desc">{{books.booksInfo.description}}</div>
                   <div class="author">
                     <div class="author-info">
-                      <router-link :to="{name:'user',params:{uid:books.booksInfo.user.uid}}"
+                      <router-link :to="{name:'user',params:{uid:books.booksInfo.user.uid,routeType:'article'}}"
                                    class="user">
                         <img class="lazy avatar hero loaded"
                              :src="books.booksInfo.user.avatar"

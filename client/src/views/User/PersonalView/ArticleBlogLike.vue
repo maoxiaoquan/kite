@@ -1,7 +1,7 @@
 <template>
   <div class="user-article-like">
 
-    <ul class="user-article-like-view">
+    <ul class="user-article-like-view row">
       <li class="col-xs-6 col-sm-6 col-md-6"
           v-for="(articleBlogItem,key) in articleBlog.list"
           :key="key">
