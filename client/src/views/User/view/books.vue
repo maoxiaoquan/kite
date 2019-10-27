@@ -177,7 +177,7 @@ export default {
         .then(result => {
           if (result.state === 'success') {
             this.$message.success(result.message);
-            window.location.reload()
+            this.getBooksList()
           } else {
             this.$message.warning(result.message);
           }

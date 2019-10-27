@@ -247,9 +247,6 @@ export default {
   .article-view {
     > .article-item {
       border-bottom: 1px solid rgba(178, 186, 194, 0.15);
-      &:hover {
-        background: #f9f9f9;
-      }
     }
   }
 }

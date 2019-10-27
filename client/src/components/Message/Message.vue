@@ -54,7 +54,7 @@ export default {
   font-size: 14px;
   line-height: 1.4;
   border-radius: 4px;
-  z-index: 1000;
+  z-index: 5000;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
 
   &.info {

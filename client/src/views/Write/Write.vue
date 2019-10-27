@@ -401,9 +401,8 @@ export default {
             this.create_show_modal = false;
             this.$message.success(res.message);
             this.$router.push({
-              name: "userArticle",
-              params: { uid: this.personalInfo.user.uid },
-              query: { blog_id: "all" }
+              name: "user",
+              params: { uid: this.personalInfo.user.uid, routeType: "article" }
             });
           } else {
             this.$message.warning(res.message);

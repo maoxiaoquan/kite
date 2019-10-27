@@ -45,9 +45,9 @@ export default {
   watch: {
     visible: function (curVal) {
       if (curVal && document.body.scrollHeight > window.innerHeight) {
-        $("body").addClass("backdrop-open");
+        document.querySelector('body').classList.add("backdrop-open");
       } else {
-        $("body").removeClass("backdrop-open");
+        document.querySelector('body').classList.remove("backdrop-open");
       }
     }
   },

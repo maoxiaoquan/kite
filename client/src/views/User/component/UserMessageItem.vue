@@ -70,33 +70,38 @@
 
     <div class="main clearfix"
          v-if="Number(MessageItem.type)===6">
-      <router-link class="user-info"
-                   :to="{name:'user',params:{uid:MessageItem.other_user.uid,routeType:'article'}}">
-        <img class="avatar"
-             :src="MessageItem.other_user.avatar"
-             alt />
-        <span class="nickname">{{MessageItem.other_user.nickname}}</span>
-      </router-link>
-      <div class="content">
-        <router-link style="color:#df5858"
-                     :to="{name:'dynamicView',params:{dynamicId:MessageItem.dynamic.id}}">{{MessageItem.dynamic.content}}</router-link>
-        中{{typeList[MessageItem.type]}}：
-      </div>
-      <div class="content-text">
-        <template v-if="MessageItem.comment">
-          <p v-html="commentRender(MessageItem.comment.content||'评论被用户删除')"
-             v-if="Number(MessageItem.comment.status)===2||Number(MessageItem.comment.status)===5"></p>
-          <p v-else-if="Number(MessageItem.comment.status)===1"
-             style="color:#f96b84;">当前用户评论需要管理员审核才能可见</p>
-          <p v-else-if="Number(MessageItem.comment.status)===4"
-             style="color:#f96b84;">评论被删除</p>
-          <p v-else-if="Number(MessageItem.comment.status)===3"
-             style="color:#f96b84;">当前用户评论违规</p>
-        </template>
-        <template v-else>
-          <p style="color:#f96b84;">评论被删除</p>
-        </template>
-      </div>
+      <template v-if="MessageItem.dynamic">
+        <router-link class="user-info"
+                     :to="{name:'user',params:{uid:MessageItem.other_user.uid,routeType:'article'}}">
+          <img class="avatar"
+               :src="MessageItem.other_user.avatar"
+               alt />
+          <span class="nickname">{{MessageItem.other_user.nickname}}</span>
+        </router-link>
+        <div class="content">
+          <router-link style="color:#df5858"
+                       :to="{name:'dynamicView',params:{dynamicId:MessageItem.dynamic.id}}">{{MessageItem.dynamic.content}}</router-link>
+          中{{typeList[MessageItem.type]}}：
+        </div>
+        <div class="content-text">
+          <template v-if="MessageItem.comment">
+            <p v-html="commentRender(MessageItem.comment.content||'评论被用户删除')"
+               v-if="Number(MessageItem.comment.status)===2||Number(MessageItem.comment.status)===5"></p>
+            <p v-else-if="Number(MessageItem.comment.status)===1"
+               style="color:#f96b84;">当前用户评论需要管理员审核才能可见</p>
+            <p v-else-if="Number(MessageItem.comment.status)===4"
+               style="color:#f96b84;">评论被删除</p>
+            <p v-else-if="Number(MessageItem.comment.status)===3"
+               style="color:#f96b84;">当前用户评论违规</p>
+          </template>
+          <template v-else>
+            <p style="color:#f96b84;">评论被删除</p>
+          </template>
+        </div>
+      </template>
+      <template v-else>
+        <p class="no-info">当前动态不存在</p>
+      </template>
       <span class="delete-message"
             @click="deleteUserMessage(MessageItem.id)">删除</span>
     </div>
@@ -226,6 +231,10 @@ export default {
     .delete-message {
       opacity: 1;
     }
+  }
+  .no-info {
+    font-size: 14px;
+    color: #666;
   }
 }
 </style>
