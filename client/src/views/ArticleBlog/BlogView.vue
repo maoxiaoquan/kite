@@ -96,7 +96,8 @@
                     @pageChange="pageChange"></Page>
             </div>
 
-            <div class="article-blog-null-public">
+            <div class="article-blog-null-public"
+                 v-else>
               <p class="info">当前个人专栏未公开,请等待作者公开</p>
             </div>
 

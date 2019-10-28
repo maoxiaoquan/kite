@@ -63,7 +63,37 @@ export default {
           // set meta
           name: "keywords",
           content: `${this.website.meta.keywords || ''}`
-        }
+        },
+        {
+          // og:site_name
+          property: "og:site_name",
+          content: this.website.meta.website_name
+        },
+        {
+          // og:site_name
+          property: "og:image",
+          content: this.website.meta.logo
+        },
+        {
+          // og:type
+          property: "og:type",
+          content: `website`
+        },
+        {
+          // og:title
+          property: "og:title",
+          content: this.website.meta.website_name
+        },
+        {
+          // og:description
+          property: "og:description",
+          content: this.website.meta.description
+        },
+        {
+          // og:url
+          property: "og:url",
+          content: this.website.meta.domain_name
+        },
       ],
       htmlAttrs: {
         lang: "zh"

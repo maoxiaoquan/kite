@@ -7,8 +7,8 @@
         <li v-if="_page==1"><a class="banclick"><i class="el-icon-arrow-left"></i></a></li>
         <li v-for="index in indexs"
             :key="index"
-            v-bind:class="{ 'active': _page == (Number(index)+1)}">
-          <a @click="btnClick(index)">{{ index }}---{{_page}}---{{(Number(index)+1)}}</a>
+            v-bind:class="{ 'active': currentPage === Number(index)}">
+          <a @click="btnClick(index)">{{ index }}</a>
         </li>
         <li v-if="_page!=numPage"><a href="javascript:;"
              @click="_page++;pageClick()"><i class="el-icon-arrow-right"></i></a></li>
@@ -51,8 +51,11 @@ export default {
     this._page = this.page
   },
   watch: {
-    page (oldValue, newValue) {
-      this._page = oldValue
+    page: {
+      immediate: true,
+      handler (oldValue, newValue) {
+        this._page = oldValue
+      }
     }
   },
   methods: {
@@ -68,6 +71,9 @@ export default {
   },
 
   computed: {
+    currentPage () {
+      return this.page
+    },
     numPage () {
       return Math.ceil(this.total / this.pageSize)
     },

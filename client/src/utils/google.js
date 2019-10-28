@@ -17,7 +17,6 @@ class Google {
 
   // 逐入google统计code
   static injectionGoogleCode (googleCode = '') {
-    console.log('googleCode', googleCode)
     if (isProduction && googleCode) {
       window.dataLayer = window.dataLayer || []
       function gtag () {
