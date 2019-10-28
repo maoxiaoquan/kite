@@ -11,6 +11,9 @@
 
 ## ✨ kite
 
+做这个项目的目的是想把目前所学的都用在里面，避免遗忘，后期维护的时候都会过一遍，这样学了的就不会忘掉，
+项目覆盖了前端大半的知识点和框架
+
 前台演示网站地址： [小随笔 https://www.xiaosuibi.com/](https://www.xiaosuibi.com/ 'xiaosuibi')
 
 后台演示网站地址： [小随笔 https://www.xiaosuibi.com/\_admin](https://www.xiaosuibi.com/_admin 'xiaosuibi')
@@ -24,14 +27,14 @@
 ## 💼 最新版本更新记录
 
 ```
-更新时间：2019.10.17 10:58:00
-外部版本号：v0.10.9 内部版本号：0.5.1
-此次更新不需要运行升级，下载下来后直接build即可
+更新时间：2019.10.28 15:32
+外部版本号：v0.11.0 内部版本号：0.6
+此次更新需要运行升级 npm run kite-update
 
-1.新增百度链接自动推送
-2.新增google统计功能，需要前往google审核，然后在后台填写code，即可生效
-3.SEO优化
-4.修改现存的bug
+1.client代码全面改造，移除了element ui (嵌套在一起，过于臃肿)
+2.移除了原来的编辑器，对原来的编辑器进行瘦身，提取了一个精简版出来
+3.seo代码部分优化、sql优化
+4.修改现存的bug，部分页面结构重写
 ```
 
 [版本更新历史记录](https://github.com/maoxiaoquan/kite/blob/master/docs/VERSION.md 'version')
