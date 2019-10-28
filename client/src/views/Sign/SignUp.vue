@@ -25,7 +25,8 @@
                      class="send-email-input account"
                      placeholder="邮箱">
               <i class="el-icon-message"></i>
-              <send-code v-model="isSendCode"
+              <send-code :isSend="isSendCodeSuccess"
+                         v-model="isSendCode"
                          @click.native="sendCode"
                          storage-key="sendEmailCode"
                          class="btn-send-email-code" />
@@ -77,6 +78,7 @@ export default {
   data () {
     return {
       isSendCode: false,
+      isSendCodeSuccess: false, // 验证码是否发送
       formData: {
         nickname: '',
         email: '',
@@ -90,8 +92,10 @@ export default {
   },
   methods: {
     sendCode () { // 发送注册验证码
+      this.isSendCodeSuccess = true
       this.$store.dispatch('sign/SIGN_SEND_CODE', { email: this.formData.email })
         .then(res => {
+          this.isSendCodeSuccess = false
           if (res.state === 'success') {
             this.isSendCode = true
           } else {

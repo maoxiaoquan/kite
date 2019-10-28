@@ -16,7 +16,8 @@
                      class="send-email-input account"
                      v-model="formData.email">
               <i class="el-icon-message"></i>
-              <send-code v-model="isSendCode"
+              <send-code :isSend="isSendCodeSuccess"
+                         v-model="isSendCode"
                          @click.native="sendCode"
                          storage-key="reset-sendEmailCode"
                          class="btn-send-email-code btn" />
@@ -74,6 +75,7 @@ export default {
   data () {
     return {
       isSendCode: false,
+      isSendCodeSuccess: false,
       formData: {
         email: '',
         code: '',
@@ -91,11 +93,13 @@ export default {
       this.$router.push({ name: 'signUp' })
     },
     sendCode () { // 发送注册验证码
+      this.isSendCodeSuccess = true
       this.$store.dispatch('sign/RESET_PASSWORD_CODE', {
         email: this.formData.email,
         type: 'email'
       })
         .then(res => {
+          this.isSendCodeSuccess = false
           if (res.state === 'success') {
             this.isSendCode = true
           } else {

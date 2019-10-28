@@ -2,7 +2,7 @@
   <button type="button"
           class="btn-code"
           :disabled="start">
-    {{tmpStr}}
+    {{_isSend?'发送验证中...':tmpStr}}
   </button>
 </template>
 
@@ -32,6 +32,10 @@ export default {
     resetStr: {
       type: String,
       default: '重新获取验证码'
+    },
+    isSend: {
+      type: Boolean,
+      default: false
     },
     value: {
       type: Boolean,
@@ -73,6 +77,11 @@ export default {
     value (val) {
       this.start = val
       val && this.run()
+    },
+  },
+  computed: {
+    _isSend () {
+      return this.isSend
     }
   },
   created () {

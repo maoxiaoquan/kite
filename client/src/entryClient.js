@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import { createApp } from './app'
 import NProgress from 'nprogress'
+import { loading } from './directive'
 const { app, router, store } = createApp()
-
 NProgress.configure({
   easing: 'ease', // 动画方式
   speed: 500, // 递增进度条的速度
@@ -26,6 +26,8 @@ Vue.mixin({
     }
   }
 })
+
+Vue.directive('loading', loading)
 
 if (window.__INITIAL_STATE__) {
   store.replaceState(window.__INITIAL_STATE__)

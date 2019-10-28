@@ -44,7 +44,8 @@
       </li>
     </ul>
 
-    <div class="list-container">
+    <div class="list-container"
+         v-loading="isLoading">
       <!-- 文章列表模块 -->
       <div class="article-view">
         <div class="article-item"
@@ -82,6 +83,7 @@ export default {
   data () {
     return {
       isCreateBlogShow: false,
+      isLoading: false,
       articleTypeList: {
         '1': '文章',
         '2': '日记',
@@ -107,6 +109,7 @@ export default {
   },
   methods: {
     getMyArticleList () {
+      this.isLoading = true
       this.$store.dispatch('user/USER_MY_ARTICLE', {
         uid: this.$route.params.uid,
         blog_id: this.$route.query.blog_id || 'all',
@@ -115,6 +118,9 @@ export default {
         pageSize: this.myArticle.pageSize || 10,
       }).then(result => {
         this.myArticle = result.data
+        this.isLoading = false
+      }).catch(() => {
+        this.isLoading = false
       })
     },
     pageChange (val) {
