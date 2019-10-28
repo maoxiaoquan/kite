@@ -50,26 +50,35 @@ export default {
   padding: 10px 20px;
   color: #909399;
   background: #f5f5f5;
+  border: 1px solid #f5f5f5;
   font-size: 14px;
   line-height: 1.4;
   border-radius: 4px;
-  z-index: 1000;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 5000;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
 
   &.info {
     color: #909399;
+    background-color: #f4f4f5;
+    border: 1px solid #909399;
   }
 
   &.success {
     color: #67c23a;
+    background-color: #f0f9eb;
+    border: 1px solid #67c23a;
   }
 
   &.error {
-    color: #f56c6c;
+    border: 1px solid #e6a23c;
+    background-color: #fdf6ec;
+    color: #e6a23c;
   }
 
   &.warning {
-    color: #e6a23c;
+    color: #f56c6c;
+    background-color: #fef0f0;
+    border: 1px solid #f56c6c;
   }
 }
 </style>

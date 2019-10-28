@@ -8,8 +8,9 @@
     </div>
     <Page :total="userMessage.count"
           :pageSize="userMessage.pageSize"
-          :page="Number(userMessage.page)||1"
+          :page="Number(userMessage.page)"
           @pageChange="pageChange"></Page>
+    {{Number(userMessage.page)}}
   </div>
 </template>
 

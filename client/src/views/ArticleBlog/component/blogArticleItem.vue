@@ -10,7 +10,7 @@
       <div class="info-row meta-row">
         <ul class="meta-list">
           <li class="item username clickable">
-            <router-link :to="{name:'user',params:{uid:articleItem.user.uid}}"
+            <router-link :to="{name:'user',params:{uid:articleItem.user.uid,routeType:'article'}}"
                          class="name">{{articleItem.user.nickname}}</router-link>
           </li>
           <li class="item item-icon read-count">

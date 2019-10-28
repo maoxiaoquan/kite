@@ -11,7 +11,7 @@
       <div class="comment-main">
         <h4>
           <router-link class="user-info"
-                       :to="{name:'user',params:{uid:commentItem.user.uid}}">{{commentItem.user.nickname}}</router-link>
+                       :to="{name:'user',params:{uid:commentItem.user.uid,routeType:'article'}}">{{commentItem.user.nickname}}</router-link>
         </h4>
         <div class="comment-text"
              v-if="Number(commentItem.status)===2||Number(commentItem.status)===5"

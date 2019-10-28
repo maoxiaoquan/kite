@@ -29,8 +29,8 @@ export default {
 #global-view {
   .cancel-top {
     position: fixed;
-    bottom: 10px;
-    right: 30px;
+    bottom: 80px;
+    right: 50px;
     margin: 1rem 0 0;
     padding: 0;
     width: 35px;
@@ -40,7 +40,7 @@ export default {
     background-color: #fff;
     border: 1px solid #f1f1f1;
     border-radius: 50%;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     text-align: center;
     line-height: 35px;

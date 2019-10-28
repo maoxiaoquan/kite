@@ -9,18 +9,7 @@
             .indexOf(String(item.user_role_id))&&item.is_show">
         <a target="_blank"
            href="javascript:;">
-          <img width="20"
-               heigth="20"
-               v-if="item.user_role_icon"
-               :src="item.user_role_icon"
-               alt="">
-          <Popover :visible.sync="Visible">
-            <span slot="button"
-                  @mouseenter="Visible=true"
-                  @mouseleave="Visible=false"
-                  class="tag-name">{{item.user_role_name}}</span>
-            {{item.user_role_description}}
-          </Popover>
+          <span class="tag-name">{{item.user_role_name}}</span>
         </a>
       </li>
     </ul>
@@ -28,7 +17,7 @@
     <ul class="aside-operat">
       <li>
         <router-link class="collection"
-                     :to='{name:"personalCollect"}'>
+                     :to='{name:"personal"}'>
           <span class="collection-name"> <i class="el-icon-s-management"></i> 收藏集</span>
         </router-link>
       </li>

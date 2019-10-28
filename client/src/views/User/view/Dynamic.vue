@@ -17,7 +17,7 @@
           </div>
           <div class="dynamic-header-content">
             <div class="user-popover-box">
-              <router-link :to="{name:'user',params:{uid:dynamicItem.user.uid}}"
+              <router-link :to="{name:'user',params:{uid:dynamicItem.user.uid,routeType:'article'}}"
                            class="username">{{dynamicItem.user.nickname}}</router-link>
             </div>
             <div class="meta-box">

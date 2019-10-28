@@ -5,8 +5,10 @@ const config = lowdb.read().value()
 module.exports = {
   // 密码盐
   ENCRYPT_KEY: 'kite',
-  DF_ARTICLE_TAG_IMG: '/default/img/default_article_tag.png', // 文章默认的标签
-  DF_ICON: '/default/img/default_icon.png', // 默认所有图标
+  DF_ARTICLE_TAG_IMG: `${
+    config.website.domain_name
+  }/default/img/default_article_tag.png`, // 文章默认的标签
+  DF_ICON: `${config.website.domain_name}/default/img/default_icon.png`, // 默认所有图标
   USER: {
     dfUserAvatarNoReviewId: 'dfUserAvatarNoReviewId' // 用户头像免审核
   },
@@ -40,7 +42,9 @@ module.exports = {
     dfNoReviewBooksCommentId: 'dfNoReviewBooksCommentId' // 发布小书评论无需审核
   },
   SUPER_ROLE_ID: '1000000', // 排除超管，超管无视所有，拥有最高权限 role = 1000000 为超管
-  default_avatar: KiteConfig.server.default_avatar, // 所有使用的默认头像
+  default_avatar: `${config.website.domain_name}${
+    KiteConfig.server.default_avatar
+  }`, // 所有使用的默认头像
   database: {
     /* database set */
     DATABASE: config.mysql.database, // 使用哪个数据库

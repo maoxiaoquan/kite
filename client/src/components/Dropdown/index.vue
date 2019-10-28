@@ -8,6 +8,7 @@
       <slot name="no-button"></slot>
     </div>
     <div v-clickoutside="close"
+         @click="visible=false"
          v-show="visible"
          :style="style"
          class="dropdown-menu">
@@ -31,10 +32,10 @@ export default {
     }
   },
   methods: {
-    toggleOpen: function () {
+    toggleOpen () {
       this.visible = !this.visible
     },
-    close: function (e) {
+    close (e) {
       if (this.$el.contains(e.target)) return;
       this.visible = false
     },
@@ -50,8 +51,8 @@ export default {
   },
   directives: {
     clickoutside: {
-      bind: function (el, binding, vnode) {
-        const documentHandler = function (e) {
+      bind (el, binding, vnode) {
+        const documentHandler = (e) => {
           if (!vnode.context || el.contains(e.target)) return;
           binding.value(e);
         };

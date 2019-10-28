@@ -7,18 +7,18 @@
           <div class="col-xs-12 col-sm-8 col-md-8 main">
             <ul class="trigger-menu">
               <li>
-                <router-link :to='{name:"personalCollect"}'>
+                <a href="javascript:;">
                   收藏
-                </router-link>
+                </a>
               </li>
             </ul>
 
-            <router-view />
+            <Collect />
           </div>
 
           <div class="col-xs-12 col-sm-4 col-md-4 box-aside">
             <router-link class="personal"
-                         :to="{name:'user',params:{uid:$route.params.uid}}">
+                         :to="{name:'user',params:{uid:$route.params.uid,routeType:'article'}}">
               返回个人中心 <i class="el-icon-d-arrow-right"></i>
             </router-link>
             <UserAside />
@@ -33,6 +33,7 @@
 
 <script>
 import UserAside from './view/UserAside'
+import Collect from './PersonalView/Collect'
 import { mapState } from 'vuex'
 import ClientOnly from 'vue-client-only'
 export default {
@@ -53,15 +54,13 @@ export default {
       })
     ])
   },
-  methods: {
-
-  },
   computed: {
     ...mapState(['personalInfo', 'user']),  // personalInfo:个人信息  user:登录后的个人信息当前用户
   },
   components: {
     UserAside,
-    ClientOnly
+    ClientOnly,
+    Collect
   }
 }
 </script>

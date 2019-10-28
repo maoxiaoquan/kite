@@ -23,23 +23,20 @@
                       <i class="menu-icon el-icon-menu"></i>
                     </div>
                     <div class="dropdown-menu-view">
-                      <div class="dropdown-menu-item"
-                           @click="commandChange({name:'home'})">
-                        主页
-                      </div>
-                      <div class="dropdown-menu-item"
-                           @click="commandChange({name:'dynamics',params:{dynamicTopicId:'newest'}})">
-                        片刻
-                      </div>
-                      <div class="dropdown-menu-item"
-                           @click="commandChange({name:'books',params:{columnEnName:'all'}})">
-                        小书
-                      </div>
-                      <div class="dropdown-menu-item"
-                           v-if="personalInfo.islogin"
-                           @click="commandChange({name:'userMessage',params:{uid:personalInfo.user.uid}})">
+
+                      <router-link :to="{name:'home'}"
+                                   class="dropdown-menu-item">主页</router-link>
+                      <router-link :to="{name:'dynamics',params:{dynamicTopicId:'newest'}}"
+                                   class="dropdown-menu-item">片刻</router-link>
+                      <router-link :to="{name:'books',params:{columnEnName:'all'}}"
+                                   class="dropdown-menu-item">小书</router-link>
+                      <router-link v-if="personalInfo.islogin"
+                                   class="dropdown-menu-item"
+                                   :to="{name:'user',params:{uid:personalInfo.user.uid,routeType:'message'}}">
                         消息
-                      </div>
+                        <span v-if="messageCount.count>0"
+                              class="unread-message-count">{{messageCount.count}}</span>
+                      </router-link>
                     </div>
                   </Dropdown>
                 </div>
