@@ -68,7 +68,7 @@ module.exports = {
   server: {
     // server
     default_avatar: '/default/img/avatar.jpeg', // 所有使用的默认头像
-    port: 8099, // 生产环境运行端口号
+    port: 8086, // 生产环境运行端口号
     ininProt: 8085 // 初始化项目端口号
   }
 }
