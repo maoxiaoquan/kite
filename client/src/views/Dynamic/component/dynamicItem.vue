@@ -9,7 +9,7 @@
           <router-link class="user-link"
                        :to="{name:'user',params:{uid:dynamicItem.user.uid,routeType:'article'}}"
                        v-if="dynamicItem.user.uid!=='tree'">
-            <img :src="dynamicItem.user.avatar"
+            <img v-lazy="dynamicItem.user.avatar"
                  class="avatar"
                  alt="">
           </router-link>
@@ -18,7 +18,7 @@
              target="_blank"
              class="user-link"
              v-else>
-            <img :src="dynamicItem.user.avatar"
+            <img v-lazy="dynamicItem.user.avatar"
                  class="avatar"
                  alt="">
           </a>
@@ -65,7 +65,7 @@
          v-if="dynamicItem.type===2">
       <img style="width: 100px; height: 100px"
            class="preview-picture"
-           :src="url"
+           v-lazy="url"
            v-for="(url,key) in imgAnalyze(dynamicItem.attach)"
            :key="key"
            v-if="url"

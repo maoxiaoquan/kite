@@ -1,5 +1,6 @@
 <template>
-  <div class="user-message">
+  <div class="user-message"
+       v-loading="isLoading">
     <div class="user-message-view">
       <UserMessageItem v-for="(item,key) in userMessage.list"
                        :MessageItem="item"
@@ -31,6 +32,7 @@ export default {
   },
   data () {
     return {
+      isLoading: false,
       userMessage: {
         // 用户消息
         list: [],
@@ -53,6 +55,9 @@ export default {
         pageSize: this.userMessage.pageSize || 10,
       }).then(result => {
         this.userMessage = result.data
+        this.isLoading = false
+      }).catch(() => {
+        this.isLoading = false
       })
     },
     deleteChange () {

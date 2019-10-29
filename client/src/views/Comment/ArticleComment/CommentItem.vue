@@ -3,7 +3,7 @@
        :id="'comment'+commentItem.id"
        ref="comment_list">
     <div class="avatar">
-      <img :src="commentItem.user.avatar"
+      <img v-lazy="commentItem.user.avatar"
            class="box-image"
            alt="">
     </div>

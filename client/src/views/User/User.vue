@@ -10,7 +10,7 @@
               <router-link :to='{name:"user",params:{uid:user.user_info.user.uid,routeType:"article"}}'
                            class="avatar">
                 <div class="avatar-img">
-                  <img :src="user.user_info.user.avatar"
+                  <img v-lazy="user.user_info.user.avatar"
                        class="box-image"
                        alt="">
                 </div>
@@ -97,7 +97,7 @@
             </ul>
 
             <BlogView v-if="$route.params.routeType==='blog'" />
-            <booksView v-else-if="$route.params.routeType==='books'" />
+            <BooksView v-else-if="$route.params.routeType==='books'" />
             <DynamicView v-else-if="$route.params.routeType==='dynamic'" />
             <UserAttentionView v-else-if="$route.params.routeType==='attention'" />
             <UserMessageView v-else-if="$route.params.routeType==='message'" />
@@ -120,7 +120,7 @@ import ClientOnly from 'vue-client-only'
 import UserAside from './view/UserAside'
 import ArticleView from './view/Article'
 import BlogView from './view/Blog'
-import booksView from './view/books'
+import BooksView from './view/Books'
 import DynamicView from './view/Dynamic'
 import UserAttentionView from './view/UserAttention'
 import UserMessageView from './view/UserMessage'
@@ -200,7 +200,7 @@ export default {
     ClientOnly,
     ArticleView,
     BlogView,
-    booksView,
+    BooksView,
     DynamicView,
     UserAttentionView,
     UserMessageView

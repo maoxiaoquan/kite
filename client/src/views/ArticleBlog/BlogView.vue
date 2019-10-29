@@ -12,7 +12,7 @@
               <div class="user-article-blog-top">
                 <div class="article-blog-icon">
                   <img class="box-image"
-                       :src="articleBlog.blogInfo.icon"
+                       v-lazy="articleBlog.blogInfo.icon"
                        alt="">
                 </div>
 
@@ -67,7 +67,7 @@
                 <ul>
                   <li class="item item-icon read-count">
                     <img class="user-avatar"
-                         :src="articleBlog.blogInfo.user.avatar"
+                         v-lazy="articleBlog.blogInfo.user.avatar"
                          alt="">
                     <router-link :to='{name:"user",params:{uid:articleBlog.blogInfo.user.uid}}'
                                  class="nickname">{{articleBlog.blogInfo.user.nickname}}</router-link>

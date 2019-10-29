@@ -1,5 +1,6 @@
 <template>
-  <div class="box-comment">
+  <div class="box-comment"
+       v-loading="isLoading">
     <div class="box-comment-part"
          v-if="website.config.on_comment==='yes'">
       <div class="box-comment-part-title">
@@ -15,7 +16,7 @@
       <div class="comment-list">
         <div id="commentlist">
           <comment-item :comment-item="item"
-                        v-for="(item,key) in articleComment.comment_list"
+                        v-for="(item,key) in articleComment.list"
                         :key="key" />
         </div>
 
@@ -41,31 +42,42 @@ export default {
   created () {
     this.getCommentList(); // 获取用户的评论
   },
+  data () {
+    return {
+      isLoading: true,
+      articleComment: {
+        list: [],
+        count: 0,
+        page: 1,
+        pageSize: 10
+      }
+    }
+  },
   methods: {
     getCommentList () {
       // 获取评论列表
-      var that = this;
+      this.isLoading = true
       this.$store
         .dispatch("articleComment/ARTICLE_COMMENT_LIST", {
           aid: this.article.aid,
           page: this.comment_page,
           pageSize: this.comment_pageSize
+        }).then(result => {
+          this.articleComment = result.data
+          this.isLoading = false
+        }).catch(() => {
+          this.isLoading = false
         })
     },
     pageChange (val) {
-      this.$store
-        .dispatch("articleComment/ARTICLE_COMMENT_LIST", {
-          aid: this.article.aid,
-          page: val,
-          pageSize: this.comment_pageSize
-        })
+      this.articleComment.page = val
+      this.getCommentList()
     },
     commentChange (res) {
       if (res.state === "success") {
         this.$message.success(res.message);
-        this.comment_content = ""; // 评论输入框为空
-        this.$store.commit("articleComment/SET_ARTICLE_COMMENT_UNSHIFT", res.data);
-        this.$store.commit("articleComment/SET_ARTICLE_COMMENT_COUNT_ADD");
+        this.articleComment.list.unshift(res.data)
+        this.articleComment.count += 1
       } else {
         this.$message.warning(res.message);
       }
@@ -80,10 +92,6 @@ export default {
     article () {
       return this.$store.state.article.article || {};
     },
-    articleComment () {
-      // 文章的评论
-      return this.$store.state.articleComment.article_comment || {};
-    }
   },
   components: {
     "comment-item": commentItem,

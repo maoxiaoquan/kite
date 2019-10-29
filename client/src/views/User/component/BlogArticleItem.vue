@@ -80,7 +80,7 @@
     </div>
     <div class="lazy thumb thumb loaded"
          v-if="articleItem.cover_img">
-      <img :src="articleItem.cover_img"
+      <img v-lazy="articleItem.cover_img"
            class="box-image"
            alt="">
     </div>

@@ -10,7 +10,7 @@
           <span class="title">头像</span>
           <div class="avatar-uploader avatar-uploader">
             <div class="avatar">
-              <img :src="(formData.avatar_review_status===1||formData.avatar_review_status===3)?formData.avatar_review:formData.avatar"
+              <img v-lazy="(formData.avatar_review_status===1||formData.avatar_review_status===3)?formData.avatar_review:formData.avatar"
                    class="box-image"
                    alt="">
             </div>

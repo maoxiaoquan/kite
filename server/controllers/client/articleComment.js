@@ -96,7 +96,7 @@ class ArticleComment {
           page,
           pageSize,
           count,
-          comment_list: rows
+          list: rows
         }
       })
     } catch (err) {

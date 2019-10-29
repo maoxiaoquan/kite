@@ -22,7 +22,7 @@
            :key="key">
         <i @click="deleteCoverImage(url,key)"
            class="close el-icon-error"></i>
-        <img :src="url"
+        <img v-lazy="url"
              alt="">
       </div>
       <div class="add-picture"
@@ -127,7 +127,7 @@
                       <div class="topic-item">
                         <div class="lazy loaded immediate">
                           <img class="icon"
-                              :src="item.icon"
+                              v-lazy="item.icon"
                               alt="">
                         </div>
                         <div class="content">

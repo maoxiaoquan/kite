@@ -1,9 +1,10 @@
 <template>
-  <div class="user-attention">
+  <div class="user-attention"
+       v-loading="isLoading">
     <div class="user-article-attention-any">
-      <router-link :to="{name:'userAttention',query:{any:'me'}}"
+      <router-link :to="{name:'user',query:{any:'me'},params:{routeType:'attention'}}"
                    :class="{'active':$route.query.any==='me'||!$route.query.any}">{{personalInfo.user.uid===$route.params.uid?'我':'他'}}关注的</router-link>
-      <router-link :to="{name:'userAttention',query:{any:'other'}}"
+      <router-link :to="{name:'user',query:{any:'other'},params:{routeType:'attention'}}"
                    :class="{'active':$route.query.any==='other'}">关注{{personalInfo.user.uid===$route.params.uid?'我':'他'}}的</router-link>
     </div>
 
@@ -53,6 +54,7 @@ export default {
   },
   data () {
     return {
+      isLoading: false,
       userAttentionList: {
         count: 0,
         page: 1,
@@ -78,6 +80,9 @@ export default {
         pageSize: this.userAttentionList.pageSize || 10
       }).then(result => {
         this.userAttentionList = result.data
+        this.isLoading = false
+      }).catch(() => {
+        this.isLoading = false
       })
     },
     pageChange (val) {
@@ -85,7 +90,6 @@ export default {
       this.getUserAttentionList()
     },
     isAttention (item) { // 是否收藏
-      console.log('item', item)
       let userAttentionIds = []
       if (item.userAttentionIds && item.userAttentionIds.length > 0) {
         item.userAttentionIds.map(item => {

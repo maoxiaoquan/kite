@@ -3,7 +3,7 @@
        id="comment_form">
     <div class="comment-avatar">
       <img v-if="personalInfo.islogin"
-           :src="personalInfo.user.avatar"
+           v-lazy="personalInfo.user.avatar"
            class="box-image"
            alt="">
       <img v-else

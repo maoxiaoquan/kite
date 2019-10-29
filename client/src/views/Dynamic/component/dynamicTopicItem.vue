@@ -2,7 +2,7 @@
   <div class="topic-item">
     <router-link class="icon"
                  :to='{name:"dynamicTopicView",params:{dynamicTopicId:dynamicTopicItem.topic_id}}'>
-      <img :src="dynamicTopicItem.icon"
+      <img v-lazy="dynamicTopicItem.icon"
            class="avatar"
            alt="">
     </router-link>
@@ -26,7 +26,7 @@ export default {
   props: ['dynamicTopicItem'],
   methods: {
     async subscribeDynamicTopic () { // 订阅动态话题
-      await this.$store.dispatch('rss/SET_RSS_DYNAMIC_TOPIC', { topic_id: this.dynamicTopicItem.topic_id })
+      await this.$store.dispatch('dynamic/SET_RSS_DYNAMIC_TOPIC', { topic_id: this.dynamicTopicItem.topic_id })
         .then(res => {
           // this.$store.dispatch('articleTag/MY_SUBSCRIBE_TAG_LIST')
           if (res.state === 'success') {

@@ -13,7 +13,7 @@
             v-for="(item,key) in faceqq"
             @click="changeFace(item)"
             :key="key">
-          <img :src="item.face_url"
+          <img v-lazy="item.face_url"
                :alt="item.face_text">
         </li>
       </ul>

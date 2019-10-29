@@ -9,7 +9,7 @@
                v-if="articleTag">
             <div class="main-top">
               <div class="thumb">
-                <img :src="articleTag.icon"
+                <img v-lazy="articleTag.icon"
                      class="box-image"
                      alt="">
               </div>

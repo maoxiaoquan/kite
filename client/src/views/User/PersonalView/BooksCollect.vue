@@ -8,7 +8,7 @@
         <div class="library-item clearfix client-card">
           <div class="library-item__thumb">
             <router-link :to="{name:'book',params:{books_id:booksItem.books.books_id}}">
-              <img :src="booksItem.books.cover_img"
+              <img v-lazy="booksItem.books.cover_img"
                    class="img-full"
                    lazy="loaded">
             </router-link>

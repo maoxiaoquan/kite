@@ -8,7 +8,7 @@
       <router-link class="user-info"
                    :to="{name:'user',params:{uid:MessageItem.other_user.uid,routeType:'article'}}">
         <img class="avatar"
-             :src="MessageItem.other_user.avatar"
+             v-lazy="MessageItem.other_user.avatar"
              alt />
         <span class="nickname">{{MessageItem.other_user.nickname}}</span>
       </router-link>
@@ -41,7 +41,7 @@
       <router-link class="user-info"
                    :to="{name:'user',params:{uid:MessageItem.other_user.uid,routeType:'article'}}">
         <img class="avatar"
-             :src="MessageItem.other_user.avatar"
+             v-lazy="MessageItem.other_user.avatar"
              alt />
         <span class="nickname">{{MessageItem.other_user.nickname}}</span>
       </router-link>
@@ -55,7 +55,7 @@
       <router-link class="user-info"
                    :to="{name:'user',params:{uid:MessageItem.other_user.uid,routeType:'article'}}">
         <img class="avatar"
-             :src="MessageItem.other_user.avatar"
+             v-lazy="MessageItem.other_user.avatar"
              alt />
         <span class="nickname">{{MessageItem.other_user.nickname}}</span>
       </router-link>
@@ -74,7 +74,7 @@
         <router-link class="user-info"
                      :to="{name:'user',params:{uid:MessageItem.other_user.uid,routeType:'article'}}">
           <img class="avatar"
-               :src="MessageItem.other_user.avatar"
+               v-lazy="MessageItem.other_user.avatar"
                alt />
           <span class="nickname">{{MessageItem.other_user.nickname}}</span>
         </router-link>

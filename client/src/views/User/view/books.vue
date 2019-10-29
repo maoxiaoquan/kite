@@ -1,5 +1,6 @@
 <template>
-  <div class="user-books">
+  <div class="user-books"
+       v-loading="isLoading">
 
     <button class="btn create-book"
             @click="createBooks">创建小书</button>
@@ -31,7 +32,7 @@
           </div>
           <div class="library-item__thumb">
             <router-link :to="{name:'book',params:{books_id:booksItem.books_id}}">
-              <img :src="booksItem.cover_img"
+              <img v-lazy="booksItem.cover_img"
                    class="img-full"
                    lazy="loaded">
             </router-link>
@@ -94,8 +95,7 @@ export default {
   },
   data () {
     return {
-      isCreateBlogShow: false,
-      isCreate: true,
+      isLoading: false,
       books: {
         // 个人中心小书列表
         count: 0,
@@ -111,12 +111,16 @@ export default {
   },
   methods: {
     getBooksList () {
+      this.isLoading = true
       this.$store.dispatch('user/GET_BOOKS_LIST', {
         uid: this.$route.params.uid,
         page: this.books.page || 1,
         pageSize: this.books.pageSize || 10,
       }).then(result => {
         this.books = result.data
+        this.isLoading = false
+      }).catch(() => {
+        this.isLoading = false
       })
     },
     createBooks () {

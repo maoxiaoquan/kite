@@ -182,7 +182,7 @@
             <!-- 缩略图展示 -->
             <img class="image-show"
                  :class="{'transition': transition}"
-                 :src="item[1].miniurl"
+                 v-lazy="item[1].miniurl"
                  alt="none">
           </div>
         </div>

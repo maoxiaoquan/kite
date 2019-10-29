@@ -66,7 +66,7 @@
                     <div class="el-dropdown-link"
                          slot="button">
                       <div class="avatar-img">
-                        <img :src="personalInfo.user.avatar"
+                        <img v-lazy="personalInfo.user.avatar"
                              class="box-image"
                              alt="">
                       </div>

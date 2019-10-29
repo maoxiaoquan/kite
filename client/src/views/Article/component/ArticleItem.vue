@@ -48,7 +48,7 @@
            v-if="articleItem.article_blog">
         <router-link :to="{name:'user',params:{uid:articleItem.user.uid,routeType:'article'}}"
                      class="avatar">
-          <img :src="articleItem.user.avatar"
+          <img v-lazy="articleItem.user.avatar"
                alt="">
         </router-link>
         <router-link :to="{name:'user',params:{uid:articleItem.user.uid,routeType:'article'}}"
@@ -67,7 +67,7 @@
     <div class="thumb"
          v-if="articleItem.cover_img">
       <img class="box-image"
-           :src="articleItem.cover_img"
+           v-lazy="articleItem.cover_img"
            alt="">
     </div>
   </article>

@@ -45,8 +45,8 @@ const pordWebpackConfig = merge(baseWebpackConfig, {
       chunkFilename: utils.assetsPath('css/[name].[contenthash].css')
     }),
     //  当vendor模块不再改变时, 根据模块的相对路径生成一个四位数的hash作为模块id
-    // new BundleAnalyzerPlugin(),
     new webpack.HashedModuleIdsPlugin()
+    // new BundleAnalyzerPlugin()
   ],
   optimization: {
     splitChunks: {

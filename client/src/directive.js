@@ -21,7 +21,6 @@ export const loading = {
       }
     } */
     const curStyle = window.getComputedStyle(el)
-    console.log('curStyle', curStyle)
     const position = curStyle.position
     if (position === 'absolute' || position === 'relative') {
       el.style.position = position

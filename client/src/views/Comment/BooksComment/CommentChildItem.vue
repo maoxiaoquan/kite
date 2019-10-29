@@ -2,7 +2,7 @@
   <div class="comment-item"
        :id="'comment'+childCommentItem.id">
     <div class="avatar">
-      <img :src="childCommentItem.user.avatar"
+      <img v-lazy="childCommentItem.user.avatar"
            class="box-image"
            alt="">
     </div>

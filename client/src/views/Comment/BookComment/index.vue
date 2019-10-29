@@ -1,5 +1,6 @@
 <template>
-  <div class="box-comment">
+  <div class="box-comment"
+       v-loading="isLoading">
     <div class="box-comment-part"
          v-if="website.config.on_comment==='yes'">
       <div class="box-comment-part-title">
@@ -39,6 +40,7 @@ export default {
   name: "index",
   data () {
     return {
+      isLoading: true,
       comment: {
         comment_list: [],
         count: 0,
@@ -58,7 +60,7 @@ export default {
   methods: {
     getCommentList () {
       // 获取评论列表
-      var that = this;
+      this.isLoading = true
       this.$store
         .dispatch("book/BOOK_COMMENT_LIST", {
           book_id: this.$route.params.book_id,
@@ -67,6 +69,9 @@ export default {
         })
         .then(result => {
           this.comment = result.data
+          this.isLoading = false
+        }).catch(() => {
+          this.isLoading = false
         })
     },
     pageChange (val) {

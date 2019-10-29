@@ -81,7 +81,6 @@ class dynamic {
       ) // 4无需审核， 1审核中
         ? 4
         : 1
-      console.log('reqData', reqData)
       await models.dynamic.create({
         uid: user.uid,
         content: xss(reqData.content) /* 主内容 */,

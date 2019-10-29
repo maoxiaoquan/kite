@@ -1,6 +1,7 @@
 <template>
 
-  <div class="user-center-article-view">
+  <div class="user-center-article-view"
+       v-loading="isLoading">
 
     <ul class="blog-list">
       <li class="title">个人专栏：</li>
@@ -44,8 +45,7 @@
       </li>
     </ul>
 
-    <div class="list-container"
-         v-loading="isLoading">
+    <div class="list-container">
       <!-- 文章列表模块 -->
       <div class="article-view">
         <div class="article-item"

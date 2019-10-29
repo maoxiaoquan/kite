@@ -19,7 +19,7 @@
         <a class="advertise-img"
            :href="advertiseItem.link||'javascript:;'"
            v-if="advertiseItem.img_url">
-          <img :src="advertiseItem.img_url"
+          <img v-lazy="advertiseItem.img_url"
                alt="">
         </a>
         <a class="advertise-text"

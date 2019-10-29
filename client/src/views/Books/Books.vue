@@ -68,7 +68,7 @@
               <div class="library-item clearfix client-card">
                 <div class="library-item__thumb">
                   <router-link :to="{name:'book',params:{books_id:booksItem.books_id}}">
-                    <img :src="booksItem.cover_img"
+                    <img v-lazy="booksItem.cover_img"
                          class="img-full"
                          lazy="loaded">
                   </router-link>
@@ -236,7 +236,6 @@ export default {
     },
     switchColumn (val) {
       this.articleColumn.homeColumn.map(item => {
-        console.log(item.en_name, val)
         if (item.en_name === val) {
           this.childNavItem = item || {}
         }

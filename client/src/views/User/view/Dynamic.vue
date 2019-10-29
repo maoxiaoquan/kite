@@ -1,5 +1,6 @@
 <template>
-  <div class="user-dynamic">
+  <div class="user-dynamic"
+       v-loading="isLoading">
 
     <div class="user-dynamic-item client-card"
          v-for="(dynamicItem,key) in dynamicList.list"
@@ -11,7 +12,7 @@
                          class="user-link">
               <img class="avatar"
                    size="size"
-                   :src="dynamicItem.user.avatar"
+                   v-lazy="dynamicItem.user.avatar"
                    alt="">
             </router-link>
           </div>
@@ -69,7 +70,7 @@
            v-if="dynamicItem.type===2">
         <img class="preview-picture"
              style="width: 100px; height: 100px"
-             :src="url"
+             v-lazy="url"
              v-for="(url,key) in imgAnalyze(dynamicItem.attach)"
              :key="key"
              v-if="url"
@@ -120,6 +121,7 @@ export default {
   name: 'Dynamic',
   data () {
     return {
+      isLoading: false,
       dynamicList: {
         // 个人中心动态列表
         count: 0,
@@ -250,6 +252,7 @@ export default {
       this.getPersonalDynamicList()
     },
     getPersonalDynamicList () {
+      this.isLoading = true
       this.$store.dispatch('user/GET_PERSONAL_DYNAMIC_LIST',
         {
           uid: this.$route.params.uid,
@@ -257,6 +260,9 @@ export default {
           pageSize: this.dynamicList.pageSize || 10,
         }).then(result => {
           this.dynamicList = result.data
+          this.isLoading = false
+        }).catch(() => {
+          this.isLoading = false
         })
     },
   },

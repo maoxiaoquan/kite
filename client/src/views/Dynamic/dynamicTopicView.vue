@@ -38,7 +38,7 @@
                 <span :style="`background-image: url(${topicInfo.icon});`"></span>
               </div>
               <div class="content">
-                <img :src="topicInfo.icon"
+                <img v-lazy="topicInfo.icon"
                      class="icon"
                      alt="">
                 <div class="title">{{topicInfo.name}}</div>
@@ -172,7 +172,7 @@ export default {
       })
     },
     async subscribeDynamicTopic () { // 订阅动态话题
-      await this.$store.dispatch('rss/SET_RSS_DYNAMIC_TOPIC', { topic_id: this.$route.params.dynamicTopicId })
+      await this.$store.dispatch('dynamic/SET_RSS_DYNAMIC_TOPIC', { topic_id: this.$route.params.dynamicTopicId })
         .then(res => {
           // this.$store.dispatch('articleTag/MY_SUBSCRIBE_TAG_LIST')
           if (res.state === 'success') {

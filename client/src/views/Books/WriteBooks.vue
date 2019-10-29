@@ -7,7 +7,7 @@
         <div class="row mrg-bm20 books-write-content">
           <div class="col-xs-12 col-sm-4 col-md-3 box-form-group">
             <div class="cover-img">
-              <img :src="write.cover_img"
+              <img v-lazy="write.cover_img"
                    v-if="write.cover_img"
                    class="cover-img-view"
                    alt="">

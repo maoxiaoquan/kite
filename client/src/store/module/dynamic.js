@@ -40,6 +40,14 @@ const mutations = {
   SET_RECOMMEND_DYNAMIC_LIST (state, data) {
     // 设置推荐动态列表
     state.recommendDynamicList = data
+  },
+  SET_RSS_DYNAMIC_TOPIC ({ commit, dispatch, state }, parameter) {
+    // 订阅动态话题
+    return fetch({
+      url: '/subscribe/dynamic_topic',
+      method: 'post',
+      parameter: parameter
+    })
   }
 }
 

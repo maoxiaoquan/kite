@@ -5,7 +5,7 @@
       <div class="user-article-blog-top">
         <router-link class="article-blog-icon"
                      :to="{name:'articleBlog',params:{blogId:articleBlogItem.articleBlog.blog_id}}">
-          <img :src="articleBlogItem.articleBlog.icon"
+          <img v-lazy="articleBlogItem.articleBlog.icon"
                class="article-blog-icon-img"
                alt="">
         </router-link>
@@ -24,7 +24,7 @@
       <div class="user-article-blog-main">
         <ul class="user-info">
           <li class="item item-icon read-count">
-            <img :src="articleBlogItem.user.avatar"
+            <img v-lazy="articleBlogItem.user.avatar"
                  class="user-avatar"
                  alt="">
             <router-link :to='{name:"user",params:{uid:articleBlogItem.user.uid}}'

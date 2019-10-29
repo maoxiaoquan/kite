@@ -1,5 +1,6 @@
 <template>
-  <div class="dynamic-comment">
+  <div class="dynamic-comment"
+       v-loading="isLoading">
     <div class="dynamic-comment-part"
          v-if="website.config.on_comment==='yes'">
       <comment-form :dynamicId="dynamicId"
@@ -34,6 +35,7 @@ export default {
   name: "index",
   data () {
     return {
+      isLoading: true,
       commentList: [], // 用户评论的列表
       page: 1,
       pageSize: 6
@@ -50,7 +52,7 @@ export default {
   methods: {
     getCommentList () {
       // 获取评论列表
-      var that = this;
+      this.isLoading = true
       this.$store
         .dispatch("dynamicComment/DYNAMIC_COMMENT_LIST", {
           dynamic_id: this.dynamicId,
@@ -60,6 +62,9 @@ export default {
         })
         .then(result => {
           this.commentList = result.data.list
+          this.isLoading = false
+        }).catch(() => {
+          this.isLoading = false
         })
     },
     commentChange (result) {

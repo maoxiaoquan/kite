@@ -1,5 +1,6 @@
 <template>
-  <div class="user-article-blog">
+  <div class="user-article-blog"
+       v-loading="isLoading">
 
     <button class="btn create-article-blog"
             @click="createEditArticleBlog('create')">创建个人专栏</button>
@@ -13,7 +14,7 @@
             <router-link class="article-blog-icon"
                          :to="{name:'articleBlog',params:{blogId:articleBlogItem.blog_id}}">
               <img class="article-blog-icon-img"
-                   :src="articleBlogItem.icon"
+                   v-lazy="articleBlogItem.icon"
                    alt="">
             </router-link>
 
@@ -150,7 +151,7 @@
           <div class="avatar"
                v-if="blogForm.icon">
             <img class="avatar-img"
-                 :src="blogForm.icon"
+                 v-lazy="blogForm.icon"
                  alt="">
           </div>
           <div class="action-box">
@@ -222,6 +223,7 @@ export default {
     return {
       isCreateBlogShow: false,
       isCreate: true,
+      isLoading: false,
       articleBlog: {
         // 个人中心个人专栏列表
         count: 0,
@@ -246,12 +248,16 @@ export default {
   },
   methods: {
     getArticleBlogList () {
+      this.isLoading = true
       this.$store.dispatch('user/GET_USER_ARTICLE_BLOG_LIST', {
         uid: this.$route.params.uid,
         page: this.articleBlog.page || 1,
         pageSize: this.articleBlog.pageSize || 10,
       }).then(result => {
         this.articleBlog = result.data
+        this.isLoading = false
+      }).catch(() => {
+        this.isLoading = false
       })
     },
     pageChange (val) {

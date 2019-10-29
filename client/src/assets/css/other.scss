@@ -175,7 +175,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 100;
+  z-index: 220;
   background-color: rgba(255, 255, 255, 0.95);
   overflow: hidden;
 }
@@ -184,7 +184,7 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  border: 4px solid purple;
+  border: 4px solid #f1f1f1;
   border-left-color: transparent;
   animation: custom-loading-rotate 1s linear infinite;
   position: absolute;

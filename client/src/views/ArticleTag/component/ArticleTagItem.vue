@@ -4,7 +4,7 @@
 
       <router-link :to='{name:"article_tag",params:{en_name:articleTagItem.en_name}}'>
         <div class="thumb">
-          <img :src="articleTagItem.icon"
+          <img v-lazy="articleTagItem.icon"
                class="box-image"
                alt="">
         </div>

@@ -163,7 +163,6 @@ class DynamicComment extends React.Component {
   }
 
   commentRender = val => {
-    console.log('val', val)
     let newComment = val
     faceqq.map(faceItem => {
       newComment = newComment.replace(

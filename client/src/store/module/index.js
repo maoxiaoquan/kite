@@ -12,7 +12,6 @@ import setting from './setting'
 import search from './search'
 import website from './website'
 import dynamic from './dynamic'
-import rss from './rss'
 import books from './books'
 import book from './book'
 
@@ -31,7 +30,6 @@ export default {
   search,
   website,
   dynamic,
-  rss,
   books,
   book
 }

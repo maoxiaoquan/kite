@@ -91,12 +91,12 @@ export default [
         //动态 2019.8.1 12:11开发
         path: 'dynamics/:dynamicTopicId',
         name: 'dynamics',
-        component: require('@views/Dynamic/index').default // 动态首页
+        component: () => import('@views/Dynamic/index') // 动态首页
       },
       {
         path: 'dynamic/:dynamicId',
         name: 'dynamicView',
-        component: require('@views/Dynamic/dynamicView').default // 动态内容页
+        component: () => import('@views/Dynamic/dynamicView') // 动态内容页
       },
       {
         path: 'topics',
@@ -106,7 +106,7 @@ export default [
       {
         path: 'topic/:dynamicTopicId',
         name: 'dynamicTopicView',
-        component: require('@views/Dynamic/dynamicTopicView').default // 动态专题内容页
+        component: () => import('@views/Dynamic/dynamicTopicView') // 动态专题内容页
       },
       // {
       //   path: 'blogs/:columnEnName', 屏蔽，此功能不开放
@@ -121,7 +121,7 @@ export default [
       {
         path: 'books-write/:type',
         name: 'booksWrite',
-        component: require('@views/Books/WriteBooks').default // 小书创建修改
+        component: () => import('@views/Books/WriteBooks') // 小书创建修改
       },
       {
         path: 'books/:columnEnName',
@@ -143,7 +143,7 @@ export default [
   {
     path: '/book/:books_id/write/:book_id',
     name: 'WriteBookView',
-    component: require('@views/BookView/WriteBookView').default // 编辑小书内容
+    component: () => import('@views/BookView/WriteBookView') // 编辑小书内容
   },
   {
     path: '/sign/in',

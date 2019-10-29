@@ -11,7 +11,7 @@
               <div class="author">
                 <router-link :to="{name:'user',params:{uid:article.user.uid,routeType:'article'}}"
                              class="avatar">
-                  <img :src="article.user.avatar"
+                  <img v-lazy="article.user.avatar"
                        alt />
                 </router-link>
                 <div class="info">
@@ -171,7 +171,6 @@ export default {
       this.$store.dispatch("article/GET_ARTICLE", { aid: this.$route.params.aid })
     },
     isCollect (item) { // 是否收藏
-      console.log('item', item)
       let likeUserIds = []
       if (item.likeUserIds && item.likeUserIds.length > 0) {
         item.likeUserIds.map(item => {

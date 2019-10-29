@@ -6,7 +6,7 @@
           <div class="client-card">
             <div class="book-info">
               <div class="poster">
-                <img :src="books.booksInfo.cover_img||''">
+                <img v-lazy="books.booksInfo.cover_img||''">
               </div>
               <div class="info">
                 <div class="title-line">
@@ -26,7 +26,7 @@
                       <router-link :to="{name:'user',params:{uid:books.booksInfo.user.uid,routeType:'article'}}"
                                    class="user">
                         <img class="lazy avatar hero loaded"
-                             :src="books.booksInfo.user.avatar"
+                             v-lazy="books.booksInfo.user.avatar"
                              alt="">
                         <span class="username username">
                           {{books.booksInfo.user.nickname}}
