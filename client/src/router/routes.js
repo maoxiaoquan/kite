@@ -54,12 +54,12 @@ export default [
       {
         path: 'column-all',
         name: 'columnAll',
-        component: require('@views/ArticleColumn/ArticleColumn').default // 文章专栏
+        component: () => import('@views/ArticleColumn/ArticleColumn') // 文章专栏
       },
       {
         path: 'subscribe/:type',
         name: 'subscribe_tag',
-        component: require('@views/ArticleTag/SubscribeTag').default // 文章标签订阅页
+        component: () => import('@views/ArticleTag/SubscribeTag') // 文章标签订阅页
       },
       {
         path: 'tag/:en_name',
@@ -102,11 +102,6 @@ export default [
         name: 'dynamicTopicView',
         component: () => import('@views/Dynamic/dynamicTopicView') // 动态专题内容页
       },
-      // {
-      //   path: 'blogs/:columnEnName', 屏蔽，此功能不开放
-      //   name: 'articleBlogs',
-      //   component: () => import('@views/ArticleBlog/Blog') // 个人专栏
-      // },
       {
         path: 'blog/:blogId',
         name: 'articleBlog',
@@ -125,7 +120,7 @@ export default [
       {
         path: 'book/:books_id',
         name: 'book',
-        component: () => import('@views/Book/Book') // 小书内容
+        component: require('@views/Book/Book').default // 小书内容
       }
     ]
   },
@@ -154,9 +149,4 @@ export default [
     name: 'resetPassword',
     component: () => import('@views/Sign/ResetPassword') // 找回密码
   }
-  // {
-  //   path: '/editor/:editor_type',
-  //   name: 'editor',
-  //   component: () => import('@views/Editor/Editor') // 旧文章编写保留文件
-  // }
 ]
