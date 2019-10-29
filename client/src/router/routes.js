@@ -4,12 +4,6 @@ export default [
     component: require('@views/Main').default, // main
     children: [
       {
-        path: '/',
-        redirect: {
-          name: 'home'
-        }
-      },
-      {
         path: '',
         name: 'home',
         component: require('@views/Home/Home').default // 主页
@@ -27,7 +21,7 @@ export default [
       {
         path: 'search',
         name: 'search',
-        component: require('@views/Search/view/Search').default // 搜索页
+        component: () => import('@views/Search/view/Search') // 搜索页
       },
       {
         path: 'user/:uid/:routeType',
@@ -42,17 +36,17 @@ export default [
       {
         path: 'setting',
         name: 'setting',
-        component: require('@views/Setting/Setting').default, // 文章内容页
+        component: () => import('@views/Setting/Setting'), // 文章内容页
         children: [
           {
             path: 'profile',
             name: 'settingProfile',
-            component: require('@views/Setting/view/Profile').default // 修改资料
+            component: () => import('@views/Setting/view/Profile') // 修改资料
           },
           {
             path: 'reset-password',
             name: 'settingResetPassword',
-            component: require('@views/Setting/view/ResetPassword').default // 重置密码
+            component: () => import('@views/Setting/view/ResetPassword') // 重置密码
           }
         ],
         redirect: { name: 'settingProfile' }
@@ -75,12 +69,12 @@ export default [
       {
         path: 'article-rule',
         name: 'article_rule',
-        component: require('@views/Rule/ArticleRule').default // 文章编写规则
+        component: () => import('@views/Rule/ArticleRule') // 文章编写规则
       },
       {
         path: 'comment-rule',
         name: 'comment_rule',
-        component: require('@views/Rule/CommentRule').default // 评论规则
+        component: () => import('@views/Rule/CommentRule') // 评论规则
       },
       {
         path: 'write/:type',
@@ -101,7 +95,7 @@ export default [
       {
         path: 'topics',
         name: 'dynamicTopic',
-        component: require('@views/Dynamic/dynamicTopic').default // 动态专题
+        component: () => import('@views/Dynamic/dynamicTopic') // 动态专题
       },
       {
         path: 'topic/:dynamicTopicId',
@@ -116,7 +110,7 @@ export default [
       {
         path: 'blog/:blogId',
         name: 'articleBlog',
-        component: require('@views/ArticleBlog/BlogView').default // 个人专栏内容
+        component: () => import('@views/ArticleBlog/BlogView') // 个人专栏内容
       },
       {
         path: 'books-write/:type',
@@ -126,7 +120,7 @@ export default [
       {
         path: 'books/:columnEnName',
         name: 'books',
-        component: require('@views/Books/Books').default // 小书首页
+        component: () => import('@views/Books/Books') // 小书首页
       },
       {
         path: 'book/:books_id',
@@ -148,17 +142,17 @@ export default [
   {
     path: '/sign/in',
     name: 'signIn',
-    component: require('@views/Sign/SignIn').default // 登录
+    component: () => import('@views/Sign/SignIn') // 登录
   },
   {
     path: '/sign/up',
     name: 'signUp',
-    component: require('@views/Sign/SignUp').default // 注册
+    component: () => import('@views/Sign/SignUp') // 注册
   },
   {
     path: '/sign/reset-password',
     name: 'resetPassword',
-    component: require('@views/Sign/ResetPassword').default // 找回密码
+    component: () => import('@views/Sign/ResetPassword') // 找回密码
   }
   // {
   //   path: '/editor/:editor_type',

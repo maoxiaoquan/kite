@@ -11,7 +11,6 @@
           :pageSize="userMessage.pageSize"
           :page="Number(userMessage.page)"
           @pageChange="pageChange"></Page>
-    {{Number(userMessage.page)}}
   </div>
 </template>
 

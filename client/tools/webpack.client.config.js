@@ -69,12 +69,6 @@ const pordWebpackConfig = merge(baseWebpackConfig, {
           minSize: 0,
           priority: 60
         },
-        styles: {
-          name: 'styles',
-          test: /\.(sa|sc|c)ss$/,
-          chunks: 'all',
-          enforce: true
-        },
         runtimeChunk: {
           name: 'manifest'
         }
