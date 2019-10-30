@@ -8,7 +8,7 @@ const clientWhere = require('../../utils/clientWhere')
 class Index {
   static async getIndex (ctx) {
     let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 10
+    let pageSize = ctx.query.pageSize || 25
     let columnEnName = ctx.query.columnEnName || ''
     let sort = ctx.query.sort || 'newest'
     let whereArticleParams = {} // 查询参数
@@ -38,7 +38,6 @@ class Index {
             allArticleTagId.push(allArticleTag[item].tag_id)
           }
 
-          console.log('allArticleTag', allArticleTagId)
           whereArticleParams['tag_ids'] = {
             [Op.notRegexp]: `${allArticleTagId.join('|')}`
           }
