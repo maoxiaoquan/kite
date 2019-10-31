@@ -51,13 +51,13 @@
         <div class="article-item"
              v-for="(item,key) in myArticle.list"
              :key="key">
-          <BlogArticleItem @delete-change="updateArticleList"
+          <userArticleItem @delete-change="updateArticleList"
                            :articleItem="item" />
         </div>
       </div>
       <Page :total="Number(myArticle.count)"
             :pageSize="Number(myArticle.pageSize)"
-            :page="Number($route.query.page)||1"
+            :page="Number(myArticle.page)||1"
             @pageChange="pageChange"></Page>
     </div>
 
@@ -67,11 +67,11 @@
 
 <script>
 
-import BlogArticleItem from '../component/BlogArticleItem'
+import userArticleItem from '../component/userArticleItem'
 import { Page, UploadImage } from '@components'
 import { mapState } from 'vuex'
 export default {
-  name: 'Blog',
+  name: 'userArticle',
   metaInfo () {
     return {
       title: '个人专栏',
@@ -85,9 +85,9 @@ export default {
       isCreateBlogShow: false,
       isLoading: false,
       articleTypeList: {
-        '1': '文章',
-        '2': '日记',
-        '3': '草稿',
+        'article': '文章',
+        'note': '笔记',
+        'draft': '草稿',
       },
       myArticle: {
         // 用户的文章
@@ -113,7 +113,7 @@ export default {
       this.$store.dispatch('user/USER_MY_ARTICLE', {
         uid: this.$route.params.uid,
         blog_id: this.$route.query.blog_id || 'all',
-        type: this.$route.query.type || '1',
+        type: this.$route.query.type || 'article',
         page: this.myArticle.page || 1,
         pageSize: this.myArticle.pageSize || 10,
       }).then(result => {
@@ -153,7 +153,7 @@ export default {
     },
   },
   components: {
-    BlogArticleItem,
+    userArticleItem,
     UploadImage,
     Page
   }

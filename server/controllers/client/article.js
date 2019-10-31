@@ -7,6 +7,10 @@ const clientWhere = require('../../utils/clientWhere')
 const xss = require('xss')
 const config = require('../../config')
 const { lowdb } = require('../../../db/lowdb/index')
+const {
+  status: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  articleType
+} = require('../../utils/constant')
 const { TimeNow, TimeDistance } = require('../../utils/time')
 
 function ErrorMessage (message) {
@@ -137,8 +141,8 @@ class Article {
       let status = ~userAuthorityIds.indexOf(
         config.USER_AUTHORITY.dfNoReviewArticleId
       )
-        ? 6
-        : 1
+        ? freeReview
+        : pendingReview
 
       await models.article.create({
         uid: user.uid,
@@ -192,9 +196,13 @@ class Article {
             tag_ids: {
               [Op.like]: `%${oneArticleTag.tag_id}%`
             },
-            type: clientWhere.article.type,
-            is_public: clientWhere.article.isPublic,
-            ...clientWhere.article.otherList // web 表示前台  公共文章限制文件
+            type: {
+              [Op.or]: [articleType.article, articleType.note] // 文章和笔记
+            },
+            is_public: true, // 公开的文章
+            status: {
+              [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
+            } // web 表示前台  公共文章限制文件
           }, // 为空，获取全部，也可以自己添加条件
           offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
           limit: pageSize, // 每页限制返回的数据条数
@@ -211,7 +219,10 @@ class Article {
             where: { blog_id: rows[i].blog_ids }
           })
 
-          if (oneArticleBlog && ~[2, 4].indexOf(oneArticleBlog.status)) {
+          if (
+            oneArticleBlog &&
+            ~[reviewSuccess, freeReview].indexOf(oneArticleBlog.status)
+          ) {
             rows[i].setDataValue('article_blog', oneArticleBlog)
           }
 
@@ -375,64 +386,71 @@ class Article {
   static async getArticle (ctx) {
     let { aid } = ctx.query
     try {
-      let article = await models.article.findOne({
+      let oneArticle = await models.article.findOne({
         where: {
           aid,
-          ...clientWhere.article.otherView,
-          type: clientWhere.article.type
+          type: {
+            [Op.or]: [articleType.article, articleType.note] // 文章和笔记
+          },
+          status: {
+            [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
+          }
         }
       })
 
-      if (article) {
+      if (oneArticle) {
         await models.article.update(
-          { read_count: Number(article.read_count) + 1 },
+          { read_count: Number(oneArticle.read_count) + 1 },
           { where: { aid } } // 为空，获取全部，也可以自己添加条件
         )
 
-        article.setDataValue(
+        oneArticle.setDataValue(
           'create_dt',
-          await TimeDistance(article.create_date)
+          await TimeDistance(oneArticle.create_date)
         )
 
         let oneArticleBlog = await models.article_blog.findOne({
-          where: { blog_id: article.blog_ids }
+          where: { blog_id: oneArticle.blog_ids }
         })
 
-        if (oneArticleBlog && ~[2, 4].indexOf(oneArticleBlog.status)) {
-          article.setDataValue('article_blog', oneArticleBlog)
+        if (
+          oneArticleBlog &&
+          ~[reviewSuccess, freeReview].indexOf(oneArticleBlog.status)
+        ) {
+          oneArticle.setDataValue('article_blog', oneArticleBlog)
         }
 
-        if (article.tag_ids) {
-          article.setDataValue(
+        if (oneArticle.tag_ids) {
+          oneArticle.setDataValue(
             'tag',
             await models.article_tag.findAll({
               where: {
-                tag_id: { [Op.or]: article.tag_ids.split(',') }
+                tag_id: { [Op.or]: oneArticle.tag_ids.split(',') }
               }
             })
           )
         }
 
-        article.setDataValue(
+        oneArticle.setDataValue(
           'likeUserIds',
           await models.like_article.findAll({
-            where: { aid: article.aid, is_like: true }
+            where: { aid: oneArticle.aid, is_like: true }
           })
         )
 
-        article.setDataValue(
+        oneArticle.setDataValue(
           'user',
           await models.user.findOne({
-            where: { uid: article.uid },
+            where: { uid: oneArticle.uid },
             attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
           })
         )
 
-        if (article) {
+        if (oneArticle) {
           resClientJson(ctx, {
             state: 'success',
             message: '获取文章成功',
-            data: { article }
+            data: { article: oneArticle }
           })
         } else {
           resClientJson(ctx, {
@@ -596,8 +614,8 @@ class Article {
       let status = ~userAuthorityIds.indexOf(
         config.USER_AUTHORITY.dfNoReviewArticleId
       )
-        ? 6
-        : 1
+        ? freeReview
+        : pendingReview
 
       await models.article.update(
         {
@@ -674,7 +692,7 @@ class Article {
 
       await models.article.update(
         {
-          status: 5
+          status: deletes
         }, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败，4回收站，5已删除)'}, {
         {
           where: {
@@ -708,9 +726,13 @@ class Article {
       let { count, rows } = await models.article.findAndCountAll({
         where: {
           title: { [Op.like]: `%${search}%` },
-          type: clientWhere.article.type,
-          is_public: clientWhere.article.isPublic,
-          ...clientWhere.article.otherList // web 表示前台  公共文章限制文件
+          type: {
+            [Op.or]: [articleType.article, articleType.note] // 文章和笔记
+          },
+          is_public: true, // 公开的文章
+          status: {
+            [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
+          } // web 表示前台  公共文章限制文件
         }, // 为空，获取全部，也可以自己添加条件 // status: 2 限制只有 审核通过的显示
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, // 每页限制返回的数据条数
@@ -727,7 +749,10 @@ class Article {
           where: { blog_id: rows[i].blog_ids }
         })
 
-        if (oneArticleBlog && ~[2, 4].indexOf(oneArticleBlog.status)) {
+        if (
+          oneArticleBlog &&
+          ~[reviewSuccess, freeReview].indexOf(oneArticleBlog.status)
+        ) {
           rows[i].setDataValue('article_blog', oneArticleBlog)
         }
 

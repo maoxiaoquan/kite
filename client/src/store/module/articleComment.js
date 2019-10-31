@@ -9,9 +9,6 @@ const actions = {
       url: '/article/comment-list',
       method: 'get',
       parameter: { params: parameter }
-    }).then(result => {
-      commit('SET_ARTICLE_COMMENT_LIST', result.data || [])
-      return result
     })
   },
   ARTICLE_COMMENT_CREATE ({ commit, dispatch, state }, parameter) {

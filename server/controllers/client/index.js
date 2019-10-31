@@ -4,6 +4,10 @@ const { resClientJson } = require('../../utils/resData')
 const Op = require('sequelize').Op
 const { TimeNow, TimeDistance } = require('../../utils/time')
 const clientWhere = require('../../utils/clientWhere')
+const {
+  status: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  articleType
+} = require('../../utils/constant')
 
 class Index {
   static async getIndex (ctx) {
@@ -19,9 +23,13 @@ class Index {
       // where
       whereArticleParams = {
         // 默认全部导入的专题
-        type: clientWhere.article.type,
-        ...clientWhere.article.otherList,
-        is_public: clientWhere.article.isPublic
+        type: {
+          [Op.or]: [articleType.article, articleType.note] // 文章和笔记
+        },
+        is_public: true, // 公开的文章
+        status: {
+          [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
+        }
       }
 
       if (!columnEnName) {
@@ -92,7 +100,10 @@ class Index {
           where: { blog_id: rows[i].blog_ids }
         })
 
-        if (oneArticleBlog && ~[2, 4].indexOf(oneArticleBlog.status)) {
+        if (
+          oneArticleBlog &&
+          ~[reviewSuccess, freeReview].indexOf(oneArticleBlog.status)
+        ) {
           rows[i].setDataValue('article_blog', oneArticleBlog)
         }
 

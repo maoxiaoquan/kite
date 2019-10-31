@@ -52,15 +52,14 @@ module.exports = {
     },
     status: {
       // 状态
-      type: Seq.INTEGER(10),
-      comment:
-        '状态(1:审核中;2:审核通过;3:审核失败;4:回收站；5:已删除，6：无需审核)',
+      type: Seq.STRING(30),
+      comment: '状态 审核成功、审核失败、待审核、免审核、已删除',
       field: 'status'
     },
     type: {
       // 类型 1:文章;2:日记;3:说说
-      type: Seq.INTEGER(10),
-      comment: '类型 （1:文章;2:日记;3:说说）',
+      type: Seq.STRING(30),
+      comment: '类型 （文章、笔记、草稿）',
       field: 'type'
     },
     cover_img: {

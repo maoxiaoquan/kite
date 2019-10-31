@@ -24,11 +24,7 @@
                     <span class="views-count">阅读 {{article.read_count}}</span>
                     <span class="comments-count">评论 {{article.comment_count}}</span>
                     <span class="likes-count">喜欢 {{article.like_count}}</span>
-                    <span class="source">{{sourceTypeList[article.source]}}</span>
-                    <span class="item"
-                          v-if="String(article.type)==='2'">
-                      {{articleTypeList[String(article.type)]}}
-                    </span>
+                    <span class="source">{{sourceTypeList[article.source]}} {{articleTypeList[article.type]}}</span>
                   </div>
                 </div>
               </div>
@@ -159,10 +155,10 @@ export default {
   data () {
     return {
       sourceTypeList: ["", "原创", "转载"],
-      articleTypeList: { // 文章类型列表
-        '1': '文章',
-        '2': '日记',
-        '3': '草稿',
+      articleTypeList: {
+        'article': '文章',
+        'note': '笔记',
+        'draft': '草稿',
       },
     };
   },

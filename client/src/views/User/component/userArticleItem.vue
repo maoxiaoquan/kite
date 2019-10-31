@@ -48,9 +48,8 @@
                          :to="{name:'article_tag',params:{en_name:itemTag.en_name}}">{{itemTag.name}}</router-link>
 
           </li>
-          <li class="item"
-              v-if="String(articleItem.type)==='2'||String(articleItem.type)==='3'">
-            {{articleTypeList[String(articleItem.type)]}}
+          <li class="item">
+            {{articleTypeList[articleItem.type]}}
           </li>
           <li class="item public-status"
               v-if="!articleItem.is_public">
@@ -58,7 +57,7 @@
           </li>
           <li class="item"
               style="color:#F07178"
-              v-if="~[3,4,5].indexOf(articleItem.status)">{{statusList[articleItem.status]}}:{{articleItem.rejection_reason}}</li>
+              v-if="articleItem.status==='review_fail'">{{statusList[articleItem.status]}}:{{articleItem.rejection_reason}}</li>
 
         </ul>
       </div>
@@ -99,18 +98,18 @@ export default {
   },
   data () {
     return {
-      statusList: [
-        "草稿",
-        "审核中",
-        "审核通过",
-        "审核失败",
-        "回收站",
-        "已删除"
-      ],
+      statusList: {
+        // 所有内容的审核状态
+        review_success: '审核成功', // 审核成功
+        review_fail: '审核失败', // 审核失败
+        pending_review: '待审核', // 待审核
+        free_review: '免审核', // 免审核
+        deleted: '已删除' // 已删除
+      },
       articleTypeList: { // 文章类型列表
-        '1': '文章',
-        '2': '日记',
-        '3': '草稿',
+        'article': '文章',
+        'note': '笔记',
+        'draft': '草稿',
       },
     };
   },

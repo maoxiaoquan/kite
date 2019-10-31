@@ -170,10 +170,10 @@ export default {
         is_public: 1, // 是否公开 1公开 0仅自己可见
       },
       publicTypeList: ['仅自己可见', '公开'], // 文章类型列表
-      articleTypeList: { // 文章类型列表
-        '1': '文章',
-        '2': '日记',
-        '3': '草稿',
+      articleTypeList: {
+        'article': '文章',
+        'note': '笔记',
+        'draft': '草稿',
       },
       blog: {
         name: ''

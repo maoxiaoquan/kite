@@ -81,7 +81,7 @@ class Article extends React.Component {
         key: 'status',
         render: (text, record) => (
           <Tag className="table-article-tag-list" color="orange">
-            {this.state.status_list[record.status]}
+            {this.state.statusList[record.status]}
           </Tag>
         )
       },
@@ -91,7 +91,7 @@ class Article extends React.Component {
         key: 'type',
         render: (text, record) => (
           <Tag className="table-article-tag-list" color="red">
-            {this.state.type_list[record.type]}
+            {this.state.articleType[record.type]}
           </Tag>
         )
       },
@@ -133,7 +133,7 @@ class Article extends React.Component {
         key: 'rejection_reason',
         render: (text, record) => (
           <div>
-            {~[3, 4, 5].indexOf(record.status) ? record.rejection_reason : ''}
+            {record.status === 'review_fail' ? record.rejection_reason : ''}
           </div>
         )
       },
@@ -172,16 +172,20 @@ class Article extends React.Component {
     },
     modal_visible_edit: false,
     loading: false,
-    status_list: [
-      '',
-      '审核中',
-      '审核通过',
-      '审核失败',
-      '回收站',
-      '已删除',
-      '无需审核'
-    ],
-    type_list: ['', '文章', '日记', '草稿'],
+    statusList: {
+      // 所有内容的审核状态
+      review_success: '审核成功', // 审核成功
+      review_fail: '审核失败', // 审核失败
+      pending_review: '待审核', // 待审核
+      free_review: '免审核', // 免审核
+      deleted: '已删除' // 已删除
+    },
+    articleType: {
+      // 文章的类型
+      article: '文章', // 文章
+      note: '笔记', // 笔记
+      draft: '草稿' // 草稿
+    },
     source_list: ['', '原创', '转载'],
     title_val: '',
     status_val: '',
@@ -330,8 +334,8 @@ class Article extends React.Component {
   render() {
     const {
       loading,
-      status_list,
-      type_list,
+      statusList,
+      articleType,
       source_list,
       title_val,
       status_val,
@@ -402,15 +406,9 @@ class Article extends React.Component {
                     }}
                   >
                     <Option value="">全部</Option>
-                    {status_list.map((item, key) =>
-                      item ? (
-                        <Option value={key} key={key}>
-                          {item}
-                        </Option>
-                      ) : (
-                        ''
-                      )
-                    )}
+                    {Object.keys(this.state.statusList).map(key => (
+                      <Option key={key}>{this.state.statusList[key]}</Option>
+                    ))}
                   </Select>
                 </FormItem>
                 <FormItem label="类型">
@@ -422,15 +420,9 @@ class Article extends React.Component {
                     }}
                   >
                     <Option value="">全部</Option>
-                    {type_list.map((item, key) =>
-                      item ? (
-                        <Option value={key} key={key}>
-                          {item}
-                        </Option>
-                      ) : (
-                        ''
-                      )
-                    )}
+                    {Object.keys(this.state.articleType).map(key => (
+                      <Option key={key}>{this.state.articleType[key]}</Option>
+                    ))}
                   </Select>
                 </FormItem>
                 <FormItem label="来源：">
@@ -497,14 +489,14 @@ class Article extends React.Component {
                         })
                       }}
                     >
-                      {this.state.status_list.map((item, key) =>
-                        item ? <Option key={key}>{item}</Option> : ''
-                      )}
+                      {Object.keys(this.state.statusList).map(key => (
+                        <Option key={key}>{this.state.statusList[key]}</Option>
+                      ))}
                     </Select>
                   )}
                 </FormItem>
 
-                {~[3, 4, 5].indexOf(Number(edit_status_val)) ? (
+                {edit_status_val === 'review_fail' ? (
                   <FormItem {...formItemLayout} label="拒绝的原因">
                     {getFieldDecorator('rejection_reason', {
                       rules: [
@@ -525,9 +517,9 @@ class Article extends React.Component {
                     rules: [{ required: true, message: '请选择类型！' }]
                   })(
                     <Select placeholder="类型">
-                      {this.state.type_list.map((item, key) =>
-                        item ? <Option key={key}>{item}</Option> : ''
-                      )}
+                      {Object.keys(this.state.articleType).map(key => (
+                        <Option key={key}>{this.state.articleType[key]}</Option>
+                      ))}
                     </Select>
                   )}
                 </FormItem>

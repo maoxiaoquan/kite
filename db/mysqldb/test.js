@@ -18,8 +18,20 @@ async function sql () {
   // )
 
   await models.sequelize.query(
-    'ALTER TABLE article CHANGE article_tag_ids tag_ids text comment "标签id";'
+    'ALTER TABLE article_blog CHANGE status status VARCHAR(30) comment "状态 审核成功、审核失败、待审核、免审核";'
   )
+  // 文章
+  await models.article_blog.update(
+    {
+      status: 'free_review'
+    },
+    {
+      where: {
+        status: 4
+      }
+    }
+  )
+
   process.exit()
 }
 sql()

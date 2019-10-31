@@ -32,20 +32,6 @@ class Articles {
 
     try {
       let { count, rows } = await models.article.findAndCountAll({
-        attributes: [
-          'uid',
-          'aid',
-          'create_date',
-          'content',
-          'title',
-          'excerpt',
-          'source',
-          'status',
-          'type',
-          'read_count',
-          'comment_count',
-          'rejection_reason'
-        ],
         where: whereParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize), // 每页限制返回的数据条数
