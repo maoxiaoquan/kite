@@ -25,8 +25,8 @@ export default {
   name: 'dynamicTopicItem',
   props: ['dynamicTopicItem'],
   methods: {
-    async subscribeDynamicTopic () { // 订阅动态话题
-      await this.$store.dispatch('dynamic/SET_RSS_DYNAMIC_TOPIC', { topic_id: this.dynamicTopicItem.topic_id })
+    subscribeDynamicTopic () { // 订阅动态话题
+      this.$store.dispatch('dynamic/SET_RSS_DYNAMIC_TOPIC', { topic_id: this.dynamicTopicItem.topic_id })
         .then(res => {
           // this.$store.dispatch('articleTag/MY_SUBSCRIBE_TAG_LIST')
           if (res.state === 'success') {

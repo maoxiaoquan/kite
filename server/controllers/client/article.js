@@ -379,8 +379,7 @@ class Article {
         where: {
           aid,
           ...clientWhere.article.otherView,
-          type: clientWhere.article.type,
-          is_public: clientWhere.article.isPublic
+          type: clientWhere.article.type
         }
       })
 
