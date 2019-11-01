@@ -3,6 +3,11 @@ const moment = require('moment')
 const { render, resClientJson } = require('../../utils/resData')
 const Op = require('sequelize').Op
 const clientWhere = require('../../utils/clientWhere')
+const {
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  articleType
+} = require('../../utils/constant')
+
 function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
@@ -22,8 +27,12 @@ class PersonalCenter {
     let pageSize = Number(ctx.query.pageSize) || 10
     let whereParams = {
       uid,
-      type,
-      ...clientWhere.article.me
+      type: {
+        [Op.or]: [articleType.article, articleType.note, articleType.draft] // 文章和笔记
+      },
+      status: {
+        [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail] // 审核成功、免审核
+      }
     }
     try {
       blog_id !== 'all' && (whereParams.blog_ids = blog_id)
@@ -396,7 +405,7 @@ class PersonalCenter {
     let { user = '' } = ctx.request
     let type = ''
     try {
-      let oneUserLikeArticle = await models.dynamic_like.findOne({
+      let oneUserLikeArticle = await models.like_dynamic.findOne({
         where: {
           uid: user.uid,
           dynamic_id
@@ -406,7 +415,7 @@ class PersonalCenter {
       if (oneUserLikeArticle) {
         /* 判断是否like动态，是则取消，否则添加 */
         type = 'cancel'
-        await models.dynamic_like.destroy({
+        await models.like_dynamic.destroy({
           where: {
             uid: user.uid,
             dynamic_id
@@ -414,7 +423,7 @@ class PersonalCenter {
         })
       } else {
         type = 'like'
-        await models.dynamic_like.create({
+        await models.like_dynamic.create({
           uid: user.uid,
           dynamic_id
         })
@@ -431,7 +440,7 @@ class PersonalCenter {
         // })
       }
 
-      let dynamicLikeCount = await models.dynamic_like.count({
+      let dynamicLikeCount = await models.like_dynamic.count({
         where: {
           dynamic_id
         }
@@ -473,7 +482,7 @@ class PersonalCenter {
       whereParams = {
         uid,
         status: {
-          [Op.or]: [1, 2, 3, 4]
+          [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail] // 审核成功、免审核
         }
       }
 
@@ -646,7 +655,10 @@ class PersonalCenter {
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
     let whereParams = {
-      uid
+      uid,
+      status: {
+        [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail] // 审核成功、免审核
+      }
     }
     try {
       let { count, rows } = await models.books.findAndCountAll({

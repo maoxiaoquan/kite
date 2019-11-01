@@ -142,6 +142,12 @@ import { mavonEditor } from '@components/MarkDown'
 import ClientOnly from 'vue-client-only'
 import marked from "marked";
 import { share, baidu, google } from '@utils'
+import {
+  statusList,
+  articleType,
+  statusListText,
+  articleTypeText
+} from '@utils/constant'
 export default {
   name: 'write',
   metaInfo () {
@@ -170,11 +176,7 @@ export default {
         is_public: 1, // 是否公开 1公开 0仅自己可见
       },
       publicTypeList: ['仅自己可见', '公开'], // 文章类型列表
-      articleTypeList: {
-        'article': '文章',
-        'note': '笔记',
-        'draft': '草稿',
-      },
+      articleTypeList: articleTypeText,
       blog: {
         name: ''
       },

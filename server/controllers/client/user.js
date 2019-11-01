@@ -15,6 +15,12 @@ const tokens = require('../../utils/tokens')
 const { queryUserVerifyCode } = require('../../sql/query')
 const { lowdb } = require('../../../db/lowdb/index')
 const clientWhere = require('../../utils/clientWhere')
+const {
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  articleType,
+  userMessageType,
+  userMessageAction
+} = require('../../utils/constant')
 
 function ErrorMessage (message) {
   this.message = message
@@ -404,7 +410,7 @@ class User {
         }
       })
 
-      let allLikeDymaicId = await models.dynamic_like
+      let allLikeDymaicId = await models.like_dynamic
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((item, key) => {

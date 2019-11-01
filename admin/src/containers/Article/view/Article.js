@@ -22,7 +22,12 @@ import {
   deleteArticle
 } from '../actions/ArticleAction'
 import alert from '../../../utils/alert'
-
+import {
+  statusList,
+  articleType,
+  statusListText,
+  articleTypeText
+} from '../../../utils/constant'
 const Option = Select.Option
 const FormItem = Form.Item
 const confirm = Modal.confirm
@@ -81,7 +86,7 @@ class Article extends React.Component {
         key: 'status',
         render: (text, record) => (
           <Tag className="table-article-tag-list" color="orange">
-            {this.state.statusList[record.status]}
+            {this.state.statusListText[record.status]}
           </Tag>
         )
       },
@@ -91,7 +96,7 @@ class Article extends React.Component {
         key: 'type',
         render: (text, record) => (
           <Tag className="table-article-tag-list" color="red">
-            {this.state.articleType[record.type]}
+            {this.state.articleTypeText[record.type]}
           </Tag>
         )
       },
@@ -133,7 +138,9 @@ class Article extends React.Component {
         key: 'rejection_reason',
         render: (text, record) => (
           <div>
-            {record.status === 'review_fail' ? record.rejection_reason : ''}
+            {Number(record.status) === this.state.statusList.reviewFail
+              ? record.rejection_reason
+              : ''}
           </div>
         )
       },
@@ -172,20 +179,10 @@ class Article extends React.Component {
     },
     modal_visible_edit: false,
     loading: false,
-    statusList: {
-      // 所有内容的审核状态
-      review_success: '审核成功', // 审核成功
-      review_fail: '审核失败', // 审核失败
-      pending_review: '待审核', // 待审核
-      free_review: '免审核', // 免审核
-      deleted: '已删除' // 已删除
-    },
-    articleType: {
-      // 文章的类型
-      article: '文章', // 文章
-      note: '笔记', // 笔记
-      draft: '草稿' // 草稿
-    },
+    statusList,
+    statusListText,
+    articleType,
+    articleTypeText,
     source_list: ['', '原创', '转载'],
     title_val: '',
     status_val: '',
@@ -334,8 +331,9 @@ class Article extends React.Component {
   render() {
     const {
       loading,
+      statusListText,
+      articleTypeText,
       statusList,
-      articleType,
       source_list,
       title_val,
       status_val,
@@ -406,8 +404,10 @@ class Article extends React.Component {
                     }}
                   >
                     <Option value="">全部</Option>
-                    {Object.keys(this.state.statusList).map(key => (
-                      <Option key={key}>{this.state.statusList[key]}</Option>
+                    {Object.keys(this.state.statusListText).map(key => (
+                      <Option key={key}>
+                        {this.state.statusListText[key]}
+                      </Option>
                     ))}
                   </Select>
                 </FormItem>
@@ -420,8 +420,10 @@ class Article extends React.Component {
                     }}
                   >
                     <Option value="">全部</Option>
-                    {Object.keys(this.state.articleType).map(key => (
-                      <Option key={key}>{this.state.articleType[key]}</Option>
+                    {Object.keys(this.state.articleTypeText).map(key => (
+                      <Option key={key}>
+                        {this.state.articleTypeText[key]}
+                      </Option>
                     ))}
                   </Select>
                 </FormItem>
@@ -447,16 +449,12 @@ class Article extends React.Component {
                 </FormItem>
                 <Form.Item>
                   <button
-                    type="primary"
-                    htmlType="submit"
                     className="btn btn-danger"
                     onClick={this.fetchArticleList}
                   >
                     搜索
                   </button>
                   <button
-                    type="primary"
-                    htmlType="submit"
                     className="btn btn-primary"
                     onClick={this.resetBarFrom}
                   >
@@ -489,14 +487,16 @@ class Article extends React.Component {
                         })
                       }}
                     >
-                      {Object.keys(this.state.statusList).map(key => (
-                        <Option key={key}>{this.state.statusList[key]}</Option>
+                      {Object.keys(this.state.statusListText).map(key => (
+                        <Option key={key}>
+                          {this.state.statusListText[key]}
+                        </Option>
                       ))}
                     </Select>
                   )}
                 </FormItem>
 
-                {edit_status_val === 'review_fail' ? (
+                {Number(edit_status_val) === statusList.reviewFail ? (
                   <FormItem {...formItemLayout} label="拒绝的原因">
                     {getFieldDecorator('rejection_reason', {
                       rules: [
@@ -517,8 +517,10 @@ class Article extends React.Component {
                     rules: [{ required: true, message: '请选择类型！' }]
                   })(
                     <Select placeholder="类型">
-                      {Object.keys(this.state.articleType).map(key => (
-                        <Option key={key}>{this.state.articleType[key]}</Option>
+                      {Object.keys(this.state.articleTypeText).map(key => (
+                        <Option key={key}>
+                          {this.state.articleTypeText[key]}
+                        </Option>
                       ))}
                     </Select>
                   )}
@@ -537,13 +539,9 @@ class Article extends React.Component {
                 </FormItem>
 
                 <FormItem {...tailFormItemLayout}>
-                  <Button
-                    className="register-btn"
-                    htmlType="submit"
-                    type="primary"
-                  >
+                  <button className="btn btn btn-danger register-btn">
                     更新
-                  </Button>
+                  </button>
                 </FormItem>
               </Form>
             </Modal>

@@ -13,7 +13,7 @@ import {
   Tag
 } from 'antd'
 import { Link } from 'react-router-dom'
-
+import { otherStatusList, otherStatusListText } from '../../../utils/constant'
 import './DynamicComment.scss'
 import {
   getDynamicCommentList,
@@ -77,7 +77,7 @@ class DynamicComment extends React.Component {
           key: 'status',
           render: (text, record) => (
             <Tag className="table-article-tag-list" color="orange">
-              {this.state.status[record.status]}
+              {this.state.otherStatusListText[record.status]}
             </Tag>
           )
         },
@@ -121,7 +121,8 @@ class DynamicComment extends React.Component {
       },
       loading: false,
       modal_visible_edit: false,
-      status: ['', '未审核', '审核通过', '审核失败', '回收站', '无需审核'],
+      otherStatusList,
+      otherStatusListText,
       content_val: '',
       status_val: ''
     }
@@ -329,15 +330,16 @@ class DynamicComment extends React.Component {
                     }}
                   >
                     <Option value="">全部</Option>
-                    {this.state.status.map((item, key) =>
-                      item ? <Option key={key}>{item}</Option> : ''
-                    )}
+                    {Object.keys(this.state.otherStatusListText).map(key => (
+                      <Option key={key}>
+                        {this.state.otherStatusListText[key]}
+                      </Option>
+                    ))}
                   </Select>
                 </FormItem>
                 <Form.Item>
                   <button
                     type="primary"
-                    htmlType="submit"
                     className="btn btn-danger"
                     onClick={this.fetchCommentList}
                   >
@@ -345,7 +347,6 @@ class DynamicComment extends React.Component {
                   </button>
                   <button
                     type="primary"
-                    htmlType="submit"
                     className="btn btn-primary"
                     onClick={this.resetBarFrom}
                   >
@@ -381,9 +382,11 @@ class DynamicComment extends React.Component {
                   rules: [{ required: true, message: '请选择状态！' }]
                 })(
                   <Select placeholder="状态">
-                    {this.state.status.map((item, key) =>
-                      item ? <Option key={key}>{item}</Option> : ''
-                    )}
+                    {Object.keys(this.state.otherStatusListText).map(key => (
+                      <Option key={key}>
+                        {this.state.otherStatusListText[key]}
+                      </Option>
+                    ))}
                   </Select>
                 )}
               </FormItem>

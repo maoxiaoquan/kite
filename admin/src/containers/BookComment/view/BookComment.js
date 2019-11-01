@@ -16,6 +16,7 @@ import { Link } from 'react-router-dom'
 
 import './BookComment.scss'
 import { getCommentList, updateComment, deleteComment } from '../actions'
+import { otherStatusList, otherStatusListText } from '../../../utils/constant'
 import alert from '../../../utils/alert'
 import faceqq from './qq'
 const Option = Select.Option
@@ -93,7 +94,7 @@ class BookComment extends React.Component {
           key: 'status',
           render: (text, record) => (
             <Tag className="table-article-tag-list" color="orange">
-              {this.state.status[record.status]}
+              {this.state.otherStatusListText[record.status]}
             </Tag>
           )
         },
@@ -137,7 +138,8 @@ class BookComment extends React.Component {
       },
       loading: false,
       modal_visible_edit: false,
-      status: ['', '审核中', '审核通过', '审核失败', '无需审核', '已删除'],
+      otherStatusList,
+      otherStatusListText,
       content_val: '',
       status_val: ''
     }
@@ -346,15 +348,16 @@ class BookComment extends React.Component {
                     }}
                   >
                     <Option value="">全部</Option>
-                    {this.state.status.map((item, key) =>
-                      item ? <Option key={key}>{item}</Option> : ''
-                    )}
+                    {Object.keys(this.state.otherStatusListText).map(key => (
+                      <Option key={key}>
+                        {this.state.otherStatusListText[key]}
+                      </Option>
+                    ))}
                   </Select>
                 </FormItem>
                 <Form.Item>
                   <button
                     type="primary"
-                    htmlType="submit"
                     className="btn btn-danger"
                     onClick={this.fetchCommentList}
                   >
@@ -362,7 +365,6 @@ class BookComment extends React.Component {
                   </button>
                   <button
                     type="primary"
-                    htmlType="submit"
                     className="btn btn-primary"
                     onClick={this.resetBarFrom}
                   >
@@ -399,9 +401,11 @@ class BookComment extends React.Component {
                 rules: [{ required: true, message: '请选择状态！' }]
               })(
                 <Select placeholder="状态">
-                  {this.state.status.map((item, key) =>
-                    item ? <Option key={key}>{item}</Option> : ''
-                  )}
+                  {Object.keys(this.state.otherStatusListText).map(key => (
+                    <Option key={key}>
+                      {this.state.otherStatusListText[key]}
+                    </Option>
+                  ))}
                 </Select>
               )}
             </FormItem>

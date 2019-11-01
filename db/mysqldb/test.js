@@ -17,17 +17,14 @@ async function sql () {
   //   'ALTER TABLE article add COLUMN is_public tinyint(1) DEFAULT 1 comment "是否公开";'
   // )
 
-  await models.sequelize.query(
-    'ALTER TABLE article_blog CHANGE status status VARCHAR(30) comment "状态 审核成功、审核失败、待审核、免审核";'
-  )
   // 文章
-  await models.article_blog.update(
+  await models.article_comment.update(
     {
-      status: 'free_review'
+      status: 4
     },
     {
       where: {
-        status: 4
+        status: 5
       }
     }
   )

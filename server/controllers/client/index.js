@@ -5,7 +5,7 @@ const Op = require('sequelize').Op
 const { TimeNow, TimeDistance } = require('../../utils/time')
 const clientWhere = require('../../utils/clientWhere')
 const {
-  status: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType
 } = require('../../utils/constant')
 

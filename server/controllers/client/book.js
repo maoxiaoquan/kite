@@ -8,6 +8,12 @@ const xss = require('xss')
 const config = require('../../config')
 const { lowdb } = require('../../../db/lowdb/index')
 const { TimeNow, TimeDistance } = require('../../utils/time')
+const {
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  articleType,
+  userMessageType,
+  userMessageAction
+} = require('../../utils/constant')
 
 function ErrorMessage (message) {
   this.message = message
@@ -106,8 +112,8 @@ class Book {
       })
 
       let status = ~userAuthorityIds.indexOf(config.BOOK.dfNoReviewBookId)
-        ? 4
-        : 1
+        ? freeReview // 免审核
+        : pendingReview // 待审核
 
       let bookCreate = await models.book.create({
         uid: user.uid,
@@ -271,8 +277,8 @@ class Book {
       })
 
       let status = ~userAuthorityIds.indexOf(config.BOOK.dfNoReviewBookId)
-        ? 4
-        : 1
+        ? freeReview // 免审核
+        : pendingReview // 待审核
 
       await models.book.update(
         {

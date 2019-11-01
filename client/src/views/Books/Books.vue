@@ -86,7 +86,7 @@
                       <i class="el-icon-notebook-2"></i> {{booksItem.bookCount||0}}
                     </span>
                     <span class="attention"
-                          v-if="~[2,4].indexOf(booksItem.status)&&personalInfo.islogin"
+                          v-if="~[statusList.reviewSuccess,statusList.freeReview].indexOf(booksItem.status)&&personalInfo.islogin"
                           @click="collectBooks(booksItem.books_id)"
                           :class="{'active':isCollect(booksItem).status}">{{isCollect(booksItem).text}}</span>
                   </div>
@@ -128,6 +128,12 @@ import { mapState } from 'vuex'
 import { Page } from "@components";
 import websiteNotice from '../Parts/websiteNotice'
 import googleMixin from '@mixins/google'
+import {
+  statusList,
+  articleType,
+  statusListText,
+  articleTypeText
+} from '@utils/constant'
 
 export default {
   name: "books",
@@ -171,7 +177,9 @@ export default {
   },
   data () {
     return {
-      childNavItem: ''
+      childNavItem: '',
+      statusList,
+      statusListText,
     };
   },
   created () {

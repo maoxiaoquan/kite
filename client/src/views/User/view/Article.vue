@@ -70,6 +70,13 @@
 import userArticleItem from '../component/userArticleItem'
 import { Page, UploadImage } from '@components'
 import { mapState } from 'vuex'
+import constant from '@utils/constant'
+import {
+  statusList,
+  articleType,
+  statusListText,
+  articleTypeText
+} from '@utils/constant'
 export default {
   name: 'userArticle',
   metaInfo () {
@@ -84,11 +91,8 @@ export default {
     return {
       isCreateBlogShow: false,
       isLoading: false,
-      articleTypeList: {
-        'article': '文章',
-        'note': '笔记',
-        'draft': '草稿',
-      },
+      articleType: articleType,
+      articleTypeList: articleTypeText,
       myArticle: {
         // 用户的文章
         list: [],
@@ -113,7 +117,7 @@ export default {
       this.$store.dispatch('user/USER_MY_ARTICLE', {
         uid: this.$route.params.uid,
         blog_id: this.$route.query.blog_id || 'all',
-        type: this.$route.query.type || 'article',
+        type: this.$route.query.type || articleType.article,
         page: this.myArticle.page || 1,
         pageSize: this.myArticle.pageSize || 10,
       }).then(result => {

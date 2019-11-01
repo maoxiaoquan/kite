@@ -3,6 +3,12 @@ const moment = require('moment')
 const models = require('../../../db/mysqldb/index')
 const Op = require('sequelize').Op
 const clientWhere = require('../../utils/clientWhere')
+const {
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  articleType,
+  userMessageType,
+  userMessageAction
+} = require('../../utils/constant')
 
 class Subscribe {
   static async getArticleTagList (ctx) {

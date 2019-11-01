@@ -74,6 +74,13 @@
 </template>
 
 <script>
+import {
+  statusList,
+  articleType,
+  statusListText,
+  articleTypeText
+} from '@utils/constant'
+
 export default {
   name: "ArticleItem",
   props: {
@@ -84,11 +91,7 @@ export default {
   },
   data () {
     return {
-      articleTypeList: { // 文章类型列表
-        '1': '文章',
-        '2': '日记',
-        '3': '草稿',
-      },
+      articleTypeList: articleTypeText,
     }
   }
 }

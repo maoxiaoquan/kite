@@ -18,7 +18,7 @@ import { withRouter } from 'react-router-dom'
 import './Book.scss'
 import { getBookList, updateBook, deleteBook } from '../actions'
 import alert from '../../../utils/alert'
-
+import { otherStatusList, otherStatusListText } from '../../../utils/constant'
 const Option = Select.Option
 const FormItem = Form.Item
 const confirm = Modal.confirm
@@ -91,7 +91,7 @@ class Book extends React.Component {
         key: 'status',
         render: (text, record) => (
           <Tag className="table-book-tag-list" color="orange">
-            {this.state.status_list[record.status]}
+            {this.state.otherStatusListText[record.status]}
           </Tag>
         )
       },
@@ -160,7 +160,8 @@ class Book extends React.Component {
     },
     modal_visible_edit: false,
     loading: false,
-    status_list: ['', '审核中', '审核通过', '审核失败', '无需审核', '已删除'],
+    otherStatusList,
+    otherStatusListText,
     title_val: '',
     status_val: '',
     edit_status_val: ''
@@ -298,13 +299,7 @@ class Book extends React.Component {
   }
 
   render() {
-    const {
-      loading,
-      status_list,
-      title_val,
-      status_val,
-      edit_status_val
-    } = this.state
+    const { loading, title_val, status_val, edit_status_val } = this.state
     const { stateBook = {} } = this.props
     const { getFieldDecorator } = this.props.form
 
@@ -368,22 +363,17 @@ class Book extends React.Component {
                     }}
                   >
                     <Option value="">全部</Option>
-                    {status_list.map((item, key) =>
-                      item ? (
-                        <Option value={key} key={key}>
-                          {item}
-                        </Option>
-                      ) : (
-                        ''
-                      )
-                    )}
+                    {Object.keys(this.state.otherStatusListText).map(key => (
+                      <Option key={key}>
+                        {this.state.otherStatusListText[key]}
+                      </Option>
+                    ))}
                   </Select>
                 </FormItem>
 
                 <Form.Item>
                   <button
                     type="primary"
-                    htmlType="submit"
                     className="btn btn-danger"
                     onClick={this.fetchBookList}
                   >
@@ -391,7 +381,6 @@ class Book extends React.Component {
                   </button>
                   <button
                     type="primary"
-                    htmlType="submit"
                     className="btn btn-primary"
                     onClick={this.resetBarFrom}
                   >
@@ -424,9 +413,11 @@ class Book extends React.Component {
                         })
                       }}
                     >
-                      {this.state.status_list.map((item, key) =>
-                        item ? <Option key={key}>{item}</Option> : ''
-                      )}
+                      {Object.keys(this.state.otherStatusListText).map(key => (
+                        <Option key={key}>
+                          {this.state.otherStatusListText[key]}
+                        </Option>
+                      ))}
                     </Select>
                   )}
                 </FormItem>

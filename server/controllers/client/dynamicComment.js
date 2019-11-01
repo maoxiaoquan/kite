@@ -7,6 +7,12 @@ const xss = require('xss')
 const clientWhere = require('../../utils/clientWhere')
 const config = require('../../config')
 const { TimeNow, TimeDistance } = require('../../utils/time')
+const {
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  articleType,
+  userMessageType,
+  userMessageAction
+} = require('../../utils/constant')
 
 function ErrorMessage (message) {
   this.message = message
@@ -29,7 +35,9 @@ class dynamicComment {
         where: {
           dynamic_id,
           parent_id,
-          ...clientWhere.comment
+          status: {
+            [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail]
+          }
         }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize), // 每页限制返回的数据条数
@@ -69,7 +77,12 @@ class dynamicComment {
       for (let item in rows) {
         // 循环取子评论
         let childAllComment = await models.dynamic_comment.findAll({
-          where: { parent_id: rows[item].id, ...clientWhere.comment },
+          where: {
+            parent_id: rows[item].id,
+            status: {
+              [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail]
+            }
+          },
           limit: Number(childPageSize) // 每页限制返回的数据条数
         })
 
@@ -79,13 +92,15 @@ class dynamicComment {
             'create_dt',
             await TimeDistance(childAllComment[childCommentItem].create_date)
           )
-          if (Number(childAllComment[childCommentItem].status === 1)) {
+          if (
+            Number(childAllComment[childCommentItem].status === pendingReview)
+          ) {
             childAllComment[childCommentItem].setDataValue(
               'content',
               '当前用户评论需要审核'
             )
           }
-          if (Number(childAllComment[childCommentItem].status === 3)) {
+          if (Number(childAllComment[childCommentItem].status === reviewFail)) {
             childAllComment[childCommentItem].setDataValue(
               'content',
               '当前用户评论违规'
@@ -150,7 +165,9 @@ class dynamicComment {
         where: {
           dynamic_id,
           parent_id,
-          ...clientWhere.comment
+          status: {
+            [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail]
+          }
         }, // 为空，获取全部，也可以自己添加条件
         order
       })
@@ -160,10 +177,10 @@ class dynamicComment {
           'create_dt',
           await TimeDistance(allDynamicComment[i].create_date)
         )
-        if (Number(allDynamicComment[i].status === 1)) {
+        if (Number(allDynamicComment[i].status === pendingReview)) {
           allDynamicComment[i].setDataValue('content', '当前用户评论需要审核')
         }
-        if (Number(allDynamicComment[i].status === 3)) {
+        if (Number(allDynamicComment[i].status === reviewFail)) {
           allDynamicComment[i].setDataValue('content', '当前用户评论违规')
         }
         allDynamicComment[i].setDataValue(
@@ -193,7 +210,9 @@ class dynamicComment {
         let childAllComment = await models.dynamic_comment.findAll({
           where: {
             parent_id: allDynamicComment[item].id,
-            ...clientWhere.comment
+            status: {
+              [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail]
+            }
           }
         })
 
@@ -204,13 +223,15 @@ class dynamicComment {
             await TimeDistance(childAllComment[childCommentItem].create_date)
           )
 
-          if (Number(childAllComment[childCommentItem].status === 1)) {
+          if (
+            Number(childAllComment[childCommentItem].status === pendingReview)
+          ) {
             childAllComment[childCommentItem].setDataValue(
               'content',
               '当前用户评论需要审核'
             )
           }
-          if (Number(childAllComment[childCommentItem].status === 3)) {
+          if (Number(childAllComment[childCommentItem].status === reviewFail)) {
             childAllComment[childCommentItem].setDataValue(
               'content',
               '当前用户评论违规'
@@ -300,8 +321,8 @@ class dynamicComment {
         // 判断动态评论不需要审核
         config.USER_AUTHORITY.dfNoReviewDynamicCommentId
       )
-        ? 5
-        : 1
+        ? freeReview // 免审核
+        : pendingReview // 待审核
 
       let oneDynamic = await models.dynamic.findOne({
         where: {
@@ -390,9 +411,9 @@ class dynamicComment {
             state: 'success',
             data: _data,
             message:
-              Number(status) === 5
+              Number(status) === freeReview // 免审核
                 ? '评论成功'
-                : '评论成功,但是由于此前您发表的评论存在问题，管理员已把你加入受限用户组，评论需要审核才能被第三人看见'
+                : '评论成功,待审核可见'
           })
         })
         .catch(err => {

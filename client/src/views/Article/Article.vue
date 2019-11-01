@@ -87,6 +87,12 @@ import { share, baidu, google } from '@utils'
 import { mapState } from 'vuex'
 import googleMixin from '@mixins/google'
 import { Dropdown } from '@components'
+import {
+  statusList,
+  articleType,
+  statusListText,
+  articleTypeText
+} from '@utils/constant'
 export default {
   name: "Article",
   mixins: [googleMixin], //混合谷歌分析 
@@ -155,11 +161,7 @@ export default {
   data () {
     return {
       sourceTypeList: ["", "原创", "转载"],
-      articleTypeList: {
-        'article': '文章',
-        'note': '笔记',
-        'draft': '草稿',
-      },
+      articleTypeList: articleTypeText,
     };
   },
   methods: {

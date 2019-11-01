@@ -9,6 +9,7 @@ module.exports = {
     config.website.domain_name
   }/default/img/default_article_tag.png`, // 文章默认的标签
   DF_ICON: `${config.website.domain_name}/default/img/default_icon.png`, // 默认所有图标
+  PUBLIC: {},
   USER: {
     dfUserAvatarNoReviewId: 'dfUserAvatarNoReviewId' // 用户头像免审核
   },

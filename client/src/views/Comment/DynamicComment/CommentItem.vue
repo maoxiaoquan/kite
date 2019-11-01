@@ -15,13 +15,13 @@
                        :to="{name:'user',params:{uid:commentItem.user.uid,routeType:'article'}}">{{commentItem.user.nickname}}</router-link>
         </h4>
         <div class="comment-text"
-             v-if="Number(commentItem.status)===2||Number(commentItem.status)===5"
+             v-if="Number(commentItem.status)===statusList.reviewSuccess||Number(commentItem.status)===statusList.freeReview"
              v-html="commentRender(commentItem.content)"></div>
         <div class="comment-text"
-             v-else-if="Number(commentItem.status)===1"
+             v-else-if="Number(commentItem.status)===statusList.pendingReview"
              style="color:#f96b84;">当前用户评论需要管理员审核才能可见</div>
         <div class="comment-text"
-             v-else-if="Number(commentItem.status)===3"
+             v-else-if="Number(commentItem.status)===statusList.reviewFail"
              style="color:#f96b84;">当前用户评论违规</div>
       </div>
 
@@ -29,7 +29,7 @@
         <span>{{commentItem.create_dt}}</span>
         <span class="comment-reply"
               v-show="personalInfo.islogin"
-              v-if="Number(commentItem.status)===2||Number(commentItem.status)===5"
+              v-if="Number(commentItem.status)===statusList.reviewSuccess||Number(commentItem.status)===statusList.freeReview"
               @click="isComment=!isComment">{{isComment?'取消回复':'回复'}}</span>
         <span class="comment-delete"
               v-if="personalInfo.user.uid===commentItem.uid"
@@ -65,6 +65,10 @@
 import commentForm from "./CommentForm";
 import { faceQQ } from '@components'
 import commentChildItem from "./CommentChildItem";
+import {
+  statusList,
+  statusListText
+} from '@utils/constant'
 
 export default {
   name: "index",
@@ -73,7 +77,9 @@ export default {
     return {
       isComment: false,
       childPage: 2,
-      isChildMore: true
+      isChildMore: true,
+      statusList,
+      statusListText
     };
   },
   methods: {

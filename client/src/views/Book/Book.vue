@@ -15,7 +15,7 @@
                     <span>{{books.booksInfo.title}}</span>
                   </a>
                   <span class="attention"
-                        v-if="~[2,4].indexOf(books.booksInfo.status)&&personalInfo.islogin"
+                        v-if="~[statusList.reviewSuccess,statusList.freeReview].indexOf(books.booksInfo.status)&&personalInfo.islogin"
                         @click="collectBooks(books.booksInfo.books_id)"
                         :class="{'active':isCollect(books.booksInfo).status}">{{isCollect(books.booksInfo).text}}</span>
                 </div>
@@ -88,6 +88,10 @@ import BookComment from './component/BookComment'
 import { mapState } from 'vuex'
 import { share, baidu, google } from '@utils'
 import googleMixin from '@mixins/google'
+import {
+  statusList,
+  statusListText,
+} from '@utils/constant'
 
 export default {
   name: "NavSort",
@@ -150,7 +154,9 @@ export default {
   },
   data () {
     return {
-      currentType: "BookList"
+      currentType: "BookList",
+      statusList,
+      statusListText,
     };
   },
   asyncData ({ store, route }) {

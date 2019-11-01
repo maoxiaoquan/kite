@@ -57,7 +57,7 @@
           </li>
           <li class="item"
               style="color:#F07178"
-              v-if="articleItem.status==='review_fail'">{{statusList[articleItem.status]}}:{{articleItem.rejection_reason}}</li>
+              v-if="articleItem.status===statusList.reviewFail">{{statusListText[articleItem.status]}}:{{articleItem.rejection_reason}}</li>
 
         </ul>
       </div>
@@ -89,6 +89,12 @@
 <script>
 import { mapState } from 'vuex'
 import { Dropdown } from '@components'
+import {
+  statusList,
+  articleType,
+  statusListText,
+  articleTypeText
+} from '@utils/constant'
 export default {
   name: "ArticleItem",
   props: {
@@ -98,19 +104,9 @@ export default {
   },
   data () {
     return {
-      statusList: {
-        // 所有内容的审核状态
-        review_success: '审核成功', // 审核成功
-        review_fail: '审核失败', // 审核失败
-        pending_review: '待审核', // 待审核
-        free_review: '免审核', // 免审核
-        deleted: '已删除' // 已删除
-      },
-      articleTypeList: { // 文章类型列表
-        'article': '文章',
-        'note': '笔记',
-        'draft': '草稿',
-      },
+      statusList: statusList,
+      statusListText: statusListText,
+      articleTypeList: articleTypeText,
     };
   },
   methods: {

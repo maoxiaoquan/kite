@@ -6,6 +6,12 @@ const trimHtml = require('trim-html')
 const xss = require('xss')
 const clientWhere = require('../../utils/clientWhere')
 const config = require('../../config')
+const {
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  articleType,
+  userMessageType,
+  userMessageAction
+} = require('../../utils/constant')
 
 function ErrorMessage (message) {
   this.message = message

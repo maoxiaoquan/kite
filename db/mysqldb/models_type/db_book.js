@@ -53,7 +53,7 @@ module.exports = {
     status: {
       // 状态
       type: Seq.INTEGER(10),
-      comment: '状态(1:审核中;2:审核通过;3:审核失败;4:无需审核;5:已删除)',
+      comment: '状态(1:审核中;2:审核通过;3:审核失败;4:无需审核;)',
       field: 'status'
     },
     rejection_reason: {

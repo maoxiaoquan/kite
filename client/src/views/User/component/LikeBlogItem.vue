@@ -52,7 +52,7 @@
             <span v-text="articleBlogItem.likeCount||0"></span>
           </li>
           <li class="item attention"
-              v-if="~[2,4].indexOf(articleBlogItem.articleBlog.status)&&personalInfo.islogin&&articleBlogItem.articleBlog.is_public"
+              v-if="~[statusList.reviewSuccess,statusList.freeReview].indexOf(articleBlogItem.articleBlog.status)&&personalInfo.islogin&&articleBlogItem.articleBlog.is_public"
               @click="setLikeArticleBlog(articleBlogItem.blog_id)">
             <span :class="{'active':isLike(articleBlogItem).status}">{{isLike(articleBlogItem).text}}</span>
           </li>
@@ -75,8 +75,17 @@
 import { share } from '@utils'
 import { mapState } from 'vuex'
 import { Page } from "@components";
+import {
+  statusList,
+  statusListText,
+} from '@utils/constant'
 export default {
   name: "articleBlogItem",
+  data () {
+    return {
+      statusList
+    }
+  },
   props: ['articleBlogItem'],
   methods: {
     shareChange (val) { // 分享到其他
@@ -124,10 +133,6 @@ export default {
     },
   },
   computed: {
-    personalInfo () {
-      // 登录后的个人信息
-      return this.$store.state.personalInfo || {};
-    },
     ...mapState(['website', 'personalInfo'])
   },
   components: {

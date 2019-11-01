@@ -7,6 +7,12 @@ const xss = require('xss')
 const clientWhere = require('../../utils/clientWhere')
 const config = require('../../config')
 const { TimeNow, TimeDistance } = require('../../utils/time')
+const {
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  articleType,
+  userMessageType,
+  userMessageAction
+} = require('../../utils/constant')
 
 function ErrorMessage (message) {
   this.message = message
@@ -28,7 +34,7 @@ class BookComment {
           book_id,
           parent_id: 0,
           status: {
-            [Op.or]: [2, 4]
+            [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail]
           }
         }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
@@ -41,10 +47,10 @@ class BookComment {
           'create_dt',
           await TimeDistance(rows[i].create_date)
         )
-        if (Number(rows[i].status === 1)) {
+        if (Number(rows[i].status) === pendingReview) {
           rows[i].setDataValue('content', '当前用户评论需要审核')
         }
-        if (Number(rows[i].status === 3)) {
+        if (Number(rows[i].status) === reviewFail) {
           rows[i].setDataValue('content', '当前用户评论违规')
         }
         rows[i].setDataValue(
@@ -62,7 +68,7 @@ class BookComment {
           where: {
             parent_id: rows[item].id,
             status: {
-              [Op.or]: [2, 4]
+              [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail]
             }
           }
         })
@@ -156,8 +162,8 @@ class BookComment {
       let status = ~userAuthorityIds.indexOf(
         config.BOOK.dfNoReviewBookCommentId
       )
-        ? 4
-        : 1
+        ? freeReview // 免审核
+        : pendingReview // 待审核
 
       await models.book_comment
         .create({
@@ -201,9 +207,9 @@ class BookComment {
             state: 'success',
             data: _data,
             message:
-              Number(status) === 4
+              Number(status) === freeReview
                 ? '评论成功'
-                : '评论成功,但是由于此前您发表的评论存在问题，管理员已把你加入受限用户组，评论需要审核才能被第三人看见'
+                : '评论成功,待审核后可见'
           })
         })
         .catch(err => {

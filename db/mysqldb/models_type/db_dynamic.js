@@ -46,7 +46,7 @@ module.exports = {
     type: {
       // 类型1:动态;2:提问
       type: Seq.INTEGER(10),
-      comment: '类型 （1:默认动态;2:图片,3:连接，4：视频 ）',
+      comment: '类型 （1:默认动态;2:图片,3:链接，4：视频 ）',
       field: 'type'
     },
     like_count: {

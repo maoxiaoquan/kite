@@ -174,9 +174,9 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
 
-  const dynamic_like = sequelize.define(
-    require('./models_type/db_dynamic_like').NAME,
-    require('./models_type/db_dynamic_like').TABLE,
+  const like_dynamic = sequelize.define(
+    require('./models_type/db_like_dynamic').NAME,
+    require('./models_type/db_like_dynamic').TABLE,
     SEQ_PARAMETER
   )
 
@@ -244,7 +244,7 @@ module.exports = sequelize => {
     dynamic,
     dynamic_topic,
     dynamic_comment,
-    dynamic_like,
+    like_dynamic,
     attention_topic,
     admin_user,
     admin_role,

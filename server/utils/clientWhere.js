@@ -1,6 +1,6 @@
 const Op = require('sequelize').Op
 const {
-  status: { reviewSuccess, freeReview, pendingReview, reviewFail },
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail },
   articleType: { article, note }
 } = require('./constant')
 module.exports = {
@@ -38,7 +38,6 @@ module.exports = {
       { status: freeReview }, // 免审核
       { status: reviewFail } // 审核失败
     ]
-    // 状态(1:审核中;2:审核通过;3:审核失败;4:回收站，5:无需审核)
   },
   dynamic: {
     myQuery: {

@@ -271,7 +271,6 @@ class AvatarReview extends React.Component {
                 <Form.Item>
                   <button
                     type="primary"
-                    htmlType="submit"
                     className="btn btn-danger"
                     onClick={this.fetchAvatarReviewList}
                   >
@@ -279,7 +278,6 @@ class AvatarReview extends React.Component {
                   </button>
                   <button
                     type="primary"
-                    htmlType="submit"
                     className="btn btn-primary"
                     onClick={this.resetBarFrom}
                   >

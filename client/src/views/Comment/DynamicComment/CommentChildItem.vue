@@ -19,13 +19,13 @@
           </template>
         </h4>
         <div class="comment-text"
-             v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===5"
+             v-if="Number(childCommentItem.status)===statusList.reviewSuccess||Number(childCommentItem.status)===statusList.freeReview"
              v-html="commentRender(childCommentItem.content)"></div>
         <div class="comment-text"
-             v-else-if="Number(childCommentItem.status)===1"
+             v-else-if="Number(childCommentItem.status)===statusList.pendingReview"
              style="color:#f96b84;">当前用户评论需要管理员审核才能可见</div>
         <div class="comment-text"
-             v-else-if="Number(childCommentItem.status)===3"
+             v-else-if="Number(childCommentItem.status)===statusList.reviewFail"
              style="color:#f96b84;">当前用户评论违规</div>
       </div>
 
@@ -33,7 +33,7 @@
         <span>{{childCommentItem.create_dt}}</span>
         <span class="comment-reply"
               v-show="personalInfo.islogin"
-              v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===5"
+              v-if="Number(childCommentItem.status)===statusList.reviewSuccess||Number(childCommentItem.status)===statusList.freeReview"
               @click="isComment=!isComment;reply_uid=childCommentItem.uid">{{isComment?'取消回复':'回复'}}</span>
         <span class="comment-delete"
               v-if="personalInfo.user.uid===childCommentItem.uid"
@@ -56,6 +56,10 @@
 <script>
 import commentForm from "./CommentForm";
 import { faceQQ } from '@components'
+import {
+  statusList,
+  statusListText
+} from '@utils/constant'
 
 export default {
   name: "childrenItem",
@@ -63,7 +67,9 @@ export default {
   data: function () {
     return {
       isComment: false,
-      reply_uid: ""
+      reply_uid: "",
+      statusList,
+      statusListText
     };
   },
   methods: {

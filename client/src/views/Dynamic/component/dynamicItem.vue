@@ -62,7 +62,7 @@
     </div>
 
     <div class="dynamic-image-row"
-         v-if="dynamicItem.type===2">
+         v-if="dynamicItem.type===dynamicType.img">
       <img style="width: 100px; height: 100px"
            class="preview-picture"
            v-lazy="url"
@@ -73,7 +73,7 @@
     </div>
 
     <div class="dynamic-link-row"
-         v-if="dynamicItem.type===3">
+         v-if="dynamicItem.type===dynamicType.link">
       <a :href="dynamicItem.attach"
          target="_block">{{dynamicItem.attach}}</a>
     </div>
@@ -143,6 +143,11 @@ import DynamicComment from '../../Comment/DynamicComment'
 import { faceQQ, Dropdown } from '@components'
 import { mapState } from 'vuex'
 import { share } from '../../../utils'
+import {
+  dynamicType,
+  dynamicTypeText
+} from '@utils/constant'
+
 export default {
   name: "dynamicItem",
   props: {
@@ -158,7 +163,9 @@ export default {
   data () {
     return {
       isCommnet: false,
-      isShowDynamic: true // 是否显示动态
+      isShowDynamic: true, // 是否显示动态
+      dynamicType,
+      dynamicTypeText
     }
   },
   methods: {

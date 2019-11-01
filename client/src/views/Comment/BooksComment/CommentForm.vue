@@ -98,7 +98,7 @@ export default {
         this.$message.warning('请填写评论内容')
         return false
       }
-      if (!this.star) {
+      if (!this.star && !this.child_comment_id) {
         this.$message.warning('请选择星级')
         return false
       }

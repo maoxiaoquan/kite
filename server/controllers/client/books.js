@@ -8,6 +8,12 @@ const xss = require('xss')
 const config = require('../../config')
 const { lowdb } = require('../../../db/lowdb/index')
 const { TimeNow, TimeDistance } = require('../../utils/time')
+const {
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  articleType,
+  userMessageType,
+  userMessageAction
+} = require('../../utils/constant')
 
 function ErrorMessage (message) {
   this.message = message
@@ -126,13 +132,12 @@ class Books {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布小书`
+            `${oneArticleTag.name}只有${
+              website.website_name
+            }管理团队才能发布小书`
           )
         }
       }
-
-      const result = reqData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
-      let $ = cheerio.load(reqData.content)
 
       let userRoleALL = await models.user_role.findAll({
         where: {
@@ -149,8 +154,8 @@ class Books {
       })
 
       let status = ~userAuthorityIds.indexOf(config.BOOKS.dfNoReviewBooksId)
-        ? 4
-        : 1
+        ? freeReview // 免审核
+        : pendingReview // 待审核
 
       await models.books.create({
         uid: user.uid,
@@ -270,7 +275,9 @@ class Books {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布小书`
+            `${oneArticleTag.name}只有${
+              website.website_name
+            }管理团队才能发布小书`
           )
         }
       }
@@ -290,8 +297,8 @@ class Books {
       })
 
       let status = ~userAuthorityIds.indexOf(config.BOOKS.dfNoReviewBooksId)
-        ? 4
-        : 1
+        ? freeReview // 免审核
+        : pendingReview // 待审核
 
       await models.books.update(
         {
@@ -334,12 +341,18 @@ class Books {
     const resData = ctx.request.body
     let { user = '' } = ctx.request
     try {
-      await models.books.destroy({
-        where: {
-          books_id: resData.books_id, // 查询条件
-          uid: user.uid
+      await models.books.update(
+        {
+          status: deletes
+        }, // '状态(1:审核中;2:审核通过;3:审核失败，4回收站，5已删除)'}, {
+        {
+          where: {
+            books_id: resData.books_id, // 查询条件
+            uid: user.uid
+          }
         }
-      })
+      )
+
       resClientJson(ctx, {
         state: 'success',
         message: '删除小书成功'
@@ -365,7 +378,7 @@ class Books {
     let whereParams = {
       is_public: true,
       status: {
-        [Op.or]: [2, 4]
+        [Op.or]: [reviewSuccess, freeReview]
       }
     }
 
@@ -536,6 +549,10 @@ class Books {
           })
         )
 
+        if (books.status === deletes) {
+          books.setDataValue('content', '小书已被删除')
+        }
+
         if (books) {
           resClientJson(ctx, {
             state: 'success',
@@ -675,7 +692,7 @@ class Books {
     let whereParams = {
       is_public: true,
       status: {
-        [Op.or]: [2, 4]
+        [Op.or]: [reviewSuccess, freeReview]
       }
     }
 

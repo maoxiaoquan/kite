@@ -9,6 +9,12 @@ const config = require('../../config')
 const { TimeNow, TimeDistance } = require('../../utils/time')
 const shortid = require('shortid')
 const { lowdb } = require('../../../db/lowdb/index')
+const {
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  articleType,
+  userMessageType,
+  userMessageAction
+} = require('../../utils/constant')
 
 function ErrorMessage (message) {
   this.message = message
@@ -138,8 +144,8 @@ class dynamicBlog {
       let status = ~userAuthorityIds.indexOf(
         config.ARTICLE_BLOG.dfNoReviewArticleBlogId
       )
-        ? 4
-        : 1
+        ? freeReview
+        : pendingReview
 
       if (oneUserArticleBlog) {
         throw new ErrorMessage('不能创建自己已有的专题')
@@ -246,8 +252,8 @@ class dynamicBlog {
       let status = ~userAuthorityIds.indexOf(
         config.ARTICLE_BLOG.dfNoReviewArticleBlogId
       )
-        ? 4
-        : 1
+        ? freeReview // 免审核
+        : pendingReview // 待审核
 
       await models.article_blog.update(
         {
@@ -405,10 +411,16 @@ class dynamicBlog {
     let pageSize = ctx.query.pageSize || 24
     let sort = ctx.query.sort
     let blogId = ctx.query.blogId
+
     let whereParams = {
       blog_ids: blogId,
-      type: clientWhere.article.type,
-      is_public: clientWhere.article.isPublic
+      type: {
+        [Op.or]: [articleType.article, articleType.note] // 文章和笔记
+      },
+      is_public: true, // 公开的文章
+      status: {
+        [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
+      }
     }
 
     let orderParams = []
@@ -447,155 +459,6 @@ class dynamicBlog {
           await models.user.findOne({
             where: { uid: rows[i].uid },
             attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-          })
-        )
-      }
-
-      await resClientJson(ctx, {
-        state: 'success',
-        message: 'success',
-        data: {
-          page,
-          count,
-          pageSize,
-          list: rows
-        }
-      })
-    } catch (err) {
-      resClientJson(ctx, {
-        state: 'error',
-        message: '错误信息：' + err.message
-      })
-      return false
-    }
-  }
-
-  // 公开的个人专栏列表
-
-  static async getArticleBlogList (ctx) {
-    let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 24
-    let sort = ctx.query.sort
-    let tagId = ctx.query.tagId
-    let columnEnName = ctx.query.columnEnName
-    let tagIdArr = []
-    let whereParams = {
-      is_public: true,
-      status: {
-        [Op.or]: [2, 4]
-      }
-    }
-
-    let orderParams = []
-
-    let allArticleTagId = [] // 全部禁止某些文章标签推送的id
-    let allArticleTag = await models.article_tag.findAll({
-      where: {
-        is_push: false
-      } // 为空，获取全部，也可以自己添加条件
-    })
-
-    if (allArticleTag && allArticleTag.length > 0) {
-      for (let item in allArticleTag) {
-        allArticleTagId.push(allArticleTag[item].tag_id)
-      }
-
-      console.log('allArticleTag', allArticleTagId)
-      whereParams['tag_ids'] = {
-        [Op.notRegexp]: `${allArticleTagId.join('|')}`
-      }
-    }
-
-    if (columnEnName && columnEnName !== 'all') {
-      if (!tagId) {
-        let oneArticleColumn = await models.article_column.findOne({
-          where: {
-            en_name: columnEnName
-          } // 为空，获取全部，也可以自己添加条件
-        })
-        tagIdArr = oneArticleColumn.tag_ids.split(',')
-      } else {
-        tagIdArr = [tagId]
-      }
-    }
-
-    !sort && (orderParams = [['create_date', 'DESC']])
-    sort === 'hot' && (orderParams = [['like_count', 'DESC']])
-
-    tagIdArr.length > 0 &&
-      (whereParams['tag_ids'] = {
-        [Op.regexp]: `${tagIdArr.join('|')}`
-      })
-
-    sort === '7day' &&
-      (whereParams['create_date'] = {
-        [Op.between]: [
-          new Date(TimeNow.showWeekFirstDay()),
-          new Date(TimeNow.showWeekLastDay())
-        ]
-      })
-
-    sort === '30day' &&
-      (whereParams['create_date'] = {
-        [Op.between]: [
-          new Date(TimeNow.showMonthFirstDay()),
-          new Date(TimeNow.showMonthLastDay())
-        ]
-      })
-
-    try {
-      let { count, rows } = await models.article_blog.findAndCountAll({
-        where: whereParams, // 为空，获取全部，也可以自己添加条件
-        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-        limit: pageSize, // 每页限制返回的数据条数
-        order: orderParams
-      })
-
-      for (let i in rows) {
-        rows[i].setDataValue(
-          'create_dt',
-          await TimeDistance(rows[i].create_date)
-        )
-        rows[i].setDataValue(
-          'update_dt',
-          await TimeDistance(rows[i].update_date)
-        )
-
-        rows[i].setDataValue(
-          'articleCount',
-          await models.article.count({
-            where: { blog_ids: rows[i].blog_id }
-          })
-        )
-
-        rows[i].setDataValue(
-          'likeCount',
-          await models.collect_blog.count({
-            where: { blog_id: rows[i].blog_id, is_like: true }
-          })
-        )
-
-        if (rows[i].tag_ids) {
-          rows[i].setDataValue(
-            'tag',
-            await models.article_tag.findAll({
-              where: { tag_id: { [Op.or]: rows[i].tag_ids.split(',') } }
-            })
-          )
-        }
-
-        rows[i].setDataValue(
-          'user',
-          await models.user.findOne({
-            where: { uid: rows[i].uid },
-            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-          })
-        )
-
-        rows[i].setDataValue(
-          'likeUserIds',
-          await models.collect_blog.findAll({
-            where: { blog_id: rows[i].blog_id, is_like: true }
           })
         )
       }
@@ -698,7 +561,7 @@ class dynamicBlog {
     let whereParams = {
       is_public: true,
       status: {
-        [Op.or]: [2, 4]
+        [Op.or]: [reviewSuccess, freeReview]
       }
     }
 
@@ -755,54 +618,6 @@ class dynamicBlog {
           })
         )
       }
-      // for (let i in rows) {
-      //   rows[i].setDataValue(
-      //     'create_dt',
-      //     await TimeDistance(rows[i].create_date)
-      //   )
-      //   rows[i].setDataValue(
-      //     'update_dt',
-      //     await TimeDistance(rows[i].update_date)
-      //   )
-
-      //   rows[i].setDataValue(
-      //     'articleCount',
-      //     await models.article.count({
-      //       where: { blog_ids: rows[i].blog_id }
-      //     })
-      //   )
-
-      //   rows[i].setDataValue(
-      //     'likeCount',
-      //     await models.collect_blog.count({
-      //       where: { blog_id: rows[i].blog_id, is_like: true }
-      //     })
-      //   )
-
-      //   if (rows[i].tag_ids) {
-      //     rows[i].setDataValue(
-      //       'tag',
-      //       await models.article_tag.findAll({
-      //         where: { tag_id: { [Op.or]: rows[i].tag_ids.split(',') } }
-      //       })
-      //     )
-      //   }
-
-      //   rows[i].setDataValue(
-      //     'user',
-      //     await models.user.findOne({
-      //       where: { uid: rows[i].uid },
-      //       attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-      //     })
-      //   )
-
-      //   rows[i].setDataValue(
-      //     'likeUserIds',
-      //     await models.collect_blog.findAll({
-      //       where: { blog_id: rows[i].blog_id, is_like: true }
-      //     })
-      //   )
-      // }
 
       await resClientJson(ctx, {
         state: 'success',

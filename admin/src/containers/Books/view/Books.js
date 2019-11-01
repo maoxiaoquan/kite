@@ -17,6 +17,7 @@ import { withRouter } from 'react-router-dom'
 
 import './Books.scss'
 import { getBooksList, updateBooks, deleteBooks } from '../actions'
+import { statusList, statusListText } from '../../../utils/constant'
 import alert from '../../../utils/alert'
 
 const Option = Select.Option
@@ -82,7 +83,7 @@ class Books extends React.Component {
         key: 'status',
         render: (text, record) => (
           <Tag className="table-article-tag-list" color="orange">
-            {this.state.status_list[record.status]}
+            {this.state.statusListText[record.status]}
           </Tag>
         )
       },
@@ -112,7 +113,9 @@ class Books extends React.Component {
         key: 'rejection_reason',
         render: (text, record) => (
           <div>
-            {~[3, 4, 5].indexOf(record.status) ? record.rejection_reason : ''}
+            {Number(record.status) === this.state.statusList.reviewFail
+              ? record.rejection_reason
+              : ''}
           </div>
         )
       },
@@ -151,7 +154,8 @@ class Books extends React.Component {
     },
     modal_visible_edit: false,
     loading: false,
-    status_list: ['', '审核中', '审核通过', '审核失败', '无需审核', '已删除'],
+    statusList,
+    statusListText,
     title_val: '',
     status_val: '',
     edit_status_val: ''
@@ -289,13 +293,7 @@ class Books extends React.Component {
   }
 
   render() {
-    const {
-      loading,
-      status_list,
-      title_val,
-      status_val,
-      edit_status_val
-    } = this.state
+    const { loading, title_val, status_val, edit_status_val } = this.state
     const { stateBooks = {} } = this.props
     const { getFieldDecorator } = this.props.form
 
@@ -359,22 +357,17 @@ class Books extends React.Component {
                     }}
                   >
                     <Option value="">全部</Option>
-                    {status_list.map((item, key) =>
-                      item ? (
-                        <Option value={key} key={key}>
-                          {item}
-                        </Option>
-                      ) : (
-                        ''
-                      )
-                    )}
+                    {Object.keys(this.state.statusListText).map(key => (
+                      <Option key={key}>
+                        {this.state.statusListText[key]}
+                      </Option>
+                    ))}
                   </Select>
                 </FormItem>
 
                 <Form.Item>
                   <button
                     type="primary"
-                    htmlType="submit"
                     className="btn btn-danger"
                     onClick={this.fetchBooksList}
                   >
@@ -382,7 +375,6 @@ class Books extends React.Component {
                   </button>
                   <button
                     type="primary"
-                    htmlType="submit"
                     className="btn btn-primary"
                     onClick={this.resetBarFrom}
                   >
@@ -415,14 +407,16 @@ class Books extends React.Component {
                         })
                       }}
                     >
-                      {this.state.status_list.map((item, key) =>
-                        item ? <Option key={key}>{item}</Option> : ''
-                      )}
+                      {Object.keys(this.state.statusListText).map(key => (
+                        <Option key={key}>
+                          {this.state.statusListText[key]}
+                        </Option>
+                      ))}
                     </Select>
                   )}
                 </FormItem>
 
-                {~[3, 5].indexOf(Number(edit_status_val)) ? (
+                {Number(edit_status_val) === statusList.reviewFail ? (
                   <FormItem {...formItemLayout} label="拒绝的原因">
                     {getFieldDecorator('rejection_reason', {
                       rules: [

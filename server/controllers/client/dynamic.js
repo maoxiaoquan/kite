@@ -8,6 +8,12 @@ const xss = require('xss')
 const config = require('../../config')
 const { lowdb } = require('../../../db/lowdb/index')
 const { TimeNow, TimeDistance } = require('../../utils/time')
+const {
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  articleType,
+  userMessageType,
+  userMessageAction
+} = require('../../utils/constant')
 
 function ErrorMessage (message) {
   this.message = message
@@ -79,8 +85,9 @@ class dynamic {
       let status = ~userAuthorityIds.indexOf(
         config.USER_AUTHORITY.dfNoReviewDynamicId
       ) // 4无需审核， 1审核中
-        ? 4
-        : 1
+        ? freeReview // 免审核
+        : pendingReview // 待审核
+
       await models.dynamic.create({
         uid: user.uid,
         content: xss(reqData.content) /* 主内容 */,
@@ -115,7 +122,7 @@ class dynamic {
       whereParams = {
         id: id,
         status: {
-          [Op.or]: [1, 2, 3, 4]
+          [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail] // 审核成功、免审核
         }
       }
 
@@ -208,15 +215,9 @@ class dynamic {
       // sort
       // hottest 全部热门:
 
-      if (sort === 'new') {
-        status = [1, 2, 4]
-      } else {
-        status = [2, 4]
-      }
-
       whereDynamicParams = {
         status: {
-          [Op.or]: status
+          [Op.or]: [reviewSuccess, freeReview]
         }
       }
 
@@ -342,7 +343,7 @@ class dynamic {
       whereParams = {
         uid: user.uid,
         status: {
-          [Op.or]: [1, 2, 4]
+          [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail]
         }
       }
 

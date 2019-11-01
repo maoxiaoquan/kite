@@ -8,8 +8,10 @@ const xss = require('xss')
 const config = require('../../config')
 const { lowdb } = require('../../../db/lowdb/index')
 const {
-  status: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
-  articleType
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  articleType,
+  userMessageType,
+  userMessageAction
 } = require('../../utils/constant')
 const { TimeNow, TimeDistance } = require('../../utils/time')
 
@@ -116,7 +118,9 @@ class Article {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布文章`
+            `${oneArticleTag.name}只有${
+              website.website_name
+            }管理团队才能发布文章`
           )
         }
       }
@@ -141,8 +145,8 @@ class Article {
       let status = ~userAuthorityIds.indexOf(
         config.USER_AUTHORITY.dfNoReviewArticleId
       )
-        ? freeReview
-        : pendingReview
+        ? freeReview // 免审核
+        : pendingReview // 待审核
 
       await models.article.create({
         uid: user.uid,
@@ -589,7 +593,9 @@ class Article {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${website.website_name}管理团队才能更新文章`
+            `${oneArticleTag.name}只有${
+              website.website_name
+            }管理团队才能更新文章`
           )
         }
       }
