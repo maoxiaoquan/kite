@@ -6,7 +6,7 @@
                      :to="{name:'article',params:{aid:articleItem.aid}}">{{articleItem.title}}</router-link>
       </div>
       <div class="operat-view"
-           v-if="personalInfo.islogin&&personalInfo.user.uid===user_info.user.uid">
+           v-if="personalInfo.islogin&&personalInfo.user.uid===user.user.uid">
         <Dropdown>
           <div class="operat-view-icon el-dropdown-link"
                slot="button">
@@ -148,11 +148,7 @@ export default {
     Dropdown
   },
   computed: {
-    ...mapState(['personalInfo']),
-    user_info () {
-      // 登录后的个人信息
-      return this.$store.state.user.user_info || {};
-    }
+    ...mapState(['personalInfo', 'user'])
   }
 };
 </script>

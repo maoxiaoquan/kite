@@ -20,6 +20,12 @@ module.exports = {
       comment: 'parent_id',
       field: 'parent_id'
     },
+    reply_id: {
+      // 评回复评论id
+      type: Seq.BIGINT(20),
+      comment: '回复评论id,和parent_id类似',
+      field: 'reply_id'
+    },
     dynamic_id: {
       // 动态id
       type: Seq.BIGINT(20),

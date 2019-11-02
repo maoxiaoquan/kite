@@ -44,7 +44,7 @@ export default {
   computed: {
     ...mapState(["personalInfo", "user"]), // home:主页  article_column:文章的专栏
     isRssDynamicTopic () {
-      return ~this.user.user_info.allRssDynamicTopicId.indexOf(this.dynamicTopicItem.topic_id)
+      return ~this.user.allRssDynamicTopicId.indexOf(this.dynamicTopicItem.topic_id)
     },
   },
 }

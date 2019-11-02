@@ -25,7 +25,7 @@
         </router-link>
       </li>
 
-      <template v-if="personalInfo.user.uid===userInfo.user.uid">
+      <template v-if="personalInfo.user.uid===user.user.uid">
         <li class="blog-list-item">
           <router-link class="btn-user-blog"
                        :to='{name:"user",params:{routeType:"blog"}}'>
@@ -145,10 +145,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["personalInfo"]),
-    userInfo () { // 登录后的个人信息
-      return this.$store.state.user.user_info || {}
-    },
+    ...mapState(["personalInfo", "user"]),
     currentBlogId () {
       return this.$route.query.blog_id || 'all'
     },

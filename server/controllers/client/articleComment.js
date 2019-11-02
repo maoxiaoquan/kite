@@ -11,8 +11,10 @@ const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
   userMessageType,
-  userMessageAction
+  userMessageAction,
+  userMessageActionText
 } = require('../../utils/constant')
+const userMessage = require('../../utils/userMessage')
 
 function ErrorMessage (message) {
   this.message = message
@@ -138,8 +140,9 @@ class ArticleComment {
       let currDate = moment(date.setHours(date.getHours())).format(
         'YYYY-MM-DD HH:mm:ss'
       )
-
-      let oneArticle = await models.article.findOne({ aid: reqData.aid })
+      let oneArticle = await models.article.findOne({
+        where: { aid: reqData.aid }
+      })
 
       if (new Date(currDate).getTime() < new Date(user.ban_dt).getTime()) {
         throw new ErrorMessage(
@@ -173,6 +176,7 @@ class ArticleComment {
           aid: reqData.aid,
           uid: user.uid,
           reply_uid: reqData.reply_uid || 0,
+          reply_id: reqData.reply_id || 0,
           content: xss(reqData.content),
           status
         })
@@ -216,28 +220,33 @@ class ArticleComment {
 
           _data['create_dt'] = await TimeDistance(_data.create_date)
 
-          await models.user_message.create({
-            // 用户行为记录
-            uid: oneArticle.uid,
-            type: 5, // 1:系统 2:喜欢文章  3:关注标签 4:关注用户 5:评论
-            content: JSON.stringify({
-              other_uid: user.uid,
-              comment_id: _data.id,
-              aid: reqData.aid,
-              title: '文章有新的评论'
-            })
-          })
-
-          if (reqData.reply_uid) {
-            await models.user_message.create({
-              // 用户行为记录
-              uid: reqData.reply_uid,
-              type: 5, // 类型 1:系统 2:喜欢文章  3:关注标签 4:用户关注 5:评论
+          if (oneArticle.uid !== user.uid && !reqData.reply_id) {
+            await userMessage.setMessage({
+              uid: oneArticle.uid,
+              sender_id: user.uid,
+              action: userMessageAction.comment, // 动作：评论
+              type: userMessageType.article, // 类型：文章评论
               content: JSON.stringify({
-                other_uid: user.uid,
                 comment_id: _data.id,
-                aid: reqData.aid,
-                title: `你的评论有新的回复`
+                aid: reqData.aid
+              })
+            })
+          }
+
+          if (
+            reqData.reply_id &&
+            reqData.reply_id !== 0 &&
+            reqData.reply_uid !== user.uid
+          ) {
+            await userMessage.setMessage({
+              uid: reqData.reply_uid,
+              sender_id: user.uid,
+              action: userMessageAction.reply, // 动作：回复
+              type: userMessageType.article_comment, // 类型：评论回复
+              content: JSON.stringify({
+                reply_id: reqData.reply_id,
+                comment_id: _data.id,
+                aid: reqData.aid
               })
             })
           }

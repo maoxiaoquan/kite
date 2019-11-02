@@ -1,11 +1,11 @@
 <template>
   <div class="user-aside-view">
     <ul class="list user-dynamic"
-        v-if="userInfo.user.user_role_ids">
+        v-if="user.user.user_role_ids">
       <li class="badge-icon"
-          v-for="(item,key) in userAside.user_role_all"
+          v-for="(item,key) in user.user_role_all"
           :key="key"
-          v-if="~userInfo.user.user_role_ids.split(',')
+          v-if="~user.user.user_role_ids.split(',')
             .indexOf(String(item.user_role_id))&&item.is_show">
         <a target="_blank"
            href="javascript:;">
@@ -24,7 +24,7 @@
     </ul>
 
     <ul class="list user-dynamic"
-        v-if="personalInfo.islogin&&personalInfo.user.uid===userInfo.user.uid">
+        v-if="personalInfo.islogin&&personalInfo.user.uid===user.user.uid">
       <li>
         <router-link :to='{name:"subscribe_tag",params:{type:"my"}}'>
           <span class="collection-name">关注的文章标签</span>
@@ -35,8 +35,8 @@
     <div class="title">个人介绍</div>
     <div class="description">
       <div class="js-intro">
-        <template v-if="userInfo.user.introduction">
-          {{userInfo.user.introduction}}
+        <template v-if="user.user.introduction">
+          {{user.user.introduction}}
         </template>
         <template v-else>
           暂无简介
@@ -57,26 +57,11 @@ import { Popover, Face } from "@components";
 import { mapState } from 'vuex'
 export default {
   name: 'UserAside',
-  data () {
-    return {
-      user_role_all: [],
-      user: {},
-      curr_user_role_ids: [],
-      user_role_item: [],
-      Visible: false
-    }
-  },
   created () {
     this.$store.dispatch('user/GET_USER_ROLE_ALL')
   },
   computed: {
-    ...mapState(['personalInfo']),
-    userAside () { // user 侧栏信息
-      return this.$store.state.user.user_aside || {}
-    },
-    userInfo () { // 登录后的个人信息
-      return this.$store.state.user.user_info || {}
-    },
+    ...mapState(['personalInfo', 'user'])
   },
   components: {
     Popover

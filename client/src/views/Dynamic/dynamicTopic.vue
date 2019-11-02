@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     isRssDynamicTopic (item) {
-      return ~this.user.user_info.allRssDynamicTopicId.indexOf(item.topic_id)
+      return ~this.user.allRssDynamicTopicId.indexOf(item.topic_id)
     },
   },
   components: {

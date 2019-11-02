@@ -4,25 +4,25 @@
          v-if="personalInfo.islogin">
       <div class="profile">
         <a href="javascript:;">
-          <img v-lazy="userInfo.user.avatar"
+          <img v-lazy="user.user.avatar"
                class="avatar"
                alt="">
         </a>
         <div class="user-info">
-          <a class="username ellipsis">{{userInfo.user.nickname}}</a>
-          <div class="position ellipsis">{{userInfo.user.nickname}}</div>
+          <a class="username ellipsis">{{user.user.nickname}}</a>
+          <div class="position ellipsis">{{user.user.nickname}}</div>
         </div>
       </div>
       <ul class="stat-list">
         <a class="item">
           <div class="title">片刻</div>
-          <div class="count">{{userInfo.dynamicCount}}</div>
+          <div class="count">{{user.dynamicCount}}</div>
         </a><a class="item">
           <div class="title">关注</div>
-          <div class="count">{{userInfo.userAttentionCount}}</div>
+          <div class="count">{{user.userAttentionCount}}</div>
         </a><a class="item">
           <div class="title">关注者</div>
-          <div class="count">{{userInfo.otherUserAttentionCount}}</div>
+          <div class="count">{{user.otherUserAttentionCount}}</div>
         </a>
       </ul>
     </div>
@@ -105,14 +105,11 @@ export default {
       return content;
     },
     isRssDynamicTopic (item) {
-      return ~this.user.user_info.allRssDynamicTopicId.indexOf(item.topic_id)
+      return ~this.user.allRssDynamicTopicId.indexOf(item.topic_id)
     },
   },
   computed: {
     ...mapState(["personalInfo", "dynamic", "website", "user"]), // home:主页  article_column:文章的专栏
-    userInfo () {
-      return this.user.user_info
-    }
   }
 }
 </script>

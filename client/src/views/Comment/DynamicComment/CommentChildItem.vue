@@ -34,7 +34,7 @@
         <span class="comment-reply"
               v-show="personalInfo.islogin"
               v-if="Number(childCommentItem.status)===statusList.reviewSuccess||Number(childCommentItem.status)===statusList.freeReview"
-              @click="isComment=!isComment;reply_uid=childCommentItem.uid">{{isComment?'取消回复':'回复'}}</span>
+              @click="onReply">{{isComment?'取消回复':'回复'}}</span>
         <span class="comment-delete"
               v-if="personalInfo.user.uid===childCommentItem.uid"
               @click="deleteComment(childCommentItem.id)">删除</span>
@@ -46,8 +46,9 @@
          v-if="isComment"
          :id="'comment-reply'+childCommentItem.id">
       <comment-form :reply_uid="reply_uid"
-                    :child_comment_id="p_id"
+                    :parent_id="p_id"
                     :dynamicId="dynamicId"
+                    :reply_id="childCommentItem.id"
                     @commentChange="commentChange" />
     </div>
   </div>
@@ -76,6 +77,10 @@ export default {
     commentChange (res) {
       this.isComment = false;
       this.$emit("ChildCommentChange", res);
+    },
+    onReply () {
+      this.isComment = !this.isComment
+      this.reply_uid = this.childCommentItem.uid
     },
     deleteComment (id) {
       this.$store

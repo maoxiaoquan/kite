@@ -13,6 +13,7 @@ const {
   userMessageType,
   userMessageAction
 } = require('../../utils/constant')
+const userMessage = require('../../utils/userMessage')
 
 function ErrorMessage (message) {
   this.message = message
@@ -330,14 +331,13 @@ class dynamicComment {
         }
       })
 
-      console.log('oneDynamic', oneDynamic)
-
       await models.dynamic_comment
         .create({
           parent_id: reqData.parent_id || 0,
           dynamic_id: reqData.dynamic_id,
           uid: user.uid,
           reply_uid: reqData.reply_uid || 0,
+          reply_id: reqData.reply_id || 0,
           content: xss(reqData.content),
           status
         })
@@ -381,28 +381,33 @@ class dynamicComment {
 
           _data['create_dt'] = await TimeDistance(_data.create_date)
 
-          await models.user_message.create({
-            // 用户行为记录
-            uid: oneDynamic.uid,
-            type: 6, // 1:系统 2:喜欢文章  3:关注标签 4:关注用户 5:评论 6:动态评论
-            content: JSON.stringify({
-              other_uid: user.uid,
-              comment_id: _data.id,
-              dynamic_id: reqData.dynamic_id,
-              title: '动态有新的评论'
-            })
-          })
-
-          if (reqData.reply_uid) {
-            await models.user_message.create({
-              // 用户行为记录
-              uid: reqData.reply_uid,
-              type: 6, // 类型 1:系统 2:喜欢文章  3:关注标签 4:用户关注 5:评论 6:动态评论
+          if (oneDynamic.uid !== user.uid && !reqData.reply_id) {
+            await userMessage.setMessage({
+              uid: oneDynamic.uid,
+              sender_id: user.uid,
+              action: userMessageAction.comment, // 动作：评论
+              type: userMessageType.dynamic, // 类型：片刻评论
               content: JSON.stringify({
-                other_uid: user.uid,
                 comment_id: _data.id,
-                dynamic_id: reqData.dynamic_id,
-                title: `你的评论有新的回复`
+                dynamic_id: reqData.dynamic_id
+              })
+            })
+          }
+
+          if (
+            reqData.reply_id &&
+            reqData.reply_id !== 0 &&
+            reqData.reply_uid !== user.uid
+          ) {
+            await userMessage.setMessage({
+              uid: reqData.reply_uid,
+              sender_id: user.uid,
+              action: userMessageAction.reply, // 动作：回复
+              type: userMessageType.dynamic_comment, // 类型：片刻回复
+              content: JSON.stringify({
+                reply_id: reqData.reply_id,
+                comment_id: _data.id,
+                dynamic_id: reqData.dynamic_id
               })
             })
           }

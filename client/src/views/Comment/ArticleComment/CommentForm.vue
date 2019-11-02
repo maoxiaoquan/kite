@@ -32,7 +32,7 @@
         <div class="right-view">
           <button type="submit"
                   class="form-btn"
-                  @click="submitComment">提交评论</button>
+                  @click="submitComment">提交评论 </button>
         </div>
       </div>
     </div>
@@ -57,7 +57,10 @@ export default {
     reply_uid: {
       default: ''
     },
-    child_comment_id: {
+    reply_id: {
+      default: ''
+    },
+    parent_id: {
       default: ''
     },
   },
@@ -67,7 +70,8 @@ export default {
         aid: this.article.aid,
         content: this.commentContent,
         reply_uid: this.reply_uid,
-        parent_id: this.child_comment_id,
+        reply_id: this.reply_id,
+        parent_id: this.parent_id,
       }
     },
     changeFace (val) {

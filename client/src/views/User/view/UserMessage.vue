@@ -2,10 +2,19 @@
   <div class="user-message"
        v-loading="isLoading">
     <div class="user-message-view">
-      <UserMessageItem v-for="(item,key) in userMessage.list"
-                       :MessageItem="item"
-                       :key="key"
-                       @delete-change="deleteChange" />
+      <div class="client-card"
+           v-for="(item,key) in userMessage.list"
+           :key="key">
+        <attention v-if="Number(item.action)===userMessageAction.attention"
+                   :MessageItem="item"
+                   @delete-change="deleteChange" />
+        <comment v-else-if="Number(item.action)===userMessageAction.comment"
+                 :MessageItem="item"
+                 @delete-change="deleteChange" />
+        <reply v-else-if="Number(item.action)===userMessageAction.reply"
+               :MessageItem="item"
+               @delete-change="deleteChange" />
+      </div>
     </div>
     <Page :total="userMessage.count"
           :pageSize="userMessage.pageSize"
@@ -16,9 +25,16 @@
 
 <script>
 
-import UserMessageItem from '../component/UserMessageItem'
+import attention from '../msgComponents/attention'
+import comment from '../msgComponents/comment'
+import reply from '../msgComponents/reply'
 import { Page } from '@components'
 import { mapState } from 'vuex'
+import {
+  userMessageType,
+  userMessageAction,
+  userMessageActionText
+} from '@utils/constant'
 export default {
   name: 'UserMessage',
   metaInfo () {
@@ -32,6 +48,9 @@ export default {
   data () {
     return {
       isLoading: false,
+      userMessageType,
+      userMessageAction,
+      userMessageActionText,
       userMessage: {
         // 用户消息
         list: [],
@@ -68,17 +87,25 @@ export default {
     },
   },
   computed: {
-    ...mapState(["personalInfo"]),
-    userInfo () { // 登录后的个人信息
-      return this.$store.state.user.user_info || {}
-    },
+    ...mapState(["personalInfo", 'user'])
   },
   components: {
-    UserMessageItem,
+    attention,
+    comment,
+    reply,
     Page
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.user-message {
+  .user-message-view {
+    padding-top: 20px;
+    .client-card {
+      margin-bottom: 15px;
+      padding: 20px;
+    }
+  }
+}
 </style>

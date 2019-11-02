@@ -631,58 +631,6 @@ class Books {
     }
   }
 
-  // 收藏小书
-  static async collectBooks (ctx) {
-    const { books_id } = ctx.request.body
-    let { user = '' } = ctx.request
-    let type = ''
-    try {
-      let oneCollectBooks = await models.collect_books.findOne({
-        where: {
-          uid: user.uid,
-          books_id
-        }
-      })
-
-      if (oneCollectBooks) {
-        /* 判断是否关注了 */
-        type = oneCollectBooks.is_like ? 'cancel' : 'attention'
-        await models.collect_books.update(
-          {
-            is_like: !oneCollectBooks.is_like
-          },
-          {
-            where: {
-              uid: user.uid,
-              books_id
-            }
-          }
-        )
-      } else {
-        type = 'attention'
-        await models.collect_books.create({
-          uid: user.uid,
-          books_id,
-          is_like: true
-        })
-      }
-
-      resClientJson(ctx, {
-        state: 'success',
-        message: type === 'attention' ? '收藏成功' : '取消收藏成功',
-        data: {
-          type
-        }
-      })
-    } catch (err) {
-      resClientJson(ctx, {
-        state: 'error',
-        message: '错误信息：' + err.message
-      })
-      return false
-    }
-  }
-
   // 获取用户收藏的小书列表
 
   static async getCollectBooksList (ctx) {

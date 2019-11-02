@@ -191,7 +191,7 @@ export default {
     ...mapState(['personalInfo', 'dynamic', 'user', 'website']),
     isRssDynamicTopic () {
       if (this.personalInfo.islogin) {
-        return ~this.user.user_info.allRssDynamicTopicId.indexOf(this.$route.params.dynamicTopicId)
+        return ~this.user.allRssDynamicTopicId.indexOf(this.$route.params.dynamicTopicId)
       } else {
         return false
       }

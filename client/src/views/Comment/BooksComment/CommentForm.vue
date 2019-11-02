@@ -75,7 +75,10 @@ export default {
     reply_uid: {
       default: ''
     },
-    child_comment_id: {
+    reply_id: {
+      default: ''
+    },
+    parent_id: {
       default: ''
     },
   },
@@ -86,7 +89,8 @@ export default {
         star: this.star,
         content: this.commentContent,
         reply_uid: this.reply_uid,
-        parent_id: this.child_comment_id,
+        reply_id: this.reply_id,
+        parent_id: this.parent_id,
       }
     },
     changeFace (val) {
@@ -98,7 +102,7 @@ export default {
         this.$message.warning('请填写评论内容')
         return false
       }
-      if (!this.star && !this.child_comment_id) {
+      if (!this.star && !this.parent_id) {
         this.$message.warning('请选择星级')
         return false
       }

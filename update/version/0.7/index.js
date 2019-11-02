@@ -10,8 +10,33 @@ class update {
       try {
         console.log(`正在升级中，当前版本是${CURRENT_VERSION}....`)
         await models.sequelize.query(
-          'rename TABLE dynamic_like to like_dynamic;'
+          'rename TABLE dynamic_like to thumb_dynamic;'
         )
+
+        await models.sequelize.query(
+          'ALTER TABLE user_message add COLUMN action INTEGER(10) comment "1:系统消息,2:喜欢,3:收藏 ,4:关注 ,5:评论,6:回复,7:赞";'
+        )
+
+        await models.sequelize.query(
+          'ALTER TABLE user_message add COLUMN sender_id BIGINT(20) comment "发送者ID";'
+        )
+
+        await models.sequelize.query(
+          'ALTER TABLE article_comment add COLUMN reply_id BIGINT(20) comment "回复评论ID";'
+        )
+
+        await models.sequelize.query(
+          'ALTER TABLE book_comment add COLUMN reply_id BIGINT(20) comment "回复评论ID";'
+        )
+
+        await models.sequelize.query(
+          'ALTER TABLE books_comment add COLUMN reply_id BIGINT(20) comment "回复评论ID";'
+        )
+
+        await models.sequelize.query(
+          'ALTER TABLE dynamic_comment add COLUMN reply_id BIGINT(20) comment "回复评论ID";'
+        )
+
         // 文章
         await models.article.update(
           {

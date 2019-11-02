@@ -87,7 +87,7 @@
     <div class="dynamic-action-row">
       <div class="action-box">
         <div class="like-action action"
-             :class="{'active':~user.user_info.allLikeDymaicId.indexOf(dynamicItem.id||'')}"
+             :class="{'active':~user.allLikeDymaicId.indexOf(dynamicItem.id||'')}"
              @click="setUserLikeDynamic">
           <i class="el-icon-star-off"></i>
           <span class="action-title">{{dynamicItem.like_count}}</span>

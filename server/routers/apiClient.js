@@ -18,6 +18,11 @@ const book = require('../controllers/client/book') // 小书章节
 const booksComment = require('../controllers/client/booksComment') // 小书评价
 const bookComment = require('../controllers/client/bookComment') // 小书章节评论
 
+const like = require('../controllers/client/like') // 喜欢
+const attention = require('../controllers/client/attention') // 关注
+const thumb = require('../controllers/client/thumb') // 赞
+const collect = require('../controllers/client/collect') // 收藏
+
 /**
  * 获取标签列表操作
  * @param   {String} TYPE 当前router 作用类型 AJAX:ajax传递数据 RENDER:render渲染页面或者 post form提交数据
@@ -105,7 +110,7 @@ router.get('/user/blog-all', articleBlog.getUserArticleBlogAll) // 获取用户�
 router.post(
   '/user/attention',
   tokens.ClientVerifyToken,
-  personalCenter.setUserAttention
+  attention.setUserAttention
 ) // 用户关注用户 TYPE:AJAX post
 
 router.get('/user/attention-list', personalCenter.getUserAttentionList) // 获取用户个人中心关注列表
@@ -113,8 +118,14 @@ router.get('/user/attention-list', personalCenter.getUserAttentionList) // 获�
 router.post(
   '/user/like-article',
   tokens.ClientVerifyToken,
-  personalCenter.setUserLikeArticle
+  like.setUserLikeArticle
 ) // 用户like文章 TYPE:AJAX post
+
+router.post(
+  '/user/like-dynamic',
+  tokens.ClientVerifyToken,
+  thumb.setUserLikeDynamic
+) // 用户like动态TYPE:AJAX post
 
 router.get('/user/like-article-list', personalCenter.getUserLikeArticleList) // 用户个人中心喜欢
 
@@ -208,7 +219,7 @@ router.get('/article-blog/article-list', articleBlog.getArticleBlogArticleList) 
 router.post(
   '/article-blog/like',
   tokens.ClientVerifyToken,
-  articleBlog.setSubscribeArticleBlog
+  collect.setSubscribeArticleBlog
 ) // 当前个人专栏like
 router.get(
   '/article-blog/like-list',
@@ -296,12 +307,6 @@ router.post(
   tokens.ClientVerifyToken,
   dynamicComment.deleteDynamicComment
 ) // 删除动态评论 TYPE:AJAX post
-
-router.post(
-  '/user/like-dynamic',
-  tokens.ClientVerifyToken,
-  personalCenter.setUserLikeDynamic
-) // 用户like动态TYPE:AJAX post
 
 router.post(
   '/subscribe/dynamic_topic',
@@ -401,7 +406,7 @@ router.post(
   bookComment.deleteBookComment
 ) // 删除小书章节评论 TYPE:AJAX post
 
-router.post('/collect/books', tokens.ClientVerifyToken, books.collectBooks) // 收藏小书
+router.post('/collect/books', tokens.ClientVerifyToken, collect.collectBooks) // 收藏小书
 
 router.get(
   '/collect/books-list',

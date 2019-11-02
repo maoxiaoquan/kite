@@ -62,10 +62,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["personalInfo"]),
-    userInfo () { // 登录后的个人信息
-      return this.$store.state.user.user_info || {}
-    },
+    ...mapState(["personalInfo", 'user']),
     userLikeArticle () { // 用户的like
       return this.$store.state.user.user_like_article || {}
     },

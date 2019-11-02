@@ -35,7 +35,7 @@
           </li>
           <li class="item operat-view"
               @click="isOperating=!isOperating"
-              v-if="personalInfo.islogin&&personalInfo.user.uid===userInfo.user.uid">
+              v-if="personalInfo.islogin&&personalInfo.user.uid===user.user.uid">
             <Dropdown>
               <div class="el-dropdown-link"
                    slot="button">
@@ -109,11 +109,7 @@ export default {
     Dropdown
   },
   computed: {
-    ...mapState(['personalInfo']),
-    userInfo () {
-      // 登录后的个人信息
-      return this.$store.state.user.user_info || {};
-    }
+    ...mapState(['personalInfo', 'user']),
   }
 };
 </script>

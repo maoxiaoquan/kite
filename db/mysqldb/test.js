@@ -18,16 +18,7 @@ async function sql () {
   // )
 
   // 文章
-  await models.article_comment.update(
-    {
-      status: 4
-    },
-    {
-      where: {
-        status: 5
-      }
-    }
-  )
+  await models.sequelize.query('rename TABLE dynamic_like to thumb_dynamic;')
 
   process.exit()
 }

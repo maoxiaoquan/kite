@@ -1,17 +1,14 @@
 import { fetch } from '@request'
 
 const state = () => ({
-  user_info: {
-    // 用户的信息
-    otherUserAttentionCount: 0,
-    userArticleCount: 0,
-    userAttentionCount: 0,
-    dynamicCount: 0,
-    allLikeDymaicId: [], // 关注的所有动态ID
-    allRssDynamicTopicId: [], // 订阅的所有动态话题ID
-    user_info: {},
-    user: {}
-  },
+  otherUserAttentionCount: 0,
+  userArticleCount: 0,
+  userAttentionCount: 0,
+  dynamicCount: 0,
+  allLikeDymaicId: [], // 关注的所有动态ID
+  allRssDynamicTopicId: [], // 订阅的所有动态话题ID
+  user_info: {},
+  user: {},
   user_article_blog: [], // 用户的文章专题
   user_aside: {
     // 侧栏
@@ -23,7 +20,14 @@ const state = () => ({
 const mutations = {
   SET_USER_INFO_ALL (state, data) {
     // 获取用户的全部信息
-    state.user_info = data
+    state.otherUserAttentionCount = data.otherUserAttentionCount
+    state.userArticleCount = data.userArticleCount
+    state.userAttentionCount = data.userAttentionCount
+    state.dynamicCount = data.dynamicCount
+    state.allLikeDymaicId = data.allLikeDymaicId // 关注的所有动态ID
+    state.allRssDynamicTopicId = data.allRssDynamicTopicId // 订阅的所有动态话题ID
+    state.user_info = data.user_info
+    state.user = data.user
   },
   SET_USER_ARTICLE_BLOG_ALL (state, data) {
     // 设置获取的全部的个人文章专栏
@@ -71,8 +75,7 @@ const actions = {
       method: 'get',
       parameter: { params: parameter }
     }).then(result => {
-      Object.keys(result.data).length > 0 &&
-        commit('SET_USER_INFO_ALL', result.data)
+      commit('SET_USER_INFO_ALL', result.data)
       return result
     })
   },

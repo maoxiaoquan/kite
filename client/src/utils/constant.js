@@ -44,3 +44,61 @@ export const dynamicTypeText = {
   [dynamicType.link]: '链接', // 草稿
   [dynamicType.video]: '视频' // 草稿
 }
+
+export const userMessageType = {
+  // 文章的类型
+  attention_user: 1, // 用户
+  article: 2, // 文章
+  article_blog: 3, // 文章个人专栏
+  article_comment: 4, // 文章评论
+  book: 5, // 小书章节
+  book_comment: 6, // 小书章节评论
+  books: 7, // 小书
+  books_comment: 8, // 小书评论
+  dynamic: 9, // 片刻
+  dynamic_comment: 10, // 片刻评论
+  thumb_dynamic: 11, // 片刻评论
+  like_article: 12, // 片刻评论
+  collect_blog: 13, // 片刻评论
+  collect_books: 14 // 片刻评论
+}
+
+export const userMessageTypeText = {
+  // 文章的类型
+  [userMessageType.attention_user]: '关注了你', // 用户1
+  [userMessageType.article]: '评论了你的文章', // 文章2
+  [userMessageType.article_blog]: '收藏了你的专栏', // 文章个人专栏3
+  [userMessageType.article_comment]: '文章中回复你的', // 文章评论4
+  [userMessageType.book]: '评论了你的小书章节', // 小书章节5
+  [userMessageType.book_comment]: '小书章节中回复你的', // 小书章节评论6
+  [userMessageType.books]: '评论了你的小书', // 小书7
+  [userMessageType.books_comment]: '小书中回复你的', // 小书评论8
+  [userMessageType.dynamic]: '评论了你片刻', // 片刻9
+  [userMessageType.dynamic_comment]: '片刻中回复你的', // 片刻评论10
+  [userMessageType.thumb_dynamic]: '点赞了你的片刻', // 点赞了你的片刻
+  [userMessageType.like_article]: '喜欢了你的文章', // 喜欢了你的文章
+  [userMessageType.collect_blog]: '收藏你的专栏', // 收藏你的专栏
+  [userMessageType.collect_books]: '收藏了你的小书' // 收藏了你的小书
+}
+
+export const userMessageAction = {
+  system: 1, // 系统消息
+  like: 2, // 喜欢
+  collect: 3, // 收藏
+  attention: 4, // 关注
+  comment: 5, // 评论
+  reply: 6, // 回复
+  thumb: 7, // 赞
+  buy: 8 // 购买
+}
+
+export const userMessageActionText = {
+  [userMessageAction.system]: '新的系统消息',
+  [userMessageAction.like]: '新的喜欢',
+  [userMessageAction.collect]: '新的收藏',
+  [userMessageAction.attention]: '新的关注',
+  [userMessageAction.comment]: '新的评论',
+  [userMessageAction.reply]: '新的赞',
+  [userMessageAction.thumb]: '新的回复',
+  [userMessageAction.buy]: '新的购买'
+}

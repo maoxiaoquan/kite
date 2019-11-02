@@ -37,8 +37,9 @@
       <div class="comment-form-view"
            v-if="isComment"
            :id="'comment-reply'+commentItem.id">
-        <comment-form reply_uid=""
-                      :child_comment_id="commentItem.id"
+        <comment-form :reply_uid="commentItem.uid"
+                      :parent_id="commentItem.id"
+                      :reply_id="commentItem.id"
                       @commentChange="commentChange" />
       </div>
     </div>

@@ -9,6 +9,9 @@ const multer = require('koa-multer')
 const upload = require('../../utils/upload') // 上传工具类
 const fs = require('fs')
 const path = require('path')
+
+const { lowdb } = require('../../../db/lowdb/index')
+
 const Op = require('sequelize').Op
 function ErrorMessage (message) {
   this.message = message
@@ -22,11 +25,16 @@ class Upload {
    */
   static async uploadUserAvatar (ctx) {
     try {
+      const website = lowdb
+        .read()
+        .get('website')
+        .value()
       await upload('avatarImg').single('file')(ctx)
       if (ctx.req.file) {
         let destination = ctx.req.file.destination.split('static')[1]
         let filename = ctx.req.file.filename
-        let origin = ctx.request.header.origin
+        let origin =
+          ctx.request.header.origin || 'http://' + website.domain_name
         let { user = '' } = ctx.request
 
         let userRoleAll = await models.user_role.findAll({
@@ -104,11 +112,16 @@ class Upload {
    */
   static async uploadArticlePicture (ctx) {
     try {
+      const website = lowdb
+        .read()
+        .get('website')
+        .value()
       await upload('articleImg').single('file')(ctx)
       if (ctx.req.file) {
         let destination = ctx.req.file.destination.split('static')[1]
         let filename = ctx.req.file.filename
-        let origin = ctx.request.header.origin
+        let origin =
+          ctx.request.header.origin || 'http://' + website.domain_name
         resClientJson(ctx, {
           state: 'success',
           message: '文章图片上传成功',

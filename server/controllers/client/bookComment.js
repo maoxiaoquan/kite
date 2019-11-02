@@ -13,6 +13,7 @@ const {
   userMessageType,
   userMessageAction
 } = require('../../utils/constant')
+const userMessage = require('../../utils/userMessage')
 
 function ErrorMessage (message) {
   this.message = message
@@ -134,6 +135,12 @@ class BookComment {
         throw new ErrorMessage('请输入评论内容')
       }
 
+      let oneBook = await models.book.findOne({
+        where: {
+          book_id: reqData.book_id
+        }
+      })
+
       let date = new Date()
       let currDate = moment(date.setHours(date.getHours())).format(
         'YYYY-MM-DD HH:mm:ss'
@@ -202,6 +209,37 @@ class BookComment {
           }
 
           _data['create_dt'] = await TimeDistance(_data.create_date)
+
+          if (oneBook.uid !== user.uid && !reqData.reply_id) {
+            await userMessage.setMessage({
+              uid: oneBook.uid,
+              sender_id: user.uid,
+              action: userMessageAction.comment, // 动作：评论
+              type: userMessageType.book, // 类型：小书章节评论
+              content: JSON.stringify({
+                comment_id: _data.id,
+                book_id: reqData.book_id
+              })
+            })
+          }
+
+          if (
+            reqData.reply_id &&
+            reqData.reply_id !== 0 &&
+            reqData.reply_uid !== user.uid
+          ) {
+            await userMessage.setMessage({
+              uid: reqData.reply_uid,
+              sender_id: user.uid,
+              action: userMessageAction.reply, // 动作：回复
+              type: userMessageType.book_comment, // 类型：小书章节回复
+              content: JSON.stringify({
+                reply_id: reqData.reply_id,
+                comment_id: _data.id,
+                book_id: reqData.book_id
+              })
+            })
+          }
 
           resClientJson(ctx, {
             state: 'success',
