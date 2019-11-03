@@ -1,27 +1,27 @@
-const models = require('../../../db/mysqldb/index')
+const models = require('../../../../db/mysqldb/index')
 const {
   checkEmail,
   checkPhoneNum,
   checkUrl,
   checkPwd
-} = require('../../utils/validators')
+} = require('../../../utils/validators')
 const moment = require('moment')
-const { resClientJson } = require('../../utils/resData')
-const { sendVerifyCodeMail } = require('../../utils/sendEmail')
-const { random_number, tools } = require('../../utils/index')
-const config = require('../../config')
+const { resClientJson } = require('../../../utils/resData')
+const { sendVerifyCodeMail } = require('../../../utils/sendEmail')
+const { random_number, tools } = require('../../../utils/index')
+const config = require('../../../config')
 const Op = require('sequelize').Op
-const tokens = require('../../utils/tokens')
-const { queryUserVerifyCode } = require('../../sql/query')
-const { lowdb } = require('../../../db/lowdb/index')
-const clientWhere = require('../../utils/clientWhere')
+const tokens = require('../../../utils/tokens')
+const { queryUserVerifyCode } = require('../../../sql/query')
+const { lowdb } = require('../../../../db/lowdb/index')
+const clientWhere = require('../../../utils/clientWhere')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
   userMessageType,
   userMessageAction,
   userMessageActionText
-} = require('../../utils/constant')
+} = require('../../../utils/constant')
 
 function ErrorMessage (message) {
   this.message = message
@@ -533,7 +533,8 @@ class User {
         {
           profession: reqData.profession || '',
           company: reqData.company || '',
-          home_page: reqData.home_page || ''
+          home_page: reqData.home_page || '',
+          is_msg_push: reqData.is_msg_push
         },
         {
           where: {
@@ -839,6 +840,22 @@ class User {
               })
             )
           }
+        } else if (rows[i].action === userMessageAction.like) {
+          rows[i].setDataValue(
+            'article',
+            await models.article.findOne({
+              where: { aid: content.aid },
+              attributes: ['aid', 'title', 'uid']
+            })
+          )
+        } else if (rows[i].action === userMessageAction.thumb) {
+          rows[i].setDataValue(
+            'dynamic',
+            await models.dynamic.findOne({
+              where: { id: content.dynamic_id },
+              attributes: ['id', 'content', 'uid']
+            })
+          )
         }
       }
 

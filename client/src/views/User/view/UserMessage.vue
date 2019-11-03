@@ -14,6 +14,12 @@
         <reply v-else-if="Number(item.action)===userMessageAction.reply"
                :MessageItem="item"
                @delete-change="deleteChange" />
+        <like v-else-if="Number(item.action)===userMessageAction.like"
+              :MessageItem="item"
+              @delete-change="deleteChange" />
+        <thumb v-else-if="Number(item.action)===userMessageAction.thumb"
+               :MessageItem="item"
+               @delete-change="deleteChange" />
       </div>
     </div>
     <Page :total="userMessage.count"
@@ -27,13 +33,14 @@
 
 import attention from '../msgComponents/attention'
 import comment from '../msgComponents/comment'
+import like from '../msgComponents/like'
 import reply from '../msgComponents/reply'
+import thumb from '../msgComponents/thumb'
+
 import { Page } from '@components'
 import { mapState } from 'vuex'
 import {
-  userMessageType,
   userMessageAction,
-  userMessageActionText
 } from '@utils/constant'
 export default {
   name: 'UserMessage',
@@ -48,9 +55,7 @@ export default {
   data () {
     return {
       isLoading: false,
-      userMessageType,
       userMessageAction,
-      userMessageActionText,
       userMessage: {
         // 用户消息
         list: [],
@@ -93,6 +98,8 @@ export default {
     attention,
     comment,
     reply,
+    like,
+    thumb,
     Page
   }
 }

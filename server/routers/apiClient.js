@@ -1,27 +1,29 @@
 const router = require('koa-router')()
 const index = require('../controllers/client/index') // 主页
-const user = require('../controllers/client/user') // 注册
-const personalCenter = require('../controllers/client/personalCenter') // 用户个人中心
-const article = require('../controllers/client/article') // 文章内容页
-const articleBlog = require('../controllers/client/articleBlog') // 文章评论
-const articleComment = require('../controllers/client/articleComment') // 文章评论
+const user = require('../controllers/client/user/user') // 注册
+const personalCenter = require('../controllers/client/user/personalCenter') // 用户个人中心
+const article = require('../controllers/client/article/article') // 文章内容页
+const articleBlog = require('../controllers/client/article/articleBlog') // 文章评论
+const articleComment = require('../controllers/client/article/articleComment') // 文章评论
 const subscribe = require('../controllers/client/subscribe') // 订阅
 const upload = require('../controllers/client/upload') // 上传
 const website = require('../controllers/client/website') // 上传
 const tokens = require('../utils/tokens') // 登录tokens
 const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
-const dynamic = require('../controllers/client/dynamic') // 动态
-const dynamicComment = require('../controllers/client/dynamicComment') // 动态评论
-const dynamicTopic = require('../controllers/client/dynamicTopic') // 动态专题
-const books = require('../controllers/client/books') // 小书
-const book = require('../controllers/client/book') // 小书章节
-const booksComment = require('../controllers/client/booksComment') // 小书评价
-const bookComment = require('../controllers/client/bookComment') // 小书章节评论
+const dynamic = require('../controllers/client/dynamic/dynamic') // 动态
+const dynamicComment = require('../controllers/client/dynamic/dynamicComment') // 动态评论
+const dynamicTopic = require('../controllers/client/dynamic/dynamicTopic') // 动态专题
+const books = require('../controllers/client/books/books') // 小书
+const book = require('../controllers/client/books/book') // 小书章节
+const booksComment = require('../controllers/client/books/booksComment') // 小书评价
+const bookComment = require('../controllers/client/books/bookComment') // 小书章节评论
 
 const like = require('../controllers/client/like') // 喜欢
 const attention = require('../controllers/client/attention') // 关注
 const thumb = require('../controllers/client/thumb') // 赞
 const collect = require('../controllers/client/collect') // 收藏
+
+const virtual = require('../controllers/client/virtual') // 虚拟币
 
 /**
  * 获取标签列表操作
@@ -124,8 +126,8 @@ router.post(
 router.post(
   '/user/like-dynamic',
   tokens.ClientVerifyToken,
-  thumb.setUserLikeDynamic
-) // 用户like动态TYPE:AJAX post
+  thumb.setUserThumbDynamic
+) // 用户点赞动态TYPE:AJAX post
 
 router.get('/user/like-article-list', personalCenter.getUserLikeArticleList) // 用户个人中心喜欢
 
@@ -309,7 +311,7 @@ router.post(
 ) // 删除动态评论 TYPE:AJAX post
 
 router.post(
-  '/subscribe/dynamic_topic',
+  '/subscribe/dynamic-topic',
   tokens.ClientVerifyToken,
   subscribe.setSubscribeDynamicTopic
 ) // 用户订阅话题 TYPE:AJAX post
@@ -413,5 +415,7 @@ router.get(
   tokens.ClientVerifyToken,
   books.getCollectBooksList
 ) // 收藏小书
+
+// 用户虚拟币开始 2019.11.4 0:19
 
 module.exports = router

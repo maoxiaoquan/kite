@@ -122,7 +122,7 @@ const actions = {
   SET_RSS_DYNAMIC_TOPIC ({ commit, dispatch, state }, parameter) {
     // 订阅动态话题
     return fetch({
-      url: '/subscribe/dynamic_topic',
+      url: '/subscribe/dynamic-topic',
       method: 'post',
       parameter: parameter
     })

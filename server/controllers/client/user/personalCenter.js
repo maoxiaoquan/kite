@@ -1,18 +1,18 @@
-const models = require('../../../db/mysqldb/index')
+const models = require('../../../../db/mysqldb/index')
 const moment = require('moment')
-const { render, resClientJson } = require('../../utils/resData')
+const { render, resClientJson } = require('../../../utils/resData')
 const Op = require('sequelize').Op
-const clientWhere = require('../../utils/clientWhere')
+const clientWhere = require('../../../utils/clientWhere')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType
-} = require('../../utils/constant')
+} = require('../../../utils/constant')
 
 function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
 }
-const { TimeNow, TimeDistance } = require('../../utils/time')
+const { TimeNow, TimeDistance } = require('../../../utils/time')
 
 class PersonalCenter {
   /**

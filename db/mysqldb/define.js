@@ -225,6 +225,15 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
 
+  // 2019.11.4 0:49
+
+  const virtual = sequelize.define(
+    // 暂定定为虚拟币
+    require('./models_type/db_virtual').NAME,
+    require('./models_type/db_virtual').TABLE,
+    SEQ_PARAMETER
+  )
+
   const _define = {
     user,
     user_info,
@@ -256,7 +265,8 @@ module.exports = sequelize => {
     books_comment,
     picture,
     options,
-    collect_books
+    collect_books,
+    virtual
   }
 
   return {

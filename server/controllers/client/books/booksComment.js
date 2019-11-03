@@ -1,19 +1,19 @@
-const models = require('../../../db/mysqldb/index')
+const models = require('../../../../db/mysqldb/index')
 const moment = require('moment')
-const { resClientJson } = require('../../utils/resData')
+const { resClientJson } = require('../../../utils/resData')
 const Op = require('sequelize').Op
 const trimHtml = require('trim-html')
 const xss = require('xss')
-const clientWhere = require('../../utils/clientWhere')
-const config = require('../../config')
-const { TimeNow, TimeDistance } = require('../../utils/time')
+const clientWhere = require('../../../utils/clientWhere')
+const config = require('../../../config')
+const { TimeNow, TimeDistance } = require('../../../utils/time')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
   userMessageType,
   userMessageAction
-} = require('../../utils/constant')
-const userMessage = require('../../utils/userMessage')
+} = require('../../../utils/constant')
+const userMessage = require('../../../utils/userMessage')
 
 function ErrorMessage (message) {
   this.message = message
@@ -22,20 +22,18 @@ function ErrorMessage (message) {
 
 /* 评论模块 */
 
-class dynamicComment {
-  static async getDynamicCommentList (ctx) {
-    let dynamic_id = ctx.query.dynamic_id
+class BooksComment {
+  static async getBooksCommentList (ctx) {
+    let books_id = ctx.query.books_id
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10
-    let childPageSize = ctx.query.childPageSize || ''
-    let parent_id = ctx.query.parent_id || 0
 
     try {
-      let { count, rows } = await models.dynamic_comment.findAndCountAll({
+      let { count, rows } = await models.books_comment.findAndCountAll({
         // 默认一级评论
         where: {
-          dynamic_id,
-          parent_id,
+          books_id,
+          parent_id: 0,
           status: {
             [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail]
           }
@@ -50,10 +48,10 @@ class dynamicComment {
           'create_dt',
           await TimeDistance(rows[i].create_date)
         )
-        if (Number(rows[i].status === 1)) {
+        if (Number(rows[i].status) === pendingReview) {
           rows[i].setDataValue('content', '当前用户评论需要审核')
         }
-        if (Number(rows[i].status === 3)) {
+        if (Number(rows[i].status) === reviewFail) {
           rows[i].setDataValue('content', '当前用户评论违规')
         }
         rows[i].setDataValue(
@@ -63,50 +61,25 @@ class dynamicComment {
             attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
           })
         )
-
-        if (rows[i].reply_uid !== 0 && rows[i].reply_uid !== rows[i].uid) {
-          rows[i].setDataValue(
-            'reply_user',
-            await models.user.findOne({
-              where: { uid: rows[i].reply_uid },
-              attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-            })
-          )
-        }
       }
 
       for (let item in rows) {
         // 循环取子评论
-        let childAllComment = await models.dynamic_comment.findAll({
+        let childAllComment = await models.books_comment.findAll({
           where: {
             parent_id: rows[item].id,
             status: {
               [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail]
             }
-          },
-          limit: Number(childPageSize) // 每页限制返回的数据条数
+          }
         })
-
+        rows[item].setDataValue('children', childAllComment)
         for (let childCommentItem in childAllComment) {
           // 循环取用户  代码有待优化，层次过于复杂
           childAllComment[childCommentItem].setDataValue(
             'create_dt',
             await TimeDistance(childAllComment[childCommentItem].create_date)
           )
-          if (
-            Number(childAllComment[childCommentItem].status === pendingReview)
-          ) {
-            childAllComment[childCommentItem].setDataValue(
-              'content',
-              '当前用户评论需要审核'
-            )
-          }
-          if (Number(childAllComment[childCommentItem].status === reviewFail)) {
-            childAllComment[childCommentItem].setDataValue(
-              'content',
-              '当前用户评论违规'
-            )
-          }
           childAllComment[childCommentItem].setDataValue(
             'user',
             await models.user.findOne({
@@ -128,8 +101,6 @@ class dynamicComment {
             )
           }
         }
-
-        rows[item].setDataValue('children', childAllComment)
       }
 
       await resClientJson(ctx, {
@@ -139,136 +110,7 @@ class dynamicComment {
           page,
           pageSize,
           count,
-          list: rows
-        }
-      })
-    } catch (err) {
-      resClientJson(ctx, {
-        state: 'error',
-        message: '错误信息：' + err.message
-      })
-      return false
-    }
-  }
-
-  static async getDynamicCommentAll (ctx) {
-    let dynamic_id = ctx.query.dynamic_id
-    let parent_id = ctx.query.parent_id || 0
-    let sort = ctx.query.sort || ''
-
-    let order = []
-
-    sort === 'desc' && order.push(['create_date', 'desc'])
-
-    try {
-      let allDynamicComment = await models.dynamic_comment.findAll({
-        // 默认一级评论
-        where: {
-          dynamic_id,
-          parent_id,
-          status: {
-            [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail]
-          }
-        }, // 为空，获取全部，也可以自己添加条件
-        order
-      })
-
-      for (let i in allDynamicComment) {
-        allDynamicComment[i].setDataValue(
-          'create_dt',
-          await TimeDistance(allDynamicComment[i].create_date)
-        )
-        if (Number(allDynamicComment[i].status === pendingReview)) {
-          allDynamicComment[i].setDataValue('content', '当前用户评论需要审核')
-        }
-        if (Number(allDynamicComment[i].status === reviewFail)) {
-          allDynamicComment[i].setDataValue('content', '当前用户评论违规')
-        }
-        allDynamicComment[i].setDataValue(
-          'user',
-          await models.user.findOne({
-            where: { uid: allDynamicComment[i].uid },
-            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-          })
-        )
-
-        if (
-          allDynamicComment[i].reply_uid !== 0 &&
-          allDynamicComment[i].reply_uid !== allDynamicComment[i].uid
-        ) {
-          allDynamicComment[i].setDataValue(
-            'reply_user',
-            await models.user.findOne({
-              where: { uid: allDynamicComment[i].reply_uid },
-              attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-            })
-          )
-        }
-      }
-
-      for (let item in allDynamicComment) {
-        // 循环取子评论
-        let childAllComment = await models.dynamic_comment.findAll({
-          where: {
-            parent_id: allDynamicComment[item].id,
-            status: {
-              [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail]
-            }
-          }
-        })
-
-        for (let childCommentItem in childAllComment) {
-          // 循环取用户  代码有待优化，层次过于复杂
-          childAllComment[childCommentItem].setDataValue(
-            'create_dt',
-            await TimeDistance(childAllComment[childCommentItem].create_date)
-          )
-
-          if (
-            Number(childAllComment[childCommentItem].status === pendingReview)
-          ) {
-            childAllComment[childCommentItem].setDataValue(
-              'content',
-              '当前用户评论需要审核'
-            )
-          }
-          if (Number(childAllComment[childCommentItem].status === reviewFail)) {
-            childAllComment[childCommentItem].setDataValue(
-              'content',
-              '当前用户评论违规'
-            )
-          }
-
-          childAllComment[childCommentItem].setDataValue(
-            'user',
-            await models.user.findOne({
-              where: { uid: childAllComment[childCommentItem].uid },
-              attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-            })
-          )
-          if (
-            childAllComment[childCommentItem].reply_uid !== 0 &&
-            childAllComment[childCommentItem].reply_uid !==
-              childAllComment[childCommentItem].uid
-          ) {
-            childAllComment[childCommentItem].setDataValue(
-              'reply_user',
-              await models.user.findOne({
-                where: { uid: childAllComment[childCommentItem].reply_uid },
-                attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-              })
-            )
-          }
-        }
-
-        allDynamicComment[item].setDataValue('children', childAllComment)
-      }
-
-      await resClientJson(ctx, {
-        state: 'success',
-        message: '获取评论列表成功',
-        data: {
-          list: allDynamicComment
+          comment_list: rows
         }
       })
     } catch (err) {
@@ -284,7 +126,7 @@ class dynamicComment {
    * 新建评论post提交
    * @param   {object} ctx 上下文对象
    */
-  static async createDynamicComment (ctx) {
+  static async createBooksComment (ctx) {
     let reqData = ctx.request.body
     let { user = '' } = ctx.request
 
@@ -297,6 +139,12 @@ class dynamicComment {
       let currDate = moment(date.setHours(date.getHours())).format(
         'YYYY-MM-DD HH:mm:ss'
       )
+
+      let oneBooks = await models.books.findOne({
+        where: {
+          books_id: reqData.books_id
+        }
+      })
 
       if (new Date(currDate).getTime() < new Date(user.ban_dt).getTime()) {
         throw new ErrorMessage(
@@ -319,40 +167,33 @@ class dynamicComment {
         userAuthorityIds += roleItem.user_authority_ids + ','
       })
       let status = ~userAuthorityIds.indexOf(
-        // 判断动态评论不需要审核
-        config.USER_AUTHORITY.dfNoReviewDynamicCommentId
+        config.BOOKS.dfNoReviewBooksCommentId
       )
         ? freeReview // 免审核
         : pendingReview // 待审核
 
-      let oneDynamic = await models.dynamic.findOne({
-        where: {
-          id: reqData.dynamic_id
-        }
-      })
-
-      await models.dynamic_comment
+      await models.books_comment
         .create({
           parent_id: reqData.parent_id || 0,
-          dynamic_id: reqData.dynamic_id,
+          books_id: reqData.books_id,
+          star: reqData.star,
           uid: user.uid,
           reply_uid: reqData.reply_uid || 0,
-          reply_id: reqData.reply_id || 0,
           content: xss(reqData.content),
           status
         })
         .then(async data => {
-          await models.dynamic.update(
+          await models.books.update(
             {
-              // 更新文章评论数
-              comment_count: await models.dynamic_comment.count({
+              // 更新小书评论数
+              comment_count: await models.books_comment.count({
                 where: {
-                  dynamic_id: reqData.dynamic_id,
+                  books_id: reqData.books_id,
                   parent_id: 0
                 }
               })
             },
-            { where: { id: reqData.dynamic_id } }
+            { where: { books_id: reqData.books_id } }
           )
 
           const oneUser = await models.user.findOne({
@@ -381,15 +222,15 @@ class dynamicComment {
 
           _data['create_dt'] = await TimeDistance(_data.create_date)
 
-          if (oneDynamic.uid !== user.uid && !reqData.reply_id) {
+          if (oneBooks.uid !== user.uid && !reqData.reply_id) {
             await userMessage.setMessage({
-              uid: oneDynamic.uid,
+              uid: oneBooks.uid,
               sender_id: user.uid,
               action: userMessageAction.comment, // 动作：评论
-              type: userMessageType.dynamic, // 类型：片刻评论
+              type: userMessageType.books, // 类型：小书评论
               content: JSON.stringify({
                 comment_id: _data.id,
-                dynamic_id: reqData.dynamic_id
+                books_id: reqData.books_id
               })
             })
           }
@@ -403,11 +244,11 @@ class dynamicComment {
               uid: reqData.reply_uid,
               sender_id: user.uid,
               action: userMessageAction.reply, // 动作：回复
-              type: userMessageType.dynamic_comment, // 类型：片刻回复
+              type: userMessageType.books_comment, // 类型：小书回复
               content: JSON.stringify({
                 reply_id: reqData.reply_id,
                 comment_id: _data.id,
-                dynamic_id: reqData.dynamic_id
+                books_id: reqData.books_id
               })
             })
           }
@@ -416,9 +257,7 @@ class dynamicComment {
             state: 'success',
             data: _data,
             message:
-              Number(status) === freeReview // 免审核
-                ? '评论成功'
-                : '评论成功,待审核可见'
+              Number(status) === freeReview ? '评论成功' : '评论成功,待审核可见'
           })
         })
         .catch(err => {
@@ -440,18 +279,12 @@ class dynamicComment {
    * 删除评论post提交
    * @param   {object} ctx 上下文对象
    */
-  static async deleteDynamicComment (ctx) {
+  static async deleteBooksComment (ctx) {
     let reqData = ctx.request.body
     let { user = '' } = ctx.request
 
     try {
-      let oneDynamicComment = await models.dynamic_comment.findOne({
-        where: {
-          id: reqData.comment_id
-        }
-      })
-
-      let allComment = await models.dynamic_comment
+      let allComment = await models.books_comment
         .findAll({ where: { parent_id: reqData.comment_id } })
         .then(res => {
           return res.map((item, key) => {
@@ -461,7 +294,7 @@ class dynamicComment {
 
       if (allComment.length > 0) {
         // 判断当前评论下是否有子评论,有则删除子评论
-        await models.dynamic_comment.destroy({
+        await models.books_comment.destroy({
           where: {
             id: { [Op.in]: allComment },
             uid: user.uid
@@ -469,24 +302,24 @@ class dynamicComment {
         })
       }
 
-      await models.dynamic_comment.destroy({
+      await models.books_comment.destroy({
         where: {
           id: reqData.comment_id,
           uid: user.uid
         }
       })
 
-      await models.dynamic.update(
+      await models.books.update(
         {
-          // 更新文章评论数
-          comment_count: await models.dynamic_comment.count({
+          // 更新小书评论数
+          comment_count: await models.books_comment.count({
             where: {
-              dynamic_id: oneDynamicComment.dynamic_id,
+              books_id: reqData.books_id,
               parent_id: 0
             }
           })
         },
-        { where: { id: oneDynamicComment.dynamic_id } }
+        { where: { books_id: reqData.books_id } }
       )
 
       resClientJson(ctx, {
@@ -503,4 +336,4 @@ class dynamicComment {
   }
 }
 
-module.exports = dynamicComment
+module.exports = BooksComment

@@ -1,19 +1,19 @@
-const models = require('../../../db/mysqldb/index')
+const models = require('../../../../db/mysqldb/index')
 const moment = require('moment')
-const { resClientJson } = require('../../utils/resData')
+const { resClientJson } = require('../../../utils/resData')
 const Op = require('sequelize').Op
 const cheerio = require('cheerio')
-const clientWhere = require('../../utils/clientWhere')
+const clientWhere = require('../../../utils/clientWhere')
 const xss = require('xss')
-const config = require('../../config')
-const { lowdb } = require('../../../db/lowdb/index')
-const { TimeNow, TimeDistance } = require('../../utils/time')
+const config = require('../../../config')
+const { lowdb } = require('../../../../db/lowdb/index')
+const { TimeNow, TimeDistance } = require('../../../utils/time')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
   userMessageType,
   userMessageAction
-} = require('../../utils/constant')
+} = require('../../../utils/constant')
 
 function ErrorMessage (message) {
   this.message = message
@@ -132,9 +132,7 @@ class Books {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${
-              website.website_name
-            }管理团队才能发布小书`
+            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布小书`
           )
         }
       }
@@ -275,9 +273,7 @@ class Books {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${
-              website.website_name
-            }管理团队才能发布小书`
+            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布小书`
           )
         }
       }

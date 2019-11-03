@@ -1,20 +1,20 @@
-const models = require('../../../db/mysqldb/index')
+const models = require('../../../../db/mysqldb/index')
 const moment = require('moment')
-const { resClientJson } = require('../../utils/resData')
+const { resClientJson } = require('../../../utils/resData')
 const Op = require('sequelize').Op
 const trimHtml = require('trim-html')
 const xss = require('xss')
-const clientWhere = require('../../utils/clientWhere')
-const config = require('../../config')
-const { TimeNow, TimeDistance } = require('../../utils/time')
+const clientWhere = require('../../../utils/clientWhere')
+const config = require('../../../config')
+const { TimeNow, TimeDistance } = require('../../../utils/time')
 const shortid = require('shortid')
-const { lowdb } = require('../../../db/lowdb/index')
+const { lowdb } = require('../../../../db/lowdb/index')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
   userMessageType,
   userMessageAction
-} = require('../../utils/constant')
+} = require('../../../utils/constant')
 
 function ErrorMessage (message) {
   this.message = message

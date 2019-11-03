@@ -64,7 +64,7 @@ import {
   userMessageType,
   userMessageTypeText,
   userMessageAction,
-  userMessageActionText,
+  userMessageActionText
 } from '@utils/constant'
 export default {
   name: "UserMessageItem",

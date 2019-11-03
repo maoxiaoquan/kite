@@ -17,8 +17,18 @@ async function sql () {
   //   'ALTER TABLE article add COLUMN is_public tinyint(1) DEFAULT 1 comment "是否公开";'
   // )
 
-  // 文章
-  await models.sequelize.query('rename TABLE dynamic_like to thumb_dynamic;')
+  // 2019.11.3 16:37新增
+  await models.sequelize.query(
+    'ALTER TABLE user_info add COLUMN shell_total_amount BIGINT(20) comment "贝壳总额";'
+  )
+
+  await models.sequelize.query(
+    'ALTER TABLE user_info add COLUMN shell_balance BIGINT(20) comment "贝壳余额";'
+  )
+
+  await models.sequelize.query(
+    'ALTER TABLE user_info add COLUMN is_msg_push INTEGER(5) comment "是否开启消息推送 1:开启;2:关闭";'
+  )
 
   process.exit()
 }

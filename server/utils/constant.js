@@ -103,6 +103,11 @@ const userMessageActionText = {
   [userMessageAction.buy]: '新的购买'
 }
 
+const userMessageIsPush = {
+  open: 1, // 开启
+  close: 2 // 关闭
+}
+
 module.exports = {
   statusList,
   statusListText,
@@ -113,5 +118,6 @@ module.exports = {
   userMessageType,
   userMessageTypeText,
   userMessageAction,
-  userMessageActionText
+  userMessageActionText,
+  userMessageIsPush
 }

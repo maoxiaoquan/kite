@@ -5,8 +5,12 @@ const Op = require('sequelize').Op
 const clientWhere = require('../../utils/clientWhere')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
-  articleType
+  articleType,
+  userMessageType,
+  userMessageAction,
+  userMessageActionText
 } = require('../../utils/constant')
+const userMessage = require('../../utils/userMessage')
 
 function ErrorMessage (message) {
   this.message = message
@@ -24,6 +28,12 @@ class Like {
     let { user = '' } = ctx.request
     let type = ''
     try {
+      let oneArticle = await models.article.findOne({
+        where: {
+          aid
+        }
+      })
+
       let oneUserLikeArticle = await models.like_article.findOne({
         where: {
           uid: user.uid,
@@ -47,16 +57,17 @@ class Like {
         )
       } else {
         type = 'attention' // 只在第一次关注的时候提交推送
-        await models.user_message.create({
-          // 用户行为记录
-          uid: uid,
-          type: 2, // 1:系统消息 2:喜欢文章  3:关注标签 4:用户关注 5:评论
+
+        await userMessage.setMessage({
+          uid: oneArticle.uid,
+          sender_id: user.uid,
+          action: userMessageAction.like, // 动作：关注
+          type: userMessageType.like_article, // 类型：用户
           content: JSON.stringify({
-            other_uid: user.uid,
-            aid,
-            title: '文章有新的喜欢'
+            aid
           })
         })
+
         await models.like_article.create({
           uid: user.uid,
           aid,

@@ -55,6 +55,21 @@
                    v-model="formData.sex"><span>保密</span>
           </div>
         </li>
+
+        <!-- <li class="item-view">
+          <span class="title">开启消息推送</span>
+          <div class="input-box profile-radio">
+            <input type="radio"
+                   name="msgPush"
+                   value="1"
+                   v-model="formData.is_msg_push"><span>开启</span>
+            <input type="radio"
+                   name="msgPush"
+                   value="2"
+                   v-model="formData.is_msg_push"><span>关闭</span>
+          </div>
+        </li> -->
+
         <li class="item-view">
 
           <span class="title">职业</span>
@@ -136,6 +151,7 @@ export default {
       formData: {
         nickname: '',
         sex: '',
+        is_msg_push: 0,
         profession: '',
         company: '',
         introduction: '',

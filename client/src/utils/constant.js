@@ -57,10 +57,10 @@ export const userMessageType = {
   books_comment: 8, // 小书评论
   dynamic: 9, // 片刻
   dynamic_comment: 10, // 片刻评论
-  thumb_dynamic: 11, // 片刻评论
-  like_article: 12, // 片刻评论
-  collect_blog: 13, // 片刻评论
-  collect_books: 14 // 片刻评论
+  thumb_dynamic: 11, // 点赞片刻
+  like_article: 12, // 喜欢文章
+  collect_blog: 13, // 收藏专栏
+  collect_books: 14 // 收藏小书
 }
 
 export const userMessageTypeText = {
