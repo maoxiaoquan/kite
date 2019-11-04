@@ -9,10 +9,8 @@ const config = require('../../../config')
 const { TimeNow, TimeDistance } = require('../../../utils/time')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
-  articleType,
   userMessageType,
   userMessageAction,
-  userMessageActionText,
   virtualAction,
   virtualType
 } = require('../../../utils/constant')
@@ -155,6 +153,17 @@ class ArticleComment {
         )
       }
 
+      // 虚拟币判断是否可以进行继续的操作
+      const isVirtual = await userVirtual.isVirtual({
+        uid: user.uid,
+        type: virtualType.article,
+        action: virtualAction.comment
+      })
+
+      if (!isVirtual) {
+        throw new ErrorMessage('贝壳余额不足！')
+      }
+
       let allUserRole = await models.user_role.findAll({
         where: {
           user_role_id: {
@@ -237,6 +246,24 @@ class ArticleComment {
             })
           }
 
+          if (
+            reqData.reply_id &&
+            reqData.reply_id !== 0 &&
+            reqData.reply_uid !== user.uid
+          ) {
+            await userMessage.setMessage({
+              uid: reqData.reply_uid,
+              sender_id: user.uid,
+              action: userMessageAction.reply, // 动作：回复
+              type: userMessageType.article_comment, // 类型：评论回复
+              content: JSON.stringify({
+                reply_id: reqData.reply_id,
+                comment_id: _data.id,
+                aid: reqData.aid
+              })
+            })
+          }
+
           // 虚拟币消耗
           await userVirtual.setVirtual({
             uid: user.uid,
@@ -260,24 +287,6 @@ class ArticleComment {
             ass_uid: user.uid
           })
 
-          if (
-            reqData.reply_id &&
-            reqData.reply_id !== 0 &&
-            reqData.reply_uid !== user.uid
-          ) {
-            await userMessage.setMessage({
-              uid: reqData.reply_uid,
-              sender_id: user.uid,
-              action: userMessageAction.reply, // 动作：回复
-              type: userMessageType.article_comment, // 类型：评论回复
-              content: JSON.stringify({
-                reply_id: reqData.reply_id,
-                comment_id: _data.id,
-                aid: reqData.aid
-              })
-            })
-          }
-
           resClientJson(ctx, {
             state: 'success',
             data: _data,
@@ -292,6 +301,7 @@ class ArticleComment {
           })
         })
     } catch (err) {
+      console.log('err', err)
       resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message

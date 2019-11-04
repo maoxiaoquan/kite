@@ -7,7 +7,9 @@ const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
   userMessageType,
-  userMessageAction
+  userMessageAction,
+  virtualAction,
+  virtualType
 } = require('../../utils/constant')
 
 class Subscribe {

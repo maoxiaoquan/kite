@@ -13,7 +13,9 @@ const {
   articleType,
   userMessageType,
   userMessageAction,
-  userMessageActionText
+  userMessageActionText,
+  virtualAction,
+  virtualType
 } = require('../../utils/constant')
 
 function ErrorMessage (message) {

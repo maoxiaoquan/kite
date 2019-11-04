@@ -5,7 +5,9 @@ const Op = require('sequelize').Op
 const clientWhere = require('../../../utils/clientWhere')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
-  articleType
+  articleType,
+  virtualAction,
+  virtualType
 } = require('../../../utils/constant')
 
 function ErrorMessage (message) {
