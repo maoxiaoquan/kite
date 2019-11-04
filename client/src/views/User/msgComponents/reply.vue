@@ -12,27 +12,19 @@
         <span class="nickname">{{MessageItem.sender.nickname}}</span>
       </router-link>
 
-      <div class="content"
-           v-if="MessageItem.type===userMessageType.article_comment">
-        {{userMessageTypeText[MessageItem.type]}} <router-link style="color:#df5858"
+      <div class="content">
+        {{userMessageTypeText[MessageItem.type][MessageItem.action]}}
+        <router-link style="color:#df5858"
+                     v-if="MessageItem.type===userMessageType.article_comment"
                      :to="{name:'article',params:{aid:MessageItem.replyComment.aid}}">{{MessageItem.replyComment.content}}</router-link>
-      </div>
-
-      <div class="content"
-           v-if="MessageItem.type===userMessageType.dynamic_comment">
-        {{userMessageTypeText[MessageItem.type]}} <router-link style="color:#df5858"
+        <router-link style="color:#df5858"
+                     v-if="MessageItem.type===userMessageType.dynamic_comment"
                      :to="{name:'dynamicView',params:{dynamicId:MessageItem.replyComment.dynamic_id}}">{{MessageItem.replyComment.content}}</router-link>
-      </div>
-
-      <div class="content"
-           v-if="MessageItem.type===userMessageType.books_comment">
-        {{userMessageTypeText[MessageItem.type]}} <router-link style="color:#df5858"
+        <router-link style="color:#df5858"
+                     v-if="MessageItem.type===userMessageType.books_comment"
                      :to="{name:'book',params:{books_id:MessageItem.replyComment.books_id}}">{{MessageItem.replyComment.content}}</router-link>
-      </div>
-
-      <div class="content"
-           v-if="MessageItem.type===userMessageType.book_comment">
-        {{userMessageTypeText[MessageItem.type]}} <router-link style="color:#df5858"
+        <router-link style="color:#df5858"
+                     v-if="MessageItem.type===userMessageType.book_comment"
                      :to="{name:'BookView',params:{books_id: MessageItem.replyComment.books_id, book_id: MessageItem.replyComment.book_id}}">{{MessageItem.replyComment.content}}</router-link>
       </div>
 

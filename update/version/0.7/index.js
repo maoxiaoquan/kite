@@ -39,16 +39,20 @@ class update {
 
         // 2019.11.3 16:37新增
         await models.sequelize.query(
-          'ALTER TABLE user_info add COLUMN shell_total_amount BIGINT(20) comment "贝壳总额";'
+          'ALTER TABLE user_info add COLUMN shell_total_amount BIGINT(20) DEFAULT 2000 comment "贝壳总额";'
         )
 
         await models.sequelize.query(
-          'ALTER TABLE user_info add COLUMN shell_balance BIGINT(20) comment "贝壳余额";'
+          'ALTER TABLE user_info add COLUMN shell_balance BIGINT(20) DEFAULT 2000 comment "贝壳余额";'
         )
 
         await models.sequelize.query(
           'ALTER TABLE user_info add COLUMN is_msg_push INTEGER(5) DEFAULT 2 comment "是否开启消息推送 1:开启;2:关闭";'
         )
+
+        await models.virtual.sync({
+          force: true
+        })
 
         // 文章
         await models.article.update(

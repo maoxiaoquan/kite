@@ -418,4 +418,7 @@ router.get(
 
 // 用户虚拟币开始 2019.11.4 0:19
 
+// 虚拟币动态记录
+router.get('/virtual/list', tokens.ClientVerifyToken, virtual.getVirtualList)
+
 module.exports = router

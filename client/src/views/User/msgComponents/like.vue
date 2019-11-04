@@ -12,7 +12,7 @@
         <span class="nickname">{{MessageItem.sender.nickname}}</span>
       </router-link>
       <div class="content">
-        {{userMessageTypeText[MessageItem.type]}}
+        {{userMessageTypeText[MessageItem.type][MessageItem.action]}}
         <router-link style="color:#df5858"
                      :to="{name:'article',params:{aid:MessageItem.article.aid}}">{{MessageItem.article.title}}</router-link>
       </div>

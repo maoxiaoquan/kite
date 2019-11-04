@@ -47,7 +47,7 @@ export const dynamicTypeText = {
 
 export const userMessageType = {
   // 文章的类型
-  attention_user: 1, // 用户
+  user: 1, // 用户
   article: 2, // 文章
   article_blog: 3, // 文章个人专栏
   article_comment: 4, // 文章评论
@@ -63,24 +63,6 @@ export const userMessageType = {
   collect_books: 14 // 收藏小书
 }
 
-export const userMessageTypeText = {
-  // 文章的类型
-  [userMessageType.attention_user]: '关注了你', // 用户1
-  [userMessageType.article]: '评论了你的文章', // 文章2
-  [userMessageType.article_blog]: '收藏了你的专栏', // 文章个人专栏3
-  [userMessageType.article_comment]: '文章中回复你的', // 文章评论4
-  [userMessageType.book]: '评论了你的小书章节', // 小书章节5
-  [userMessageType.book_comment]: '小书章节中回复你的', // 小书章节评论6
-  [userMessageType.books]: '评论了你的小书', // 小书7
-  [userMessageType.books_comment]: '小书中回复你的', // 小书评论8
-  [userMessageType.dynamic]: '评论了你片刻', // 片刻9
-  [userMessageType.dynamic_comment]: '片刻中回复你的', // 片刻评论10
-  [userMessageType.thumb_dynamic]: '点赞了你的片刻', // 点赞了你的片刻
-  [userMessageType.like_article]: '喜欢了你的文章', // 喜欢了你的文章
-  [userMessageType.collect_blog]: '收藏你的专栏', // 收藏你的专栏
-  [userMessageType.collect_books]: '收藏了你的小书' // 收藏了你的小书
-}
-
 export const userMessageAction = {
   system: 1, // 系统消息
   like: 2, // 喜欢
@@ -90,6 +72,52 @@ export const userMessageAction = {
   reply: 6, // 回复
   thumb: 7, // 赞
   buy: 8 // 购买
+}
+
+export const userMessageTypeText = {
+  // 文章的类型
+  [userMessageType.user]: {
+    [userMessageAction.attention]: '关注了你' // 用户1
+  },
+  [userMessageType.article]: {
+    [userMessageAction.comment]: '评论了你的文章' // 文章2
+  },
+  [userMessageType.article_blog]: {
+    [userMessageAction.collect]: '收藏了你的专栏' // 文章个人专栏3
+  },
+  [userMessageType.article_comment]: {
+    [userMessageAction.reply]: '文章中回复你的' // 文章评论4
+  },
+  [userMessageType.book]: {
+    [userMessageAction.comment]: '评论了你的小书章节' // 小书章节5
+  },
+  [userMessageType.book_comment]: {
+    [userMessageAction.reply]: '小书章节中回复你的' // 小书章节评论6
+  },
+  [userMessageType.books]: {
+    [userMessageAction.comment]: '评论了你的小书' // 小书7
+  },
+  [userMessageType.books_comment]: {
+    [userMessageAction.reply]: '小书中回复你的' // 小书评论8
+  },
+  [userMessageType.dynamic]: {
+    [userMessageAction.comment]: '评论了你片刻' // 片刻9
+  },
+  [userMessageType.dynamic_comment]: {
+    [userMessageAction.comment]: '片刻中回复你的' // 片刻评论10
+  },
+  [userMessageType.thumb_dynamic]: {
+    [userMessageAction.thumb]: '点赞了你的片刻' // 点赞了你的片刻
+  },
+  [userMessageType.like_article]: {
+    [userMessageAction.like]: '喜欢了你的文章' // 喜欢了你的文章
+  },
+  [userMessageType.collect_blog]: {
+    [userMessageAction.collect]: '收藏你的专栏' // 收藏你的专栏
+  },
+  [userMessageType.collect_books]: {
+    [userMessageAction.collect]: '收藏了你的小书' // 收藏了你的小书
+  }
 }
 
 export const userMessageActionText = {

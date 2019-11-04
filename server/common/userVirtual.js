@@ -1,31 +1,53 @@
 const models = require('../../db/mysqldb/index')
-const { sendNotification } = require('./sendEmail')
 const moment = require('moment')
-const { userMessageIsPush } = require('./constant')
+const { virtualInfo, virtualPlusLess } = require('../utils/constant')
 const { lowdb } = require('../../db/lowdb/index')
 const config = lowdb.read().value()
-class userMessage {
+
+class userVirtual {
   // 用户消息
-  static setMessage (msgData) {
+  static setVirtual (vrData) {
+    let virtualData = vrData
     // 订阅消息
-    let date = new Date()
-    let currDate = moment(date.setHours(date.getHours())).format(
-      'YYYY-MM-DD HH:mm:ss'
-    )
     return new Promise(async (resolve, reject) => {
-      await models.user_message
+      let user_info = await models.user_info.findOne({
+        where: {
+          uid: virtualData.uid
+        }
+      })
+      let balance =
+        virtualInfo[virtualData.action].plusLess === virtualPlusLess.plus
+          ? user_info.balance +
+            virtualInfo[virtualData.action][virtualData.type]
+          : user_info.balance -
+            virtualInfo[virtualData.action][virtualData.type]
+      console.log('balance', balance)
+      await models.virtual
         .create({
-          // 用户行为记录
-          ...msgData
+          // 用户虚拟币消息记录
+          plus_less: virtualInfo[virtualData.action].plusLess,
+          balance,
+          amount: virtualInfo[virtualData.action][virtualData.type],
+          ...virtualData
         })
         .then(async result => {
+          await models.user_info.update(
+            {
+              balance: balance
+            },
+            {
+              where: {
+                uid: virtualData.uid
+              }
+            }
+          )
           resolve({ status: 'success' })
         })
-        .catch(() => {
-          reject('消息订阅失败')
+        .catch(err => {
+          reject('虚拟币消费出现错误:' + err)
         })
     })
   }
 }
 
-module.exports = userMessage
+module.exports = userVirtual

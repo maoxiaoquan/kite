@@ -9,6 +9,7 @@ module.exports = {
       // id
       type: Seq.BIGINT(20),
       primaryKey: true, // 定义主键
+      autoIncrement: true, // 自动递增
       comment: 'id',
       field: 'id'
     },
@@ -18,11 +19,17 @@ module.exports = {
       comment: 'uid',
       field: 'uid'
     },
-    description: {
-      // 描述
-      type: Seq.TEXT,
-      comment: '描述，用处',
-      field: 'description'
+    ass_uid: {
+      // 关联用户
+      type: Seq.BIGINT(20),
+      comment: '关联用户',
+      field: 'ass_uid'
+    },
+    associate: {
+      // 关联融合字段
+      type: Seq.TEXT('long'),
+      comment: '关联融合字段',
+      field: 'associate'
     },
     amount: {
       type: Seq.INTEGER(20),
@@ -34,10 +41,10 @@ module.exports = {
       comment: '余额',
       field: 'balance'
     },
-    is_increase: {
+    plus_less: {
       type: Seq.INTEGER(10),
-      comment: '是否增加',
-      field: 'is_increase'
+      comment: '加减',
+      field: 'plus_less'
     },
     status: {
       // 状态
@@ -49,6 +56,18 @@ module.exports = {
       type: Seq.INTEGER(10),
       comment: '类型',
       field: 'type'
+    },
+    action: {
+      // 消息动作
+      type: Seq.INTEGER(10),
+      comment: '消息动作',
+      field: 'action'
+    },
+    description: {
+      // 描述
+      type: Seq.TEXT,
+      comment: '描述，用处',
+      field: 'description'
     }
   }
 }

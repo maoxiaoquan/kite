@@ -12,27 +12,19 @@
         <span class="nickname">{{MessageItem.sender.nickname}}</span>
       </router-link>
 
-      <div class="content"
-           v-if="MessageItem.type===userMessageType.article">
-        {{userMessageTypeText[MessageItem.type]}} <router-link style="color:#df5858"
+      <div class="content">
+        {{userMessageTypeText[MessageItem.type][MessageItem.action]}}
+        <router-link style="color:#df5858"
+                     v-if="MessageItem.type===userMessageType.article"
                      :to="{name:'article',params:{aid:MessageItem.article.aid}}">{{MessageItem.article.title}}</router-link>
-      </div>
-
-      <div class="content"
-           v-if="MessageItem.type===userMessageType.dynamic">
-        {{userMessageTypeText[MessageItem.type]}} <router-link style="color:#df5858"
+        <router-link style="color:#df5858"
+                     v-if="MessageItem.type===userMessageType.dynamic"
                      :to="{name:'dynamicView',params:{dynamicId:MessageItem.dynamic.id}}">{{MessageItem.dynamic.content}}</router-link>
-      </div>
-
-      <div class="content"
-           v-if="MessageItem.type===userMessageType.books">
-        {{userMessageTypeText[MessageItem.type]}} <router-link style="color:#df5858"
+        <router-link style="color:#df5858"
+                     v-if="MessageItem.type===userMessageType.books"
                      :to="{name:'book',params:{books_id:MessageItem.books.books_id}}">{{MessageItem.books.title}}</router-link>
-      </div>
-
-      <div class="content"
-           v-if="MessageItem.type===userMessageType.book">
-        {{userMessageTypeText[MessageItem.type]}} <router-link style="color:#df5858"
+        <router-link style="color:#df5858"
+                     v-if="MessageItem.type===userMessageType.book"
                      :to="{name:'BookView',params:{books_id: MessageItem.book.books_id, book_id: MessageItem.book.book_id}}">{{MessageItem.book.title}}</router-link>
       </div>
 

@@ -52,12 +52,14 @@ module.exports = {
     shell_total_amount: {
       type: Seq.BIGINT(20),
       comment: '贝壳总额',
-      field: 'shell_total_amount'
+      field: 'shell_total_amount',
+      defaultValue: 2000
     },
     shell_balance: {
       type: Seq.BIGINT(20),
       comment: '贝壳余额',
-      field: 'shell_balance'
+      field: 'shell_balance',
+      defaultValue: 2000
     },
     is_msg_push: {
       type: Seq.INTEGER(5),

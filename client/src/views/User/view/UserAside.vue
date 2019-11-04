@@ -21,6 +21,12 @@
           <span class="collection-name"> <i class="el-icon-s-management"></i> 收藏集</span>
         </router-link>
       </li>
+      <li>
+        <router-link class="collection"
+                     :to='{name:"shellDetail"}'>
+          <span class="collection-name"> <i class="el-icon-s-management"></i> 贝壳明细</span>
+        </router-link>
+      </li>
     </ul>
 
     <ul class="list user-dynamic"

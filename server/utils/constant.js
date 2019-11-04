@@ -47,7 +47,7 @@ const dynamicTypeText = {
 
 const userMessageType = {
   // 文章的类型
-  attention_user: 1, // 用户
+  user: 1, // 用户
   article: 2, // 文章
   article_blog: 3, // 文章个人专栏
   article_comment: 4, // 文章评论
@@ -61,24 +61,6 @@ const userMessageType = {
   like_article: 12, // 片刻评论
   collect_blog: 13, // 片刻评论
   collect_books: 14 // 片刻评论
-}
-
-const userMessageTypeText = {
-  // 文章的类型
-  [userMessageType.attention_user]: '关注了你', // 用户1
-  [userMessageType.article]: '评论了你的文章', // 文章2
-  [userMessageType.article_blog]: '收藏了你的专栏', // 文章个人专栏3
-  [userMessageType.article_comment]: '文章中回复你的', // 文章评论4
-  [userMessageType.book]: '评论了你的小书章节', // 小书章节5
-  [userMessageType.book_comment]: '小书章节中回复你的', // 小书章节评论6
-  [userMessageType.books]: '评论了你的小书', // 小书7
-  [userMessageType.books_comment]: '小书中回复你的', // 小书评论8
-  [userMessageType.dynamic]: '评论了你片刻', // 片刻9
-  [userMessageType.dynamic_comment]: '片刻中回复你的', // 片刻评论10
-  [userMessageType.thumb_dynamic]: '点赞了你的片刻', // 点赞了你的片刻
-  [userMessageType.like_article]: '喜欢了你的文章', // 喜欢了你的文章
-  [userMessageType.collect_blog]: '收藏你的专栏', // 收藏你的专栏
-  [userMessageType.collect_books]: '收藏了你的小书' // 收藏了你的小书
 }
 
 const userMessageAction = {
@@ -108,6 +90,118 @@ const userMessageIsPush = {
   close: 2 // 关闭
 }
 
+// 2019.11.4 15:34
+
+const virtualPlusLess = {
+  // 虚拟币动作
+  plus: 1, // 加
+  less: 2 // 减
+}
+
+const virtualAction = {
+  // 动作
+  check_in: 1, // 签到
+  create: 2, // 创建
+  like: 3, // 喜欢
+  collect: 4, // 收藏
+  comment: 5, // 评论
+  reply: 6, // 回复
+  thumb: 7, // 点赞
+  sell: 8, // 卖
+  buy: 9, // 买
+  recover: 10, // 系统回收
+  obtain_like: 11, // 收到喜欢
+  obtain_collect: 12, // 收到收藏
+  obtain_comment: 13, // 收到评论
+  obtain_reply: 14, // 收到回复
+  obtain_thumb: 15 // 收到点赞
+}
+
+const virtualType = {
+  // 关联模块
+  other: 1, // 其他
+  user: 2, // 用户
+  article: 3, // 文章
+  article_blog: 4, // 文章个人专栏
+  book: 5, // 小书章节
+  books: 6, // 小书
+  dynamic: 7, // 片刻
+  system: 8 // 系统
+}
+
+const virtualInfo = {
+  [virtualAction.check_in]: {
+    // 签到+
+    plusLess: virtualPlusLess.plus, // +
+    [virtualType.user]: 20 // 用户每天签到:+20
+  },
+  [virtualAction.create]: {
+    // 创建内容-
+    plusLess: virtualPlusLess.less, // -
+    [virtualType.article]: 20, // 创建文章：-20
+    [virtualType.article_blog]: 10, // 创建个人专栏文章：-10
+    [virtualType.book]: 5, // 创建小书章节：-5
+    [virtualType.books]: 50, // 创建小书：-50
+    [virtualType.dynamic]: 15 // 创建动态：-15
+  },
+  [virtualAction.like]: {
+    // 喜欢
+    plusLess: virtualPlusLess.less, // -
+    [virtualType.article]: 5 // 喜欢文章: -5
+  },
+  [virtualAction.collect]: {
+    // 收藏
+    plusLess: virtualPlusLess.less, // -
+    [virtualType.article_blog]: 5 // 收藏个人专栏: -5
+  },
+  [virtualAction.comment]: {
+    // 创建评论-
+    plusLess: virtualPlusLess.less, // -
+    [virtualType.article]: 5, // 创建文章评论：-5
+    [virtualType.book]: 5, // 创建小书章节评论：-5
+    [virtualType.books]: 5, // 创建小书评论：-5
+    [virtualType.dynamic]: 5 // 创建动态评论：-5
+  },
+  [virtualAction.reply]: {
+    // 回复评论-
+    plusLess: virtualPlusLess.less, // -
+    [virtualType.article]: 5, // 创建文章回复：-5
+    [virtualType.book]: 5, // 创建小书章节回复：-5
+    [virtualType.books]: 5, // 创建小书回复：-5
+    [virtualType.dynamic]: 5 // 创建动态回复：-5
+  },
+  [virtualAction.thumb]: {
+    plusLess: virtualPlusLess.less, // -
+    [virtualType.dynamic]: 5 // 点赞动态：-5
+  },
+  [virtualAction.obtain_like]: {
+    plusLess: virtualPlusLess.plus, // +
+    [virtualType.article]: 5 // 收到喜欢文章: +5
+  },
+  [virtualAction.obtain_collect]: {
+    plusLess: virtualPlusLess.plus, // +
+    [virtualType.article_blog]: 5 // 收到收藏个人专栏:  +5
+  },
+  [virtualAction.obtain_comment]: {
+    plusLess: virtualPlusLess.plus, // +
+    [virtualType.article]: 5, // 收到文章评论：+5
+    [virtualType.book]: 5, // 收到小书章节评论：+5
+    [virtualType.books]: 5, // 收到小书评论：+5
+    [virtualType.dynamic]: 5 // 收到动态评论：+5
+  },
+  [virtualAction.obtain_reply]: {
+    plusLess: virtualPlusLess.plus, // +
+    [virtualType.article]: 5, // 收到文章回复：+5
+    [virtualType.book]: 5, // 收到小书章节回复：+5
+    [virtualType.books]: 5, // 收到小书回复：+5
+    [virtualType.dynamic]: 5 // 收到动态回复：+5
+  },
+  [virtualAction.obtain_thumb]: {
+    plusLess: virtualPlusLess.plus, // +
+    [virtualType.dynamic]: 5 // 收到点赞动态：+5
+  }
+}
+
 module.exports = {
   statusList,
   statusListText,
@@ -116,8 +210,11 @@ module.exports = {
   dynamicType,
   dynamicTypeText,
   userMessageType,
-  userMessageTypeText,
   userMessageAction,
   userMessageActionText,
-  userMessageIsPush
+  userMessageIsPush,
+  virtualType,
+  virtualPlusLess,
+  virtualAction,
+  virtualInfo
 }

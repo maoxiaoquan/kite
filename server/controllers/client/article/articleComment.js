@@ -12,9 +12,12 @@ const {
   articleType,
   userMessageType,
   userMessageAction,
-  userMessageActionText
+  userMessageActionText,
+  virtualAction,
+  virtualType
 } = require('../../../utils/constant')
 const userMessage = require('../../../utils/userMessage')
+const userVirtual = require('../../../common/userVirtual')
 
 function ErrorMessage (message) {
   this.message = message
@@ -221,6 +224,7 @@ class ArticleComment {
           _data['create_dt'] = await TimeDistance(_data.create_date)
 
           if (oneArticle.uid !== user.uid && !reqData.reply_id) {
+            // 消息推送
             await userMessage.setMessage({
               uid: oneArticle.uid,
               sender_id: user.uid,
@@ -232,6 +236,29 @@ class ArticleComment {
               })
             })
           }
+
+          // 虚拟币消耗
+          await userVirtual.setVirtual({
+            uid: user.uid,
+            associate: JSON.stringify({
+              comment_id: _data.id,
+              aid: reqData.aid
+            }),
+            type: virtualType.article,
+            action: virtualAction.comment,
+            ass_uid: oneArticle.uid
+          })
+
+          await userVirtual.setVirtual({
+            uid: oneArticle.uid,
+            associate: JSON.stringify({
+              comment_id: _data.id,
+              aid: reqData.aid
+            }),
+            type: virtualType.article,
+            action: virtualAction.obtain_comment,
+            ass_uid: user.uid
+          })
 
           if (
             reqData.reply_id &&
