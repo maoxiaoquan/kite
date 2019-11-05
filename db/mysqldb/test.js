@@ -18,9 +18,26 @@ async function sql () {
   // )
 
   // 2019.11.3 16:37新增
-  await models.virtual.sync({
-    force: true
-  })
+  // let allUser = await models.user.findAll()
+  // for (let i in allUser) {
+  //   await models.virtual.create({
+  //     // 用户虚拟币消息记录
+  //     plus_less: 1,
+  //     balance: 3000,
+  //     amount: 3000,
+  //     uid: allUser[i].uid,
+  //     type: 8,
+  //     action: 16
+  //   })
+  // }
+
+  await models.sequelize.query(
+    'ALTER TABLE user_info add COLUMN shell_total_amount DECIMAL(10,2)  comment "贝壳总额";'
+  )
+
+  await models.sequelize.query(
+    'ALTER TABLE user_info add COLUMN shell_balance DECIMAL(10,2)  comment "贝壳余额";'
+  )
 
   process.exit()
 }

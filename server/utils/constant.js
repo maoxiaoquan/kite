@@ -114,7 +114,8 @@ const virtualAction = {
   obtain_collect: 12, // 收到收藏
   obtain_comment: 13, // 收到评论
   obtain_reply: 14, // 收到回复
-  obtain_thumb: 15 // 收到点赞
+  obtain_thumb: 15, // 收到点赞
+  registered: 16 // 注册
 }
 
 const virtualActionText = {
@@ -133,7 +134,8 @@ const virtualActionText = {
   [virtualAction.obtain_collect]: '收到收藏', // 收到收藏
   [virtualAction.obtain_comment]: '收到评论', // 收到评论
   [virtualAction.obtain_reply]: '收到回复', // 收到回复
-  [virtualAction.obtain_thumb]: '收到点赞' // 收到点赞
+  [virtualAction.obtain_thumb]: '收到点赞', // 收到点赞
+  [virtualAction.registered]: '默认' // 默认
 }
 
 const virtualType = {
@@ -164,7 +166,7 @@ const virtualInfo = {
   [virtualAction.check_in]: {
     // 签到+
     plusLess: virtualPlusLess.plus, // +
-    [virtualType.system]: 20 // 用户每天签到:+20
+    [virtualType.system]: 50 // 用户每天签到:+50
   },
   [virtualAction.create]: {
     // 创建内容-
@@ -230,7 +232,22 @@ const virtualInfo = {
   [virtualAction.obtain_thumb]: {
     plusLess: virtualPlusLess.plus, // +
     [virtualType.dynamic]: 5 // 收到点赞动态：+5
+  },
+  [virtualAction.registered]: {
+    plusLess: virtualPlusLess.plus, // +
+    [virtualType.system]: 3000 // 注册增加3000：+5
   }
+}
+
+// 2019.11.6 0:57
+// 支付购买开始
+
+const payMethod = {
+  shell: 1 // 贝壳
+}
+
+const payMethodText = {
+  [payMethod.shell]: '贝壳' // 贝壳
 }
 
 module.exports = {
@@ -249,5 +266,7 @@ module.exports = {
   virtualAction,
   virtualInfo,
   virtualActionText,
-  virtualTypeText
+  virtualTypeText,
+  payMethod,
+  payMethodText
 }

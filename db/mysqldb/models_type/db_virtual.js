@@ -31,13 +31,23 @@ module.exports = {
       comment: '关联融合字段',
       field: 'associate'
     },
+    income: {
+      type: Seq.DECIMAL(6, 2),
+      comment: '收入',
+      field: 'income'
+    },
+    expenses: {
+      type: Seq.DECIMAL(6, 2),
+      comment: '支出',
+      field: 'expenses'
+    },
     amount: {
-      type: Seq.INTEGER(20),
+      type: Seq.DECIMAL(6, 2),
       comment: '金额',
       field: 'amount'
     },
     balance: {
-      type: Seq.BIGINT(20),
+      type: Seq.DECIMAL(10, 2),
       comment: '余额',
       field: 'balance'
     },

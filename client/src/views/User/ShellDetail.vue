@@ -151,10 +151,10 @@ export default {
   .amount {
     margin-top: 10px;
     margin-bottom: 10px;
-    font-size: 16px;
     .amount-num {
       color: #0aa31c;
       font-weight: bold;
+      font-size: 16px;
     }
   }
   .table-view {
@@ -177,6 +177,9 @@ export default {
       .balance,
       .amount {
         font-weight: bold;
+      }
+      .balance {
+        color: #0aa31c;
       }
     }
   }

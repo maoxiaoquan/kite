@@ -39,11 +39,11 @@ class update {
 
         // 2019.11.3 16:37新增
         await models.sequelize.query(
-          'ALTER TABLE user_info add COLUMN shell_total_amount BIGINT(20) DEFAULT 2000 comment "贝壳总额";'
+          'ALTER TABLE user_info add COLUMN shell_total_amount DECIMAL(10,2)  comment "贝壳总额";'
         )
 
         await models.sequelize.query(
-          'ALTER TABLE user_info add COLUMN shell_balance BIGINT(20) DEFAULT 2000 comment "贝壳余额";'
+          'ALTER TABLE user_info add COLUMN shell_balance DECIMAL(10,2)  comment "贝壳余额";'
         )
 
         await models.sequelize.query(
@@ -87,6 +87,21 @@ class update {
             }
           }
         )
+
+        let allUser = await models.user.findAll()
+        for (let i in allUser) {
+          await models.virtual.create({
+            // 用户虚拟币消息记录
+            plus_less: 1,
+            balance: 3000,
+            amount: 3000,
+            uid: allUser[i].uid,
+            income: 3000,
+            expenses: 0,
+            type: 8,
+            action: 16
+          })
+        }
 
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb

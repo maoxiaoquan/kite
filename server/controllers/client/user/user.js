@@ -22,7 +22,9 @@ const {
   userMessageAction,
   userMessageActionText,
   virtualAction,
-  virtualType
+  virtualType,
+  virtualInfo,
+  virtualPlusLess
 } = require('../../../utils/constant')
 
 const userVirtual = require('../../../common/userVirtual')
@@ -282,28 +284,53 @@ class User {
             }
           })
 
-          await models.sequelize.transaction(transaction => {
+          await models.sequelize.transaction(t => {
             // 在事务中执行操作
             return models.user
-              .create({
-                /* 注册写入数据库操作 */
-                avatar: config.default_avatar,
-                nickname: reqData.nickname,
-                password: tools.encrypt(reqData.password, config.ENCRYPT_KEY),
-                email: reqData.email,
-                user_role_ids: config.USER_ROLE.dfId,
-                sex: 0,
-                reg_ip: ctx.request.ip,
-                enable: true
-              })
-              .then(user => {
-                return models.user_info.create({
+              .create(
+                {
                   /* 注册写入数据库操作 */
-                  uid: user.uid,
-                  avatar_review_status: 2
+                  avatar: config.default_avatar,
+                  nickname: reqData.nickname,
+                  password: tools.encrypt(reqData.password, config.ENCRYPT_KEY),
+                  email: reqData.email,
+                  user_role_ids: config.USER_ROLE.dfId,
+                  sex: 0,
+                  reg_ip: ctx.request.ip,
+                  enable: true
+                },
+                { transaction: t }
+              )
+              .then(user => {
+                return models.user_info.create(
+                  {
+                    /* 注册写入数据库操作 */
+                    uid: user.uid,
+                    avatar_review_status: 2,
+                    shell_balance:
+                      virtualInfo[virtualAction.registered][virtualType.system]
+                  },
+                  { transaction: t }
+                )
+              })
+              .then(user_info => {
+                return models.virtual.create({
+                  // 用户虚拟币消息记录
+                  plus_less: virtualInfo[virtualAction.registered].plusLess,
+                  balance:
+                    virtualInfo[virtualAction.registered][virtualType.system],
+                  amount:
+                    virtualInfo[virtualAction.registered][virtualType.system],
+                  income:
+                    virtualInfo[virtualAction.registered][virtualType.system],
+                  expenses: 0,
+                  uid: user_info.uid,
+                  type: virtualType.system,
+                  action: virtualAction.registered
                 })
               })
           })
+
           resClientJson(ctx, {
             state: 'success',
             message: '注册成功，跳往登录页'

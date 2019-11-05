@@ -59,24 +59,39 @@ class userVirtual {
           }
         }
 
-        await models.virtual.create({
-          // 用户虚拟币消息记录
-          plus_less: virtualInfo[virtualData.action].plusLess,
-          balance,
-          amount: virtualInfo[virtualData.action][virtualData.type],
-          ...virtualData
+        await models.sequelize.transaction(t => {
+          // 在事务中执行操作
+          return models.virtual
+            .create(
+              {
+                // 用户虚拟币消息记录
+                plus_less: virtualInfo[virtualData.action].plusLess,
+                balance,
+                income: isPlus
+                  ? virtualInfo[virtualData.action][virtualData.type]
+                  : 0,
+                expenses: isPlus
+                  ? 0
+                  : virtualInfo[virtualData.action][virtualData.type],
+                amount: virtualInfo[virtualData.action][virtualData.type],
+                ...virtualData
+              },
+              { transaction: t }
+            )
+            .then(user => {
+              return models.user_info.update(
+                {
+                  shell_balance: balance
+                },
+                {
+                  where: {
+                    uid: virtualData.uid
+                  }
+                },
+                { transaction: t }
+              )
+            })
         })
-
-        await models.user_info.update(
-          {
-            shell_balance: balance
-          },
-          {
-            where: {
-              uid: virtualData.uid
-            }
-          }
-        )
 
         resolve({ status: 'success' })
       } catch (err) {

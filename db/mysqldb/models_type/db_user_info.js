@@ -50,16 +50,14 @@ module.exports = {
     },
     // 2019.11.3 新增
     shell_total_amount: {
-      type: Seq.BIGINT(20),
+      type: Seq.DECIMAL(10, 2),
       comment: '贝壳总额',
-      field: 'shell_total_amount',
-      defaultValue: 2000
+      field: 'shell_total_amount'
     },
     shell_balance: {
-      type: Seq.BIGINT(20),
+      type: Seq.DECIMAL(10, 2),
       comment: '贝壳余额',
-      field: 'shell_balance',
-      defaultValue: 2000
+      field: 'shell_balance'
     },
     is_msg_push: {
       type: Seq.INTEGER(5),
