@@ -17,6 +17,8 @@ const {
   virtualType
 } = require('../../../utils/constant')
 
+const userVirtual = require('../../../common/userVirtual')
+
 function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
@@ -46,6 +48,17 @@ class dynamic {
             user.ban_dt
           ).format('YYYY年MM月DD日 HH时mm分ss秒')},如有疑问请联系网站管理员`
         )
+      }
+
+      // 虚拟币判断是否可以进行继续的操作
+      const isVirtual = await userVirtual.isVirtual({
+        uid: user.uid,
+        type: virtualType.dynamic,
+        action: virtualAction.create
+      })
+
+      if (!isVirtual) {
+        throw new ErrorMessage('贝壳余额不足！')
       }
 
       let oneDynamicTopic = await models.dynamic_topic.findOne({
@@ -90,7 +103,7 @@ class dynamic {
         ? freeReview // 免审核
         : pendingReview // 待审核
 
-      await models.dynamic.create({
+      const createDynamic = await models.dynamic.create({
         uid: user.uid,
         content: xss(reqData.content) /* 主内容 */,
         origin_content: reqData.content /* 源内容 */,
@@ -98,6 +111,15 @@ class dynamic {
         status, // '状态(1:审核中;2:审核通过;3:审核失败;4：无需审核)'
         type: reqData.type, // 类型 （1:默认动态;2:图片,3:连接，4：视频  ）
         topic_ids: reqData.topic_ids
+      })
+
+      await userVirtual.setVirtual({
+        uid: user.uid,
+        associate: JSON.stringify({
+          dynamic_id: createDynamic.id
+        }),
+        type: virtualType.dynamic,
+        action: virtualAction.create
       })
 
       resClientJson(ctx, {

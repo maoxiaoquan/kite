@@ -62,7 +62,7 @@
 
                   <li>
                     <div class="meta-block">
-                      <router-link :to='{name:"user",params:{routeType:"article"}}'>
+                      <router-link :to='{name:"shellDetail"}'>
                         <p>{{user.user_info.shell_balance||0}}</p>
                         <strong>贝壳余额</strong>
                       </router-link>

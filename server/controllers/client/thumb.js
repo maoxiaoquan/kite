@@ -12,7 +12,9 @@ const {
   virtualAction,
   virtualType
 } = require('../../utils/constant')
+
 const userMessage = require('../../utils/userMessage')
+const userVirtual = require('../../common/userVirtual')
 
 function ErrorMessage (message) {
   this.message = message

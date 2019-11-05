@@ -130,3 +130,26 @@ export const userMessageActionText = {
   [userMessageAction.thumb]: '新的回复',
   [userMessageAction.buy]: '新的购买'
 }
+
+export const virtualPlusLess = {
+  // 虚拟币动作
+  plus: 1, // 加
+  less: 2 // 减
+}
+
+export const virtualPlusLessText = {
+  [virtualPlusLess.plus]: '+', // 加
+  [virtualPlusLess.less]: '-' // 减
+}
+
+export const virtualType = {
+  // 关联模块
+  other: 1, // 其他
+  user: 2, // 用户
+  article: 3, // 文章
+  article_blog: 4, // 文章个人专栏
+  book: 5, // 小书章节
+  books: 6, // 小书
+  dynamic: 7, // 片刻
+  system: 8 // 系统
+}

@@ -117,6 +117,25 @@ const virtualAction = {
   obtain_thumb: 15 // 收到点赞
 }
 
+const virtualActionText = {
+  // 动作
+  [virtualAction.check_in]: '签到', // 签到
+  [virtualAction.create]: '创建', // 创建
+  [virtualAction.like]: '喜欢', // 喜欢
+  [virtualAction.collect]: '收藏', // 收藏
+  [virtualAction.comment]: '评论或者回复', // 评论
+  [virtualAction.reply]: '评论或者回复', // 回复
+  [virtualAction.thumb]: '点赞', // 点赞
+  [virtualAction.sell]: '卖', // 卖
+  [virtualAction.buy]: '买', // 买
+  [virtualAction.recover]: '系统回收', // 系统回收
+  [virtualAction.obtain_like]: '收到喜欢', // 收到喜欢
+  [virtualAction.obtain_collect]: '收到收藏', // 收到收藏
+  [virtualAction.obtain_comment]: '收到评论', // 收到评论
+  [virtualAction.obtain_reply]: '收到回复', // 收到回复
+  [virtualAction.obtain_thumb]: '收到点赞' // 收到点赞
+}
+
 const virtualType = {
   // 关联模块
   other: 1, // 其他
@@ -129,11 +148,23 @@ const virtualType = {
   system: 8 // 系统
 }
 
+const virtualTypeText = {
+  // 关联模块
+  [virtualType.other]: '其他', // 其他
+  [virtualType.user]: '用户', // 用户
+  [virtualType.article]: '文章', // 文章
+  [virtualType.article_blog]: '文章个人专栏', // 文章个人专栏
+  [virtualType.book]: '小书章节', // 小书章节
+  [virtualType.books]: '小书', // 小书
+  [virtualType.dynamic]: '片刻', // 片刻
+  [virtualType.system]: '系统' // 系统
+}
+
 const virtualInfo = {
   [virtualAction.check_in]: {
     // 签到+
     plusLess: virtualPlusLess.plus, // +
-    [virtualType.user]: 20 // 用户每天签到:+20
+    [virtualType.system]: 20 // 用户每天签到:+20
   },
   [virtualAction.create]: {
     // 创建内容-
@@ -216,5 +247,7 @@ module.exports = {
   virtualType,
   virtualPlusLess,
   virtualAction,
-  virtualInfo
+  virtualInfo,
+  virtualActionText,
+  virtualTypeText
 }

@@ -14,7 +14,14 @@
       </li>
     </ul>
 
-    <ul class="aside-operat">
+    <div class="check-in"
+         v-if="personalInfo.islogin">
+      <span class="check"
+            @click="checkIn">签到</span>
+    </div>
+
+    <ul class="aside-operat"
+        v-if="personalInfo.islogin">
       <li>
         <router-link class="collection"
                      :to='{name:"personal"}'>
@@ -69,6 +76,17 @@ export default {
   computed: {
     ...mapState(['personalInfo', 'user'])
   },
+  methods: {
+    checkIn () {
+      this.$store.dispatch('virtual/CHECK_IN').then(result => {
+        if (result.state === 'success') {
+          this.$message.warning(result.message)
+        } else {
+          this.$message.warning(result.message)
+        }
+      })
+    }
+  },
   components: {
     Popover
   }
@@ -88,6 +106,23 @@ export default {
       a {
         display: inline-block;
       }
+    }
+  }
+  .check-in {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: #f0f0f0;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+    .check {
+      display: inline-block;
+      padding: 8px 18px;
+      font-size: 13px;
+      color: #fff;
+      background: #00bcd4;
+      border-radius: 6px;
+      cursor: pointer;
     }
   }
   .function-btn {

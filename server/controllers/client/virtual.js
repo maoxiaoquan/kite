@@ -2,6 +2,7 @@ const models = require('../../../db/mysqldb/index')
 const moment = require('moment')
 const { resClientJson } = require('../../utils/resData')
 const Op = require('sequelize').Op
+const sequelize = require('sequelize')
 const cheerio = require('cheerio')
 const clientWhere = require('../../utils/clientWhere')
 const xss = require('xss')
@@ -13,10 +14,15 @@ const {
   articleType,
   userMessageType,
   userMessageAction,
-  userMessageActionText,
+  virtualType,
+  virtualPlusLess,
   virtualAction,
-  virtualType
+  virtualInfo,
+  virtualActionText,
+  virtualTypeText
 } = require('../../utils/constant')
+
+const userVirtual = require('../../common/userVirtual')
 
 function ErrorMessage (message) {
   this.message = message
@@ -24,8 +30,51 @@ function ErrorMessage (message) {
 }
 
 class Virtual {
+  // 签到
+  static async checkIn (ctx) {
+    try {
+      let { user = '' } = ctx.request
+      let date = new Date()
+      let getTime = date.setHours(date.getHours())
+      let startTime = new Date(new Date(getTime).setHours(0, 0, 0, 0)) // 当天0点
+      let endTime = new Date(new Date(getTime).setHours(23, 59, 59, 999))
+
+      let oneVirtual = await models.virtual.count({
+        where: {
+          uid: user.uid,
+          type: virtualType.system,
+          action: virtualAction.check_in,
+          create_date: {
+            [Op.gt]: startTime, //  >
+            [Op.lt]: endTime //  <
+          }
+        }
+      })
+
+      if (oneVirtual > 0) {
+        throw new ErrorMessage('当天已签到')
+      } else {
+        await userVirtual.setVirtual({
+          uid: user.uid,
+          type: virtualType.system,
+          action: virtualAction.check_in
+        })
+      }
+
+      await resClientJson(ctx, {
+        state: 'success',
+        message: '签到成功'
+      })
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
   /**
-   * 获取用户消息
+   * 获取消费列表
    * @param   {object} ctx 上下文对象
    */
   static async getVirtualList (ctx) {
@@ -33,21 +82,13 @@ class Virtual {
     let pageSize = Number(ctx.query.pageSize) || 10
     let { user = '' } = ctx.request
     try {
-      let allUserMessage = await models.user_message.findAll({
-        // 获取所有未读消息id
-        where: {
-          is_read: false,
-          uid: user.uid
-        }
-      })
-
-      let { count, rows } = await models.user_message.findAndCountAll({
+      let { count, rows } = await models.virtual.findAndCountAll({
         where: {
           uid: user.uid
         }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, // 每页限制返回的数据条数
-        order: [['create_timestamp', 'desc']]
+        order: [['create_date', 'DESC']]
       })
 
       for (let i in rows) {
@@ -56,188 +97,63 @@ class Virtual {
           await moment(rows[i].create_date).format('YYYY-MM-DD')
         )
         rows[i].setDataValue(
-          'sender',
+          'ass_user',
           await models.user.findOne({
-            where: { uid: rows[i].sender_id },
+            where: { uid: rows[i].ass_uid },
             attributes: ['uid', 'avatar', 'nickname']
           })
         )
-        rows[i].setDataValue(
-          'actionText',
-          userMessageActionText[rows[i].action]
-        )
+        rows[i].setDataValue('actionText', virtualActionText[rows[i].action])
+        rows[i].setDataValue('typeText', virtualTypeText[rows[i].type])
 
-        let content = rows[i].content && JSON.parse(rows[i].content)
+        let associate = rows[i].associate && JSON.parse(rows[i].associate)
         // 以上是公共的数据
 
-        if (rows[i].action === userMessageAction.attention) {
+        if (rows[i].type === virtualType.other) {
           // 用户关注 所需要的数据已获取,无需处理
-        } else if (rows[i].action === userMessageAction.comment) {
-          // 评论
-          if (rows[i].type === userMessageType.article) {
-            // 文章评论
-            rows[i].setDataValue(
-              'article',
-              await models.article.findOne({
-                where: { aid: content.aid },
-                attributes: ['aid', 'title']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.article_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'aid']
-              })
-            )
-          } else if (rows[i].type === userMessageType.dynamic) {
-            // 片刻评论
-            rows[i].setDataValue(
-              'dynamic',
-              await models.dynamic.findOne({
-                where: { id: content.dynamic_id },
-                attributes: ['id', 'content']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.dynamic_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'dynamic_id']
-              })
-            )
-          } else if (rows[i].type === userMessageType.books) {
-            // 小书评论
-            rows[i].setDataValue(
-              'books',
-              await models.books.findOne({
-                where: { books_id: content.books_id },
-                attributes: ['books_id', 'title']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.books_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'books_id']
-              })
-            )
-          } else if (rows[i].type === userMessageType.book) {
-            // 小书章节评论
-            rows[i].setDataValue(
-              'book',
-              await models.book.findOne({
-                where: { book_id: content.book_id },
-                attributes: ['book_id', 'title', 'books_id']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.book_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'book_id', 'books_id']
-              })
-            )
-          }
-        } else if (rows[i].action === userMessageAction.reply) {
-          // 评论回复
-          if (rows[i].type === userMessageType.article_comment) {
-            // 文章回复
-            rows[i].setDataValue(
-              'replyComment',
-              await models.article_comment.findOne({
-                where: { id: content.reply_id },
-                attributes: ['id', 'content', 'status', 'aid']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.article_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'aid']
-              })
-            )
-          } else if (rows[i].type === userMessageType.dynamic_comment) {
-            // 片刻回复
-            rows[i].setDataValue(
-              'replyComment',
-              await models.dynamic_comment.findOne({
-                where: { id: content.reply_id },
-                attributes: ['id', 'content', 'status', 'dynamic_id']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.dynamic_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'dynamic_id']
-              })
-            )
-          } else if (rows[i].type === userMessageType.books_comment) {
-            // 小书回复
-            rows[i].setDataValue(
-              'replyComment',
-              await models.books_comment.findOne({
-                where: { id: content.reply_id },
-                attributes: ['id', 'content', 'status', 'books_id']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.books_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'books_id']
-              })
-            )
-          } else if (rows[i].type === userMessageType.book_comment) {
-            // 小书章节回复
-            rows[i].setDataValue(
-              'replyComment',
-              await models.book_comment.findOne({
-                where: { id: content.reply_id },
-                attributes: ['id', 'content', 'status', 'book_id', 'books_id']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.book_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'book_id', 'books_id']
-              })
-            )
-          }
-        } else if (rows[i].action === userMessageAction.like) {
+        } else if (rows[i].type === virtualType.user) {
+        } else if (rows[i].type === virtualType.article) {
           rows[i].setDataValue(
             'article',
             await models.article.findOne({
-              where: { aid: content.aid },
-              attributes: ['aid', 'title', 'uid']
+              where: { aid: associate.aid },
+              attributes: ['aid', 'title']
             })
           )
-        } else if (rows[i].action === userMessageAction.thumb) {
+        } else if (rows[i].type === virtualType.article_blog) {
+          rows[i].setDataValue(
+            'article_blog',
+            await models.article_blog.findOne({
+              where: { blog_id: associate.blog_id },
+              attributes: ['blog_id', 'name']
+            })
+          )
+        } else if (rows[i].type === virtualType.book) {
+          rows[i].setDataValue(
+            'book',
+            await models.book.findOne({
+              where: { book_id: associate.book_id },
+              attributes: ['book_id', 'title', 'books_id']
+            })
+          )
+        } else if (rows[i].type === virtualType.books) {
+          rows[i].setDataValue(
+            'books',
+            await models.books.findOne({
+              where: { books_id: associate.books_id },
+              attributes: ['books_id', 'title']
+            })
+          )
+        } else if (rows[i].type === virtualType.dynamic) {
           rows[i].setDataValue(
             'dynamic',
             await models.dynamic.findOne({
-              where: { id: content.dynamic_id },
-              attributes: ['id', 'content', 'uid']
+              where: { id: associate.dynamic_id },
+              attributes: ['id', 'content']
             })
           )
+        } else if (rows[i].type === virtualType.system) {
         }
-      }
-
-      if (allUserMessage.length > 0) {
-        // 修改未读为已读
-        await models.user_message.update(
-          {
-            is_read: true
-          },
-          {
-            where: {
-              is_read: false,
-              uid: user.uid
-            }
-          }
-        )
       }
 
       await resClientJson(ctx, {

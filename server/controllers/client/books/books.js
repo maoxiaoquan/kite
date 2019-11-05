@@ -17,6 +17,8 @@ const {
   virtualType
 } = require('../../../utils/constant')
 
+const userVirtual = require('../../../common/userVirtual')
+
 function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
@@ -122,6 +124,17 @@ class Books {
         )
       }
 
+      // 虚拟币判断是否可以进行继续的操作
+      const isVirtual = await userVirtual.isVirtual({
+        uid: user.uid,
+        type: virtualType.books,
+        action: virtualAction.create
+      })
+
+      if (!isVirtual) {
+        throw new ErrorMessage('贝壳余额不足！')
+      }
+
       let oneArticleTag = await models.article_tag.findOne({
         where: {
           tag_id: config.ARTICLE_TAG.dfOfficialExclusive
@@ -134,7 +147,9 @@ class Books {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布小书`
+            `${oneArticleTag.name}只有${
+              website.website_name
+            }管理团队才能发布小书`
           )
         }
       }
@@ -157,7 +172,7 @@ class Books {
         ? freeReview // 免审核
         : pendingReview // 待审核
 
-      await models.books.create({
+      const createBooks = await models.books.create({
         uid: user.uid,
         title: xss(reqData.title),
         description: xss(reqData.description),
@@ -167,6 +182,15 @@ class Books {
         status, // '1:审核中;2:审核通过;3:审核失败;4：无需审核'
         is_public: Number(reqData.is_public), // 是否公开
         tag_ids: reqData.tag_ids
+      })
+
+      await userVirtual.setVirtual({
+        uid: user.uid,
+        associate: JSON.stringify({
+          books_id: createBooks.books_id
+        }),
+        type: virtualType.books,
+        action: virtualAction.create
       })
 
       resClientJson(ctx, {
@@ -275,7 +299,9 @@ class Books {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布小书`
+            `${oneArticleTag.name}只有${
+              website.website_name
+            }管理团队才能发布小书`
           )
         }
       }

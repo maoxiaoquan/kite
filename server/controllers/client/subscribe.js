@@ -12,6 +12,8 @@ const {
   virtualType
 } = require('../../utils/constant')
 
+const userVirtual = require('../../common/userVirtual')
+
 class Subscribe {
   static async getArticleTagList (ctx) {
     let page = ctx.query.page || 1

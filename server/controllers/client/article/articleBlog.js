@@ -18,6 +18,8 @@ const {
   virtualType
 } = require('../../../utils/constant')
 
+const userVirtual = require('../../../common/userVirtual')
+
 function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
@@ -109,6 +111,17 @@ class dynamicBlog {
         }
       }
 
+      // 虚拟币判断是否可以进行继续的操作
+      const isVirtual = await userVirtual.isVirtual({
+        uid: user.uid,
+        type: virtualType.article_blog,
+        action: virtualAction.create
+      })
+
+      if (!isVirtual) {
+        throw new ErrorMessage('贝壳余额不足！')
+      }
+
       let oneArticleTag = await models.article_tag.findOne({
         where: {
           tag_id: config.ARTICLE_TAG.dfOfficialExclusive
@@ -153,7 +166,7 @@ class dynamicBlog {
         throw new ErrorMessage('不能创建自己已有的专题')
       }
 
-      await models.article_blog.create({
+      const createArticleBlog = await models.article_blog.create({
         name: blog_name,
         en_name: en_name || shortid.generate(),
         icon: icon || config.DF_ICON,
@@ -164,6 +177,16 @@ class dynamicBlog {
         tag_ids: tag_ids || '',
         status
       })
+
+      await userVirtual.setVirtual({
+        uid: user.uid,
+        associate: JSON.stringify({
+          blog_id: createArticleBlog.blog_id
+        }),
+        type: virtualType.article_blog,
+        action: virtualAction.create
+      })
+
       resClientJson(ctx, {
         state: 'success',
         message: '文章个人专栏创建成功'

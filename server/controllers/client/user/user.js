@@ -25,6 +25,8 @@ const {
   virtualType
 } = require('../../../utils/constant')
 
+const userVirtual = require('../../../common/userVirtual')
+
 function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'

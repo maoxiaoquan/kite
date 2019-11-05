@@ -68,6 +68,7 @@ module.exports = {
       type: Seq.TEXT,
       comment: '描述，用处',
       field: 'description'
-    }
+    },
+    ...time.create_date
   }
 }

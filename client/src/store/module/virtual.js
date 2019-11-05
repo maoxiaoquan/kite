@@ -12,6 +12,14 @@ const actions = {
       method: 'get',
       parameter: { params: parameter }
     })
+  },
+  CHECK_IN ({ commit, dispatch, state }, parameter) {
+    // 签到获取积分
+    return fetch({
+      url: '/virtual/check-in',
+      method: 'post',
+      parameter: parameter
+    })
   }
 }
 

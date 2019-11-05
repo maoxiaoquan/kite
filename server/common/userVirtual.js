@@ -80,6 +80,7 @@ class userVirtual {
 
         resolve({ status: 'success' })
       } catch (err) {
+        console.log('err', err)
         reject('虚拟币消费出现错误:' + err.message)
       }
     })

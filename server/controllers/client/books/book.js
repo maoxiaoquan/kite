@@ -17,6 +17,8 @@ const {
   virtualType
 } = require('../../../utils/constant')
 
+const userVirtual = require('../../../common/userVirtual')
+
 function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
@@ -96,6 +98,17 @@ class Book {
         )
       }
 
+      // 虚拟币判断是否可以进行继续的操作
+      const isVirtual = await userVirtual.isVirtual({
+        uid: user.uid,
+        type: virtualType.book,
+        action: virtualAction.create
+      })
+
+      if (!isVirtual) {
+        throw new ErrorMessage('贝壳余额不足！')
+      }
+
       const result = reqData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
       let $ = cheerio.load(reqData.content)
 
@@ -127,6 +140,15 @@ class Book {
         status, // '1:审核中;2:审核通过;3:审核失败;4：无需审核'
         sort: reqData.sort,
         read_time: reqData.content.length
+      })
+
+      await userVirtual.setVirtual({
+        uid: user.uid,
+        associate: JSON.stringify({
+          book_id: bookCreate.book_id
+        }),
+        type: virtualType.book,
+        action: virtualAction.create
       })
 
       resClientJson(ctx, {

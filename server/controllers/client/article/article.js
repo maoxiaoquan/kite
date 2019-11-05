@@ -17,6 +17,8 @@ const {
 } = require('../../../utils/constant')
 const { TimeNow, TimeDistance } = require('../../../utils/time')
 
+const userVirtual = require('../../../common/userVirtual')
+
 function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
@@ -108,6 +110,17 @@ class Article {
         )
       }
 
+      // 虚拟币判断是否可以进行继续的操作
+      const isVirtual = await userVirtual.isVirtual({
+        uid: user.uid,
+        type: virtualType.article,
+        action: virtualAction.create
+      })
+
+      if (!isVirtual) {
+        throw new ErrorMessage('贝壳余额不足！')
+      }
+
       let oneArticleTag = await models.article_tag.findOne({
         where: {
           tag_id: config.ARTICLE_TAG.dfOfficialExclusive
@@ -120,7 +133,9 @@ class Article {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布文章`
+            `${oneArticleTag.name}只有${
+              website.website_name
+            }管理团队才能发布文章`
           )
         }
       }
@@ -148,7 +163,7 @@ class Article {
         ? freeReview // 免审核
         : pendingReview // 待审核
 
-      await models.article.create({
+      let createArticle = await models.article.create({
         uid: user.uid,
         title: xss(reqData.title),
         excerpt: getSubStr(getNoMarkupStr($.text())) /* 摘记 */,
@@ -161,6 +176,15 @@ class Article {
         type: reqData.type, // 类型 （1文章 2日记 3草稿 ）
         blog_ids: reqData.blog_ids,
         tag_ids: reqData.tag_ids
+      })
+
+      await userVirtual.setVirtual({
+        uid: user.uid,
+        associate: JSON.stringify({
+          aid: createArticle.aid
+        }),
+        type: virtualType.article,
+        action: virtualAction.create
       })
 
       resClientJson(ctx, {
@@ -593,7 +617,9 @@ class Article {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${website.website_name}管理团队才能更新文章`
+            `${oneArticleTag.name}只有${
+              website.website_name
+            }管理团队才能更新文章`
           )
         }
       }
@@ -649,6 +675,7 @@ class Article {
           }
         }
       )
+
       resClientJson(ctx, {
         state: 'success',
         message:

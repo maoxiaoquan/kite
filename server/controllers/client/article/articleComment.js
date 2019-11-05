@@ -14,6 +14,7 @@ const {
   virtualAction,
   virtualType
 } = require('../../../utils/constant')
+
 const userMessage = require('../../../utils/userMessage')
 const userVirtual = require('../../../common/userVirtual')
 
@@ -193,15 +194,16 @@ class ArticleComment {
           status
         })
         .then(async data => {
+          let articleCommentCount = await models.article_comment.count({
+            where: {
+              aid: reqData.aid,
+              parent_id: 0
+            }
+          })
           await models.article.update(
             {
               // 更新文章评论数
-              comment_count: await models.article_comment.count({
-                where: {
-                  aid: reqData.aid,
-                  parent_id: 0
-                }
-              })
+              comment_count: articleCommentCount
             },
             { where: { aid: reqData.aid } }
           )
@@ -231,6 +233,32 @@ class ArticleComment {
           }
 
           _data['create_dt'] = await TimeDistance(_data.create_date)
+
+          // 虚拟币消耗后期开启事物
+          await userVirtual.setVirtual({
+            uid: user.uid,
+            associate: JSON.stringify({
+              comment_id: _data.id,
+              aid: reqData.aid
+            }),
+            type: virtualType.article,
+            action: virtualAction.comment,
+            ass_uid: oneArticle.uid
+          })
+
+          if (oneArticle.uid !== user.uid) {
+            // 屏蔽自己
+            await userVirtual.setVirtual({
+              uid: oneArticle.uid,
+              associate: JSON.stringify({
+                comment_id: _data.id,
+                aid: reqData.aid
+              }),
+              type: virtualType.article,
+              action: virtualAction.obtain_comment,
+              ass_uid: user.uid
+            })
+          }
 
           if (oneArticle.uid !== user.uid && !reqData.reply_id) {
             // 消息推送
@@ -263,29 +291,6 @@ class ArticleComment {
               })
             })
           }
-
-          // 虚拟币消耗
-          await userVirtual.setVirtual({
-            uid: user.uid,
-            associate: JSON.stringify({
-              comment_id: _data.id,
-              aid: reqData.aid
-            }),
-            type: virtualType.article,
-            action: virtualAction.comment,
-            ass_uid: oneArticle.uid
-          })
-
-          await userVirtual.setVirtual({
-            uid: oneArticle.uid,
-            associate: JSON.stringify({
-              comment_id: _data.id,
-              aid: reqData.aid
-            }),
-            type: virtualType.article,
-            action: virtualAction.obtain_comment,
-            ass_uid: user.uid
-          })
 
           resClientJson(ctx, {
             state: 'success',

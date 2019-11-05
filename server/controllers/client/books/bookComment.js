@@ -15,7 +15,9 @@ const {
   virtualAction,
   virtualType
 } = require('../../../utils/constant')
+
 const userMessage = require('../../../utils/userMessage')
+const userVirtual = require('../../../common/userVirtual')
 
 function ErrorMessage (message) {
   this.message = message
@@ -156,6 +158,17 @@ class BookComment {
         )
       }
 
+      // 虚拟币判断是否可以进行继续的操作
+      const isVirtual = await userVirtual.isVirtual({
+        uid: user.uid,
+        type: virtualType.book,
+        action: virtualAction.comment
+      })
+
+      if (!isVirtual) {
+        throw new ErrorMessage('贝壳余额不足！')
+      }
+
       let allUserRole = await models.user_role.findAll({
         where: {
           user_role_id: {
@@ -211,6 +224,32 @@ class BookComment {
           }
 
           _data['create_dt'] = await TimeDistance(_data.create_date)
+
+          // 虚拟币消耗后期开启事物
+          await userVirtual.setVirtual({
+            uid: user.uid,
+            associate: JSON.stringify({
+              comment_id: _data.id,
+              book_id: reqData.book_id
+            }),
+            type: virtualType.book,
+            action: virtualAction.comment,
+            ass_uid: oneBook.uid
+          })
+
+          if (oneBook.uid !== user.uid) {
+            // 屏蔽自己
+            await userVirtual.setVirtual({
+              uid: oneBook.uid,
+              associate: JSON.stringify({
+                comment_id: _data.id,
+                book_id: reqData.book_id
+              }),
+              type: virtualType.book,
+              action: virtualAction.obtain_comment,
+              ass_uid: user.uid
+            })
+          }
 
           if (oneBook.uid !== user.uid && !reqData.reply_id) {
             await userMessage.setMessage({

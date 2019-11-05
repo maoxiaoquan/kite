@@ -418,6 +418,8 @@ router.get(
 
 // 用户虚拟币开始 2019.11.4 0:19
 
+// 签到
+router.post('/virtual/check-in', tokens.ClientVerifyToken, virtual.checkIn)
 // 虚拟币动态记录
 router.get('/virtual/list', tokens.ClientVerifyToken, virtual.getVirtualList)
 
