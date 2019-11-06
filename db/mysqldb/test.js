@@ -30,7 +30,9 @@ async function sql () {
   //     action: 16
   //   })
   // }
-
+  await models.virtual.sync({
+    force: true
+  })
   await models.sequelize.query(
     'ALTER TABLE user_info add COLUMN shell_total_amount DECIMAL(10,2)  comment "贝壳总额";'
   )

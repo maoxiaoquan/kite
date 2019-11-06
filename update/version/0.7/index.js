@@ -50,7 +50,21 @@ class update {
           'ALTER TABLE user_info add COLUMN is_msg_push INTEGER(5) DEFAULT 2 comment "是否开启消息推送 1:开启;2:关闭";'
         )
 
+        // 2019.11.6 11:51
+        await models.sequelize.query(
+          'ALTER TABLE books add COLUMN is_free tinyint(1) comment "是否免费";'
+        )
+        await models.sequelize.query(
+          'ALTER TABLE books add COLUMN pay_type INTEGER(6) comment "支付类型";'
+        )
+        await models.sequelize.query(
+          'ALTER TABLE books add COLUMN price DECIMAL(8,2) comment "价格";'
+        )
+
         await models.virtual.sync({
+          force: true
+        })
+        await models.order.sync({
           force: true
         })
 
@@ -90,6 +104,14 @@ class update {
 
         let allUser = await models.user.findAll()
         for (let i in allUser) {
+          models.user_info.update(
+            {
+              /* 注册写入数据库操作 */
+              shell_balance: 3000
+            },
+            { uid: allUser[i].uid }
+          )
+
           await models.virtual.create({
             // 用户虚拟币消息记录
             plus_less: 1,

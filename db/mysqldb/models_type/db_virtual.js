@@ -32,17 +32,17 @@ module.exports = {
       field: 'associate'
     },
     income: {
-      type: Seq.DECIMAL(6, 2),
+      type: Seq.DECIMAL(8, 2),
       comment: '收入',
       field: 'income'
     },
     expenses: {
-      type: Seq.DECIMAL(6, 2),
+      type: Seq.DECIMAL(8, 2),
       comment: '支出',
       field: 'expenses'
     },
     amount: {
-      type: Seq.DECIMAL(6, 2),
+      type: Seq.DECIMAL(8, 2),
       comment: '金额',
       field: 'amount'
     },
@@ -68,9 +68,9 @@ module.exports = {
       field: 'type'
     },
     action: {
-      // 消息动作
+      // 动作
       type: Seq.INTEGER(10),
-      comment: '消息动作',
+      comment: '动作',
       field: 'action'
     },
     description: {

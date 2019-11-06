@@ -242,12 +242,16 @@ const virtualInfo = {
 // 2019.11.6 0:57
 // 支付购买开始
 
-const payMethod = {
+const payType = {
   shell: 1 // 贝壳
 }
 
-const payMethodText = {
-  [payMethod.shell]: '贝壳' // 贝壳
+const payTypeText = {
+  [payType.shell]: '贝壳' // 贝壳
+}
+
+const productType = {
+  // 商品类型
 }
 
 module.exports = {
@@ -267,6 +271,6 @@ module.exports = {
   virtualInfo,
   virtualActionText,
   virtualTypeText,
-  payMethod,
-  payMethodText
+  payType,
+  payTypeText
 }

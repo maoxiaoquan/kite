@@ -18,15 +18,15 @@ module.exports = {
       comment: 'uid',
       field: 'uid'
     },
-    goods_id: {
+    product_id: {
       type: Seq.BIGINT(20),
       comment: '产品id',
-      field: 'goods_id'
+      field: 'product_id'
     },
-    goods_type: {
+    product_type: {
       type: Seq.BIGINT(20),
       comment: '产品类型',
-      field: 'goods_type'
+      field: 'product_type'
     },
     status: {
       // 状态
@@ -36,25 +36,14 @@ module.exports = {
     },
     pay_type: {
       // 支付类型
-      type: Seq.INTEGER(10),
+      type: Seq.INTEGER(6),
       comment: '支付类型',
       field: 'pay_type'
     },
-    pay_currency: {
-      // 状态
-      type: Seq.INTEGER(10),
-      comment: '支付货币',
-      field: 'pay_currency'
-    },
     amount: {
-      type: Seq.INTEGER(20),
+      type: Seq.DECIMAL(8, 2),
       comment: '金额',
       field: 'amount'
-    },
-    type: {
-      type: Seq.INTEGER(10),
-      comment: '类型',
-      field: 'type'
     },
     description: {
       // 描述
