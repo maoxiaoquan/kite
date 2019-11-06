@@ -15,6 +15,7 @@ import dynamic from './dynamic'
 import books from './books'
 import book from './book'
 import virtual from './virtual'
+import shop from './shop'
 
 export default {
   sign,
@@ -33,5 +34,6 @@ export default {
   dynamic,
   books,
   book,
-  virtual
+  virtual,
+  shop
 }

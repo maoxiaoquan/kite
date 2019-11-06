@@ -24,6 +24,7 @@ const thumb = require('../controllers/client/thumb') // 赞
 const collect = require('../controllers/client/collect') // 收藏
 
 const virtual = require('../controllers/client/virtual') // 虚拟币
+const shop = require('../controllers/client/shop') // 购物
 
 /**
  * 获取标签列表操作

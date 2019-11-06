@@ -104,7 +104,7 @@ module.exports = {
     // 2019.11.6 11:55新增
     is_free: {
       // 是否免费
-      type: Seq.BOOLEAN,
+      type: Seq.INTEGER(6),
       comment: '是否免费',
       field: 'is_free'
     },

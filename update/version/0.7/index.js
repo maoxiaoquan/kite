@@ -52,7 +52,7 @@ class update {
 
         // 2019.11.6 11:51
         await models.sequelize.query(
-          'ALTER TABLE books add COLUMN is_free tinyint(1) comment "是否免费";'
+          'ALTER TABLE books add COLUMN is_free INTEGER(6) DEFAULT 1 comment "是否免费";'
         )
         await models.sequelize.query(
           'ALTER TABLE books add COLUMN pay_type INTEGER(6) comment "支付类型";'

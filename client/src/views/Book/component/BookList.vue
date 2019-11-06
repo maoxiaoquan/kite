@@ -43,9 +43,17 @@ export default {
   name: "BookList",
   methods: {
     lookChapter (book_id) {
+      if (!this.personalInfo.islogin) {
+        this.$message.warning('查看小书需要登录');
+        return false
+      }
       this.$router.push({ name: 'BookView', params: { books_id: this.$route.params.books_id, book_id: book_id } })
     },
     writeChapter (book_id) {
+      if (!this.personalInfo.islogin) {
+        this.$message.warning('编辑小书需要登录');
+        return false
+      }
       this.$router.push({ name: 'WriteBookView', params: { books_id: this.$route.params.books_id, book_id: book_id } })
     },
     deleteChapter (book_id) {

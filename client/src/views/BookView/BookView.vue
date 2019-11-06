@@ -105,8 +105,8 @@
                     <div class="comment-form comment-form unauthorized"
                          id="comment">
                       <div class="unauthorized-panel">
-                        <button class="authorize-btn"
-                                @click="show_login">登录</button>
+                        <router-link class="authorize-btn"
+                                     :to="{ name: 'signIn' }">登录</router-link>
                         <div class="placeholder">评论将在后台进行审核，审核通过后对所有人可见</div>
                       </div>
                     </div>
@@ -187,6 +187,11 @@ export default {
     }
   },
   mounted () {
+    if (!this.personalInfo.islogin) {
+      this.$message.warning('查看小书需要登录');
+      this.$router.push({ name: 'book', params: { books_id: this.$route.params.books_id } })
+      return false
+    }
     this.getBooksBookAll()
     this.getBookNextPrev()
   },

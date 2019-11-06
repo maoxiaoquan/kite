@@ -12,7 +12,11 @@
                 <div class="title-line">
                   <a href="javascript:;"
                      class="title">
-                    <span>{{books.booksInfo.title}}</span>
+                    {{books.booksInfo.title}}
+                    <span class="free"
+                          :class="Number(books.booksInfo.is_free)===isFree.free?'yes':''">{{isFreeText[books.booksInfo.is_free]}}</span>
+                    <span class="price"
+                          v-if="Number(books.booksInfo.is_free)!==isFree.free">￥{{books.booksInfo.price}} {{payTypeText[books.booksInfo.pay_type]}}</span>
                   </a>
                   <span class="attention"
                         v-if="~[statusList.reviewSuccess,statusList.freeReview].indexOf(books.booksInfo.status)&&personalInfo.islogin"
@@ -38,6 +42,9 @@
                 <div class="other">
                   <button class="btn button-look"
                           @click="lookChapter"> 查看</button>
+                  <button class="btn button-look"
+                          v-if="Number(books.booksInfo.is_free)!==isFree.free"
+                          @click="onBuy"> 购买 </button>
                   <router-link v-if="personalInfo.islogin"
                                :to="{ name: 'booksWrite', params: { type: 'update' }, query: { books_id: books.booksInfo.books_id }}"
                                class="btn button-update"
@@ -77,6 +84,25 @@
 
     </div>
 
+    <Dialog :visible.sync="isBuyBooksDialog"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            width="380px">
+      <div class="buy-books-view">
+        <h3 class="title">购买信息确认</h3>
+        <ul>
+          <li class="p-name">商品名称：<em>{{books.booksInfo.title}}</em></li>
+          <li class="p-pay-type">支付方式：<em>{{payTypeText[books.booksInfo.pay_type]}}</em></li>
+          <li class="p-pay-price">价格：<em>￥{{books.booksInfo.price}}</em> </li>
+        </ul>
+        <div class="footer-view">
+          <button class="btn btn-buy">确认购买</button>
+          <button class="btn btn-cancel"
+                  @click="isBuyBooksDialog=false">取消</button>
+        </div>
+      </div>
+    </Dialog>
+
   </div>
 </template>
 
@@ -85,12 +111,16 @@ import websiteNotice from '@views/Parts/websiteNotice'
 import BookList from './component/BookList'
 import BookInfo from './component/BookInfo'
 import BookComment from './component/BookComment'
+import { Dialog } from '@components'
 import { mapState } from 'vuex'
 import { share, baidu, google } from '@utils'
 import googleMixin from '@mixins/google'
 import {
   statusList,
   statusListText,
+  payTypeText,
+  isFree,
+  isFreeText
 } from '@utils/constant'
 
 export default {
@@ -155,8 +185,12 @@ export default {
   data () {
     return {
       currentType: "BookList",
+      isFree,
+      isFreeText,
       statusList,
       statusListText,
+      payTypeText,
+      isBuyBooksDialog: true // 是否开启购买按钮
     };
   },
   asyncData ({ store, route }) {
@@ -181,6 +215,16 @@ export default {
             this.$message.warning(result.message);
           }
         })
+    },
+    onBuy () { // 
+      if (!this.personalInfo.islogin) {
+        this.$message.warning('请先登录，再继续操作');
+        return false
+      }
+      this.isBuyBooksDialog = true
+    },
+    submitBuyBooks () { // 购买小书
+
     },
     isCollect (item) { // 是否收藏
       let collectUserIds = []
@@ -207,6 +251,10 @@ export default {
       }
     },
     lookChapter () {
+      if (!this.personalInfo.islogin) {
+        this.$message.warning('查看小书需要登录');
+        return false
+      }
       if (this.books.booksBookAll.length > 0) {
         this.$router.push({ name: 'BookView', params: { books_id: this.$route.params.books_id, book_id: this.books.booksBookAll[0].book_id } })
       } else {
@@ -221,12 +269,55 @@ export default {
     websiteNotice,
     BookList,
     BookInfo,
-    BookComment
+    BookComment,
+    Dialog
   }
 };
 </script>
 
 <style scoped lang="scss">
+.buy-books-view {
+  .title {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 15px;
+  }
+  ul {
+    li {
+      text-align: center;
+      line-height: 30px;
+    }
+    .p-name {
+      em {
+        color: #333;
+        font-weight: bold;
+      }
+    }
+    .p-pay-type {
+      em {
+        color: #e67e7e;
+        font-weight: bold;
+      }
+    }
+    .p-pay-price {
+      em {
+        color: #e67e7e;
+        font-weight: bold;
+      }
+    }
+  }
+  .footer-view {
+    padding-top: 15px;
+    text-align: center;
+    .btn {
+      font-size: 14px;
+    }
+    .btn-buy {
+      background: #e67e7e;
+    }
+  }
+}
 .book-view {
   .book-info {
     padding: 20px;
@@ -246,6 +337,27 @@ export default {
           font-size: 18px;
           font-weight: 700;
           color: #333;
+          .free {
+            font-size: 12px;
+            background: #fd763a;
+            border-radius: 3px;
+            line-height: 18px;
+            color: #fff;
+            padding: 1px 3px;
+            display: inline-block;
+            &.yes {
+              background: #41b883;
+            }
+          }
+          .price {
+            font-size: 12px;
+            background: #fd763a;
+            border-radius: 3px;
+            line-height: 18px;
+            color: #fff;
+            padding: 1px 3px;
+            display: inline-block;
+          }
         }
         .attention {
           cursor: pointer;
@@ -255,8 +367,8 @@ export default {
           color: #333;
           border-radius: 3px;
           border: 1px solid #e0e0e0;
-          line-height: 12px;
-          padding: 2px 3px;
+          line-height: 18px;
+          padding: 1px 8px;
           &.active {
             color: #fff;
             background: #41b883;

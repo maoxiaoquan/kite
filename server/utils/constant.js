@@ -243,15 +243,35 @@ const virtualInfo = {
 // 支付购买开始
 
 const payType = {
+  // 支付类型
   shell: 1 // 贝壳
 }
 
 const payTypeText = {
+  // 支付类型文案
   [payType.shell]: '贝壳' // 贝壳
 }
 
 const productType = {
   // 商品类型
+  other: 1, // 其他
+  user: 2, // 用户
+  article: 3, // 文章
+  article_blog: 4, // 文章个人专栏
+  book: 5, // 小书章节
+  books: 6, // 小书
+  dynamic: 7, // 片刻
+  system: 8 // 系统
+}
+
+const isFree = {
+  free: 1, // 免费
+  pay: 2 // 付费
+}
+
+const isFreeText = {
+  [isFree.free]: '免费', // 免费
+  [isFree.pay]: '付费' // 付费
 }
 
 module.exports = {
@@ -272,5 +292,8 @@ module.exports = {
   virtualActionText,
   virtualTypeText,
   payType,
-  payTypeText
+  payTypeText,
+  isFree,
+  isFreeText,
+  productType
 }

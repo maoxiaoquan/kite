@@ -14,7 +14,12 @@ const {
   userMessageType,
   userMessageAction,
   virtualAction,
-  virtualType
+  virtualType,
+  payType,
+  payTypeText,
+  isFree,
+  isFreeText,
+  productType
 } = require('../../../utils/constant')
 
 const userVirtual = require('../../../common/userVirtual')
@@ -111,6 +116,20 @@ class Books {
         throw new ErrorMessage('请选择小书标签')
       }
 
+      if (!reqData.is_free) {
+        throw new ErrorMessage('请选择是否免费还是付费')
+      }
+
+      if (Number(reqData.is_free) !== isFree.free) {
+        if (!reqData.pay_type) {
+          throw new ErrorMessage('请选择支付类型')
+        }
+
+        if (reqData.price < 0) {
+          throw new ErrorMessage('请请输入大于等于0的定价！')
+        }
+      }
+
       let date = new Date()
       let currDate = moment(date.setHours(date.getHours())).format(
         'YYYY-MM-DD HH:mm:ss'
@@ -147,9 +166,7 @@ class Books {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${
-              website.website_name
-            }管理团队才能发布小书`
+            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布小书`
           )
         }
       }
@@ -181,7 +198,10 @@ class Books {
         origin_content: reqData.origin_content /* 源内容 */,
         status, // '1:审核中;2:审核通过;3:审核失败;4：无需审核'
         is_public: Number(reqData.is_public), // 是否公开
-        tag_ids: reqData.tag_ids
+        tag_ids: reqData.tag_ids,
+        is_free: reqData.is_free, // 免费还是付费
+        pay_type: reqData.pay_type, // 支付类型
+        price: reqData.price // 价格
       })
 
       await userVirtual.setVirtual({
@@ -274,6 +294,20 @@ class Books {
         throw new ErrorMessage('请选择小书标签')
       }
 
+      if (!reqData.is_free) {
+        throw new ErrorMessage('请选择是否免费还是付费')
+      }
+
+      if (Number(reqData.is_free) !== isFree.free) {
+        if (!reqData.pay_type) {
+          throw new ErrorMessage('请选择支付类型')
+        }
+
+        if (reqData.price < 0) {
+          throw new ErrorMessage('请请输入大于等于0的定价！')
+        }
+      }
+
       let date = new Date()
       let currDate = moment(date.setHours(date.getHours())).format(
         'YYYY-MM-DD HH:mm:ss'
@@ -299,9 +333,7 @@ class Books {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${
-              website.website_name
-            }管理团队才能发布小书`
+            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布小书`
           )
         }
       }
@@ -333,7 +365,10 @@ class Books {
           origin_content: reqData.origin_content /* 源内容 */,
           status, // '1:审核中;2:审核通过;3:审核失败;4：无需审核'
           is_public: Number(reqData.is_public), // 是否公开
-          tag_ids: reqData.tag_ids
+          tag_ids: reqData.tag_ids,
+          is_free: reqData.is_free, // 免费还是付费
+          pay_type: reqData.pay_type, // 支付类型
+          price: reqData.price // 价格
         },
         {
           where: {

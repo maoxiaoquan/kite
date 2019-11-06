@@ -31,10 +31,10 @@
             <div class="box-form-group">
               <label class="box-label"
                      for="">简介</label>
-              <textarea class="box-input title"
-                        v-model="write.description"
-                        type="text"
-                        placeholder="请输入小书标题"></textarea>
+              <input class="box-input title"
+                     v-model="write.description"
+                     type="text"
+                     placeholder="请输入小书标题"></input>
             </div>
 
             <div class="write mrg-bm20 box-form-group">
@@ -47,13 +47,6 @@
                             ref="mavonEditor"
                             :imageFilter="imageFilter"
                             @imgAdd="$imgAdd" />
-              <!-- <mavon-editor defaultOpen="edit"
-                            :boxShadow="false"
-                            v-model="write.content"
-                            :toolbars="toolbars"
-                            ref="mavonEditor"
-                            :imageFilter="imageFilter"
-                            @imgAdd="$imgAdd" /> -->
             </div>
 
             <div class="row mrg-bm20">
@@ -66,6 +59,37 @@
                           v-for="(item,key) in publicTypeList"
                           :key="key">{{item}}</option>
                 </select>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
+                <label class="box-label"
+                       for="">开启付费</label>
+                <select class="box-select"
+                        v-model="write.is_free">
+                  <option :value="key"
+                          v-for="(item,key) in isFreeText"
+                          :key="key">{{item}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mrg-bm20"
+                 v-if="Number(write.is_free||1)!==isFree.free">
+              <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
+                <label class="box-label"
+                       for="">支付类型</label>
+                <select class="box-select"
+                        v-model="write.pay_type">
+                  <option :value="key"
+                          v-for="(item,key) in payTypeText"
+                          :key="key">{{item}}</option>
+                </select>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
+                <label class="box-label"
+                       for="">价格 ￥({{payTypeText[write.pay_type]}})</label>
+                <input type="text"
+                       class="box-input"
+                       v-model="write.price">
               </div>
             </div>
 
@@ -129,6 +153,11 @@ import ClientOnly from 'vue-client-only'
 import marked from "marked";
 import { mapState } from 'vuex'
 import googleMixin from '@mixins/google'
+import {
+  payTypeText,
+  isFree,
+  isFreeText
+} from '@utils/constant'
 
 export default {
   name: 'write',
@@ -162,7 +191,13 @@ export default {
         description: '', // 小书的简介
         content: '', // 小书的详情
         is_public: 1, // 是否公开 1公开 0仅自己可见
+        is_free: 1, // 免费还是付费
+        pay_type: 1,// 支付类型
+        price: 0, // 价格
       },
+      payTypeText, // 支付类型
+      isFree, // 免费还是付费值
+      isFreeText, // 免费还是付费
       publicTypeList: ['仅自己可见', '公开'], // 小书类型列表
       searchArticleTag: "",
       currentArticleTagArr: [], // 用户选中的小书标签
@@ -336,6 +371,13 @@ export default {
         this.$message.warning('小书内容不能为空！');
         return false
       }
+
+      if (Number(this.write.is_free || 1) !== this.isFree.free) {
+        if (this.write.price < 1) {
+          this.$message.warning('小书价格请大于0！');
+          return false
+        }
+      }
       var params = {
         title: this.write.title, //小书的标题
         description: this.write.description, //小书的简介
@@ -343,6 +385,9 @@ export default {
         content: marked(this.write.content, { breaks: true }) /*主内容*/,
         origin_content: this.write.content /*源内容*/,
         is_public: this.write.is_public,
+        is_free: this.write.is_free, // 免费还是付费
+        pay_type: this.write.pay_type,// 支付类型
+        price: this.write.price, // 价格
         tag_ids: this
           .getObjectValues(this.currentArticleTagArr)
           .join(",")
@@ -426,7 +471,6 @@ export default {
         font-size: 14px;
         border: 1px solid #e0e0e0;
         border-radius: 3px;
-        padding: 8px 16px;
         width: 100%;
       }
     }
@@ -449,7 +493,11 @@ export default {
   .box-select {
     height: 36px;
   }
-
+  .box-input {
+    height: 36px;
+    padding: 0px 20px;
+    width: 100%;
+  }
   .tag-warp {
     margin-top: 5px;
     .common-title {

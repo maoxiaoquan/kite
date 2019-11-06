@@ -234,6 +234,14 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
 
+  // 2019.11.6 23:29
+  const order = sequelize.define(
+    // 暂定定为虚拟币
+    require('./models_type/db_order').NAME,
+    require('./models_type/db_order').TABLE,
+    SEQ_PARAMETER
+  )
+
   const _define = {
     user,
     user_info,
@@ -266,7 +274,8 @@ module.exports = sequelize => {
     picture,
     options,
     collect_books,
-    virtual
+    virtual,
+    order
   }
 
   return {

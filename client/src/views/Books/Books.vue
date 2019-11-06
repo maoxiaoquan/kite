@@ -29,11 +29,6 @@
               <nav class="column-tag-menu"
                    v-if="childNavItem.tag&&childNavItem.tag.length>0">
                 <ul class="nav-item-view">
-                  <!-- <li class="nav-item">
-                    <router-link :to="{name:'books',params:{columnEnName:$router.params.columnEnName||''}}">
-                      全部
-                    </router-link>
-                  </li> -->
                   <li class="nav-item"
                       v-for="(item,key) in childNavItem.tag"
                       :key="key"
@@ -78,6 +73,8 @@
                   <router-link class="library-item__title"
                                :to="{name:'book',params:{books_id:booksItem.books_id}}">
                     {{booksItem.title}}
+                    <span class="free"
+                          :class="Number(booksItem.is_free)===isFree.free?'yes':''">{{isFreeText[booksItem.is_free]}}</span>
                   </router-link>
 
                   <div class="library-item__info">
@@ -132,7 +129,10 @@ import {
   statusList,
   articleType,
   statusListText,
-  articleTypeText
+  articleTypeText,
+  payTypeText,
+  isFree,
+  isFreeText
 } from '@utils/constant'
 
 export default {
@@ -178,6 +178,8 @@ export default {
   data () {
     return {
       childNavItem: '',
+      isFree,
+      isFreeText,
       statusList,
       statusListText,
     };
@@ -413,6 +415,18 @@ export default {
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
+        .free {
+          font-size: 12px;
+          background: #fd763a;
+          border-radius: 3px;
+          line-height: 18px;
+          color: #fff;
+          padding: 1px 3px;
+          display: inline-block;
+          &.yes {
+            background: #41b883;
+          }
+        }
       }
       .library-item-tag {
         height: 50px;

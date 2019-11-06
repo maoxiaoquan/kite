@@ -153,3 +153,23 @@ export const virtualType = {
   dynamic: 7, // 片刻
   system: 8 // 系统
 }
+
+export const payType = {
+  // 支付类型
+  shell: 1 // 贝壳
+}
+
+export const payTypeText = {
+  // 支付类型文案
+  [payType.shell]: '贝壳' // 贝壳
+}
+
+export const isFree = {
+  free: 1, // 免费
+  pay: 2 // 付费
+}
+
+export const isFreeText = {
+  [isFree.free]: '免费', // 免费
+  [isFree.pay]: '付费' // 付费
+}
