@@ -887,6 +887,16 @@ class User {
               attributes: ['id', 'content', 'uid']
             })
           )
+        } else if (rows[i].action === userMessageAction.sell) {
+          if (rows[i].type === userMessageType.books) {
+            rows[i].setDataValue(
+              'books',
+              await models.books.findOne({
+                where: { books_id: content.books_id },
+                attributes: ['books_id', 'title']
+              })
+            )
+          }
         }
       }
 

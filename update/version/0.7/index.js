@@ -61,6 +61,10 @@ class update {
           'ALTER TABLE books add COLUMN price DECIMAL(8,2) comment "价格";'
         )
 
+        await models.sequelize.query(
+          'ALTER TABLE book add COLUMN trial_read INTEGER(6) comment "是否可以试读";'
+        )
+
         await models.virtual.sync({
           force: true
         })

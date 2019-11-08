@@ -342,7 +342,7 @@ router.get('/personal/books-list', personalCenter.userBooksList) // 获取用户
 
 router.get('/user-books/info', tokens.ClientVerifyToken, books.getUserBooksInfo) // 获取用户自己的小书信息
 
-router.get('/books/info', books.getBooksInfo) // 获取小书信息
+router.get('/books/info', tokens.ClientVerifyTokenInfo, books.getBooksInfo) // 获取小书信息
 
 router.get('/books/book-all', books.getBooksBookAll) // 获取小书章节列表
 
@@ -363,7 +363,7 @@ router.post('/book/update', tokens.ClientVerifyToken, book.updateBook) // 编辑
 
 router.get('/user-book/info', tokens.ClientVerifyToken, book.getUserBookInfo) // 获取用户自己的小书章节信息
 
-router.get('/book/info', book.getBookInfo) // 获取小书章节信息
+router.get('/book/info', tokens.ClientVerifyTokenInfo, book.getBookInfo) // 获取小书章节信息
 
 router.post('/book/next-prev', book.getNextPrevBook) // 获取小书上一页，下一页
 
@@ -423,5 +423,11 @@ router.get(
 router.post('/virtual/check-in', tokens.ClientVerifyToken, virtual.checkIn)
 // 虚拟币动态记录
 router.get('/virtual/list', tokens.ClientVerifyToken, virtual.getVirtualList)
+
+// 购买
+
+router.post('/shop/buy', tokens.ClientVerifyToken, shop.Buy)
+// 订单列表
+router.get('/shop/list', tokens.ClientVerifyToken, shop.orderList)
 
 module.exports = router

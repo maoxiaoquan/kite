@@ -40,15 +40,20 @@
                   </div>
                 </div>
                 <div class="other">
-                  <button class="btn button-look"
+                  <button v-if="books.booksInfo.is_free===isFree.free"
+                          class="btn button-look"
                           @click="lookChapter"> 查看</button>
-                  <button class="btn button-look"
-                          v-if="Number(books.booksInfo.is_free)!==isFree.free"
-                          @click="onBuy"> 购买 </button>
-                  <router-link v-if="personalInfo.islogin"
-                               :to="{ name: 'booksWrite', params: { type: 'update' }, query: { books_id: books.booksInfo.books_id }}"
-                               class="btn button-update"
-                               @click="lookChapter"> 修改</router-link>
+                  <template v-else>
+                    <button class="btn button-look"
+                            @click="lookChapter"> 试读</button>
+                    <button class="btn button-look"
+                            v-if="Number(books.booksInfo.is_free)!==isFree.free"
+                            @click="onBuy"> 购买 </button>
+                    <router-link v-if="personalInfo.islogin&&personalInfo.user.uid===books.booksInfo.user.uid"
+                                 :to="{ name: 'booksWrite', params: { type: 'update' }, query: { books_id: books.booksInfo.books_id }}"
+                                 class="btn button-update"
+                                 @click="lookChapter"> 修改</router-link>
+                  </template>
                 </div>
               </div>
             </div>
@@ -88,7 +93,8 @@
             :close-on-click-modal="false"
             :close-on-press-escape="false"
             width="380px">
-      <div class="buy-books-view">
+      <div class="buy-books-view"
+           v-loading="isBuyLoading">
         <h3 class="title">购买信息确认</h3>
         <ul>
           <li class="p-name">商品名称：<em>{{books.booksInfo.title}}</em></li>
@@ -96,7 +102,8 @@
           <li class="p-pay-price">价格：<em>￥{{books.booksInfo.price}}</em> </li>
         </ul>
         <div class="footer-view">
-          <button class="btn btn-buy">确认购买</button>
+          <button class="btn btn-buy"
+                  @click="enterBuy">确认购买</button>
           <button class="btn btn-cancel"
                   @click="isBuyBooksDialog=false">取消</button>
         </div>
@@ -120,7 +127,8 @@ import {
   statusListText,
   payTypeText,
   isFree,
-  isFreeText
+  isFreeText,
+  productType
 } from '@utils/constant'
 
 export default {
@@ -190,7 +198,9 @@ export default {
       statusList,
       statusListText,
       payTypeText,
-      isBuyBooksDialog: true // 是否开启购买按钮
+      productType,
+      isBuyLoading: false,
+      isBuyBooksDialog: false // 是否开启购买按钮
     };
   },
   asyncData ({ store, route }) {
@@ -204,6 +214,10 @@ export default {
   },
   methods: {
     collectBooks (books_id) { // 用户收藏小书
+      if (!this.personalInfo.islogin) {
+        this.$message.warning('请先登录，再继续操作');
+        return false
+      }
       this.$store.dispatch('books/COLLECT_BOOKS', {
         books_id,
       })
@@ -223,8 +237,29 @@ export default {
       }
       this.isBuyBooksDialog = true
     },
-    submitBuyBooks () { // 购买小书
-
+    enterBuy () {
+      if (!this.personalInfo.islogin) {
+        this.$message.warning('请先登录，再继续操作');
+        return false
+      }
+      if (this.books.booksBookAll.length < 1) {
+        this.$message.warning('当前章节为空,无法购买')
+        return false
+      }
+      this.isBuyLoading = true
+      this.$store.dispatch('shop/BUY', {
+        product_id: this.books.booksInfo.books_id,
+        product_type: this.productType.books
+      }).then(result => {
+        this.isBuyLoading = false
+        if (result.state === 'success') {
+          this.isBuyBooksDialog = false
+          this.$router.push({ name: 'myOrder' })
+          this.$message.success(result.message);
+        } else {
+          this.$message.warning(result.message);
+        }
+      })
     },
     isCollect (item) { // 是否收藏
       let collectUserIds = []
@@ -251,10 +286,6 @@ export default {
       }
     },
     lookChapter () {
-      if (!this.personalInfo.islogin) {
-        this.$message.warning('查看小书需要登录');
-        return false
-      }
       if (this.books.booksBookAll.length > 0) {
         this.$router.push({ name: 'BookView', params: { books_id: this.$route.params.books_id, book_id: this.books.booksBookAll[0].book_id } })
       } else {

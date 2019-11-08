@@ -187,11 +187,6 @@ export default {
     }
   },
   mounted () {
-    if (!this.personalInfo.islogin) {
-      this.$message.warning('查看小书需要登录');
-      this.$router.push({ name: 'book', params: { books_id: this.$route.params.books_id } })
-      return false
-    }
     this.getBooksBookAll()
     this.getBookNextPrev()
   },

@@ -41,6 +41,28 @@ class Tokens {
     }
   }
 
+  static async ClientVerifyTokenInfo (ctx, next) {
+    let req = ctx.request.body
+    let token =
+      req.accessToken ||
+      ctx.query.accessToken ||
+      ctx.headers['access-token'] ||
+      ctx.cookies.get('accessToken')
+    // 存在token，解析token
+    await jwt.verify(token, 'client', async (err, decoded) => {
+      if (err) {
+        ctx.request.islogin = false
+        ctx.request.user = {}
+      } else {
+        ctx.request.islogin = true
+        ctx.request.user = await models.user.findOne({
+          where: { uid: decoded.uid }
+        })
+      }
+      await next()
+    })
+  }
+
   static async AdminVerifyToken (ctx, next) {
     let req = ctx.request.body
     let token = req.token || ctx.query.token || ctx.headers['x-access-token']

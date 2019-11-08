@@ -39,6 +39,11 @@ export default [
         component: () => import('@views/User/shellDetail') // 消费明细
       },
       {
+        path: 'my-order',
+        name: 'myOrder',
+        component: () => import('@views/User/Order') // 我的订单
+      },
+      {
         path: 'setting',
         name: 'setting',
         component: () => import('@views/Setting/Setting'), // 文章内容页

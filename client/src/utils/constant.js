@@ -71,7 +71,8 @@ export const userMessageAction = {
   comment: 5, // 评论
   reply: 6, // 回复
   thumb: 7, // 赞
-  buy: 8 // 购买
+  buy: 8, // 购买
+  sell: 9 // 卖出
 }
 
 export const userMessageTypeText = {
@@ -95,7 +96,8 @@ export const userMessageTypeText = {
     [userMessageAction.reply]: '小书章节中回复你的' // 小书章节评论6
   },
   [userMessageType.books]: {
-    [userMessageAction.comment]: '评论了你的小书' // 小书7
+    [userMessageAction.comment]: '评论了你的小书', // 小书7
+    [userMessageAction.sell]: '卖出小书' // 小书7
   },
   [userMessageType.books_comment]: {
     [userMessageAction.reply]: '小书中回复你的' // 小书评论8
@@ -128,7 +130,8 @@ export const userMessageActionText = {
   [userMessageAction.comment]: '新的评论',
   [userMessageAction.reply]: '新的赞',
   [userMessageAction.thumb]: '新的回复',
-  [userMessageAction.buy]: '新的购买'
+  [userMessageAction.buy]: '新的购买',
+  [userMessageAction.sell]: '新的卖出'
 }
 
 export const virtualPlusLess = {
@@ -172,4 +175,77 @@ export const isFree = {
 export const isFreeText = {
   [isFree.free]: '免费', // 免费
   [isFree.pay]: '付费' // 付费
+}
+
+export const productType = {
+  // 商品类型
+  other: 1, // 其他
+  user: 2, // 用户
+  article: 3, // 文章
+  article_blog: 4, // 文章个人专栏
+  book: 5, // 小书章节
+  books: 6, // 小书
+  dynamic: 7, // 片刻
+  system: 8 // 系统
+}
+
+export const productTypeInfo = {
+  // 商品类型
+  [productType.other]: {
+    model: 'other',
+    name: '其他',
+    isUse: false,
+    idKey: ''
+  }, // 其他
+  [productType.user]: {
+    model: 'user',
+    name: '用户',
+    isUse: false,
+    idKey: 'uid'
+  }, // 用户
+  [productType.article]: {
+    model: 'article',
+    name: '文章',
+    isUse: false,
+    idKey: 'aid'
+  }, // 文章
+  [productType.article_blog]: {
+    model: 'article_blog',
+    name: '文章专栏',
+    isUse: false,
+    idKey: 'blog_id'
+  }, // 文章个人专栏
+  [productType.book]: {
+    model: 'book',
+    name: '小书章节',
+    isUse: false,
+    idKey: 'book_id'
+  }, // 小书章节
+  [productType.books]: {
+    model: 'books',
+    name: '小书',
+    isUse: true,
+    idKey: 'books_id'
+  }, // 小书
+  [productType.dynamic]: {
+    model: 'dynamic',
+    name: '片刻',
+    isUse: false,
+    idKey: 'id'
+  }, // 片刻
+  [productType.system]: {
+    model: 'system',
+    isUse: false,
+    idKey: ''
+  } // 系统
+}
+
+export const trialRead = {
+  yes: 1, // 可以
+  no: 2 // 不可以
+}
+
+export const trialReadText = {
+  [trialRead.yes]: '开启', // 可以
+  [trialRead.no]: '关闭' // 不可以
 }

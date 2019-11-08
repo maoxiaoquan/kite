@@ -9,6 +9,7 @@ module.exports = {
       // id
       type: Seq.BIGINT(20),
       primaryKey: true, // 定义主键
+      autoIncrement: true, // 自动递增
       comment: 'id',
       field: 'id'
     },
@@ -50,6 +51,7 @@ module.exports = {
       type: Seq.TEXT,
       comment: '描述',
       field: 'description'
-    }
+    },
+    ...time.create_date
   }
 }

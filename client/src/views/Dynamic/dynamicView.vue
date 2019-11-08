@@ -178,7 +178,7 @@ export default {
     commentChange (result) {
       if (result.state === "success") {
         this.commentList.unshift(result.data)
-        this.dynamicView.comment_count = Number(this.dynamicItem.comment_count) + 1
+        this.dynamicView.comment_count = Number(this.dynamicView.comment_count) + 1
         this.$message.success(result.message);
       } else {
         this.$message.warning(result.message);

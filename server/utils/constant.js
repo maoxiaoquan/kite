@@ -71,7 +71,8 @@ const userMessageAction = {
   comment: 5, // 评论
   reply: 6, // 回复
   thumb: 7, // 赞
-  buy: 8 // 购买
+  buy: 8, // 购买
+  sell: 9 // 售出
 }
 
 const userMessageActionText = {
@@ -127,8 +128,8 @@ const virtualActionText = {
   [virtualAction.comment]: '评论或者回复', // 评论
   [virtualAction.reply]: '评论或者回复', // 回复
   [virtualAction.thumb]: '点赞', // 点赞
-  [virtualAction.sell]: '卖', // 卖
-  [virtualAction.buy]: '买', // 买
+  [virtualAction.sell]: '售出', // 卖
+  [virtualAction.buy]: '购物', // 买
   [virtualAction.recover]: '系统回收', // 系统回收
   [virtualAction.obtain_like]: '收到喜欢', // 收到喜欢
   [virtualAction.obtain_collect]: '收到收藏', // 收到收藏
@@ -264,6 +265,57 @@ const productType = {
   system: 8 // 系统
 }
 
+const productTypeInfo = {
+  // 商品类型
+  [productType.other]: {
+    model: 'other',
+    name: '其他',
+    isUse: false,
+    idKey: ''
+  }, // 其他
+  [productType.user]: {
+    model: 'user',
+    name: '用户',
+    isUse: false,
+    idKey: 'uid'
+  }, // 用户
+  [productType.article]: {
+    model: 'article',
+    name: '文章',
+    isUse: false,
+    idKey: 'aid'
+  }, // 文章
+  [productType.article_blog]: {
+    model: 'article_blog',
+    name: '文章专栏',
+    isUse: false,
+    idKey: 'blog_id'
+  }, // 文章个人专栏
+  [productType.book]: {
+    model: 'book',
+    name: '小书章节',
+    isUse: false,
+    idKey: 'book_id'
+  }, // 小书章节
+  [productType.books]: {
+    model: 'books',
+    name: '小书',
+    isUse: true,
+    idKey: 'books_id'
+  }, // 小书
+  [productType.dynamic]: {
+    model: 'dynamic',
+    name: '片刻',
+    isUse: false,
+    idKey: 'id'
+  }, // 片刻
+  [productType.system]: {
+    model: 'system',
+    isUse: false,
+    idKey: ''
+  } // 系统
+}
+
 const isFree = {
   free: 1, // 免费
   pay: 2 // 付费
@@ -272,6 +324,16 @@ const isFree = {
 const isFreeText = {
   [isFree.free]: '免费', // 免费
   [isFree.pay]: '付费' // 付费
+}
+
+const trialRead = {
+  yes: 1, // 可以
+  no: 2 // 不可以
+}
+
+const trialReadText = {
+  [trialRead.yes]: '开启', // 可以
+  [trialRead.no]: '关闭' // 不可以
 }
 
 module.exports = {
@@ -295,5 +357,8 @@ module.exports = {
   payTypeText,
   isFree,
   isFreeText,
-  productType
+  productType,
+  productTypeInfo,
+  trialRead,
+  trialReadText
 }

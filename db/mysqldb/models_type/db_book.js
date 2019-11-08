@@ -93,6 +93,12 @@ module.exports = {
       comment: '更新时间戳',
       field: 'update_timestamp'
     },
+    trial_read: {
+      // 是否可以试读
+      type: Seq.INTEGER(6),
+      comment: '是否可以试读 1可以 2不可以',
+      field: 'trial_read'
+    },
     ...time.create_date
   }
 }

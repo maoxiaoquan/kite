@@ -10,13 +10,16 @@ const {
   userMessageAction,
   userMessageActionText,
   virtualAction,
-  virtualType
+  virtualPlusLess,
+  virtualType,
+  productTypeInfo,
+  isFree
 } = require('../../utils/constant')
 
 const userMessage = require('../../utils/userMessage')
 const userVirtual = require('../../common/userVirtual')
 
-function ErrorMessage(message) {
+function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
 }
@@ -28,98 +31,154 @@ class Shop {
    * @param   {object} ctx 上下文对象
    */
   // 购买操作
-  static async Buy(ctx) {
+  static async Buy (ctx) {
     try {
-      let reqData = ctx.request.body
+      let { product_id, product_type } = ctx.request.body
       let { user = '' } = ctx.request
-      let user_info = await models.user_info.findOne({
+
+      const productTypeAll = Object.keys(productTypeInfo)
+
+      if (!~productTypeAll.indexOf(String(product_type))) {
+        throw new ErrorMessage('当前商品不在可购买列表')
+      }
+
+      // 获取商品信息
+      const model = productTypeInfo[product_type].model
+      const idKey = productTypeInfo[product_type].idKey
+
+      const productInfo = await models[model].findOne({
+        where: {
+          [idKey]: product_id
+        }
+      })
+
+      if (productInfo.is_free === isFree.free) {
+        // 判断商品是否免费
+        throw new ErrorMessage('当前商品是免费无需购买！')
+      }
+
+      if (productInfo.uid === user.uid) {
+        // 判断商品是否免费
+        throw new ErrorMessage('无法购买自己售出的！')
+      }
+
+      let oneOrder = await models.order.findOne({
+        where: {
+          product_id,
+          product_type,
+          uid: user.uid
+        }
+      })
+
+      if (oneOrder) {
+        throw new ErrorMessage('当前商品已购买，请勿重复购买！')
+      }
+
+      let myUserInfo = await models.user_info.findOne({
         where: {
           uid: user.uid
         }
       })
 
-      let shell_balance = Number(user_info.shell_balance)
-      if (shell_balance < reqData.price) {
-      } else {
-      }
-
-      let user_info = await models.user_info.findOne({
+      let otherUserInfo = await models.user_info.findOne({
         where: {
-          uid: virtualData.uid
+          uid: productInfo.uid
         }
       })
-      let isPlus =
-        virtualInfo[virtualData.action].plusLess === virtualPlusLess.plus
-      let amount = virtualInfo[virtualData.action][virtualData.type]
-      let shell_balance = Number(user_info.shell_balance)
-      let balance = isPlus ? shell_balance + amount : shell_balance - amount
 
-      if (!isPlus) {
-        if (shell_balance < amount) {
-          throw new ErrorMessage('积分余额不足')
-        }
+      let myShellBalance = Number(myUserInfo.shell_balance) // 我的账户余额
+      let otherShellBalance = Number(otherUserInfo.shell_balance) // 商品用户的账户余额
+      let price = Number(productInfo.price)
+
+      if (myShellBalance < 1) {
+        throw new ErrorMessage('当前账户贝壳不足')
       }
+      if (myShellBalance < Number(productInfo.price)) {
+        throw new ErrorMessage('当前账户贝壳不足')
+      }
+
+      let myBalance = myShellBalance - price
+      let otherBalance = otherShellBalance + price
 
       await models.sequelize.transaction(t => {
         // 在事务中执行操作
         return models.virtual
           .create(
             {
-              // 用户虚拟币消息记录
-              uid: '',
-              ass_uid: '',
-              associate: '',
-              plus_less: '',
-              balance: '',
-              income: '',
-              expenses: '',
-              amount: '',
-              type: '',
-              action: '',
+              // 用户虚拟币记录
+              uid: user.uid,
+              ass_uid: productInfo.uid || '',
+              associate: JSON.stringify({
+                [productTypeInfo[product_type].idKey]: product_id
+              }),
+              plus_less: virtualPlusLess.less,
+              balance: myBalance,
+              income: productInfo.price,
+              expenses: 0,
+              amount: productInfo.price,
+              type: virtualType.books,
+              action: virtualAction.buy,
               description: ''
             },
             { transaction: t }
           )
-          .then(user => {
+          .then(virtual => {
             return models.user_info.update(
               {
-                shell_balance: balance
+                shell_balance: myBalance
               },
               {
                 where: {
-                  uid: virtualData.uid
+                  uid: user.uid
                 }
               },
               { transaction: t }
             )
           })
-          .then(user => {
+          .then(user_info => {
+            return models.order.create(
+              {
+                // 用户虚拟币记录
+                uid: user.uid,
+                product_id,
+                product_type,
+                status: 1,
+                pay_type: productInfo.pay_type,
+                amount: productInfo.price,
+                description: '购买小书'
+              },
+              { transaction: t }
+            )
+          })
+          .then(order => {
             return models.virtual.create(
               {
                 // 用户虚拟币消息记录
-                uid: '',
-                ass_uid: '',
-                associate: '',
-                plus_less: '',
-                balance: '',
-                income: '',
-                expenses: '',
-                amount: '',
-                type: '',
-                action: '',
+                uid: productInfo.uid,
+                ass_uid: user.uid,
+                associate: JSON.stringify({
+                  [productTypeInfo[product_type].idKey]: product_id
+                }),
+                plus_less: virtualPlusLess.plus,
+                balance: otherBalance,
+                income: 0,
+                expenses: productInfo.price,
+                amount: productInfo.price,
+                type: virtualType.books,
+                action: virtualAction.sell,
                 description: ''
               },
               { transaction: t }
             )
           })
-          .then(user => {
+          .then(virtual => {
             return models.user_info.update(
               {
-                shell_balance: balance
+                shell_balance: otherBalance
               },
               {
                 where: {
-                  uid: virtualData.uid
+                  uid: productInfo.uid
                 }
               },
               { transaction: t }
@@ -127,10 +186,20 @@ class Shop {
           })
       })
 
+      await userMessage.setMessage({
+        uid: productInfo.uid,
+        sender_id: user.uid,
+        action: userMessageAction.sell, // 动作：评论
+        type: userMessageType.books, // 类型：小书章节评论
+        content: JSON.stringify({
+          [productTypeInfo[product_type].idKey]: product_id
+        })
+      })
+
       resClientJson(ctx, {
         state: 'success',
         data: {},
-        message: 'success'
+        message: '购买成功'
       })
     } catch (err) {
       resClientJson(ctx, {
@@ -141,71 +210,48 @@ class Shop {
     }
   }
   /**
-   * 我的购买列表
+   * 我的订单列表
    * @param   {object} ctx 上下文对象
    */
-  static async myShopList(ctx) {
-    const { dynamic_id } = ctx.request.body
+  static async orderList (ctx) {
+    let page = ctx.query.page || 1
+    let product_type = ctx.query.product_type || ''
+    let pageSize = Number(ctx.query.pageSize) || 10
     let { user = '' } = ctx.request
-    let type = ''
-    try {
-      let oneDynamic = await models.dynamic.findOne({
-        where: {
-          id: dynamic_id
-        }
-      })
-      let oneUserThumbDynamic = await models.thumb_dynamic.findOne({
-        where: {
-          uid: user.uid,
-          dynamic_id
-        }
-      })
+    let whereParams = {
+      // 查询参数
+      uid: user.uid
+    }
 
-      if (oneUserThumbDynamic) {
-        /* 判断是否like动态，是则取消，否则添加 */
-        type = 'cancel'
-        await models.thumb_dynamic.destroy({
+    product_type && (whereParams['product_type'] = product_type)
+
+    try {
+      let { count, rows } = await models.order.findAndCountAll({
+        where: whereParams, // 为空，获取全部，也可以自己添加条件
+        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: pageSize, // 每页限制返回的数据条数
+        order: [['create_date', 'DESC']]
+      })
+      for (let i in rows) {
+        let model = productTypeInfo[rows[i].product_type].model
+        let idKey = productTypeInfo[rows[i].product_type].idKey
+        const productInfo = await models[model].findOne({
           where: {
-            uid: user.uid,
-            dynamic_id
+            [idKey]: rows[i].product_id
           }
         })
-      } else {
-        type = 'like'
-        await userMessage.setMessage({
-          uid: oneDynamic.uid,
-          sender_id: user.uid,
-          action: userMessageAction.thumb, // 动作：点赞
-          type: userMessageType.thumb_dynamic, // 类型：点赞动态
-          content: JSON.stringify({
-            dynamic_id: dynamic_id
-          })
-        })
-        await models.thumb_dynamic.create({
-          uid: user.uid,
-          dynamic_id
-        })
+        rows[i].setDataValue('productInfo', productInfo)
       }
-
-      let dynamicLikeCount = await models.thumb_dynamic.count({
-        where: {
-          dynamic_id
-        }
-      })
-
-      await models.dynamic.update(
-        {
-          like_count: dynamicLikeCount
-        },
-        { where: { id: dynamic_id } }
-      )
 
       resClientJson(ctx, {
         state: 'success',
         data: {
-          type
+          count,
+          list: rows,
+          page,
+          pageSize
         },
-        message: type === 'like' ? '点赞动态成功' : '取消点赞动态成功'
+        message: '获取订单信息成功'
       })
     } catch (err) {
       resClientJson(ctx, {

@@ -20,6 +20,9 @@
         <thumb v-else-if="Number(item.action)===userMessageAction.thumb"
                :MessageItem="item"
                @delete-change="deleteChange" />
+        <sell v-else-if="Number(item.action)===userMessageAction.sell"
+              :MessageItem="item"
+              @delete-change="deleteChange" />
       </div>
     </div>
     <Page :total="userMessage.count"
@@ -36,6 +39,7 @@ import comment from '../msgComponents/comment'
 import like from '../msgComponents/like'
 import reply from '../msgComponents/reply'
 import thumb from '../msgComponents/thumb'
+import sell from '../msgComponents/sell'
 
 import { Page } from '@components'
 import { mapState } from 'vuex'
@@ -100,6 +104,7 @@ export default {
     reply,
     like,
     thumb,
+    sell,
     Page
   }
 }

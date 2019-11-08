@@ -19,9 +19,11 @@
             <div class="statistics">
               <span class="duration">时长: {{bookItem.rTime}}</span>
               <span class="readed">{{bookItem.read_count||0}}次学习</span><span class="comment">{{bookItem.commentCount||0}}条评论</span>
+              <span class="read"
+                    v-if="Number(books.booksInfo.is_free)===isFree.pay&&Number(bookItem.trial_read)===trialRead.yes">可试读</span>
               <span class="edit"
                     @click="writeChapter(bookItem.book_id)"
-                    v-if="personalInfo.islogin">编辑章节</span>
+                    v-if="personalInfo.islogin&&personalInfo.user.uid===bookItem.uid">编辑章节</span>
               <span class="delete"
                     @click="deleteChapter(bookItem.book_id)"
                     v-if="personalInfo.islogin">删除</span>
@@ -39,14 +41,23 @@
 
 <script>
 import { mapState } from 'vuex'
+import {
+  trialRead,
+  trialReadText,
+  isFree
+} from '@utils/constant'
+
 export default {
   name: "BookList",
+  data () {
+    return {
+      trialRead,
+      trialReadText,
+      isFree
+    }
+  },
   methods: {
     lookChapter (book_id) {
-      if (!this.personalInfo.islogin) {
-        this.$message.warning('查看小书需要登录');
-        return false
-      }
       this.$router.push({ name: 'BookView', params: { books_id: this.$route.params.books_id, book_id: book_id } })
     },
     writeChapter (book_id) {
@@ -214,6 +225,15 @@ export default {
               margin-right: 12px;
               display: inline-block;
               vertical-align: middle;
+            }
+            .read {
+              color: #fff;
+              background: lightcoral;
+              font-size: 12px;
+              border-radius: 3px;
+              line-height: 18px;
+              padding: 1px 3px;
+              cursor: pointer;
             }
             .edit {
               color: #fff;

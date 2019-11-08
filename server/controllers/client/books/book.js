@@ -139,6 +139,7 @@ class Book {
         origin_content: reqData.origin_content /* 源内容 */,
         status, // '1:审核中;2:审核通过;3:审核失败;4：无需审核'
         sort: reqData.sort,
+        trial_read: reqData.trial_read,
         read_time: reqData.content.length
       })
 
@@ -313,6 +314,7 @@ class Book {
           origin_content: reqData.origin_content /* 源内容 */,
           status, // '1:审核中;2:审核通过;3:审核失败;4：无需审核'
           sort: reqData.sort,
+          trial_read: reqData.trial_read,
           read_time: reqData.content.length
         },
         {

@@ -42,6 +42,8 @@
               <router-link class="link-dark-major"
                            :to="{name:'book',params:{books_id:booksItem.books_id}}">
                 {{booksItem.title}}
+                <span class="free"
+                      :class="Number(booksItem.is_free)===isFree.free?'yes':''">{{isFreeText[booksItem.is_free]}}</span>
               </router-link>
             </div>
             <div class="library-item__info">
@@ -83,6 +85,16 @@
 <script>
 import { Page, UploadImage, Dropdown } from '@components'
 import { mapState } from 'vuex'
+
+import {
+  statusList,
+  statusListText,
+  payTypeText,
+  isFree,
+  isFreeText,
+  productType
+} from '@utils/constant'
+
 export default {
   name: 'Books',
   metaInfo () {
@@ -96,6 +108,8 @@ export default {
   data () {
     return {
       isLoading: false,
+      isFree,
+      isFreeText,
       books: {
         // 个人中心小书列表
         count: 0,
@@ -262,6 +276,18 @@ export default {
           display: -webkit-box;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 2;
+          .free {
+            font-size: 12px;
+            background: #fd763a;
+            border-radius: 3px;
+            line-height: 18px;
+            color: #fff;
+            padding: 1px 3px;
+            display: inline-block;
+            &.yes {
+              background: #41b883;
+            }
+          }
         }
         .library-item-tag {
           height: 50px;
