@@ -214,6 +214,8 @@ class Book {
    */
   static async getBookInfo (ctx) {
     let { book_id } = ctx.query
+    let { user = '', islogin } = ctx.request
+    let isBuy = false
     try {
       let oneBook = await models.book.findOne({
         where: {
@@ -222,10 +224,18 @@ class Book {
       })
 
       if (oneBook) {
+        if (islogin) {
+          isBuy = true
+        } else {
+          isBuy = false
+        }
+
         await models.book.update(
           { read_count: Number(oneBook.read_count) + 1 },
           { where: { book_id } } // 为空，获取全部，也可以自己添加条件
         )
+
+        oneBook.setDataValue('isBuy', isBuy)
 
         if (oneBook) {
           resClientJson(ctx, {

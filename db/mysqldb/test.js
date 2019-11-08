@@ -32,9 +32,9 @@ async function sql () {
   // }
   // 2019.11.6 11:51
 
-  await models.sequelize.query(
-    'ALTER TABLE book add COLUMN trial_read INTEGER(6) comment "是否可以试读";'
-  )
+  await models.order.sync({
+    force: true
+  })
   process.exit()
 }
 sql()

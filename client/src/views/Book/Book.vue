@@ -45,7 +45,7 @@
                           @click="lookChapter"> 查看</button>
                   <template v-else>
                     <button class="btn button-look"
-                            @click="lookChapter"> 试读</button>
+                            @click="trialRead"> 试读</button>
                     <button class="btn button-look"
                             v-if="Number(books.booksInfo.is_free)!==isFree.free"
                             @click="onBuy"> 购买 </button>
@@ -283,6 +283,13 @@ export default {
           status: false,
           text: '收藏'
         }
+      }
+    },
+    trialRead () {
+      if (this.books.booksInfo.trialReadCount > 0) {
+        this.lookChapter()
+      } else {
+        this.$message.warning('当前小书无可试读章节');
       }
     },
     lookChapter () {

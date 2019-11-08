@@ -327,6 +327,7 @@ const isFreeText = {
 }
 
 const trialRead = {
+  // 是否可以试读
   yes: 1, // 可以
   no: 2 // 不可以
 }
