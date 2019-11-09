@@ -20,7 +20,8 @@ const {
   isFree,
   isFreeText,
   productType,
-  trialRead
+  trialRead,
+  productTypeInfo
 } = require('../../../utils/constant')
 
 const userVirtual = require('../../../common/userVirtual')
@@ -305,7 +306,13 @@ class Books {
         }
 
         if (reqData.price < 0) {
-          throw new ErrorMessage('请请输入大于等于0的定价！')
+          throw new ErrorMessage('请输入大于等于0的定价！')
+        }
+
+        if (reqData.price > 0) {
+          throw new ErrorMessage(
+            '小书当前定价不能超过200，后续等待管理员开放！'
+          )
         }
       }
 
@@ -572,18 +579,13 @@ class Books {
     let { books_id, type } = ctx.query
     let { user = '', islogin } = ctx.request
     let isBuy = false
+
     try {
       let books = await models.books.findOne({
         where: {
           books_id
         }
       })
-
-      if (islogin) {
-        isBuy = true
-      } else {
-        isBuy = false
-      }
 
       if (books) {
         if (type === 'look') {
@@ -624,6 +626,25 @@ class Books {
           })
         )
 
+        if (islogin) {
+          // 获取商品信息
+          const productInfo = await models.order.findOne({
+            where: {
+              product_id: books_id,
+              product_type: productType.books,
+              uid: user.uid
+            }
+          })
+          if (productInfo) {
+            // 存在商品信息，说明当前商品已被用户购买
+            isBuy = true
+          } else {
+            isBuy = false
+          }
+        } else {
+          isBuy = false
+        }
+
         if (books.status === deletes) {
           books.setDataValue('content', '小书已被删除')
         }
@@ -659,6 +680,8 @@ class Books {
    */
   static async getBooksBookAll (ctx) {
     let { books_id } = ctx.query
+    let { user = '', islogin } = ctx.request
+
     try {
       let books = await models.books.findOne({
         where: {
@@ -670,10 +693,44 @@ class Books {
         let allBook = await models.book.findAll({
           where: {
             books_id
-          }
+          },
+          attributes: [
+            'book_id',
+            'books_id',
+            'uid',
+            'title',
+            'excerpt',
+            'status',
+            'rejection_reason',
+            'sort',
+            'read_count',
+            'update_date',
+            'read_time',
+            'create_date',
+            'trial_read'
+          ]
         })
 
         for (let i in allBook) {
+          if (islogin) {
+            // 获取商品信息
+            const productInfo = await models.order.findOne({
+              where: {
+                product_id: books_id,
+                product_type: productType.books,
+                uid: user.uid
+              }
+            })
+            if (productInfo) {
+              // 存在商品信息，说明当前商品已被用户购买
+              allBook[i].setDataValue('isBuy', true)
+            } else {
+              allBook[i].setDataValue('isBuy', false)
+            }
+          } else {
+            allBook[i].setDataValue('isBuy', false)
+          }
+
           allBook[i].setDataValue(
             'commentCount',
             await models.book_comment.count({

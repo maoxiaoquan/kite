@@ -1,7 +1,7 @@
 <template>
   <div class="book-list">
     <router-link class="btn create-book"
-                 v-if="personalInfo.islogin"
+                 v-if="personalInfo.islogin&&personalInfo.user.uid===books.booksInfo.user.uid"
                  :to="{name:'WriteBookView',params: { books_id: $route.params.books_id, book_id: 'create' }}">新增小书章节</router-link>
     <div class="book-content-head">小书章节</div>
     <div class="book-directory section-of-info"
@@ -14,7 +14,7 @@
         </div>
         <div class="center">
           <div class="title"
-               @click="lookChapter(bookItem.book_id)">{{bookItem.title}}</div>
+               @click="lookChapter(bookItem)">{{bookItem.title}}</div>
           <div class="sub-line">
             <div class="statistics">
               <span class="duration">时长: {{bookItem.rTime}}</span>
@@ -26,7 +26,7 @@
                     v-if="personalInfo.islogin&&personalInfo.user.uid===bookItem.uid">编辑章节</span>
               <span class="delete"
                     @click="deleteChapter(bookItem.book_id)"
-                    v-if="personalInfo.islogin">删除</span>
+                    v-if="personalInfo.islogin&&personalInfo.user.uid===bookItem.uid">删除</span>
             </div>
           </div>
         </div>
@@ -57,8 +57,12 @@ export default {
     }
   },
   methods: {
-    lookChapter (book_id) {
-      this.$router.push({ name: 'BookView', params: { books_id: this.$route.params.books_id, book_id: book_id } })
+    lookChapter (bookItem) {
+      if (bookItem.isBuy || bookItem.trial_read === this.trialRead.yes || bookItem.uid === this.personalInfo.user.uid) {
+        this.$router.push({ name: 'BookView', params: { books_id: this.$route.params.books_id, book_id: bookItem.book_id } })
+      } else {
+        this.$message.warning('当前章节需要购买后可阅读');
+      }
     },
     writeChapter (book_id) {
       if (!this.personalInfo.islogin) {

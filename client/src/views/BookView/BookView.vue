@@ -16,7 +16,7 @@
               <div class="label">小书</div>
             </div>
             <div class="book-summary-btn"
-                 v-if="personalInfo.islogin">
+                 v-if="personalInfo.islogin&&book.bookInfo.uid===personalInfo.user.uid">
               <div class="section-buy"
                    @click="writeChapter('create')">创建新章节</div>
             </div>
@@ -30,13 +30,13 @@
                   <div class="step-btn">{{key+1}}</div>
                 </div>
                 <div class="center">
-                  <div class="title">{{bookItem.title}} </div>
+                  <div class="title">{{bookItem.title}} <span class="read"
+                          v-if="Number(books.booksInfo.is_free)===isFree.pay&&bookItem.trial_read===trialRead.yes">可试读</span></div>
                 </div>
               </router-link>
             </div>
             <div class="book-summary__footer"></div>
           </div>
-
         </div>
         <div class="book-content">
           <div class="book-content-inner">
@@ -91,13 +91,18 @@
               <div class="section-content">
                 <div class="clearfix">
                   <div class="btn edit-outline"
-                       v-if="personalInfo.islogin"
+                       v-if="personalInfo.islogin&&book.bookInfo.uid===personalInfo.user.uid"
                        @click="writeChapter(book.bookInfo.book_id)">
                     编辑当前章节
                   </div>
                 </div>
                 <div class="entry-content article-content box-article-view"
+                     v-if="book.bookInfo.isLook||book.bookInfo.trial_read===trialRead.yes"
                      v-html="book.bookInfo.content">
+                </div>
+                <div v-else
+                     class="no-read">
+                  <p>当前章节需要购买此小书后，方可继续阅读</p>
                 </div>
                 <div class="book-comments">
                   <div class="comment-box"
@@ -139,6 +144,11 @@ import ClientOnly from 'vue-client-only'
 import { baidu, google } from '@utils'
 import googleMixin from '@mixins/google'
 import { Dropdown } from '@components'
+import {
+  trialRead,
+  trialReadText,
+  isFree
+} from '@utils/constant'
 export default {
   name: "BookInfo",
   minixs: [googleMixin], //混合谷歌分析
@@ -168,12 +178,14 @@ export default {
     return Promise.all([
       store.dispatch("PERSONAL_INFO", { accessToken }),
       store.dispatch('website/GET_WEBSITE_INFO'),
-      store.dispatch("books/GET_BOOKS_INFO", { books_id: route.params.books_id, type: 'info' }),
-      store.dispatch("book/GET_BOOK_INFO", { book_id: route.params.book_id }),
+      store.dispatch("books/GET_BOOKS_INFO", { books_id: route.params.books_id, type: 'info', accessToken }),
+      store.dispatch("book/GET_BOOK_INFO", { book_id: route.params.book_id, accessToken }),
     ]);
   },
   data () {
     return {
+      trialRead,
+      isFree,
       isShowAside: true, // 是否显示侧栏
       bookInfoOther: { // 当前小书章节的其他信息
         prev: {},
@@ -356,6 +368,17 @@ export default {
             &.current-active {
               color: #333;
               background: rgba(0, 0, 0, 0.1);
+            }
+            .title {
+              .read {
+                color: #fff;
+                background: lightcoral;
+                font-size: 12px;
+                border-radius: 3px;
+                line-height: 18px;
+                padding: 1px 3px;
+                cursor: pointer;
+              }
             }
             .step {
               align-items: center;
@@ -545,6 +568,14 @@ export default {
               font-weight: 400;
               font-size: 15px;
               overflow-x: hidden;
+            }
+            .no-read {
+              padding-top: 50px;
+              padding-bottom: 50px;
+              p {
+                text-align: center;
+                font-weight: bold;
+              }
             }
             .book-comments {
               padding-top: 30px;

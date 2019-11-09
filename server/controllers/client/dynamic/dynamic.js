@@ -154,8 +154,6 @@ class dynamic {
         where: whereParams // 为空，获取全部，也可以自己添加条件
       })
 
-      console.log('oneDynamic', oneDynamic)
-
       if (oneDynamic) {
         oneDynamic.setDataValue(
           'create_dt',

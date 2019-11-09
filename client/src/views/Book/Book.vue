@@ -40,20 +40,20 @@
                   </div>
                 </div>
                 <div class="other">
-                  <button v-if="books.booksInfo.is_free===isFree.free"
+                  <button v-if="books.booksInfo.is_free===isFree.free||books.booksInfo.user.uid===personalInfo.user.uid"
                           class="btn button-look"
                           @click="lookChapter"> 查看</button>
                   <template v-else>
                     <button class="btn button-look"
-                            @click="trialRead"> 试读</button>
+                            @click="trialRead">{{books.booksInfo.isBuy?'阅读':'试读'}} </button>
                     <button class="btn button-look"
-                            v-if="Number(books.booksInfo.is_free)!==isFree.free"
+                            v-if="!books.booksInfo.isBuy"
                             @click="onBuy"> 购买 </button>
-                    <router-link v-if="personalInfo.islogin&&personalInfo.user.uid===books.booksInfo.user.uid"
-                                 :to="{ name: 'booksWrite', params: { type: 'update' }, query: { books_id: books.booksInfo.books_id }}"
-                                 class="btn button-update"
-                                 @click="lookChapter"> 修改</router-link>
                   </template>
+                  <router-link v-if="personalInfo.islogin&&personalInfo.user.uid===books.booksInfo.user.uid"
+                               :to="{ name: 'booksWrite', params: { type: 'update' }, query: { books_id: books.booksInfo.books_id }}"
+                               class="btn button-update"
+                               @click="lookChapter">修改</router-link>
                 </div>
               </div>
             </div>
@@ -203,10 +203,10 @@ export default {
       isBuyBooksDialog: false // 是否开启购买按钮
     };
   },
-  asyncData ({ store, route }) {
+  asyncData ({ store, route, accessToken = '' }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
-      store.dispatch("books/GET_BOOKS_INFO", { books_id: route.params.books_id, type: 'look' }),
+      store.dispatch("books/GET_BOOKS_INFO", { books_id: route.params.books_id, type: 'look', accessToken }),
     ]);
   },
   mounted () {
