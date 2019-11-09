@@ -70,6 +70,15 @@ function getNoMarkupStr (markupStr) {
   return noMarkupStr
 }
 
+function isDigit (value) {
+  var patrn = /^[0-9]*$/
+  if (patrn.exec(value) == null || value == '') {
+    return false
+  } else {
+    return true
+  }
+}
+
 function getSubStr (string) {
   let str = ''
   let len = 0
@@ -129,6 +138,16 @@ class Books {
 
         if (reqData.price < 0) {
           throw new ErrorMessage('请请输入大于等于0的定价！')
+        }
+
+        if (reqData.price > 0) {
+          throw new ErrorMessage(
+            '小书当前定价不能超过200，后续等待管理员开放！'
+          )
+        }
+
+        if (isDigit(reqData.price)) {
+          throw new ErrorMessage('请输入数字类型！')
         }
       }
 
@@ -203,7 +222,7 @@ class Books {
         tag_ids: reqData.tag_ids,
         is_free: reqData.is_free, // 免费还是付费
         pay_type: reqData.pay_type, // 支付类型
-        price: reqData.price // 价格
+        price: parseInt(reqData.price) // 价格
       })
 
       await userVirtual.setVirtual({
@@ -314,6 +333,9 @@ class Books {
             '小书当前定价不能超过200，后续等待管理员开放！'
           )
         }
+        if (isDigit(reqData.price)) {
+          throw new ErrorMessage('请输入数字类型！')
+        }
       }
 
       let date = new Date()
@@ -376,7 +398,7 @@ class Books {
           tag_ids: reqData.tag_ids,
           is_free: reqData.is_free, // 免费还是付费
           pay_type: reqData.pay_type, // 支付类型
-          price: reqData.price // 价格
+          price: parseInt(reqData.price) // 价格
         },
         {
           where: {
