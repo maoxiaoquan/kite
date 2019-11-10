@@ -116,7 +116,7 @@ class update {
         step = 19
         let allUser = await models.user.findAll()
         for (let i in allUser) {
-          models.user_info.update(
+          await models.user_info.update(
             {
               /* 注册写入数据库操作 */
               shell_balance: 3000

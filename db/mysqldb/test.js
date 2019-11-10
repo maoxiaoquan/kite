@@ -32,9 +32,28 @@ async function sql () {
   // }
   // 2019.11.6 11:51
 
-  await models.order.sync({
-    force: true
-  })
+  let allUser = await models.user.findAll()
+  for (let i in allUser) {
+    // models.user_info.update(
+    //   {
+    //     /* 注册写入数据库操作 */
+    //     shell_balance: 3000
+    //   },
+    //   { uid: allUser[i].uid }
+    // )
+
+    await models.virtual.create({
+      // 用户虚拟币消息记录
+      plus_less: 1,
+      balance: 3000,
+      amount: 3000,
+      uid: allUser[i].uid,
+      income: 3000,
+      expenses: 0,
+      type: 8,
+      action: 16
+    })
+  }
   process.exit()
 }
 sql()
