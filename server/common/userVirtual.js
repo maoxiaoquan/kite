@@ -62,8 +62,6 @@ class userVirtual {
         let shell_balance = Number(user_info.shell_balance)
         let balance = isPlus ? shell_balance + amount : shell_balance - amount
 
-        console.log('balance', balance)
-        console.log('isDigit(balance)', isDigit(balance))
         if (!isDigit(balance)) {
           throw new ErrorMessage('贝壳支付出现错误')
         }
