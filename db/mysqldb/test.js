@@ -34,13 +34,15 @@ async function sql () {
 
   let allUser = await models.user.findAll()
   for (let i in allUser) {
-    // models.user_info.update(
-    //   {
-    //     /* 注册写入数据库操作 */
-    //     shell_balance: 3000
-    //   },
-    //   { uid: allUser[i].uid }
-    // )
+    await models.user_info.update(
+      {
+        /* 注册写入数据库操作 */
+        shell_balance: 3000
+      },
+      {
+        where: { uid: allUser[i].uid }
+      }
+    )
 
     await models.virtual.create({
       // 用户虚拟币消息记录

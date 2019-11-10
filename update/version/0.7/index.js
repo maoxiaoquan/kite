@@ -114,6 +114,7 @@ class update {
         )
 
         step = 19
+
         let allUser = await models.user.findAll()
         for (let i in allUser) {
           await models.user_info.update(
@@ -121,7 +122,9 @@ class update {
               /* 注册写入数据库操作 */
               shell_balance: 3000
             },
-            { uid: allUser[i].uid }
+            {
+              where: { uid: allUser[i].uid }
+            }
           )
 
           await models.virtual.create({
