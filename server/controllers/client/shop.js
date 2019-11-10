@@ -86,6 +86,24 @@ class Shop {
         }
       })
 
+      let myVirtual = await models.virtual.findOne({
+        where: {
+          uid: user.uid
+        },
+        limit: 1,
+        order: [['id', 'DESC']]
+      })
+
+      let otherVirtual = await models.virtual.findOne({
+        where: {
+          uid: productInfo.uid
+        },
+        limit: 1,
+        order: [['id', 'DESC']]
+      })
+
+      let myOrShellBalance = Number(myVirtual.balance) // 我的账户余额
+      let otherOrShellBalance = Number(otherVirtual.balance) // 商品用户的账户余额
       let myShellBalance = Number(myUserInfo.shell_balance) // 我的账户余额
       let otherShellBalance = Number(otherUserInfo.shell_balance) // 商品用户的账户余额
       let price = Number(productInfo.price)
@@ -99,6 +117,12 @@ class Shop {
 
       let myBalance = myShellBalance - price
       let otherBalance = otherShellBalance + price
+      let myOrBalance = myOrShellBalance - price
+      let otherOrBalance = otherOrShellBalance + price
+
+      if (myBalance !== myOrBalance || otherBalance !== otherOrBalance) {
+        throw new ErrorMessage('支付出现错误，已终止')
+      }
 
       await models.sequelize.transaction(t => {
         // 在事务中执行操作

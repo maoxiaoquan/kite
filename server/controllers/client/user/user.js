@@ -265,24 +265,34 @@ class User {
         })
 
         if (!oneUserEmail) {
-          await queryUserVerifyCode(reqData.email).then(data => {
-            /* 注册验证码验证 */
-            if (data.length > 0) {
-              let time_num = moment(date.setHours(date.getHours())).format('X')
-              if (reqData.code === data[0].verify_code) {
-                if (
-                  Number(time_num) - Number(data[0].create_timestamp) >
-                  30 * 60
-                ) {
-                  throw new ErrorMessage('验证码已过时，请再次发送')
+          await models.verify_code
+            .findOne({
+              where: {
+                email: reqData.email
+              },
+              limit: 1,
+              order: [['id', 'DESC']]
+            })
+            .then(data => {
+              /* 注册验证码验证 */
+              if (data) {
+                let time_num = moment(date.setHours(date.getHours())).format(
+                  'X'
+                )
+                if (reqData.code === data.verify_code) {
+                  if (
+                    Number(time_num) - Number(data.create_timestamp) >
+                    30 * 60
+                  ) {
+                    throw new ErrorMessage('验证码已过时，请再次发送')
+                  }
+                } else {
+                  throw new ErrorMessage('验证码错误')
                 }
               } else {
-                throw new ErrorMessage('验证码错误')
+                throw new ErrorMessage('请发送验证码')
               }
-            } else {
-              throw new ErrorMessage('请发送验证码')
-            }
-          })
+            })
 
           await models.sequelize.transaction(t => {
             // 在事务中执行操作
@@ -1081,24 +1091,32 @@ class User {
         })
 
         if (email) {
-          await queryUserVerifyCode(reqData.email).then(data => {
-            /* 重置密码验证码验证 */
-            if (data.length > 0) {
-              let timeNum = moment()
-                .utc()
-                .utcOffset(+8)
-                .format('X')
-              if (reqData.code === data[0].verify_code) {
-                if (Number(timeNum) - Number(data[0].expire_time) > 30 * 60) {
-                  throw new ErrorMessage('验证码已过时，请再次发送')
+          await models.verify_code
+            .findOne({
+              where: {
+                email: reqData.email
+              },
+              limit: 1,
+              order: [['id', 'DESC']]
+            })
+            .then(data => {
+              /* 重置密码验证码验证 */
+              if (data) {
+                let timeNum = moment()
+                  .utc()
+                  .utcOffset(+8)
+                  .format('X')
+                if (reqData.code === data.verify_code) {
+                  if (Number(timeNum) - Number(data.expire_time) > 30 * 60) {
+                    throw new ErrorMessage('验证码已过时，请再次发送')
+                  }
+                } else {
+                  throw new ErrorMessage('验证码错误')
                 }
               } else {
-                throw new ErrorMessage('验证码错误')
+                throw new ErrorMessage('请发送验证码')
               }
-            } else {
-              throw new ErrorMessage('请发送验证码')
-            }
-          })
+            })
 
           await models.user.update(
             {

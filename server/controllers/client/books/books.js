@@ -146,7 +146,7 @@ class Books {
           )
         }
 
-        if (isDigit(reqData.price)) {
+        if (!isDigit(reqData.price)) {
           throw new ErrorMessage('请输入数字类型！')
         }
       }
@@ -333,7 +333,7 @@ class Books {
             '小书当前定价不能超过200，后续等待管理员开放！'
           )
         }
-        if (isDigit(reqData.price)) {
+        if (!isDigit(reqData.price)) {
           throw new ErrorMessage('请输入数字类型！')
         }
       }
@@ -600,7 +600,6 @@ class Books {
   static async getBooksInfo (ctx) {
     let { books_id, type } = ctx.query
     let { user = '', islogin } = ctx.request
-    let isBuy = false
 
     try {
       let books = await models.books.findOne({
@@ -638,8 +637,6 @@ class Books {
           })
         )
 
-        books.setDataValue('isBuy', isBuy)
-
         books.setDataValue(
           'user',
           await models.user.findOne({
@@ -659,12 +656,12 @@ class Books {
           })
           if (productInfo) {
             // 存在商品信息，说明当前商品已被用户购买
-            isBuy = true
+            books.setDataValue('isBuy', true)
           } else {
-            isBuy = false
+            books.setDataValue('isBuy', false)
           }
         } else {
-          isBuy = false
+          books.setDataValue('isBuy', false)
         }
 
         if (books.status === deletes) {

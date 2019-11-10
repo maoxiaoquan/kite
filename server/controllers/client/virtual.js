@@ -66,6 +66,7 @@ class Virtual {
         message: '签到成功'
       })
     } catch (err) {
+      console.log('err', err)
       resClientJson(ctx, {
         state: 'error',
         message: '错误信息：' + err.message

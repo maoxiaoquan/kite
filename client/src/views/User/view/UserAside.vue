@@ -63,11 +63,6 @@
       </div>
     </div>
 
-    <div class="client-card article-info">
-      <p class="info">
-        专栏为个人文章的一个集合
-      </p>
-    </div>
   </div>
 </template>
 
@@ -196,13 +191,6 @@ export default {
   .new-collection-btn {
     font-size: 13px;
     color: #42c02e;
-  }
-  .article-info {
-    padding: 15px;
-    background: #f9f9f9;
-    p {
-      font-size: 13px;
-    }
   }
 }
 

@@ -217,7 +217,6 @@ class Book {
   static async getBookInfo (ctx) {
     let { book_id } = ctx.query
     let { user = '', islogin } = ctx.request
-    let isLook = false
     try {
       let oneBook = await models.book.findOne({
         where: {
@@ -226,11 +225,6 @@ class Book {
       })
 
       if (oneBook) {
-        if (islogin) {
-          isLook = true
-        } else {
-          isLook = false
-        }
         if (islogin) {
           // 获取商品信息
           const productInfo = await models.order.findOne({
@@ -267,8 +261,6 @@ class Book {
           { read_count: Number(oneBook.read_count) + 1 },
           { where: { book_id } } // 为空，获取全部，也可以自己添加条件
         )
-
-        oneBook.setDataValue('isLook', isLook)
 
         if (oneBook) {
           resClientJson(ctx, {

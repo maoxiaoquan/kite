@@ -9,6 +9,15 @@ function ErrorMessage (message) {
   this.name = 'UserException'
 }
 
+function isDigit (value) {
+  var patrn = /^[0-9]*$/
+  if (patrn.exec(value) == null || value == '') {
+    return false
+  } else {
+    return true
+  }
+}
+
 class userVirtual {
   // 是否可以进行操作
   static isVirtual (vrData) {
@@ -36,10 +45,10 @@ class userVirtual {
     })
   }
 
-  // 用户消息
+  // 用户消费积分
   static setVirtual (vrData) {
     let virtualData = vrData
-    // 订阅消息
+    // 消费
     return new Promise(async (resolve, reject) => {
       try {
         let user_info = await models.user_info.findOne({
@@ -52,6 +61,12 @@ class userVirtual {
         let amount = virtualInfo[virtualData.action][virtualData.type]
         let shell_balance = Number(user_info.shell_balance)
         let balance = isPlus ? shell_balance + amount : shell_balance - amount
+
+        console.log('balance', balance)
+        console.log('isDigit(balance)', isDigit(balance))
+        if (!isDigit(balance)) {
+          throw new ErrorMessage('贝壳支付出现错误')
+        }
 
         if (!isPlus) {
           if (shell_balance < amount) {
