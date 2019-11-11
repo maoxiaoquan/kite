@@ -29,7 +29,7 @@
             <i class="el-icon-chat-dot-round"></i>
             <strong v-text="articleItem.comment_count"></strong>
           </li>
-          <li class="item"
+          <li class="item tag-view"
               v-if="articleItem.tag_ids">
             <router-link v-for="(itemTag,key) in articleItem.tag"
                          class="tag-class frontend"
@@ -159,14 +159,14 @@ export default {
           display: inline-block;
           color: #b3bac1;
           font-size: 12px;
-          &:after {
+          &:before {
             display: inline-block;
             content: "\B7";
             margin: 0 4px;
             color: #b2bac2;
           }
-          &:last-of-type {
-            &:after {
+          &:first-child {
+            &:before {
               content: "";
             }
           }
@@ -198,6 +198,11 @@ export default {
                 content: "";
               }
             }
+          }
+        }
+        @media (max-width: 575px) {
+          .tag-view {
+            display: none;
           }
         }
         .item-icon {

@@ -217,5 +217,21 @@ export default {
       position: relative;
     }
   }
+  @media (max-width: 575px) {
+    .aside {
+      position: static;
+      width: 100%;
+      margin-top: 30px;
+      .nav-list {
+        display: block;
+        .nav-item {
+          display: inline-block;
+        }
+      }
+    }
+    .dynamic-main {
+      padding-left: 0;
+    }
+  }
 }
 </style>
