@@ -36,7 +36,7 @@ export default [
       {
         path: 'shell-detail',
         name: 'shellDetail',
-        component: () => import('@views/User/shellDetail') // 消费明细
+        component: () => import('@views/User/ShellDetail') // 消费明细
       },
       {
         path: 'my-order',
