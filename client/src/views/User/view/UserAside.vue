@@ -15,13 +15,12 @@
     </ul>
 
     <div class="check-in"
-         v-if="personalInfo.islogin">
-      <span class="check"
-            @click="checkIn">签到</span>
+         v-if="personalInfo.islogin&&personalInfo.user.uid===user.user.uid">
+      签到
     </div>
 
     <ul class="aside-operat"
-        v-if="personalInfo.islogin">
+        v-if="personalInfo.islogin&&personalInfo.user.uid===user.user.uid">
       <li>
         <router-link class="collection"
                      :to='{name:"personal"}'>
@@ -110,21 +109,13 @@ export default {
     }
   }
   .check-in {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    background: #f0f0f0;
+    margin-top: 15px;
+    margin-bottom: 15px;
     border-radius: 6px;
-    padding: 10px;
+    padding: 8px;
     text-align: center;
-    .check {
-      display: inline-block;
-      padding: 8px 18px;
-      font-size: 13px;
-      color: #fff;
-      background: #00bcd4;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+    background: bisque;
+    font-size: 14px;
   }
   .function-btn {
     float: right;

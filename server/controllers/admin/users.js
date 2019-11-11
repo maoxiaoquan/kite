@@ -29,6 +29,15 @@ class Users {
           'ft_ban_dt',
           await moment(rows[i].ban_dt).format('YYYY年MM月DD日 HH时mm分ss秒')
         )
+
+        rows[i].setDataValue(
+          'user_info',
+          await models.user_info.findOne({
+            where: {
+              uid: rows[i].uid
+            }
+          })
+        )
       }
 
       resAdminJson(ctx, {
