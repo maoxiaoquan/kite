@@ -15,6 +15,7 @@
     </ul>
 
     <div class="check-in"
+         @click="checkIn"
          v-if="personalInfo.islogin&&personalInfo.user.uid===user.user.uid">
       签到
     </div>
