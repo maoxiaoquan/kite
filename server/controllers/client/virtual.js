@@ -116,42 +116,42 @@ class Virtual {
         } else if (rows[i].type === virtualType.article) {
           rows[i].setDataValue(
             'article',
-            await models.article.findOne({
+            (await models.article.findOne({
               where: { aid: associate.aid },
               attributes: ['aid', 'title']
-            })
+            })) || {}
           )
         } else if (rows[i].type === virtualType.article_blog) {
           rows[i].setDataValue(
             'article_blog',
-            await models.article_blog.findOne({
+            (await models.article_blog.findOne({
               where: { blog_id: associate.blog_id },
               attributes: ['blog_id', 'name']
-            })
+            })) || {}
           )
         } else if (rows[i].type === virtualType.book) {
           rows[i].setDataValue(
             'book',
-            await models.book.findOne({
+            (await models.book.findOne({
               where: { book_id: associate.book_id },
               attributes: ['book_id', 'title', 'books_id']
-            })
+            })) || {}
           )
         } else if (rows[i].type === virtualType.books) {
           rows[i].setDataValue(
             'books',
-            await models.books.findOne({
+            (await models.books.findOne({
               where: { books_id: associate.books_id },
               attributes: ['books_id', 'title']
-            })
+            })) || {}
           )
         } else if (rows[i].type === virtualType.dynamic) {
           rows[i].setDataValue(
             'dynamic',
-            await models.dynamic.findOne({
+            (await models.dynamic.findOne({
               where: { id: associate.dynamic_id },
               attributes: ['id', 'content']
-            })
+            })) || {}
           )
         } else if (rows[i].type === virtualType.system) {
         }
