@@ -81,8 +81,8 @@ const userMessageActionText = {
   [userMessageAction.collect]: '新的收藏',
   [userMessageAction.attention]: '新的关注',
   [userMessageAction.comment]: '新的评论',
-  [userMessageAction.reply]: '新的赞',
-  [userMessageAction.thumb]: '新的回复',
+  [userMessageAction.reply]: '新的回复',
+  [userMessageAction.thumb]: '新的赞',
   [userMessageAction.buy]: '新的购买'
 }
 
