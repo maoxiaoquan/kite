@@ -187,7 +187,9 @@ class Books {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布小书`
+            `${oneArticleTag.name}只有${
+              website.website_name
+            }管理团队才能发布小书`
           )
         }
       }
@@ -363,7 +365,9 @@ class Books {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布小书`
+            `${oneArticleTag.name}只有${
+              website.website_name
+            }管理团队才能发布小书`
           )
         }
       }

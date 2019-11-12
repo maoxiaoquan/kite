@@ -257,7 +257,7 @@ class _Notice extends React.Component {
     return (
       <div className="card layout-main" id="system-config">
         <div className="card-body">
-          <h4 class="header-title">系统通知</h4>
+          <h4 className="header-title">系统通知</h4>
           <button
             className="btn btn-danger"
             icon="plus"

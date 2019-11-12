@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     lookChapter (bookItem) {
-      if (bookItem.isBuy || bookItem.trial_read === this.trialRead.yes || bookItem.uid === this.personalInfo.user.uid) {
+      if (bookItem.isBuy || bookItem.trial_read === this.trialRead.yes || bookItem.uid === this.personalInfo.user.uid || Number(this.books.booksInfo.is_free) === this.isFree.free) {
         this.$router.push({ name: 'BookView', params: { books_id: this.$route.params.books_id, book_id: bookItem.book_id } })
       } else {
         this.$message.warning('当前章节需要购买后可阅读');

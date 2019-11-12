@@ -97,7 +97,7 @@
                   </div>
                 </div>
                 <div class="entry-content article-content box-article-view"
-                     v-if="book.bookInfo.isLook||book.bookInfo.trial_read===trialRead.yes"
+                     v-if="book.bookInfo.isLook"
                      v-html="book.bookInfo.content">
                 </div>
                 <div v-else

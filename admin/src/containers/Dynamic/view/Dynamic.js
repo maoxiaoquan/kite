@@ -189,11 +189,11 @@ class Dynamic extends React.Component {
 
   renderAttach(item) {
     // 渲染其他
-    if (item.type === this.dynamicType.link) {
+    if (item.type === this.state.dynamicType.link) {
       return `<a href="${item.attach}" target="_block">
        ${item.attach}
         </a>`
-    } else if (item.type === this.dynamicType.img) {
+    } else if (item.type === this.state.dynamicType.img) {
       let img = ''
       this.imgAnalyze(item.attach).map(item => {
         img += `<img src="${item}" alt=""></img>`

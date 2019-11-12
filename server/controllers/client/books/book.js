@@ -16,7 +16,8 @@ const {
   virtualAction,
   virtualType,
   productType,
-  trialRead
+  trialRead,
+  isFree
 } = require('../../../utils/constant')
 
 const userVirtual = require('../../../common/userVirtual')
@@ -224,34 +225,32 @@ class Book {
         }
       })
 
+      let oneBooks = await models.books.findOne({
+        where: {
+          books_id: oneBook.books_id
+        }
+      })
+
       if (oneBook) {
-        if (islogin) {
-          // 获取商品信息
-          const productInfo = await models.order.findOne({
-            where: {
-              product_id: oneBook.books_id,
-              product_type: productType.books,
-              uid: user.uid
+        if (
+          oneBooks.is_free === isFree.free ||
+          oneBook.trial_read === trialRead.yes
+        ) {
+          oneBook.setDataValue('isLook', true)
+        } else {
+          if (islogin) {
+            const productInfo = await models.order.findOne({
+              where: {
+                product_id: oneBook.books_id,
+                product_type: productType.books,
+                uid: user.uid
+              }
+            })
+            if (productInfo || user.uid === oneBook.uid) {
+              oneBook.setDataValue('isLook', true)
             }
-          })
-          if (productInfo || user.uid === oneBook.uid) {
-            // 当前商品已被购买，或者小书是自己发布的，即可直接阅读
-            // 存在商品信息，说明当前商品已被用户购买
-            oneBook.setDataValue('isLook', true)
           } else {
             oneBook.setDataValue('isLook', false)
-          }
-          if (
-            oneBook.trial_read !== trialRead.yes &&
-            !productInfo &&
-            user.uid !== oneBook.uid
-          ) {
-            oneBook.setDataValue('content', '需要购买方可继续阅读')
-            oneBook.setDataValue('origin_content', '需要购买方可继续阅读')
-          }
-        } else {
-          oneBook.setDataValue('isLook', false)
-          if (oneBook.trial_read !== trialRead.yes) {
             oneBook.setDataValue('content', '需要购买方可继续阅读')
             oneBook.setDataValue('origin_content', '需要购买方可继续阅读')
           }

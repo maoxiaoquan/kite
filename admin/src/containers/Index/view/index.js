@@ -58,89 +58,93 @@ class Index extends React.Component {
           <div className="big-statistics">
             <Row gutter={24}>
               <Col span={6} className="count-view">
-                <div class="card separate-card">
-                  <div class="card-body">
-                    <div class="float-right">
+                <div className="card separate-card">
+                  <div className="card-body">
+                    <div className="float-right">
                       <Icon
                         type="file-text"
                         className="big-widget-icon text-danger"
                       />
                     </div>
                     <h5
-                      class="text-muted font-weight-normal mt-0"
+                      className="text-muted font-weight-normal mt-0"
                       title="Number of Customers"
                     >
                       文章总数
                     </h5>
-                    <h3 class="mt-3 mb-3">{articleCount.allCount}</h3>
-                    <p class="mb-0 text-muted">
-                      <span class="text-nowrap">统计所有的文章</span>
+                    <h3 className="mt-3 mb-3">{articleCount.allCount}</h3>
+                    <p className="mb-0 text-muted">
+                      <span className="text-nowrap">统计所有的文章</span>
                     </p>
                   </div>
                 </div>
               </Col>
 
               <Col span={6} className="count-view ">
-                <div class="card separate-card">
-                  <div class="card-body">
-                    <div class="float-right">
+                <div className="card separate-card">
+                  <div className="card-body">
+                    <div className="float-right">
                       <Icon
                         type="message"
                         className="big-widget-icon text-primary"
                       />
                     </div>
                     <h5
-                      class="text-muted font-weight-normal mt-0"
+                      className="text-muted font-weight-normal mt-0"
                       title="Number of Customers"
                     >
                       片刻总数
                     </h5>
-                    <h3 class="mt-3 mb-3">{dynamicCount.allCount}</h3>
-                    <p class="mb-0 text-muted">
-                      <span class="text-nowrap">统计所有的用户发表的说说</span>
+                    <h3 className="mt-3 mb-3">{dynamicCount.allCount}</h3>
+                    <p className="mb-0 text-muted">
+                      <span className="text-nowrap">
+                        统计所有的用户发表的说说
+                      </span>
                     </p>
                   </div>
                 </div>
               </Col>
 
               <Col span={6} className="count-view">
-                <div class="card  separate-card">
-                  <div class="card-body">
-                    <div class="float-right">
+                <div className="card  separate-card">
+                  <div className="card-body">
+                    <div className="float-right">
                       <Icon type="read" className="big-widget-icon text-info" />
                     </div>
                     <h5
-                      class="text-muted font-weight-normal mt-0"
+                      className="text-muted font-weight-normal mt-0"
                       title="Number of Customers"
                     >
                       个人专栏总数
                     </h5>
-                    <h3 class="mt-3 mb-3">{articleBlogCount.allCount}</h3>
-                    <p class="mb-0 text-muted">
-                      <span class="text-nowrap">统计所有的个人公开的专栏</span>
+                    <h3 className="mt-3 mb-3">{articleBlogCount.allCount}</h3>
+                    <p className="mb-0 text-muted">
+                      <span className="text-nowrap">
+                        统计所有的个人公开的专栏
+                      </span>
                     </p>
                   </div>
                 </div>
               </Col>
 
               <Col span={6} className="count-view ">
-                <div class="card  separate-card">
-                  <div class="card-body">
-                    <div class="float-right">
+                <div className="card  separate-card">
+                  <div className="card-body">
+                    <div className="float-right">
                       <Icon
                         type="user"
                         className="big-widget-icon text-primary"
                       />
                     </div>
                     <h5
-                      class="text-muted font-weight-normal mt-0"
+                      className="text-muted font-weight-normal mt-0"
                       title="Number of Customers"
                     >
                       用户总数
                     </h5>
-                    <h3 class="mt-3 mb-3">{articleCount.allCount}</h3>
-                    <p class="mb-0 text-muted">
-                      <span class="text-nowrap">统计所有的用户</span>
+                    <h3 className="mt-3 mb-3">{articleCount.allCount}</h3>
+                    <p className="mb-0 text-muted">
+                      <span className="text-nowrap">统计所有的用户</span>
                     </p>
                   </div>
                 </div>
@@ -152,22 +156,22 @@ class Index extends React.Component {
             <Col span={10} className="left-view">
               <Row gutter={24}>
                 <Col span={12} className="count-view">
-                  <div class="xsb-card  separate-card">
-                    <div class="xsb-card-body">
-                      <div class="float-right">
+                  <div className="xsb-card  separate-card">
+                    <div className="xsb-card-body">
+                      <div className="float-right">
                         <Icon type="read" className="widget-icon" />
                       </div>
                       <h5
-                        class="text-muted font-weight-normal mt-0"
+                        className="text-muted font-weight-normal mt-0"
                         title="Number of Customers"
                       >
                         个人专栏无需审核
                       </h5>
-                      <h3 class="mt-3 mb-3">
+                      <h3 className="mt-3 mb-3">
                         {articleBlogCount.noReviewCount}
                       </h3>
-                      <p class="mb-0 text-muted">
-                        <span class="text-nowrap">
+                      <p className="mb-0 text-muted">
+                        <span className="text-nowrap">
                           统计所有的个人公开的专栏
                         </span>
                       </p>
@@ -176,60 +180,64 @@ class Index extends React.Component {
                 </Col>
 
                 <Col span={12} className="count-view ">
-                  <div class="xsb-card  separate-card">
-                    <div class="xsb-card-body">
-                      <div class="float-right">
+                  <div className="xsb-card  separate-card">
+                    <div className="xsb-card-body">
+                      <div className="float-right">
                         <Icon type="read" className="widget-icon" />
                       </div>
                       <h5
-                        class="text-muted font-weight-normal mt-0"
+                        className="text-muted font-weight-normal mt-0"
                         title="Number of Customers"
                       >
                         个人专栏待审核
                       </h5>
-                      <h3 class="mt-3 mb-3">{articleCount.reviewCount}</h3>
-                      <p class="mb-0 text-muted">
-                        <span class="text-nowrap">统计所有的用户</span>
+                      <h3 className="mt-3 mb-3">{articleCount.reviewCount}</h3>
+                      <p className="mb-0 text-muted">
+                        <span className="text-nowrap">统计所有的用户</span>
                       </p>
                     </div>
                   </div>
                 </Col>
 
                 <Col span={12} className="count-view">
-                  <div class="xsb-card separate-card">
-                    <div class="xsb-card-body">
-                      <div class="float-right">
+                  <div className="xsb-card separate-card">
+                    <div className="xsb-card-body">
+                      <div className="float-right">
                         <Icon type="file-text" className="widget-icon" />
                       </div>
                       <h5
-                        class="text-muted font-weight-normal mt-0"
+                        className="text-muted font-weight-normal mt-0"
                         title="Number of Customers"
                       >
                         文章评论总数
                       </h5>
-                      <h3 class="mt-3 mb-3">{articleCommentCount.allCount}</h3>
-                      <p class="mb-0 text-muted">
-                        <span class="text-nowrap">统计所有的文章评论</span>
+                      <h3 className="mt-3 mb-3">
+                        {articleCommentCount.allCount}
+                      </h3>
+                      <p className="mb-0 text-muted">
+                        <span className="text-nowrap">统计所有的文章评论</span>
                       </p>
                     </div>
                   </div>
                 </Col>
 
                 <Col span={12} className="count-view ">
-                  <div class="xsb-card separate-card">
-                    <div class="xsb-card-body">
-                      <div class="float-right">
+                  <div className="xsb-card separate-card">
+                    <div className="xsb-card-body">
+                      <div className="float-right">
                         <Icon type="message" className="widget-icon" />
                       </div>
                       <h5
-                        class="text-muted font-weight-normal mt-0"
+                        className="text-muted font-weight-normal mt-0"
                         title="Number of Customers"
                       >
                         片刻评论总数
                       </h5>
-                      <h3 class="mt-3 mb-3">{dynamicCommentCount.allCount}</h3>
-                      <p class="mb-0 text-muted">
-                        <span class="text-nowrap">统计片刻评论总数</span>
+                      <h3 className="mt-3 mb-3">
+                        {dynamicCommentCount.allCount}
+                      </h3>
+                      <p className="mb-0 text-muted">
+                        <span className="text-nowrap">统计片刻评论总数</span>
                       </p>
                     </div>
                   </div>
@@ -237,9 +245,9 @@ class Index extends React.Component {
               </Row>
             </Col>
             <Col span={14} className="right-view">
-              <div class="card total-card">
-                <div class="card-body">
-                  <h4 class="header-title">数据统计</h4>
+              <div className="card total-card">
+                <div className="card-body">
+                  <h4 className="header-title">数据统计</h4>
                   <div className="table-responsive count-view-table">
                     <table
                       border="0"
