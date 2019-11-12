@@ -43,11 +43,11 @@ exports.TimeDistance = async function (time) {
 
   if (minuteDistance === 0) {
     return '刚刚'
-  } else if (minuteDistance > 0 && minuteDistance <= 60) {
+  } else if (minuteDistance <= 60) {
     return `${minuteDistance}分钟前`
-  } else if (hoursDistance > 1 && hoursDistance <= 24) {
+  } else if (hoursDistance <= 24) {
     return `${hoursDistance}小时前`
-  } else if (daysDistance > 1 && daysDistance <= 30) {
+  } else if (daysDistance <= 30) {
     return `${daysDistance}天前`
   } else {
     return _Time
