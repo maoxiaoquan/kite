@@ -34,7 +34,8 @@ const pordWebpackConfig = merge(baseWebpackConfig, {
   },
   resolve: {
     alias: {
-      'request-config': '../request/requestClient.js'
+      'request-config': '../request/requestClient.js',
+      'fetch-config': '../fetch/requestClient.js'
     }
   },
   devtool: false,

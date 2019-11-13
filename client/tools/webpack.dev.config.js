@@ -26,7 +26,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   },
   resolve: {
     alias: {
-      'request-config': '../request/requestClient.js'
+      'request-config': '../request/requestClient.js',
+      'fetch-config': '../fetch/requestClient.js'
     }
   },
   devtool: config.client.devtool, //  cheap-module-eval-source-map编译更快

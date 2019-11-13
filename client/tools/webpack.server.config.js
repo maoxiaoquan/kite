@@ -28,7 +28,8 @@ module.exports = merge(baseWebpackConfig, {
   },
   resolve: {
     alias: {
-      'request-config': '../request/requestServer.js'
+      'request-config': '../request/requestServer.js',
+      'fetch-config': '../fetch/requestServer.js'
     }
   },
   externals: nodeExternals({

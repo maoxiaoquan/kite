@@ -23,7 +23,8 @@ module.exports = {
       changeOrigin: true,
       secure: false,
       pathRewrite: {
-        '^/client': '/client'
+        '^/client': '/client',
+        '^/graphql': '/graphql'
       }
     },
     assetsRoot: IS_NODE_ENV

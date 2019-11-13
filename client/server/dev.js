@@ -48,7 +48,7 @@ app.use(
 
 app.use(async (ctx, next) => {
   // 接口进行拦截，并进行代理
-  if (ctx.url.startsWith('/api-client/v1')) {
+  if (ctx.url.startsWith('/api-client/v1') || ctx.url.startsWith('/graphql')) {
     ctx.respond = false
     return proxy(config.client.proxy)(ctx.req, ctx.res, next)
   }
