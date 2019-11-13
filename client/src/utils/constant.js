@@ -128,7 +128,7 @@ export const userMessageActionText = {
   [userMessageAction.collect]: '新的收藏',
   [userMessageAction.attention]: '新的关注',
   [userMessageAction.comment]: '新的评论',
-  [userMessageAction.reply]: '新的赞',
+  [userMessageAction.reply]: '新的回复',
   [userMessageAction.thumb]: '新的回复',
   [userMessageAction.buy]: '新的购买',
   [userMessageAction.sell]: '新的卖出'

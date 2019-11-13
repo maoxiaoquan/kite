@@ -337,6 +337,20 @@ const trialReadText = {
   [trialRead.no]: '关闭' // 不可以
 }
 
+const modelType = {
+  // 文章的类型
+  user: 1, // 用户
+  article: 2, // 文章
+  article_blog: 3, // 文章个人专栏
+  article_comment: 4, // 文章评论
+  book: 5, // 小书章节
+  book_comment: 6, // 小书章节评论
+  books: 7, // 小书
+  books_comment: 8, // 小书评论
+  dynamic: 9, // 片刻
+  dynamic_comment: 10 // 片刻评论
+}
+
 module.exports = {
   statusList,
   statusListText,
@@ -361,5 +375,6 @@ module.exports = {
   productType,
   productTypeInfo,
   trialRead,
-  trialReadText
+  trialReadText,
+  modelType
 }
