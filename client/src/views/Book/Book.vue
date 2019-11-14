@@ -128,7 +128,8 @@ import {
   payTypeText,
   isFree,
   isFreeText,
-  productType
+  productType,
+  modelType
 } from '@utils/constant'
 
 export default {
@@ -219,8 +220,9 @@ export default {
         this.$message.warning('请先登录，再继续操作');
         return false
       }
-      this.$store.dispatch('books/COLLECT_BOOKS', {
-        books_id,
+      this.$store.dispatch('common/SET_COLLECT', {
+        associate_id: books_id,
+        type: modelType.books
       })
         .then(result => {
           if (result.state === 'success') {

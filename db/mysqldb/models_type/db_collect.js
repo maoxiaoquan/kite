@@ -19,11 +19,11 @@ module.exports = {
       comment: 'uid',
       field: 'uid'
     },
-    associate: {
+    associate_id: {
       // 关联的内容
-      type: Seq.BIGINT(20),
+      type: Seq.STRING(50),
       comment: '关联的内容',
-      field: 'associate'
+      field: 'associate_id'
     },
     type: {
       // 类型
@@ -31,11 +31,12 @@ module.exports = {
       comment: '类型',
       field: 'type'
     },
-    is_collect: {
-      // 是否like
+    is_associate: {
+      // 是否关联
       type: Seq.BOOLEAN,
-      comment: '是否收藏',
-      field: 'is_collect'
-    }
+      comment: '是否关联',
+      field: 'is_associate'
+    },
+    ...time.create_date
   }
 }

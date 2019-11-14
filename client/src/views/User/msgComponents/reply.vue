@@ -15,16 +15,16 @@
       <div class="content">
         {{userMessageTypeText[MessageItem.type][MessageItem.action]}}
         <router-link style="color:#df5858"
-                     v-if="MessageItem.type===userMessageType.article_comment"
+                     v-if="MessageItem.type===modelType.article_comment"
                      :to="{name:'article',params:{aid:MessageItem.replyComment.aid}}">{{MessageItem.replyComment.content}}</router-link>
         <router-link style="color:#df5858"
-                     v-if="MessageItem.type===userMessageType.dynamic_comment"
+                     v-if="MessageItem.type===modelType.dynamic_comment"
                      :to="{name:'dynamicView',params:{dynamicId:MessageItem.replyComment.dynamic_id}}">{{MessageItem.replyComment.content}}</router-link>
         <router-link style="color:#df5858"
-                     v-if="MessageItem.type===userMessageType.books_comment"
+                     v-if="MessageItem.type===modelType.books_comment"
                      :to="{name:'book',params:{books_id:MessageItem.replyComment.books_id}}">{{MessageItem.replyComment.content}}</router-link>
         <router-link style="color:#df5858"
-                     v-if="MessageItem.type===userMessageType.book_comment"
+                     v-if="MessageItem.type===modelType.book_comment"
                      :to="{name:'BookView',params:{books_id: MessageItem.replyComment.books_id, book_id: MessageItem.replyComment.book_id}}">{{MessageItem.replyComment.content}}</router-link>
       </div>
 
@@ -53,7 +53,7 @@ import { faceQQ } from '@components'
 import {
   statusList,
   statusListText,
-  userMessageType,
+  modelType,
   userMessageTypeText,
   userMessageAction,
   userMessageActionText
@@ -68,7 +68,7 @@ export default {
   data () {
     return {
       statusList,
-      userMessageType,
+      modelType,
       userMessageTypeText,
       typeList: ["", "系统消息", "喜欢文章", "关注标签", "用户关注", "评论", "动态评论"]
     };

@@ -66,14 +66,6 @@ const actions = {
       return result
     })
   },
-  LIKE_ARTICLE_BLOG ({ commit, dispatch, state }, parameter) {
-    // 个人专栏like
-    return fetch({
-      url: '/article-blog/like',
-      method: 'post',
-      parameter
-    })
-  },
   GET_LIKE_ARTICLE_BLOG_LIST ({ commit, dispatch, state }, parameter) {
     // 获取个人like的个人专栏列表
     return fetch({

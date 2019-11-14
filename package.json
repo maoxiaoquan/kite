@@ -34,7 +34,6 @@
     "ejs": "^2.5.7",
     "express": "^4.17.0",
     "graphql": "^14.5.8",
-    "graphql-tag": "^2.10.1",
     "inquirer": "^6.5.0",
     "jsonwebtoken": "^8.2.0",
     "koa": "^2.3.0",

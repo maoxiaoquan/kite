@@ -26,7 +26,7 @@
 <script>
 
 import {
-  userMessageType,
+  modelType,
   userMessageTypeText
 } from '@utils/constant'
 
@@ -39,7 +39,7 @@ export default {
   },
   data () {
     return {
-      userMessageType,
+      modelType,
       userMessageTypeText
     };
   },

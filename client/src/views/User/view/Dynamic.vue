@@ -145,8 +145,8 @@ export default {
         this.$message.warning('请先登录')
         return false
       }
-      this.$store.dispatch('user/USER_ATTENTION', {
-        attention_uid: this.dynamicItem.user.uid
+      this.$store.dispatch('common/SET_ATTENTION', {
+        associate_id: this.dynamicItem.user.uid
       }).then(result => {
         if (result.state === 'success') {
           this.$message.success(result.message)
@@ -208,7 +208,7 @@ export default {
       }
       /*用户like 动态*/
       this.$store
-        .dispatch("user/USER_LIKE_DYNAMIC", {
+        .dispatch("common/SET_THUMB", {
           dynamic_id: dynamicItem.id
         })
         .then(res => {

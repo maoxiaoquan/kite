@@ -62,10 +62,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["personalInfo", 'user']),
-    userLikeArticle () { // 用户的like
-      return this.$store.state.user.user_like_article || {}
-    },
+    ...mapState(["personalInfo", 'user'])
   },
   components: {
     LikeArticleItem,

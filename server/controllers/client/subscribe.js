@@ -6,10 +6,10 @@ const clientWhere = require('../../utils/clientWhere')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  userMessageType,
   userMessageAction,
   virtualAction,
-  virtualType
+  virtualType,
+  modelType
 } = require('../../utils/constant')
 
 const userVirtual = require('../../common/userVirtual')
@@ -48,7 +48,7 @@ class Subscribe {
       for (let i in rows) {
         rows[i].setDataValue(
           'subscribe_count',
-          await models.attention_tag.count({
+          await models.attention.count({
             where: { tag_id: rows[i].tag_id }
           })
         )
@@ -94,7 +94,7 @@ class Subscribe {
     }
 
     try {
-      let allSubscribeArticleTag = await models.attention_tag.findAll({
+      let allSubscribeArticleTag = await models.attention.findAll({
         where: {
           uid: user.uid
         }
@@ -130,7 +130,7 @@ class Subscribe {
         for (let i in rows) {
           rows[i].setDataValue(
             'subscribe_count',
-            await models.attention_tag.count({
+            await models.attention.count({
               where: { tag_id: rows[i].tag_id }
             })
           )
@@ -186,7 +186,7 @@ class Subscribe {
   static async getSubscribeTagMyAll (ctx) {
     let { user = '' } = ctx.request
     try {
-      let allSubscribeArticleTag = await models.attention_tag.findAll({
+      let allSubscribeArticleTag = await models.attention.findAll({
         where: {
           uid: user.uid
         }
@@ -212,7 +212,7 @@ class Subscribe {
     let { user = '' } = ctx.request
     let type = ''
     try {
-      let oneSubscribeArticleTag = await models.attention_tag.findOne({
+      let oneSubscribeArticleTag = await models.attention.findOne({
         where: {
           uid: user.uid,
           tag_id
@@ -222,7 +222,7 @@ class Subscribe {
       if (oneSubscribeArticleTag) {
         /* 判断是否关注了，是则取消，否则添加 */
         type = 'cancel'
-        await models.attention_tag.destroy({
+        await models.attention.destroy({
           where: {
             uid: user.uid,
             tag_id
@@ -230,13 +230,13 @@ class Subscribe {
         })
       } else {
         type = 'attention'
-        await models.attention_tag.create({
+        await models.attention.create({
           uid: user.uid,
           tag_id
         })
       }
 
-      let articleTagRssCount = await models.attention_tag.count({
+      let articleTagRssCount = await models.attention.count({
         where: {
           tag_id
         }
@@ -276,7 +276,7 @@ class Subscribe {
     let { user = '' } = ctx.request
     let type = ''
     try {
-      let oneSubscribeDynamicTopic = await models.attention_topic.findOne({
+      let oneSubscribeDynamicTopic = await models.attention.findOne({
         where: {
           uid: user.uid,
           topic_id
@@ -286,7 +286,7 @@ class Subscribe {
       if (oneSubscribeDynamicTopic) {
         /* 判断是否关注了，是则取消，否则添加 */
         type = 'cancel'
-        await models.attention_topic.destroy({
+        await models.attention.destroy({
           where: {
             uid: user.uid,
             topic_id
@@ -294,13 +294,13 @@ class Subscribe {
         })
       } else {
         type = 'attention'
-        await models.attention_topic.create({
+        await models.attention.create({
           uid: user.uid,
           topic_id
         })
       }
 
-      let dynamicTopicRssCount = await models.attention_topic.count({
+      let dynamicTopicRssCount = await models.attention.count({
         where: {
           topic_id
         }

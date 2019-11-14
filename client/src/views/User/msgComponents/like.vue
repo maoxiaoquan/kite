@@ -28,7 +28,7 @@
 import {
   statusList,
   statusListText,
-  userMessageType,
+  modelType,
   userMessageTypeText,
   userMessageAction,
   userMessageActionText,
@@ -44,7 +44,7 @@ export default {
   data () {
     return {
       statusList,
-      userMessageType,
+      modelType,
       userMessageTypeText
     };
   },

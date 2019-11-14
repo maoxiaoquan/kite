@@ -12,14 +12,14 @@ const { TimeNow, TimeDistance } = require('../../utils/time')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  userMessageType,
   userMessageAction,
   virtualType,
   virtualPlusLess,
   virtualAction,
   virtualInfo,
   virtualActionText,
-  virtualTypeText
+  virtualTypeText,
+  modelType
 } = require('../../utils/constant')
 
 const userVirtual = require('../../common/userVirtual')

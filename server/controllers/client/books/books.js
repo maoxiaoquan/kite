@@ -11,7 +11,6 @@ const { TimeNow, TimeDistance } = require('../../../utils/time')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  userMessageType,
   userMessageAction,
   virtualAction,
   virtualType,
@@ -21,7 +20,8 @@ const {
   isFreeText,
   productType,
   trialRead,
-  productTypeInfo
+  productTypeInfo,
+  modelType
 } = require('../../../utils/constant')
 
 const userVirtual = require('../../../common/userVirtual')
@@ -187,9 +187,7 @@ class Books {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${
-              website.website_name
-            }管理团队才能发布小书`
+            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布小书`
           )
         }
       }
@@ -365,9 +363,7 @@ class Books {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${
-              website.website_name
-            }管理团队才能发布小书`
+            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布小书`
           )
         }
       }
@@ -555,8 +551,12 @@ class Books {
 
         rows[i].setDataValue(
           'collectUserIds',
-          await models.collect_books.findAll({
-            where: { books_id: rows[i].books_id, is_like: true }
+          await models.collect.findAll({
+            where: {
+              associate_id: rows[i].books_id,
+              is_associate: true,
+              type: modelType.books
+            }
           })
         )
 
@@ -624,8 +624,12 @@ class Books {
 
         books.setDataValue(
           'collectUserIds',
-          await models.collect_books.findAll({
-            where: { books_id: books.books_id, is_like: true }
+          await models.collect.findAll({
+            where: {
+              associate_id: books.books_id,
+              is_associate: true,
+              type: modelType.books
+            }
           })
         )
 
@@ -800,7 +804,7 @@ class Books {
     }
 
     try {
-      let { count, rows } = await models.collect_books.findAndCountAll({
+      let { count, rows } = await models.collect.findAndCountAll({
         where: { is_like: true, uid }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize // 每页限制返回的数据条数

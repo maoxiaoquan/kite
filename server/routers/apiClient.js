@@ -110,25 +110,7 @@ router.get('/user/info', user.getUserInfo) // 根据uid 获取用户相应信息
 
 router.get('/user/blog-all', articleBlog.getUserArticleBlogAll) // 获取用户所有文章专题 TYPE:AJAX get
 
-router.post(
-  '/user/attention',
-  tokens.ClientVerifyToken,
-  attention.setUserAttention
-) // 用户关注用户 TYPE:AJAX post
-
 router.get('/user/attention-list', personalCenter.getUserAttentionList) // 获取用户个人中心关注列表
-
-router.post(
-  '/user/like-article',
-  tokens.ClientVerifyToken,
-  like.setUserLikeArticle
-) // 用户like文章 TYPE:AJAX post
-
-router.post(
-  '/user/like-dynamic',
-  tokens.ClientVerifyToken,
-  thumb.setUserThumbDynamic
-) // 用户点赞动态TYPE:AJAX post
 
 router.get('/user/like-article-list', personalCenter.getUserLikeArticleList) // 用户个人中心喜欢
 
@@ -219,11 +201,7 @@ router.get(
 
 router.get('/article-blog/info', articleBlog.getArticleBlogView) // 个人专栏详细信息
 router.get('/article-blog/article-list', articleBlog.getArticleBlogArticleList) // 当前个人专栏文章列表
-router.post(
-  '/article-blog/like',
-  tokens.ClientVerifyToken,
-  collect.setSubscribeArticleBlog
-) // 当前个人专栏like
+
 router.get(
   '/article-blog/like-list',
   tokens.ClientVerifyToken,
@@ -409,8 +387,6 @@ router.post(
   bookComment.deleteBookComment
 ) // 删除小书章节评论 TYPE:AJAX post
 
-router.post('/collect/books', tokens.ClientVerifyToken, collect.collectBooks) // 收藏小书
-
 router.get(
   '/collect/books-list',
   tokens.ClientVerifyToken,
@@ -429,5 +405,19 @@ router.get('/virtual/list', tokens.ClientVerifyToken, virtual.getVirtualList)
 router.post('/shop/buy', tokens.ClientVerifyToken, shop.Buy)
 // 订单列表
 router.get('/shop/list', tokens.ClientVerifyToken, shop.orderList)
+
+// 关注类
+
+router.post(
+  '/common/attention',
+  tokens.ClientVerifyToken,
+  attention.setAttention
+)
+
+router.post('/common/like', tokens.ClientVerifyToken, like.setLike) // like TYPE:AJAX post
+
+router.post('/common/collect', tokens.ClientVerifyToken, collect.setCollect) // 收藏
+
+router.post('/common/thumb', tokens.ClientVerifyToken, thumb.setThumb) // 用户点赞动态TYPE:AJAX post
 
 module.exports = router

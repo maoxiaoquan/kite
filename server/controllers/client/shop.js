@@ -6,14 +6,14 @@ const clientWhere = require('../../utils/clientWhere')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  userMessageType,
   userMessageAction,
   userMessageActionText,
   virtualAction,
   virtualPlusLess,
   virtualType,
   productTypeInfo,
-  isFree
+  isFree,
+  modelType
 } = require('../../utils/constant')
 
 const userMessage = require('../../utils/userMessage')
@@ -214,7 +214,7 @@ class Shop {
         uid: productInfo.uid,
         sender_id: user.uid,
         action: userMessageAction.sell, // 动作：评论
-        type: userMessageType.books, // 类型：小书章节评论
+        type: modelType.books, // 类型：小书章节评论
         content: JSON.stringify({
           [productTypeInfo[product_type].idKey]: product_id
         })

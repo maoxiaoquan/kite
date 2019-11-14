@@ -1,19 +1,13 @@
 import { fetch } from '@request'
-import { gqlfetch } from '@fetch'
-import gql from 'graphql-tag'
 
 const state = () => ({
-  article: {},
-  test: {}
+  article: {}
 })
 
 const mutations = {
   SET_ARTICLE (state, data) {
     // 设置文章
     state.article = data
-  },
-  GET_TEST (state, data) {
-    state.test = data
   }
 }
 
@@ -26,19 +20,6 @@ const actions = {
       parameter: { params: parameter }
     }).then(result => {
       commit('SET_ARTICLE', result.data.article)
-      return result
-    })
-  },
-  GET_TEST ({ commit, dispatch, state }, parameter) {
-    console.log(111111111111111111)
-    return gqlfetch({
-      parameter: `
-        query {
-          hello
-        }
-        `
-    }).then(result => {
-      commit('GET_TEST', result.data)
       return result
     })
   },

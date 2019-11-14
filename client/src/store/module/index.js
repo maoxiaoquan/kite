@@ -16,6 +16,7 @@ import books from './books'
 import book from './book'
 import virtual from './virtual'
 import shop from './shop'
+import common from './common'
 
 export default {
   sign,
@@ -35,5 +36,6 @@ export default {
   books,
   book,
   virtual,
-  shop
+  shop,
+  common
 }

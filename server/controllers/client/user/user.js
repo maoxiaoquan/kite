@@ -18,13 +18,13 @@ const clientWhere = require('../../../utils/clientWhere')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  userMessageType,
   userMessageAction,
   userMessageActionText,
   virtualAction,
   virtualType,
   virtualInfo,
-  virtualPlusLess
+  virtualPlusLess,
+  modelType
 } = require('../../../utils/constant')
 
 const userVirtual = require('../../../common/userVirtual')
@@ -431,28 +431,29 @@ class User {
       oneUser.setDataValue(
         // 我关注了哪些用户的信息
         'attentionUserIds',
-        await models.attention_user.findAll({
-          where: { uid: oneUser.uid, is_attention: true }
+        await models.attention.findAll({
+          where: { uid: oneUser.uid, is_associate: true, type: modelType.user }
         })
       )
 
       oneUser.setDataValue(
         // 哪些用户关注了我
         'userAttentionIds',
-        await models.attention_user.findAll({
-          where: { attention_uid: oneUser.uid, is_attention: true }
+        await models.attention.findAll({
+          where: { associate_id: oneUser.uid, is_associate: true, type: modelType.user }
         })
       )
 
-      let userAttentionCount = await models.attention_user.count({
+      let userAttentionCount = await models.attention.count({
         // 关注了多少人
         where: {
           uid,
-          is_attention: true
+          is_associate: true,
+          type: modelType.user
         }
       })
 
-      let allLikeDymaicId = await models.thumb_dynamic
+      let allLikeDymaicId = await models.thumb
         .findAll({ where: { uid } })
         .then(res => {
           return res.map((item, key) => {
@@ -460,19 +461,20 @@ class User {
           })
         })
 
-      let allRssDynamicTopicId = await models.attention_topic
-        .findAll({ where: { uid } })
+      let allRssDynamicTopicId = await models.attention
+        .findAll({ where: { uid, type: modelType.user } })
         .then(res => {
           return res.map((item, key) => {
             return item.topic_id
           })
         })
 
-      let otherUserAttentionCount = await models.attention_user.count({
+      let otherUserAttentionCount = await models.attention.count({
         // 多少人关注了
         where: {
-          attention_uid: uid,
-          is_attention: true
+          associate_id: uid,
+          is_associate: true,
+          type: modelType.user
         }
       })
 
@@ -749,7 +751,7 @@ class User {
           // 用户关注 所需要的数据已获取,无需处理
         } else if (rows[i].action === userMessageAction.comment) {
           // 评论
-          if (rows[i].type === userMessageType.article) {
+          if (rows[i].type === modelType.article) {
             // 文章评论
             rows[i].setDataValue(
               'article',
@@ -765,7 +767,7 @@ class User {
                 attributes: ['id', 'content', 'status', 'aid']
               })
             )
-          } else if (rows[i].type === userMessageType.dynamic) {
+          } else if (rows[i].type === modelType.dynamic) {
             // 片刻评论
             rows[i].setDataValue(
               'dynamic',
@@ -781,7 +783,7 @@ class User {
                 attributes: ['id', 'content', 'status', 'dynamic_id']
               })
             )
-          } else if (rows[i].type === userMessageType.books) {
+          } else if (rows[i].type === modelType.books) {
             // 小书评论
             rows[i].setDataValue(
               'books',
@@ -797,7 +799,7 @@ class User {
                 attributes: ['id', 'content', 'status', 'books_id']
               })
             )
-          } else if (rows[i].type === userMessageType.book) {
+          } else if (rows[i].type === modelType.book) {
             // 小书章节评论
             rows[i].setDataValue(
               'book',
@@ -816,7 +818,7 @@ class User {
           }
         } else if (rows[i].action === userMessageAction.reply) {
           // 评论回复
-          if (rows[i].type === userMessageType.article_comment) {
+          if (rows[i].type === modelType.article_comment) {
             // 文章回复
             rows[i].setDataValue(
               'replyComment',
@@ -832,7 +834,7 @@ class User {
                 attributes: ['id', 'content', 'status', 'aid']
               })
             )
-          } else if (rows[i].type === userMessageType.dynamic_comment) {
+          } else if (rows[i].type === modelType.dynamic_comment) {
             // 片刻回复
             rows[i].setDataValue(
               'replyComment',
@@ -848,7 +850,7 @@ class User {
                 attributes: ['id', 'content', 'status', 'dynamic_id']
               })
             )
-          } else if (rows[i].type === userMessageType.books_comment) {
+          } else if (rows[i].type === modelType.books_comment) {
             // 小书回复
             rows[i].setDataValue(
               'replyComment',
@@ -864,7 +866,7 @@ class User {
                 attributes: ['id', 'content', 'status', 'books_id']
               })
             )
-          } else if (rows[i].type === userMessageType.book_comment) {
+          } else if (rows[i].type === modelType.book_comment) {
             // 小书章节回复
             rows[i].setDataValue(
               'replyComment',
@@ -898,7 +900,7 @@ class User {
             })
           )
         } else if (rows[i].action === userMessageAction.sell) {
-          if (rows[i].type === userMessageType.books) {
+          if (rows[i].type === modelType.books) {
             rows[i].setDataValue(
               'books',
               await models.books.findOne({

@@ -91,7 +91,8 @@ import {
   statusList,
   articleType,
   statusListText,
-  articleTypeText
+  articleTypeText,
+  modelType
 } from '@utils/constant'
 export default {
   name: "Article",
@@ -187,9 +188,9 @@ export default {
     onUserLikeArticle () {
       /*用户like 文章*/
       this.$store
-        .dispatch("user/USER_LIKE_ARTICLE", {
-          aid: this.article.aid,
-          uid: this.article.uid
+        .dispatch("common/SET_LIKE", {
+          associate_id: this.article.aid,
+          type: modelType.article
         })
         .then(result => {
           if (result.state === "success") {

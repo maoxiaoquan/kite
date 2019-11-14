@@ -6,11 +6,12 @@ const clientWhere = require('../../utils/clientWhere')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  userMessageType,
   userMessageAction,
   userMessageActionText,
   virtualAction,
-  virtualType
+  virtualType,
+  modelType,
+  modelInfo
 } = require('../../utils/constant')
 
 const userMessage = require('../../utils/userMessage')
@@ -23,72 +24,77 @@ function ErrorMessage (message) {
 const { TimeNow, TimeDistance } = require('../../utils/time')
 
 class Thumb {
-  /**
-   * 用户like动态post
-   * @param   {object} ctx 上下文对象
-   */
-  static async setUserThumbDynamic (ctx) {
-    const { dynamic_id } = ctx.request.body
-    let { user = '' } = ctx.request
-    let type = ''
+  static async setThumb (ctx) {
     try {
-      let oneDynamic = await models.dynamic.findOne({
+      const { associate_id, type } = ctx.request.body
+      const { user = '' } = ctx.request
+      let associateType = ''
+
+      if (!modelInfo[type]) {
+        throw new ErrorMessage('类型不存在，系统已禁止行为')
+      }
+      if (!associate_id) {
+        throw new ErrorMessage('关联ID不存在')
+      }
+      const oneModelInfo = await models[modelInfo[type].model].findOne({
         where: {
-          id: dynamic_id
-        }
-      })
-      let oneUserThumbDynamic = await models.thumb_dynamic.findOne({
-        where: {
-          uid: user.uid,
-          dynamic_id
+          [modelInfo[type].idKey]: associate_id
         }
       })
 
-      if (oneUserThumbDynamic) {
-        /* 判断是否like动态，是则取消，否则添加 */
-        type = 'cancel'
-        await models.thumb_dynamic.destroy({
-          where: {
-            uid: user.uid,
-            dynamic_id
+      if (!oneModelInfo) {
+        throw new ErrorMessage('模型不存在')
+      }
+
+      let oneAttention = await models.thumb.findOne({
+        where: {
+          uid: user.uid,
+          type,
+          associate_id
+        }
+      })
+
+      if (oneAttention) {
+        /* 判断是否关注了 */
+        associateType = oneAttention.is_associate ? 'cancel' : 'enter'
+        await models.thumb.update(
+          {
+            is_associate: !oneAttention.is_associate
+          },
+          {
+            where: {
+              uid: user.uid,
+              type,
+              associate_id
+            }
           }
-        })
+        )
       } else {
-        type = 'like'
+        associateType = 'enter' // 只在第一次关注的时候提交推送
+        // 订阅消息，只在用户第一关注的时候推送消息
         await userMessage.setMessage({
-          uid: oneDynamic.uid,
+          uid: oneModelInfo.uid,
           sender_id: user.uid,
           action: userMessageAction.thumb, // 动作：点赞
-          type: userMessageType.thumb_dynamic, // 类型：点赞动态
+          type: modelType.dynamic, // 类型：点赞动态
           content: JSON.stringify({
-            dynamic_id: dynamic_id
+            dynamic_id: associate_id
           })
         })
-        await models.thumb_dynamic.create({
+        await models.thumb.create({
           uid: user.uid,
-          dynamic_id
+          associate_id,
+          type,
+          is_associate: true
         })
       }
 
-      let dynamicLikeCount = await models.thumb_dynamic.count({
-        where: {
-          dynamic_id
-        }
-      })
-
-      await models.dynamic.update(
-        {
-          like_count: dynamicLikeCount
-        },
-        { where: { id: dynamic_id } }
-      )
-
       resClientJson(ctx, {
         state: 'success',
+        message: associateType === 'enter' ? '点赞成功' : '取消点赞成功',
         data: {
-          type
-        },
-        message: type === 'like' ? '点赞动态成功' : '取消点赞动态成功'
+          type: associateType
+        }
       })
     } catch (err) {
       resClientJson(ctx, {

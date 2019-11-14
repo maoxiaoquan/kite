@@ -10,7 +10,7 @@ const { lowdb } = require('../../../../db/lowdb/index')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  userMessageType,
+  modelType,
   userMessageAction,
   virtualAction,
   virtualType
@@ -133,9 +133,7 @@ class Article {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${
-              website.website_name
-            }管理团队才能发布文章`
+            `${oneArticleTag.name}只有${website.website_name}管理团队才能发布文章`
           )
         }
       }
@@ -276,7 +274,7 @@ class Article {
           )
         }
 
-        let subscribeArticleTagCount = await models.attention_tag.count({
+        let subscribeArticleTagCount = await models.attention.count({
           where: { tag_id: oneArticleTag.tag_id }
         })
 
@@ -329,7 +327,7 @@ class Article {
       for (let i in articleTagAll) {
         articleTagAll[i].setDataValue(
           'subscribe_count',
-          await models.attention_tag.count({
+          await models.attention.count({
             where: { tag_id: articleTagAll[i].tag_id }
           })
         )
@@ -375,8 +373,11 @@ class Article {
       for (let i in articleTagAll) {
         articleTagAll[i].setDataValue(
           'subscribe_count',
-          await models.attention_tag.count({
-            where: { tag_id: articleTagAll[i].tag_id }
+          await models.attention.count({
+            where: {
+              associate_id: articleTagAll[i].id || '',
+              type: modelType.article_tag
+            }
           })
         )
         articleTagAll[i].setDataValue(
@@ -461,8 +462,12 @@ class Article {
 
         oneArticle.setDataValue(
           'likeUserIds',
-          await models.like_article.findAll({
-            where: { aid: oneArticle.aid, is_like: true }
+          await models.like.findAll({
+            where: {
+              associate_id: oneArticle.aid,
+              is_associate: true,
+              type: modelType.article
+            }
           })
         )
 
@@ -617,9 +622,7 @@ class Article {
       if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
         if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
           throw new ErrorMessage(
-            `${oneArticleTag.name}只有${
-              website.website_name
-            }管理团队才能更新文章`
+            `${oneArticleTag.name}只有${website.website_name}管理团队才能更新文章`
           )
         }
       }

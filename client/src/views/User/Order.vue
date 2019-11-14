@@ -100,8 +100,11 @@ import {
   virtualType,
   productType,
   statusList,
-  productTypeInfo
+  productTypeInfo,
+  modelType
 } from '@utils/constant'
+
+
 
 export default {
   name: 'order',
@@ -121,6 +124,7 @@ export default {
       virtualType,
       statusList,
       productType,
+      modelType,
       currProductType: '',
       detail: {
         list: [],
@@ -146,8 +150,9 @@ export default {
       this.getList()
     },
     collectBooks (books_id) { // 用户收藏小书
-      this.$store.dispatch('books/COLLECT_BOOKS', {
-        books_id,
+      this.$store.dispatch('common/SET_COLLECT', {
+        associate_id: books_id,
+        type: modelType.books
       })
         .then(result => {
           if (result.state === 'success') {

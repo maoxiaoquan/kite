@@ -45,7 +45,7 @@ const dynamicTypeText = {
   [dynamicType.video]: '视频' // 草稿
 }
 
-const userMessageType = {
+const modelType = {
   // 文章的类型
   user: 1, // 用户
   article: 2, // 文章
@@ -57,10 +57,96 @@ const userMessageType = {
   books_comment: 8, // 小书评论
   dynamic: 9, // 片刻
   dynamic_comment: 10, // 片刻评论
-  thumb_dynamic: 11, // 片刻评论
-  like_article: 12, // 片刻评论
-  collect_blog: 13, // 片刻评论
-  collect_books: 14 // 片刻评论
+  thumb: 11, // 点赞表
+  like: 12, // 喜欢表
+  collect: 13, // 收藏表
+  attention: 14, // 关注表
+  article_tag: 15, // 文章标签
+  dynamic_topic: 16 // 动态专题
+}
+
+const modelInfo = {
+  // 文章的类型
+  [modelType.user]: {
+    model: 'user',
+    name: '用户',
+    idKey: 'uid'
+  }, // 用户
+  [modelType.article]: {
+    model: 'article',
+    name: '文章',
+    idKey: 'aid'
+  }, // 文章
+  [modelType.article_blog]: {
+    model: 'article_blog',
+    name: '文章专栏',
+    idKey: 'blog_id'
+  }, // 文章个人专栏
+  [modelType.article_comment]: {
+    model: 'article_comment',
+    name: '文章评论',
+    idKey: 'id'
+  }, // 文章评论
+  [modelType.book]: {
+    model: 'book',
+    name: '小书章节',
+    idKey: 'book_id'
+  }, // 小书章节
+  [modelType.book_comment]: {
+    model: 'book_comment',
+    name: '小书章节评论',
+    idKey: 'id'
+  }, // 小书章节评论
+  [modelType.books]: {
+    model: 'books',
+    name: '小书',
+    idKey: 'books_id'
+  }, // 小书
+  [modelType.books_comment]: {
+    model: 'books_comment',
+    name: '小书评论',
+    idKey: 'id'
+  }, // 小书评论
+  [modelType.dynamic]: {
+    model: 'dynamic',
+    name: '片刻',
+    idKey: 'id'
+  }, // 片刻
+  [modelType.dynamic_comment]: {
+    model: 'dynamic_comment',
+    name: '片刻评论',
+    idKey: 'id'
+  }, // 片刻评论
+  [modelType.thumb]: {
+    model: 'thumb',
+    name: '赞',
+    idKey: 'id'
+  }, // 点赞表
+  [modelType.like]: {
+    model: 'like',
+    name: '喜欢',
+    idKey: 'id'
+  }, // 喜欢表
+  [modelType.collect]: {
+    model: 'collect',
+    name: '收藏',
+    idKey: 'id'
+  }, // 收藏表
+  [modelType.attention]: {
+    model: 'attention',
+    name: '关注',
+    idKey: 'id'
+  }, // 关注表
+  [modelType.article_tag]: {
+    model: 'article_tag',
+    name: '文章标签',
+    idKey: 'id'
+  }, // 关注表
+  [modelType.dynamic_topic]: {
+    model: 'dynamic_topic',
+    name: '动态专题',
+    idKey: 'id'
+  } // 关注表
 }
 
 const userMessageAction = {
@@ -337,20 +423,6 @@ const trialReadText = {
   [trialRead.no]: '关闭' // 不可以
 }
 
-const modelType = {
-  // 文章的类型
-  user: 1, // 用户
-  article: 2, // 文章
-  article_blog: 3, // 文章个人专栏
-  article_comment: 4, // 文章评论
-  book: 5, // 小书章节
-  book_comment: 6, // 小书章节评论
-  books: 7, // 小书
-  books_comment: 8, // 小书评论
-  dynamic: 9, // 片刻
-  dynamic_comment: 10 // 片刻评论
-}
-
 module.exports = {
   statusList,
   statusListText,
@@ -358,7 +430,6 @@ module.exports = {
   articleTypeText,
   dynamicType,
   dynamicTypeText,
-  userMessageType,
   userMessageAction,
   userMessageActionText,
   userMessageIsPush,
@@ -376,5 +447,6 @@ module.exports = {
   productTypeInfo,
   trialRead,
   trialReadText,
-  modelType
+  modelType,
+  modelInfo
 }

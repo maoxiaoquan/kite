@@ -10,10 +10,10 @@ const { TimeNow, TimeDistance } = require('../../../utils/time')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  userMessageType,
   userMessageAction,
   virtualAction,
-  virtualType
+  virtualType,
+  modelType
 } = require('../../../utils/constant')
 
 const userMessage = require('../../../utils/userMessage')
@@ -268,7 +268,7 @@ class BooksComment {
               uid: oneBooks.uid,
               sender_id: user.uid,
               action: userMessageAction.comment, // 动作：评论
-              type: userMessageType.books, // 类型：小书评论
+              type: modelType.books, // 类型：小书评论
               content: JSON.stringify({
                 comment_id: _data.id,
                 books_id: reqData.books_id
@@ -285,7 +285,7 @@ class BooksComment {
               uid: reqData.reply_uid,
               sender_id: user.uid,
               action: userMessageAction.reply, // 动作：回复
-              type: userMessageType.books_comment, // 类型：小书回复
+              type: modelType.books_comment, // 类型：小书回复
               content: JSON.stringify({
                 reply_id: reqData.reply_id,
                 comment_id: _data.id,

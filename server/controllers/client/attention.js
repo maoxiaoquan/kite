@@ -6,11 +6,12 @@ const clientWhere = require('../../utils/clientWhere')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  userMessageType,
   userMessageAction,
   userMessageActionText,
   virtualAction,
-  virtualType
+  virtualType,
+  modelType,
+  modelInfo
 } = require('../../utils/constant')
 
 const userMessage = require('../../utils/userMessage')
@@ -32,57 +33,76 @@ class Attention {
    * 用户关注用户post
    * @param   {object} ctx 上下文对象
    */
-  static async setUserAttention (ctx) {
-    const { attention_uid } = ctx.request.body
-    let { user = '' } = ctx.request
-    let type = ''
+  static async setAttention (ctx) {
     try {
-      if (attention_uid === user.uid) {
-        throw new ErrorMessage('关注用户失败，自己不能关注自己')
+      const { associate_id, type } = ctx.request.body
+      const { user = '' } = ctx.request
+      let associateType = ''
+      if (!modelInfo[type]) {
+        throw new ErrorMessage('类型不存在，系统已禁止行为')
       }
-
-      let oneUserAttention = await models.attention_user.findOne({
+      if (!associate_id) {
+        throw new ErrorMessage('关联ID不存在')
+      }
+      const oneModelInfo = await models[modelInfo[type].model].findOne({
         where: {
-          uid: user.uid,
-          attention_uid
+          [modelInfo[type].idKey]: associate_id
         }
       })
 
-      if (oneUserAttention) {
+      if (!oneModelInfo) {
+        throw new ErrorMessage('模型不存在')
+      }
+
+      if (associate_id === user.uid) {
+        throw new ErrorMessage('关注用户失败，自己不能关注自己')
+      }
+
+      let oneAttention = await models.attention.findOne({
+        where: {
+          uid: user.uid,
+          type,
+          associate_id
+        }
+      })
+
+      if (oneAttention) {
         /* 判断是否关注了 */
-        type = oneUserAttention.is_attention ? 'cancel' : 'attention'
-        await models.attention_user.update(
+        associateType = oneAttention.is_associate ? 'cancel' : 'enter'
+        await models.attention.update(
           {
-            is_attention: !oneUserAttention.is_attention
+            is_associate: !oneAttention.is_associate
           },
           {
             where: {
               uid: user.uid,
-              attention_uid
+              type,
+              associate_id
             }
           }
         )
       } else {
-        type = 'attention' // 只在第一次关注的时候提交推送
+        associateType = 'enter' // 只在第一次关注的时候提交推送
         // 订阅消息，只在用户第一关注的时候推送消息
         await userMessage.setMessage({
-          uid: attention_uid,
+          uid: associate_id,
           sender_id: user.uid,
           action: userMessageAction.attention, // 动作：关注
-          type: userMessageType.user // 类型：用户
+          type: modelType.user // 类型：用户
         })
-        await models.attention_user.create({
+        await models.attention.create({
           uid: user.uid,
-          attention_uid,
-          is_attention: true
+          associate_id,
+          type,
+          is_associate: true
         })
       }
 
       resClientJson(ctx, {
         state: 'success',
-        message: type === 'attention' ? '关注成功' : '取消关注成功',
+        message: associateType === 'enter' ? '关注成功' : '取消关注成功',
         data: {
-          type
+          type: associateType
         }
       })
     } catch (err) {

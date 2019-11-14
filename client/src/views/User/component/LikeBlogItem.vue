@@ -78,12 +78,17 @@ import { Page } from "@components";
 import {
   statusList,
   statusListText,
+  modelType
 } from '@utils/constant'
+
+
+
 export default {
   name: "articleBlogItem",
   data () {
     return {
-      statusList
+      statusList,
+      modelType
     }
   },
   props: ['articleBlogItem'],
@@ -99,8 +104,9 @@ export default {
       }
     },
     setLikeArticleBlog (blog_id) { // 用户关注blog
-      this.$store.dispatch('articleBlog/LIKE_ARTICLE_BLOG', {
-        blog_id,
+      this.$store.dispatch('common/SET_COLLECT', {
+        associate_id: blog_id,
+        type: modelType.article_blog
       })
         .then(result => {
           if (result.state === 'success') {

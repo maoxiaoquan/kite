@@ -22,7 +22,6 @@
 <script>
 
 import {
-  userMessageType,
   userMessageAction,
   userMessageActionText
 } from '@utils/constant'

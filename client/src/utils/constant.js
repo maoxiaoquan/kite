@@ -45,24 +45,6 @@ export const dynamicTypeText = {
   [dynamicType.video]: '视频' // 草稿
 }
 
-export const userMessageType = {
-  // 文章的类型
-  user: 1, // 用户
-  article: 2, // 文章
-  article_blog: 3, // 文章个人专栏
-  article_comment: 4, // 文章评论
-  book: 5, // 小书章节
-  book_comment: 6, // 小书章节评论
-  books: 7, // 小书
-  books_comment: 8, // 小书评论
-  dynamic: 9, // 片刻
-  dynamic_comment: 10, // 片刻评论
-  thumb_dynamic: 11, // 点赞片刻
-  like_article: 12, // 喜欢文章
-  collect_blog: 13, // 收藏专栏
-  collect_books: 14 // 收藏小书
-}
-
 export const userMessageAction = {
   system: 1, // 系统消息
   like: 2, // 喜欢
@@ -75,50 +57,67 @@ export const userMessageAction = {
   sell: 9 // 卖出
 }
 
+export const modelType = {
+  // 文章的类型
+  user: 1, // 用户
+  article: 2, // 文章
+  article_blog: 3, // 文章个人专栏
+  article_comment: 4, // 文章评论
+  book: 5, // 小书章节
+  book_comment: 6, // 小书章节评论
+  books: 7, // 小书
+  books_comment: 8, // 小书评论
+  dynamic: 9, // 片刻
+  dynamic_comment: 10, // 片刻评论
+  thumb: 11, // 点赞表
+  like: 12, // 喜欢表
+  collect: 13, // 收藏表
+  attention: 14, // 关注表
+  article_tag: 15, // 文章标签
+  dynamic_topic: 16 // 动态专题
+}
+
 export const userMessageTypeText = {
   // 文章的类型
-  [userMessageType.user]: {
+  [modelType.user]: {
     [userMessageAction.attention]: '关注了你' // 用户1
   },
-  [userMessageType.article]: {
+  [modelType.article]: {
     [userMessageAction.comment]: '评论了你的文章' // 文章2
   },
-  [userMessageType.article_blog]: {
+  [modelType.article_blog]: {
     [userMessageAction.collect]: '收藏了你的专栏' // 文章个人专栏3
   },
-  [userMessageType.article_comment]: {
+  [modelType.article_comment]: {
     [userMessageAction.reply]: '文章中回复你的' // 文章评论4
   },
-  [userMessageType.book]: {
+  [modelType.book]: {
     [userMessageAction.comment]: '评论了你的小书章节' // 小书章节5
   },
-  [userMessageType.book_comment]: {
+  [modelType.book_comment]: {
     [userMessageAction.reply]: '小书章节中回复你的' // 小书章节评论6
   },
-  [userMessageType.books]: {
+  [modelType.books]: {
     [userMessageAction.comment]: '评论了你的小书', // 小书7
     [userMessageAction.sell]: '卖出小书' // 小书7
   },
-  [userMessageType.books_comment]: {
+  [modelType.books_comment]: {
     [userMessageAction.reply]: '小书中回复你的' // 小书评论8
   },
-  [userMessageType.dynamic]: {
+  [modelType.dynamic]: {
     [userMessageAction.comment]: '评论了你片刻' // 片刻9
   },
-  [userMessageType.dynamic_comment]: {
+  [modelType.dynamic_comment]: {
     [userMessageAction.comment]: '片刻中回复你的' // 片刻评论10
   },
-  [userMessageType.thumb_dynamic]: {
-    [userMessageAction.thumb]: '点赞了你的片刻' // 点赞了你的片刻
+  [modelType.thumb]: {
+    [userMessageAction.thumb]: '点赞你的' // 点赞了你的片刻
   },
-  [userMessageType.like_article]: {
+  [modelType.like]: {
     [userMessageAction.like]: '喜欢了你的文章' // 喜欢了你的文章
   },
-  [userMessageType.collect_blog]: {
-    [userMessageAction.collect]: '收藏你的专栏' // 收藏你的专栏
-  },
-  [userMessageType.collect_books]: {
-    [userMessageAction.collect]: '收藏了你的小书' // 收藏了你的小书
+  [modelType.collect]: {
+    [userMessageAction.collect]: '收藏你的' // 收藏你的专栏
   }
 }
 

@@ -12,10 +12,11 @@ const { lowdb } = require('../../../db/lowdb/index')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  userMessageType,
   userMessageAction,
   virtualAction,
-  virtualType
+  virtualType,
+  modelType,
+  modelInfo
 } = require('../../utils/constant')
 
 const userVirtual = require('../../common/userVirtual')
@@ -30,117 +31,70 @@ function ErrorMessage (message) {
 // 获取动态专题详情
 
 class Collect {
-  // 订阅个人专栏
-  static async setSubscribeArticleBlog (ctx) {
-    const { blog_id } = ctx.request.body
-    let { user = '' } = ctx.request
-    let type = ''
+  static async setCollect (ctx) {
     try {
-      let oneSubscribeArticleBlog = await models.collect_blog.findOne({
+      const { associate_id, type } = ctx.request.body
+      const { user = '' } = ctx.request
+      let associateType = ''
+      if (!modelInfo[type]) {
+        throw new ErrorMessage('类型不存在，系统已禁止行为')
+      }
+      if (!associate_id) {
+        throw new ErrorMessage('关联ID不存在')
+      }
+      const oneModelInfo = await models[modelInfo[type].model].findOne({
         where: {
-          uid: user.uid,
-          blog_id
+          [modelInfo[type].idKey]: associate_id
         }
       })
 
-      if (oneSubscribeArticleBlog) {
-        /* 判断是否关注了 */
-        type = oneSubscribeArticleBlog.is_like ? 'cancel' : 'attention'
-        await models.collect_blog.update(
-          {
-            is_like: !oneSubscribeArticleBlog.is_like
-          },
-          {
-            where: {
-              uid: user.uid,
-              blog_id
-            }
-          }
-        )
-      } else {
-        type = 'attention'
-        await models.collect_blog.create({
-          uid: user.uid,
-          blog_id,
-          is_like: true
-        })
+      if (!oneModelInfo) {
+        throw new ErrorMessage('模型不存在')
       }
 
-      let articleBlogRssCount = await models.collect_blog.count({
-        where: {
-          blog_id,
-          is_like: true
-        }
-      })
+      if (associate_id === user.uid) {
+        throw new ErrorMessage('关注用户失败，自己不能关注自己')
+      }
 
-      await models.article_blog.update(
-        {
-          like_count: articleBlogRssCount
-        },
-        {
-          where: {
-            blog_id
-          }
-        }
-      )
-
-      resClientJson(ctx, {
-        state: 'success',
-        message: type === 'attention' ? '关注个人专栏成功' : '取消个人专栏成功',
-        data: {
-          type
-        }
-      })
-    } catch (err) {
-      resClientJson(ctx, {
-        state: 'error',
-        message: '错误信息：' + err.message
-      })
-      return false
-    }
-  }
-
-  // 收藏小书
-  static async collectBooks (ctx) {
-    const { books_id } = ctx.request.body
-    let { user = '' } = ctx.request
-    let type = ''
-    try {
-      let oneCollectBooks = await models.collect_books.findOne({
+      let oneAttention = await models.collect.findOne({
         where: {
           uid: user.uid,
-          books_id
+          type,
+          associate_id
         }
       })
 
-      if (oneCollectBooks) {
+      if (oneAttention) {
         /* 判断是否关注了 */
-        type = oneCollectBooks.is_like ? 'cancel' : 'attention'
-        await models.collect_books.update(
+        associateType = oneAttention.is_associate ? 'cancel' : 'enter'
+        await models.collect.update(
           {
-            is_like: !oneCollectBooks.is_like
+            is_associate: !oneAttention.is_associate
           },
           {
             where: {
               uid: user.uid,
-              books_id
+              type,
+              associate_id
             }
           }
         )
       } else {
-        type = 'attention'
-        await models.collect_books.create({
+        associateType = 'enter' // 只在第一次关注的时候提交推送
+        // 订阅消息，只在用户第一关注的时候推送消息
+        await models.collect.create({
           uid: user.uid,
-          books_id,
-          is_like: true
+          associate_id,
+          type,
+          is_associate: true
         })
       }
 
       resClientJson(ctx, {
         state: 'success',
-        message: type === 'attention' ? '收藏成功' : '取消收藏成功',
+        message: associateType === 'enter' ? '收藏成功' : '取消收藏成功',
         data: {
-          type
+          type: associateType
         }
       })
     } catch (err) {

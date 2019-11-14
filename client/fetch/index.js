@@ -33,10 +33,16 @@ function warmCache () {
 
 // 不缓存请求
 export function gqlfetch ({ parameter }) {
+  const params = {
+    'query': parameter,
+    'operationName': '',
+    'variables': {},
+    'access-token': ''
+  }
+
   return new Promise((resolve, reject) => {
-    console.log(11111111111166)
     service
-      .post(api.url, parameter)
+      .post(api.url, params)
       .then(res => {
         const val = res.data
         resolve(val)

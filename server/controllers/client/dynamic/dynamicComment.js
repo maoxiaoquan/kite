@@ -10,10 +10,10 @@ const { TimeNow, TimeDistance } = require('../../../utils/time')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  userMessageType,
   userMessageAction,
   virtualAction,
-  virtualType
+  virtualType,
+  modelType
 } = require('../../../utils/constant')
 
 const userMessage = require('../../../utils/userMessage')
@@ -427,7 +427,7 @@ class dynamicComment {
               uid: oneDynamic.uid,
               sender_id: user.uid,
               action: userMessageAction.comment, // 动作：评论
-              type: userMessageType.dynamic, // 类型：片刻评论
+              type: modelType.dynamic, // 类型：片刻评论
               content: JSON.stringify({
                 comment_id: _data.id,
                 dynamic_id: reqData.dynamic_id
@@ -444,7 +444,7 @@ class dynamicComment {
               uid: reqData.reply_uid,
               sender_id: user.uid,
               action: userMessageAction.reply, // 动作：回复
-              type: userMessageType.dynamic_comment, // 类型：片刻回复
+              type: modelType.dynamic_comment, // 类型：片刻回复
               content: JSON.stringify({
                 reply_id: reqData.reply_id,
                 comment_id: _data.id,

@@ -12,10 +12,10 @@ const { lowdb } = require('../../../../db/lowdb/index')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  userMessageType,
   userMessageAction,
   virtualAction,
-  virtualType
+  virtualType,
+  modelType
 } = require('../../../utils/constant')
 
 const userVirtual = require('../../../common/userVirtual')
@@ -373,15 +373,23 @@ class dynamicBlog {
 
       oneArticleBlog.setDataValue(
         'likeCount',
-        await models.collect_blog.count({
-          where: { blog_id: oneArticleBlog.blog_id }
+        await models.collect.count({
+          where: {
+            associate_id: oneArticleBlog.blog_id,
+            is_associate: true,
+            type: modelType.article_blog
+          }
         })
       )
 
       oneArticleBlog.setDataValue(
         'likeUserIds',
-        await models.collect_blog.findAll({
-          where: { blog_id: oneArticleBlog.blog_id, is_like: true }
+        await models.collect.findAll({
+          where: {
+            associate_id: oneArticleBlog.blog_id,
+            is_associate: true,
+            type: modelType.article_blog
+          }
         })
       )
 
@@ -521,7 +529,7 @@ class dynamicBlog {
     }
 
     try {
-      let { count, rows } = await models.collect_blog.findAndCountAll({
+      let { count, rows } = await models.collect.findAndCountAll({
         where: { is_like: true, uid }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize) // 每页限制返回的数据条数
@@ -561,14 +569,14 @@ class dynamicBlog {
 
         rows[i].setDataValue(
           'likeCount',
-          await models.collect_blog.count({
+          await models.collect.count({
             where: { blog_id: rows[i].blog_id, is_like: true }
           })
         )
 
         rows[i].setDataValue(
           'likeUserIds',
-          await models.collect_blog.findAll({
+          await models.collect.findAll({
             where: { blog_id: rows[i].blog_id, is_like: true }
           })
         )

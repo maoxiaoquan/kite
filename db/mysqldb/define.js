@@ -18,26 +18,6 @@ module.exports = sequelize => {
       initialAutoIncrement: 10000
     }
   )
-  const attention_user = sequelize.define(
-    /* 前台用户关注用户表 */
-    require('./models_type/db_attention_user').NAME,
-    require('./models_type/db_attention_user').TABLE,
-    SEQ_PARAMETER
-  )
-
-  /* 前台用户关注文章标签表 */
-  const attention_tag = sequelize.define(
-    require('./models_type/db_attention_tag').NAME,
-    require('./models_type/db_attention_tag').TABLE,
-    SEQ_PARAMETER
-  )
-
-  /* 前台用户喜欢文章表 */
-  const like_article = sequelize.define(
-    require('./models_type/db_like_article').NAME,
-    require('./models_type/db_like_article').TABLE,
-    SEQ_PARAMETER
-  )
 
   /* 前台用户信息表 */
   const user_info = sequelize.define(
@@ -173,27 +153,7 @@ module.exports = sequelize => {
     require('./models_type/db_dynamic_comment').TABLE,
     SEQ_PARAMETER
   )
-
-  const thumb_dynamic = sequelize.define(
-    require('./models_type/db_thumb_dynamic').NAME,
-    require('./models_type/db_thumb_dynamic').TABLE,
-    SEQ_PARAMETER
-  )
-
-  const attention_topic = sequelize.define(
-    require('./models_type/db_attention_topic').NAME,
-    require('./models_type/db_attention_topic').TABLE,
-    SEQ_PARAMETER
-  )
-
-  const collect_blog = sequelize.define(
-    require('./models_type/db_collect_blog').NAME,
-    require('./models_type/db_collect_blog').TABLE,
-    SEQ_PARAMETER
-  )
-
   // book
-
   const book = sequelize.define(
     require('./models_type/db_book').NAME,
     require('./models_type/db_book').TABLE,
@@ -217,14 +177,6 @@ module.exports = sequelize => {
     require('./models_type/db_books_comment').TABLE,
     SEQ_PARAMETER
   )
-
-  const collect_books = sequelize.define(
-    // 收藏------书
-    require('./models_type/db_collect_books').NAME,
-    require('./models_type/db_collect_books').TABLE,
-    SEQ_PARAMETER
-  )
-
   // 2019.11.4 0:49
 
   const virtual = sequelize.define(
@@ -250,27 +202,42 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
 
+  const attention = sequelize.define(
+    // 关注
+    require('./models_type/db_attention').NAME,
+    require('./models_type/db_attention').TABLE,
+    SEQ_PARAMETER
+  )
+
+  const like = sequelize.define(
+    // 喜欢
+    require('./models_type/db_like').NAME,
+    require('./models_type/db_like').TABLE,
+    SEQ_PARAMETER
+  )
+
+  const thumb = sequelize.define(
+    // 点赞
+    require('./models_type/db_thumb').NAME,
+    require('./models_type/db_thumb').TABLE,
+    SEQ_PARAMETER
+  )
+
   const _define = {
     user,
     user_info,
-    attention_user,
     user_role,
     user_authority,
     user_message,
-    attention_tag,
     verify_code,
     article,
     article_tag,
     article_column,
     article_blog,
-    like_article,
     article_comment,
-    collect_blog,
     dynamic,
     dynamic_topic,
     dynamic_comment,
-    thumb_dynamic,
-    attention_topic,
     admin_user,
     admin_role,
     admin_authority,
@@ -281,10 +248,12 @@ module.exports = sequelize => {
     books_comment,
     picture,
     options,
-    collect_books,
     virtual,
     order,
-    collect
+    collect,
+    attention,
+    like,
+    thumb
   }
 
   return {

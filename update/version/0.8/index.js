@@ -14,6 +14,17 @@ class update {
         await models.collect.sync({
           force: true
         })
+        await models.attention.sync({
+          force: true
+        })
+
+        await models.like.sync({
+          force: true
+        })
+
+        await models.thumb.sync({
+          force: true
+        })
 
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb

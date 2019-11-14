@@ -44,30 +44,6 @@ const mutations = {
 }
 
 const actions = {
-  USER_ATTENTION ({ commit, dispatch, state }, parameter) {
-    // 用户关注用户
-    return fetch({
-      url: '/user/attention',
-      method: 'post',
-      parameter: parameter
-    })
-  },
-  USER_LIKE_ARTICLE ({ commit, dispatch, state }, parameter) {
-    // 用户喜欢文章
-    return fetch({
-      url: '/user/like-article',
-      method: 'post',
-      parameter: parameter
-    })
-  },
-  USER_LIKE_DYNAMIC ({ commit, dispatch, state }, parameter) {
-    // 用户喜欢动态
-    return fetch({
-      url: '/user/like-dynamic',
-      method: 'post',
-      parameter: parameter
-    })
-  },
   GET_USER_INFO_ALL ({ commit, dispatch, state }, parameter) {
     // 获取用户信息
     return fetch({

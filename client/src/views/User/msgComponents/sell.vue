@@ -14,7 +14,7 @@
       <div class="content">
         {{userMessageTypeText[MessageItem.type][MessageItem.action]}}
         <router-link style="color:#df5858"
-                     v-if="MessageItem.type===userMessageType.books"
+                     v-if="MessageItem.type===modelType.books"
                      :to="{name:'book',params:{books_id:MessageItem.books.books_id}}">{{MessageItem.books.title}}</router-link>
       </div>
       <span class="delete-message"
@@ -29,7 +29,7 @@
 import {
   statusList,
   statusListText,
-  userMessageType,
+  modelType,
   userMessageTypeText,
   userMessageAction,
   userMessageActionText,
@@ -45,7 +45,7 @@ export default {
   data () {
     return {
       statusList,
-      userMessageType,
+      modelType,
       userMessageTypeText
     };
   },

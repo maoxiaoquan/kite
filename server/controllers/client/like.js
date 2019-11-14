@@ -6,11 +6,12 @@ const clientWhere = require('../../utils/clientWhere')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  userMessageType,
   userMessageAction,
   userMessageActionText,
   virtualAction,
-  virtualType
+  virtualType,
+  modelType,
+  modelInfo
 } = require('../../utils/constant')
 
 const userMessage = require('../../utils/userMessage')
@@ -27,77 +28,76 @@ class Like {
    * 用户like文章post
    * @param   {object} ctx 上下文对象
    */
-  static async setUserLikeArticle (ctx) {
-    const { aid, uid } = ctx.request.body
-    let { user = '' } = ctx.request
-    let type = ''
+  static async setLike (ctx) {
     try {
-      let oneArticle = await models.article.findOne({
+      const { associate_id, type } = ctx.request.body
+      const { user = '' } = ctx.request
+      let associateType = ''
+
+      if (!modelInfo[type]) {
+        throw new ErrorMessage('类型不存在，系统已禁止行为')
+      }
+      if (!associate_id) {
+        throw new ErrorMessage('关联ID不存在')
+      }
+      const oneModelInfo = await models[modelInfo[type].model].findOne({
         where: {
-          aid
+          [modelInfo[type].idKey]: associate_id
         }
       })
 
-      let oneUserLikeArticle = await models.like_article.findOne({
+      if (!oneModelInfo) {
+        throw new ErrorMessage('模型不存在')
+      }
+
+      let oneAttention = await models.like.findOne({
         where: {
           uid: user.uid,
-          aid
+          type,
+          associate_id
         }
       })
 
-      if (oneUserLikeArticle) {
+      if (oneAttention) {
         /* 判断是否关注了 */
-        type = oneUserLikeArticle.is_like ? 'cancel' : 'attention'
-        await models.like_article.update(
+        associateType = oneAttention.is_associate ? 'cancel' : 'enter'
+        await models.like.update(
           {
-            is_like: !oneUserLikeArticle.is_like
+            is_associate: !oneAttention.is_associate
           },
           {
             where: {
               uid: user.uid,
-              aid
+              type,
+              associate_id
             }
           }
         )
       } else {
-        type = 'attention' // 只在第一次关注的时候提交推送
-
+        associateType = 'enter' // 只在第一次关注的时候提交推送
+        // 订阅消息，只在用户第一关注的时候推送消息
         await userMessage.setMessage({
-          uid: oneArticle.uid,
+          uid: associate_id,
           sender_id: user.uid,
-          action: userMessageAction.like, // 动作：关注
-          type: userMessageType.like_article, // 类型：用户
+          action: userMessageAction.like, // 动作：喜欢
+          type: modelType.article, // 类型：文章
           content: JSON.stringify({
-            aid
+            aid: associate_id
           })
         })
-
-        await models.like_article.create({
+        await models.like.create({
           uid: user.uid,
-          aid,
-          is_like: true
+          associate_id,
+          type,
+          is_associate: true
         })
       }
 
-      let articleLikeCount = await models.like_article.count({
-        where: {
-          aid,
-          is_like: true
-        }
-      })
-
-      await models.article.update(
-        {
-          like_count: articleLikeCount
-        },
-        { where: { aid } }
-      )
-
       resClientJson(ctx, {
         state: 'success',
-        message: type === 'attention' ? '收藏成功' : '取消收藏成功',
+        message: associateType === 'enter' ? '喜欢成功' : '取消喜欢成功',
         data: {
-          type
+          type: associateType
         }
       })
     } catch (err) {

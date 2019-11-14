@@ -11,10 +11,10 @@ const { TimeNow, TimeDistance } = require('../../../utils/time')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  userMessageType,
   userMessageAction,
   virtualAction,
-  virtualType
+  virtualType,
+  modelType
 } = require('../../../utils/constant')
 
 const userVirtual = require('../../../common/userVirtual')
@@ -171,7 +171,7 @@ class dynamic {
 
         oneDynamic.setDataValue(
           'userAttentionIds',
-          await models.attention_user.findAll({
+          await models.attention.findAll({
             where: {
               attention_uid: oneDynamic.uid,
               is_attention: true
@@ -295,10 +295,11 @@ class dynamic {
 
         rows[i].setDataValue(
           'userAttentionIds',
-          await models.attention_user.findAll({
+          await models.attention.findAll({
             where: {
-              attention_uid: rows[i].uid,
-              is_attention: true
+              associate_id: rows[i].uid,
+              type: modelType.user,
+              is_associate: true
             }
           })
         )
@@ -392,7 +393,7 @@ class dynamic {
 
         rows[i].setDataValue(
           'userAttentionIds',
-          await models.attention_user.findAll({
+          await models.attention.findAll({
             where: {
               attention_uid: rows[i].uid,
               is_attention: true

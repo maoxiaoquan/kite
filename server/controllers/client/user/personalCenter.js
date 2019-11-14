@@ -7,7 +7,8 @@ const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
   virtualAction,
-  virtualType
+  virtualType,
+  modelType
 } = require('../../../utils/constant')
 
 function ErrorMessage (message) {
@@ -123,16 +124,18 @@ class PersonalCenter {
       if (any === 'me') {
         whereParmas = {
           uid: uid,
-          is_attention: true
+          type: modelType.user,
+          is_associate: true
         }
       } else {
         whereParmas = {
-          attention_uid: uid,
-          is_attention: true
+          associate_id: uid,
+          type: modelType.user,
+          is_associate: true
         }
       }
 
-      let { count, rows } = await models.attention_user.findAndCountAll({
+      let { count, rows } = await models.attention.findAndCountAll({
         where: whereParmas, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, // 每页限制返回的数据条数
@@ -143,17 +146,18 @@ class PersonalCenter {
         rows[i].setDataValue(
           'user',
           await models.user.findOne({
-            where: { uid: any === 'me' ? rows[i].attention_uid : rows[i].uid },
+            where: { uid: any === 'me' ? rows[i].associate_id : rows[i].uid },
             attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
           })
         )
 
         rows[i].setDataValue(
           'userAttentionIds',
-          await models.attention_user.findAll({
+          await models.attention.findAll({
             where: {
-              attention_uid: any === 'me' ? rows[i].attention_uid : rows[i].uid,
-              is_attention: true
+              associate_id: any === 'me' ? rows[i].associate_id : rows[i].uid,
+              type: modelType.user,
+              is_associate: true
             }
           })
         )
@@ -188,7 +192,7 @@ class PersonalCenter {
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
     try {
-      let allUserLikeArticle = await models.like_article
+      let allUserLikeArticle = await models.like
         .findAll({ where: { uid, is_like: true } })
         .then(res => {
           return res.map((item, key) => {
@@ -299,10 +303,10 @@ class PersonalCenter {
 
         rows[i].setDataValue(
           'userAttentionIds',
-          await models.attention_user.findAll({
+          await models.attention.findAll({
             where: {
               attention_uid: rows[i].uid,
-              is_attention: true
+              is_associate: true
             }
           })
         )
@@ -378,8 +382,12 @@ class PersonalCenter {
 
         rows[i].setDataValue(
           'likeCount',
-          await models.collect_blog.count({
-            where: { blog_id: rows[i].blog_id, is_like: true }
+          await models.collect.count({
+            where: {
+              associate_id: rows[i].blog_id,
+              is_associate: true,
+              type: modelType.article_blog
+            }
           })
         )
 
@@ -402,8 +410,12 @@ class PersonalCenter {
 
         rows[i].setDataValue(
           'likeUserIds',
-          await models.collect_blog.findAll({
-            where: { blog_id: rows[i].blog_id, is_like: true }
+          await models.collect.findAll({
+            where: {
+              associate_id: rows[i].blog_id,
+              is_associate: true,
+              type: modelType.article_blog
+            }
           })
         )
       }

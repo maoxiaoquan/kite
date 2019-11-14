@@ -8,7 +8,8 @@ const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
   virtualAction,
-  virtualType
+  virtualType,
+  modelType
 } = require('../../utils/constant')
 
 class Index {

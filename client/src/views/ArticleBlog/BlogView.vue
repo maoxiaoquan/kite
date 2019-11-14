@@ -120,7 +120,9 @@ import blogArticleItem from './component/blogArticleItem'
 import websiteNotice from '@views/Parts/websiteNotice'
 import { share, baidu, google } from '@utils'
 import googleMixin from '@mixins/google'
-
+import {
+  modelType
+} from '@utils/constant'
 export default {
   name: "ArticleBlogView",
   mixins: [googleMixin], //混合谷歌分析  
@@ -157,6 +159,11 @@ export default {
       store.dispatch("articleBlog/GET_ARTICLE_BLOG_ARTICLE_LIST", { blogId: route.params.blogId }),
     ]);
   },
+  data () {
+    return {
+      modelType
+    }
+  },
   methods: {
     setBlogTime (item) { // 设置blog的时间
       if (item.create_date === item.update_date) {
@@ -187,8 +194,9 @@ export default {
       }
     },
     setLikeArticleBlog (blog_id) { // 用户关注blog
-      this.$store.dispatch('articleBlog/LIKE_ARTICLE_BLOG', {
-        blog_id,
+      this.$store.dispatch('common/SET_COLLECT', {
+        associate_id: blog_id,
+        type: modelType.article_blog
       })
         .then(result => {
           if (result.state === 'success') {

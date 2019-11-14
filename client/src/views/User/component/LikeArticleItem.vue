@@ -92,7 +92,7 @@ export default {
       /*用户like 文章*/
       var that = this;
       this.$store
-        .dispatch("user/USER_LIKE_ARTICLE", { aid: this.articleItem.aid })
+        .dispatch("common/SET_LIKE", { aid: this.articleItem.aid })
         .then(res => {
           if (res.state === "success") {
             this.$emit('likeArticle')

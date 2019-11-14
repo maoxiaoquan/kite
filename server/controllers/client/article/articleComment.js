@@ -9,10 +9,10 @@ const config = require('../../../config')
 const { TimeNow, TimeDistance } = require('../../../utils/time')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
-  userMessageType,
   userMessageAction,
   virtualAction,
-  virtualType
+  virtualType,
+  modelType
 } = require('../../../utils/constant')
 
 const userMessage = require('../../../utils/userMessage')
@@ -266,7 +266,7 @@ class ArticleComment {
               uid: oneArticle.uid,
               sender_id: user.uid,
               action: userMessageAction.comment, // 动作：评论
-              type: userMessageType.article, // 类型：文章评论
+              type: modelType.article, // 类型：文章评论
               content: JSON.stringify({
                 comment_id: _data.id,
                 aid: reqData.aid
@@ -283,7 +283,7 @@ class ArticleComment {
               uid: reqData.reply_uid,
               sender_id: user.uid,
               action: userMessageAction.reply, // 动作：回复
-              type: userMessageType.article_comment, // 类型：评论回复
+              type: modelType.article_comment, // 类型：评论回复
               content: JSON.stringify({
                 reply_id: reqData.reply_id,
                 comment_id: _data.id,

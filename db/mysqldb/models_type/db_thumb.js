@@ -2,7 +2,7 @@ const Seq = require('sequelize')
 const shortid = require('shortid')
 const time = require('../time')
 module.exports = {
-  NAME: 'attention_tag' /* 表名 */,
+  NAME: 'thumb' /* 表名 */,
   TABLE: {
     /* 表结构 */
     id: {
@@ -19,11 +19,24 @@ module.exports = {
       comment: 'uid',
       field: 'uid'
     },
-    tag_id: {
-      // 标签ID
-      type: Seq.STRING(20),
-      comment: 'id 主键，自增',
-      field: 'tag_id'
-    }
+    associate_id: {
+      // 关联的内容
+      type: Seq.STRING(50),
+      comment: '关联的内容',
+      field: 'associate_id'
+    },
+    type: {
+      // 类型
+      type: Seq.INTEGER(6),
+      comment: '类型',
+      field: 'type'
+    },
+    is_associate: {
+      // 是否关联
+      type: Seq.BOOLEAN,
+      comment: '是否关联',
+      field: 'is_associate'
+    },
+    ...time.create_date
   }
 }

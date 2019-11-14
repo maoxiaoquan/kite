@@ -145,6 +145,7 @@ import { mapState } from 'vuex'
 import { share } from '../../../utils'
 import {
   dynamicType,
+  modelType,
   dynamicTypeText
 } from '@utils/constant'
 
@@ -165,6 +166,7 @@ export default {
       isCommnet: false,
       isShowDynamic: true, // 是否显示动态
       dynamicType,
+      modelType,
       dynamicTypeText
     }
   },
@@ -174,8 +176,9 @@ export default {
         this.$message.warning('请先登录')
         return false
       }
-      this.$store.dispatch('user/USER_ATTENTION', {
-        attention_uid: this.dynamicItem.user.uid
+      this.$store.dispatch('common/SET_ATTENTION', {
+        associate_id: this.dynamicItem.user.uid,
+        type: modelType.user
       }).then(result => {
         if (result.state === 'success') {
           this.$message.success(result.message)
@@ -189,7 +192,7 @@ export default {
     selectAttentionUserClass (type) {
       let userAttentionAll = document.querySelectorAll(`.user-attention-${this.dynamicItem.user.uid}`)
       for (let i = 0; i < userAttentionAll.length; i++) {
-        if (type === 'attention') {
+        if (type === 'enter') {
           userAttentionAll[i].classList.add('active')
           userAttentionAll[i].innerHTML = '已关注'
         } else {
@@ -256,7 +259,7 @@ export default {
       }
       /*用户like 动态*/
       this.$store
-        .dispatch("user/USER_LIKE_DYNAMIC", {
+        .dispatch("common/SET_THUMB", {
           dynamic_id: this.dynamicItem.id
         })
         .then(res => {
