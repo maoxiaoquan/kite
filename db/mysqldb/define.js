@@ -242,6 +242,14 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
 
+  // 2019.11.13 10:46
+  const collect = sequelize.define(
+    // 收藏
+    require('./models_type/db_collect').NAME,
+    require('./models_type/db_collect').TABLE,
+    SEQ_PARAMETER
+  )
+
   const _define = {
     user,
     user_info,
@@ -275,7 +283,8 @@ module.exports = sequelize => {
     options,
     collect_books,
     virtual,
-    order
+    order,
+    collect
   }
 
   return {

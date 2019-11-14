@@ -99,6 +99,7 @@ export default {
   metaInfo () {
     return {
       title: this.article.title || "",
+      titleTemplate: `%s - ${this.website.meta.website_name || ''}`,
       meta: [
         {
           // set meta

@@ -137,6 +137,7 @@ export default {
   metaInfo () {
     return {
       title: this.books.booksInfo.title || "",
+      titleTemplate: `%s - ${this.website.meta.website_name || ''}`,
       meta: [
         {
           // set meta
