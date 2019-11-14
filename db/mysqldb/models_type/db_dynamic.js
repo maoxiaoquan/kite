@@ -49,11 +49,11 @@ module.exports = {
       comment: '类型 （1:默认动态;2:图片,3:链接，4：视频 ）',
       field: 'type'
     },
-    like_count: {
+    thumb_count: {
       // 喜欢数
       type: Seq.BIGINT(20),
       comment: '喜欢数',
-      field: 'like_count',
+      field: 'thumb_count',
       defaultValue: 0
     },
     comment_count: {

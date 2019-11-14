@@ -170,11 +170,23 @@ class dynamic {
         )
 
         oneDynamic.setDataValue(
+          'thumbCount',
+          await models.thumb.count({
+            where: {
+              associate_id: oneDynamic.id,
+              type: modelType.dynamic,
+              is_associate: true
+            }
+          })
+        )
+
+        oneDynamic.setDataValue(
           'userAttentionIds',
           await models.attention.findAll({
             where: {
-              attention_uid: oneDynamic.uid,
-              is_attention: true
+              associate_id: oneDynamic.uid,
+              type: modelType.user,
+              is_associate: true
             }
           })
         )
@@ -232,7 +244,6 @@ class dynamic {
     let sort = ctx.query.sort || '' // 排序
     let whereDynamicParams = {} // 查询参数
     let orderParams = [] // 排序参数
-    let status = []
     try {
       // sort
       // hottest 全部热门:
@@ -292,6 +303,17 @@ class dynamic {
           await TimeDistance(rows[i].create_date)
         )
         rows[i].setDataValue('topic', topic)
+
+        rows[i].setDataValue(
+          'thumbCount',
+          await models.thumb.count({
+            where: {
+              associate_id: rows[i].id,
+              type: modelType.dynamic,
+              is_associate: true
+            }
+          })
+        )
 
         rows[i].setDataValue(
           'userAttentionIds',
@@ -392,6 +414,17 @@ class dynamic {
         )
 
         rows[i].setDataValue(
+          'thumbCount',
+          await models.thumb.count({
+            where: {
+              associate_id: rows[i].id,
+              type: modelType.dynamic,
+              is_associate: true
+            }
+          })
+        )
+
+        rows[i].setDataValue(
           'userAttentionIds',
           await models.attention.findAll({
             where: {
@@ -455,7 +488,6 @@ class dynamic {
     let whereParams = {} // 查询参数
     let orderParams = [
       ['create_date', 'DESC'],
-      ['like_count', 'DESC'],
       ['comment_count', 'DESC']
     ] // 排序参数
 

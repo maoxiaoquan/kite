@@ -5,7 +5,7 @@ const state = () => ({
   userArticleCount: 0,
   userAttentionCount: 0,
   dynamicCount: 0,
-  allLikeDymaicId: [], // 关注的所有动态ID
+  allLikeDynaicId: [], // 关注的所有动态ID
   allRssDynamicTopicId: [], // 订阅的所有动态话题ID
   user_info: {},
   user: {},
@@ -24,7 +24,7 @@ const mutations = {
     state.userArticleCount = data.userArticleCount
     state.userAttentionCount = data.userAttentionCount
     state.dynamicCount = data.dynamicCount
-    state.allLikeDymaicId = data.allLikeDymaicId // 关注的所有动态ID
+    state.allLikeDynaicId = data.allLikeDynaicId // 关注的所有动态ID
     state.allRssDynamicTopicId = data.allRssDynamicTopicId // 订阅的所有动态话题ID
     state.user_info = data.user_info
     state.user = data.user

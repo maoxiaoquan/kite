@@ -440,7 +440,11 @@ class User {
         // 哪些用户关注了我
         'userAttentionIds',
         await models.attention.findAll({
-          where: { associate_id: oneUser.uid, is_associate: true, type: modelType.user }
+          where: {
+            associate_id: oneUser.uid,
+            is_associate: true,
+            type: modelType.user
+          }
         })
       )
 
@@ -453,11 +457,13 @@ class User {
         }
       })
 
-      let allLikeDymaicId = await models.thumb
-        .findAll({ where: { uid } })
+      let allLikeDynaicId = await models.thumb
+        .findAll({
+          where: { uid, type: modelType.dynamic, is_associate: true }
+        })
         .then(res => {
           return res.map((item, key) => {
-            return item.dynamic_id
+            return item.associate_id
           })
         })
 
@@ -504,7 +510,7 @@ class User {
           userAttentionCount: userAttentionCount,
           userArticleCount: articleCount,
           dynamicCount,
-          allLikeDymaicId,
+          allLikeDynaicId,
           allRssDynamicTopicId
         }
       })

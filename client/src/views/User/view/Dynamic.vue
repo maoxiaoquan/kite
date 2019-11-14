@@ -1,125 +1,168 @@
 <template>
-  <div class="user-dynamic"
-       v-loading="isLoading">
-
-    <div class="user-dynamic-item client-card"
-         v-for="(dynamicItem,key) in dynamicList.list"
-         :key="key">
+  <div class="user-dynamic" v-loading="isLoading">
+    <div
+      class="user-dynamic-item client-card"
+      v-for="(dynamicItem, key) in dynamicList.list"
+      :key="key"
+    >
       <div class="dynamic-header-row">
         <div class="account-group">
           <div class="user-popover-box">
-            <router-link :to='{name:"user",params:{uid:dynamicItem.user.uid}}'
-                         class="user-link">
-              <img class="avatar"
-                   size="size"
-                   v-lazy="dynamicItem.user.avatar"
-                   alt="">
+            <router-link
+              :to="{ name: 'user', params: { uid: dynamicItem.user.uid } }"
+              class="user-link"
+            >
+              <img
+                class="avatar"
+                size="size"
+                v-lazy="dynamicItem.user.avatar"
+                alt=""
+              />
             </router-link>
           </div>
           <div class="dynamic-header-content">
             <div class="user-popover-box">
-              <router-link :to="{name:'user',params:{uid:dynamicItem.user.uid,routeType:'article'}}"
-                           class="username">{{dynamicItem.user.nickname}}</router-link>
+              <router-link
+                :to="{
+                  name: 'user',
+                  params: { uid: dynamicItem.user.uid, routeType: 'article' }
+                }"
+                class="username"
+                >{{ dynamicItem.user.nickname }}</router-link
+              >
             </div>
             <div class="meta-box">
-              <div class="meta-box-item position ellipsis">@ {{dynamicItem.user.introduction}}</div>
+              <div class="meta-box-item position ellipsis">
+                @ {{ dynamicItem.user.introduction }}
+              </div>
               <div class="dot">·</div>
-              <a href="javascript:;"
-                 target="_blank"
-                 rel=""
-                 class="meta-box-item time-box">
-                <time :title="dynamicItem.create_dt"
-                      class="time">{{dynamicItem.create_dt}}</time>
+              <a
+                href="javascript:;"
+                target="_blank"
+                rel=""
+                class="meta-box-item time-box"
+              >
+                <time :title="dynamicItem.create_dt" class="time">{{
+                  dynamicItem.create_dt
+                }}</time>
               </a>
               <div class="dot">·</div>
-              <div class="meta-box-item like-action action"
-                   :class="{'active':~user.allLikeDymaicId.indexOf(dynamicItem.id||'')}"
-                   @click="setUserLikeDynamic(dynamicItem)">
+              <div
+                class="meta-box-item like-action action"
+                :class="{
+                  active: ~user.allLikeDynaicId.indexOf(dynamicItem.id || '')
+                }"
+                @click="setUserLikeDynamic(dynamicItem)"
+              >
                 <i class="el-icon-star-off"></i>
-                <span class="action-title">{{dynamicItem.like_count}}</span>
+                <span class="action-title">{{ dynamicItem.thumbCount }}</span>
               </div>
               <div class="dot">·</div>
-              <div class="meta-box-item comment-action action"
-                   @click="isCommnet=!isCommnet">
+              <div
+                class="meta-box-item comment-action action"
+                @click="isCommnet = !isCommnet"
+              >
                 <i class="el-icon-chat-line-round"></i>
-                <span class="action-title">{{dynamicItem.comment_count}}</span>
+                <span class="action-title">{{
+                  dynamicItem.comment_count
+                }}</span>
               </div>
-
             </div>
           </div>
         </div>
 
-        <div class="header-action"
-             v-if="personalInfo.user.uid!==dynamicItem.user.uid">
-          <button class="subscribe-btn follow-button"
-                  :class="[{'active':isAttention(dynamicItem||'')},`user-attention-${dynamicItem.user.uid}`]"
-                  @click="setUserAttention">{{isAttention(dynamicItem)?'已关注':'关注'}}</button>
+        <div
+          class="header-action"
+          v-if="personalInfo.user.uid !== dynamicItem.user.uid"
+        >
+          <button
+            class="subscribe-btn follow-button"
+            :class="[
+              { active: isAttention(dynamicItem || '') },
+              `user-attention-${dynamicItem.user.uid}`
+            ]"
+            @click="setUserAttention"
+          >
+            {{ isAttention(dynamicItem) ? '已关注' : '关注' }}
+          </button>
         </div>
-
       </div>
 
       <div class="dynamic-content-row">
         <div class="content-box content-box">
           <div v-html="contentRender(dynamicItem.content)"></div>
-          <div class="limit-ctl-box"
-               v-if="dynamicItem.status===3">审核失败原因：{{dynamicItem.rejection_reason}}</div>
+          <div class="limit-ctl-box" v-if="dynamicItem.status === 3">
+            审核失败原因：{{ dynamicItem.rejection_reason }}
+          </div>
         </div>
       </div>
 
-      <div class="dynamic-image-row"
-           v-if="dynamicItem.type===2">
-        <img class="preview-picture"
-             style="width: 100px; height: 100px"
-             v-lazy="url"
-             v-for="(url,key) in imgAnalyze(dynamicItem.attach)"
-             :key="key"
-             v-if="url"
-             alt="">
+      <div class="dynamic-image-row" v-if="dynamicItem.type === 2">
+        <img
+          class="preview-picture"
+          style="width: 100px; height: 100px"
+          v-lazy="url"
+          v-for="(url, key) in imgAnalyze(dynamicItem.attach)"
+          :key="key"
+          v-if="url"
+          alt=""
+        />
       </div>
 
-      <div class="dynamic-link-row"
-           v-if="dynamicItem.type===3">
-        <a :href="dynamicItem.attach"
-           target="_block">{{dynamicItem.attach}}</a>
+      <div class="dynamic-link-row" v-if="dynamicItem.type === 3">
+        <a :href="dynamicItem.attach" target="_block">{{
+          dynamicItem.attach
+        }}</a>
       </div>
 
-      <div class="dynamic-topic-row"
-           v-if="dynamicItem.topic">
-        <router-link :to='{name:"dynamicTopicView",params:{dynamicTopicId:dynamicItem.topic.topic_id}}'
-                     class="topic-title">{{dynamicItem.topic.name}}</router-link>
+      <div class="dynamic-topic-row" v-if="dynamicItem.topic">
+        <router-link
+          :to="{
+            name: 'dynamicTopicView',
+            params: { dynamicTopicId: dynamicItem.topic.topic_id }
+          }"
+          class="topic-title"
+          >{{ dynamicItem.topic.name }}</router-link
+        >
       </div>
 
-      <div class="operat-view"
-           v-if="personalInfo.islogin&&personalInfo.user.uid===dynamicItem.user.uid">
+      <div
+        class="operat-view"
+        v-if="
+          personalInfo.islogin && personalInfo.user.uid === dynamicItem.user.uid
+        "
+      >
         <Dropdown>
-          <div class="el-dropdown-link"
-               slot="button">
+          <div class="el-dropdown-link" slot="button">
             <i class="el-icon-more"></i>
           </div>
           <div class="dropdown-menu-view">
-            <div class="dropdown-menu-item"
-                 @click="commandChange({name:'Write',id:dynamicItem.id})">
+            <div
+              class="dropdown-menu-item"
+              @click="commandChange({ name: 'Write', id: dynamicItem.id })"
+            >
               删除
             </div>
           </div>
         </Dropdown>
       </div>
-
     </div>
 
-    <Page :total="Number(dynamicList.count)"
-          :pageSize="Number(dynamicList.pageSize)"
-          :page="Number(dynamicList.page)||1"
-          @pageChange="pageChange"></Page>
+    <Page
+      :total="Number(dynamicList.count)"
+      :pageSize="Number(dynamicList.pageSize)"
+      :page="Number(dynamicList.page) || 1"
+      @pageChange="pageChange"
+    ></Page>
   </div>
 </template>
 
 <script>
 import { Page, faceQQ, Dropdown } from '@components'
-import { mapState } from "vuex"
+import { mapState } from 'vuex'
 export default {
   name: 'Dynamic',
-  data () {
+  data() {
     return {
       isLoading: false,
       dynamicList: {
@@ -128,37 +171,44 @@ export default {
         list: [],
         page: 1,
         pageSize: 10
-      },
+      }
     }
   },
-  created () {
-    this.getPersonalDynamicList() // 获取当前用户发表的片刻 
+  created() {
+    this.getPersonalDynamicList() // 获取当前用户发表的片刻
   },
   watch: {
-    $route (to, from) {
-      this.getPersonalDynamicList() // 获取当前用户发表的片刻 
+    $route(to, from) {
+      this.getPersonalDynamicList() // 获取当前用户发表的片刻
     }
   },
   methods: {
-    setUserAttention () { // 设置用户关注用户
+    setUserAttention() {
+      // 设置用户关注用户
       if (!this.personalInfo.islogin) {
         this.$message.warning('请先登录')
         return false
       }
-      this.$store.dispatch('common/SET_ATTENTION', {
-        associate_id: this.dynamicItem.user.uid
-      }).then(result => {
-        if (result.state === 'success') {
-          this.$message.success(result.message)
-          this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
-          this.selectAttentionUserClass(result.data.type)
-        } else {
-          this.$message.error(result.message)
-        }
-      })
+      this.$store
+        .dispatch('common/SET_ATTENTION', {
+          associate_id: this.dynamicItem.user.uid
+        })
+        .then(result => {
+          if (result.state === 'success') {
+            this.$message.success(result.message)
+            this.$store.dispatch('user/GET_USER_INFO_ALL', {
+              uid: this.personalInfo.user.uid
+            })
+            this.selectAttentionUserClass(result.data.type)
+          } else {
+            this.$message.error(result.message)
+          }
+        })
     },
-    selectAttentionUserClass (type) {
-      let userAttentionAll = document.querySelectorAll(`.user-attention-${this.dynamicItem.user.uid}`)
+    selectAttentionUserClass(type) {
+      let userAttentionAll = document.querySelectorAll(
+        `.user-attention-${this.dynamicItem.user.uid}`
+      )
       for (let i = 0; i < userAttentionAll.length; i++) {
         if (type === 'attention') {
           userAttentionAll[i].classList.add('active')
@@ -169,65 +219,73 @@ export default {
         }
       }
     },
-    commandChange (val) {
-      this.deleteDynamic(val.id);
+    commandChange(val) {
+      this.deleteDynamic(val.id)
     },
-    contentRender (val) {
-      let content = val;
+    contentRender(val) {
+      let content = val
       faceQQ.map(faceItem => {
         content = content.replace(
-          new RegExp("\\" + faceItem.face_text, "g"),
+          new RegExp('\\' + faceItem.face_text, 'g'),
           faceItem.face_view
-        );
-      });
-      return content;
+        )
+      })
+      return content
     },
-    deleteDynamic (id) { // 删除动态
+    deleteDynamic(id) {
+      // 删除动态
       this.$confirm('此操作将永久删除该动态, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        this.$store.dispatch('dynamic/DELETE_DYNAMIC', {
-          id
-        }).then(result => {
-          if (result.state === 'success') {
-            this.$message.success(result.message)
-            this.getPersonalDynamicList()
-          } else {
-            this.$message.error(result.message)
-          }
+      })
+        .then(() => {
+          this.$store
+            .dispatch('dynamic/DELETE_DYNAMIC', {
+              id
+            })
+            .then(result => {
+              if (result.state === 'success') {
+                this.$message.success(result.message)
+                this.getPersonalDynamicList()
+              } else {
+                this.$message.error(result.message)
+              }
+            })
         })
-      }).catch(() => {
-      });
+        .catch(() => {})
     },
-    setUserLikeDynamic (dynamicItem) {
+    setUserLikeDynamic(dynamicItem) {
       if (!this.personalInfo.islogin) {
         this.$message.warning('请先登录')
         return false
       }
       /*用户like 动态*/
       this.$store
-        .dispatch("common/SET_THUMB", {
-          dynamic_id: dynamicItem.id
+        .dispatch('common/SET_THUMB', {
+          associate_id: dynamicItem.id,
+          type: modelType.dynamic
         })
         .then(res => {
-          if (res.state === "success") {
-            if (res.data.type === "like") {
-              dynamicItem.like_count = Number(dynamicItem.like_count) + 1
-            } else if (res.data.type === "cancel") {
-              dynamicItem.like_count -= 1
+          if (res.state === 'success') {
+            if (res.data.type === 'enter') {
+              dynamicItem.thumbCount = Number(dynamicItem.thumbCount) + 1
+            } else if (res.data.type === 'cancel') {
+              dynamicItem.thumbCount -= 1
             }
-            this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
+            this.$store.dispatch('user/GET_USER_INFO_ALL', {
+              uid: this.personalInfo.user.uid
+            })
           } else {
-            this.$message.warning(res.message);
+            this.$message.warning(res.message)
           }
         })
-        .catch(function (err) {
-          console.log(err);
-        });
+        .catch(function(err) {
+          console.log(err)
+        })
     },
-    isAttention (item) { // 是否收藏
+    isAttention(item) {
+      // 是否收藏
       let userAttentionIds = []
       if (item.userAttentionIds && item.userAttentionIds.length > 0) {
         item.userAttentionIds.map(item => {
@@ -242,37 +300,39 @@ export default {
         return false
       }
     },
-    imgAnalyze (attach) {
+    imgAnalyze(attach) {
       let urlArr = attach.split(',') || []
       let length = attach.split(',').length
       return length > 0 ? urlArr : []
     },
-    pageChange (val) {
+    pageChange(val) {
       this.dynamicList.page = val
       this.getPersonalDynamicList()
     },
-    getPersonalDynamicList () {
+    getPersonalDynamicList() {
       this.isLoading = true
-      this.$store.dispatch('user/GET_PERSONAL_DYNAMIC_LIST',
-        {
+      this.$store
+        .dispatch('user/GET_PERSONAL_DYNAMIC_LIST', {
           uid: this.$route.params.uid,
           page: this.dynamicList.page || 1,
-          pageSize: this.dynamicList.pageSize || 10,
-        }).then(result => {
+          pageSize: this.dynamicList.pageSize || 10
+        })
+        .then(result => {
           this.dynamicList = result.data
           this.isLoading = false
-        }).catch(() => {
+        })
+        .catch(() => {
           this.isLoading = false
         })
-    },
+    }
   },
   components: {
     Page,
     Dropdown
   },
   computed: {
-    ...mapState(['user', 'personalInfo']),
-  },
+    ...mapState(['user', 'personalInfo'])
+  }
 }
 </script>
 
