@@ -59,7 +59,7 @@
                   <div class="title">片刻</div>
                 </li>
                 <li class="item">
-                  <div class="count">{{topicInfo.rss_count}}</div>
+                  <div class="count">{{topicInfo.attention_count}}</div>
                   <div class="title">关注</div>
                 </li>
               </div>
@@ -79,6 +79,9 @@ import { mapState } from 'vuex'
 import { ScrollLoading } from "@components";
 import { baidu, google } from '@utils'
 import googleMixin from '@mixins/google'
+import {
+  modelType
+} from '@utils/constant'
 
 export default {
   name: 'dynamic',
@@ -172,14 +175,14 @@ export default {
       })
     },
     async subscribeDynamicTopic () { // 订阅动态话题
-      await this.$store.dispatch('dynamic/SET_RSS_DYNAMIC_TOPIC', { topic_id: this.$route.params.dynamicTopicId })
+      await this.$store.dispatch('common/SET_ATTENTION', { associate_id: this.topicInfo.id, type: modelType.dynamic_topic })
         .then(res => {
           // this.$store.dispatch('articleTag/MY_SUBSCRIBE_TAG_LIST')
           if (res.state === 'success') {
-            if (res.data.type === 'attention') {
-              this.topicInfo.rss_count = Number(this.topicInfo.rss_count) + 1
+            if (res.data.type === 'enter') {
+              this.topicInfo.attention_count = Number(this.topicInfo.attention_count) + 1
             } else {
-              this.topicInfo.rss_count -= 1
+              this.topicInfo.attention_count -= 1
             }
             this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
             this.$message.success(res.message);
@@ -191,7 +194,7 @@ export default {
     ...mapState(['personalInfo', 'dynamic', 'user', 'website']),
     isRssDynamicTopic () {
       if (this.personalInfo.islogin) {
-        return ~this.user.allRssDynamicTopicId.indexOf(this.$route.params.dynamicTopicId)
+        return ~this.user.allRssDynamicTopicId.indexOf(this.topicInfo.id)
       } else {
         return false
       }

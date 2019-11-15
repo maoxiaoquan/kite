@@ -39,33 +39,6 @@ module.exports = {
       cssSourceMap: true
     }
   },
-  admin: {
-    // admin spa
-    port: 8083, // 后台调试端口号
-    basePath: ProcessCwd('admin'),
-    srcDir: ProcessCwd('admin/src'),
-    outDir: IS_NODE_ENV
-      ? ProcessCwd('admin/_admin')
-      : ProcessCwd('static/_admin'),
-    publicPath: IS_NODE_ENV ? './' : '_admin/',
-    proxy: {
-      '/api-admin/v1': {
-        target: `http://localhost:8086/`,
-        secure: false,
-        changeOrigin: true
-      },
-      '/default': {
-        target: `http://localhost:8086/`,
-        secure: false,
-        changeOrigin: true
-      },
-      '/upload': {
-        target: `http://localhost:8086/`,
-        secure: false,
-        changeOrigin: true
-      }
-    }
-  },
   server: {
     // server
     default_avatar: '/default/img/avatar.jpeg', // 所有使用的默认头像

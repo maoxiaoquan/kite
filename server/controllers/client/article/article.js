@@ -275,7 +275,11 @@ class Article {
         }
 
         let subscribeArticleTagCount = await models.attention.count({
-          where: { tag_id: oneArticleTag.tag_id }
+          where: {
+            associate_id: oneArticleTag.tag_id,
+            is_associate: true,
+            type: modelType.article_tag
+          }
         })
 
         /* 所有文章专题 */
@@ -328,7 +332,11 @@ class Article {
         articleTagAll[i].setDataValue(
           'subscribe_count',
           await models.attention.count({
-            where: { tag_id: articleTagAll[i].tag_id }
+            where: {
+              associate_id: articleTagAll[i].id,
+              is_associate: true,
+              type: modelType.article_tag
+            }
           })
         )
         articleTagAll[i].setDataValue(
@@ -376,6 +384,7 @@ class Article {
           await models.attention.count({
             where: {
               associate_id: articleTagAll[i].id || '',
+              is_associate: true,
               type: modelType.article_tag
             }
           })

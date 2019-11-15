@@ -37,7 +37,7 @@
                       <li class="item attention"
                           v-if="~[2,4].indexOf(Number(articleBlog.blogInfo.status))&&personalInfo.islogin&&articleBlog.blogInfo.is_public"
                           @click="setLikeArticleBlog(articleBlog.blogInfo.blog_id)">
-                        <span :class="{'active':isLike(articleBlog.blogInfo).status}">{{isLike(articleBlog.blogInfo).text}}</span>
+                        <span :class="{'active':isCollect(articleBlog.blogInfo).status}">{{isCollect(articleBlog.blogInfo).text}}</span>
                       </li>
                     </ul>
                   </div>
@@ -207,7 +207,7 @@ export default {
           }
         })
     },
-    isLike (item) { // 是否like
+    isCollect (item) { // 是否like
       let likeUserIds = []
       item.likeUserIds.map(item => {
         likeUserIds.push(item.uid)
@@ -215,12 +215,12 @@ export default {
       if (~likeUserIds.indexOf(Number(this.personalInfo.user.uid))) {
         return {
           status: true,
-          text: '已关注'
+          text: '已收藏'
         }
       } else {
         return {
           status: false,
-          text: '关注'
+          text: '收藏'
         }
       }
     },

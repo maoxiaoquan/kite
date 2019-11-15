@@ -11,7 +11,7 @@ const {
   modelType
 } = require('../../../utils/constant')
 
-function ErrorMessage (message) {
+function ErrorMessage(message) {
   this.message = message
   this.name = 'UserException'
 }
@@ -22,7 +22,7 @@ class PersonalCenter {
    * 用户个人中心个人文章列表render
    * @param   {object} ctx 上下文对象
    */
-  static async userMyArticle (ctx) {
+  static async userMyArticle(ctx) {
     let uid = ctx.query.uid
     let blog_id = ctx.query.blog_id || 'all'
     let type = ctx.query.type || '1'
@@ -114,7 +114,7 @@ class PersonalCenter {
    * 用户个人中心用户关注用户render
    * @param   {object} ctx 上下文对象
    */
-  static async getUserAttentionList (ctx) {
+  static async getUserAttentionList(ctx) {
     let uid = ctx.query.uid
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
@@ -187,16 +187,18 @@ class PersonalCenter {
    * 用户like文章render
    * @param   {object} ctx 上下文对象
    */
-  static async getUserLikeArticleList (ctx) {
+  static async getUserLikeArticleList(ctx) {
     let uid = ctx.query.uid
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
     try {
       let allUserLikeArticle = await models.like
-        .findAll({ where: { uid, is_like: true } })
+        .findAll({
+          where: { uid, is_associate: true, type: modelType.article }
+        })
         .then(res => {
           return res.map((item, key) => {
-            return item.aid
+            return item.associate_id
           })
         })
 
@@ -254,7 +256,7 @@ class PersonalCenter {
     }
   }
 
-  static async getDynamicListMe (ctx) {
+  static async getDynamicListMe(ctx) {
     const { uid } = ctx.query
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
@@ -288,9 +290,20 @@ class PersonalCenter {
           'topic',
           rows[i].topic_ids
             ? await models.dynamic_topic.findOne({
-              where: { topic_id: rows[i].topic_ids }
-            })
+                where: { topic_id: rows[i].topic_ids }
+              })
             : ''
+        )
+
+        rows[i].setDataValue(
+          'thumbCount',
+          await models.thumb.count({
+            where: {
+              associate_id: rows[i].id,
+              is_associate: true,
+              type: modelType.dynamic
+            }
+          })
         )
 
         rows[i].setDataValue(
@@ -305,7 +318,8 @@ class PersonalCenter {
           'userAttentionIds',
           await models.attention.findAll({
             where: {
-              attention_uid: rows[i].uid,
+              uid: rows[i].uid || '',
+              type: modelType.user,
               is_associate: true
             }
           })
@@ -342,7 +356,7 @@ class PersonalCenter {
    * 用户个人中心个人专栏列表
    * @param   {object} ctx 上下文对象
    */
-  static async userArticleBlogList (ctx) {
+  static async userArticleBlogList(ctx) {
     let uid = ctx.query.uid
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
@@ -443,7 +457,7 @@ class PersonalCenter {
    * 用户个人中心个人小书列表
    * @param   {object} ctx 上下文对象
    */
-  static async userBooksList (ctx) {
+  static async userBooksList(ctx) {
     let uid = ctx.query.uid
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10

@@ -27,8 +27,7 @@
               </span>
               <span class="attention"
                     v-if="~[2,4].indexOf(booksItem.books.status)&&personalInfo.islogin"
-                    @click="collectBooks(booksItem.books.books_id)"
-                    :class="{'active':isCollect(booksItem.books).status}">{{isCollect(booksItem.books).text}}</span>
+                    @click="collectBooks(booksItem.books.books_id)">取消收藏</span>
             </div>
             <div class="library-item-tag">
               <template v-if="booksItem.tag">
@@ -114,19 +113,6 @@ export default {
             this.$message.warning(result.message);
           }
         })
-    },
-    isCollect (item) { // 是否收藏
-      if (item.uid == this.personalInfo.user.uid) {
-        return {
-          status: true,
-          text: '已关注'
-        }
-      } else {
-        return {
-          status: false,
-          text: '关注'
-        }
-      }
     },
   },
   computed: {

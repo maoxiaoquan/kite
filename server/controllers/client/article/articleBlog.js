@@ -530,14 +530,14 @@ class dynamicBlog {
 
     try {
       let { count, rows } = await models.collect.findAndCountAll({
-        where: { is_like: true, uid }, // 为空，获取全部，也可以自己添加条件
+        where: { is_associate: true, uid, type: modelType.article_blog }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize) // 每页限制返回的数据条数
         // order: orderParams
       })
       for (let i in rows) {
         const oneArticleBlog = await models.article_blog.findOne({
-          where: { blog_id: rows[i].blog_id, ...whereParams }
+          where: { blog_id: rows[i].associate_id, ...whereParams }
         })
 
         if (oneArticleBlog) {
@@ -563,21 +563,29 @@ class dynamicBlog {
         rows[i].setDataValue(
           'articleCount',
           await models.article.count({
-            where: { blog_ids: rows[i].blog_id }
+            where: { blog_ids: rows[i].associate_id }
           })
         )
 
         rows[i].setDataValue(
           'likeCount',
           await models.collect.count({
-            where: { blog_id: rows[i].blog_id, is_like: true }
+            where: {
+              associate_id: rows[i].associate_id,
+              is_associate: true,
+              type: modelType.article_blog
+            }
           })
         )
 
         rows[i].setDataValue(
           'likeUserIds',
           await models.collect.findAll({
-            where: { blog_id: rows[i].blog_id, is_like: true }
+            where: {
+              associate_id: rows[i].associate_id,
+              is_associate: true,
+              type: modelType.article_blog
+            }
           })
         )
       }

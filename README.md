@@ -11,6 +11,11 @@
 
 ## ✨ kite
 
+|   项目    |                              项目体验                               |                                         原代码                                         |            主要技术栈            |
+| :-------: | :-----------------------------------------------------------------: | :------------------------------------------------------------------------------------: | :------------------------------: |
+| Kite 前台 |           [www.xiaosuibi.com](https://www.xiaosuibi.com)            |       [https://github.com/maoxiaoquan/kite](https://github.com/maoxiaoquan/kite)       | vue、vue ssr、vuex、GraphQL、koa |
+| 后台管理  | [http://www.xiaosuibi.com/\_admin](http://www.xiaosuibi.com/_admin) | [https://github.com/maoxiaoquan/kite-admin](https://github.com/maoxiaoquan/kite-admin) |    React、Redux、React-Router    |
+
 做这个项目的目的是想把目前所学的都用在里面，避免遗忘，后期维护的时候都会过一遍，这样学了的就不会忘掉，
 项目覆盖了前端大半的知识点和框架
 

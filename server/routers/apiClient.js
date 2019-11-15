@@ -12,7 +12,6 @@ const tokens = require('../utils/tokens') // 登录tokens
 const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
 const dynamic = require('../controllers/client/dynamic/dynamic') // 动态
 const dynamicComment = require('../controllers/client/dynamic/dynamicComment') // 动态评论
-const dynamicTopic = require('../controllers/client/dynamic/dynamicTopic') // 动态专题
 const books = require('../controllers/client/books/books') // 小书
 const book = require('../controllers/client/books/book') // 小书章节
 const booksComment = require('../controllers/client/books/booksComment') // 小书评价
@@ -173,12 +172,6 @@ router.get('/article-tag', article.getArticleTag) // 文章标签
 
 router.get('/article-tag/all', article.getArticleTagAll) // 获取文章标签 获取全部的
 
-router.post(
-  '/subscribe/tag',
-  tokens.ClientVerifyToken,
-  subscribe.setSubscribeTag
-) // 用户订阅标签 TYPE:AJAX post
-
 router.get('/article-tag/list', subscribe.getArticleTagList) // 获取用户订阅标签列表 根据搜索和分页获取
 
 router.get('/article-tag/popular-list', article.getPopularArticleTag) // 获取热门文章标签
@@ -289,15 +282,9 @@ router.post(
   dynamicComment.deleteDynamicComment
 ) // 删除动态评论 TYPE:AJAX post
 
-router.post(
-  '/subscribe/dynamic-topic',
-  tokens.ClientVerifyToken,
-  subscribe.setSubscribeDynamicTopic
-) // 用户订阅话题 TYPE:AJAX post
-
 router.get('/personal/dynamic-list', personalCenter.getDynamicListMe) // 个人中心获取列表
 
-router.get('/dynamic-topic/info', dynamicTopic.getDynamicTopicInfo) // 获取动态话题的信息
+router.get('/dynamic-topic/info', dynamic.getDynamicTopicInfo) // 获取动态话题的信息
 
 router.get('/personal/article-blog-list', personalCenter.userArticleBlogList) // 用户自己的个人专栏列表
 

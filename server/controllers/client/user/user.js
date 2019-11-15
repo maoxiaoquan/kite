@@ -29,13 +29,13 @@ const {
 
 const userVirtual = require('../../../common/userVirtual')
 
-function ErrorMessage (message) {
+function ErrorMessage(message) {
   this.message = message
   this.name = 'UserException'
 }
 
 class User {
-  static async userSignIn (ctx) {
+  static async userSignIn(ctx) {
     const { no_login } = lowdb
       .read()
       .get('config')
@@ -125,7 +125,7 @@ class User {
   }
 
   // 注册验证码发送
-  static async userSignUpCode (ctx) {
+  static async userSignUpCode(ctx) {
     let reqData = ctx.request.body
     try {
       const { on_register } = lowdb
@@ -198,7 +198,7 @@ class User {
    * 用户注册post
    * @param   {object} ctx 上下文对象
    */
-  static async userSignUp (ctx) {
+  static async userSignUp(ctx) {
     // post 数据
     let reqData = ctx.request.body
     let date = new Date()
@@ -367,7 +367,7 @@ class User {
   /**
    * 获取个人信息get 并且知道用户是否登录，不需要任何参数
    */
-  static async userPersonalInfo (ctx) {
+  static async userPersonalInfo(ctx) {
     let { islogin = '', user = '' } = ctx.request
     try {
       let oneUser = await models.user.findOne({
@@ -402,7 +402,7 @@ class User {
    * 获取用户信息get 不需要登录
    * @param   {object} ctx 上下文对象
    */
-  static async getUserInfo (ctx) {
+  static async getUserInfo(ctx) {
     let uid = ctx.query.uid
 
     try {
@@ -468,10 +468,12 @@ class User {
         })
 
       let allRssDynamicTopicId = await models.attention
-        .findAll({ where: { uid, type: modelType.user } })
+        .findAll({
+          where: { uid, type: modelType.dynamic_topic, is_associate: true }
+        })
         .then(res => {
           return res.map((item, key) => {
-            return item.topic_id
+            return item.associate_id
           })
         })
 
@@ -528,7 +530,7 @@ class User {
    * @param   {object} ctx 上下文对象
    */
 
-  static async updateUserInfo (ctx) {
+  static async updateUserInfo(ctx) {
     let reqData = ctx.request.body
     let { user = '' } = ctx.request
     let oneUser = await models.user.findOne({
@@ -614,7 +616,7 @@ class User {
    * @param   {object} ctx 上下文对象
    */
 
-  static async updateUserPassword (ctx) {
+  static async updateUserPassword(ctx) {
     let reqData = ctx.request.body
     let { user = '' } = ctx.request
     try {
@@ -681,7 +683,7 @@ class User {
    * 获取未读用户消息数量
    * @param   {object} ctx 上下文对象
    */
-  static async getUnreadMessageCount (ctx) {
+  static async getUnreadMessageCount(ctx) {
     let { user = '' } = ctx.request
     try {
       let count = await models.user_message.count({
@@ -711,7 +713,7 @@ class User {
    * 获取用户消息
    * @param   {object} ctx 上下文对象
    */
-  static async getUserMessageList (ctx) {
+  static async getUserMessageList(ctx) {
     let page = ctx.query.page || 1
     let pageSize = Number(ctx.query.pageSize) || 10
     let { user = '' } = ctx.request
@@ -956,7 +958,7 @@ class User {
    * 删除用户消息
    * @param   {object} ctx 上下文对象
    */
-  static async deleteUserMessage (ctx) {
+  static async deleteUserMessage(ctx) {
     let reqData = ctx.query
     let { user = '' } = ctx.request
     try {
@@ -994,7 +996,7 @@ class User {
    * @param   {object} ctx 上下文对象
    */
 
-  static async sendResetPasswordCode (ctx) {
+  static async sendResetPasswordCode(ctx) {
     let reqData = ctx.request.body
     try {
       if (reqData.type === 'email') {
@@ -1067,7 +1069,7 @@ class User {
    * @param   {object} ctx 上下文对象
    */
 
-  static async userResetPassword (ctx) {
+  static async userResetPassword(ctx) {
     let reqData = ctx.request.body
     try {
       if (!reqData.email) {
@@ -1173,7 +1175,7 @@ class User {
    *  获取所有用户角色标签
    * @param   {object} ctx 上下文对象
    */
-  static async getUserRoleAll (ctx) {
+  static async getUserRoleAll(ctx) {
     // get 页面
     try {
       let allUserRole = await models.user_role.findAll({

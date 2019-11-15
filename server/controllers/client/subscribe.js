@@ -29,14 +29,6 @@ class Subscribe {
         })
 
       let { count, rows } = await models.article_tag.findAndCountAll({
-        attributes: [
-          'tag_id',
-          'name',
-          'en_name',
-          'icon',
-          'description',
-          'attention_count'
-        ],
         where: whereParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, // 每页限制返回的数据条数
@@ -49,7 +41,11 @@ class Subscribe {
         rows[i].setDataValue(
           'subscribe_count',
           await models.attention.count({
-            where: { tag_id: rows[i].tag_id }
+            where: {
+              associate_id: rows[i].id || '',
+              is_associate: true,
+              type: modelType.article_tag
+            }
           })
         )
         rows[i].setDataValue(
@@ -111,14 +107,6 @@ class Subscribe {
           })
 
         let { count, rows } = await models.article_tag.findAndCountAll({
-          attributes: [
-            'tag_id',
-            'name',
-            'en_name',
-            'icon',
-            'description',
-            'attention_count'
-          ],
           where: whereParams, // 为空，获取全部，也可以自己添加条件
           offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
           limit: pageSize, // 每页限制返回的数据条数
@@ -131,7 +119,11 @@ class Subscribe {
           rows[i].setDataValue(
             'subscribe_count',
             await models.attention.count({
-              where: { tag_id: rows[i].tag_id }
+              where: {
+                associate_id: rows[i].id || '',
+                is_associate: true,
+                type: modelType.article_tag
+              }
             })
           )
           rows[i].setDataValue(
@@ -188,7 +180,9 @@ class Subscribe {
     try {
       let allSubscribeArticleTag = await models.attention.findAll({
         where: {
-          uid: user.uid
+          uid: user.uid,
+          type: modelType.article_tag,
+          is_associate: true
         }
       })
       resClientJson(ctx, {
@@ -196,133 +190,6 @@ class Subscribe {
         message: '获取当前用户订阅的标签成功',
         data: {
           subscribe_article_tag: allSubscribeArticleTag
-        }
-      })
-    } catch (err) {
-      resClientJson(ctx, {
-        state: 'error',
-        message: '错误信息：' + err.message
-      })
-      return false
-    }
-  }
-
-  static async setSubscribeTag (ctx) {
-    const { tag_id } = ctx.request.body
-    let { user = '' } = ctx.request
-    let type = ''
-    try {
-      let oneSubscribeArticleTag = await models.attention.findOne({
-        where: {
-          uid: user.uid,
-          tag_id
-        }
-      })
-
-      if (oneSubscribeArticleTag) {
-        /* 判断是否关注了，是则取消，否则添加 */
-        type = 'cancel'
-        await models.attention.destroy({
-          where: {
-            uid: user.uid,
-            tag_id
-          }
-        })
-      } else {
-        type = 'attention'
-        await models.attention.create({
-          uid: user.uid,
-          tag_id
-        })
-      }
-
-      let articleTagRssCount = await models.attention.count({
-        where: {
-          tag_id
-        }
-      })
-
-      await models.article_tag.update(
-        {
-          attention_count: articleTagRssCount
-        },
-        {
-          where: {
-            tag_id
-          }
-        }
-      )
-
-      resClientJson(ctx, {
-        state: 'success',
-        message:
-          type === 'attention' ? '关注文章标签成功' : '取消关注文章标签成功',
-        data: {
-          type
-        }
-      })
-    } catch (err) {
-      resClientJson(ctx, {
-        state: 'error',
-        message: '错误信息：' + err.message
-      })
-      return false
-    }
-  }
-
-  // 订阅动态话题
-  static async setSubscribeDynamicTopic (ctx) {
-    const { topic_id } = ctx.request.body
-    let { user = '' } = ctx.request
-    let type = ''
-    try {
-      let oneSubscribeDynamicTopic = await models.attention.findOne({
-        where: {
-          uid: user.uid,
-          topic_id
-        }
-      })
-
-      if (oneSubscribeDynamicTopic) {
-        /* 判断是否关注了，是则取消，否则添加 */
-        type = 'cancel'
-        await models.attention.destroy({
-          where: {
-            uid: user.uid,
-            topic_id
-          }
-        })
-      } else {
-        type = 'attention'
-        await models.attention.create({
-          uid: user.uid,
-          topic_id
-        })
-      }
-
-      let dynamicTopicRssCount = await models.attention.count({
-        where: {
-          topic_id
-        }
-      })
-
-      await models.dynamic_topic.update(
-        {
-          rss_count: dynamicTopicRssCount
-        },
-        {
-          where: {
-            topic_id
-          }
-        }
-      )
-
-      resClientJson(ctx, {
-        state: 'success',
-        message:
-          type === 'attention' ? '关注动态话题成功' : '取消关注动态话题成功',
-        data: {
-          type
         }
       })
     } catch (err) {

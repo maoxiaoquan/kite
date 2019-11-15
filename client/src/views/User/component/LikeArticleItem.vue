@@ -62,6 +62,10 @@
 <script>
 import { Dropdown } from '@components'
 import { mapState } from 'vuex'
+import {
+  modelType
+} from '@utils/constant'
+
 export default {
   name: "TopArticleItem",
   props: {
@@ -92,7 +96,7 @@ export default {
       /*用户like 文章*/
       var that = this;
       this.$store
-        .dispatch("common/SET_LIKE", { aid: this.articleItem.aid })
+        .dispatch("common/SET_LIKE", { associate_id: this.articleItem.aid, type: modelType.article })
         .then(res => {
           if (res.state === "success") {
             this.$emit('likeArticle')

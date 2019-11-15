@@ -19,13 +19,13 @@ const {
 
 const userVirtual = require('../../../common/userVirtual')
 
-function ErrorMessage (message) {
+function ErrorMessage(message) {
   this.message = message
   this.name = 'UserException'
 }
 
 class dynamic {
-  static async createDynamic (ctx) {
+  static async createDynamic(ctx) {
     let reqData = ctx.request.body
     let { user = '' } = ctx.request
     try {
@@ -135,7 +135,7 @@ class dynamic {
     }
   }
 
-  static async getDynamicView (ctx) {
+  static async getDynamicView(ctx) {
     let id = ctx.query.id || ''
 
     let whereParams = {} // 查询参数
@@ -164,8 +164,8 @@ class dynamic {
           'topic',
           oneDynamic.topic_ids
             ? await models.dynamic_topic.findOne({
-              where: { topic_id: oneDynamic.topic_ids }
-            })
+                where: { topic_id: oneDynamic.topic_ids }
+              })
             : ''
         )
 
@@ -237,7 +237,7 @@ class dynamic {
     }
   }
 
-  static async getDynamicList (ctx) {
+  static async getDynamicList(ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10
     let topic_id = ctx.query.topic_id || ''
@@ -279,7 +279,7 @@ class dynamic {
       }
 
       sort === 'newest' && orderParams.push(['create_date', 'DESC'])
-      sort === 'hot' && orderParams.push(['like_count', 'DESC'])
+      sort === 'hot' && orderParams.push(['thumb_count', 'DESC'])
       // newest 最新推荐:
       if (!sort || sort === 'new') {
         orderParams.push(['create_date', 'DESC'])
@@ -295,8 +295,8 @@ class dynamic {
       for (let i in rows) {
         let topic = rows[i].topic_ids
           ? await models.dynamic_topic.findOne({
-            where: { topic_id: rows[i].topic_ids }
-          })
+              where: { topic_id: rows[i].topic_ids }
+            })
           : ''
         rows[i].setDataValue(
           'create_dt',
@@ -375,7 +375,7 @@ class dynamic {
     }
   }
 
-  static async getDynamicListMe (ctx) {
+  static async getDynamicListMe(ctx) {
     let page = ctx.query.page || 1
     let pageSize = ctx.query.pageSize || 10
     let whereParams = {} // 查询参数
@@ -408,8 +408,8 @@ class dynamic {
           'topic',
           rows[i].topic_ids
             ? await models.dynamic_topic.findOne({
-              where: { topic_id: rows[i].topic_ids }
-            })
+                where: { topic_id: rows[i].topic_ids }
+              })
             : ''
         )
 
@@ -428,8 +428,9 @@ class dynamic {
           'userAttentionIds',
           await models.attention.findAll({
             where: {
-              attention_uid: rows[i].uid,
-              is_attention: true
+              associate_id: rows[i].uid,
+              type: modelType.user,
+              is_associate: true
             }
           })
         )
@@ -484,7 +485,7 @@ class dynamic {
   }
 
   // 推荐动态
-  static async recommendDynamicList (ctx) {
+  static async recommendDynamicList(ctx) {
     let whereParams = {} // 查询参数
     let orderParams = [
       ['create_date', 'DESC'],
@@ -521,8 +522,8 @@ class dynamic {
           'topic',
           allDynamic[i].topic_ids
             ? await models.dynamic_topic.findOne({
-              where: { topic_id: allDynamic[i].topic_ids }
-            })
+                where: { topic_id: allDynamic[i].topic_ids }
+              })
             : ''
         )
         if (
@@ -571,7 +572,7 @@ class dynamic {
     }
   }
 
-  static async dynamicTopicIndex (ctx) {
+  static async dynamicTopicIndex(ctx) {
     // 获取首页侧栏动态列表
     try {
       let allDynamicTopic = await models.dynamic_topic.findAll({
@@ -596,7 +597,7 @@ class dynamic {
     }
   }
 
-  static async dynamicTopicList (ctx) {
+  static async dynamicTopicList(ctx) {
     // 获取所有动态列表
     try {
       let allDynamicTopic = await models.dynamic_topic.findAll({
@@ -611,6 +612,17 @@ class dynamic {
           'dynamicCount',
           await models.dynamic.count({
             where: { topic_ids: allDynamicTopic[i].topic_id }
+          })
+        )
+
+        allDynamicTopic[i].setDataValue(
+          'attention_count',
+          await models.attention.count({
+            where: {
+              associate_id: allDynamicTopic[i].id,
+              is_associate: true,
+              type: modelType.dynamic_topic
+            }
           })
         )
       }
@@ -631,13 +643,55 @@ class dynamic {
     }
   }
 
+  static async getDynamicTopicInfo(ctx) {
+    const { topic_id } = ctx.query
+    try {
+      const oneDynamicTopic = await models.dynamic_topic.findOne({
+        where: {
+          topic_id
+        }
+      })
+      oneDynamicTopic.setDataValue(
+        'dynamic_count',
+        await models.dynamic.count({
+          where: { topic_ids: oneDynamicTopic.topic_id }
+        })
+      )
+
+      oneDynamicTopic.setDataValue(
+        'attention_count',
+        await models.attention.count({
+          where: {
+            associate_id: oneDynamicTopic.id,
+            is_associate: true,
+            type: modelType.dynamic_topic
+          }
+        })
+      )
+
+      resClientJson(ctx, {
+        state: 'success',
+        data: {
+          info: oneDynamicTopic
+        },
+        message: '动态专题详情获取成功'
+      })
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
   /**
    * 删除动态
    * @param   {object} ctx 上下文对象
    * 删除动态判断是否有动态
    * 无关联则直接删除动态，有关联则开启事务同时删除与动态的关联
    */
-  static async deleteDynamic (ctx) {
+  static async deleteDynamic(ctx) {
     const { id } = ctx.query
     let { islogin = '', user = '' } = ctx.request
 

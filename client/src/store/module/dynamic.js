@@ -119,14 +119,6 @@ const actions = {
       return result
     })
   },
-  SET_RSS_DYNAMIC_TOPIC ({ commit, dispatch, state }, parameter) {
-    // 订阅动态话题
-    return fetch({
-      url: '/subscribe/dynamic-topic',
-      method: 'post',
-      parameter: parameter
-    })
-  },
   GET_DYNAMIC_TOPIC_LIST ({ commit, dispatch, state }, parameter) {
     // 获取首页全部话题
     return fetch({
@@ -139,7 +131,7 @@ const actions = {
     })
   },
   DELETE_DYNAMIC ({ commit, dispatch, state }, parameter) {
-    // 删除动态
+    // 动态
     return fetch({
       url: '/dynamic/delete',
       method: 'delete',
@@ -147,7 +139,7 @@ const actions = {
     })
   },
   GET_DYNAMIC_TOPIC_INFO ({ commit, dispatch, state }, parameter) {
-    // 删除动态
+    // 动态
     return fetch({
       url: '/dynamic-topic/info',
       method: 'get',

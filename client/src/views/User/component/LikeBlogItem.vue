@@ -53,8 +53,8 @@
           </li>
           <li class="item attention"
               v-if="~[statusList.reviewSuccess,statusList.freeReview].indexOf(articleBlogItem.articleBlog.status)&&personalInfo.islogin&&articleBlogItem.articleBlog.is_public"
-              @click="setLikeArticleBlog(articleBlogItem.blog_id)">
-            <span :class="{'active':isLike(articleBlogItem).status}">{{isLike(articleBlogItem).text}}</span>
+              @click="setLikeArticleBlog(articleBlogItem)">
+            <span>取消收藏</span>
           </li>
         </ul>
       </div>
@@ -63,7 +63,7 @@
       <div class="user-article-blog-null">
         <span class="info">此专栏暂时不可见，原因有，1.专栏主人正在装修专栏中，2.由于未知原因，专栏被个人或者官方下架，你可以等待，或者点击下方的</span>
         <span class="cancel-attention"
-              @click="setLikeArticleBlog(articleBlogItem.blog_id)">取消关注</span>
+              @click="setLikeArticleBlog(articleBlogItem)">取消关注</span>
       </div>
     </template>
 
@@ -103,9 +103,9 @@ export default {
         share.shareQQ(val.data.title, urlOrigin + '/p/' + val.data.aid, this.website.meta.logo)
       }
     },
-    setLikeArticleBlog (blog_id) { // 用户关注blog
+    setLikeArticleBlog (articleBlogItem) { // 用户关注blog
       this.$store.dispatch('common/SET_COLLECT', {
-        associate_id: blog_id,
+        associate_id: articleBlogItem.associate_id,
         type: modelType.article_blog
       })
         .then(result => {
@@ -116,19 +116,6 @@ export default {
             this.$message.warning(result.message);
           }
         })
-    },
-    isLike (item) { // 是否like
-      if (item.uid == this.personalInfo.user.uid) {
-        return {
-          status: true,
-          text: '已关注'
-        }
-      } else {
-        return {
-          status: false,
-          text: '关注'
-        }
-      }
     },
     setBlogTime (item) { // 设置blog的时间
       if (item.create_date === item.update_date) {
