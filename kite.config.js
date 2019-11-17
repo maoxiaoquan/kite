@@ -9,7 +9,7 @@ function ProcessCwd (val) {
 }
 
 module.exports = {
-  version: 0.8,
+  version: 0.7,
   theme: {
     'font-family': 'Microsoft YaHei'
   },
@@ -23,8 +23,7 @@ module.exports = {
       changeOrigin: true,
       secure: false,
       pathRewrite: {
-        '^/client': '/client',
-        '^/graphql': '/graphql'
+        '^/client': '/client'
       }
     },
     assetsRoot: IS_NODE_ENV
@@ -37,6 +36,33 @@ module.exports = {
       useEslint: true,
       showEslintErrorsInOverlay: false,
       cssSourceMap: true
+    }
+  },
+  admin: {
+    // admin spa
+    port: 8083, // 后台调试端口号
+    basePath: ProcessCwd('admin'),
+    srcDir: ProcessCwd('admin/src'),
+    outDir: IS_NODE_ENV
+      ? ProcessCwd('admin/_admin')
+      : ProcessCwd('static/_admin'),
+    publicPath: IS_NODE_ENV ? './' : '_admin/',
+    proxy: {
+      '/api-admin/v1': {
+        target: `http://localhost:8086/`,
+        secure: false,
+        changeOrigin: true
+      },
+      '/default': {
+        target: `http://localhost:8086/`,
+        secure: false,
+        changeOrigin: true
+      },
+      '/upload': {
+        target: `http://localhost:8086/`,
+        secure: false,
+        changeOrigin: true
+      }
     }
   },
   server: {

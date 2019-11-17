@@ -11,6 +11,9 @@ const actions = {
       parameter: `
           query { 
             hello
+            user {
+              age
+            }
           }
         `
     })
