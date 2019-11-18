@@ -9,10 +9,15 @@ const actions = {
   GET_TEST ({ commit, dispatch, state }, parameter) {
     return gqlfetch({
       parameter: `
-          query { 
-            hello
-            user {
-              age
+          query {
+            author (id:1) {
+              firstName
+            }
+            posts {
+              id
+            }
+            articleList { 
+              aid
             }
           }
         `
