@@ -2,7 +2,6 @@ const router = require('koa-router')()
 const { lowdb } = require('../../db/lowdb')
 const kiteConfig = require('../../kite.config')
 const API_VERSION = 'v1' // 接口版本
-const graphql = require('../graphql')
 
 const cli = lowdb
   .read()
@@ -19,9 +18,6 @@ if (cli.is_success) {
   const apiAdmin = require('./apiAdmin')
   const client = require('./client')
   const admin = require('./admin')
-
-  router.post('/graphql', graphql({}))
-  router.get('/graphql', graphql({}))
 
   router.use(
     `/api-client/${API_VERSION}`,

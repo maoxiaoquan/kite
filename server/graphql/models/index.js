@@ -7,11 +7,13 @@ const typeDefs = `
 
   # the schema allows the following query:
   type Query {
+    _: Boolean
      ${article.typeDefs.Query}
   }
 
   # this schema allows the following mutation:
   type Mutation {
+    _: Boolean
     ${article.typeDefs.Mutation}
   }
 

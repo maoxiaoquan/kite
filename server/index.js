@@ -6,7 +6,12 @@ const bodyParser = require('koa-bodyparser')
 const koaLogger = require('koa-logger')
 const kiteConfig = require('../kite.config')
 const routers = require('./routers')
-
+const graphql = require('./graphql')
+const { lowdb } = require('../db/lowdb')
+const cli = lowdb
+  .read()
+  .get('cli')
+  .value()
 require('../db/mysqldb/pool').poolInit()
 
 app.use(koaLogger())
@@ -22,7 +27,9 @@ app.use(
     map: { html: 'ejs' }
   })
 )
-
+if (cli.is_success) {
+  graphql(app)
+}
 // 加载路由中间件
 app.use(routers.routes())
 app.use(routers.allowedMethods())

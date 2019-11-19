@@ -10,14 +10,11 @@ const actions = {
     return gqlfetch({
       parameter: `
           query {
-            author (id:1) {
-              firstName
-            }
-            posts {
-              id
-            }
             articleList { 
-              aid
+              list {
+                aid
+                title
+              }
             }
           }
         `

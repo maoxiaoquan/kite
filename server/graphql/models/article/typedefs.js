@@ -15,9 +15,7 @@ const Query = `
   articleList: ArticleList  
 `
 const Mutation = ` 
-  upvotePost (
-    postId: Int!
-  ): ArticleView
+  
 `
 
 module.exports = {
