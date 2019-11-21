@@ -33,6 +33,10 @@ class update {
           'ALTER TABLE article CHANGE like_count thumb_count bigint(20) comment "点赞数";'
         )
 
+        await models.sequelize.query(
+          'ALTER TABLE article_blog CHANGE like_count collect_count bigint(20) comment "收藏数";'
+        )
+
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb
           .get('config')

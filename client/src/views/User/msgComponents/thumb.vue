@@ -14,6 +14,10 @@
       <div class="content">
         {{userMessageTypeText[MessageItem.type][MessageItem.action]}}
         <router-link style="color:#df5858"
+                     v-if="MessageItem.type===modelType.article"
+                     :to="{name:'article',params:{aid:MessageItem.article.aid}}">{{MessageItem.article.title}}</router-link>
+        <router-link style="color:#df5858"
+                     v-if="MessageItem.type===modelType.dynamic"
                      :to="{name:'dynamicView',params:{dynamicId:MessageItem.dynamic.id}}">{{MessageItem.dynamic.content}}</router-link>
       </div>
       <span class="delete-message"

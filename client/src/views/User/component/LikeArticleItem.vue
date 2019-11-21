@@ -18,7 +18,7 @@
           </li>
           <li class="item item-icon like-article">
             <i class="el-icon-star-off"></i>
-            <strong v-text="articleItem.like_count"></strong>
+            <strong v-text="articleItem.thumb_count"></strong>
           </li>
           <li class="item item-icon comment-count">
             <i class="el-icon-chat-dot-round"></i>

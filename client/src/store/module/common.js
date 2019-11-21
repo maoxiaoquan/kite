@@ -45,7 +45,7 @@ const actions = {
     })
   },
   SET_THUMB ({ commit, dispatch, state }, parameter) {
-    // 设置收藏
+    // 设置点赞
     return fetch({
       url: '/common/thumb',
       method: 'post',

@@ -74,11 +74,11 @@ module.exports = {
       field: 'read_count',
       defaultValue: 0
     },
-    like_count: {
+    thumb_count: {
       // 喜欢数
       type: Seq.BIGINT(20),
-      comment: '喜欢数',
-      field: 'like_count',
+      comment: '点赞数',
+      field: 'thumb_count',
       defaultValue: 0
     },
     comment_count: {
