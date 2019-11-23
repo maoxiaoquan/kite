@@ -393,6 +393,13 @@ router.post('/shop/buy', tokens.ClientVerifyToken, shop.Buy)
 // 订单列表
 router.get('/shop/list', tokens.ClientVerifyToken, shop.orderList)
 
+// 获取用户关联信息
+router.get(
+  '/user/associate-info',
+  tokens.ClientVerifyTokenInfo,
+  user.getUserAssociateinfo
+)
+
 // 关注类
 
 router.post(

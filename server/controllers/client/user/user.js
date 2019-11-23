@@ -1209,6 +1209,60 @@ class User {
       return false
     }
   }
+
+  /**
+   *  获取用户关联的一些信息
+   * @param   {object} ctx 上下文对象
+   */
+  static async getUserAssociateinfo (ctx) {
+    // get 页面
+    try {
+      let articleThumdId = [] // 文章点赞id
+      let dynamicThumdId = [] // 动态点赞id
+      let { user = '', islogin } = ctx.request
+      if (!islogin) {
+        resClientJson(ctx, {
+          state: 'success',
+          message: '获取成功',
+          data: {
+            articleThumdId,
+            dynamicThumdId
+          }
+        })
+        return false
+      }
+
+      let allThumb = await models.thumb.findAll({
+        where: {
+          uid: user.uid,
+          is_associate: true
+        }
+      })
+
+      for (let i in allThumb) {
+        if (allThumb[i].type === modelType.article) {
+          articleThumdId.push(allThumb[i].associate_id)
+        } else if (allThumb[i].type === modelType.dynamic) {
+          articleThumdId.push(allThumb[i].associate_id)
+        }
+      }
+
+      resClientJson(ctx, {
+        state: 'success',
+        message: '获取成功',
+        data: {
+          articleThumdId,
+          dynamicThumdId
+        }
+      })
+    } catch (err) {
+      resClientJson(ctx, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
 }
 
 module.exports = User

@@ -20,6 +20,9 @@ export default {
       store.dispatch('user/GET_UNREAD_MESSAGE_COUNT')
     ])
   },
+  created () {
+    this.$store.dispatch('user/GET_ASSOCIATE_INFO')
+  },
   components: {
     'box-header': header,
     GlobalView

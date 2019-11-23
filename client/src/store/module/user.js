@@ -14,7 +14,8 @@ const state = () => ({
     // 侧栏
     user_role_all: []
   },
-  messageCount: 0 // 用户未读
+  messageCount: 0, // 用户未读
+  associateInfo: {}
 })
 
 const mutations = {
@@ -40,6 +41,10 @@ const mutations = {
   SET_UNREAD_MESSAGE_COUNT (state, data) {
     // 用户消息数量
     state.messageCount = data
+  },
+  SET_ASSOCIATE_INFO (state, data) {
+    // 用户关联信心
+    state.associateInfo = data
   }
 }
 
@@ -182,6 +187,17 @@ const actions = {
       url: '/personal/books-list',
       method: 'get',
       parameter: { params: parameter }
+    })
+  },
+  GET_ASSOCIATE_INFO ({ commit, dispatch, state }, parameter) {
+    // 获取用户关联信息
+    return fetch({
+      url: '/user/associate-info',
+      method: 'get',
+      parameter: { params: parameter }
+    }).then(result => {
+      commit('SET_ASSOCIATE_INFO', result.data)
+      return result
     })
   }
 }
