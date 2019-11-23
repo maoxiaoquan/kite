@@ -87,11 +87,11 @@ module.exports = {
       comment: '驳回，或者文章审核不通过的原因',
       field: 'rejection_reason'
     },
-    like_count: {
+    collect_count: {
       // 喜欢数
       type: Seq.BIGINT(20),
-      comment: '喜欢数',
-      field: 'like_count',
+      comment: '收藏数',
+      field: 'collect_count',
       defaultValue: 0
     },
     update_date: {

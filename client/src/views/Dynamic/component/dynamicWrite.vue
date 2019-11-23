@@ -131,7 +131,8 @@
                               alt="">
                         </div>
                         <div class="content">
-                          <span>{{item.name}}</span><span>{{item.like_count}} 关注 · 0 片刻</span>
+                          <span>{{item.name}}</span>
+                          <!-- <span>{{item.thumb_count}} 关注 · 0 片刻</span> -->
                         </div>
                       </div>
                     </li>

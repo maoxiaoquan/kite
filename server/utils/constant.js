@@ -62,7 +62,9 @@ const modelType = {
   collect: 13, // 收藏表
   attention: 14, // 关注表
   article_tag: 15, // 文章标签
-  dynamic_topic: 16 // 动态专题
+  dynamic_topic: 16, // 动态专题
+  system: 17, // 系统
+  other: 18 // 其他
 }
 
 const modelInfo = {

@@ -4,27 +4,20 @@
       <div class="row">
         <div class="col-xs-12 col-sm-8 col-md-8">
           <div class="dynamic-content-main client-card">
-            <dynamic-item :dynamicItem="dynamicView" :dfIsCommnet="false" />
-            <div
-              class="dynamic-comment-part"
-              v-if="website.config.on_comment === 'yes'"
-            >
-              <comment-form
-                :dynamicId="$route.params.dynamicId"
-                @commentChange="commentChange"
-              />
+            <dynamic-item :dynamicItem="dynamicView"
+                          :dfIsCommnet="false" />
+            <div class="dynamic-comment-part"
+                 v-if="website.config.on_comment === 'yes'">
+              <comment-form :dynamicId="$route.params.dynamicId"
+                            @commentChange="commentChange" />
               <div class="comment-list">
-                <scroll-loading
-                  @scroll-loading="infiniteHandler"
-                  :isLoading="isLoading"
-                  :isMore="isMore"
-                >
-                  <comment-item
-                    :comment-item="item"
-                    :dynamicId="$route.params.dynamicId"
-                    v-for="(item, key) in commentList"
-                    :key="key"
-                  />
+                <scroll-loading @scroll-loading="infiniteHandler"
+                                :isLoading="isLoading"
+                                :isMore="isMore">
+                  <comment-item :comment-item="item"
+                                :dynamicId="$route.params.dynamicId"
+                                v-for="(item, key) in commentList"
+                                :key="key" />
                 </scroll-loading>
               </div>
             </div>
@@ -38,23 +31,18 @@
             <div class="related-dynamic-block client-card">
               <header class="title">相关推荐</header>
               <ul class="dynamic-list">
-                <li
-                  class="item"
-                  v-for="(item, key) in dynamic.recommendDynamicList"
-                  :key="key"
-                >
-                  <router-link
-                    class="dynamic"
-                    :to="{
+                <li class="item"
+                    v-for="(item, key) in dynamic.recommendDynamicList"
+                    :key="key">
+                  <router-link class="dynamic"
+                               :to="{
                       name: 'dynamicView',
                       params: { dynamicId: item.id }
-                    }"
-                  >
+                    }">
                     <div class="content-box">
                       <div class="content">{{ item.content }}</div>
                       <div class="stat item">
-                        <span>{{ item.like_count }} 赞 · </span
-                        ><span>{{ item.comment_count }} 评论</span>
+                        <span>{{ item.thumb_count }} 赞 · </span><span>{{ item.comment_count }} 评论</span>
                       </div>
                     </div>
                   </router-link>
@@ -83,7 +71,7 @@ import googleMixin from '@mixins/google'
 export default {
   name: 'dynamic-view',
   minixs: [googleMixin], //混合谷歌分析
-  metaInfo() {
+  metaInfo () {
     return {
       title: this.dynamic.dynamicView.content + '-片刻' || '',
       meta: [
@@ -141,7 +129,7 @@ export default {
       __dangerouslyDisableSanitizers: ['script']
     }
   },
-  async asyncData({ store, route, accessToken = '' }) {
+  async asyncData ({ store, route, accessToken = '' }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
       store.dispatch('dynamic/GET_DYNAMIC_VIEW', {
@@ -149,7 +137,7 @@ export default {
       })
     ])
   },
-  data() {
+  data () {
     return {
       commentList: [], // 用户评论的列表
       page: 1,
@@ -158,16 +146,16 @@ export default {
       isMore: true
     }
   },
-  mounted() {
+  mounted () {
     this.$store.dispatch('user/GET_USER_INFO_ALL', {
       uid: this.personalInfo.user.uid
     })
   },
-  created() {
+  created () {
     this.$store.dispatch('dynamic/GET_RECOMMEND_DYNAMIC_LIST')
   },
   watch: {
-    $route(to, from) {
+    $route (to, from) {
       this.commentList = []
       this.page = 1
       this.isLoading = false
@@ -175,7 +163,7 @@ export default {
     }
   },
   methods: {
-    infiniteHandler() {
+    infiniteHandler () {
       this.isLoading = true
       this.$store
         .dispatch('dynamicComment/DYNAMIC_COMMENT_LIST', {
@@ -197,7 +185,7 @@ export default {
           this.isMore = false
         })
     },
-    commentChange(result) {
+    commentChange (result) {
       if (result.state === 'success') {
         this.commentList.unshift(result.data)
         this.dynamicView.comment_count =
@@ -211,10 +199,10 @@ export default {
   computed: {
     dynamicView: {
       // 登录弹窗的状态
-      get() {
+      get () {
         return this.$store.state.dynamic.dynamicView
       },
-      set(val) {
+      set (val) {
         this.$store.state.dynamic.dynamicView = val
       }
     },

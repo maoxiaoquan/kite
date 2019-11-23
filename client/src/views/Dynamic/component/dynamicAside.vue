@@ -38,7 +38,7 @@
             <div class="content-box">
               <div class="content"
                    v-html="contentRender(item.content)"></div>
-              <div class="stat item"><span>{{item.like_count}} 赞 · </span><span>{{item.comment_count}} 评论</span></div>
+              <div class="stat item"><span>{{item.thumb_count}} 赞 · </span><span>{{item.comment_count}} 评论</span></div>
             </div>
 
           </router-link>

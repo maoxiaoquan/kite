@@ -504,7 +504,7 @@ class Books {
     }
 
     !sort && (orderParams = [['create_date', 'DESC']])
-    sort === 'hot' && (orderParams = [['like_count', 'DESC']])
+    sort === 'hot' && (orderParams = [['read_count', 'DESC']])
 
     tagIdArr.length > 0 &&
       (whereParams['tag_ids'] = {

@@ -23,7 +23,7 @@
                     <span class="publish-time">{{article.create_dt}}</span>
                     <span class="views-count">阅读 {{article.read_count}}</span>
                     <span class="comments-count">评论 {{article.comment_count}}</span>
-                    <span class="likes-count">喜欢 {{article.like_count}}</span>
+                    <span class="likes-count">喜欢 {{article.thumb_count}}</span>
                     <span class="source">{{sourceTypeList[article.source]}} {{articleTypeList[article.type]}}</span>
                   </div>
                 </div>
@@ -188,13 +188,15 @@ export default {
     onUserLikeArticle () {
       /*用户like 文章*/
       this.$store
-        .dispatch("common/SET_LIKE", {
+        .dispatch("common/SET_THUMB", {
           associate_id: this.article.aid,
           type: modelType.article
         })
         .then(result => {
           if (result.state === "success") {
-            this.getArticle()
+            if (result.data.type === 'enter') {
+              this.likeUserIds.push(this.personalInfo.user.uid)
+            }
           } else {
             this.$message.warning(result.message);
           }

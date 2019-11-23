@@ -76,9 +76,9 @@ class Thumb {
           uid: oneModelInfo.uid,
           sender_id: user.uid,
           action: userMessageAction.thumb, // 动作：点赞
-          type: modelType.dynamic, // 类型：点赞动态
+          type: type, // 类型：点赞
           content: JSON.stringify({
-            dynamic_id: associate_id
+            [modelInfo[type].idKey]: associate_id
           })
         })
         await models.thumb.create({

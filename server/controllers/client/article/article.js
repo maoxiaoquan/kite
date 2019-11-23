@@ -471,7 +471,7 @@ class Article {
 
         oneArticle.setDataValue(
           'likeUserIds',
-          await models.like.findAll({
+          await models.thumb.findAll({
             where: {
               associate_id: oneArticle.aid,
               is_associate: true,
