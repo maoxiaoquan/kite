@@ -9,12 +9,15 @@ const microCache = new LRU({
   maxAge: 1000 * 60 // 重要提示：条目在 1 秒后过期。
 })
 
-const isCacheable = ctx => {
+const cacheable_list = [
+  // 添加缓存页面
+  '/test'
+]
+
+const isCacheable = (req, res, next) => {
   // 实现逻辑为，检查请求是否是用户特定(user-specific)。
   // 只有非用户特定(non-user-specific)页面才会缓存
-  // 暂时未用到
-  console.log(ctx.url)
-  if (ctx.url === '/kite-test-cacheable') {
+  if (~cacheable_list.indexOf(req.url)) {
     return true
   }
   return false
@@ -34,10 +37,10 @@ renderer = createBundleRenderer(serverBundle, {
   clientManifest
 })
 
-const render = async (ctx, next) => {
-  ctx.set('Content-Type', 'text/html')
+const render = async (req, res, next) => {
+  res.setHeader('Content-Type', 'text/html')
 
-  let accessToken = ctx.cookies.get('accessToken')
+  let accessToken = req.cookies.accessToken || ''
 
   const handleError = err => {
     if (err.code === 404) {
@@ -45,37 +48,37 @@ const render = async (ctx, next) => {
         path.resolve(__dirname, '../../views/404.html'),
         'utf-8'
       )
-      ctx.status = 404
-      ctx.body = html
+      res.status(404)
+      res.send(html)
     } else {
-      ctx.status = 500
-      ctx.body = '500 Internal Server Error'
-      console.error(`error during render : ${ctx.url}`)
+      res.status(500)
+      res.send('500 Internal Server Error')
+      console.error(`error during render : ${req.url}`)
       console.error(err.stack)
     }
   }
 
   const context = {
-    url: ctx.url,
+    url: req.url,
     accessToken: accessToken
   }
 
   // 判断是否可缓存，可缓存并且缓存中有则直接返回
-  const cacheable = isCacheable(ctx)
+  const cacheable = isCacheable(req, res, next)
   if (cacheable) {
-    const hit = microCache.get(ctx.url)
+    const hit = microCache.get(req.url)
     if (hit) {
       console.log('从缓存中取', hit)
-      return (ctx.body = hit)
+      res.send(hit)
     }
   }
 
   try {
     const html = await renderer.renderToString(context)
-    ctx.body = html
+    res.send(html)
     if (cacheable) {
-      console.log('设置缓存: ', ctx.url)
-      microCache.set(ctx.url, html)
+      console.log('设置缓存: ', req.url)
+      microCache.set(req.url, html)
     }
   } catch (error) {
     handleError(error)

@@ -5,7 +5,7 @@ const {
 } = require('../../utils/index')
 const config = require('../../config')
 const moment = require('moment')
-const multer = require('koa-multer')
+const multer = require('nodemailer')
 const upload = require('../../utils/upload') // 上传工具类
 const fs = require('fs')
 const path = require('path')
@@ -33,8 +33,7 @@ class Upload {
       if (ctx.req.file) {
         let destination = ctx.req.file.destination.split('static')[1]
         let filename = ctx.req.file.filename
-        let origin =
-          req.header.origin || 'http://' + website.domain_name
+        let origin = req.header.origin || 'http://' + website.domain_name
         let { user = '' } = req
 
         let userRoleAll = await models.user_role.findAll({
@@ -120,8 +119,7 @@ class Upload {
       if (ctx.req.file) {
         let destination = ctx.req.file.destination.split('static')[1]
         let filename = ctx.req.file.filename
-        let origin =
-          req.header.origin || 'http://' + website.domain_name
+        let origin = req.header.origin || 'http://' + website.domain_name
         resClientJson(res, {
           state: 'success',
           message: '文章图片上传成功',

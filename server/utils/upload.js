@@ -1,4 +1,4 @@
-const multer = require('koa-multer') // 加载koa-multer模块
+const multer = require('nodemailer') // 加载nodemailer模块
 
 // 文件上传
 
