@@ -2,18 +2,18 @@ const jwt = require('jsonwebtoken')
 const { resClientJson, resAdminJson } = require('./resData')
 const models = require('../../db/mysqldb')
 class Tokens {
-  static async ClientVerifyToken (ctx, next) {
-    let req = ctx.request.body
+  static async ClientVerifyToken (req, res, next) {
+    let reqBody = req.body
     let token =
-      req.accessToken ||
-      ctx.query.accessToken ||
-      ctx.headers['access-token'] ||
-      ctx.cookies.get('accessToken')
+      reqBody.accessToken ||
+      req.params.accessToken ||
+      req.headers['access-token'] ||
+      req.cookies.accessToken
     if (token) {
       // 存在token，解析token
       await jwt.verify(token, 'client', async (err, decoded) => {
         if (err) {
-          await resClientJson(ctx, {
+          await resClientJson(res, {
             state: 'error',
             message: '当前用户未登陆，请登陆后再次尝试',
             data: {
@@ -22,15 +22,15 @@ class Tokens {
             }
           })
         } else {
-          ctx.request.islogin = true
-          ctx.request.user = await models.user.findOne({
+          req.islogin = true
+          req.user = await models.user.findOne({
             where: { uid: decoded.uid }
           })
           await next()
         }
       })
     } else {
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'error',
         message: '当前用户未登陆，请登陆后再次尝试',
         data: {
@@ -41,21 +41,21 @@ class Tokens {
     }
   }
 
-  static async ClientVerifyTokenInfo (ctx, next) {
-    let req = ctx.request.body
+  static async ClientVerifyTokenInfo (req, res, next) {
+    let reqBody = req.body
     let token =
-      req.accessToken ||
-      ctx.query.accessToken ||
-      ctx.headers['access-token'] ||
-      ctx.cookies.get('accessToken')
+      reqBody.accessToken ||
+      req.params.accessToken ||
+      req.headers['access-token'] ||
+      req.cookies.accessToken
     // 存在token，解析token
     await jwt.verify(token, 'client', async (err, decoded) => {
       if (err) {
-        ctx.request.islogin = false
-        ctx.request.user = {}
+        req.islogin = false
+        req.user = {}
       } else {
-        ctx.request.islogin = true
-        ctx.request.user = await models.user.findOne({
+        req.islogin = true
+        req.user = await models.user.findOne({
           where: { uid: decoded.uid }
         })
       }
@@ -63,18 +63,19 @@ class Tokens {
     })
   }
 
-  static async AdminVerifyToken (ctx, next) {
-    let req = ctx.request.body
-    let token = req.token || ctx.query.token || ctx.headers['x-access-token']
+  static async AdminVerifyToken (req, res, next) {
+    let reqBody = req.body
+    let token =
+      reqBody.token || req.params.token || req.headers['x-access-token']
 
     if (token) {
       // 存在token，解析token
       try {
-        ctx.request.userInfo = await jwt.verify(token, 'admin')
+        req.userInfo = await jwt.verify(token, 'admin')
         await next()
       } catch (err) {
         resAdminJson(
-          ctx,
+          res,
           {
             state: 'error',
             message: '请登录'
@@ -84,7 +85,7 @@ class Tokens {
       }
     } else {
       resAdminJson(
-        ctx,
+        res,
         {
           state: 'error',
           message: '请登录'

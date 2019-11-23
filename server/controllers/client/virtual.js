@@ -31,9 +31,9 @@ function ErrorMessage (message) {
 
 class Virtual {
   // 签到
-  static async checkIn (ctx) {
+  static async checkIn (req, res, next) {
     try {
-      let { user = '' } = ctx.request
+      let { user = '' } = req
       let date = new Date()
       let getTime = date.setHours(date.getHours())
       let startTime = new Date(new Date(getTime).setHours(0, 0, 0, 0)) // 当天0点
@@ -61,13 +61,13 @@ class Virtual {
         })
       }
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: '签到成功'
       })
     } catch (err) {
       console.log('err', err)
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -78,10 +78,10 @@ class Virtual {
    * 获取消费列表
    * @param   {object} ctx 上下文对象
    */
-  static async getVirtualList (ctx) {
-    let page = ctx.query.page || 1
-    let pageSize = Number(ctx.query.pageSize) || 10
-    let { user = '' } = ctx.request
+  static async getVirtualList (req, res, next) {
+    let page = req.params.page || 1
+    let pageSize = Number(req.params.pageSize) || 10
+    let { user = '' } = req
     try {
       let { count, rows } = await models.virtual.findAndCountAll({
         where: {
@@ -157,7 +157,7 @@ class Virtual {
         }
       }
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: '数据返回成功',
         data: {
@@ -168,7 +168,7 @@ class Virtual {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

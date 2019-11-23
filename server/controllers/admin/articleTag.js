@@ -13,8 +13,8 @@ class ArticleTag {
    * 创建标签
    * @param   {object} ctx 上下文对象
    */
-  static async createArticleTag (ctx) {
-    const reqData = ctx.request.body
+  static async createArticleTag (req, res, next) {
+    const reqData = req.body
 
     try {
       let oneArticleTagName = await models.article_tag.findOne({
@@ -40,17 +40,17 @@ class ArticleTag {
       })
       await createAdminSystemLog({
         // 写入日志
-        uid: ctx.request.userInfo.uid,
+        uid: req.userInfo.uid,
         type: 1,
         content: `成功创建了‘${reqData.name}’文章标签`
       })
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '标签创建成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -62,15 +62,15 @@ class ArticleTag {
    * 获取标签列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async getArticleTagList (ctx) {
-    const { page = 1, pageSize = 10 } = ctx.query
+  static async getArticleTagList (req, res, next) {
+    const { page = 1, pageSize = 10 } = req.params
     try {
       let { count, rows } = await models.article_tag.findAndCountAll({
         where: '', // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize) // 每页限制返回的数据条数
       })
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -79,7 +79,7 @@ class ArticleTag {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -91,12 +91,12 @@ class ArticleTag {
    * 获取所有标签操作
    * @param   {object} ctx 上下文对象
    */
-  static async getArticleTagAll (ctx) {
+  static async getArticleTagAll (req, res, next) {
     try {
       let articleTagAll = await models.article_tag.findAll({
         where: { enable: 1 } // 为空，获取全部，也可以自己添加条件
       })
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -104,7 +104,7 @@ class ArticleTag {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -116,8 +116,8 @@ class ArticleTag {
    * 更新标签
    * @param   {object} ctx 上下文对象
    */
-  static async updateArticleTag (ctx) {
-    const reqData = ctx.request.body
+  static async updateArticleTag (req, res, next) {
+    const reqData = req.body
     try {
       await models.article_tag.update(
         {
@@ -136,17 +136,17 @@ class ArticleTag {
       )
       await createAdminSystemLog({
         // 写入日志
-        uid: ctx.request.userInfo.uid,
+        uid: req.userInfo.uid,
         type: 1,
         content: `成功更新了id为‘${reqData.tag_id}’的文章标签名字为‘${reqData.name}’`
       })
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '更新标签成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -157,8 +157,8 @@ class ArticleTag {
   /**
    * 删除标签
    */
-  static async deleteArticleTag (ctx) {
-    const { tag_id } = ctx.request.body
+  static async deleteArticleTag (req, res, next) {
+    const { tag_id } = req.body
     try {
       let oneArticleTag = await models.article_tag.findOne({
         where: { tag_id }
@@ -167,17 +167,17 @@ class ArticleTag {
       await models.article_tag.destroy({ where: { tag_id } })
       await createAdminSystemLog({
         // 写入日志
-        uid: ctx.request.userInfo.uid,
+        uid: req.userInfo.uid,
         type: 1,
         content: `成功删除了‘${oneArticleTag.name}’文章标签`
       })
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '删除用户成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

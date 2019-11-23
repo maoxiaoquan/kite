@@ -69,9 +69,9 @@ class Article {
    * 新建文章post提交
    * @param   {object} ctx 上下文对象
    */
-  static async createArticle (ctx) {
-    let reqData = ctx.request.body
-    let { user = '' } = ctx.request
+  static async createArticle (req, res, next) {
+    let reqData = req.body
+    let { user = '' } = req
     try {
       if (!reqData.title) {
         throw new ErrorMessage('请输入文章标题')
@@ -185,13 +185,13 @@ class Article {
         action: virtualAction.create
       })
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message:
           '文章创建成功，最晚会在4小时内由人工审核通过后发布，超过24点文章，将在次日8.30审核后发布'
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -204,11 +204,11 @@ class Article {
    * @param   {object} ctx 上下文对象
    */
 
-  static async getArticleTag (ctx) {
-    let qyData = ctx.query
+  static async getArticleTag (req, res, next) {
+    let qyData = req.params
 
-    let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 25
+    let page = req.params.page || 1
+    let pageSize = req.params.pageSize || 25
 
     try {
       let oneArticleTag = await models.article_tag.findOne({
@@ -287,7 +287,7 @@ class Article {
           attributes: ['tag_id', 'name', 'en_name']
         })
 
-        await resClientJson(ctx, {
+        await resClientJson(res, {
           state: 'success',
           message: 'user',
           data: {
@@ -305,7 +305,7 @@ class Article {
         throw new ErrorMessage('当前文章标签不存在')
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -317,7 +317,7 @@ class Article {
    * 获取热门文章标签
    * @param   {object} ctx 上下文对象
    */
-  static async getPopularArticleTag (ctx) {
+  static async getPopularArticleTag (req, res, next) {
     try {
       let articleTagAll = await models.article_tag.findAll({
         attributes: ['tag_id', 'name', 'en_name', 'icon', 'description'],
@@ -351,7 +351,7 @@ class Article {
         )
       }
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '获取所有文章标签成功',
         data: {
@@ -359,7 +359,7 @@ class Article {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -371,7 +371,7 @@ class Article {
    * 获取所有文章标签get
    * @param   {object} ctx 上下文对象
    */
-  static async getArticleTagAll (ctx) {
+  static async getArticleTagAll (req, res, next) {
     try {
       let articleTagAll = await models.article_tag.findAll({
         attributes: ['tag_id', 'name', 'en_name', 'icon', 'description'],
@@ -401,7 +401,7 @@ class Article {
         )
       }
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '获取所有文章标签成功',
         data: {
@@ -409,7 +409,7 @@ class Article {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -421,8 +421,8 @@ class Article {
    * ajax 查询一篇文章
    * @param   {object} ctx 上下文对象
    */
-  static async getArticle (ctx) {
-    let { aid } = ctx.query
+  static async getArticle (req, res, next) {
+    let { aid } = req.params
     try {
       let oneArticle = await models.article.findOne({
         where: {
@@ -489,13 +489,13 @@ class Article {
         )
 
         if (oneArticle) {
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'success',
             message: '获取文章成功',
             data: { article: oneArticle }
           })
         } else {
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'error',
             message: '获取文章失败'
           })
@@ -504,7 +504,7 @@ class Article {
         throw new ErrorMessage('获取文章失败')
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -516,9 +516,9 @@ class Article {
    * ajax 获取用户自己的一篇文章
    * @param   {object} ctx 上下文对象
    */
-  static async getUserArticle (ctx) {
-    let { aid } = ctx.query
-    let { user = '' } = ctx.request
+  static async getUserArticle (req, res, next) {
+    let { aid } = req.params
+    let { user = '' } = req
     try {
       let article = await models.article.findOne({
         where: { aid, uid: user.uid }
@@ -539,13 +539,13 @@ class Article {
         )
 
         if (article) {
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'success',
             message: '获取当前用户文章成功',
             data: { article }
           })
         } else {
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'error',
             message: '获取当前用户文章失败'
           })
@@ -554,7 +554,7 @@ class Article {
         throw new ErrorMessage('获取当前用户文章失败')
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -566,10 +566,10 @@ class Article {
    * 更新文章
    * @param   {object} ctx 上下文对象
    */
-  static async updateArticle (ctx) {
-    let reqData = ctx.request.body
+  static async updateArticle (req, res, next) {
+    let reqData = req.body
 
-    let { user = '' } = ctx.request
+    let { user = '' } = req
     try {
       let oneArticle = await models.article.findOne({
         where: {
@@ -688,13 +688,13 @@ class Article {
         }
       )
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message:
           '文章更新后需要重新审核，最晚会在4小时内由人工审核通过后发布，超过24点文章，将在次日8.30审核后发布'
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -709,9 +709,9 @@ class Article {
    * 无关联则直接删除文章，有关联则开启事务同时删除与文章的关联
    * 前台用户删除文章并不是真的删除，只是置为了删除态
    */
-  static async deleteArticle (ctx) {
-    const { aid } = ctx.query
-    let { islogin = '', user = '' } = ctx.request
+  static async deleteArticle (req, res, next) {
+    const { aid } = req.params
+    let { islogin = '', user = '' } = req
 
     try {
       let oneArticle = await models.article.findOne({
@@ -744,12 +744,12 @@ class Article {
           }
         }
       )
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '删除文章成功'
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -761,10 +761,10 @@ class Article {
    * 搜索
    * @param   {object} ctx 上下文对象
    */
-  static async searchArticle (ctx) {
-    let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 25
-    let search = ctx.query.search
+  static async searchArticle (req, res, next) {
+    let page = req.params.page || 1
+    let pageSize = req.params.pageSize || 25
+    let search = req.params.search
     try {
       let { count, rows } = await models.article.findAndCountAll({
         where: {
@@ -824,7 +824,7 @@ class Article {
         attributes: ['tag_id', 'name']
       })
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: 'search',
         data: {
@@ -837,7 +837,7 @@ class Article {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -850,7 +850,7 @@ class Article {
    * @param   {object} ctx 上下文对象
    */
 
-  static async getArticleColumn (ctx) {
+  static async getArticleColumn (req, res, next) {
     try {
       let allArticleColumn = await models.article_column.findAll({
         attributes: [
@@ -885,7 +885,7 @@ class Article {
         }
       }
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '获取所有文章专栏成功',
         data: {
@@ -893,7 +893,7 @@ class Article {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -906,9 +906,9 @@ class Article {
    * @param   {object} ctx 上下文对象
    */
 
-  static async getArticleColumnList (ctx) {
-    let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 25
+  static async getArticleColumnList (req, res, next) {
+    let page = req.params.page || 1
+    let pageSize = req.params.pageSize || 25
 
     let whereParams = {
       enable: 1
@@ -941,7 +941,7 @@ class Article {
         )
       }
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: 'column',
         data: {
@@ -952,7 +952,7 @@ class Article {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

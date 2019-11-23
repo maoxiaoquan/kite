@@ -13,8 +13,8 @@ class ArticleColumn {
    * 创建标签
    * @param   {object} ctx 上下文对象
    */
-  static async createArticleColumn (ctx) {
-    const reqData = ctx.request.body
+  static async createArticleColumn (req, res, next) {
+    const reqData = req.body
 
     try {
       let oneArticleColumnName = await models.article_column.findOne({
@@ -41,17 +41,17 @@ class ArticleColumn {
 
       await createAdminSystemLog({
         // 写入日志
-        uid: ctx.request.userInfo.uid,
+        uid: req.userInfo.uid,
         type: 3,
         content: `成功创建了‘${reqData.name}’文章专栏`
       })
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '专栏创建成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -63,8 +63,8 @@ class ArticleColumn {
    * 获取标签列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async getArticleColumnList (ctx) {
-    const { page = 1, pageSize = 10 } = ctx.query
+  static async getArticleColumnList (req, res, next) {
+    const { page = 1, pageSize = 10 } = req.params
     try {
       let { count, rows } = await models.article_column.findAndCountAll({
         attributes: [
@@ -85,7 +85,7 @@ class ArticleColumn {
           ['sort', 'ASC'] // asc
         ]
       })
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -94,7 +94,7 @@ class ArticleColumn {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -106,8 +106,8 @@ class ArticleColumn {
    * 更新标签
    * @param   {object} ctx 上下文对象
    */
-  static async updateArticleColumn (ctx) {
-    const reqData = ctx.request.body
+  static async updateArticleColumn (req, res, next) {
+    const reqData = req.body
     try {
       await models.article_column.update(
         {
@@ -120,12 +120,12 @@ class ArticleColumn {
           }
         }
       )
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '更新专栏成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -136,20 +136,20 @@ class ArticleColumn {
   /**
    * 删除标签
    */
-  static async deleteArticleColumn (ctx) {
-    const { column_id } = ctx.request.body
+  static async deleteArticleColumn (req, res, next) {
+    const { column_id } = req.body
 
     await models.article_column
       .destroy({ where: { column_id } })
       .then(data => {
-        resAdminJson(ctx, {
+        resAdminJson(res, {
           state: 'success',
           message: '删除专栏成功'
         })
       })
       .catch(err => {
         console.log('failed: ' + err)
-        resAdminJson(ctx, {
+        resAdminJson(res, {
           state: 'error',
           message: '删除专栏失败'
         })

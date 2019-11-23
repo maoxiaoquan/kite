@@ -33,10 +33,10 @@ class Attention {
    * 用户关注用户post
    * @param   {object} ctx 上下文对象
    */
-  static async setAttention (ctx) {
+  static async setAttention (req, res, next) {
     try {
-      const { associate_id, type } = ctx.request.body
-      const { user = '' } = ctx.request
+      const { associate_id, type } = req.body
+      const { user = '' } = req
       let associateType = ''
       if (!modelInfo[type]) {
         throw new ErrorMessage('类型不存在，系统已禁止行为')
@@ -98,7 +98,7 @@ class Attention {
         })
       }
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: associateType === 'enter' ? '关注成功' : '取消关注成功',
         data: {
@@ -106,7 +106,7 @@ class Attention {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

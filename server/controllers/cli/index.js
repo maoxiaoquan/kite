@@ -1,7 +1,7 @@
 const { render } = require('../../utils/cliResData')
 const { lowdb } = require('../../../db/lowdb/index')
 class Index {
-  static async renderGetIndex (ctx) {
+  static async renderGetIndex (req, res, next) {
     let cli_is_success = lowdb.get('cli.is_success').value()
     if (cli_is_success) {
       await render(ctx, {

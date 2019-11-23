@@ -11,7 +11,7 @@ const {
   modelType
 } = require('../../../utils/constant')
 
-function ErrorMessage(message) {
+function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
 }
@@ -22,12 +22,12 @@ class PersonalCenter {
    * 用户个人中心个人文章列表render
    * @param   {object} ctx 上下文对象
    */
-  static async userMyArticle(ctx) {
-    let uid = ctx.query.uid
-    let blog_id = ctx.query.blog_id || 'all'
-    let type = ctx.query.type || '1'
-    let page = ctx.query.page || 1
-    let pageSize = Number(ctx.query.pageSize) || 10
+  static async userMyArticle (req, res, next) {
+    let uid = req.params.uid
+    let blog_id = req.params.blog_id || 'all'
+    let type = req.params.type || '1'
+    let page = req.params.page || 1
+    let pageSize = Number(req.params.pageSize) || 10
     let whereParams = {
       uid,
       type: {
@@ -90,7 +90,7 @@ class PersonalCenter {
         )
       }
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: 'home',
         data: {
@@ -102,7 +102,7 @@ class PersonalCenter {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -114,11 +114,11 @@ class PersonalCenter {
    * 用户个人中心用户关注用户render
    * @param   {object} ctx 上下文对象
    */
-  static async getUserAttentionList(ctx) {
-    let uid = ctx.query.uid
-    let page = ctx.query.page || 1
-    let pageSize = Number(ctx.query.pageSize) || 10
-    let any = ctx.query.any || 'me'
+  static async getUserAttentionList (req, res, next) {
+    let uid = req.params.uid
+    let page = req.params.page || 1
+    let pageSize = Number(req.params.pageSize) || 10
+    let any = req.params.any || 'me'
     let whereParmas = {}
     try {
       if (any === 'me') {
@@ -163,7 +163,7 @@ class PersonalCenter {
         )
       }
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: '获取列表成功',
         data: {
@@ -175,7 +175,7 @@ class PersonalCenter {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -187,10 +187,10 @@ class PersonalCenter {
    * 用户like文章render
    * @param   {object} ctx 上下文对象
    */
-  static async getUserLikeArticleList(ctx) {
-    let uid = ctx.query.uid
-    let page = ctx.query.page || 1
-    let pageSize = Number(ctx.query.pageSize) || 10
+  static async getUserLikeArticleList (req, res, next) {
+    let uid = req.params.uid
+    let page = req.params.page || 1
+    let pageSize = Number(req.params.pageSize) || 10
     try {
       let allUserLikeArticle = await models.like
         .findAll({
@@ -237,7 +237,7 @@ class PersonalCenter {
         )
       }
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: 'home',
         data: {
@@ -248,7 +248,7 @@ class PersonalCenter {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -256,10 +256,10 @@ class PersonalCenter {
     }
   }
 
-  static async getDynamicListMe(ctx) {
-    const { uid } = ctx.query
-    let page = ctx.query.page || 1
-    let pageSize = Number(ctx.query.pageSize) || 10
+  static async getDynamicListMe (req, res, next) {
+    const { uid } = req.params
+    let page = req.params.page || 1
+    let pageSize = Number(req.params.pageSize) || 10
     let whereParams = {} // 查询参数
     let orderParams = [['create_date', 'DESC']] // 排序参数
 
@@ -290,8 +290,8 @@ class PersonalCenter {
           'topic',
           rows[i].topic_ids
             ? await models.dynamic_topic.findOne({
-                where: { topic_id: rows[i].topic_ids }
-              })
+              where: { topic_id: rows[i].topic_ids }
+            })
             : ''
         )
 
@@ -327,7 +327,7 @@ class PersonalCenter {
       }
 
       if (rows) {
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'success',
           message: '数据返回成功',
           data: {
@@ -338,13 +338,13 @@ class PersonalCenter {
           }
         })
       } else {
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'error',
           message: '数据返回错误，请再次刷新尝试'
         })
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -356,10 +356,10 @@ class PersonalCenter {
    * 用户个人中心个人专栏列表
    * @param   {object} ctx 上下文对象
    */
-  static async userArticleBlogList(ctx) {
-    let uid = ctx.query.uid
-    let page = ctx.query.page || 1
-    let pageSize = Number(ctx.query.pageSize) || 10
+  static async userArticleBlogList (req, res, next) {
+    let uid = req.params.uid
+    let page = req.params.page || 1
+    let pageSize = Number(req.params.pageSize) || 10
     let whereParams = {
       uid
     }
@@ -434,7 +434,7 @@ class PersonalCenter {
         )
       }
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: '获取用户个人专栏成功列表',
         data: {
@@ -445,7 +445,7 @@ class PersonalCenter {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -457,10 +457,10 @@ class PersonalCenter {
    * 用户个人中心个人小书列表
    * @param   {object} ctx 上下文对象
    */
-  static async userBooksList(ctx) {
-    let uid = ctx.query.uid
-    let page = ctx.query.page || 1
-    let pageSize = Number(ctx.query.pageSize) || 10
+  static async userBooksList (req, res, next) {
+    let uid = req.params.uid
+    let page = req.params.page || 1
+    let pageSize = Number(req.params.pageSize) || 10
     let whereParams = {
       uid,
       status: {
@@ -516,7 +516,7 @@ class PersonalCenter {
         )
       }
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: '获取用户个人小书列表',
         data: {
@@ -527,7 +527,7 @@ class PersonalCenter {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

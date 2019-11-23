@@ -13,11 +13,11 @@ const {
 } = require('../../utils/constant')
 
 class Index {
-  static async getIndex (ctx) {
-    let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 25
-    let columnEnName = ctx.query.columnEnName || ''
-    let sort = ctx.query.sort || 'newest'
+  static async getIndex (req, res, next) {
+    let page = req.params.page || 1
+    let pageSize = req.params.pageSize || 25
+    let columnEnName = req.params.columnEnName || ''
+    let sort = req.params.sort || 'newest'
     let whereArticleParams = {} // 查询参数
     let whereArticleColumnParams = {} // 查询参数
     let orderParams = [] // 排序参数
@@ -139,7 +139,7 @@ class Index {
     } */
 
       if (rows) {
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'success',
           message: '数据返回成功',
           data: {
@@ -152,13 +152,13 @@ class Index {
           }
         })
       } else {
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'error',
           message: '数据返回错误，请再次刷新尝试'
         })
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

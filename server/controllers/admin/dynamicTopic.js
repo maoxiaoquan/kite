@@ -13,8 +13,8 @@ class dynamicTopic {
    * 创建专题
    * @param   {object} ctx 上下文对象
    */
-  static async createDynamicTopic (ctx) {
-    const reqData = ctx.request.body
+  static async createDynamicTopic (req, res, next) {
+    const reqData = req.body
 
     try {
       let oneDynamicTopicName = await models.dynamic_topic.findOne({
@@ -42,17 +42,17 @@ class dynamicTopic {
       })
       await createAdminSystemLog({
         // 写入日志
-        uid: ctx.request.userInfo.uid,
+        uid: req.userInfo.uid,
         type: 1,
         content: `成功创建了‘${reqData.name}’动态专题`
       })
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '专题创建成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -64,8 +64,8 @@ class dynamicTopic {
    * 获取专题列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async getDynamicTopicList (ctx) {
-    const { page = 1, pageSize = 10 } = ctx.query
+  static async getDynamicTopicList (req, res, next) {
+    const { page = 1, pageSize = 10 } = req.params
     try {
       let { count, rows } = await models.dynamic_topic.findAndCountAll({
         where: '', // 为空，获取全部，也可以自己添加条件
@@ -75,7 +75,7 @@ class dynamicTopic {
           ['sort', 'ASC'] // asc
         ]
       })
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -84,7 +84,7 @@ class dynamicTopic {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -96,12 +96,12 @@ class dynamicTopic {
    * 获取所有专题操作
    * @param   {object} ctx 上下文对象
    */
-  static async getDynamicTopicAll (ctx) {
+  static async getDynamicTopicAll (req, res, next) {
     try {
       let allDynamicTopic = await models.dynamic_topic.findAll({
         where: { enable: 1 } // 为空，获取全部，也可以自己添加条件
       })
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -109,7 +109,7 @@ class dynamicTopic {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -121,8 +121,8 @@ class dynamicTopic {
    * 更新专题
    * @param   {object} ctx 上下文对象
    */
-  static async updateDynamicTopic (ctx) {
-    const reqData = ctx.request.body
+  static async updateDynamicTopic (req, res, next) {
+    const reqData = req.body
     try {
       await models.dynamic_topic.update(
         {
@@ -143,17 +143,17 @@ class dynamicTopic {
       )
       await createAdminSystemLog({
         // 写入日志
-        uid: ctx.request.userInfo.uid,
+        uid: req.userInfo.uid,
         type: 1,
         content: `成功更新了id为‘${reqData.topic_id}’的动态专题名字为‘${reqData.name}’`
       })
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '更新专题成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -164,8 +164,8 @@ class dynamicTopic {
   /**
    * 删除专题
    */
-  static async deleteDynamicTopic (ctx) {
-    const { topic_id } = ctx.request.body
+  static async deleteDynamicTopic (req, res, next) {
+    const { topic_id } = req.body
     try {
       let oneDynamicTopic = await models.dynamic_topic.findOne({
         where: { topic_id }
@@ -174,17 +174,17 @@ class dynamicTopic {
       await models.dynamic_topic.destroy({ where: { topic_id } })
       await createAdminSystemLog({
         // 写入日志
-        uid: ctx.request.userInfo.uid,
+        uid: req.userInfo.uid,
         type: 1,
         content: `成功删除了‘${oneDynamicTopic.name}’动态专题`
       })
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '删除用户成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

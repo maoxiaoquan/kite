@@ -1,14 +1,15 @@
-const Koa = require('koa')
+const express = require('express')
+const app = express()
 const path = require('path')
+const cookieParser = require('cookie-parser')
 const chalk = require('chalk')
 const LRU = require('lru-cache')
-const Router = require('koa-router')
 const setupDevServer = require('../tools/setup-dev-server')
 const { createBundleRenderer } = require('vue-server-renderer')
 const config = require('../../kite.config')
-const koaStatic = require('koa-static')
-const views = require('koa-views')
 const fs = require('fs')
+const router = express.Router()
+app.use(cookieParser())
 // 缓存
 const microCache = new LRU({
   max: 100,
@@ -20,37 +21,27 @@ const cacheable_list = [
   '/test'
 ]
 
-const isCacheable = ctx => {
+const isCacheable = (req, res, next) => {
   // 实现逻辑为，检查请求是否是用户特定(user-specific)。
   // 只有非用户特定(non-user-specific)页面才会缓存
-  console.log(ctx.url)
-  if (~cacheable_list.indexOf(ctx.url)) {
+  console.log(req.url)
+  if (~cacheable_list.indexOf(req.url)) {
     return true
   }
   return false
 }
 
-//  第 1 步：创建koa、koa-router 实例
-const app = new Koa()
-const router = new Router()
-
 const proxy = require('http-proxy-middleware')
 
 // 配置静态资源加载中间件
-app.use(koaStatic(path.join(__dirname, '../../static')))
 
-// 配置服务端模板渲染引擎中间件
-app.use(
-  views(path.join(__dirname, '../../views'), {
-    map: { html: 'ejs' }
-  })
-)
+app.use(express.static(path.join(__dirname, '../../static')))
 
-app.use(async (ctx, next) => {
+app.use((req, res, next) => {
   // 接口进行拦截，并进行代理
-  if (ctx.url.startsWith('/api-client/v1') || ctx.url.startsWith('/graphql')) {
-    ctx.respond = false
-    return proxy(config.client.proxy)(ctx.req, ctx.res, next)
+  if (req.url.startsWith('/api-client/v1') || req.url.startsWith('/graphql')) {
+    req.respond = false
+    return proxy(config.client.proxy)(req, res, next)
   }
   return next()
 })
@@ -69,46 +60,46 @@ setupDevServer(app, templatePath, (bundle, options) => {
   renderer = createBundleRenderer(bundle, option)
 })
 
-const render = async (ctx, next) => {
-  ctx.set('Content-Type', 'text/html')
-  let accessToken = ctx.cookies.get('accessToken')
+const render = async (req, res, next) => {
+  res.setHeader('Content-Type', 'text/html')
+  let accessToken = req.cookies.accessToken || ''
   const handleError = async err => {
     if (err.code === 404) {
       const html = fs.readFileSync(
         path.resolve(__dirname, '../../views/404.html'),
         'utf-8'
       )
-      ctx.status = 404
-      ctx.body = html
+      res.status(404)
+      res.send(html)
     } else {
-      ctx.status = 500
-      ctx.body = '500 Internal Server Error'
-      console.error(`error during render : ${ctx.url}`)
+      res.status(500)
+      res.send('500 Internal Server Error')
+      console.error(`error during render : ${req.url}`)
       console.error(err.stack)
     }
   }
 
   const context = {
-    url: ctx.url,
+    url: req.url,
     accessToken: accessToken
   }
 
   // 判断是否可缓存，可缓存并且缓存中有则直接返回
-  const cacheable = isCacheable(ctx)
+  const cacheable = isCacheable(req, res, next)
   if (cacheable) {
-    const hit = microCache.get(ctx.url)
+    const hit = microCache.get(req.url)
     if (hit) {
       console.log('从缓存中取', hit)
-      return (ctx.body = hit)
+      res.send(hit)
     }
   }
 
   try {
     const html = await renderer.renderToString(context)
-    ctx.body = html
+    res.send(html)
     if (cacheable) {
-      console.log('设置缓存: ', ctx.url)
-      microCache.set(ctx.url, html)
+      console.log('设置缓存: ', req.url)
+      microCache.set(req.url, html)
     }
   } catch (error) {
     handleError(error)
@@ -117,7 +108,7 @@ const render = async (ctx, next) => {
 
 router.get('*', render)
 
-app.use(router.routes()).use(router.allowedMethods())
+app.use('/', router)
 
 const port = config.client.port
 

@@ -8,8 +8,8 @@ class BooksComment {
    * 获取标分页评论列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async getCommentList (ctx) {
-    const { page = 1, pageSize = 10, content, status } = ctx.request.body
+  static async getCommentList (req, res, next) {
+    const { page = 1, pageSize = 10, content, status } = req.body
     try {
       let whereParams = {} // 定义查询条件
 
@@ -36,7 +36,7 @@ class BooksComment {
         )
       }
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -45,7 +45,7 @@ class BooksComment {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -56,8 +56,8 @@ class BooksComment {
    * 更新评论
    * @param   {object} ctx 上下文对象
    */
-  static async updateComment (ctx) {
-    const reqData = ctx.request.body
+  static async updateComment (req, res, next) {
+    const reqData = req.body
     try {
       await await models.books_comment.update(
         {
@@ -69,12 +69,12 @@ class BooksComment {
           }
         }
       )
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '更新评论成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -84,8 +84,8 @@ class BooksComment {
   /**
    * 删除评论
    */
-  static async deleteComment (ctx) {
-    const { id } = ctx.request.body
+  static async deleteComment (req, res, next) {
+    const { id } = req.body
     try {
       let oneComment = await models.books_comment.findOne({ where: { id } })
       await models.books_comment.destroy({ where: { id } })
@@ -102,12 +102,12 @@ class BooksComment {
         { where: { books_id: oneComment.books_id } }
       )
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '删除用户评论成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

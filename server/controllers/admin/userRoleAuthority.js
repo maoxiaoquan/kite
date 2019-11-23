@@ -15,8 +15,8 @@ class UserRole {
    * 创建角色
    * @param   {object} ctx 上下文对象
    */
-  static async createUserRole (ctx) {
-    const reqData = ctx.request.body
+  static async createUserRole (req, res, next) {
+    const reqData = req.body
 
     try {
       let oneUserRole = await models.user_role.findOne({
@@ -36,17 +36,17 @@ class UserRole {
       })
       await createAdminSystemLog({
         // 写入日志
-        uid: ctx.request.userInfo.uid,
+        uid: req.userInfo.uid,
         type: 3,
         content: `成功创建了‘${reqData.user_role_name}’用户角色`
       })
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '角色创建成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -57,7 +57,7 @@ class UserRole {
    * 获取所有角色操作
    * @param   {object} ctx 上下文对象
    */
-  static async getUserRoleAll (ctx) {
+  static async getUserRoleAll (req, res, next) {
     try {
       let userRoleAll = await models.user_role.findAll({
         attributes: [
@@ -71,7 +71,7 @@ class UserRole {
         ],
         where: { enable: 1 } // 为空，获取全部，也可以自己添加条件
       })
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -79,7 +79,7 @@ class UserRole {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -90,8 +90,8 @@ class UserRole {
    * 获取角色列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async getUserRoleList (ctx) {
-    const { page = 1, pageSize = 10 } = ctx.query
+  static async getUserRoleList (req, res, next) {
+    const { page = 1, pageSize = 10 } = req.params
     try {
       let { count, rows } = await models.user_role.findAndCountAll({
         attributes: [
@@ -108,7 +108,7 @@ class UserRole {
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize) // 每页限制返回的数据条数
       })
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -117,7 +117,7 @@ class UserRole {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -128,8 +128,8 @@ class UserRole {
    * 更新角色
    * @param   {object} ctx 上下文对象
    */
-  static async updateUserRole (ctx) {
-    const reqData = ctx.request.body
+  static async updateUserRole (req, res, next) {
+    const reqData = req.body
     try {
       await models.user_role.update(
         {
@@ -146,12 +146,12 @@ class UserRole {
           }
         }
       )
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '更新用户角色成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -161,11 +161,11 @@ class UserRole {
   /**
    * 删除角色
    */
-  static async deleteUserRole (ctx) {
-    const { user_role_id } = ctx.request.body
+  static async deleteUserRole (req, res, next) {
+    const { user_role_id } = req.body
     try {
       if (config.USER_ROLE.dfId === user_role_id) {
-        resAdminJson(ctx, {
+        resAdminJson(res, {
           state: 'error',
           message: '默认用户角色不可删除'
         })
@@ -173,7 +173,7 @@ class UserRole {
       }
 
       if (config.USER_ROLE.dfLegalizeId === user_role_id) {
-        resAdminJson(ctx, {
+        resAdminJson(res, {
           state: 'error',
           message: '当前角色特殊原因不可删除'
         })
@@ -181,12 +181,12 @@ class UserRole {
       }
 
       await models.user_role.destroy({ where: { user_role_id } })
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '删除用户角色成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -198,8 +198,8 @@ class UserRole {
    * 创建权限
    * @param   {object} ctx 上下文对象
    */
-  static async createUserAuthority (ctx) {
-    const reqData = ctx.request.body
+  static async createUserAuthority (req, res, next) {
+    const reqData = req.body
 
     try {
       let oneUserAuthorityName = await models.user_authority.findOne({
@@ -217,12 +217,12 @@ class UserRole {
       await models.user_authority.create({
         ...reqData
       })
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '用户权限创建成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -233,17 +233,17 @@ class UserRole {
    * 获取权限列表
    * @param   {object} ctx 上下文对象
    */
-  static async getUserAuthorityList (ctx) {
+  static async getUserAuthorityList (req, res, next) {
     try {
       let userAuthorityAll = await models.user_authority.findAll()
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: userAuthorityAll
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -254,8 +254,8 @@ class UserRole {
    * 修改权限
    * @param   {object} ctx 上下文对象
    */
-  static async updateUserAuthority (ctx) {
-    const reqData = ctx.request.body
+  static async updateUserAuthority (req, res, next) {
+    const reqData = req.body
     try {
       await models.user_authority.update(
         {
@@ -272,12 +272,12 @@ class UserRole {
           }
         }
       )
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '更新权限成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -288,18 +288,18 @@ class UserRole {
    * 删除权限列表
    * @param   {object} ctx 上下文对象
    */
-  static async deleteUserAuthority (ctx) {
-    const { authority_id_arr } = ctx.request.body
+  static async deleteUserAuthority (req, res, next) {
+    const { authority_id_arr } = req.body
     try {
       await models.user_authority.destroy({
         where: { authority_id: { [Op.in]: authority_id_arr } }
       })
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '删除权限树成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -311,8 +311,8 @@ class UserRole {
    * @param   {object} ctx 上下文对象
    */
 
-  static async setUserRoleAuthority (ctx) {
-    const reqData = ctx.request.body
+  static async setUserRoleAuthority (req, res, next) {
+    const reqData = req.body
     try {
       await models.user_role.update(
         { user_authority_ids: reqData.role_authority_list_all.join(',') },
@@ -320,12 +320,12 @@ class UserRole {
           where: { user_role_id: reqData.user_role_id } // 查询条件
         }
       )
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '修改成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

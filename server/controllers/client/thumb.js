@@ -24,10 +24,10 @@ function ErrorMessage (message) {
 const { TimeNow, TimeDistance } = require('../../utils/time')
 
 class Thumb {
-  static async setThumb (ctx) {
+  static async setThumb (req, res, next) {
     try {
-      const { associate_id, type } = ctx.request.body
-      const { user = '' } = ctx.request
+      const { associate_id, type } = req.body
+      const { user = '' } = req
       let associateType = ''
 
       if (!modelInfo[type]) {
@@ -89,7 +89,7 @@ class Thumb {
         })
       }
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: associateType === 'enter' ? '点赞成功' : '取消点赞成功',
         data: {
@@ -97,7 +97,7 @@ class Thumb {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

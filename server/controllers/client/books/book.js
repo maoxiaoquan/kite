@@ -72,9 +72,9 @@ class Book {
    * 新建小书post提交
    * @param   {object} ctx 上下文对象
    */
-  static async createBook (ctx) {
-    let reqData = ctx.request.body
-    let { user = '' } = ctx.request
+  static async createBook (req, res, next) {
+    let reqData = req.body
+    let { user = '' } = req
     try {
       if (!reqData.title) {
         throw new ErrorMessage('请输入小书名字')
@@ -155,7 +155,7 @@ class Book {
         action: virtualAction.create
       })
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '创建成功',
         data: {
@@ -163,7 +163,7 @@ class Book {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -175,9 +175,9 @@ class Book {
    * ajax 查询一篇用户自己的小书章节
    * @param   {object} ctx 上下文对象
    */
-  static async getUserBookInfo (ctx) {
-    let { book_id } = ctx.query
-    let { user = '' } = ctx.request
+  static async getUserBookInfo (req, res, next) {
+    let { book_id } = req.params
+    let { user = '' } = req
     try {
       let oneBook = await models.book.findOne({
         where: {
@@ -188,13 +188,13 @@ class Book {
 
       if (oneBook) {
         if (oneBook) {
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'success',
             message: '获取小书成功',
             data: { book: oneBook }
           })
         } else {
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'error',
             message: '获取小书失败'
           })
@@ -203,7 +203,7 @@ class Book {
         throw new ErrorMessage('获取小书失败')
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -215,9 +215,9 @@ class Book {
    * ajax 查询一篇用户可查看的小书章节
    * @param   {object} ctx 上下文对象
    */
-  static async getBookInfo (ctx) {
-    let { book_id } = ctx.query
-    let { user = '', islogin } = ctx.request
+  static async getBookInfo (req, res, next) {
+    let { book_id } = req.params
+    let { user = '', islogin } = req
     try {
       let oneBook = await models.book.findOne({
         where: {
@@ -262,13 +262,13 @@ class Book {
         )
 
         if (oneBook) {
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'success',
             message: '获取小书成功',
             data: { book: oneBook }
           })
         } else {
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'error',
             message: '获取小书失败'
           })
@@ -277,7 +277,7 @@ class Book {
         throw new ErrorMessage('获取小书失败')
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -289,9 +289,9 @@ class Book {
    * 更新小书
    * @param   {object} ctx 上下文对象
    */
-  static async updateBook (ctx) {
-    let reqData = ctx.request.body
-    let { user = '' } = ctx.request
+  static async updateBook (req, res, next) {
+    let reqData = req.body
+    let { user = '' } = req
     try {
       if (!reqData.title) {
         throw new ErrorMessage('请输入小书名字')
@@ -359,12 +359,12 @@ class Book {
         }
       )
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '修改小书成功'
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -377,9 +377,9 @@ class Book {
    * @param   {object} ctx 上下文对象
    */
 
-  static async deleteBook (ctx) {
-    const resData = ctx.request.body
-    let { user = '' } = ctx.request
+  static async deleteBook (req, res, next) {
+    const resData = req.body
+    let { user = '' } = req
     try {
       await models.book.destroy({
         where: {
@@ -387,12 +387,12 @@ class Book {
           uid: user.uid
         }
       })
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '删除小书章节成功'
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -404,8 +404,8 @@ class Book {
    * 获取小书的上一页下一页
    * @param   {object} ctx 上下文对象
    */
-  static async getNextPrevBook (ctx) {
-    const resData = ctx.request.body
+  static async getNextPrevBook (req, res, next) {
+    const resData = req.body
     try {
       let prev = await models.book.findOne({
         where: {
@@ -429,7 +429,7 @@ class Book {
         order: [['book_id', 'ASC']]
       })
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '获取上一页，下一页成功',
         data: {
@@ -438,7 +438,7 @@ class Book {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

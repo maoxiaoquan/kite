@@ -1,4 +1,6 @@
-const router = require('koa-router')()
+const express = require('express')
+const router = express.Router()
+
 const index = require('../controllers/client/index') // 主页
 const user = require('../controllers/client/user/user') // 注册
 const personalCenter = require('../controllers/client/user/personalCenter') // 用户个人中心

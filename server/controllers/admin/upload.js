@@ -7,13 +7,13 @@ class Picture {
    * 创建标签
    * @param   {object} ctx 上下文对象
    */
-  static async uploadPicture (ctx) {
+  static async uploadPicture (req, res, next) {
     try {
-      await upload('admin').single('file')(ctx)
+      await upload('admin').single('file')(req, res, next)
       let destination = ctx.req.file.destination.split('static')[1]
       let filename = ctx.req.file.filename
-      let origin = ctx.request.header.origin
-      resAdminJson(ctx, {
+      let origin = req.header.origin
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -21,7 +21,7 @@ class Picture {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '上传图片大于1m'
       })

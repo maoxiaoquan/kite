@@ -35,13 +35,13 @@ function ErrorMessage (message) {
 }
 
 class User {
-  static async userSignIn (ctx) {
+  static async userSignIn (req, res, next) {
     const { no_login } = lowdb
       .read()
       .get('config')
       .value()
 
-    let reqDate = ctx.request.body
+    let reqDate = req.body
 
     try {
       if (!reqDate.email) {
@@ -82,7 +82,7 @@ class User {
 
             let token = tokens.ClientSetToken(60 * 60 * 24 * 7, user_info)
 
-            await resClientJson(ctx, {
+            await resClientJson(res, {
               state: 'success',
               message: '登录成功',
               data: {
@@ -90,13 +90,13 @@ class User {
               }
             })
           } else {
-            resClientJson(ctx, {
+            resClientJson(res, {
               state: 'error',
               message: '密码错误'
             })
           }
         } else {
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'error',
             message: '账户不存在'
           })
@@ -104,19 +104,19 @@ class User {
       } else if (reqDate.phone) {
         /* 手机号码登录 */
 
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'error',
           message: '暂时未开放手机号码登录'
         })
       } else {
         /* 非手机号码非邮箱 */
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'error',
           message: '请输入正确的手机号码或者邮箱'
         })
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -125,8 +125,8 @@ class User {
   }
 
   // 注册验证码发送
-  static async userSignUpCode (ctx) {
-    let reqData = ctx.request.body
+  static async userSignUpCode (req, res, next) {
+    let reqData = req.body
     try {
       const { on_register } = lowdb
         .read()
@@ -162,31 +162,31 @@ class User {
             type: 'register'
           })
           await sendVerifyCodeMail(reqData.email, '注册验证码', random)
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'success',
             message: '验证码已发送到邮箱'
           })
         } else {
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'error',
             message: '邮箱已存在'
           })
         }
       } else if (reqData.phone) {
         /* 手机号码注册 */
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'error',
           message: '暂时未开放手机号码注册'
         })
       } else {
         /* 非手机号码非邮箱 */
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'error',
           message: '请输入正确的手机号码或者邮箱'
         })
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -198,9 +198,9 @@ class User {
    * 用户注册post
    * @param   {object} ctx 上下文对象
    */
-  static async userSignUp (ctx) {
+  static async userSignUp (req, res, next) {
     // post 数据
-    let reqData = ctx.request.body
+    let reqData = req.body
     let date = new Date()
     try {
       const { on_register } = lowdb
@@ -251,7 +251,7 @@ class User {
         })
 
         if (oneUserNickname) {
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'error',
             message: '用户昵称已存在，请重新输入'
           })
@@ -306,7 +306,7 @@ class User {
                   email: reqData.email,
                   user_role_ids: config.USER_ROLE.dfId,
                   sex: 0,
-                  reg_ip: ctx.request.ip,
+                  reg_ip: req.ip,
                   enable: true
                 },
                 { transaction: t }
@@ -341,7 +341,7 @@ class User {
               })
           })
 
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'success',
             message: '注册成功，跳往登录页'
           })
@@ -356,7 +356,7 @@ class User {
         throw new ErrorMessage('请输入正确的手机号码或者邮箱')
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -367,8 +367,8 @@ class User {
   /**
    * 获取个人信息get 并且知道用户是否登录，不需要任何参数
    */
-  static async userPersonalInfo (ctx) {
-    let { islogin = '', user = '' } = ctx.request
+  static async userPersonalInfo (req, res, next) {
+    let { islogin = '', user = '' } = req
     try {
       let oneUser = await models.user.findOne({
         where: { uid: user.uid },
@@ -381,7 +381,7 @@ class User {
           'user_role_ids'
         ]
       })
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: '获取成功',
         data: {
@@ -390,7 +390,7 @@ class User {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -402,8 +402,8 @@ class User {
    * 获取用户信息get 不需要登录
    * @param   {object} ctx 上下文对象
    */
-  static async getUserInfo (ctx) {
-    let uid = ctx.query.uid
+  static async getUserInfo (req, res, next) {
+    let uid = req.params.uid
 
     try {
       if (!uid) {
@@ -502,7 +502,7 @@ class User {
         }
       })
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '获取用户所有信息成功',
         data: {
@@ -517,7 +517,7 @@ class User {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -530,9 +530,9 @@ class User {
    * @param   {object} ctx 上下文对象
    */
 
-  static async updateUserInfo (ctx) {
-    let reqData = ctx.request.body
-    let { user = '' } = ctx.request
+  static async updateUserInfo (req, res, next) {
+    let reqData = req.body
+    let { user = '' } = req
     let oneUser = await models.user.findOne({
       where: {
         nickname: reqData.nickname,
@@ -594,7 +594,7 @@ class User {
         }
       )
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '修改用户信息成功',
         data: {
@@ -603,7 +603,7 @@ class User {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -616,9 +616,9 @@ class User {
    * @param   {object} ctx 上下文对象
    */
 
-  static async updateUserPassword (ctx) {
-    let reqData = ctx.request.body
-    let { user = '' } = ctx.request
+  static async updateUserPassword (req, res, next) {
+    let reqData = req.body
+    let { user = '' } = req
     try {
       let oneUser = await models.user.findOne({
         where: {
@@ -660,18 +660,18 @@ class User {
             }
           }
         )
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'success',
           message: '修改用户密码成功'
         })
       } else {
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'error',
           message: '旧密码错误，请重新输入'
         })
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -683,8 +683,8 @@ class User {
    * 获取未读用户消息数量
    * @param   {object} ctx 上下文对象
    */
-  static async getUnreadMessageCount (ctx) {
-    let { user = '' } = ctx.request
+  static async getUnreadMessageCount (req, res, next) {
+    let { user = '' } = req
     try {
       let count = await models.user_message.count({
         where: {
@@ -693,7 +693,7 @@ class User {
         }
       })
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '数据返回成功',
         data: {
@@ -701,7 +701,7 @@ class User {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -713,10 +713,10 @@ class User {
    * 获取用户消息
    * @param   {object} ctx 上下文对象
    */
-  static async getUserMessageList (ctx) {
-    let page = ctx.query.page || 1
-    let pageSize = Number(ctx.query.pageSize) || 10
-    let { user = '' } = ctx.request
+  static async getUserMessageList (req, res, next) {
+    let page = req.params.page || 1
+    let pageSize = Number(req.params.pageSize) || 10
+    let { user = '' } = req
     try {
       let allUserMessage = await models.user_message.findAll({
         // 获取所有未读消息id
@@ -945,7 +945,7 @@ class User {
         )
       }
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: '数据返回成功',
         data: {
@@ -956,7 +956,7 @@ class User {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -968,9 +968,9 @@ class User {
    * 删除用户消息
    * @param   {object} ctx 上下文对象
    */
-  static async deleteUserMessage (ctx) {
-    let reqData = ctx.query
-    let { user = '' } = ctx.request
+  static async deleteUserMessage (req, res, next) {
+    let reqData = req.params
+    let { user = '' } = req
     try {
       let oneUserMessage = await models.user_message.findOne({
         where: {
@@ -988,12 +988,12 @@ class User {
       } else {
         throw new ErrorMessage('非法操作')
       }
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '删除用户消息成功'
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -1006,8 +1006,8 @@ class User {
    * @param   {object} ctx 上下文对象
    */
 
-  static async sendResetPasswordCode (ctx) {
-    let reqData = ctx.request.body
+  static async sendResetPasswordCode (req, res, next) {
+    let reqData = req.body
     try {
       if (reqData.type === 'email') {
         /* 邮箱注册验证码 */
@@ -1042,31 +1042,31 @@ class User {
               .format() /* 时间 */
           })
           sendVerifyCodeMail(reqData.email, '重置密码验证码', random)
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'success',
             message: '验证码已发送到邮箱'
           })
         } else {
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'error',
             message: '邮箱不存在'
           })
         }
       } else if (reqData.type === 'phone') {
         /* 手机号码 */
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'error',
           message: '暂时未开放手机号码修改密码'
         })
       } else {
         /* 非手机号码非邮箱 */
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'error',
           message: '请输入正确的手机号码或者邮箱'
         })
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -1079,8 +1079,8 @@ class User {
    * @param   {object} ctx 上下文对象
    */
 
-  static async userResetPassword (ctx) {
-    let reqData = ctx.request.body
+  static async userResetPassword (req, res, next) {
+    let reqData = req.body
     try {
       if (!reqData.email) {
         throw new ErrorMessage('邮箱不存在')
@@ -1148,12 +1148,12 @@ class User {
               }
             }
           )
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'success',
             message: '修改用户密码成功'
           })
         } else {
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'error',
             message: '邮箱不存在'
           })
@@ -1161,19 +1161,19 @@ class User {
       } else if (reqData.type === 'phone') {
         // 手机号码重置密码
 
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'error',
           message: '暂时未开放手机号码重置密码'
         })
       } else {
         /* 非手机号码非邮箱 */
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'error',
           message: '请输入正确的手机号码或者邮箱'
         })
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -1185,7 +1185,7 @@ class User {
    *  获取所有用户角色标签
    * @param   {object} ctx 上下文对象
    */
-  static async getUserRoleAll (ctx) {
+  static async getUserRoleAll (req, res, next) {
     // get 页面
     try {
       let allUserRole = await models.user_role.findAll({
@@ -1194,7 +1194,7 @@ class User {
           is_show: true
         }
       })
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '获取成功',
         data: {
@@ -1202,7 +1202,7 @@ class User {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -1214,14 +1214,14 @@ class User {
    *  获取用户关联的一些信息
    * @param   {object} ctx 上下文对象
    */
-  static async getUserAssociateinfo (ctx) {
+  static async getUserAssociateinfo (req, res, next) {
     // get 页面
     try {
       let articleThumdId = [] // 文章点赞id
       let dynamicThumdId = [] // 动态点赞id
-      let { user = '', islogin } = ctx.request
+      let { user = '', islogin } = req
       if (!islogin) {
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'success',
           message: '获取成功',
           data: {
@@ -1247,7 +1247,7 @@ class User {
         }
       }
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '获取成功',
         data: {
@@ -1256,7 +1256,7 @@ class User {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

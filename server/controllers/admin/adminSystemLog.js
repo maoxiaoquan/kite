@@ -20,8 +20,8 @@ class AdminSystemLog {
    * 获取后台系统日志操作
    * @param   {object} ctx 上下文对象
    */
-  static async getAdminSystemLogList (ctx) {
-    const { page = 1, pageSize = 10 } = ctx.query
+  static async getAdminSystemLogList (req, res, next) {
+    const { page = 1, pageSize = 10 } = req.params
     try {
       let { count, rows } = await models.system_log.findAndCountAll({
         where: '', // 为空，获取全部，也可以自己添加条件
@@ -43,7 +43,7 @@ class AdminSystemLog {
           })
         )
       }
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -52,7 +52,7 @@ class AdminSystemLog {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -62,16 +62,16 @@ class AdminSystemLog {
   /**
    * 删除后台系统日志
    */
-  static async deleteAdminSystemLog (ctx) {
-    const { id } = ctx.request.body
+  static async deleteAdminSystemLog (req, res, next) {
+    const { id } = req.body
     try {
       await models.system_log.destroy({ where: { id } })
-      await resAdminJson(ctx, {
+      await resAdminJson(res, {
         state: 'success',
         message: '删除后台系统日志成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

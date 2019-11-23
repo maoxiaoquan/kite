@@ -1,4 +1,4 @@
-const Koa = require('koa')
+import express from 'express'
 
-const app = new Koa()
+const app = express()
 module.exports = app

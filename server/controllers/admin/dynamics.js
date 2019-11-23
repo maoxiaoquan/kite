@@ -13,8 +13,8 @@ class Dynamics {
    * 获取用户列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async getDynamicList (ctx) {
-    const { page = 1, pageSize = 10, content, status, type } = ctx.request.body
+  static async getDynamicList (req, res, next) {
+    const { page = 1, pageSize = 10, content, status, type } = req.body
 
     let whereParams = {} // 定义查询条件
 
@@ -46,7 +46,7 @@ class Dynamics {
         )
       }
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -55,7 +55,7 @@ class Dynamics {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -66,8 +66,8 @@ class Dynamics {
    * 更新动态
    * @param   {object} ctx 上下文对象
    */
-  static async updateDynamic (ctx) {
-    const { id, status, type, rejection_reason } = ctx.request.body
+  static async updateDynamic (req, res, next) {
+    const { id, status, type, rejection_reason } = req.body
     try {
       await models.dynamic.update(
         {
@@ -81,12 +81,12 @@ class Dynamics {
           }
         }
       )
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '更新动态成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -99,13 +99,13 @@ class Dynamics {
    * 删除动态判断是否有动态
    * 无关联则直接删除动态，有关联则开启事务同时删除与动态的关联
    */
-  static async deleteDynamic (ctx) {
-    const { id } = ctx.request.body
+  static async deleteDynamic (req, res, next) {
+    const { id } = req.body
     try {
       let oneDynamic = await models.dynamic.findOne({ where: { id } })
       if (oneDynamic) {
         await models.dynamic.destroy({ where: { id } })
-        resAdminJson(ctx, {
+        resAdminJson(res, {
           state: 'success',
           message: '删除动态成功'
         })
@@ -113,7 +113,7 @@ class Dynamics {
         throw new ErrorMessage('删除动态失败!')
       }
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

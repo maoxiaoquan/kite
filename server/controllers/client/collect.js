@@ -31,10 +31,10 @@ function ErrorMessage (message) {
 // 获取动态专题详情
 
 class Collect {
-  static async setCollect (ctx) {
+  static async setCollect (req, res, next) {
     try {
-      const { associate_id, type } = ctx.request.body
-      const { user = '' } = ctx.request
+      const { associate_id, type } = req.body
+      const { user = '' } = req
       let associateType = ''
       if (!modelInfo[type]) {
         throw new ErrorMessage('类型不存在，系统已禁止行为')
@@ -90,7 +90,7 @@ class Collect {
         })
       }
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: associateType === 'enter' ? '收藏成功' : '取消收藏成功',
         data: {
@@ -98,7 +98,7 @@ class Collect {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

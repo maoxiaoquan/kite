@@ -1,4 +1,4 @@
-const { ApolloServer } = require('apollo-server-koa')
+const { ApolloServer } = require('apollo-server-express')
 const { makeExecutableSchema } = require('graphql-tools')
 const { typeDefs, resolvers } = require('./models')
 const isProd = process.env.NODE_ENV === 'production'
@@ -22,8 +22,7 @@ function graphql (app) {
     formatError: error => ({
       code: error.extensions.code,
       message: error.message
-    }),
-    context: ({ ctx }) => ({ ctx })
+    })
   })
 
   server.applyMiddleware({ app, path: '/graphql' })

@@ -8,9 +8,9 @@ const chokidar = require('chokidar')
 const clientConfig = require('./webpack.dev.config')
 const serverConfig = require('./webpack.server.dev.config')
 // webpack热加载需要
-const webpackDevMiddleware = require('koa-webpack-dev-middleware')
+const webpackDevMiddleware = require('webpack-dev-middleware')
 // 配合热加载实现模块热替换
-const webpackHotMiddleware = require('koa-webpack-hot-middleware')
+const webpackHotMiddleware = require('webpack-hot-middleware')
 
 // 读取vue-ssr-webpack-plugin生成的文件
 const readFile = (fs, file) => {

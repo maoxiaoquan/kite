@@ -27,12 +27,12 @@ function ErrorMessage (message) {
 /* 评论模块 */
 
 class dynamicComment {
-  static async getDynamicCommentList (ctx) {
-    let dynamic_id = ctx.query.dynamic_id
-    let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 10
-    let childPageSize = ctx.query.childPageSize || ''
-    let parent_id = ctx.query.parent_id || 0
+  static async getDynamicCommentList (req, res, next) {
+    let dynamic_id = req.params.dynamic_id
+    let page = req.params.page || 1
+    let pageSize = req.params.pageSize || 10
+    let childPageSize = req.params.childPageSize || ''
+    let parent_id = req.params.parent_id || 0
 
     try {
       let { count, rows } = await models.dynamic_comment.findAndCountAll({
@@ -136,7 +136,7 @@ class dynamicComment {
         rows[item].setDataValue('children', childAllComment)
       }
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: '获取评论列表成功',
         data: {
@@ -147,7 +147,7 @@ class dynamicComment {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -155,10 +155,10 @@ class dynamicComment {
     }
   }
 
-  static async getDynamicCommentAll (ctx) {
-    let dynamic_id = ctx.query.dynamic_id
-    let parent_id = ctx.query.parent_id || 0
-    let sort = ctx.query.sort || ''
+  static async getDynamicCommentAll (req, res, next) {
+    let dynamic_id = req.params.dynamic_id
+    let parent_id = req.params.parent_id || 0
+    let sort = req.params.sort || ''
 
     let order = []
 
@@ -268,7 +268,7 @@ class dynamicComment {
         allDynamicComment[item].setDataValue('children', childAllComment)
       }
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: '获取评论列表成功',
         data: {
@@ -276,7 +276,7 @@ class dynamicComment {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -288,9 +288,9 @@ class dynamicComment {
    * 新建评论post提交
    * @param   {object} ctx 上下文对象
    */
-  static async createDynamicComment (ctx) {
-    let reqData = ctx.request.body
-    let { user = '' } = ctx.request
+  static async createDynamicComment (req, res, next) {
+    let reqData = req.body
+    let { user = '' } = req
 
     try {
       if (!reqData.content) {
@@ -453,7 +453,7 @@ class dynamicComment {
             })
           }
 
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'success',
             data: _data,
             message:
@@ -463,13 +463,13 @@ class dynamicComment {
           })
         })
         .catch(err => {
-          resClientJson(ctx, {
+          resClientJson(res, {
             state: 'error',
             message: '回复失败:' + err
           })
         })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -481,9 +481,9 @@ class dynamicComment {
    * 删除评论post提交
    * @param   {object} ctx 上下文对象
    */
-  static async deleteDynamicComment (ctx) {
-    let reqData = ctx.request.body
-    let { user = '' } = ctx.request
+  static async deleteDynamicComment (req, res, next) {
+    let reqData = req.body
+    let { user = '' } = req
 
     try {
       let oneDynamicComment = await models.dynamic_comment.findOne({
@@ -530,12 +530,12 @@ class dynamicComment {
         { where: { id: oneDynamicComment.dynamic_id } }
       )
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '删除成功'
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

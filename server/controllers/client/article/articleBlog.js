@@ -34,16 +34,16 @@ class dynamicBlog {
    * 获取所有文章专题get
    * @param   {object} ctx 上下文对象
    */
-  static async getUserArticleBlogAll (ctx) {
+  static async getUserArticleBlogAll (req, res, next) {
     /* 获取所有文章专题 */
-    let { uid } = ctx.query
+    let { uid } = req.params
     try {
       let allUserArticleBlog = await models.article_blog.findAll({
         where: {
           uid
         }
       })
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '获取当前用户个人专题成功',
         data: {
@@ -51,7 +51,7 @@ class dynamicBlog {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -63,7 +63,7 @@ class dynamicBlog {
    * 创建用户专题
    * @param   {object} ctx 上下文对象
    */
-  static async createUserArticleBlog (ctx) {
+  static async createUserArticleBlog (req, res, next) {
     /* 创建用户专题 */
     let {
       blog_name,
@@ -73,8 +73,8 @@ class dynamicBlog {
       is_public,
       enable,
       tag_ids
-    } = ctx.request.body
-    let { user = '' } = ctx.request
+    } = req.body
+    let { user = '' } = req
     try {
       if (blog_name.length === 0) {
         throw new ErrorMessage('请输入文章专题名字')
@@ -187,12 +187,12 @@ class dynamicBlog {
         action: virtualAction.create
       })
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '文章个人专栏创建成功'
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -204,9 +204,9 @@ class dynamicBlog {
    * 更新用户专题
    * @param   {object} ctx 上下文对象
    */
-  static async updateUserArticleBlog (ctx) {
-    const resData = ctx.request.body
-    let { user = '' } = ctx.request
+  static async updateUserArticleBlog (req, res, next) {
+    const resData = req.body
+    let { user = '' } = req
 
     try {
       let oneUserArticleBlog = await models.article_blog.findOne({
@@ -298,12 +298,12 @@ class dynamicBlog {
           }
         }
       )
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '更新成功'
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -316,9 +316,9 @@ class dynamicBlog {
    * @param   {object} ctx 上下文对象
    */
 
-  static async deleteUserArticleBlog (ctx) {
-    const resData = ctx.request.body
-    let { user = '' } = ctx.request
+  static async deleteUserArticleBlog (req, res, next) {
+    const resData = req.body
+    let { user = '' } = req
     try {
       await models.article_blog.destroy({
         where: {
@@ -326,12 +326,12 @@ class dynamicBlog {
           uid: user.uid
         }
       })
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '删除用户个人专栏成功'
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -341,8 +341,8 @@ class dynamicBlog {
 
   // 获取个人专栏详细信息信息
 
-  static async getArticleBlogView (ctx) {
-    let blogId = ctx.query.blogId
+  static async getArticleBlogView (req, res, next) {
+    let blogId = req.params.blogId
     try {
       let oneArticleBlog = await models.article_blog.findOne({
         where: {
@@ -413,7 +413,7 @@ class dynamicBlog {
       )
 
       if (oneArticleBlog) {
-        await resClientJson(ctx, {
+        await resClientJson(res, {
           state: 'success',
           message: 'success',
           data: {
@@ -421,7 +421,7 @@ class dynamicBlog {
           }
         })
       } else {
-        await resClientJson(ctx, {
+        await resClientJson(res, {
           state: 'success',
           message: '文章个人专栏不存在',
           data: {
@@ -430,7 +430,7 @@ class dynamicBlog {
         })
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -439,11 +439,11 @@ class dynamicBlog {
   }
 
   // 获取个人专栏所含有的文章
-  static async getArticleBlogArticleList (ctx) {
-    let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 24
-    let sort = ctx.query.sort
-    let blogId = ctx.query.blogId
+  static async getArticleBlogArticleList (req, res, next) {
+    let page = req.params.page || 1
+    let pageSize = req.params.pageSize || 24
+    let sort = req.params.sort
+    let blogId = req.params.blogId
 
     let whereParams = {
       blog_ids: blogId,
@@ -496,7 +496,7 @@ class dynamicBlog {
         )
       }
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: 'success',
         data: {
@@ -507,7 +507,7 @@ class dynamicBlog {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -517,10 +517,10 @@ class dynamicBlog {
 
   // 获取用户like的专栏列表
 
-  static async getLikeArticleBlogList (ctx) {
-    let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 24
-    let uid = ctx.query.uid || ''
+  static async getLikeArticleBlogList (req, res, next) {
+    let page = req.params.page || 1
+    let pageSize = req.params.pageSize || 24
+    let uid = req.params.uid || ''
     let whereParams = {
       is_public: true,
       status: {
@@ -590,7 +590,7 @@ class dynamicBlog {
         )
       }
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: 'success',
         data: {
@@ -601,7 +601,7 @@ class dynamicBlog {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

@@ -28,20 +28,20 @@ function ErrorMessage (message) {
 }
 
 class Init {
-  static async cliSetStep (ctx) {
-    let formData = ctx.request.body
+  static async cliSetStep (req, res, next) {
+    let formData = req.body
 
     await lowdb
       .set('cli.step', formData.step) // 通过set方法来对对象操作
       .write()
 
-    await resClientJson(ctx, {
+    await resClientJson(res, {
       state: 'success',
       message: 'step update success'
     })
   }
 
-  static async cliInit (ctx) {
+  static async cliInit (req, res, next) {
     await render(ctx, {
       title: 'init project',
       view_url: '_cli/init',
@@ -50,7 +50,7 @@ class Init {
     })
   }
 
-  static async cliInitStepOne (ctx) {
+  static async cliInitStepOne (req, res, next) {
     await render(ctx, {
       title: 'init project',
       view_url: '_cli/init_step_one',
@@ -59,7 +59,7 @@ class Init {
     })
   }
 
-  static async cliInitStepTwo (ctx) {
+  static async cliInitStepTwo (req, res, next) {
     await render(ctx, {
       title: 'init project',
       view_url: '_cli/init_step_two',
@@ -68,7 +68,7 @@ class Init {
     })
   }
 
-  static async cliInitStepThree (ctx) {
+  static async cliInitStepThree (req, res, next) {
     await render(ctx, {
       title: 'init project',
       view_url: '_cli/init_step_three',
@@ -77,9 +77,9 @@ class Init {
     })
   }
 
-  static async cliSetMysql (ctx) {
+  static async cliSetMysql (req, res, next) {
     // set mysql 数据
-    let formData = ctx.request.body
+    let formData = req.body
 
     try {
       await lowdb.set('mysql', { ...formData }).write()
@@ -109,12 +109,12 @@ class Init {
 
       await sequelize.sync({ force: true })
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: 'mysql table create success'
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -122,8 +122,8 @@ class Init {
     }
   }
 
-  static async cliCreateAdminUser (ctx) {
-    const reqData = ctx.request.body
+  static async cliCreateAdminUser (req, res, next) {
+    const reqData = req.body
     const configMysql = lowdb
       .read()
       .get('mysql')
@@ -242,7 +242,7 @@ class Init {
         nickname: reqData.nickname,
         password: encrypt(reqData.password, config.ENCRYPT_KEY),
         admin_role_ids: config.SUPER_ROLE_ID,
-        // reg_ip: ctx.request.ip,
+        // reg_ip: req.ip,
         enable: true
       })
 
@@ -253,12 +253,12 @@ class Init {
         })
         .write()
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: '注册成功'
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -266,7 +266,7 @@ class Init {
     }
   }
 
-  static async cliRestartProject (ctx) {
+  static async cliRestartProject (req, res, next) {
     // 项目初始化成功后重启
     const shell = require('./shell')
     shell.esc()

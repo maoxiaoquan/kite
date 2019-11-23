@@ -28,10 +28,10 @@ class Like {
    * 用户like文章post
    * @param   {object} ctx 上下文对象
    */
-  static async setLike (ctx) {
+  static async setLike (req, res, next) {
     try {
-      const { associate_id, type } = ctx.request.body
-      const { user = '' } = ctx.request
+      const { associate_id, type } = req.body
+      const { user = '' } = req
       let associateType = ''
 
       if (!modelInfo[type]) {
@@ -93,7 +93,7 @@ class Like {
         })
       }
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: associateType === 'enter' ? '喜欢成功' : '取消喜欢成功',
         data: {
@@ -101,7 +101,7 @@ class Like {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

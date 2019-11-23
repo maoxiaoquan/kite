@@ -1,4 +1,5 @@
-const router = require('koa-router')()
+const express = require('express')
+const router = express.Router()
 const index = require('../controllers/cli/index') // 主页
 const init = require('../controllers/cli/init') // init
 

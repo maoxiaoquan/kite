@@ -15,10 +15,10 @@ const {
 const userVirtual = require('../../common/userVirtual')
 
 class Subscribe {
-  static async getArticleTagList (ctx) {
-    let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 24
-    let tag_name = ctx.query.tag_name
+  static async getArticleTagList (req, res, next) {
+    let page = req.params.page || 1
+    let pageSize = req.params.pageSize || 24
+    let tag_name = req.params.tag_name
     let whereParams = {
       enable: 1
     }
@@ -61,7 +61,7 @@ class Subscribe {
         )
       }
 
-      await resClientJson(ctx, {
+      await resClientJson(res, {
         state: 'success',
         message: 'subscribe',
         data: {
@@ -73,7 +73,7 @@ class Subscribe {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -81,10 +81,10 @@ class Subscribe {
     }
   }
 
-  static async getArticleTagListMy (ctx) {
-    let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 25
-    let { user = '' } = ctx.request
+  static async getArticleTagListMy (req, res, next) {
+    let page = req.params.page || 1
+    let pageSize = req.params.pageSize || 25
+    let { user = '' } = req
     let whereParams = {
       enable: 1
     }
@@ -139,7 +139,7 @@ class Subscribe {
           )
         }
 
-        await resClientJson(ctx, {
+        await resClientJson(res, {
           state: 'success',
           message: 'subscribe',
           data: {
@@ -150,7 +150,7 @@ class Subscribe {
           }
         })
       } else {
-        await resClientJson(ctx, {
+        await resClientJson(res, {
           state: 'success',
           message: 'subscribe',
           data: {
@@ -162,7 +162,7 @@ class Subscribe {
         })
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -175,8 +175,8 @@ class Subscribe {
    * @param   {object} ctx 上下文对象
    */
 
-  static async getSubscribeTagMyAll (ctx) {
-    let { user = '' } = ctx.request
+  static async getSubscribeTagMyAll (req, res, next) {
+    let { user = '' } = req
     try {
       let allSubscribeArticleTag = await models.attention.findAll({
         where: {
@@ -185,7 +185,7 @@ class Subscribe {
           is_associate: true
         }
       })
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '获取当前用户订阅的标签成功',
         data: {
@@ -193,7 +193,7 @@ class Subscribe {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

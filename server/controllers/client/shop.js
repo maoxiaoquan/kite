@@ -31,10 +31,10 @@ class Shop {
    * @param   {object} ctx 上下文对象
    */
   // 购买操作
-  static async Buy (ctx) {
+  static async Buy (req, res, next) {
     try {
-      let { product_id, product_type } = ctx.request.body
-      let { user = '' } = ctx.request
+      let { product_id, product_type } = req.body
+      let { user = '' } = req
 
       const productTypeAll = Object.keys(productTypeInfo)
 
@@ -220,13 +220,13 @@ class Shop {
         })
       })
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         data: {},
         message: '购买成功'
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -237,11 +237,11 @@ class Shop {
    * 我的订单列表
    * @param   {object} ctx 上下文对象
    */
-  static async orderList (ctx) {
-    let page = ctx.query.page || 1
-    let product_type = ctx.query.product_type || ''
-    let pageSize = Number(ctx.query.pageSize) || 10
-    let { user = '' } = ctx.request
+  static async orderList (req, res, next) {
+    let page = req.params.page || 1
+    let product_type = req.params.product_type || ''
+    let pageSize = Number(req.params.pageSize) || 10
+    let { user = '' } = req
     let whereParams = {
       // 查询参数
       uid: user.uid
@@ -267,7 +267,7 @@ class Shop {
         rows[i].setDataValue('productInfo', productInfo)
       }
 
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         data: {
           count,
@@ -278,7 +278,7 @@ class Shop {
         message: '获取订单信息成功'
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

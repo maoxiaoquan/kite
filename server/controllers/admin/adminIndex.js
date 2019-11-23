@@ -3,7 +3,7 @@ const { resAdminJson } = require('../../utils/resData')
 const moment = require('moment')
 
 class AdminIndex {
-  static async adminIndexStatistics (ctx) {
+  static async adminIndexStatistics (req, res, next) {
     try {
       const adminUserCount = await models.admin_user.count() // 后台用户统计
       const userCount = await models.user.count() // 前台用户统计
@@ -158,7 +158,7 @@ class AdminIndex {
         )
       }
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '获取统计信息成功',
         data: {
@@ -209,7 +209,7 @@ class AdminIndex {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
