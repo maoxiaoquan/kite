@@ -1,0 +1,57 @@
+.layout-index {
+  .big-statistics {
+    .big-widget-icon {
+      font-size: 30px;
+      color: #fff;
+    }
+  }
+  .layout-statistics {
+    .left-view {
+      .separate-card {
+        height: 160px;
+        overflow: hidden;
+      }
+    }
+    .right-view {
+      .total-card {
+        height: 350px;
+        overflow: hidden;
+      }
+      .header-title {
+        padding-bottom: 15px;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .layout-detailed {
+    .card .card-body {
+      height: 500px;
+      .limit-height {
+        height: 430px;
+        padding-right: 10px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        &::-webkit-scrollbar-track-piece {
+          //滚动条凹槽的颜色，还可以设置边框属性
+          background-color: #fff;
+        }
+        &::-webkit-scrollbar {
+          //滚动条的宽度
+          width: 8px;
+          height: 8px;
+        }
+        &::-webkit-scrollbar-thumb {
+          //滚动条的设置
+          background-color: #dddddd;
+          background-clip: padding-box;
+          min-height: 28px;
+          border-radius: 3px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+          background-color: #bbb;
+        }
+      }
+    }
+  }
+}

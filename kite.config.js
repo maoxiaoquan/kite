@@ -9,7 +9,7 @@ function ProcessCwd (val) {
 }
 
 module.exports = {
-  version: 0.7,
+  version: 0.8,
   theme: {
     'font-family': 'Microsoft YaHei'
   },
@@ -23,7 +23,8 @@ module.exports = {
       changeOrigin: true,
       secure: false,
       pathRewrite: {
-        '^/client': '/client'
+        '^/client': '/client',
+        '^/graphql': '/graphql'
       }
     },
     assetsRoot: IS_NODE_ENV

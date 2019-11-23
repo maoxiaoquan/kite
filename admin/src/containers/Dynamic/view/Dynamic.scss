@@ -1,0 +1,37 @@
+.admin-dynamic {
+  .dynamic-article-bar {
+    margin-bottom: 20px;
+    .select-view {
+      width: 150px;
+    }
+    button {
+      margin: 0 5px;
+    }
+  }
+  .dynamic-title {
+    color: #00bcd4;
+    &:hover {
+      color: #00d0b2;
+    }
+  }
+  .img-preview {
+    img {
+      width: 70px;
+      height: 70px;
+      margin-right: 5px;
+      margin-bottom: 5px;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+    }
+  }
+  .dynamic-content {
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    width: 300px;
+  }
+}
