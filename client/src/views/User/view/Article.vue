@@ -79,14 +79,6 @@ import {
 } from '@utils/constant'
 export default {
   name: 'userArticle',
-  metaInfo () {
-    return {
-      title: '个人专栏',
-      htmlAttrs: {
-        lang: 'zh'
-      }
-    }
-  },
   data () {
     return {
       isCreateBlogShow: false,

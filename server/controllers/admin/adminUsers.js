@@ -176,7 +176,7 @@ class AdminUsers {
    * @param   {object} ctx 上下文对象
    */
   static async getAdminUserList (req, res, next) {
-    const { page = 1, pageSize = 10 } = req.params
+    const { page = 1, pageSize = 10 } = req.query
     try {
       let { count, rows } = await models.admin_user.findAndCountAll({
         attributes: [

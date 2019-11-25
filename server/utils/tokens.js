@@ -6,7 +6,7 @@ class Tokens {
     let reqBody = req.body
     let token =
       reqBody.accessToken ||
-      req.params.accessToken ||
+      req.query.accessToken ||
       req.headers['access-token'] ||
       req.cookies.accessToken
     if (token) {
@@ -45,7 +45,7 @@ class Tokens {
     let reqBody = req.body
     let token =
       reqBody.accessToken ||
-      req.params.accessToken ||
+      req.query.accessToken ||
       req.headers['access-token'] ||
       req.cookies.accessToken
     // 存在token，解析token
@@ -66,7 +66,7 @@ class Tokens {
   static async AdminVerifyToken (req, res, next) {
     let reqBody = req.body
     let token =
-      reqBody.token || req.params.token || req.headers['x-access-token']
+      reqBody.token || req.query.token || req.headers['x-access-token']
 
     if (token) {
       // 存在token，解析token

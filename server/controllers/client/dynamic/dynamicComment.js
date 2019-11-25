@@ -28,11 +28,11 @@ function ErrorMessage (message) {
 
 class dynamicComment {
   static async getDynamicCommentList (req, res, next) {
-    let dynamic_id = req.params.dynamic_id
-    let page = req.params.page || 1
-    let pageSize = req.params.pageSize || 10
-    let childPageSize = req.params.childPageSize || ''
-    let parent_id = req.params.parent_id || 0
+    let dynamic_id = req.query.dynamic_id
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 10
+    let childPageSize = req.query.childPageSize || ''
+    let parent_id = req.query.parent_id || 0
 
     try {
       let { count, rows } = await models.dynamic_comment.findAndCountAll({
@@ -156,9 +156,9 @@ class dynamicComment {
   }
 
   static async getDynamicCommentAll (req, res, next) {
-    let dynamic_id = req.params.dynamic_id
-    let parent_id = req.params.parent_id || 0
-    let sort = req.params.sort || ''
+    let dynamic_id = req.query.dynamic_id
+    let parent_id = req.query.parent_id || 0
+    let sort = req.query.sort || ''
 
     let order = []
 

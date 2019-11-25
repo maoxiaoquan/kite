@@ -14,10 +14,10 @@ const {
 
 class Index {
   static async getIndex (req, res, next) {
-    let page = req.params.page || 1
-    let pageSize = req.params.pageSize || 25
-    let columnEnName = req.params.columnEnName || ''
-    let sort = req.params.sort || 'newest'
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 25
+    let columnEnName = req.query.columnEnName || ''
+    let sort = req.query.sort || 'newest'
     let whereArticleParams = {} // 查询参数
     let whereArticleColumnParams = {} // 查询参数
     let orderParams = [] // 排序参数

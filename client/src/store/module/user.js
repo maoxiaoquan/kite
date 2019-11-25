@@ -15,7 +15,9 @@ const state = () => ({
     user_role_all: []
   },
   messageCount: 0, // 用户未读
-  associateInfo: {}
+  associateInfo: {
+    articleThumdId: []
+  }
 })
 
 const mutations = {
@@ -44,7 +46,7 @@ const mutations = {
   },
   SET_ASSOCIATE_INFO (state, data) {
     // 用户关联信心
-    state.associateInfo = data
+    state.associateInfo = data || {}
   }
 }
 

@@ -121,7 +121,7 @@ class adminRoleAuthority {
    * @param   {object} ctx 上下文对象
    */
   static async getAdminRoleList (req, res, next) {
-    const { page = 1, pageSize = 10 } = req.params
+    const { page = 1, pageSize = 10 } = req.query
     try {
       let { count, rows } = await models.admin_role.findAndCountAll({
         attributes: [

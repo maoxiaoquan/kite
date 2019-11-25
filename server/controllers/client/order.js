@@ -37,8 +37,8 @@ class Order {
    * @param   {object} ctx 上下文对象
    */
   static async getVirtualList (req, res, next) {
-    let page = req.params.page || 1
-    let pageSize = Number(req.params.pageSize) || 10
+    let page = req.query.page || 1
+    let pageSize = Number(req.query.pageSize) || 10
     let { user = '' } = req
     try {
       let { count, rows } = await models.virtual.findAndCountAll({

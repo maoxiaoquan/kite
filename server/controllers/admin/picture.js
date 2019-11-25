@@ -52,7 +52,7 @@ class Picture {
    * @param   {object} ctx 上下文对象
    */
   static async getPictureList (req, res, next) {
-    const { page = 1, pageSize = 10 } = req.params
+    const { page = 1, pageSize = 10 } = req.query
     try {
       let { count, rows } = await models.picture.findAndCountAll({
         attributes: [

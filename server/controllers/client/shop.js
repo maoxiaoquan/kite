@@ -238,9 +238,9 @@ class Shop {
    * @param   {object} ctx 上下文对象
    */
   static async orderList (req, res, next) {
-    let page = req.params.page || 1
-    let product_type = req.params.product_type || ''
-    let pageSize = Number(req.params.pageSize) || 10
+    let page = req.query.page || 1
+    let product_type = req.query.product_type || ''
+    let pageSize = Number(req.query.pageSize) || 10
     let { user = '' } = req
     let whereParams = {
       // 查询参数

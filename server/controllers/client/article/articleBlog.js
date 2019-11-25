@@ -36,7 +36,7 @@ class dynamicBlog {
    */
   static async getUserArticleBlogAll (req, res, next) {
     /* 获取所有文章专题 */
-    let { uid } = req.params
+    let { uid } = req.query
     try {
       let allUserArticleBlog = await models.article_blog.findAll({
         where: {
@@ -342,7 +342,7 @@ class dynamicBlog {
   // 获取个人专栏详细信息信息
 
   static async getArticleBlogView (req, res, next) {
-    let blogId = req.params.blogId
+    let blogId = req.query.blogId
     try {
       let oneArticleBlog = await models.article_blog.findOne({
         where: {
@@ -440,10 +440,10 @@ class dynamicBlog {
 
   // 获取个人专栏所含有的文章
   static async getArticleBlogArticleList (req, res, next) {
-    let page = req.params.page || 1
-    let pageSize = req.params.pageSize || 24
-    let sort = req.params.sort
-    let blogId = req.params.blogId
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 24
+    let sort = req.query.sort
+    let blogId = req.query.blogId
 
     let whereParams = {
       blog_ids: blogId,
@@ -518,9 +518,9 @@ class dynamicBlog {
   // 获取用户like的专栏列表
 
   static async getLikeArticleBlogList (req, res, next) {
-    let page = req.params.page || 1
-    let pageSize = req.params.pageSize || 24
-    let uid = req.params.uid || ''
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 24
+    let uid = req.query.uid || ''
     let whereParams = {
       is_public: true,
       status: {

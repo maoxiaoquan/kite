@@ -176,7 +176,7 @@ class Book {
    * @param   {object} ctx 上下文对象
    */
   static async getUserBookInfo (req, res, next) {
-    let { book_id } = req.params
+    let { book_id } = req.query
     let { user = '' } = req
     try {
       let oneBook = await models.book.findOne({
@@ -216,7 +216,7 @@ class Book {
    * @param   {object} ctx 上下文对象
    */
   static async getBookInfo (req, res, next) {
-    let { book_id } = req.params
+    let { book_id } = req.query
     let { user = '', islogin } = req
     try {
       let oneBook = await models.book.findOne({

@@ -7,7 +7,7 @@ class Users {
    * @param   {object} ctx 上下文对象
    */
   static async getUserList (req, res, next) {
-    const { page = 1, pageSize = 10 } = req.params
+    const { page = 1, pageSize = 10 } = req.query
     try {
       let { count, rows } = await models.user.findAndCountAll({
         attributes: [
@@ -138,7 +138,7 @@ class Users {
    * @param   {object} ctx 上下文对象
    */
   static async getAvatarReview (req, res, next) {
-    const { page = 1, pageSize = 10, status = 1 } = req.params
+    const { page = 1, pageSize = 10, status = 1 } = req.query
     try {
       let { count, rows } = await models.user_info.findAndCountAll({
         where: {

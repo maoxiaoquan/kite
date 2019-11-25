@@ -403,7 +403,7 @@ class User {
    * @param   {object} ctx 上下文对象
    */
   static async getUserInfo (req, res, next) {
-    let uid = req.params.uid
+    let uid = req.query.uid
 
     try {
       if (!uid) {
@@ -714,8 +714,8 @@ class User {
    * @param   {object} ctx 上下文对象
    */
   static async getUserMessageList (req, res, next) {
-    let page = req.params.page || 1
-    let pageSize = Number(req.params.pageSize) || 10
+    let page = req.query.page || 1
+    let pageSize = Number(req.query.pageSize) || 10
     let { user = '' } = req
     try {
       let allUserMessage = await models.user_message.findAll({
@@ -969,7 +969,7 @@ class User {
    * @param   {object} ctx 上下文对象
    */
   static async deleteUserMessage (req, res, next) {
-    let reqData = req.params
+    let reqData = req.query
     let { user = '' } = req
     try {
       let oneUserMessage = await models.user_message.findOne({

@@ -39,8 +39,8 @@
             <div class="meta-bottom clearfix">
               <div class="meta-bottom-item like"
                    @click="onUserLikeArticle"
-                   :class="{'active':isCollect(article)}">
-                <i :class="isCollect(article)?'el-icon-star-on':'el-icon-star-off'"></i>
+                   :class="{'active':isThumb(article)}">
+                <i :class="isThumb(article)?'el-icon-star-on':'el-icon-star-off'"></i>
               </div>
               <div class="meta-bottom-item share">
                 <Dropdown>
@@ -170,13 +170,9 @@ export default {
     getArticle () {
       this.$store.dispatch("article/GET_ARTICLE", { aid: this.$route.params.aid })
     },
-    isCollect (item) { // 是否收藏
-      let likeUserIds = []
-      if (item.likeUserIds && item.likeUserIds.length > 0) {
-        item.likeUserIds.map(item => {
-          likeUserIds.push(Number(item.uid))
-        })
-        if (~likeUserIds.indexOf(Number(this.personalInfo.user.uid))) {
+    isThumb (item) { // 是否收藏
+      if (this.personalInfo.islogin) {
+        if (this.user.associateInfo.articleThumdId && ~this.user.associateInfo.articleThumdId.indexOf(item.aid)) {
           return true
         } else {
           return false
@@ -194,9 +190,7 @@ export default {
         })
         .then(result => {
           if (result.state === "success") {
-            if (result.data.type === 'enter') {
-              this.likeUserIds.push(this.personalInfo.user.uid)
-            }
+            this.$store.dispatch('user/GET_ASSOCIATE_INFO')
           } else {
             this.$message.warning(result.message);
           }
@@ -220,7 +214,7 @@ export default {
     article () {
       return this.$store.state.article.article || {};
     },
-    ...mapState(['website', 'personalInfo'])
+    ...mapState(['website', 'personalInfo', 'user'])
   },
   components: {
     ArticleComment,

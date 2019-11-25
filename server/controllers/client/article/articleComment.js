@@ -27,9 +27,9 @@ function ErrorMessage (message) {
 
 class ArticleComment {
   static async getArticleComment (req, res, next) {
-    let aid = req.params.aid
-    let page = req.params.page || 1
-    let pageSize = req.params.pageSize || 10
+    let aid = req.query.aid
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 10
 
     try {
       let { count, rows } = await models.article_comment.findAndCountAll({

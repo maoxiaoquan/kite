@@ -1,43 +1,40 @@
 <template>
   <client-only>
-    <section class="user-lay layout-content" id="user-center-article">
+    <section class="user-lay layout-content"
+             id="user-center-article">
       <div class="container  box-container">
         <div class="row">
           <div class="col-xs-12 col-sm-8 col-md-8 main">
             <div class="main-top clearfix">
-              <router-link
-                :to="{
+              <router-link :to="{
                   name: 'user',
                   params: { uid: user.user.uid, routeType: 'article' }
                 }"
-                class="avatar"
-              >
+                           class="avatar">
                 <div class="avatar-img">
-                  <img v-lazy="user.user.avatar" class="box-image" alt="" />
+                  <img v-lazy="user.user.avatar"
+                       class="box-image"
+                       alt="" />
                 </div>
               </router-link>
 
               <div class="title">
-                <router-link
-                  :to="{
+                <router-link :to="{
                     name: 'user',
                     params: { uid: user.user.uid, routeType: 'article' }
                   }"
-                  class="name"
-                >
+                             class="name">
                   {{ user.user.nickname }}
                 </router-link>
               </div>
 
-              <button
-                v-if="
+              <button v-if="
                   user.user.uid !== personalInfo.user.uid &&
                     personalInfo.islogin
                 "
-                class="user-follow-button"
-                @click="onUserAttention(isAttention.is_attention)"
-                :class="isAttention.is_attention ? 'has' : 'no'"
-              >
+                      class="user-follow-button"
+                      @click="onUserAttention(isAttention.is_attention)"
+                      :class="isAttention.is_attention ? 'has' : 'no'">
                 <i class="iconfont"></i>
                 <span>{{ isAttention.text }}</span>
               </button>
@@ -46,13 +43,11 @@
                 <ul>
                   <li>
                     <div class="meta-block">
-                      <router-link
-                        :to="{
+                      <router-link :to="{
                           name: 'user',
                           params: { routeType: 'attention' },
                           query: { any: 'me' }
-                        }"
-                      >
+                        }">
                         <p>{{ user.userAttentionCount }}</p>
                         <strong>
                           {{
@@ -66,13 +61,11 @@
                   </li>
                   <li>
                     <div class="meta-block">
-                      <router-link
-                        :to="{
+                      <router-link :to="{
                           name: 'user',
                           params: { routeType: 'attention' },
                           query: { any: 'other' }
-                        }"
-                      >
+                        }">
                         <p>{{ user.otherUserAttentionCount }}</p>
                         <strong>粉丝</strong>
                       </router-link>
@@ -80,9 +73,7 @@
                   </li>
                   <li>
                     <div class="meta-block">
-                      <router-link
-                        :to="{ name: 'user', params: { routeType: 'article' } }"
-                      >
+                      <router-link :to="{ name: 'user', params: { routeType: 'article' } }">
                         <p>{{ user.userArticleCount }}</p>
                         <strong>文章</strong>
                       </router-link>
@@ -103,49 +94,35 @@
 
             <ul class="trigger-menu">
               <li>
-                <router-link
-                  :to="{ name: 'user', params: { routeType: 'article' } }"
-                >
+                <router-link :to="{ name: 'user', params: { routeType: 'article' } }">
                   文章
                 </router-link>
               </li>
               <li>
-                <router-link
-                  :to="{ name: 'user', params: { routeType: 'dynamic' } }"
-                >
+                <router-link :to="{ name: 'user', params: { routeType: 'dynamic' } }">
                   片刻
                 </router-link>
               </li>
               <li>
-                <router-link
-                  :to="{ name: 'user', params: { routeType: 'books' } }"
-                >
+                <router-link :to="{ name: 'user', params: { routeType: 'books' } }">
                   小书
                 </router-link>
               </li>
               <li>
-                <router-link
-                  :to="{ name: 'user', params: { routeType: 'blog' } }"
-                >
+                <router-link :to="{ name: 'user', params: { routeType: 'blog' } }">
                   专栏
                 </router-link>
               </li>
               <li>
-                <router-link
-                  :to="{ name: 'user', params: { routeType: 'attention' } }"
-                >
+                <router-link :to="{ name: 'user', params: { routeType: 'attention' } }">
                   关注
                 </router-link>
               </li>
-              <li
-                v-if="
+              <li v-if="
                   personalInfo.islogin &&
                     personalInfo.user.uid === user.user.uid
-                "
-              >
-                <router-link
-                  :to="{ name: 'user', params: { routeType: 'message' } }"
-                >
+                ">
+                <router-link :to="{ name: 'user', params: { routeType: 'message' } }">
                   消息
                 </router-link>
               </li>
@@ -154,12 +131,8 @@
             <BlogView v-if="$route.params.routeType === 'blog'" />
             <BooksView v-else-if="$route.params.routeType === 'books'" />
             <DynamicView v-else-if="$route.params.routeType === 'dynamic'" />
-            <UserAttentionView
-              v-else-if="$route.params.routeType === 'attention'"
-            />
-            <UserMessageView
-              v-else-if="$route.params.routeType === 'message'"
-            />
+            <UserAttentionView v-else-if="$route.params.routeType === 'attention'" />
+            <UserMessageView v-else-if="$route.params.routeType === 'message'" />
             <ArticleView v-else />
           </div>
 
@@ -186,26 +159,27 @@ import { modelType } from '@utils/constant'
 
 export default {
   name: 'User',
-  metaInfo() {
+  metaInfo () {
     return {
-      title: '个人中心',
+      title: this.user.user.nickname,
+      titleTemplate: `%s - ${this.website.meta.website_name || ''}`,
       htmlAttrs: {
         lang: 'zh'
       }
     }
   },
-  data() {
+  data () {
     return {
       modelType
     }
   },
-  async asyncData({ store, route }) {
+  async asyncData ({ store, route }) {
     return Promise.all([
       store.dispatch('user/GET_USER_INFO_ALL', { uid: route.params.uid })
     ])
   },
   methods: {
-    onUserAttention(type) {
+    onUserAttention (type) {
       /*用户关注用户*/
       this.$confirm(type ? '是否取消关注?' : '是否关注?', '提示', {
         confirmButtonText: '确定',
@@ -231,8 +205,8 @@ export default {
     }
   },
   computed: {
-    ...mapState(['personalInfo', 'user']), // personalInfo:个人信息  user:登录后的个人信息当前用户
-    isAttention() {
+    ...mapState(['personalInfo', 'user', 'website']), // personalInfo:个人信息  user:登录后的个人信息当前用户
+    isAttention () {
       // 是否收藏
       let userAttentionIds = [] // 当前用户被其他的用户所关注的其他用户 所有 id
       this.user.user.userAttentionIds &&

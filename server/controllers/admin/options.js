@@ -42,7 +42,7 @@ class Options {
    * @param   {object} ctx 上下文对象
    */
   static async QueryOptions (req, res, next) {
-    const reqData = req.params
+    const reqData = req.query
     try {
       const optionsAll = await models.options.findAll({
         where: {

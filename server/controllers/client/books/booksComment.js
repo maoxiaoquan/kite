@@ -28,9 +28,9 @@ function ErrorMessage (message) {
 
 class BooksComment {
   static async getBooksCommentList (req, res, next) {
-    let books_id = req.params.books_id
-    let page = req.params.page || 1
-    let pageSize = req.params.pageSize || 10
+    let books_id = req.query.books_id
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 10
 
     try {
       let { count, rows } = await models.books_comment.findAndCountAll({

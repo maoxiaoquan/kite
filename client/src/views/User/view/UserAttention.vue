@@ -64,14 +64,6 @@ import { modelType } from '@utils/constant'
 
 export default {
   name: 'UserAttention',
-  metaInfo () {
-    return {
-      title: '个人关注',
-      htmlAttrs: {
-        lang: 'zh'
-      }
-    }
-  },
   data () {
     return {
       isLoading: false,

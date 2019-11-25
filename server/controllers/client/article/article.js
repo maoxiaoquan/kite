@@ -205,10 +205,10 @@ class Article {
    */
 
   static async getArticleTag (req, res, next) {
-    let qyData = req.params
+    let qyData = req.query
 
-    let page = req.params.page || 1
-    let pageSize = req.params.pageSize || 25
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 25
 
     try {
       let oneArticleTag = await models.article_tag.findOne({
@@ -333,7 +333,7 @@ class Article {
           'subscribe_count',
           await models.attention.count({
             where: {
-              associate_id: articleTagAll[i].id,
+              associate_id: articleTagAll[i].id || '',
               is_associate: true,
               type: modelType.article_tag
             }
@@ -422,7 +422,7 @@ class Article {
    * @param   {object} ctx 上下文对象
    */
   static async getArticle (req, res, next) {
-    let { aid } = req.params
+    let { aid } = req.query
     try {
       let oneArticle = await models.article.findOne({
         where: {
@@ -470,17 +470,6 @@ class Article {
         }
 
         oneArticle.setDataValue(
-          'likeUserIds',
-          await models.thumb.findAll({
-            where: {
-              associate_id: oneArticle.aid,
-              is_associate: true,
-              type: modelType.article
-            }
-          })
-        )
-
-        oneArticle.setDataValue(
           'user',
           await models.user.findOne({
             where: { uid: oneArticle.uid },
@@ -517,7 +506,7 @@ class Article {
    * @param   {object} ctx 上下文对象
    */
   static async getUserArticle (req, res, next) {
-    let { aid } = req.params
+    let { aid } = req.query
     let { user = '' } = req
     try {
       let article = await models.article.findOne({
@@ -710,7 +699,7 @@ class Article {
    * 前台用户删除文章并不是真的删除，只是置为了删除态
    */
   static async deleteArticle (req, res, next) {
-    const { aid } = req.params
+    const { aid } = req.query
     let { islogin = '', user = '' } = req
 
     try {
@@ -762,9 +751,9 @@ class Article {
    * @param   {object} ctx 上下文对象
    */
   static async searchArticle (req, res, next) {
-    let page = req.params.page || 1
-    let pageSize = req.params.pageSize || 25
-    let search = req.params.search
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 25
+    let search = req.query.search
     try {
       let { count, rows } = await models.article.findAndCountAll({
         where: {
@@ -907,8 +896,8 @@ class Article {
    */
 
   static async getArticleColumnList (req, res, next) {
-    let page = req.params.page || 1
-    let pageSize = req.params.pageSize || 25
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 25
 
     let whereParams = {
       enable: 1

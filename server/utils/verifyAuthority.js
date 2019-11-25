@@ -12,8 +12,9 @@ const noLimit = ['/admin-index/statistics', '/admin-user/info']
 
 class VerifyAuthority {
   // 前台权限验证
-  static async ClientCheck (ctx, next) {
-    const { url, user = {} } = req
+  static async ClientCheck (req, res, next) {
+    const { user = {} } = req
+    const url = req.url
     const { user_role_ids } = user
     try {
       if (user_role_ids) {
@@ -27,7 +28,7 @@ class VerifyAuthority {
           clientUrl = url
         }
         let oneUserAuthority = await models.user_authority.findOne({
-          where: { authority_url: clientUrl.split('/api-client/v1')[1] }
+          where: { authority_url: clientUrl.split('/api-client/v1')[1] || '' }
         })
         if (oneUserAuthority) {
           let allUserRole = await models.user_role.findAll({
@@ -67,7 +68,7 @@ class VerifyAuthority {
   }
 
   // 后台权限验证
-  static async AdminCheck (ctx, next) {
+  static async AdminCheck (req, res, next) {
     const { url, userInfo = {} } = req
     const { role_id } = userInfo
     if (role_id && role_id !== config.SUPER_ROLE_ID) {
@@ -81,7 +82,7 @@ class VerifyAuthority {
       }
       try {
         let oneAdminAuthority = await models.admin_authority.findOne({
-          where: { authority_url: adminUrl.split('/api-admin/v1')[1] }
+          where: { authority_url: adminUrl.split('/api-admin/v1')[1] || '' }
         })
         if (oneAdminAuthority) {
           let oneAdminRole = await models.admin_role.findOne({

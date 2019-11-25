@@ -21,7 +21,7 @@ class AdminSystemLog {
    * @param   {object} ctx 上下文对象
    */
   static async getAdminSystemLogList (req, res, next) {
-    const { page = 1, pageSize = 10 } = req.params
+    const { page = 1, pageSize = 10 } = req.query
     try {
       let { count, rows } = await models.system_log.findAndCountAll({
         where: '', // 为空，获取全部，也可以自己添加条件

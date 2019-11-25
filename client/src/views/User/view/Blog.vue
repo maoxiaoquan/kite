@@ -208,14 +208,6 @@ import {
 
 export default {
   name: 'Blog',
-  metaInfo () {
-    return {
-      title: '个人专栏',
-      htmlAttrs: {
-        lang: 'zh'
-      }
-    }
-  },
   async asyncData ({ store, route }) {
     return store.dispatch('user/GET_USER_ARTICLE_BLOG_LIST', {
       uid: route.params.uid,

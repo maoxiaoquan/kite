@@ -15,7 +15,7 @@ class ArticleBlog {
    */
   static async getArticleBlogList (req, res, next) {
     let whereParams = {} // 定义查询条件
-    const { page = 1, pageSize = 10, name, status, is_public } = req.params
+    const { page = 1, pageSize = 10, name, status, is_public } = req.query
     try {
       name && (whereParams['name'] = { [Op.like]: `%${name}%` })
       status && (whereParams['status'] = status)

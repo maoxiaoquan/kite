@@ -23,11 +23,11 @@ class PersonalCenter {
    * @param   {object} ctx 上下文对象
    */
   static async userMyArticle (req, res, next) {
-    let uid = req.params.uid
-    let blog_id = req.params.blog_id || 'all'
-    let type = req.params.type || '1'
-    let page = req.params.page || 1
-    let pageSize = Number(req.params.pageSize) || 10
+    let uid = req.query.uid
+    let blog_id = req.query.blog_id || 'all'
+    let type = req.query.type || '1'
+    let page = req.query.page || 1
+    let pageSize = Number(req.query.pageSize) || 10
     let whereParams = {
       uid,
       type: {
@@ -115,10 +115,10 @@ class PersonalCenter {
    * @param   {object} ctx 上下文对象
    */
   static async getUserAttentionList (req, res, next) {
-    let uid = req.params.uid
-    let page = req.params.page || 1
-    let pageSize = Number(req.params.pageSize) || 10
-    let any = req.params.any || 'me'
+    let uid = req.query.uid
+    let page = req.query.page || 1
+    let pageSize = Number(req.query.pageSize) || 10
+    let any = req.query.any || 'me'
     let whereParmas = {}
     try {
       if (any === 'me') {
@@ -188,9 +188,9 @@ class PersonalCenter {
    * @param   {object} ctx 上下文对象
    */
   static async getUserLikeArticleList (req, res, next) {
-    let uid = req.params.uid
-    let page = req.params.page || 1
-    let pageSize = Number(req.params.pageSize) || 10
+    let uid = req.query.uid
+    let page = req.query.page || 1
+    let pageSize = Number(req.query.pageSize) || 10
     try {
       let allUserLikeArticle = await models.like
         .findAll({
@@ -257,9 +257,9 @@ class PersonalCenter {
   }
 
   static async getDynamicListMe (req, res, next) {
-    const { uid } = req.params
-    let page = req.params.page || 1
-    let pageSize = Number(req.params.pageSize) || 10
+    const { uid } = req.query
+    let page = req.query.page || 1
+    let pageSize = Number(req.query.pageSize) || 10
     let whereParams = {} // 查询参数
     let orderParams = [['create_date', 'DESC']] // 排序参数
 
@@ -357,9 +357,9 @@ class PersonalCenter {
    * @param   {object} ctx 上下文对象
    */
   static async userArticleBlogList (req, res, next) {
-    let uid = req.params.uid
-    let page = req.params.page || 1
-    let pageSize = Number(req.params.pageSize) || 10
+    let uid = req.query.uid
+    let page = req.query.page || 1
+    let pageSize = Number(req.query.pageSize) || 10
     let whereParams = {
       uid
     }
@@ -458,9 +458,9 @@ class PersonalCenter {
    * @param   {object} ctx 上下文对象
    */
   static async userBooksList (req, res, next) {
-    let uid = req.params.uid
-    let page = req.params.page || 1
-    let pageSize = Number(req.params.pageSize) || 10
+    let uid = req.query.uid
+    let page = req.query.page || 1
+    let pageSize = Number(req.query.pageSize) || 10
     let whereParams = {
       uid,
       status: {

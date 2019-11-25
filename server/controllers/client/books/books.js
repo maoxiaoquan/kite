@@ -252,7 +252,7 @@ class Books {
    * @param   {object} ctx 上下文对象
    */
   static async getUserBooksInfo (req, res, next) {
-    let { books_id } = req.params
+    let { books_id } = req.query
     let { user = '' } = req
     try {
       let books = await models.books.findOne({
@@ -458,11 +458,11 @@ class Books {
   // 首页的公开的小书列表
 
   static async getBooksList (req, res, next) {
-    let page = req.params.page || 1
-    let pageSize = req.params.pageSize || 24
-    let sort = req.params.sort
-    let tagId = req.params.tagId
-    let columnEnName = req.params.columnEnName
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 24
+    let sort = req.query.sort
+    let tagId = req.query.tagId
+    let columnEnName = req.query.columnEnName
     let tagIdArr = []
     let whereParams = {
       is_public: true,
@@ -602,7 +602,7 @@ class Books {
    * @param   {object} ctx 上下文对象
    */
   static async getBooksInfo (req, res, next) {
-    let { books_id, type } = req.params
+    let { books_id, type } = req.query
     let { user = '', islogin } = req
 
     try {
@@ -706,7 +706,7 @@ class Books {
    * @param   {object} ctx 上下文对象
    */
   static async getBooksBookAll (req, res, next) {
-    let { books_id } = req.params
+    let { books_id } = req.query
     let { user = '', islogin } = req
 
     try {
@@ -793,9 +793,9 @@ class Books {
   // 获取用户收藏的小书列表
 
   static async getCollectBooksList (req, res, next) {
-    let page = req.params.page || 1
-    let pageSize = req.params.pageSize || 24
-    let uid = req.params.uid || ''
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 24
+    let uid = req.query.uid || ''
     let whereParams = {
       is_public: true,
       status: {

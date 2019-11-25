@@ -77,8 +77,6 @@
           :page="Number(books.page)||1"
           @pageChange="pageChange"></Page>
 
-    <!-- use the modal component, pass in the prop -->
-
   </div>
 </template>
 
@@ -97,14 +95,6 @@ import {
 
 export default {
   name: 'Books',
-  metaInfo () {
-    return {
-      title: '小书',
-      htmlAttrs: {
-        lang: 'zh'
-      }
-    }
-  },
   data () {
     return {
       isLoading: false,

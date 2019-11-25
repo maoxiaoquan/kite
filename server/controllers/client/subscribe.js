@@ -16,9 +16,9 @@ const userVirtual = require('../../common/userVirtual')
 
 class Subscribe {
   static async getArticleTagList (req, res, next) {
-    let page = req.params.page || 1
-    let pageSize = req.params.pageSize || 24
-    let tag_name = req.params.tag_name
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 24
+    let tag_name = req.query.tag_name
     let whereParams = {
       enable: 1
     }
@@ -82,8 +82,8 @@ class Subscribe {
   }
 
   static async getArticleTagListMy (req, res, next) {
-    let page = req.params.page || 1
-    let pageSize = req.params.pageSize || 25
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 25
     let { user = '' } = req
     let whereParams = {
       enable: 1

@@ -27,6 +27,7 @@ function ErrorMessage (message) {
 class dynamic {
   static async createDynamic (req, res, next) {
     let reqData = req.body
+    console.log('reqData', req)
     let { user = '' } = req
     try {
       if (!reqData.content) {
@@ -136,7 +137,7 @@ class dynamic {
   }
 
   static async getDynamicView (req, res, next) {
-    let id = req.params.id || ''
+    let id = req.query.id || ''
 
     let whereParams = {} // 查询参数
 
@@ -238,10 +239,11 @@ class dynamic {
   }
 
   static async getDynamicList (req, res, next) {
-    let page = req.params.page || 1
-    let pageSize = req.params.pageSize || 10
-    let topic_id = req.params.topic_id || ''
-    let sort = req.params.sort || '' // 排序
+    console.log('req.query', req.query)
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 10
+    let topic_id = req.query.topic_id || ''
+    let sort = req.query.sort || '' // 排序
     let whereDynamicParams = {} // 查询参数
     let orderParams = [] // 排序参数
     try {
@@ -253,7 +255,7 @@ class dynamic {
           [Op.or]: [reviewSuccess, freeReview]
         }
       }
-
+      console.log('sort', sort)
       if (!~['hot', 'newest'].indexOf(sort)) {
         whereDynamicParams['topic_ids'] = topic_id
       } else {
@@ -264,6 +266,8 @@ class dynamic {
             is_push: false
           } // 为空，获取全部，也可以自己添加条件
         })
+
+        console.log('allDynamicTopic', allDynamicTopic)
 
         if (allDynamicTopic && allDynamicTopic.length > 0) {
           for (let item in allDynamicTopic) {
@@ -284,6 +288,8 @@ class dynamic {
       if (!sort || sort === 'new') {
         orderParams.push(['create_date', 'DESC'])
       }
+
+      console.log('whereDynamicParams', whereDynamicParams)
 
       let { count, rows } = await models.dynamic.findAndCountAll({
         where: whereDynamicParams, // 为空，获取全部，也可以自己添加条件
@@ -376,8 +382,8 @@ class dynamic {
   }
 
   static async getDynamicListMe (req, res, next) {
-    let page = req.params.page || 1
-    let pageSize = req.params.pageSize || 10
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 10
     let whereParams = {} // 查询参数
     let orderParams = [['create_date', 'DESC']] // 排序参数
     let { user = '' } = req
@@ -644,7 +650,7 @@ class dynamic {
   }
 
   static async getDynamicTopicInfo (req, res, next) {
-    const { topic_id } = req.params
+    const { topic_id } = req.query
     try {
       const oneDynamicTopic = await models.dynamic_topic.findOne({
         where: {
@@ -692,7 +698,7 @@ class dynamic {
    * 无关联则直接删除动态，有关联则开启事务同时删除与动态的关联
    */
   static async deleteDynamic (req, res, next) {
-    const { id } = req.params
+    const { id } = req.query
     let { islogin = '', user = '' } = req
 
     try {
