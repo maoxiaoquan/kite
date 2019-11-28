@@ -1,52 +1,57 @@
 <template>
   <div class="user-aside-view">
-    <ul class="list user-dynamic"
-        v-if="user.user.user_role_ids">
-      <li class="badge-icon"
-          v-for="(item,key) in user.user_role_all"
-          :key="key"
-          v-if="~user.user.user_role_ids.split(',')
-            .indexOf(String(item.user_role_id))&&item.is_show">
-        <a target="_blank"
-           href="javascript:;">
-          <span class="tag-name">{{item.user_role_name}}</span>
+    <ul
+      class="list user-dynamic"
+      v-if="user.user.user_role_ids && user.user_role_all"
+    >
+      <li
+        class="badge-icon"
+        v-for="(item, key) in user.user_role_all"
+        :key="key"
+        v-if="
+          ~user.user.user_role_ids
+            .split(',')
+            .indexOf(String(item.user_role_id)) && item.is_show
+        "
+      >
+        <a target="_blank" href="javascript:;">
+          <span class="tag-name">{{ item.user_role_name }}</span>
         </a>
       </li>
     </ul>
 
-    <div class="check-in"
-         @click="checkIn"
-         v-if="personalInfo.islogin&&personalInfo.user.uid===user.user.uid">
-      签到
-    </div>
-
-    <ul class="aside-operat"
-        v-if="personalInfo.islogin&&personalInfo.user.uid===user.user.uid">
+    <ul
+      class="aside-operat"
+      v-if="personalInfo.islogin && personalInfo.user.uid === user.user.uid"
+    >
+      <li
+        v-if="personalInfo.islogin && personalInfo.user.uid === user.user.uid"
+        @click="checkIn"
+      >
+        <span class="check-in"> <i class="el-icon-bell"></i> 签到</span>
+      </li>
       <li>
-        <router-link class="collection"
-                     :to='{name:"personal"}'>
-          <span class="collection-name"> <i class="el-icon-s-management"></i> 收藏集</span>
+        <router-link class="collection" :to="{ name: 'personal' }">
+          <i class="el-icon-folder-opened"></i>
+          收藏集
         </router-link>
       </li>
       <li>
-        <router-link class="collection"
-                     :to='{name:"shellDetail"}'>
-          <span class="collection-name"> <i class="el-icon-s-management"></i> 贝壳明细</span>
+        <router-link class="collection" :to="{ name: 'shellDetail' }">
+          <i class="el-icon-notebook-2"></i>
+          贝壳明细
         </router-link>
       </li>
       <li>
-        <router-link class="collection"
-                     :to='{name:"myOrder"}'>
-          <span class="collection-name"> <i class="el-icon-s-management"></i> 我的订单</span>
+        <router-link class="collection" :to="{ name: 'myOrder' }">
+          <i class="el-icon-notebook-1"></i>
+          我的订单
         </router-link>
       </li>
-    </ul>
-
-    <ul class="list user-dynamic"
-        v-if="personalInfo.islogin&&personalInfo.user.uid===user.user.uid">
       <li>
-        <router-link :to='{name:"subscribe_tag",params:{type:"my"}}'>
-          <span class="collection-name">关注的文章标签</span>
+        <router-link :to="{ name: 'subscribe_tag', params: { type: 'my' } }">
+          <i class="el-icon-price-tag"></i>
+          关注的文章标签
         </router-link>
       </li>
     </ul>
@@ -55,30 +60,29 @@
     <div class="description">
       <div class="js-intro">
         <template v-if="user.user.introduction">
-          {{user.user.introduction}}
+          {{ user.user.introduction }}
         </template>
         <template v-else>
           暂无简介
         </template>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import { Popover, Face } from "@components";
+import { Popover, Face } from '@components'
 import { mapState } from 'vuex'
 export default {
   name: 'UserAside',
-  created () {
+  created() {
     this.$store.dispatch('user/GET_USER_ROLE_ALL')
   },
   computed: {
     ...mapState(['personalInfo', 'user'])
   },
   methods: {
-    checkIn () {
+    checkIn() {
       this.$store.dispatch('virtual/CHECK_IN').then(result => {
         if (result.state === 'success') {
           this.$message.warning(result.message)
@@ -108,15 +112,6 @@ export default {
         display: inline-block;
       }
     }
-  }
-  .check-in {
-    margin-top: 15px;
-    margin-bottom: 15px;
-    border-radius: 6px;
-    padding: 8px;
-    text-align: center;
-    background: bisque;
-    font-size: 14px;
   }
   .function-btn {
     float: right;
@@ -188,9 +183,10 @@ export default {
 
 .aside-operat {
   li {
-    display: block;
+    display: inline-block;
     margin-bottom: 10px;
-    a {
+    a,
+    span {
       padding: 5px 13px;
       display: block;
       background: #f3f3f3;
@@ -204,6 +200,9 @@ export default {
       &.collection {
         background: #ffe699;
       }
+    }
+    .check-in {
+      background: #fd763a;
     }
   }
 }

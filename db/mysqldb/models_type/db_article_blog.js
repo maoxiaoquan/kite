@@ -66,15 +66,6 @@ module.exports = {
       comment: '状态(1:审核中;2:审核通过;3:审核失败;4：免审核)',
       field: 'status'
     },
-    is_public: {
-      // 是否公开
-      type: Seq.BOOLEAN,
-      comment: '是否公开',
-      field: 'is_public',
-      defaultValue: () => {
-        return false
-      }
-    },
     enable: {
       // 是否可以显示
       type: Seq.BOOLEAN,

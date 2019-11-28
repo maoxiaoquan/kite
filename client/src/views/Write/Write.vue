@@ -2,87 +2,101 @@
   <client-only>
     <section class="write-lay layout-content">
       <div class="container">
-
         <!-- this component will only be rendered on client-side -->
 
         <div class="write-top  box-form-group">
-
-          <input class="box-input title"
-                 v-model="write.title"
-                 type="text"
-                 placeholder="请输入文章标题">
-
+          <input
+            class="box-input title"
+            v-model="write.title"
+            type="text"
+            placeholder="请输入文章标题"
+          />
         </div>
 
         <div class="write mrg-bm20">
-          <mavon-editor defaultOpen="edit"
-                        :boxShadow="false"
-                        v-model="write.content"
-                        :toolbars="toolbars"
-                        ref="mavonEditor"
-                        :imageFilter="imageFilter"
-                        @imgAdd="$imgAdd" />
+          <mavon-editor
+            defaultOpen="edit"
+            :boxShadow="false"
+            v-model="write.content"
+            :toolbars="toolbars"
+            ref="mavonEditor"
+            :imageFilter="imageFilter"
+            @imgAdd="$imgAdd"
+          />
         </div>
 
         <div class="row mrg-bm20">
           <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
-            <label class="box-label"
-                   for="">来源</label>
-            <select class="box-select"
-                    v-model="write.source">
-              <option :value="item.id"
-                      v-for="(item,key) in sourceList"
-                      :key="key">{{item.text}}</option>
+            <label class="box-label" for="">来源</label>
+            <select class="box-select" v-model="write.source">
+              <option
+                :value="item.id"
+                v-for="(item, key) in sourceList"
+                :key="key"
+                >{{ item.text }}</option
+              >
             </select>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
-            <label class="box-label"
-                   for="">是否公开</label>
-            <select class="box-select"
-                    v-model="write.is_public">
-              <option :value="key"
-                      v-for="(item,key) in publicTypeList"
-                      :key="key">{{item}}</option>
+            <label class="box-label" for="">是否公开</label>
+            <select class="box-select" v-model="write.is_public">
+              <option
+                :value="key"
+                v-for="(item, key) in publicTypeList"
+                :key="key"
+                >{{ item }}</option
+              >
             </select>
           </div>
-
         </div>
 
         <div class="row mrg-bm20">
           <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
-            <label class="box-label"
-                   for="">个人专栏</label>
-            <select class="box-select"
-                    v-model="write.blog_ids">
-              <option :value="item.blog_id"
-                      v-for="(item,key) in userArticleBlogAll"
-                      :key="key">{{item.name}}</option>
+            <label class="box-label" for="">个人专栏（非必选）</label>
+            <select class="box-select" v-model="write.blog_ids">
+              <option
+                :value="item.blog_id"
+                v-for="(item, key) in userArticleBlogAll"
+                :key="key"
+                >{{ item.name }}</option
+              >
             </select>
             <div class="create-blog">
-              <div class="create-blog-view"
-                   v-show="isCreateBlogShow">
-                <input class="create-blog-input box-input"
-                       placeholder="请输入专栏名字"
-                       v-model="blog.name"
-                       type="text" />
-                <button class="btn btn-primary btn-sm"
-                        @click="saveCreateBlog">保存</button>
-                <button class="btn btn-primary btn-sm"
-                        @click="isCreateBlogShow=false">取消</button>
+              <div class="create-blog-view" v-show="isCreateBlogShow">
+                <input
+                  class="create-blog-input box-input"
+                  placeholder="请输入专栏名字"
+                  v-model="blog.name"
+                  type="text"
+                />
+                <button class="btn btn-primary btn-sm" @click="saveCreateBlog">
+                  保存
+                </button>
+                <button
+                  class="btn btn-primary btn-sm"
+                  @click="isCreateBlogShow = false"
+                >
+                  取消
+                </button>
               </div>
-              <button class="btn btn-primary btn-sm"
-                      v-show="!isCreateBlogShow"
-                      @click="isCreateBlogShow=true">创建新个人专栏</button>
+              <button
+                class="btn btn-primary btn-sm"
+                v-show="!isCreateBlogShow"
+                @click="isCreateBlogShow = true"
+              >
+                创建新个人专栏
+              </button>
             </div>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-6 box-form-group">
-            <label class="box-label"
-                   for="">文章类型</label>
-            <select class="box-select"
-                    v-model="write.type">
-              <option :value="key"
-                      v-for="(item,key) in articleTypeList"
-                      :key="key">{{item}}</option>
+            <label class="box-label" for="">文章类型</label>
+            <select class="box-select" v-model="write.type">
+              <option
+                :value="key"
+                v-for="(item, key) in articleTypeList"
+                :key="key"
+                >{{ item }}</option
+              >
             </select>
           </div>
         </div>
@@ -91,46 +105,57 @@
           <p class="common-title">
             文章标签
             <span>
-              <em id="chosen_tag_num">{{currentArticleTagArr.length}}</em>/3
+              <em id="chosen_tag_num">{{ currentArticleTagArr.length }}</em
+              >/3
             </span>
           </p>
-          <div class="search-box clearfix"
-               ref="search_box">
-            <div class="clearfix js-chosen-tags"
-                 ref="js_chosen_tags"
-                 v-show="currentArticleTagArr.length>0">
-              <span class="tag-item"
-                    v-for="(item,key) in currentArticleTagArr"
-                    :key="key"
-                    @click="deleteCurrentArticleTag(item)">{{item.name}}</span>
+          <div class="search-box clearfix" ref="search_box">
+            <div
+              class="clearfix js-chosen-tags"
+              ref="js_chosen_tags"
+              v-show="currentArticleTagArr.length > 0"
+            >
+              <span
+                class="tag-item"
+                v-for="(item, key) in currentArticleTagArr"
+                :key="key"
+                @click="deleteCurrentArticleTag(item)"
+                >{{ item.name }}</span
+              >
             </div>
-            <input class="search-input"
-                   v-show="currentArticleTagArr.length<3"
-                   placeholder="选择下列热门标签或输入关键词检索标签"
-                   :style="{'width':searchBoxWidth}"
-                   v-model="searchArticleTag" />
+            <input
+              class="search-input"
+              v-show="currentArticleTagArr.length < 3"
+              placeholder="选择下列热门标签或输入关键词检索标签"
+              :style="{ width: searchBoxWidth }"
+              v-model="searchArticleTag"
+            />
           </div>
-          <p class="search-result js-search-result"
-             v-show="isSearchResultShow">
+          <p class="search-result js-search-result" v-show="isSearchResultShow">
             相关“
-            <span class="js-search-text">{{searchArticleTag}}</span>”的搜索
-            <span class="js-search-num">{{searchShowArticleTagAll.length}}</span> 个
+            <span class="js-search-text">{{ searchArticleTag }}</span
+            >”的搜索
+            <span class="js-search-num">{{
+              searchShowArticleTagAll.length
+            }}</span>
+            个
           </p>
           <div class="tag-list-view js-tag-nano has-scrollbar">
             <div class="clearfix js-tag-list">
-              <span class="tag-item"
-                    v-for="(item,key) in searchShowArticleTagAll"
-                    :key="key"
-                    @click="addArticleTag(item)">{{item.name}}</span>
+              <span
+                class="tag-item"
+                v-for="(item, key) in searchShowArticleTagAll"
+                :key="key"
+                @click="addArticleTag(item)"
+                >{{ item.name }}</span
+              >
             </div>
           </div>
         </div>
 
         <div class="write-footer clearfix">
-          <button class="send-article"
-                  @click="saveArticle">发布文章</button>
+          <button class="send-article" @click="saveArticle">发布文章</button>
         </div>
-
       </div>
     </section>
   </client-only>
@@ -140,7 +165,7 @@
 // Local Registration
 import { mavonEditor } from '@components/MarkDown'
 import ClientOnly from 'vue-client-only'
-import marked from "marked";
+import marked from 'marked'
 import { share, baidu, google } from '@utils'
 import {
   statusList,
@@ -150,22 +175,22 @@ import {
 } from '@utils/constant'
 export default {
   name: 'write',
-  metaInfo () {
+  metaInfo() {
     return {
-      title: "文章编辑",
+      title: '文章编辑',
       htmlAttrs: {
-        lang: "zh"
+        lang: 'zh'
       }
-    };
+    }
   },
-  async asyncData ({ store, route, accessToken = "" }) {
+  async asyncData({ store, route, accessToken = '' }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
-      store.dispatch("PERSONAL_INFO", { accessToken }),
-      store.dispatch("articleTag/GET_ARTICLE_TAG_ALL")
-    ]);
+      store.dispatch('PERSONAL_INFO', { accessToken }),
+      store.dispatch('articleTag/GET_ARTICLE_TAG_ALL')
+    ])
   },
-  data () {
+  data() {
     return {
       write: {
         title: '', // 文章的标题
@@ -173,7 +198,7 @@ export default {
         content: '', // 文章的内容
         blog_ids: '', // 文章所属专栏ID
         type: '1', // 文章的类型
-        is_public: 1, // 是否公开 1公开 0仅自己可见
+        is_public: 1 // 是否公开 1公开 0仅自己可见
       },
       publicTypeList: ['仅自己可见', '公开'], // 文章类型列表
       articleTypeList: articleTypeText,
@@ -181,23 +206,24 @@ export default {
         name: ''
       },
       userArticleBlogAll: [], // 用户全部专栏
-      sourceList: [ // 文章来源
+      sourceList: [
+        // 文章来源
         // whether to display create blog btn and input 文章类型列表
         {
-          id: "1",
-          text: "原创"
+          id: '1',
+          text: '原创'
         },
         {
-          id: "2",
-          text: "转载"
+          id: '2',
+          text: '转载'
         }
       ],
       isCreateBlogShow: false, // 是否显示创建blog
-      searchArticleTag: "",
+      searchArticleTag: '',
       currentArticleTagArr: [], // 用户选中的文章标签
       isSearchResultShow: false, // 搜索结果显示
       searchShowArticleTagAll: [], // 搜索栏内呈现的文章标题
-      searchBoxWidth: "100%",
+      searchBoxWidth: '100%',
       toolbars: {
         bold: true, // 粗体
         italic: true, // 斜体
@@ -224,158 +250,155 @@ export default {
       editArticleInfo: {} // 修改文章的信息
     }
   },
-  created () {
+  created() {
     this.initArticleTagAll()
     this.getUserArticleBlogAll()
-    if (this.$route.params.type !== "create") {
+    if (this.$route.params.type !== 'create') {
       this.isEditArticle()
     }
   },
   watch: {
-    searchArticleTag (val) {
-      let _arr = [];
+    searchArticleTag(val) {
+      let _arr = []
       for (let item in this.articleTagAll) {
         if (
           this.articleTagAll[item].name
             .toLowerCase()
             .indexOf(this.searchArticleTag.toLowerCase()) >= 0
         ) {
-          _arr.push(this.articleTagAll[item]);
+          _arr.push(this.articleTagAll[item])
         }
       }
-      this.searchShowArticleTagAll = _arr;
+      this.searchShowArticleTagAll = _arr
       if (this.searchArticleTag.length === 0) {
-        this.isSearchResultShow = false;
+        this.isSearchResultShow = false
       } else {
-        this.isSearchResultShow = true;
+        this.isSearchResultShow = true
       }
     }
   },
   methods: {
-    isEditArticle () {
-      if (this.$route.params.type !== "create") {
+    isEditArticle() {
+      if (this.$route.params.type !== 'create') {
         // 判断是不是创建，不是则是修改，同时赋值
         this.$store
-          .dispatch("editor/GET_USER_ARTICLE", {
+          .dispatch('editor/GET_USER_ARTICLE', {
             aid: this.$route.params.type
           })
           .then(result => {
-            this.write = result.data.article;
+            this.write = result.data.article
             this.editArticleInfo = result.data.article
             this.write.is_public = Number(result.data.article.is_public)
-            this.write.content = result.data.article.origin_content;
+            this.write.content = result.data.article.origin_content
             this.articleTagAll.map(item => {
               if (
                 ~this.editArticleInfo.tag_ids
-                  .split(",")
+                  .split(',')
                   .indexOf(String(item.tag_id))
               ) {
-                this.currentArticleTagArr.push(item);
+                this.currentArticleTagArr.push(item)
               }
-            });
-            this.renderCurrentArticleTag();
-          });
+            })
+            this.renderCurrentArticleTag()
+          })
       }
     },
-    initArticleTagAll () {
-      this.searchShowArticleTagAll = this.articleTagAll;
+    initArticleTagAll() {
+      this.searchShowArticleTagAll = this.articleTagAll
     },
-    getUserArticleBlogAll () {
+    getUserArticleBlogAll() {
       if (!this.$store.state.personalInfo.islogin) {
-        this.$message.warning("当前用户未登陆，请前往首页登陆后尝试");
-        this.$router.push({ name: "home" });
-        return false;
+        this.$message.warning('当前用户未登陆，请前往首页登陆后尝试')
+        this.$router.push({ name: 'home' })
+        return false
       }
       this.$store
-        .dispatch("editor/GET_USER_BLOG", {
+        .dispatch('editor/GET_USER_BLOG', {
           uid: this.$store.state.personalInfo.user.uid
         })
         .then(res => {
-          this.userArticleBlogAll = res.data.list;
-        });
+          this.userArticleBlogAll = res.data.list
+        })
     },
-    addArticleTag (val) {
-      this.search_article_tag = "";
-      let _arr = [];
+    addArticleTag(val) {
+      this.search_article_tag = ''
+      let _arr = []
       for (var item in this.currentArticleTagArr) {
-        _arr.push(this.currentArticleTagArr[item].name);
+        _arr.push(this.currentArticleTagArr[item].name)
       }
       if (
         this.currentArticleTagArr.length < 3 &&
         _arr.indexOf(val.name) === -1
       ) {
-        this.currentArticleTagArr.push(val);
+        this.currentArticleTagArr.push(val)
       }
-      this.renderCurrentArticleTag();
+      this.renderCurrentArticleTag()
     },
-    deleteCurrentArticleTag (val) {
+    deleteCurrentArticleTag(val) {
       for (var item in this.currentArticleTagArr) {
-        if (
-          val.name ===
-          this.currentArticleTagArr[item].name
-        ) {
-          this.currentArticleTagArr.splice(item, 1);
+        if (val.name === this.currentArticleTagArr[item].name) {
+          this.currentArticleTagArr.splice(item, 1)
         }
       }
-      this.renderCurrentArticleTag();
+      this.renderCurrentArticleTag()
     },
-    renderCurrentArticleTag () {
+    renderCurrentArticleTag() {
       this.$nextTick(() => {
         this.searchBoxWidth =
           this.$refs.search_box.offsetWidth -
           this.$refs.js_chosen_tags.offsetWidth -
           15 +
-          "px";
-      });
+          'px'
+      })
     },
-    getObjectValues (object) {
-      var values = [];
+    getObjectValues(object) {
+      var values = []
       for (var property in object) {
-        values.push(object[property].tag_id);
+        values.push(object[property].tag_id)
       }
-      return values;
+      return values
     },
-    saveCreateBlog () {
+    saveCreateBlog() {
       this.$store
-        .dispatch("editor/CREATE_ARTICLE_BLOG", {
+        .dispatch('editor/CREATE_ARTICLE_BLOG', {
           blog_name: this.blog.name
         })
         .then(res => {
-          if (res.state === "success") {
-            this.$message.success("创建文章专题成功");
-            this.blog.name = "";
-            this.getUserArticleBlogAll();
-            this.isCreateBlogShow = false;
+          if (res.state === 'success') {
+            this.$message.success('创建文章专题成功')
+            this.blog.name = ''
+            this.getUserArticleBlogAll()
+            this.isCreateBlogShow = false
           } else {
-            this.$message.warning(res.message);
+            this.$message.warning(res.message)
           }
-        });
+        })
     },
-    imageFilter (file) {
+    imageFilter(file) {
       if (file.size > 1 * 1024 * 1024) {
-        this.$message.success("上传文章图片应该小于1M");
+        this.$message.success('上传文章图片应该小于1M')
         return false
       } else {
         return true
       }
     },
-    $imgAdd (pos, $file) {
+    $imgAdd(pos, $file) {
       // 第一步.将图片上传到服务器.
-      var formData = new FormData();
-      formData.append('file', $file);
+      var formData = new FormData()
+      formData.append('file', $file)
       this.$store
-        .dispatch("editor/UPLOAD_ARTICLE_PICTURE", formData)
+        .dispatch('editor/UPLOAD_ARTICLE_PICTURE', formData)
         .then(res => {
-          if (res.state === "success") {
-            this.$message.success("上传文章图片成功");
-            this.$refs.mavonEditor.$img2Url(pos, res.data.img);
+          if (res.state === 'success') {
+            this.$message.success('上传文章图片成功')
+            this.$refs.mavonEditor.$img2Url(pos, res.data.img)
           } else {
-            this.$message.warning(res.message);
+            this.$message.warning(res.message)
             return false
           }
-        });
+        })
     },
-    saveArticle () {
+    saveArticle() {
       var params = {
         title: this.write.title, //文章的标题
         content: marked(this.write.content, { breaks: true }) /*主内容*/,
@@ -384,50 +407,48 @@ export default {
         type: this.write.type, // 类型 （1:文章;2:日记,3:草稿 ）
         is_public: this.write.is_public,
         blog_ids: this.write.blog_ids,
-        tag_ids: this
-          .getObjectValues(this.currentArticleTagArr)
-          .join(",")
-      };
-      this.$route.params.type !== "create" &&
-        (params.aid = this.$route.params.type);
+        tag_ids: this.getObjectValues(this.currentArticleTagArr).join(',')
+      }
+      this.$route.params.type !== 'create' &&
+        (params.aid = this.$route.params.type)
 
       let dispatch_url =
-        this.$route.params.type === "create"
-          ? "editor/SAVE_ARTICLE"
-          : "editor/UPDATE_ARTICLE";
+        this.$route.params.type === 'create'
+          ? 'editor/SAVE_ARTICLE'
+          : 'editor/UPDATE_ARTICLE'
 
       this.$store
         .dispatch(dispatch_url, params)
         .then(res => {
-          if (res.state === "success") {
-            this.create_show_modal = false;
-            this.$message.success(res.message);
+          if (res.state === 'success') {
+            this.create_show_modal = false
+            this.$message.success(res.message)
             this.$router.push({
-              name: "user",
-              params: { uid: this.personalInfo.user.uid, routeType: "article" }
-            });
+              name: 'user',
+              params: { uid: this.personalInfo.user.uid, routeType: 'article' }
+            })
           } else {
-            this.$message.warning(res.message);
+            this.$message.warning(res.message)
           }
         })
-        .catch(function (err) {
-          this.$message.error("出现错误：" + err);
-        });
-    },
+        .catch(function(err) {
+          this.$message.error('出现错误：' + err)
+        })
+    }
   },
   components: {
     'mavon-editor': mavonEditor,
     ClientOnly
   },
   computed: {
-    articleTagAll () {
-      return this.$store.state.articleTag.article_tag_all;
+    articleTagAll() {
+      return this.$store.state.articleTag.article_tag_all
     },
-    personalInfo () {
+    personalInfo() {
       // 登录后的个人信息
-      return this.$store.state.personalInfo;
+      return this.$store.state.personalInfo
     }
-  },
+  }
 }
 </script>
 
@@ -624,6 +645,3 @@ export default {
   }
 }
 </style>
-
-
-

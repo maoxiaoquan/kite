@@ -65,15 +65,7 @@ class dynamicBlog {
    */
   static async createUserArticleBlog (req, res, next) {
     /* 创建用户专题 */
-    let {
-      blog_name,
-      en_name,
-      description,
-      icon,
-      is_public,
-      enable,
-      tag_ids
-    } = req.body
+    let { blog_name, en_name, description, icon, enable, tag_ids } = req.body
     let { user = '' } = req
     try {
       if (blog_name.length === 0) {
@@ -173,7 +165,6 @@ class dynamicBlog {
         description: description || '',
         uid: user.uid,
         enable: enable || false,
-        is_public: is_public || false,
         tag_ids: tag_ids || '',
         status
       })
@@ -287,7 +278,6 @@ class dynamicBlog {
           icon: resData.icon || config.DF_ICON,
           description: resData.description || '',
           enable: resData.enable || false,
-          is_public: resData.is_public || false,
           tag_ids: resData.tag_ids || '',
           status
         },

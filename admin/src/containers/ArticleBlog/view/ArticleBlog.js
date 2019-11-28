@@ -78,16 +78,6 @@ class ArticleBlog extends React.Component {
           key: 'description'
         },
         {
-          title: '是否公开',
-          dataIndex: 'is_public',
-          key: 'is_public',
-          render: (value, record) => {
-            return (
-              <div className="table-is-login">{value ? '公开' : '个人'}</div>
-            )
-          }
-        },
-        {
           title: '审核被拒绝的原因',
           dataIndex: 'rejection_reason',
           key: 'rejection_reason'
@@ -98,20 +88,16 @@ class ArticleBlog extends React.Component {
           render: (text, record) => {
             return (
               <div className="operation-btn">
-                {record.is_public ? (
-                  <button
-                    onClick={() => {
-                      this._edit(record)
-                    }}
-                    className="btn btn-info"
-                    size="small"
-                    type="primary"
-                  >
-                    <Icon type="edit" />
-                  </button>
-                ) : (
-                  ''
-                )}
+                <button
+                  onClick={() => {
+                    this._edit(record)
+                  }}
+                  className="btn btn-info"
+                  size="small"
+                  type="primary"
+                >
+                  <Icon type="edit" />
+                </button>
               </div>
             )
           }
@@ -127,7 +113,6 @@ class ArticleBlog extends React.Component {
       is_create: true,
       edit_status_val: '',
       status_val: '',
-      is_public_val: '',
       name_val: ''
     }
   }
@@ -211,11 +196,10 @@ class ArticleBlog extends React.Component {
   }
 
   getParams = () => {
-    const { name_val, status_val, is_public_val } = this.state
+    const { name_val, status_val } = this.state
     return {
       name: name_val,
-      status: status_val,
-      is_public: is_public_val
+      status: status_val
     }
   }
 
@@ -246,7 +230,6 @@ class ArticleBlog extends React.Component {
       status_list,
       status_val,
       name_val,
-      is_public_val,
       is_create,
       edit_status_val
     } = this.state
@@ -388,20 +371,6 @@ class ArticleBlog extends React.Component {
                         {this.state.otherStatusListText[key]}
                       </Option>
                     ))}
-                  </Select>
-                </FormItem>
-
-                <FormItem hasFeedback label="是否公开">
-                  <Select
-                    placeholder="状态"
-                    value={is_public_val}
-                    onChange={value => {
-                      this.changeVal(value, 'is_public_val')
-                    }}
-                  >
-                    <Option value="">全部</Option>
-                    <Option value={0}>个人</Option>
-                    <Option value={1}>公开</Option>
                   </Select>
                 </FormItem>
 

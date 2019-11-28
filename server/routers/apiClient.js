@@ -27,6 +27,8 @@ const collect = require('../controllers/client/collect') // 收藏
 const virtual = require('../controllers/client/virtual') // 虚拟币
 const shop = require('../controllers/client/shop') // 购物
 
+const uploadModel = require('../utils/upload')
+
 /**
  * 获取标签列表操作
  * @param   {String} TYPE 当前router 作用类型 AJAX:ajax传递数据 RENDER:render渲染页面或者 post form提交数据
@@ -89,6 +91,7 @@ router.get(
 router.post(
   '/personal/upload-avatar',
   tokens.ClientVerifyToken,
+  uploadModel('avatarImg').single('file'),
   upload.uploadUserAvatar
 ) // 用户修改头像 post
 
@@ -130,12 +133,14 @@ router.get('/user-article', tokens.ClientVerifyToken, article.getUserArticle) //
 router.post(
   '/article/upload-article-picture',
   tokens.ClientVerifyToken,
+  uploadModel('articleImg').single('file'),
   upload.uploadArticlePicture
 ) // 文章图片上传
 
 router.post(
   '/article-blog/upload-img',
   tokens.ClientVerifyToken,
+  uploadModel('articleBlogImg').single('file'),
   upload.uploadArticleBlogPicture
 ) // 文章图片上传
 
@@ -248,6 +253,7 @@ router.get('/dynamic/view', dynamic.getDynamicView) // 获取动态详情
 router.post(
   '/dynamic/upload-dynamic-picture',
   tokens.ClientVerifyToken,
+  uploadModel('dynamic').single('file'),
   upload.uploadDynamicPicture
 ) // 动态图片上传
 
@@ -294,6 +300,7 @@ router.get('/personal/article-blog-list', personalCenter.userArticleBlogList) //
 router.post(
   '/books/upload-books-picture',
   tokens.ClientVerifyToken,
+  uploadModel('booksImg').single('file'),
   upload.uploadBooksPicture
 ) // 小书图片上传
 
@@ -339,6 +346,7 @@ router.post('/book/delete', tokens.ClientVerifyToken, book.deleteBook) // 删除
 router.post(
   '/book/upload-book-picture',
   tokens.ClientVerifyToken,
+  uploadModel('bookImg').single('file'),
   upload.uploadBookPicture
 ) // 小书章节图片上传
 

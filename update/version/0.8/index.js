@@ -36,6 +36,7 @@ class update {
         await models.sequelize.query(
           'ALTER TABLE article_blog CHANGE like_count collect_count bigint(20) comment "收藏数";'
         )
+        await models.sequelize.query('ALTER TABLE article_blog DROP is_public;')
 
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb

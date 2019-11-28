@@ -1,6 +1,6 @@
 const { ApolloServer } = require('apollo-server-express')
 const { makeExecutableSchema } = require('graphql-tools')
-const { typeDefs, resolvers } = require('./models')
+const { typeDefs, resolvers } = require('./graphql')
 const isProd = process.env.NODE_ENV === 'production'
 /**
  * 中间件

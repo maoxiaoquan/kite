@@ -1,29 +1,32 @@
 <template>
-  <div class="box-comment"
-       v-loading="isLoading">
-    <div class="box-comment-part"
-         v-if="website.config.on_comment==='yes'">
+  <div class="box-comment" v-loading="isLoading">
+    <div class="box-comment-part" v-if="website.config.on_comment === 'yes'">
       <div class="box-comment-part-title">
         <span>发表评论</span>
         <small>
           已发布评论
-          <em>{{articleComment.count}}</em> 条
+          <em>{{ articleComment.count }}</em> 条
         </small>
-        <router-link class="comment-rule"
-                     :to="{'name':'comment_rule'}">《点我查看评论规范》</router-link>
+        <router-link class="comment-rule" :to="{ name: 'comment_rule' }"
+          >《点我查看评论规范》</router-link
+        >
       </div>
       <comment-form @commentChange="commentChange" />
       <div class="comment-list">
         <div id="commentlist">
-          <comment-item :comment-item="item"
-                        v-for="(item,key) in articleComment.list"
-                        :key="key" />
+          <comment-item
+            :comment-item="item"
+            v-for="(item, key) in articleComment.list"
+            :key="key"
+          />
         </div>
 
-        <Page :total="Number(articleComment.count)"
-              :page="Number(articleComment.page)"
-              :pageSize="articleComment.pageSize"
-              @pageChange="pageChange"></Page>
+        <Page
+          :total="Number(articleComment.count)"
+          :page="Number(articleComment.page)"
+          :pageSize="articleComment.pageSize"
+          @pageChange="pageChange"
+        ></Page>
       </div>
     </div>
     <div v-else>
@@ -33,16 +36,16 @@
 </template>
 
 <script>
-import commentItem from "./CommentItem";
-import { Page } from "@components";
-import commentForm from "./CommentForm";
-import { mapState } from "vuex";
+import commentItem from './CommentItem'
+import { Page } from '@components'
+import commentForm from './CommentForm'
+import { mapState } from 'vuex'
 export default {
-  name: "index",
-  created () {
-    this.getCommentList(); // 获取用户的评论
+  name: 'index',
+  created() {
+    this.getCommentList() // 获取用户的评论
   },
-  data () {
+  data() {
     return {
       isLoading: true,
       articleComment: {
@@ -54,58 +57,59 @@ export default {
     }
   },
   methods: {
-    getCommentList () {
+    getCommentList() {
       // 获取评论列表
       this.isLoading = true
       this.$store
-        .dispatch("articleComment/ARTICLE_COMMENT_LIST", {
+        .dispatch('articleComment/ARTICLE_COMMENT_LIST', {
           aid: this.article.aid,
           page: this.comment_page,
           pageSize: this.comment_pageSize
-        }).then(result => {
+        })
+        .then(result => {
           this.articleComment = result.data
           this.isLoading = false
-        }).catch(() => {
+        })
+        .catch(() => {
           this.isLoading = false
         })
     },
-    pageChange (val) {
+    pageChange(val) {
       this.articleComment.page = val
       this.getCommentList()
     },
-    commentChange (res) {
-      if (res.state === "success") {
-        this.$message.success(res.message);
+    commentChange(res) {
+      if (res.state === 'success') {
+        this.$message.success(res.message)
         this.articleComment.list.unshift(res.data)
         this.articleComment.count += 1
       } else {
-        this.$message.warning(res.message);
+        this.$message.warning(res.message)
       }
     }
   },
   computed: {
-    ...mapState(["website"]),
-    personalInfo () {
+    ...mapState(['website']),
+    personalInfo() {
       // 登录后的个人信息
-      return this.$store.state.personalInfo || {};
+      return this.$store.state.personalInfo || {}
     },
-    article () {
-      return this.$store.state.article.article || {};
-    },
+    article() {
+      return this.$store.state.article.article || {}
+    }
   },
   components: {
-    "comment-item": commentItem,
+    'comment-item': commentItem,
     'comment-form': commentForm,
     Page
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
 /*comment-lay start*/
 
 .box-comment {
-  margin-bottom: 100px;
   .box-comment-part {
     margin-top: 60px;
     margin-bottom: 60px;

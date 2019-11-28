@@ -19,12 +19,12 @@ const { TimeNow, TimeDistance } = require('../../../utils/time')
 
 const userVirtual = require('../../../common/userVirtual')
 
-function ErrorMessage (message) {
+function ErrorMessage(message) {
   this.message = message
   this.name = 'UserException'
 }
 
-function getNoMarkupStr (markupStr) {
+function getNoMarkupStr(markupStr) {
   /* markupStr 源码</> */
   // console.log(markupStr);
   let noMarkupStr = markupStr
@@ -45,7 +45,7 @@ function getNoMarkupStr (markupStr) {
   return noMarkupStr
 }
 
-function getSubStr (string) {
+function getSubStr(string) {
   let str = ''
   let len = 0
   for (var i = 0; i < string.length; i++) {
@@ -69,7 +69,7 @@ class Article {
    * 新建文章post提交
    * @param   {object} ctx 上下文对象
    */
-  static async createArticle (req, res, next) {
+  static async createArticle(req, res, next) {
     let reqData = req.body
     let { user = '' } = req
     try {
@@ -83,10 +83,6 @@ class Article {
 
       if (!reqData.content) {
         throw new ErrorMessage('请输入文章内容')
-      }
-
-      if (!reqData.blog_ids) {
-        throw new ErrorMessage('请选择个人专题')
       }
 
       if (reqData.source.length === 0 || reqData.source === null) {
@@ -204,7 +200,7 @@ class Article {
    * @param   {object} ctx 上下文对象
    */
 
-  static async getArticleTag (req, res, next) {
+  static async getArticleTag(req, res, next) {
     let qyData = req.query
 
     let page = req.query.page || 1
@@ -317,7 +313,7 @@ class Article {
    * 获取热门文章标签
    * @param   {object} ctx 上下文对象
    */
-  static async getPopularArticleTag (req, res, next) {
+  static async getPopularArticleTag(req, res, next) {
     try {
       let articleTagAll = await models.article_tag.findAll({
         attributes: ['tag_id', 'name', 'en_name', 'icon', 'description'],
@@ -371,7 +367,7 @@ class Article {
    * 获取所有文章标签get
    * @param   {object} ctx 上下文对象
    */
-  static async getArticleTagAll (req, res, next) {
+  static async getArticleTagAll(req, res, next) {
     try {
       let articleTagAll = await models.article_tag.findAll({
         attributes: ['tag_id', 'name', 'en_name', 'icon', 'description'],
@@ -421,7 +417,7 @@ class Article {
    * ajax 查询一篇文章
    * @param   {object} ctx 上下文对象
    */
-  static async getArticle (req, res, next) {
+  static async getArticle(req, res, next) {
     let { aid } = req.query
     try {
       let oneArticle = await models.article.findOne({
@@ -505,7 +501,7 @@ class Article {
    * ajax 获取用户自己的一篇文章
    * @param   {object} ctx 上下文对象
    */
-  static async getUserArticle (req, res, next) {
+  static async getUserArticle(req, res, next) {
     let { aid } = req.query
     let { user = '' } = req
     try {
@@ -555,7 +551,7 @@ class Article {
    * 更新文章
    * @param   {object} ctx 上下文对象
    */
-  static async updateArticle (req, res, next) {
+  static async updateArticle(req, res, next) {
     let reqData = req.body
 
     let { user = '' } = req
@@ -581,10 +577,6 @@ class Article {
 
       if (!reqData.content) {
         throw new ErrorMessage('请输入文章内容')
-      }
-
-      if (!reqData.blog_ids) {
-        throw new ErrorMessage('请选择个人专题')
       }
 
       if (reqData.source.length === 0 || reqData.source === null) {
@@ -698,7 +690,7 @@ class Article {
    * 无关联则直接删除文章，有关联则开启事务同时删除与文章的关联
    * 前台用户删除文章并不是真的删除，只是置为了删除态
    */
-  static async deleteArticle (req, res, next) {
+  static async deleteArticle(req, res, next) {
     const { aid } = req.query
     let { islogin = '', user = '' } = req
 
@@ -750,7 +742,7 @@ class Article {
    * 搜索
    * @param   {object} ctx 上下文对象
    */
-  static async searchArticle (req, res, next) {
+  static async searchArticle(req, res, next) {
     let page = req.query.page || 1
     let pageSize = req.query.pageSize || 25
     let search = req.query.search
@@ -839,7 +831,7 @@ class Article {
    * @param   {object} ctx 上下文对象
    */
 
-  static async getArticleColumn (req, res, next) {
+  static async getArticleColumn(req, res, next) {
     try {
       let allArticleColumn = await models.article_column.findAll({
         attributes: [
@@ -895,7 +887,7 @@ class Article {
    * @param   {object} ctx 上下文对象
    */
 
-  static async getArticleColumnList (req, res, next) {
+  static async getArticleColumnList(req, res, next) {
     let page = req.query.page || 1
     let pageSize = req.query.pageSize || 25
 

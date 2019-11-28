@@ -904,7 +904,7 @@ class User {
             rows[i].setDataValue(
               'dynamic',
               await models.dynamic.findOne({
-                where: { id: content.dynamic_id },
+                where: { id: content.id },
                 attributes: ['id', 'content', 'uid']
               })
             )
@@ -1243,7 +1243,7 @@ class User {
         if (allThumb[i].type === modelType.article) {
           articleThumdId.push(allThumb[i].associate_id)
         } else if (allThumb[i].type === modelType.dynamic) {
-          articleThumdId.push(allThumb[i].associate_id)
+          dynamicThumdId.push(allThumb[i].associate_id)
         }
       }
 

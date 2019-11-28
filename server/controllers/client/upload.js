@@ -29,11 +29,10 @@ class Upload {
         .read()
         .get('website')
         .value()
-      await upload('avatarImg').single('file')(req, res, next)
-      if (ctx.req.file) {
-        let destination = ctx.req.file.destination.split('static')[1]
-        let filename = ctx.req.file.filename
-        let origin = req.header.origin || 'http://' + website.domain_name
+      if (req.file) {
+        let destination = req.file.destination.split('static')[1]
+        let filename = req.file.filename
+        let origin = req.headers.origin || 'https://' + website.domain_name
         let { user = '' } = req
 
         let userRoleAll = await models.user_role.findAll({
@@ -115,11 +114,10 @@ class Upload {
         .read()
         .get('website')
         .value()
-      await upload('articleImg').single('file')(req, res, next)
-      if (ctx.req.file) {
-        let destination = ctx.req.file.destination.split('static')[1]
-        let filename = ctx.req.file.filename
-        let origin = req.header.origin || 'http://' + website.domain_name
+      if (req.file) {
+        let destination = req.file.destination.split('static')[1]
+        let filename = req.file.filename
+        let origin = req.headers.origin || 'https://' + website.domain_name
         resClientJson(res, {
           state: 'success',
           message: '文章图片上传成功',
@@ -148,11 +146,10 @@ class Upload {
    */
   static async uploadBooksPicture (req, res, next) {
     try {
-      await upload('booksImg').single('file')(req, res, next)
-      if (ctx.req.file) {
-        let destination = ctx.req.file.destination.split('static')[1]
-        let filename = ctx.req.file.filename
-        let origin = req.header.origin
+      if (req.file) {
+        let destination = req.file.destination.split('static')[1]
+        let filename = req.file.filename
+        let origin = req.headers.origin
         resClientJson(res, {
           state: 'success',
           message: '小书图片上传成功',
@@ -181,11 +178,10 @@ class Upload {
    */
   static async uploadBookPicture (req, res, next) {
     try {
-      await upload('bookImg').single('file')(req, res, next)
-      if (ctx.req.file) {
-        let destination = ctx.req.file.destination.split('static')[1]
-        let filename = ctx.req.file.filename
-        let origin = req.header.origin
+      if (req.file) {
+        let destination = req.file.destination.split('static')[1]
+        let filename = req.file.filename
+        let origin = req.headers.origin
         resClientJson(res, {
           state: 'success',
           message: '小书图片上传成功',
@@ -214,11 +210,10 @@ class Upload {
    */
   static async uploadDynamicPicture (req, res, next) {
     try {
-      await upload('dynamic').single('file')(req, res, next)
-      if (ctx.req.file) {
-        let destination = ctx.req.file.destination.split('static')[1]
-        let filename = ctx.req.file.filename
-        let origin = req.header.origin
+      if (req.file) {
+        let destination = req.file.destination.split('static')[1]
+        let filename = req.file.filename
+        let origin = req.headers.origin
         resClientJson(res, {
           state: 'success',
           message: '动态图片上传成功',
@@ -244,11 +239,10 @@ class Upload {
   // 个人专栏图片上传
   static async uploadArticleBlogPicture (req, res, next) {
     try {
-      await upload('articleBlogImg').single('file')(req, res, next)
-      if (ctx.req.file) {
-        let destination = ctx.req.file.destination.split('static')[1]
-        let filename = ctx.req.file.filename
-        let origin = req.header.origin
+      if (req.file) {
+        let destination = req.file.destination.split('static')[1]
+        let filename = req.file.filename
+        let origin = req.headers.origin
         resClientJson(res, {
           state: 'success',
           message: '个人专栏图片上传成功',

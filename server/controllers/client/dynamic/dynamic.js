@@ -181,17 +181,6 @@ class dynamic {
           })
         )
 
-        oneDynamic.setDataValue(
-          'userAttentionIds',
-          await models.attention.findAll({
-            where: {
-              associate_id: oneDynamic.uid,
-              type: modelType.user,
-              is_associate: true
-            }
-          })
-        )
-
         if (
           oneDynamic.topic_ids &&
           config.DYNAMIC.dfTreeHole === oneDynamic.topic_ids
@@ -321,17 +310,6 @@ class dynamic {
           })
         )
 
-        rows[i].setDataValue(
-          'userAttentionIds',
-          await models.attention.findAll({
-            where: {
-              associate_id: rows[i].uid,
-              type: modelType.user,
-              is_associate: true
-            }
-          })
-        )
-
         if (
           rows[i].topic_ids &&
           config.DYNAMIC.dfTreeHole === rows[i].topic_ids
@@ -425,17 +403,6 @@ class dynamic {
             where: {
               associate_id: rows[i].id,
               type: modelType.dynamic,
-              is_associate: true
-            }
-          })
-        )
-
-        rows[i].setDataValue(
-          'userAttentionIds',
-          await models.attention.findAll({
-            where: {
-              associate_id: rows[i].uid,
-              type: modelType.user,
               is_associate: true
             }
           })

@@ -1,6 +1,6 @@
 // example data
 
-const models = require('../../../models')
+const models = require('../../models')
 
 const Query = {
   articleList: async () => {
