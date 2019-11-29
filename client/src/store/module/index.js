@@ -17,7 +17,7 @@ import book from './book'
 import virtual from './virtual'
 import shop from './shop'
 import common from './common'
-
+import graphql from './graphql'
 export default {
   sign,
   home,
@@ -37,5 +37,6 @@ export default {
   book,
   virtual,
   shop,
-  common
+  common,
+  graphql
 }

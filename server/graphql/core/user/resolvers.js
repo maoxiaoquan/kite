@@ -3,13 +3,9 @@
 const models = require('../../models')
 
 const Query = {
-  articleList: async () => {
-    const { page, pageSize, list } = await models.article.getIndex()
-    return {
-      page,
-      pageSize,
-      list
-    }
+  async userInfo (uid) {
+    const userInfo = await models.user.userInfo(uid)
+    return userInfo
   }
 }
 

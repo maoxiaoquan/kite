@@ -1,19 +1,19 @@
 const Schema = `
-  type ArticleView {
-    aid: Int
-    title: String
-  }
-
-  type ArticleList {
-    page: String
-    pageSize: String
-    list: [ArticleView]
+  type UserInfo {
+    uid: Int
+    avatar: String
+    nickname: String
+    user_role_ids: String
+    home_page: String
+    company: String
+    shell_balance: Int
   }
 `
 
 const Query = `
-  articleList: ArticleList  
+  userInfo(uid: Int!): UserInfo
 `
+
 const Mutation = ` 
   
 `

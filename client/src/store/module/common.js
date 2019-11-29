@@ -1,25 +1,10 @@
 import { fetch } from '@request'
-import { gqlfetch } from '@fetch'
 
 const state = () => ({})
 
 const mutations = {}
 
 const actions = {
-  GET_TEST ({ commit, dispatch, state }, parameter) {
-    return gqlfetch({
-      parameter: `
-          query {
-            articleList { 
-              list {
-                aid
-                title
-              }
-            }
-          }
-        `
-    })
-  },
   SET_ATTENTION ({ commit, dispatch, state }, parameter) {
     // 设置关注
     return fetch({

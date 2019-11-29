@@ -3,27 +3,19 @@
     <div class="sidebar-block author-block  client-card">
       <div class="block-title">关于作者</div>
       <div class="block-body">
-        <a
-          href="/user/59c3d4a35188252f923830e7"
-          target="_blank"
-          rel=""
-          class="user-item item"
-        >
-          <div
-            class="lazy avatar avatar loaded"
-            style='background-image: url("https://user-gold-cdn.xitu.io/2019/10/31/16e21c965d87845b?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1");'
-          ></div>
+        <a href="/user/59c3d4a35188252f923830e7"
+           target="_blank"
+           rel=""
+           class="user-item item">
+          <div class="lazy avatar avatar loaded"
+               style='background-image: url("https://user-gold-cdn.xitu.io/2019/10/31/16e21c965d87845b?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1");'></div>
           <div class="info-box">
-            <a
-              href="/user/59c3d4a35188252f923830e7"
-              target="_blank"
-              class="username"
-            >
+            <a href="/user/59c3d4a35188252f923830e7"
+               target="_blank"
+               class="username">
               B_Cornelius
-              <img
-                src="https://b-gold-cdn.xitu.io/v3/static/img/lv-3.e108c68.svg"
-                alt="lv-3"
-            /></a>
+              <img src="https://b-gold-cdn.xitu.io/v3/static/img/lv-3.e108c68.svg"
+                   alt="lv-3" /></a>
             <div class="position">
               我是菜鸡前端 @ 作业帮
             </div>
@@ -47,22 +39,20 @@
       <div class="block-title">相关文章</div>
       <div class="block-body">
         <div class="entry-list">
-          <a href="/post/59cb6307f265da064e1f65b9" target="_blank" class="item">
+          <a href="/post/59cb6307f265da064e1f65b9"
+             target="_blank"
+             class="item">
             <div class="entry-title">
               前端面试之webpack篇
             </div>
             <div class="entry-meta-box">
               <div class="entry-meta">
-                <img
-                  src="https://b-gold-cdn.xitu.io/v3/static/img/zan.e9d7698.svg"
-                  class="icon"
-                /><span class="count">896</span>
+                <img src="https://b-gold-cdn.xitu.io/v3/static/img/zan.e9d7698.svg"
+                     class="icon" /><span class="count">896</span>
               </div>
               <div class="entry-meta">
-                <img
-                  src="https://b-gold-cdn.xitu.io/v3/static/img/comment.a7c8341.svg"
-                  class="icon"
-                /><span class="count">20</span>
+                <img src="https://b-gold-cdn.xitu.io/v3/static/img/comment.a7c8341.svg"
+                     class="icon" /><span class="count">20</span>
               </div>
             </div>
           </a>
@@ -73,7 +63,30 @@
 </template>
 
 <script>
-export default {}
+import { mapState } from 'vuex'
+export default {
+  data () {
+    return {
+
+    }
+  },
+  created () {
+    this.getUserInfo() // 获取用户的信息
+  },
+  computed: {
+    article () {
+      return this.$store.state.article.article || {}
+    },
+    ...mapState(['website', 'personalInfo', 'user'])
+  },
+  methods: {
+    getUserInfo () {
+      this.$store.dispatch('graphql/GET_USER_INFO', { uid: this.article.uid }).then(result => {
+        console.log('result', result)
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

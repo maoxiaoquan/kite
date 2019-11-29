@@ -118,7 +118,6 @@ export default {
         ""
         // route.params.en_name || ''
       ),
-      store.dispatch("common/GET_TEST"),
       store.commit("home/SET_INIT_INDEX_ARTICLE_LIST"), // 重置文章列表数据
       store.dispatch("articleColumn/GET_ARTICLE_COLUMN"),
       store.dispatch("home/GET_INDEX_ARTICLE_LIST", {

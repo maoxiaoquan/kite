@@ -12,34 +12,30 @@ const {
   modelType
 } = require('../../utils/constant')
 
-class Article {
-  static async getIndex () {
-    let page = 1
-    let pageSize = 25
-    let sort = 'newest'
-    let order = [] // 排序参数
-    let where = [] // 排序参数
+class User {
+  static async userInfo (uid) {
+    let where = {
+      uid
+    } // 排序参数
     try {
       // where
-      let { count, rows } = await models.user.findOne({
-        where: where // 为空，获取全部，也可以自己添加条件
+      let oneUser = await models.user.findOne({
+        where: where, // 为空，获取全部，也可以自己添加条件
+        attributes: ['uid', 'avatar', 'nickname', 'user_role_ids']
+      })
+      let oneUserInfo = await models.user_info.findOne({
+        where: where, // 为空，获取全部，也可以自己添加条件
+        attributes: ['home_page', 'company', 'shell_balance']
       })
 
       return {
-        count,
-        page,
-        pageSize,
-        list: JSON.parse(JSON.stringify(rows))
+        ...JSON.parse(JSON.stringify(oneUser)),
+        ...JSON.parse(JSON.stringify(oneUserInfo))
       }
     } catch (err) {
-      return {
-        count: 0,
-        page: 1,
-        pageSize,
-        list: []
-      }
+      return {}
     }
   }
 }
 
-module.exports = Article
+module.exports = User
