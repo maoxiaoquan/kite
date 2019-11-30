@@ -10,6 +10,9 @@ const Query = {
       pageSize,
       list
     }
+  },
+  recommendArticle () {
+    return models.article.recommendArticle()
   }
 }
 

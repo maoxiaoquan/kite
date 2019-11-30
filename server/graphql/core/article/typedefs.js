@@ -2,6 +2,8 @@ const Schema = `
   type ArticleView {
     aid: Int
     title: String
+    thumb_count: Int
+    comment_count: Int
   }
 
   type ArticleList {
@@ -12,7 +14,8 @@ const Schema = `
 `
 
 const Query = `
-  articleList: ArticleList  
+  articleList: ArticleList
+  recommendArticle: [ArticleView] 
 `
 const Mutation = ` 
   

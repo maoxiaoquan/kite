@@ -318,7 +318,11 @@ router.get('/user-books/info', tokens.ClientVerifyToken, books.getUserBooksInfo)
 
 router.get('/books/info', tokens.ClientVerifyTokenInfo, books.getBooksInfo) // 获取小书信息
 
-router.get('/books/book-all', books.getBooksBookAll) // 获取小书章节列表
+router.get(
+  '/books/book-all',
+  tokens.ClientVerifyTokenInfo,
+  books.getBooksBookAll
+) // 获取小书章节列表
 
 router.post('/books/update', tokens.ClientVerifyToken, books.updateBooks) // 更新用户自己的小书
 

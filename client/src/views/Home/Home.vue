@@ -191,10 +191,10 @@ export default {
 <style scoped lang="scss">
 .home-lay {
   .home-col-left {
-    padding-right: 38px;
+    padding-right: 30px;
   }
   .home-col-right {
-    padding-left: 38px;
+    padding-left: 30px;
   }
   .main-top {
     width: 100%;

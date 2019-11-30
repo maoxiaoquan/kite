@@ -110,7 +110,7 @@
           }"
              @click="setUserLikeDynamic">
           <i class="el-icon-star-off"></i>
-          <span class="action-title">{{ dynamicItem.thumbCount }}</span>
+          <span class="action-title">{{ dynamicItem.thumb_count }}</span>
         </div>
         <div class="comment-action action"
              @click="isCommnet = !isCommnet">
@@ -294,10 +294,10 @@ export default {
         .then(res => {
           if (res.state === 'success') {
             if (res.data.type === 'enter') {
-              this.dynamicItem.thumbCount =
-                Number(this.dynamicItem.thumbCount) + 1
+              this.dynamicItem.thumb_count =
+                Number(this.dynamicItem.thumb_count) + 1
             } else if (res.data.type === 'cancel') {
-              this.dynamicItem.thumbCount -= 1
+              this.dynamicItem.thumb_count -= 1
             }
             this.$store.dispatch('user/GET_USER_INFO_ALL', {
               uid: this.personalInfo.user.uid

@@ -1,49 +1,45 @@
 <template>
   <div class="user-aside-view">
-    <ul
-      class="list user-dynamic"
-      v-if="user.user.user_role_ids && user.user_role_all"
-    >
-      <li
-        class="badge-icon"
-        v-for="(item, key) in user.user_role_all"
-        :key="key"
-        v-if="
+    <ul class="list user-dynamic"
+        v-if="user.user.user_role_ids && user.user_role_all">
+      <li class="badge-icon"
+          v-for="(item, key) in user.user_role_all"
+          :key="key"
+          v-if="
           ~user.user.user_role_ids
             .split(',')
             .indexOf(String(item.user_role_id)) && item.is_show
-        "
-      >
-        <a target="_blank" href="javascript:;">
+        ">
+        <a target="_blank"
+           href="javascript:;">
           <span class="tag-name">{{ item.user_role_name }}</span>
         </a>
       </li>
     </ul>
 
-    <ul
-      class="aside-operat"
-      v-if="personalInfo.islogin && personalInfo.user.uid === user.user.uid"
-    >
-      <li
-        v-if="personalInfo.islogin && personalInfo.user.uid === user.user.uid"
-        @click="checkIn"
-      >
+    <ul class="aside-operat"
+        v-if="personalInfo.islogin && personalInfo.user.uid === user.user.uid">
+      <li v-if="personalInfo.islogin && personalInfo.user.uid === user.user.uid"
+          @click="checkIn">
         <span class="check-in"> <i class="el-icon-bell"></i> 签到</span>
       </li>
       <li>
-        <router-link class="collection" :to="{ name: 'personal' }">
+        <router-link class="collection"
+                     :to="{ name: 'personal' }">
           <i class="el-icon-folder-opened"></i>
           收藏集
         </router-link>
       </li>
       <li>
-        <router-link class="collection" :to="{ name: 'shellDetail' }">
+        <router-link class="collection"
+                     :to="{ name: 'shellDetail' }">
           <i class="el-icon-notebook-2"></i>
           贝壳明细
         </router-link>
       </li>
       <li>
-        <router-link class="collection" :to="{ name: 'myOrder' }">
+        <router-link class="collection"
+                     :to="{ name: 'myOrder' }">
           <i class="el-icon-notebook-1"></i>
           我的订单
         </router-link>
@@ -75,14 +71,14 @@ import { Popover, Face } from '@components'
 import { mapState } from 'vuex'
 export default {
   name: 'UserAside',
-  created() {
+  created () {
     this.$store.dispatch('user/GET_USER_ROLE_ALL')
   },
   computed: {
     ...mapState(['personalInfo', 'user'])
   },
   methods: {
-    checkIn() {
+    checkIn () {
       this.$store.dispatch('virtual/CHECK_IN').then(result => {
         if (result.state === 'success') {
           this.$message.warning(result.message)
@@ -195,7 +191,6 @@ export default {
       color: rgba(0, 0, 0, 0.88);
       i {
         display: inline-block;
-        margin-right: 15px;
       }
       &.collection {
         background: #ffe699;

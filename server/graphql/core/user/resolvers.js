@@ -3,7 +3,7 @@
 const models = require('../../models')
 
 const Query = {
-  async userInfo (uid) {
+  async userInfo (root, { uid }) {
     const userInfo = await models.user.userInfo(uid)
     return userInfo
   }

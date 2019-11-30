@@ -2,90 +2,70 @@
   <section class="article layout-content container">
     <div class="article-lay">
       <main class="main client-card">
-        <div class="article-view" v-if="article.aid">
+        <div class="article-view"
+             v-if="article.aid">
           <div class="article-title">
             <h1>{{ article.title }}</h1>
             <div class="author">
-              <router-link
-                :to="{
+              <router-link :to="{
                   name: 'user',
                   params: { uid: article.user.uid, routeType: 'article' }
                 }"
-                class="avatar"
-              >
-                <img v-lazy="article.user.avatar" alt />
+                           class="avatar">
+                <img v-lazy="article.user.avatar"
+                     alt />
               </router-link>
               <div class="info">
                 <div class="name">
-                  <router-link
-                    :to="{
+                  <router-link :to="{
                       name: 'user',
                       params: { uid: article.user.uid, routeType: 'article' }
-                    }"
-                    >{{ article.user.nickname }}</router-link
-                  >
+                    }">{{ article.user.nickname }}</router-link>
                 </div>
                 <!-- 文章数据信息 -->
                 <div class="meta">
                   <span class="publish-time">{{ article.create_dt }}</span>
                   <span class="views-count">阅读 {{ article.read_count }}</span>
-                  <span class="comments-count"
-                    >评论 {{ article.comment_count }}</span
-                  >
-                  <span class="likes-count"
-                    >喜欢 {{ article.thumb_count }}</span
-                  >
-                  <span class="source"
-                    >{{ sourceTypeList[article.source] }}
-                    {{ articleTypeList[article.type] }}</span
-                  >
+                  <span class="comments-count">评论 {{ article.comment_count }}</span>
+                  <span class="likes-count">喜欢 {{ article.thumb_count }}</span>
+                  <span class="source">{{ sourceTypeList[article.source] }}
+                    {{ articleTypeList[article.type] }}</span>
                 </div>
               </div>
             </div>
           </div>
-          <article
-            class="article-content box-article-view"
-            v-html="article.content"
-          ></article>
+          <article class="article-content box-article-view"
+                   v-html="article.content"></article>
 
           <div class="show-foot clearfix">
             <div class="copyright">© 著作权归作者所有</div>
           </div>
 
           <div class="meta-bottom clearfix">
-            <div
-              class="meta-bottom-item like"
-              @click="onUserLikeArticle"
-              :class="{ active: isThumb(article) }"
-            >
-              <i
-                :class="
+            <div class="meta-bottom-item like"
+                 @click="onUserThumbArticle"
+                 :class="{ active: isThumb(article) }">
+              <i :class="
                   isThumb(article) ? 'el-icon-star-on' : 'el-icon-star-off'
-                "
-              ></i>
+                "></i>
             </div>
             <div class="meta-bottom-item share">
               <Dropdown>
-                <div class="el-dropdown-link" slot="button">
+                <div class="el-dropdown-link"
+                     slot="button">
                   <i class="el-icon-share"></i>
                 </div>
                 <div class="dropdown-menu-view">
-                  <div
-                    class="dropdown-menu-item"
-                    @click="shareChange({ type: 'qq', data: article })"
-                  >
+                  <div class="dropdown-menu-item"
+                       @click="shareChange({ type: 'qq', data: article })">
                     分享到QQ
                   </div>
-                  <div
-                    class="dropdown-menu-item"
-                    @click="shareChange({ type: 'sina', data: article })"
-                  >
+                  <div class="dropdown-menu-item"
+                       @click="shareChange({ type: 'sina', data: article })">
                     分享到新浪
                   </div>
-                  <div
-                    class="dropdown-menu-item"
-                    @click="shareChange({ type: 'qzone', data: article })"
-                  >
+                  <div class="dropdown-menu-item"
+                       @click="shareChange({ type: 'qzone', data: article })">
                     分享到QQ空间
                   </div>
                 </div>
@@ -96,7 +76,8 @@
           <!--文章评论-->
           <ArticleComment />
         </div>
-        <p class="no-aricle" v-else>文章不存在</p>
+        <p class="no-aricle"
+           v-else>文章不存在</p>
       </main>
 
       <div class="aside">
@@ -124,7 +105,7 @@ import {
 export default {
   name: 'Article',
   mixins: [googleMixin], //混合谷歌分析
-  metaInfo() {
+  metaInfo () {
     return {
       title: this.article.title || '',
       titleTemplate: `%s - ${this.website.meta.website_name || ''}`,
@@ -183,25 +164,25 @@ export default {
       __dangerouslyDisableSanitizers: ['script']
     }
   },
-  asyncData({ store, route }) {
+  asyncData ({ store, route }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
       store.dispatch('article/GET_ARTICLE', { aid: route.params.aid })
     ])
   },
-  data() {
+  data () {
     return {
       sourceTypeList: ['', '原创', '转载'],
       articleTypeList: articleTypeText
     }
   },
   methods: {
-    getArticle() {
+    getArticle () {
       this.$store.dispatch('article/GET_ARTICLE', {
         aid: this.$route.params.aid
       })
     },
-    isThumb(item) {
+    isThumb (item) {
       // 是否收藏
       if (this.personalInfo.islogin) {
         if (
@@ -216,7 +197,7 @@ export default {
         return false
       }
     },
-    onUserLikeArticle() {
+    onUserThumbArticle () {
       /*用户like 文章*/
       this.$store
         .dispatch('common/SET_THUMB', {
@@ -234,7 +215,7 @@ export default {
           console.log(err)
         })
     },
-    shareChange(val) {
+    shareChange (val) {
       // 分享到其他
       let urlOrigin = window.location.origin // 源地址
       if (val.type === 'sina') {
@@ -262,7 +243,7 @@ export default {
     }
   },
   computed: {
-    article() {
+    article () {
       return this.$store.state.article.article || {}
     },
     ...mapState(['website', 'personalInfo', 'user'])
@@ -458,6 +439,17 @@ export default {
     text-align: center;
     font-size: 25px;
     margin: 20px 0;
+  }
+}
+
+@media (max-width: 575px) {
+  .aside {
+    display: none;
+  }
+  .article.layout-content .main {
+    border: none;
+    padding: 0;
+    border-radius: none;
   }
 }
 </style>

@@ -3,59 +3,54 @@
     <div class="sidebar-block author-block  client-card">
       <div class="block-title">关于作者</div>
       <div class="block-body">
-        <a href="/user/59c3d4a35188252f923830e7"
-           target="_blank"
-           rel=""
-           class="user-item item">
+        <div class="user-item item">
           <div class="lazy avatar avatar loaded"
-               style='background-image: url("https://user-gold-cdn.xitu.io/2019/10/31/16e21c965d87845b?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1");'></div>
+               :style='`background-image: url("${userInfo.avatar}");`'></div>
           <div class="info-box">
-            <a href="/user/59c3d4a35188252f923830e7"
-               target="_blank"
-               class="username">
-              B_Cornelius
-              <img src="https://b-gold-cdn.xitu.io/v3/static/img/lv-3.e108c68.svg"
-                   alt="lv-3" /></a>
+            <router-link class="username"
+                         :to="{name:'user',params:{uid:userInfo.uid,routeType:'article'}}">
+              {{userInfo.nickname}}</router-link>
             <div class="position">
-              我是菜鸡前端 @ 作业帮
+              {{userInfo.profession}} @ {{userInfo.company}}
             </div>
           </div>
-        </a>
+        </div>
         <div class="stat-item item">
           <i class="el-icon-document"></i>
-          <span class="content">文章总数 <em class="count">3,100</em></span>
+          <span class="content">文章总数 <em class="count">{{userInfo.articleCount||0}}</em></span>
         </div>
         <div class="stat-item item">
           <i class="el-icon-chat-line-square"></i>
           <span class="content">
             片刻总数
-            <em class="count">74,108</em>
+            <em class="count">{{userInfo.dynamicCount||0}}</em>
           </span>
         </div>
       </div>
     </div>
 
     <div class="sidebar-block related-entry-sidebar-block client-card">
-      <div class="block-title">相关文章</div>
+      <div class="block-title">最新文章</div>
       <div class="block-body">
         <div class="entry-list">
-          <a href="/post/59cb6307f265da064e1f65b9"
-             target="_blank"
-             class="item">
+          <router-link class="item"
+                       v-for="(item,key) in  recommendArticle"
+                       :key="key"
+                       :to="{name:'article',params:{aid:item.aid}}">
             <div class="entry-title">
-              前端面试之webpack篇
+              {{item.title}}
             </div>
             <div class="entry-meta-box">
               <div class="entry-meta">
-                <img src="https://b-gold-cdn.xitu.io/v3/static/img/zan.e9d7698.svg"
-                     class="icon" /><span class="count">896</span>
+                <i class="el-icon-thumb icon"></i>
+                <span class="count">{{item.thumb_count}}</span>
               </div>
               <div class="entry-meta">
-                <img src="https://b-gold-cdn.xitu.io/v3/static/img/comment.a7c8341.svg"
-                     class="icon" /><span class="count">20</span>
+                <i class="el-icon-chat-dot-square icon"></i>
+                <span class="count">{{item.comment_count}}</span>
               </div>
             </div>
-          </a>
+          </router-link>
         </div>
       </div>
     </div>
@@ -67,10 +62,11 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
-
+      userInfo: {},
+      recommendArticle: []
     }
   },
-  created () {
+  mounted () {
     this.getUserInfo() // 获取用户的信息
   },
   computed: {
@@ -82,7 +78,8 @@ export default {
   methods: {
     getUserInfo () {
       this.$store.dispatch('graphql/GET_USER_INFO', { uid: this.article.uid }).then(result => {
-        console.log('result', result)
+        this.userInfo = result.data.userInfo || {}
+        this.recommendArticle = result.data.recommendArticle || []
       })
     }
   }

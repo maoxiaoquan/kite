@@ -289,10 +289,14 @@ export default {
       }
     },
     trialRead () {
-      if (this.books.booksInfo.trialReadCount > 0) {
+      if (this.books.booksInfo.isBuy) {
         this.lookChapter()
       } else {
-        this.$message.warning('当前小书无可试读章节');
+        if (this.books.booksInfo.trialReadCount > 0) {
+          this.lookChapter()
+        } else {
+          this.$message.warning('当前小书无可试读章节');
+        }
       }
     },
     lookChapter () {

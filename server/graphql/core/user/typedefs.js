@@ -6,7 +6,10 @@ const Schema = `
     user_role_ids: String
     home_page: String
     company: String
+    profession: String
     shell_balance: Int
+    articleCount: Int
+    dynamicCount: Int
   }
 `
 

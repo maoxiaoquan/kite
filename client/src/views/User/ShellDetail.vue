@@ -15,28 +15,33 @@
 
             <table class="table-view">
               <tr>
-                <td class="hd">时间</td>
-                <td class="hd">类型</td>
-                <td class="hd">数额</td>
-                <td class="hd">余额</td>
-                <td class="hd">描述</td>
+                <td style="width:20%"
+                    class="hd">时间</td>
+                <td style="width:20%"
+                    class="hd">类型</td>
+                <td style="width:20%"
+                    class="hd">数额</td>
+                <td style="width:20%"
+                    class="hd">余额</td>
+                <td style="width:20%"
+                    class="hd">描述</td>
               </tr>
               <tr v-for="(detailItem,key) in detail.list"
                   :key="key">
-                <td>{{detailItem.create_dt}}</td>
-                <td>{{detailItem.actionText}}</td>
-                <td>
+                <td style="width:20%">{{detailItem.create_dt}}</td>
+                <td style="width:20%">{{detailItem.actionText}}</td>
+                <td style="width:20%">
                   <span class="amount"
                         :class="virtualPlusLess.plus===detailItem.plus_less?'plus':'less'">
                     {{virtualPlusLessText[detailItem.plus_less]+detailItem.amount}}
                   </span>
                 </td>
-                <td>
+                <td style="width:20%">
                   <span class="balance">
                     {{detailItem.balance}}
                   </span>
                 </td>
-                <td>
+                <td style="width:20%">
                   {{detailItem.actionText+detailItem.typeText}}
                   <router-link style="color:#df5858"
                                v-if="detailItem.type===virtualType.article"
@@ -147,6 +152,8 @@ export default {
   .personal {
     font-size: 14px;
     color: #333;
+    margin: 15px 0;
+    display: block;
   }
   .amount {
     margin-top: 10px;

@@ -28,9 +28,19 @@ class User {
         attributes: ['home_page', 'company', 'shell_balance']
       })
 
+      let articleCount = await models.article.count({
+        where: where // 为空，获取全部，也可以自己添加条件
+      })
+
+      let dynamicCount = await models.dynamic.count({
+        where: where // 为空，获取全部，也可以自己添加条件
+      })
+
       return {
         ...JSON.parse(JSON.stringify(oneUser)),
-        ...JSON.parse(JSON.stringify(oneUserInfo))
+        ...JSON.parse(JSON.stringify(oneUserInfo)),
+        articleCount,
+        dynamicCount
       }
     } catch (err) {
       return {}

@@ -89,6 +89,21 @@ class Thumb {
         })
       }
 
+      await models[modelInfo[type].model].update(
+        // 更新点赞数
+        {
+          thumb_count:
+            associateType === 'enter'
+              ? Number(oneModelInfo.thumb_count) + 1
+              : Number(oneModelInfo.thumb_count) - 1
+        },
+        {
+          where: {
+            [modelInfo[type].idKey]: associate_id
+          }
+        }
+      )
+
       resClientJson(res, {
         state: 'success',
         message: associateType === 'enter' ? '点赞成功' : '取消点赞成功',

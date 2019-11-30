@@ -43,6 +43,41 @@ class Article {
       }
     }
   }
+
+  // 推荐动态
+  static async recommendArticle () {
+    let whereParams = {} // 查询参数
+    let orderParams = [
+      ['create_date', 'DESC'],
+      ['comment_count', 'DESC']
+    ] // 排序参数
+
+    try {
+      // sort
+      // hottest 全部热门:
+      whereParams = {
+        status: {
+          [Op.or]: [2, 4]
+        },
+        create_date: {
+          [Op.between]: [
+            new Date(TimeNow.showMonthFirstDay()),
+            new Date(TimeNow.showMonthLastDay())
+          ]
+        }
+      }
+
+      let allDynamic = await models.article.findAll({
+        where: whereParams, // 为空，获取全部，也可以自己添加条件
+        limit: 3, // 每页限制返回的数据条数
+        order: orderParams
+      })
+
+      return JSON.parse(JSON.stringify(allDynamic))
+    } catch (err) {
+      return []
+    }
+  }
 }
 
 module.exports = Article

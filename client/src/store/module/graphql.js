@@ -25,6 +25,18 @@ const actions = {
           query {
             userInfo(uid: ${params.uid}) { 
               uid
+              nickname
+              avatar
+              profession
+              company
+              articleCount
+              dynamicCount
+            }
+            recommendArticle {
+              aid
+              title
+              thumb_count
+              comment_count
             }
           }
         `
