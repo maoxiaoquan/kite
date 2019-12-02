@@ -57,14 +57,14 @@ class AdminUsers {
         role_id: oneAdminUser ? oneAdminUser.admin_role_ids : ''
       }
       let token = tokens.AdminSetToken(60 * 60 * 24 * 7, datas)
-      resSignJson(ctx, {
+      resSignJson(res, {
         state: 'success',
         message: '登录成功',
         token
       })
     } catch (err) {
       resSignJson(
-        ctx,
+        res,
         {
           state: 'error',
           message: '错误信息：' + err.message

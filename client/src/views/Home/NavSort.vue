@@ -64,6 +64,7 @@ export default {
 .list-nav {
   display: flex;
   justify-content: space-between;
+  padding: 0 25px;
   border-bottom: 1px solid rgba(178, 186, 194, 0.15);
   .nav-list {
     align-items: center;
