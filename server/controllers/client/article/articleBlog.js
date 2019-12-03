@@ -512,7 +512,6 @@ class dynamicBlog {
     let pageSize = req.query.pageSize || 24
     let uid = req.query.uid || ''
     let whereParams = {
-      is_public: true,
       status: {
         [Op.or]: [reviewSuccess, freeReview]
       }

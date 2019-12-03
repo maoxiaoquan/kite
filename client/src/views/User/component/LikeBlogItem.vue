@@ -52,7 +52,7 @@
             <span v-text="articleBlogItem.likeCount||0"></span>
           </li>
           <li class="item attention"
-              v-if="~[statusList.reviewSuccess,statusList.freeReview].indexOf(articleBlogItem.articleBlog.status)&&personalInfo.islogin&&articleBlogItem.articleBlog.is_public"
+              v-if="~[statusList.reviewSuccess,statusList.freeReview].indexOf(articleBlogItem.articleBlog.status)&&personalInfo.islogin"
               @click="setLikeArticleBlog(articleBlogItem)">
             <span>取消收藏</span>
           </li>

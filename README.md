@@ -11,13 +11,12 @@
 
 ## ✨ kite
 
-|   项目    |                               项目体验                                |                                         原代码                                         |            主要技术栈             |
-| :-------: | :-------------------------------------------------------------------: | :------------------------------------------------------------------------------------: | :-------------------------------: |
-| Kite 前台 |            [www.xiaosuibi.com](https://www.xiaosuibi.com)             |       [https://github.com/maoxiaoquan/kite](https://github.com/maoxiaoquan/kite)       | Vue、Vue ssr、Vvuex、GraphQL、Koa |
-| 后台管理  | [https://www.xiaosuibi.com/\_admin](https://www.xiaosuibi.com/_admin) | [https://github.com/maoxiaoquan/kite-admin](https://github.com/maoxiaoquan/kite-admin) |    React、Redux、React-Router     |
+简介：这个项目用了 react、vue、node 、webpack、grophql 基本涉及到了前端大部分主流的技术了，都是用的最新的版本，都是从零开始搭建包括 ssr 脚手架，主要是让学的人，接触前端整个的生态圈，后期 node 会用 ts 重构，而且会根据所有框架的版本实时更新项目
 
-做这个项目的目的是想把目前所学的都用在里面，避免遗忘，后期维护的时候都会过一遍，这样学了的就不会忘掉，
-项目覆盖了前端大半的知识点和框架
+|   项目    |                               项目体验                                |                                   原代码                                   |            主要技术栈             |
+| :-------: | :-------------------------------------------------------------------: | :------------------------------------------------------------------------: | :-------------------------------: |
+| Kite 前台 |            [www.xiaosuibi.com](https://www.xiaosuibi.com)             | [https://github.com/maoxiaoquan/kite](https://github.com/maoxiaoquan/kite) | Vue、Vue ssr、Vvuex、GraphQL、Koa |
+| 后台管理  | [https://www.xiaosuibi.com/\_admin](https://www.xiaosuibi.com/_admin) | [https://github.com/maoxiaoquan/kite](https://github.com/maoxiaoquan/kite) |    React、Redux、React-Router     |
 
 前台演示网站地址： [小随笔 https://www.xiaosuibi.com/](https://www.xiaosuibi.com/ 'xiaosuibi')
 

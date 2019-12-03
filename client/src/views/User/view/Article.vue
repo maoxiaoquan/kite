@@ -1,48 +1,39 @@
 <template>
-  <div class="user-center-article-view" v-loading="isLoading">
+  <div class="user-center-article-view"
+       v-loading="isLoading">
     <ul class="blog-list">
       <li class="title">个人专栏：</li>
-      <li
-        class="blog-list-item"
-        :class="{
+      <li class="blog-list-item"
+          :class="{
           current: !$route.query.blog_id || $route.query.blog_id === 'all'
-        }"
-      >
-        <router-link
-          :to="{
+        }">
+        <router-link :to="{
             name: 'user',
             query: { blog_id: 'all' },
             params: { routeType: 'article' }
-          }"
-        >
+          }">
           <span class="name">全部</span>
         </router-link>
       </li>
 
-      <li
-        class="blog-list-item"
-        v-for="(item, key) in userArticleBlogAll"
-        :class="{ current: item.blog_id == $route.query.blog_id }"
-        :key="key"
-      >
-        <router-link
-          :to="{
+      <li class="blog-list-item"
+          v-for="(item, key) in userArticleBlogAll"
+          :class="{ current: item.blog_id == $route.query.blog_id }"
+          :key="key">
+        <router-link :to="{
             name: 'user',
             query: { blog_id: item.blog_id },
             params: { routeType: 'article' }
           }"
-          class="avatar"
-        >
+                     class="avatar">
           <span class="name">{{ item.name }}</span>
         </router-link>
       </li>
 
       <template v-if="personalInfo.user.uid === user.user.uid">
         <li class="blog-list-item">
-          <router-link
-            class="btn-user-blog"
-            :to="{ name: 'user', params: { routeType: 'blog' } }"
-          >
+          <router-link class="btn-user-blog"
+                       :to="{ name: 'user', params: { routeType: 'blog' } }">
             管理个人专栏
           </router-link>
         </li>
@@ -50,21 +41,17 @@
     </ul>
 
     <ul class="article-type">
-      <li
-        v-for="(articleItem, key) in articleTypeList"
-        :class="{
+      <li v-for="(articleItem, key) in articleTypeList"
+          :class="{
           active: $route.query.type === key,
           'index-active': !$route.query.type && key === '1'
         }"
-        :key="key"
-      >
-        <router-link
-          :to="{
+          :key="key">
+        <router-link :to="{
             name: 'user',
             query: { blog_id: $route.query.blog_id || 'all', type: key },
             params: { routeType: 'article' }
-          }"
-        >
+          }">
           <span class="name">{{ articleItem }}</span>
         </router-link>
       </li>
@@ -73,30 +60,24 @@
     <div class="list-container">
       <!-- 文章列表模块 -->
       <div class="article-view">
-        <div
-          class="article-item"
-          v-for="(item, key) in myArticle.list"
-          :key="key"
-        >
-          <userArticleItem
-            @delete-change="updateArticleList"
-            :articleItem="item"
-          />
+        <div class="article-item"
+             v-for="(item, key) in myArticle.list"
+             :key="key">
+          <UserArticleItem @delete-change="updateArticleList"
+                           :articleItem="item" />
         </div>
       </div>
-      <Page
-        :total="Number(myArticle.count)"
-        :pageSize="Number(myArticle.pageSize)"
-        :page="Number(myArticle.page) || 1"
-        @pageChange="pageChange"
-      ></Page>
+      <Page :total="Number(myArticle.count)"
+            :pageSize="Number(myArticle.pageSize)"
+            :page="Number(myArticle.page) || 1"
+            @pageChange="pageChange"></Page>
     </div>
   </div>
   <!--article-list-lay layout-content end-->
 </template>
 
 <script>
-import userArticleItem from '../component/userArticleItem'
+import UserArticleItem from '../component/UserArticleItem'
 import { Page, UploadImage } from '@components'
 import { mapState } from 'vuex'
 import constant from '@utils/constant'
@@ -108,7 +89,7 @@ import {
 } from '@utils/constant'
 export default {
   name: 'userArticle',
-  data() {
+  data () {
     return {
       isCreateBlogShow: false,
       isLoading: false,
@@ -123,17 +104,17 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.getUserArticleBlogList()
     this.getMyArticleList()
   },
   watch: {
-    $route(to, from) {
+    $route (to, from) {
       this.getMyArticleList()
     }
   },
   methods: {
-    getMyArticleList() {
+    getMyArticleList () {
       this.isLoading = true
       this.$store
         .dispatch('user/USER_MY_ARTICLE', {
@@ -151,11 +132,11 @@ export default {
           this.isLoading = false
         })
     },
-    pageChange(val) {
+    pageChange (val) {
       this.myArticle.page = val
       this.getMyArticleList()
     },
-    updateArticleList() {
+    updateArticleList () {
       this.$store.dispatch('user/USER_MY_ARTICLE', {
         uid: this.$route.params.uid,
         blog_id: this.$route.query.blog_id || 'all',
@@ -164,7 +145,7 @@ export default {
         pageSize: 10
       })
     },
-    async getUserArticleBlogList() {
+    async getUserArticleBlogList () {
       await this.$store.dispatch('user/GET_USER_ARTICLE_BLOG_ALL', {
         uid: this.$route.params.uid
       })
@@ -172,16 +153,16 @@ export default {
   },
   computed: {
     ...mapState(['personalInfo', 'user']),
-    currentBlogId() {
+    currentBlogId () {
       return this.$route.query.blog_id || 'all'
     },
-    userArticleBlogAll() {
+    userArticleBlogAll () {
       // 个人所有专栏
       return this.$store.state.user.user_article_blog || []
     }
   },
   components: {
-    userArticleItem,
+    UserArticleItem,
     UploadImage,
     Page
   }

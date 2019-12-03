@@ -25,7 +25,7 @@
                     <div class="dropdown-menu-view">
 
                       <router-link :to="{name:'home'}"
-                                   class="dropdown-menu-item">主页</router-link>
+                                   class="dropdown-menu-item">首页</router-link>
                       <router-link :to="{name:'dynamics',params:{dynamicTopicId:'newest'}}"
                                    class="dropdown-menu-item">片刻</router-link>
                       <router-link :to="{name:'books',params:{columnEnName:'all'}}"
@@ -44,7 +44,7 @@
                     :class="{show:isNavbarMenu}">
                   <li class="nav-item">
                     <router-link :to="{name:'home'}"
-                                 class="nav-link">主页</router-link>
+                                 class="nav-link">首页</router-link>
                   </li>
                   <li class="nav-item">
                     <router-link :to="{name:'dynamics',params:{dynamicTopicId:'newest'}}"

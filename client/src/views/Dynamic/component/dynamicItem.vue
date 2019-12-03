@@ -109,7 +109,7 @@
             active: ~user.allLikeDynaicId.indexOf(dynamicItem.id || '')
           }"
              @click="setUserLikeDynamic">
-          <i class="el-icon-star-off"></i>
+          <i class="el-icon-thumb"></i>
           <span class="action-title">{{ dynamicItem.thumb_count }}</span>
         </div>
         <div class="comment-action action"

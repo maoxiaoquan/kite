@@ -35,7 +35,7 @@
                         <span v-text="articleBlog.blogInfo.likeCount||0"></span>
                       </li>
                       <li class="item attention"
-                          v-if="~[2,4].indexOf(Number(articleBlog.blogInfo.status))&&personalInfo.islogin&&articleBlog.blogInfo.is_public"
+                          v-if="~[2,4].indexOf(Number(articleBlog.blogInfo.status))&&personalInfo.islogin"
                           @click="setLikeArticleBlog(articleBlog.blogInfo.blog_id)">
                         <span :class="{'active':isCollect(articleBlog.blogInfo).status}">{{isCollect(articleBlog.blogInfo).text}}</span>
                       </li>
@@ -80,8 +80,7 @@
 
             </div>
 
-            <div class="article-blog-main"
-                 v-if="articleBlog.blogInfo.is_public">
+            <div class="article-blog-main">
               <div class="article-view">
                 <div class="article-item"
                      v-for="(item,key) in articleBlog.blogArticleList.list"
@@ -94,11 +93,6 @@
                     :pageSize="Number(articleBlog.blogArticleList.pageSize)"
                     :page="Number($route.query.page)||1"
                     @pageChange="pageChange"></Page>
-            </div>
-
-            <div class="article-blog-null-public"
-                 v-else>
-              <p class="info">当前个人专栏未公开,请等待作者公开</p>
             </div>
 
           </div>

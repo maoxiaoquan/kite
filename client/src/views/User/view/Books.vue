@@ -51,6 +51,8 @@
               </span><span style="margin-left: 8px;">
                 <i class="el-icon-notebook-2"></i> {{booksItem.bookCount||0}}
               </span>
+              <span class="public-tag"
+                    v-if="!booksItem.is_public">未公开</span>
             </div>
             <div class="library-item-tag">
               <template v-if="booksItem.tag">
@@ -304,6 +306,16 @@ export default {
           font-size: 12px;
           line-height: 20px;
           color: rgba(0, 0, 0, 0.56);
+          .public-tag {
+            background: #fd763a;
+            font-size: 12px;
+            border-radius: 3px;
+            display: inline-block;
+            margin-left: 5px;
+            line-height: 14px;
+            color: #fff;
+            padding: 1px 2px;
+          }
         }
       }
     }

@@ -6,7 +6,7 @@
         <a href="javascript:;"
            class="collection-name"
            @click="switchNav({name:'home'})">
-          热门
+          推荐
         </a>
       </li>
       <li class="nav-item"

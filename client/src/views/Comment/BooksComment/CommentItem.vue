@@ -204,7 +204,6 @@ export default {
     margin-top: 30px;
     padding-left: 20px;
     border-left: 1px solid #f1f1f1;
-    overflow: hidden;
     .comment-item {
       margin-bottom: 15px;
       padding-bottom: 10px;

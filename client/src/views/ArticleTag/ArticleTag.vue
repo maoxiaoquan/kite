@@ -4,27 +4,9 @@
     <div class="container">
       <div class="row">
 
-        <div class="col-xs-12 col-sm-12 col-md-12">
-          <div class="article-list"
+        <div class="col-xs-12 col-sm-8 col-md-8">
+          <div class="article-tag-main article-list client-card"
                v-if="articleTag">
-            <div class="main-top">
-              <div class="thumb">
-                <img v-lazy="articleTag.icon"
-                     class="box-image"
-                     alt="">
-              </div>
-
-              <div class="title">
-                <a class="name"
-                   href="javascript:;">
-                  {{articleTag.name}}</a>
-              </div>
-              <div class="info">
-                收录了
-                {{count}} 篇文章 ·
-                {{subscribeCount}} 人关注
-              </div>
-            </div>
             <ul class="trigger-menu">
               <!-- <li class=""><a href="/"><i class="iconfont ic-latestcomments"></i> 最新评论</a></li>-->
               <li class="active"><a href="javascript:;"><i class="iconfont ic-articles"></i> 最新收录</a></li>
@@ -48,6 +30,29 @@
           <div v-else
                class="no-data">
             <span class="info">标签不存在</span>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-4">
+          <div class="client-card article-tag-aside ">
+            <div class="main-top">
+              <div class="thumb">
+                <img v-lazy="articleTag.icon"
+                     class="box-image"
+                     alt="">
+              </div>
+
+              <div class="title">
+                <a class="name"
+                   href="javascript:;">
+                  {{articleTag.name}}</a>
+              </div>
+              <div class="info">
+                收录了
+                {{count}} 篇文章 ·
+                {{subscribeCount}} 人关注
+              </div>
+            </div>
           </div>
         </div>
 
@@ -112,7 +117,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['website']),
+    ...mapState(['website', 'articleTag']),
     count () {
       return this.$store.state.articleTag.tag.count
     },
@@ -138,62 +143,70 @@ export default {
 
 <style scoped lang="scss">
 .tag-lay.layout-content {
+  padding-top: 25px;
   padding-bottom: 50px;
-  .main-top {
-    margin-top: 30px;
-    margin-bottom: 10px;
-    text-align: center;
+  .article-tag-main {
+    padding: 30px;
+  }
+  .article-tag-aside {
+    padding-bottom: 25px;
+    .main-top {
+      margin-top: 30px;
+      margin-bottom: 10px;
+      text-align: center;
 
-    .thumb {
-      width: 100px;
-      height: 100px;
-      margin: 0 auto;
-      border-radius: 15px;
-      .box-image {
+      .thumb {
         width: 100px;
         height: 100px;
-        border-radius: 4px;
-        overflow: hidden;
-        img {
-          width: 100%;
-          height: 100%;
-          border-radius: 15px;
+        margin: 0 auto;
+        border-radius: 15px;
+        .box-image {
+          width: 100px;
+          height: 100px;
+          border-radius: 4px;
+          overflow: hidden;
+          img {
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+          }
         }
       }
-    }
-    .tag-img-icon {
-      width: 80px;
-      height: 80px;
-      display: inline-block;
-      background-color: #fff;
-      background-position: 50%;
-      background-repeat: no-repeat;
-    }
-    .tag-font-icon {
-      display: inline-block;
-      width: 80px;
-      height: 80px;
-      line-height: 80px;
-      i {
-        font-size: 35px;
+      .tag-img-icon {
+        width: 80px;
+        height: 80px;
+        display: inline-block;
+        background-color: #fff;
+        background-position: 50%;
+        background-repeat: no-repeat;
       }
-    }
+      .tag-font-icon {
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+        line-height: 80px;
+        i {
+          font-size: 35px;
+        }
+      }
 
-    .title {
-      padding: 10px 0 0 0;
-      .name {
-        display: inline;
-        font-size: 21px;
-        font-weight: 700;
-        vertical-align: middle;
+      .title {
+        padding: 10px 0 0 0;
+        .name {
+          display: inline;
+          font-size: 21px;
+          font-weight: 700;
+          vertical-align: middle;
+        }
       }
-    }
-    .info {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #969696;
+      .info {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #969696;
+      }
     }
   }
+
   .trigger-menu {
     margin-bottom: 20px;
     border-bottom: 1px solid #f0f0f0;

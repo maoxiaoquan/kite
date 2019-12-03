@@ -62,6 +62,19 @@ class adminRoleAuthority {
   static async editAdminRole (req, res, next) {
     const reqData = req.body
     try {
+      let oneAdminRole = await models.admin_role.findOne({
+        where: {
+          role_name: reqData.role_name,
+          role_id: {
+            [Op.ne]: reqData.role_id
+          }
+        }
+      })
+
+      if (oneAdminRole) {
+        throw new ErrorMessage('角色名字已存在，请重新输入')
+      }
+
       await models.admin_role.update(
         {
           role_name: reqData.role_name,

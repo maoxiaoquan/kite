@@ -23,8 +23,8 @@
       <div class="form-item form-btns clearfix">
         <div class="left-view">
           <Popover :visible.sync="faceVisible">
-            <comment-face @changeFace="changeFace"
-                          v-if="faceVisible" />
+            <Face @changeFace="changeFace"
+                  v-if="faceVisible" />
             <i slot="button"
                class="face-icon el-icon-picture-outline-round"></i>
           </Popover>
