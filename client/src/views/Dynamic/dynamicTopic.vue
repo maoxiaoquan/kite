@@ -8,7 +8,9 @@
              v-for="(item,key) in dynamic.dynamicTopicList"
              v-if="isRssDynamicTopic(item)"
              :key="key">
-          <dynamic-topic-item :dynamicTopicItem="item" />
+          <div class="client-card">
+            <dynamic-topic-item :dynamicTopicItem="item" />
+          </div>
         </div>
       </div>
     </div>
@@ -18,7 +20,9 @@
         <div class="col-xs-12 col-sm-4 col-md-4"
              v-for="(item,key) in dynamic.dynamicTopicList"
              :key="key">
-          <dynamic-topic-item :dynamicTopicItem="item" />
+          <div class="client-card">
+            <dynamic-topic-item :dynamicTopicItem="item" />
+          </div>
         </div>
       </div>
     </div>

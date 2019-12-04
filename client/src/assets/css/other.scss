@@ -6,14 +6,11 @@
   word-wrap: break-word;
   background-color: #fff;
   background-clip: border-box;
-  border: 1px solid #edf2f9;
-  border-radius: 0.5rem;
-}
-.client-card {
-  display: block;
-  margin-bottom: 1rem;
-  border-color: #edf2f9;
-  box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
+  border-radius: 2px;
+  -webkit-box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
+  box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .sign-lay {
@@ -193,4 +190,9 @@
   left: 0;
   right: 0;
   margin: auto;
+}
+
+// danwie
+.pd20 {
+  padding: 20px;
 }

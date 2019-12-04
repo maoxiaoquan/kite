@@ -1,6 +1,13 @@
 <template>
   <div class="user-aside-view">
-    <ul class="list user-dynamic"
+
+    <router-link class="return-user client-card"
+                 v-if="$route.name!=='user'"
+                 :to="{name:'user',params:{uid:personalInfo.user.uid,routeType:'article'}}">
+      返回个人中心 <i class="el-icon-d-arrow-right"></i>
+    </router-link>
+
+    <ul class="list user-dynamic client-card"
         v-if="user.user.user_role_ids && user.user_role_all">
       <li class="badge-icon"
           v-for="(item, key) in user.user_role_all"
@@ -17,7 +24,7 @@
       </li>
     </ul>
 
-    <ul class="aside-operat"
+    <ul class="aside-operat client-card"
         v-if="personalInfo.islogin && personalInfo.user.uid === user.user.uid">
       <li v-if="personalInfo.islogin && personalInfo.user.uid === user.user.uid"
           @click="checkIn">
@@ -52,17 +59,20 @@
       </li>
     </ul>
 
-    <div class="title">个人介绍</div>
-    <div class="description">
-      <div class="js-intro">
-        <template v-if="user.user.introduction">
-          {{ user.user.introduction }}
-        </template>
-        <template v-else>
-          暂无简介
-        </template>
+    <div class="client-card">
+      <div class="title">个人介绍</div>
+      <div class="description">
+        <div class="js-intro">
+          <template v-if="user.user.introduction">
+            {{ user.user.introduction }}
+          </template>
+          <template v-else>
+            暂无简介
+          </template>
+        </div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -174,6 +184,18 @@ export default {
   .new-collection-btn {
     font-size: 13px;
     color: #42c02e;
+  }
+}
+
+.user-aside-view {
+  .return-user {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 14px;
+  }
+  .client-card {
+    margin-bottom: 10px;
+    padding: 20px;
   }
 }
 

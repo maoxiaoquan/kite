@@ -347,7 +347,7 @@ export default {
     border-radius: 2px;
     .content {
       position: relative;
-      border-radius: 16px;
+      border-radius: 3px;
       background-color: rgba(226, 230, 235, 0.2);
       .editor {
         position: relative;
@@ -512,7 +512,7 @@ export default {
           padding: 3px 5px;
         }
         .send-dynamic {
-          border-radius: 15px;
+          border-radius: 3px;
           background: #ffd600;
           padding: 3px 13px;
           font-size: 14px;

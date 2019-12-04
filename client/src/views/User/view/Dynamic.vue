@@ -1,7 +1,7 @@
 <template>
   <div class="user-dynamic"
        v-loading="isLoading">
-    <div class="user-dynamic-item client-card"
+    <div class="user-dynamic-item"
          v-for="(dynamicItem, key) in dynamicList.list"
          :key="key">
       <div class="dynamic-header-row">
@@ -320,8 +320,10 @@ export default {
 .user-dynamic {
   padding-top: 20px;
   .user-dynamic-item {
-    padding-bottom: 12px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
     position: relative;
+    border: 1px solid rgba(178, 186, 194, 0.15);
     .dynamic-content-row,
     .dynamic-image-row,
     .dynamic-link-row,

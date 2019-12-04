@@ -3,132 +3,133 @@
        id="main-header">
     <header class="navbar navbar-visible"
             id="header-view">
-      <div class="navbar-view-re">
-        <div class="container navbar-view">
-          <router-link :to="{name:'home'}"
-                       class="navbar-brand logo-img"
-                       v-if="website.meta.logo"
-                       :style="{'background-image':'url('+website.meta.logo+')'}"></router-link>
-          <router-link :to="{name:'home'}"
-                       class="navbar-brand logo-text"
-                       v-else>{{website.meta.website_name}}</router-link>
-          <div class="collapse navbar-collapse">
-            <ul class="navbar-item-content mr-auto">
-              <li class="navbar-menu-content active">
-                <div class="navbar-toggler"
-                     @click="isNavbarMenu=!isNavbarMenu">
-                  <Dropdown>
-                    <div class="el-dropdown-link"
-                         slot="button">
-                      <i class="menu-icon el-icon-menu"></i>
-                    </div>
-                    <div class="dropdown-menu-view">
 
-                      <router-link :to="{name:'home'}"
-                                   class="dropdown-menu-item">首页</router-link>
-                      <router-link :to="{name:'dynamics',params:{dynamicTopicId:'newest'}}"
-                                   class="dropdown-menu-item">片刻</router-link>
-                      <router-link :to="{name:'books',params:{columnEnName:'all'}}"
-                                   class="dropdown-menu-item">小书</router-link>
-                      <router-link v-if="personalInfo.islogin"
-                                   class="dropdown-menu-item"
-                                   :to="{name:'user',params:{uid:personalInfo.user.uid,routeType:'message'}}">
-                        消息
-                        <span v-if="messageCount.count>0"
-                              class="unread-message-count">{{messageCount.count}}</span>
-                      </router-link>
-                    </div>
-                  </Dropdown>
-                </div>
-                <ul class="navbar-menu"
-                    :class="{show:isNavbarMenu}">
-                  <li class="nav-item">
+      <div class="container navbar-view">
+        <router-link :to="{name:'home'}"
+                     class="navbar-brand logo-img"
+                     v-if="website.meta.logo"
+                     :style="{'background-image':'url('+website.meta.logo+')'}"></router-link>
+        <router-link :to="{name:'home'}"
+                     class="navbar-brand logo-text"
+                     v-else>{{website.meta.website_name}}</router-link>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-item-content mr-auto">
+            <li class="navbar-menu-content active">
+              <div class="navbar-toggler"
+                   @click="isNavbarMenu=!isNavbarMenu">
+                <Dropdown>
+                  <div class="el-dropdown-link"
+                       slot="button">
+                    <i class="menu-icon el-icon-menu"></i>
+                  </div>
+                  <div class="dropdown-menu-view">
+
                     <router-link :to="{name:'home'}"
-                                 class="nav-link">首页</router-link>
-                  </li>
-                  <li class="nav-item">
+                                 class="dropdown-menu-item">首页</router-link>
                     <router-link :to="{name:'dynamics',params:{dynamicTopicId:'newest'}}"
-                                 class="nav-link">片刻</router-link>
-                  </li>
-                  <li class="nav-item">
+                                 class="dropdown-menu-item">片刻</router-link>
                     <router-link :to="{name:'books',params:{columnEnName:'all'}}"
-                                 class="nav-link">小书</router-link>
-                  </li>
-                  <li class="nav-item"
-                      v-if="personalInfo.islogin">
-                    <router-link :to="{name:'user',params:{uid:personalInfo.user.uid,routeType:'message'}}">
+                                 class="dropdown-menu-item">小书</router-link>
+                    <router-link v-if="personalInfo.islogin"
+                                 class="dropdown-menu-item"
+                                 :to="{name:'user',params:{uid:personalInfo.user.uid,routeType:'message'}}">
                       消息
                       <span v-if="messageCount.count>0"
                             class="unread-message-count">{{messageCount.count}}</span>
                     </router-link>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item search">
-                <div class="form-search form-inline mr-lg-5">
-                  <input class="form-control form-search-view"
-                         type="text"
-                         required="true"
-                         v-model="searchVal"
-                         name="search"
-                         placeholder="搜索文章"
-                         aria-label="Search" />
-                  <button class="search-btn"
-                          @click="search">
-                    <i class="el-icon-search"></i>
-                  </button>
-                </div>
-              </li>
-              <template v-if="personalInfo.islogin">
+                  </div>
+                </Dropdown>
+              </div>
+              <ul class="navbar-menu"
+                  :class="{show:isNavbarMenu}">
                 <li class="nav-item">
-                  <router-link :to="{name:'Write',params:{type:'create'}}"
-                               class="btn btn-sm btn-outline-warning xiezuo">
-                    <i class="iconfont el-icon-edit"></i>
-                  </router-link>
+                  <router-link :to="{name:'home'}"
+                               class="nav-link">首页</router-link>
                 </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item">
+                  <router-link :to="{name:'dynamics',params:{dynamicTopicId:'newest'}}"
+                               class="nav-link">片刻</router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link :to="{name:'books',params:{columnEnName:'all'}}"
+                               class="nav-link">小书</router-link>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item search">
+              <div class="form-search form-inline mr-lg-5">
+                <input class="form-control form-search-view"
+                       type="text"
+                       required="true"
+                       v-model="searchVal"
+                       name="search"
+                       placeholder="搜索文章"
+                       aria-label="Search" />
+                <button class="search-btn"
+                        @click="search">
+                  <i class="el-icon-search"></i>
+                </button>
+              </div>
+            </li>
+            <template v-if="personalInfo.islogin">
+              <li class="nav-item">
+                <router-link :to="{name:'Write',params:{type:'create'}}"
+                             class="btn btn-sm ">
+                  <i class="iconfont el-icon-edit"></i>
+                </router-link>
+              </li>
+              <li class="nav-item"
+                  v-if="personalInfo.islogin">
+                <router-link class="btn btn-sm"
+                             :to="{name:'user',params:{uid:personalInfo.user.uid,routeType:'message'}}">
+                  <i class="iconfont el-icon-chat-dot-round"></i>
+                  <span v-if="messageCount.count>0"
+                        class="unread-message-count">{{messageCount.count}}</span>
+                </router-link>
+              </li>
+              <li class="nav-item dropdown">
 
-                  <Dropdown placement="right">
-                    <div class="el-dropdown-link"
-                         slot="button">
-                      <div class="avatar-img">
-                        <img v-lazy="personalInfo.user.avatar"
-                             class="box-image"
-                             alt="">
-                      </div>
+                <Dropdown placement="right">
+                  <div class="el-dropdown-link"
+                       slot="button">
+                    <div class="avatar-img">
+                      <img v-lazy="personalInfo.user.avatar"
+                           class="box-image"
+                           alt="">
                     </div>
-                    <div class="dropdown-menu-view">
-                      <router-link class="dropdown-menu-item"
-                                   :to="{name:'user',params:{uid:personalInfo.user.uid,routeType:'article'}}">
-                        我的主页</router-link>
-                      <router-link class="dropdown-menu-item"
-                                   :to="{name:'setting'}">
-                        设置</router-link>
-                      <div class="dropdown-menu-item"
-                           @click="escLogin">
-                        退出
-                      </div>
+                  </div>
+                  <div class="dropdown-menu-view">
+                    <router-link class="dropdown-menu-item"
+                                 :to="{name:'user',params:{uid:personalInfo.user.uid,routeType:'article'}}">
+                      我的主页</router-link>
+                    <router-link class="dropdown-menu-item"
+                                 :to="{name:'setting'}">
+                      设置</router-link>
+                    <div class="dropdown-menu-item"
+                         @click="escLogin">
+                      退出
                     </div>
-                  </Dropdown>
+                  </div>
+                </Dropdown>
 
-                </li>
-              </template>
-              <template v-else>
-                <li class="nav-item"
-                    v-if="website.config.on_login==='yes'">
-                  <router-link class="btn btn-sm sign-btn btn-block"
-                               :to="{ name: 'signIn' }">登录</router-link>
-                </li>
-                <li class="nav-item"
-                    v-if="website.config.on_register==='yes'">
-                  <router-link class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
-                               :to="{ name: 'signIn' }">注册</router-link>
-                </li>
-              </template>
-            </ul>
-          </div>
+              </li>
+            </template>
+            <template v-else>
+              <li class="nav-item"
+                  v-if="website.config.on_login==='yes'">
+                <router-link class="btn btn-sm sign-btn btn-block"
+                             :to="{ name: 'signIn' }">登录</router-link>
+              </li>
+              <li class="nav-item"
+                  v-if="website.config.on_register==='yes'">
+                <router-link class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
+                             :to="{ name: 'signIn' }">注册</router-link>
+              </li>
+            </template>
+          </ul>
         </div>
       </div>
+
     </header>
   </div>
   <!--header end-->
@@ -180,7 +181,7 @@ export default {
 <style scoped lang="scss">
 .main-header {
   position: relative;
-  height: 63px;
+  height: 65px;
   .navbar-bootom-border {
     z-index: 999;
     background: #fff;
@@ -201,20 +202,9 @@ export default {
     /* border-bottom: 1px solid #f1f1f1;*/
     color: #909090;
     z-index: 250;
-    .navbar-view-re {
-      height: 60px;
-      position: relative;
-      &:after {
-        border-bottom: 1px solid #f1f1f1;
-        display: block;
-        position: absolute;
-        top: 59px;
-        color: rgba(0, 0, 0, 0.07);
-        content: "";
-        width: 100%;
-        height: 2px;
-      }
-    }
+    -webkit-box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
+    box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
+    background-clip: content-box;
     &.navbar-visible {
       transform: translateZ(0);
     }
@@ -277,7 +267,7 @@ export default {
             align-items: center;
             cursor: pointer;
             > a {
-              padding: 20px 15px;
+              padding: 15px 15px;
               display: block;
               font-size: 15px;
               color: rgba(0, 0, 0, 0.56);
@@ -286,6 +276,9 @@ export default {
               display: inline-block;
               margin-right: 5px;
               font-weight: bold;
+            }
+            .iconfont {
+              font-size: 20px;
             }
             a.exact-active {
               color: #ea6f5a;
@@ -298,7 +291,7 @@ export default {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                border-radius: 20px;
+                border-radius: 3px;
                 .form-search-view {
                   border: none;
                   padding: 6px 10px;
@@ -306,6 +299,7 @@ export default {
                   outline: none;
                   font-size: 12px;
                   color: #666;
+                  width: 260px;
                   background-color: transparent;
                 }
                 .search-btn {

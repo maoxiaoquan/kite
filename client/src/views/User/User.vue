@@ -5,135 +5,139 @@
       <div class="container  box-container">
         <div class="row">
           <div class="col-xs-12 col-sm-8 col-md-8 main">
-            <div class="main-top clearfix">
-              <router-link :to="{
+            <div class="client-card">
+              <div class="main-top clearfix">
+                <router-link :to="{
                   name: 'user',
                   params: { uid: user.user.uid, routeType: 'article' }
                 }"
-                           class="avatar">
-                <div class="avatar-img">
-                  <img v-lazy="user.user.avatar"
-                       class="box-image"
-                       alt="" />
-                </div>
-              </router-link>
+                             class="avatar">
+                  <div class="avatar-img">
+                    <img v-lazy="user.user.avatar"
+                         class="box-image"
+                         alt="" />
+                  </div>
+                </router-link>
 
-              <div class="title">
-                <router-link :to="{
+                <div class="title">
+                  <router-link :to="{
                     name: 'user',
                     params: { uid: user.user.uid, routeType: 'article' }
                   }"
-                             class="name">
-                  {{ user.user.nickname }}
-                </router-link>
-              </div>
+                               class="name">
+                    {{ user.user.nickname }}
+                  </router-link>
+                </div>
 
-              <button v-if="
+                <button v-if="
                   user.user.uid !== personalInfo.user.uid &&
                     personalInfo.islogin
                 "
-                      class="user-follow-button"
-                      @click="onUserAttention(isAttention.is_attention)"
-                      :class="isAttention.is_attention ? 'has' : 'no'">
-                <i class="iconfont"></i>
-                <span>{{ isAttention.text }}</span>
-              </button>
+                        class="user-follow-button"
+                        @click="onUserAttention(isAttention.is_attention)"
+                        :class="isAttention.is_attention ? 'has' : 'no'">
+                  <i class="iconfont"></i>
+                  <span>{{ isAttention.text }}</span>
+                </button>
 
-              <div class="info">
-                <ul>
-                  <li>
-                    <div class="meta-block">
-                      <router-link :to="{
+                <div class="info">
+                  <ul>
+                    <li>
+                      <div class="meta-block">
+                        <router-link :to="{
                           name: 'user',
                           params: { routeType: 'attention' },
                           query: { any: 'me' }
                         }">
-                        <p>{{ user.userAttentionCount }}</p>
-                        <strong>
-                          {{
+                          <p>{{ user.userAttentionCount }}</p>
+                          <strong>
+                            {{
                             user.user.uid === personalInfo.user.uid
                               ? '我关注的人'
                               : '他关注的人'
                           }}
-                        </strong>
-                      </router-link>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="meta-block">
-                      <router-link :to="{
+                          </strong>
+                        </router-link>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="meta-block">
+                        <router-link :to="{
                           name: 'user',
                           params: { routeType: 'attention' },
                           query: { any: 'other' }
                         }">
-                        <p>{{ user.otherUserAttentionCount }}</p>
-                        <strong>粉丝</strong>
-                      </router-link>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="meta-block">
-                      <router-link :to="{ name: 'user', params: { routeType: 'article' } }">
-                        <p>{{ user.userArticleCount }}</p>
-                        <strong>文章</strong>
-                      </router-link>
-                    </div>
-                  </li>
+                          <p>{{ user.otherUserAttentionCount }}</p>
+                          <strong>粉丝</strong>
+                        </router-link>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="meta-block">
+                        <router-link :to="{ name: 'user', params: { routeType: 'article' } }">
+                          <p>{{ user.userArticleCount }}</p>
+                          <strong>文章</strong>
+                        </router-link>
+                      </div>
+                    </li>
 
-                  <li>
-                    <div class="meta-block">
-                      <router-link :to="{ name: 'shellDetail' }">
-                        <p>{{ user.user_info.shell_balance || 0 }}</p>
-                        <strong>贝壳余额</strong>
-                      </router-link>
-                    </div>
-                  </li>
-                </ul>
+                    <li>
+                      <div class="meta-block">
+                        <router-link :to="{ name: 'shellDetail' }">
+                          <p>{{ user.user_info.shell_balance || 0 }}</p>
+                          <strong>贝壳余额</strong>
+                        </router-link>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
 
-            <ul class="trigger-menu">
-              <li>
-                <router-link :to="{ name: 'user', params: { routeType: 'article' } }">
-                  文章
-                </router-link>
-              </li>
-              <li>
-                <router-link :to="{ name: 'user', params: { routeType: 'dynamic' } }">
-                  片刻
-                </router-link>
-              </li>
-              <li>
-                <router-link :to="{ name: 'user', params: { routeType: 'books' } }">
-                  小书
-                </router-link>
-              </li>
-              <li>
-                <router-link :to="{ name: 'user', params: { routeType: 'blog' } }">
-                  专栏
-                </router-link>
-              </li>
-              <li>
-                <router-link :to="{ name: 'user', params: { routeType: 'attention' } }">
-                  关注
-                </router-link>
-              </li>
-              <li v-if="
+            <div class="client-card">
+              <ul class="trigger-menu">
+                <li>
+                  <router-link :to="{ name: 'user', params: { routeType: 'article' } }">
+                    文章
+                  </router-link>
+                </li>
+                <li>
+                  <router-link :to="{ name: 'user', params: { routeType: 'dynamic' } }">
+                    片刻
+                  </router-link>
+                </li>
+                <li>
+                  <router-link :to="{ name: 'user', params: { routeType: 'books' } }">
+                    小书
+                  </router-link>
+                </li>
+                <li>
+                  <router-link :to="{ name: 'user', params: { routeType: 'blog' } }">
+                    专栏
+                  </router-link>
+                </li>
+                <li>
+                  <router-link :to="{ name: 'user', params: { routeType: 'attention' } }">
+                    关注
+                  </router-link>
+                </li>
+                <li v-if="
                   personalInfo.islogin &&
                     personalInfo.user.uid === user.user.uid
                 ">
-                <router-link :to="{ name: 'user', params: { routeType: 'message' } }">
-                  消息
-                </router-link>
-              </li>
-            </ul>
+                  <router-link :to="{ name: 'user', params: { routeType: 'message' } }">
+                    消息
+                  </router-link>
+                </li>
+              </ul>
 
-            <BlogView v-if="$route.params.routeType === 'blog'" />
-            <BooksView v-else-if="$route.params.routeType === 'books'" />
-            <DynamicView v-else-if="$route.params.routeType === 'dynamic'" />
-            <UserAttentionView v-else-if="$route.params.routeType === 'attention'" />
-            <UserMessageView v-else-if="$route.params.routeType === 'message'" />
-            <ArticleView v-else />
+              <BlogView v-if="$route.params.routeType === 'blog'" />
+              <BooksView v-else-if="$route.params.routeType === 'books'" />
+              <DynamicView v-else-if="$route.params.routeType === 'dynamic'" />
+              <UserAttentionView v-else-if="$route.params.routeType === 'attention'" />
+              <UserMessageView v-else-if="$route.params.routeType === 'message'" />
+              <ArticleView v-else />
+            </div>
           </div>
 
           <div class="col-xs-12 col-sm-4 col-md-4 box-aside">
@@ -241,9 +245,12 @@ export default {
 
 <style scoped lang="scss">
 .user-lay.layout-content {
+  .client-card {
+    margin-bottom: 10px;
+    padding: 20px;
+  }
   .main {
     .main-top {
-      margin-bottom: 20px;
       .avatar {
         float: left;
         width: 80px;

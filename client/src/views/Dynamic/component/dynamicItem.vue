@@ -409,13 +409,14 @@ export default {
       width: 55px;
       height: 23px;
       font-size: 13px;
-      border-radius: 25px;
+      border-radius: 3px;
+      line-height: 23px;
       border-color: #6cbd45;
       color: #6cbd45;
       border: 1px solid #37c700;
       background-color: #fff;
       &.active {
-        border: 1px solid #999;
+        border: 1px solid #e0e0e0;
         color: #999;
       }
     }
@@ -469,15 +470,13 @@ export default {
     }
   }
   .dynamic-action-row {
-    padding: 0 12px 12px;
+    padding: 0 10px 10px;
+    border-top: 1px solid rgba(178, 186, 194, 0.15);
     .action-box {
       display: flex;
       position: relative;
-      margin-top: 15px;
+      margin-top: 10px;
       height: 34px;
-      background: #f8f8f8;
-      border-radius: 10px;
-      border: 1px solid #f8f8f8;
     }
     .action {
       flex: 1 1 33.333%;

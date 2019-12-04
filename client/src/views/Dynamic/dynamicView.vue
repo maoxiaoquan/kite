@@ -221,7 +221,6 @@ export default {
 
 <style scoped lang="scss">
 #dynamic-content {
-  padding-top: 25px;
   margin-bottom: 15px;
   .dynamic-content-main {
     // box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);

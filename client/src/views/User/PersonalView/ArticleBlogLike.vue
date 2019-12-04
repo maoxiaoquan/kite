@@ -49,7 +49,7 @@ export default {
   methods: {
     getLikeArticleBlogList () {
       this.$store.dispatch('articleBlog/GET_LIKE_ARTICLE_BLOG_LIST', {
-        uid: this.$route.params.uid,
+        uid: this.personalInfo.user.uid,
         page: this.articleBlog.page || 1,
         pageSize: this.articleBlog.pageSize || 10,
       }).then(result => {

@@ -58,6 +58,7 @@
               </div>
             </div>
           </div>
+
           <div class="client-card">
             <div class="book-menu-wrap">
               <div class="book-menu">
@@ -364,6 +365,9 @@ export default {
   }
 }
 .book-view {
+  .client-card {
+    margin-bottom: 10px;
+  }
   .book-info {
     padding: 20px;
     .poster {

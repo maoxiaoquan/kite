@@ -1,5 +1,5 @@
 <template>
-  <div class="user-article-blog-item client-card">
+  <div class="user-article-blog-item">
 
     <template v-if="articleBlogItem.articleBlog">
       <div class="user-article-blog-top">
@@ -145,6 +145,7 @@ export default {
   display: block;
   height: 220px;
   padding: 20px;
+  border: 1px solid #f0f0f0;
   .user-article-blog-top {
     display: flex;
     .article-blog-icon {

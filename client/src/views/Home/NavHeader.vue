@@ -1,29 +1,27 @@
 <template>
   <nav class="nav-header recommend-collection">
-    <ul class="nav-item-view">
-      <li class="nav-item"
-          :class="{'active':currColumnEnName===''}">
-        <a href="javascript:;"
-           class="collection-name"
-           @click="switchNav({name:'home'})">
-          推荐
-        </a>
-      </li>
-      <li class="nav-item"
-          v-for="column_item in navItem"
-          :key="column_item.column_id"
-          @click="switchNav({name:'column',params:{en_name:column_item.en_name}})"
-          :class="{'active':currColumnEnName===column_item.en_name}">
-        <span class="collection-name">{{column_item.name}}</span>
-      </li>
-      <li class="nav-item more">
-        <a href="javascript:;"
-           class="collection-name"
-           @click="switchNav({name:'columnAll'})">
-          更多...
-        </a>
-      </li>
-    </ul>
+    <div class="nav-items">
+      <a href="javascript:;"
+         class="nav-item"
+         :class="{'active':currColumnEnName===''}"
+         @click="switchNav({name:'home'})">
+        推荐
+      </a>
+      <a class="nav-item"
+         v-for="column_item in navItem"
+         :key="column_item.column_id"
+         @click="switchNav({name:'column',params:{en_name:column_item.en_name}})"
+         :class="{'active':currColumnEnName===column_item.en_name}">
+        {{column_item.name}}
+      </a>
+    </div>
+    <div class="nav-more">
+      <a href="javascript:;"
+         class="nav-more-btn"
+         @click="switchNav({name:'columnAll'})">
+        更多...
+      </a>
+    </div>
   </nav>
 </template>
 
@@ -51,37 +49,69 @@ export default {
 <style scoped lang="scss">
 .nav-header {
   width: 100%;
-  /*-webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-              box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.06);*/
   transition: all 0.2s;
   transform: translateZ(0);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 25px 20px 15px;
+  border-bottom: 1px solid rgba(178, 186, 194, 0.15);
   &.recommend-collection {
-    .nav-item-view {
-      position: relative;
+    .nav-items {
+      flex: 1;
       .nav-item {
+        height: 30px;
+        box-sizing: border-box;
+        padding: 0 20px;
+        border-radius: 2px;
+        font-size: 14px;
+        line-height: 30px;
         display: inline-block;
-        a,
-        span {
-          display: block;
-          font-size: 13px;
-          color: rgba(0, 0, 0, 0.56);
-          text-align: center;
-          padding: 3px 12px;
-          border: 1px solid rgba(0, 0, 0, 0.1);
-          border-radius: 14px;
-          margin-right: 10px;
-          margin-bottom: 10px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
+        color: #646464;
+        background-color: #f6f6f6;
+        margin: 0 4px 10px;
         &.active {
-          a,
-          span {
-            background: #f46300;
-            border-color: #f46300;
-            color: #fff;
-          }
+          font-weight: 500;
+          color: #0084ff;
+          background-color: rgba(0, 132, 255, 0.1);
         }
+      }
+    }
+    .nav-more {
+      width: 80px;
+      .nav-more-btn {
+        position: absolute;
+        right: 25px;
+        top: 30px;
+        padding: 0 16px;
+        font-size: 14px;
+        line-height: 32px;
+        color: #8590a6;
+        text-align: center;
+        cursor: pointer;
+        background: none;
+        border: 1px solid;
+        border-radius: 3px;
+        width: 48px;
+        height: 26px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        border-radius: 15px;
+        vertical-align: center;
+        line-height: 26px;
+        padding: 0;
+        color: #8590a6;
+        font-size: 12px;
       }
     }
   }

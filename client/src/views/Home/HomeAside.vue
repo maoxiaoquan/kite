@@ -174,10 +174,8 @@ export default {
     }
   }
   .aside-component {
-    margin-bottom: 24px;
-    background: #f8f8f8;
+    margin-bottom: 10px;
     padding: 24px;
-    border-radius: 4px;
     transition: all 0.3s ease;
     .title {
       font-size: 16px;
@@ -234,10 +232,8 @@ export default {
   }
 
   .hot-tags-for-sidebar {
-    margin-bottom: 24px;
-    background: #f8f8f8;
+    margin-bottom: 10px;
     padding: 24px;
-    border-radius: 5px;
     transition: all 0.3s ease;
     .hot-tags-header {
       position: relative;

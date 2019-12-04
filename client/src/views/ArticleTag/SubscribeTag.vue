@@ -2,7 +2,7 @@
   <!--article-list-lay layout-content start-->
   <section class="subscribe-lay layout-content"
            id="subscribe-lay">
-    <div class="container box-container">
+    <div class="container box-container client-card">
       <nav class="switch-list-nav">
         <div class="nav-list">
           <router-link class="nav-item"

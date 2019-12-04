@@ -258,7 +258,6 @@ export default {
 
 <style scoped lang="scss">
 .article.layout-content {
-  padding-top: 30px;
   .article-lay {
     display: flex;
   }
@@ -427,8 +426,8 @@ export default {
     }
   }
   .aside {
-    width: 250px;
-    margin-left: 20px;
+    width: 280px;
+    margin-left: 10px;
   }
   .no-aricle {
     width: 100%;

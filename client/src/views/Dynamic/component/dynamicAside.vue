@@ -118,10 +118,8 @@ export default {
 .profile-box {
   display: flex;
   flex-direction: column;
-  background: #f8f8f8;
-  border-radius: 6px;
   overflow: hidden;
-
+  margin-bottom: 10px;
   font-size: 13px;
   .profile {
     display: flex;
@@ -185,10 +183,9 @@ export default {
 }
 
 .related-dynamic-block {
-  background: #f8f8f8;
-
   overflow: hidden;
   padding: 22px;
+  margin-bottom: 10px;
   .title {
     font-size: 16px;
     line-height: 28px;
@@ -242,9 +239,7 @@ export default {
 }
 
 .topic-sidebar {
-  background: #f8f8f8;
   padding: 22px;
-  border-radius: 6px;
   overflow: hidden;
   .title {
     font-size: 16px;

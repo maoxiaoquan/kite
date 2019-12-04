@@ -211,7 +211,6 @@ export default {
 
 <style scoped lang="scss">
 #dynamic-topic-view {
-  padding-top: 25px;
   margin-bottom: 15px;
   .dynamic-main {
     .stream-wrapper {

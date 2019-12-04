@@ -5,22 +5,22 @@
         <div class="row">
 
           <div class="col-xs-12 col-sm-8 col-md-8 main">
-            <ul class="trigger-menu">
-              <li>
-                <a href="javascript:;">
-                  收藏
-                </a>
-              </li>
-            </ul>
+            <div class="client-card">
+              <ul class="trigger-menu">
+                <li>
+                  <a href="javascript:;">
+                    收藏
+                  </a>
+                </li>
+              </ul>
 
-            <Collect />
+              <div class="collect-view">
+                <Collect />
+              </div>
+            </div>
           </div>
 
           <div class="col-xs-12 col-sm-4 col-md-4 box-aside">
-            <router-link class="personal"
-                         :to="{name:'user',params:{uid:$route.params.uid,routeType:'article'}}">
-              返回个人中心 <i class="el-icon-d-arrow-right"></i>
-            </router-link>
             <UserAside />
           </div>
 
@@ -48,11 +48,13 @@ export default {
   },
   async asyncData ({ store, route }) {
     return Promise.all([
-      store.dispatch('user/GET_USER_INFO_ALL', { uid: route.params.uid }),
       store.dispatch('user/GET_USER_ATTENTION_LIST', {
         uid: route.params.uid
       })
     ])
+  },
+  created () {
+    this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
   },
   computed: {
     ...mapState(['personalInfo', 'user']),  // personalInfo:个人信息  user:登录后的个人信息当前用户
@@ -96,6 +98,9 @@ export default {
   .personal {
     font-size: 14px;
     color: #333;
+  }
+  .collect-view {
+    padding: 20px;
   }
 }
 </style>

@@ -29,7 +29,7 @@ export default [
         component: () => import('@views/User/User') // 用户内页
       },
       {
-        path: 'personal/:uid',
+        path: 'personal',
         name: 'personal',
         component: () => import('@views/User/Personal') // 个人页
       },

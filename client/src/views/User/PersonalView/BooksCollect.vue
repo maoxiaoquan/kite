@@ -5,7 +5,7 @@
       <div class="col-xs-6 col-sm-6 col-md-6"
            v-for="(booksItem,key) in collectBooksInfo.list"
            :key="key">
-        <div class="library-item clearfix client-card">
+        <div class="library-item clearfix">
           <div class="library-item__thumb">
             <router-link :to="{name:'book',params:{books_id:booksItem.books.books_id}}">
               <img v-lazy="booksItem.books.cover_img"
@@ -95,7 +95,7 @@ export default {
     getCollectBooksList (page) {
       this.$store.dispatch('books/GET_COLLECT_BOOKS_LIST', {
         page: this.collectBooksInfo.page || 1,
-        uid: this.$route.params.uid
+        uid: this.personalInfo.user.uid,
       }).then(result => {
         this.collectBooksInfo = result.data
       })
@@ -131,6 +131,7 @@ export default {
     padding: 16px;
     background: #fff;
     transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
     .library-item__thumb {
       float: left;
       width: 88px;

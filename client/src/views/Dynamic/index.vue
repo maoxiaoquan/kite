@@ -2,50 +2,39 @@
   <div id="dynamic">
     <div class="container dynamic-container">
       <div class="aside">
-        <nav role="navigation" class="dock-nav">
+        <nav role="navigation"
+             class="dock-nav">
           <ul class="nav-list">
             <li class="nav-item acitve">
-              <router-link
-                :to="{ name: 'dynamics', params: { dynamicTopicId: 'newest' } }"
-                class="nav-link"
-                >推荐</router-link
-              >
+              <router-link :to="{ name: 'dynamics', params: { dynamicTopicId: 'newest' } }"
+                           class="nav-link">推荐</router-link>
             </li>
             <li class="nav-item">
-              <router-link
-                :to="{ name: 'dynamics', params: { dynamicTopicId: 'hot' } }"
-                class="nav-link"
-                >热门</router-link
-              >
+              <router-link :to="{ name: 'dynamics', params: { dynamicTopicId: 'hot' } }"
+                           class="nav-link">热门</router-link>
             </li>
-            <li class="nav-item" v-if="personalInfo.islogin">
-              <router-link
-                :to="{
+            <li class="nav-item"
+                v-if="personalInfo.islogin">
+              <router-link :to="{
                   name: 'dynamics',
                   params: { dynamicTopicId: 'following' }
                 }"
-                class="nav-link"
-                >关注</router-link
-              >
+                           class="nav-link">关注</router-link>
             </li>
           </ul>
           <ul class="nav-list">
-            <li
-              class="nav-item"
-              v-for="(item, key) in dynamic.dynamicTopicIndex"
-              :key="key"
-            >
-              <router-link
-                :to="{
+            <li class="nav-item"
+                v-for="(item, key) in dynamic.dynamicTopicIndex"
+                :key="key">
+              <router-link :to="{
                   name: 'dynamics',
                   params: { dynamicTopicId: item.topic_id }
                 }"
-                class="nav-link"
-                >{{ item.name }}</router-link
-              >
+                           class="nav-link">{{ item.name }}</router-link>
             </li>
             <li class="nav-item more">
-              <router-link :to="{ name: 'dynamicTopic' }" class="more-view">
+              <router-link :to="{ name: 'dynamicTopic' }"
+                           class="more-view">
                 <span>更多</span>
               </router-link>
             </li>
@@ -54,24 +43,21 @@
       </div>
       <div class="row dynamic-main">
         <div class="col-xs-12 col-sm-8 col-md-8">
-          <div class="stream-wrapper client-card" v-if="personalInfo.islogin">
+          <div class="stream-wrapper client-card"
+               v-if="personalInfo.islogin">
             <dynamic-write @changeDynamicWrite="dynamicSubmit" />
           </div>
-          <div>
-            <scroll-loading
-              @scroll-loading="infiniteHandler"
-              :isLoading="isLoading"
-              :isMore="isMore"
-            >
-              <div
-                class="dy-item client-card"
-                v-for="(dynamicItem, key) in dynamic.dynamicList.list"
-                :key="key"
-              >
-                <dynamic-item :dynamicItem="dynamicItem" />
-              </div>
-            </scroll-loading>
-          </div>
+
+          <scroll-loading @scroll-loading="infiniteHandler"
+                          :isLoading="isLoading"
+                          :isMore="isMore">
+            <div class="dy-item client-card"
+                 v-for="(dynamicItem, key) in dynamic.dynamicList.list"
+                 :key="key">
+              <dynamic-item :dynamicItem="dynamicItem" />
+            </div>
+          </scroll-loading>
+
         </div>
         <div class="col-xs-12 col-sm-4 col-md-4">
           <dynamic-aside />
@@ -93,7 +79,7 @@ import googleMixin from '@mixins/google'
 export default {
   name: 'dynamic',
   mixins: [googleMixin], //混合谷歌分析
-  metaInfo() {
+  metaInfo () {
     return {
       title: `片刻-${this.website.meta.website_name}`,
       htmlAttrs: {
@@ -113,7 +99,7 @@ export default {
       __dangerouslyDisableSanitizers: ['script']
     }
   },
-  data() {
+  data () {
     return {
       page: 2,
       isLoading: false,
@@ -121,7 +107,7 @@ export default {
       loginUserInfo: {}
     }
   },
-  async asyncData({ store, route, accessToken = '' }) {
+  async asyncData ({ store, route, accessToken = '' }) {
     // 触发 action 后，会返回 Promise
     const dispatchUrl =
       route.params.dynamicTopicId !== 'following'
@@ -138,11 +124,11 @@ export default {
       })
     ])
   },
-  created() {
+  created () {
     this.$store.dispatch('dynamic/GET_DYNAMIC_TOPIC_INDEX') // 获取首页动态专题列表
   },
   methods: {
-    dynamicSubmit() {
+    dynamicSubmit () {
       // 评论提交的回调
       if (this.$route.params.dynamicTopicId !== 'following') {
         // 判断是不是关注页面，是则直接刷新
@@ -154,7 +140,7 @@ export default {
         window.location.reload()
       }
     },
-    infiniteHandler() {
+    infiniteHandler () {
       this.isLoading = true
       const dispatchUrl =
         this.$route.params.dynamicTopicId !== 'following'
@@ -200,7 +186,7 @@ export default {
   margin-bottom: 15px;
   .aside {
     position: fixed;
-    top: 89px;
+    top: 65px;
     width: 110px;
     padding: 12px 10px;
     background: #fff;
@@ -220,7 +206,7 @@ export default {
           font-size: 14px;
           margin-bottom: 5px;
           padding: 3px 10px;
-          border-radius: 15px;
+          border-radius: 5px;
           color: #666;
           transition: background-color 0.2s, color 0.2s;
         }
@@ -237,15 +223,18 @@ export default {
     .more {
       .more-view {
         border: 1px solid #e0e0e0;
-        border-radius: 15px !important;
+        border-radius: 5px !important;
       }
     }
   }
   .dynamic-main {
-    padding-left: 135px;
-    margin-top: 25px;
+    padding-left: 120px;
+    .stream-wrapper {
+      margin-bottom: 10px;
+    }
     .dy-item {
       position: relative;
+      margin-bottom: 10px;
     }
   }
   @media (max-width: 575px) {

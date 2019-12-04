@@ -2,7 +2,7 @@
   <div class="user-message"
        v-loading="isLoading">
     <div class="user-message-view">
-      <div class="client-card"
+      <div class="user-message-item"
            v-for="(item,key) in userMessage.list"
            :key="key">
         <attention v-if="Number(item.action)===userMessageAction.attention"
@@ -106,9 +106,10 @@ export default {
 .user-message {
   .user-message-view {
     padding-top: 20px;
-    .client-card {
+    .user-message-item {
       margin-bottom: 15px;
       padding: 20px;
+      border: 1px solid rgba(178, 186, 194, 0.15);
     }
   }
 }

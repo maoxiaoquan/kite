@@ -1,7 +1,7 @@
 <template>
   <div class="article-column"
        id="article-column">
-    <div class="container  box-container">
+    <div class="container  box-container client-card">
 
       <nav class="switch-list-nav">
         <div class="nav-list">

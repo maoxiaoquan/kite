@@ -10,7 +10,7 @@
       <div class="col-xs-12 col-sm-6 col-md-6"
            v-for="(articleBlogItem, key) in articleBlog.list"
            :key="key">
-        <div class="user-article-blog-item client-card">
+        <div class="user-article-blog-item ">
           <div class="user-article-blog-top">
             <router-link class="article-blog-icon"
                          :to="{
@@ -416,6 +416,7 @@ export default {
       display: block;
       height: 210px;
       padding: 10px;
+      border: 1px solid rgba(178, 186, 194, 0.15);
       .user-article-blog-top {
         display: flex;
         .article-blog-icon {

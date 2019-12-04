@@ -10,7 +10,7 @@
            v-for="(booksItem,key) in books.list"
            :key="key">
 
-        <div class="library-item clearfix client-card">
+        <div class="library-item clearfix">
           <div class="operat-view"
                v-if="personalInfo.islogin&&personalInfo.user.uid===booksItem.user.uid">
             <Dropdown>
@@ -227,10 +227,11 @@ export default {
     padding-top: 20px;
 
     .library-item {
-      margin-bottom: 24px;
+      margin-bottom: 10px;
       padding: 16px;
       background: #fff;
       transition: all 0.3s ease;
+      border: 1px solid rgba(178, 186, 194, 0.15);
       .library-item__thumb {
         float: left;
         width: 88px;

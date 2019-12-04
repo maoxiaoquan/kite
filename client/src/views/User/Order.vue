@@ -3,80 +3,79 @@
     <section class="layout-content detail-lay">
       <div class="container  box-container">
 
-        <h3 class="title">我的订单</h3>
-
         <div class="row">
 
           <div class="col-xs-12 col-sm-8 col-md-8 main">
 
-            <ul class="nav-item-view">
-              <li class="nav-item"
-                  :class="{'active':!currProductType}"
-                  @click="switchType('','')">
-                <a href="javascript:;"
-                   class="collection-name">
-                  全部
-                </a>
-              </li>
-              <li class="nav-item"
-                  :class="{'active':key==currProductType}"
-                  v-for="(item,key,index) in productTypeInfo"
-                  v-if="item.isUse"
-                  @click="switchType(item,key)"
-                  :key="index">
-                <a href="javascript:;"
-                   class="collection-name">
-                  {{item.name}}
-                </a>
-              </li>
-            </ul>
+            <div class="client-card pd20">
 
-            <div class="detail-view row">
-              <div class="col-xs-12 col-sm-6 col-md-6 detail-item"
-                   v-for="(item,key) in detail.list"
-                   :key="key">
-                <div v-if="item.product_type==productType.books"
-                     class="client-card books">
+              <h3 class="title">我的订单</h3>
 
-                  <div class="library-item__thumb">
-                    <router-link :to="{name:'book',params:{books_id:item.productInfo.books_id}}">
-                      <img v-lazy="item.productInfo.cover_img"
-                           class="img-full"
-                           lazy="loaded">
-                    </router-link>
-                  </div>
-                  <div class="library-item__body">
-                    <router-link class="library-item__title"
-                                 :to="{name:'book',params:{books_id:item.productInfo.books_id}}">
-                      {{item.productInfo.title}}
-                      <span class="tag-buy">已购买</span>
-                    </router-link>
-                    <div class="library-item__info">
-                      <span><i class="el-icon-view"></i> {{item.productInfo.read_count||0}}
-                      </span><span style="margin-left: 8px;">
-                        <i class="el-icon-notebook-2"></i> {{item.productInfo.bookCount||0}}
-                      </span>
-                      <span class="attention"
-                            v-if="~[statusList.reviewSuccess,statusList.freeReview].indexOf(item.productInfo.status)&&personalInfo.islogin"
-                            @click="collectBooks(item.productInfo.books_id)"
-                            :class="{'active':isCollect(item.productInfo).status}">{{isCollect(item.productInfo).text}}</span>
+              <ul class="nav-item-view">
+                <li class="nav-item"
+                    :class="{'active':!currProductType}"
+                    @click="switchType('','')">
+                  <a href="javascript:;"
+                     class="collection-name">
+                    全部
+                  </a>
+                </li>
+                <li class="nav-item"
+                    :class="{'active':key==currProductType}"
+                    v-for="(item,key,index) in productTypeInfo"
+                    v-if="item.isUse"
+                    @click="switchType(item,key)"
+                    :key="index">
+                  <a href="javascript:;"
+                     class="collection-name">
+                    {{item.name}}
+                  </a>
+                </li>
+              </ul>
+
+              <div class="detail-view row">
+                <div class="col-xs-12 col-sm-6 col-md-6 detail-item"
+                     v-for="(item,key) in detail.list"
+                     :key="key">
+                  <div v-if="item.product_type==productType.books"
+                       class="books">
+
+                    <div class="library-item__thumb">
+                      <router-link :to="{name:'book',params:{books_id:item.productInfo.books_id}}">
+                        <img v-lazy="item.productInfo.cover_img"
+                             class="img-full"
+                             lazy="loaded">
+                      </router-link>
+                    </div>
+                    <div class="library-item__body">
+                      <router-link class="library-item__title"
+                                   :to="{name:'book',params:{books_id:item.productInfo.books_id}}">
+                        {{item.productInfo.title}}
+                        <span class="tag-buy">已购买</span>
+                      </router-link>
+                      <div class="library-item__info">
+                        <span><i class="el-icon-view"></i> {{item.productInfo.read_count||0}}
+                        </span><span style="margin-left: 8px;">
+                          <i class="el-icon-notebook-2"></i> {{item.productInfo.bookCount||0}}
+                        </span>
+                        <span class="attention"
+                              v-if="~[statusList.reviewSuccess,statusList.freeReview].indexOf(item.productInfo.status)&&personalInfo.islogin"
+                              @click="collectBooks(item.productInfo.books_id)"
+                              :class="{'active':isCollect(item.productInfo).status}">{{isCollect(item.productInfo).text}}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <Page :total="Number(detail.count)"
-                  :pageSize="Number(detail.pageSize)"
-                  :page="Number(detail.page)||1"
-                  @pageChange="pageChange"></Page>
+              <Page :total="Number(detail.count)"
+                    :pageSize="Number(detail.pageSize)"
+                    :page="Number(detail.page)||1"
+                    @pageChange="pageChange"></Page>
+            </div>
           </div>
 
           <div class="col-xs-12 col-sm-4 col-md-4 box-aside">
-            <router-link class="personal"
-                         :to="{name:'user',params:{uid:personalInfo.user.uid,routeType:'article'}}">
-              返回个人中心 <i class="el-icon-d-arrow-right"></i>
-            </router-link>
             <UserAside />
           </div>
 
@@ -212,10 +211,6 @@ export default {
 
 <style scoped lang="scss">
 .detail-lay {
-  .personal {
-    font-size: 14px;
-    color: #333;
-  }
   .title {
     margin-bottom: 20px;
   }
@@ -257,6 +252,7 @@ export default {
         box-sizing: border-box;
         flex-direction: row;
         overflow: hidden;
+        border: 1px solid rgba(178, 186, 194, 0.15);
         .img-full {
           width: 80px;
           height: 80px;
