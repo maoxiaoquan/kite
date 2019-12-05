@@ -159,6 +159,9 @@ export default {
 
 <style scoped lang="scss">
 .subscribe-lay.layout-content {
+  .client-card {
+    padding: 20px;
+  }
   .switch-list-nav {
     display: flex;
     justify-content: space-between;

@@ -42,7 +42,7 @@
 
       <button type="button"
               class="Button VoteButton">
-        <i class="el-icon-star-off"></i>
+        <i class="el-icon-thumb"></i>
         <span>​
         </span>赞 ​​{{articleItem.thumb_count}}
       </button>
@@ -288,9 +288,9 @@ export default {
 
   .VoteButton {
     padding: 0 10px;
-    color: #0084ff;
     font-size: 14px;
-    background: rgba(0, 132, 255, 0.1);
+    color: #f46e65;
+    background-color: #f46e653b;
     border-color: transparent;
   }
   .AnnotationTag {

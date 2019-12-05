@@ -106,6 +106,9 @@ export default {
 
 <style scoped lang="scss">
 #article-column {
+  .client-card {
+    padding: 20px;
+  }
   .switch-list-nav {
     display: flex;
     justify-content: space-between;

@@ -80,9 +80,9 @@
               </li>
               <li class="nav-item"
                   v-if="personalInfo.islogin">
-                <router-link class="btn btn-sm"
+                <router-link class="btn btn-sm no-read-msg"
                              :to="{name:'user',params:{uid:personalInfo.user.uid,routeType:'message'}}">
-                  <i class="iconfont el-icon-chat-dot-round"></i>
+                  <i class="iconfont el-icon-message-solid"></i>
                   <span v-if="messageCount.count>0"
                         class="unread-message-count">{{messageCount.count}}</span>
                 </router-link>
@@ -272,6 +272,9 @@ export default {
               font-size: 15px;
               color: rgba(0, 0, 0, 0.56);
             }
+            .s-btn--primary {
+              color: #fff;
+            }
             i {
               display: inline-block;
               margin-right: 5px;
@@ -338,16 +341,24 @@ export default {
               padding: 5px 20px;
             }
             .sign-btn {
-              font-weight: bold;
               font-size: 14px;
             }
-            .unread-message-count {
-              padding: 0 3px;
-              background: #ff4d4f;
-              border-radius: 50%;
-              font-size: 12px;
-              color: #ffffff;
-              vertical-align: middle;
+            .no-read-msg {
+              position: relative;
+              .unread-message-count {
+                background: #ff4d4f;
+                border-radius: 50%;
+                position: absolute;
+                display: block;
+                font-size: 12px;
+                width: 15px;
+                text-align: center;
+                line-height: 15px;
+                height: 15px;
+                right: 12px;
+                top: 4px;
+                color: #fff;
+              }
             }
           }
         }

@@ -24,37 +24,40 @@
       </li>
     </ul>
 
-    <ul class="aside-operat client-card"
+    <ul class="aside-operat client-card-shadow"
         v-if="personalInfo.islogin && personalInfo.user.uid === user.user.uid">
       <li v-if="personalInfo.islogin && personalInfo.user.uid === user.user.uid"
           @click="checkIn">
-        <span class="check-in"> <i class="el-icon-bell"></i> 签到</span>
+        <a href="javascript:;">
+          <i class="icon el-icon-bell"></i>
+          <span class="box-title check-in"> 签到</span>
+        </a>
       </li>
       <li>
         <router-link class="collection"
                      :to="{ name: 'personal' }">
-          <i class="el-icon-folder-opened"></i>
-          收藏集
+          <i class="icon el-icon-folder-opened"></i>
+          <span class="box-title">收藏集</span>
         </router-link>
       </li>
       <li>
         <router-link class="collection"
                      :to="{ name: 'shellDetail' }">
-          <i class="el-icon-notebook-2"></i>
-          贝壳明细
+          <i class="icon el-icon-notebook-2"></i>
+          <span class="box-title">贝壳明细</span>
         </router-link>
       </li>
       <li>
         <router-link class="collection"
                      :to="{ name: 'myOrder' }">
-          <i class="el-icon-notebook-1"></i>
-          我的订单
+          <i class="icon el-icon-notebook-1"></i>
+          <span class="box-title">我的订单</span>
         </router-link>
       </li>
       <li>
         <router-link :to="{ name: 'subscribe_tag', params: { type: 'my' } }">
-          <i class="el-icon-price-tag"></i>
-          关注的文章标签
+          <i class="icon el-icon-price-tag"></i>
+          <span class="box-title">关注标签</span>
         </router-link>
       </li>
     </ul>
@@ -200,26 +203,55 @@ export default {
 }
 
 .aside-operat {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: 20px 20px 0px;
+  margin-bottom: 10px;
   li {
-    display: inline-block;
-    margin-bottom: 10px;
+    width: 33%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 25px;
     a,
     span {
-      padding: 5px 13px;
-      display: block;
-      background: #f3f3f3;
-      font-size: 14px;
-      border-radius: 5px;
-      color: rgba(0, 0, 0, 0.88);
-      i {
-        display: inline-block;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-flex: 1;
+      -ms-flex: 1 1;
+      flex: 1 1;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+      color: currentColor;
+      .icon {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: end;
+        -ms-flex-align: end;
+        align-items: flex-end;
+        width: 25px;
+        height: 25px;
+        margin-bottom: 10px;
       }
-      &.collection {
-        background: #ffe699;
+      .box-title {
+        font-size: 15px;
+        color: #8590a6;
       }
-    }
-    .check-in {
-      background: #fd763a;
     }
   }
 }

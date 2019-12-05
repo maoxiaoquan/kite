@@ -1,7 +1,7 @@
 <template>
   <div class="home-lay layout-aside">
 
-    <div class="notice client-card"
+    <div class="notice client-card-shadow"
          v-if="website.notice.length>0">
       <a class="notice-item"
          v-for="(item,key) in website.notice"
@@ -10,23 +10,26 @@
          :key="key">{{item.title}}</a>
     </div>
 
-    <div class="aside-component client-card">
+    <div class="aside-component client-card-shadow">
       <h3 class="title">写下你想说的</h3>
       <div class="issue-btn">
         <a href="javascript:;"
            @click="createDynamic"
            class="btn-dynamic">
-          <i class="el-icon-chat-line-round"></i>发片刻
+          <i class="el-icon-chat-line-round"></i>
+          <span class="label-title">发片刻</span>
         </a>
         <a href="javascript:;"
            @click="createArticle"
            class="btn-note">
-          <i class="el-icon-edit"></i>写文章
+          <i class="el-icon-edit"></i>
+          <span class="label-title">写文章</span>
         </a>
         <a href="javascript:;"
            @click="createBooks"
            class="btn-book">
-          <i class="el-icon-notebook-2"></i>撰小书
+          <i class="el-icon-notebook-2"></i>
+          <span class="label-title">撰小书</span>
         </a>
       </div>
     </div>
@@ -181,7 +184,7 @@ export default {
       font-size: 16px;
       line-height: 28px;
       color: rgba(0, 0, 0, 0.88);
-      font-weight: 700;
+      font-weight: normal;
       margin-bottom: 16px;
       position: relative;
       padding-left: 12px;
@@ -193,40 +196,37 @@ export default {
         top: 4px;
         left: 0;
         border-radius: 2px;
-        background: #ffd600;
+        background: #ec7259;
       }
     }
     .issue-btn {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
       a {
-        font-size: 15px;
-        width: 100%;
-        text-align: center;
-        display: block;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
         cursor: pointer;
-        padding: 6px 0;
-        color: #ffffff;
-        margin-bottom: 10px;
-        border-radius: 5px;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        flex: 1;
+        padding: 10px 0;
+        text-align: center;
+        position: relative;
         i {
           margin-right: 10px;
         }
-      }
-      .btn-dynamic {
-        // color: #db5000;
-        // border: 1px solid rgba(219, 80, 0, 0.7);
-        color: rgba(0, 0, 0, 0.88);
-        background: #ffb84f;
-        border: 1px solid #ffb84f;
-      }
-      .btn-note {
-        color: rgba(0, 0, 0, 0.88);
-        background: #c1e4de;
-        border: 1px solid #c1e4de;
-      }
-      .btn-book {
-        color: rgba(0, 0, 0, 0.88);
-        background: #b7d6ec;
-        border: 1px solid #b7d6ec;
+        .label-title {
+          color: #444;
+          font-size: 16px;
+          display: block;
+        }
       }
     }
   }
@@ -256,10 +256,10 @@ export default {
         position: absolute;
         left: 0;
         border-radius: 2px;
-        background: #ffd600;
+        background: #ec7259;
       }
       span.hot-tags-header-title {
-        font-weight: bold;
+        font-weight: normal;
         font-size: 16px;
         color: #2d2d2f;
         &:after {

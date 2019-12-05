@@ -78,8 +78,8 @@ export default {
         margin: 0 4px 10px;
         &.active {
           font-weight: 500;
-          color: #0084ff;
-          background-color: rgba(0, 132, 255, 0.1);
+          color: #f46e65;
+          background-color: #f46e653b;
         }
       }
     }

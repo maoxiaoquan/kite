@@ -212,8 +212,8 @@ export default {
         }
         .current-active {
           color: rgba(0, 0, 0, 0.88);
-          background: #ffd600;
-          border-color: #ffd600;
+          background: #ec7259;
+          border-color: #ec7259;
         }
       }
       &:last-child {

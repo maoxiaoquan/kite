@@ -1,10 +1,10 @@
 <template>
   <client-only>
     <section class="books-write-lay layout-content">
-      <div class="container">
+      <div class="container client-card-shadow">
         <!-- this component will only be rendered on client-side -->
 
-        <div class="row mrg-bm20 books-write-content">
+        <div class="row mrg-bm20 books-write-content ">
           <div class="col-xs-12 col-sm-4 col-md-3 box-form-group">
             <div class="cover-img">
               <img v-lazy="write.cover_img"
@@ -434,7 +434,10 @@ export default {
 
 <style lang="scss" scoped>
 .books-write-lay {
-  padding-top: 30px;
+  .client-card-shadow {
+    padding: 20px;
+    margin-bottom: 30px;
+  }
   .books-write-content {
     .cover-img {
       .cover-img-view {

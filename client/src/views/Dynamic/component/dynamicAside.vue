@@ -202,7 +202,7 @@ export default {
       top: 4px;
       left: 0;
       border-radius: 2px;
-      background: #ffd600;
+      background: #ec7259;
     }
   }
   .dynamic-list {
@@ -257,7 +257,7 @@ export default {
       top: 4px;
       left: 0;
       border-radius: 2px;
-      background: #ffd600;
+      background: #ec7259;
     }
     a {
       color: #007fff;

@@ -423,7 +423,7 @@ export default {
   }
   .dynamic-content-row {
     margin-top: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     .content-box {
       font-size: 14px;
       line-height: 20px;
@@ -470,13 +470,12 @@ export default {
     }
   }
   .dynamic-action-row {
-    padding: 0 10px 10px;
+    padding: 0 5px 5px;
     border-top: 1px solid rgba(178, 186, 194, 0.15);
     .action-box {
       display: flex;
       position: relative;
-      margin-top: 10px;
-      height: 34px;
+      margin-top: 5px;
     }
     .action {
       flex: 1 1 33.333%;
@@ -506,7 +505,7 @@ export default {
     }
   }
   .dynamic-comment-row {
-    border-top: 1px solid #ebebeb;
+    border-top: 1px solid rgba(178, 186, 194, 0.15);
     padding: 20px;
   }
 }
