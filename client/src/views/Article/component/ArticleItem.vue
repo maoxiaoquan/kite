@@ -289,9 +289,10 @@ export default {
   .VoteButton {
     padding: 0 10px;
     font-size: 14px;
-    color: #f46e65;
-    background-color: #f46e653b;
-    border-color: transparent;
+    color: #b2bac2;
+    border-radius: 1px;
+    border: 1px solid #edeeef;
+    background: #fff;
   }
   .AnnotationTag {
     margin-left: auto;

@@ -192,7 +192,6 @@ export default {
     background: #fff;
     border-radius: 3px;
     transition: all 0.3s ease;
-    border: 1px solid #edf2f9;
     box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
     .nav-list {
       height: 100%;
@@ -218,12 +217,6 @@ export default {
       }
       &:last-child {
         border-bottom: none;
-      }
-    }
-    .more {
-      .more-view {
-        border: 1px solid #e0e0e0;
-        border-radius: 5px !important;
       }
     }
   }

@@ -397,7 +397,6 @@ export default {
     background: #fff;
     transition: all 0.3s ease;
     border-radius: 2px;
-    box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
     box-sizing: border-box;
     .library-item__thumb {
       float: left;

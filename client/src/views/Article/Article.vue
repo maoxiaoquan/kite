@@ -1,86 +1,88 @@
 <template>
   <section class="article layout-content container">
-    <div class="article-lay">
-      <main class="main client-card">
-        <div class="article-view"
-             v-if="article.aid">
-          <div class="article-title">
-            <h1>{{ article.title }}</h1>
-            <div class="author">
-              <router-link :to="{
+    <div class="article-lay row">
+      <div class="col-xs-12 col-sm-8--4 col-md-8--4">
+
+        <main class="main client-card">
+          <div class="article-view"
+               v-if="article.aid">
+            <div class="article-title">
+              <h1>{{ article.title }}</h1>
+              <div class="author">
+                <router-link :to="{
                   name: 'user',
                   params: { uid: article.user.uid, routeType: 'article' }
                 }"
-                           class="avatar">
-                <img v-lazy="article.user.avatar"
-                     alt />
-              </router-link>
-              <div class="info">
-                <div class="name">
-                  <router-link :to="{
+                             class="avatar">
+                  <img v-lazy="article.user.avatar"
+                       alt />
+                </router-link>
+                <div class="info">
+                  <div class="name">
+                    <router-link :to="{
                       name: 'user',
                       params: { uid: article.user.uid, routeType: 'article' }
                     }">{{ article.user.nickname }}</router-link>
-                </div>
-                <!-- 文章数据信息 -->
-                <div class="meta">
-                  <span class="publish-time">{{ article.create_dt }}</span>
-                  <span class="views-count">阅读 {{ article.read_count }}</span>
-                  <span class="comments-count">评论 {{ article.comment_count }}</span>
-                  <span class="likes-count">喜欢 {{ article.thumb_count }}</span>
-                  <span class="source">{{ sourceTypeList[article.source] }}
-                    {{ articleTypeList[article.type] }}</span>
+                  </div>
+                  <!-- 文章数据信息 -->
+                  <div class="meta">
+                    <span class="publish-time">{{ article.create_dt }}</span>
+                    <span class="views-count">阅读 {{ article.read_count }}</span>
+                    <span class="comments-count">评论 {{ article.comment_count }}</span>
+                    <span class="likes-count">喜欢 {{ article.thumb_count }}</span>
+                    <span class="source">{{ sourceTypeList[article.source] }}
+                      {{ articleTypeList[article.type] }}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <article class="article-content box-article-view"
-                   v-html="article.content"></article>
+            <article class="article-content box-article-view"
+                     v-html="article.content"></article>
 
-          <div class="show-foot clearfix">
-            <div class="copyright">© 著作权归作者所有</div>
-          </div>
+            <div class="show-foot clearfix">
+              <div class="copyright">© 著作权归作者所有</div>
+            </div>
 
-          <div class="meta-bottom clearfix">
-            <div class="meta-bottom-item like"
-                 @click="onUserThumbArticle"
-                 :class="{ active: isThumb(article) }">
-              <i :class="
+            <div class="meta-bottom clearfix">
+              <div class="meta-bottom-item like"
+                   @click="onUserThumbArticle"
+                   :class="{ active: isThumb(article) }">
+                <i :class="
                   isThumb(article) ? 'el-icon-star-on' : 'el-icon-star-off'
                 "></i>
+              </div>
+              <div class="meta-bottom-item share">
+                <Dropdown>
+                  <div class="el-dropdown-link"
+                       slot="button">
+                    <i class="el-icon-share"></i>
+                  </div>
+                  <div class="dropdown-menu-view">
+                    <div class="dropdown-menu-item"
+                         @click="shareChange({ type: 'qq', data: article })">
+                      分享到QQ
+                    </div>
+                    <div class="dropdown-menu-item"
+                         @click="shareChange({ type: 'sina', data: article })">
+                      分享到新浪
+                    </div>
+                    <div class="dropdown-menu-item"
+                         @click="shareChange({ type: 'qzone', data: article })">
+                      分享到QQ空间
+                    </div>
+                  </div>
+                </Dropdown>
+              </div>
             </div>
-            <div class="meta-bottom-item share">
-              <Dropdown>
-                <div class="el-dropdown-link"
-                     slot="button">
-                  <i class="el-icon-share"></i>
-                </div>
-                <div class="dropdown-menu-view">
-                  <div class="dropdown-menu-item"
-                       @click="shareChange({ type: 'qq', data: article })">
-                    分享到QQ
-                  </div>
-                  <div class="dropdown-menu-item"
-                       @click="shareChange({ type: 'sina', data: article })">
-                    分享到新浪
-                  </div>
-                  <div class="dropdown-menu-item"
-                       @click="shareChange({ type: 'qzone', data: article })">
-                    分享到QQ空间
-                  </div>
-                </div>
-              </Dropdown>
-            </div>
+            <!--article footer end-->
+            <!--文章评论-->
+            <ArticleComment />
           </div>
-          <!--article footer end-->
-          <!--文章评论-->
-          <ArticleComment />
-        </div>
-        <p class="no-aricle"
-           v-else>文章不存在</p>
-      </main>
-
-      <div class="aside">
+          <p class="no-aricle"
+             v-else>文章不存在</p>
+        </main>
+      </div>
+      <div class="col-xs-12 col-sm-3--6 col-md-3--6 aside">
         <ArticleAside />
       </div>
     </div>
@@ -258,9 +260,7 @@ export default {
 
 <style scoped lang="scss">
 .article.layout-content {
-  .article-lay {
-    display: flex;
-  }
+  margin-bottom: 12px;
   .main {
     width: 100%;
     flex: 1;
@@ -425,10 +425,6 @@ export default {
       }
     }
   }
-  .aside {
-    width: 280px;
-    margin-left: 10px;
-  }
   .no-aricle {
     width: 100%;
     padding: 30px;
@@ -438,17 +434,6 @@ export default {
     text-align: center;
     font-size: 25px;
     margin: 20px 0;
-  }
-}
-
-@media (max-width: 575px) {
-  .aside {
-    display: none;
-  }
-  .article.layout-content .main {
-    border: none;
-    padding: 0;
-    border-radius: none;
   }
 }
 </style>

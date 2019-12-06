@@ -78,7 +78,7 @@
       </ul>
     </div>
 
-    <div class="website-information">
+    <div class="website-information client-card">
 
       <ul class="more-list">
         <li class="item"
@@ -298,8 +298,7 @@ export default {
   }
 
   .website-information {
-    border-top: 1px solid #ededed;
-    padding-top: 10px;
+    padding: 20px;
     ul {
       display: block;
       li {

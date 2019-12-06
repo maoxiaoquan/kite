@@ -3,7 +3,7 @@
        id="index">
     <div class="index-container">
       <div class="row">
-        <div class="col-xs-12 col-sm-8 col-md-8">
+        <div class="col-xs-12 col-sm-8--4 col-md-8--4">
           <!--home-lay layout-content start-->
           <section class="home-main layout-content client-card">
             <NavHeader :navItem="articleColumn.homeColumn" />
@@ -26,7 +26,7 @@
           </section>
           <!--home-lay layout-content end-->
         </div>
-        <div class="col-xs-12 col-sm-4 col-md-4">
+        <div class="col-xs-12 col-sm-3--6 col-md-3--6">
           <!--aside.html start-->
           <div class="home-aside">
             <HomeAside />
