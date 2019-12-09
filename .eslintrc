@@ -3,7 +3,5 @@
     "camelcase": 0
   },
   "extends": "standard",
-  "plugins": [
-    "html"
-  ]
+  "plugins": ["html"]
 }

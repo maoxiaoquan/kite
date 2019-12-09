@@ -19,6 +19,11 @@ export default [
         component: require('@views/Article/Article').default // 文章内容页
       },
       {
+        path: 'attention',
+        name: 'AttentionMessage',
+        component: () => import('@views/AttentionMessage') // 关注
+      },
+      {
         path: 'search',
         name: 'search',
         component: () => import('@views/Search/view/Search') // 搜索页

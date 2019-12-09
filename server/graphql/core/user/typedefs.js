@@ -11,10 +11,28 @@ const Schema = `
     articleCount: Int
     dynamicCount: Int
   }
+
+  type UserUnreadCount {
+    messageCount:Int
+    attentionCount:Int
+  }
+
+  type AttentionMsgInfo {
+    receive_uid:Int
+  }
+
+  type AttentionMsg {
+    count: Int
+    list: [AttentionMsgInfo]
+    page: Int
+    pageSize: Int
+  }
 `
 
 const Query = `
   userInfo(uid: Int!): UserInfo
+  userUnreadCount: UserUnreadCount
+  userUnreadList(page: Int!,pageSize: Int!): AttentionMsg
 `
 
 const Mutation = ` 

@@ -20,7 +20,7 @@ const {
   articleType,
   userMessageAction,
   userMessageActionText,
-  virtualAction,
+  modelAction,
   virtualType,
   virtualInfo,
   virtualPlusLess,
@@ -29,13 +29,13 @@ const {
 
 const userVirtual = require('../../../common/userVirtual')
 
-function ErrorMessage (message) {
+function ErrorMessage(message) {
   this.message = message
   this.name = 'UserException'
 }
 
 class User {
-  static async userSignIn (req, res, next) {
+  static async userSignIn(req, res, next) {
     const { no_login } = lowdb
       .read()
       .get('config')
@@ -125,7 +125,7 @@ class User {
   }
 
   // 注册验证码发送
-  static async userSignUpCode (req, res, next) {
+  static async userSignUpCode(req, res, next) {
     let reqData = req.body
     try {
       const { on_register } = lowdb
@@ -198,7 +198,7 @@ class User {
    * 用户注册post
    * @param   {object} ctx 上下文对象
    */
-  static async userSignUp (req, res, next) {
+  static async userSignUp(req, res, next) {
     // post 数据
     let reqData = req.body
     let date = new Date()
@@ -318,7 +318,7 @@ class User {
                     uid: user.uid,
                     avatar_review_status: 2,
                     shell_balance:
-                      virtualInfo[virtualAction.registered][virtualType.system]
+                      virtualInfo[modelAction.registered][virtualType.system]
                   },
                   { transaction: t }
                 )
@@ -326,17 +326,17 @@ class User {
               .then(user_info => {
                 return models.virtual.create({
                   // 用户虚拟币消息记录
-                  plus_less: virtualInfo[virtualAction.registered].plusLess,
+                  plus_less: virtualInfo[modelAction.registered].plusLess,
                   balance:
-                    virtualInfo[virtualAction.registered][virtualType.system],
+                    virtualInfo[modelAction.registered][virtualType.system],
                   amount:
-                    virtualInfo[virtualAction.registered][virtualType.system],
+                    virtualInfo[modelAction.registered][virtualType.system],
                   income:
-                    virtualInfo[virtualAction.registered][virtualType.system],
+                    virtualInfo[modelAction.registered][virtualType.system],
                   expenses: 0,
                   uid: user_info.uid,
                   type: virtualType.system,
-                  action: virtualAction.registered
+                  action: modelAction.registered
                 })
               })
           })
@@ -367,7 +367,7 @@ class User {
   /**
    * 获取个人信息get 并且知道用户是否登录，不需要任何参数
    */
-  static async userPersonalInfo (req, res, next) {
+  static async userPersonalInfo(req, res, next) {
     let { islogin = '', user = '' } = req
     try {
       let oneUser = await models.user.findOne({
@@ -402,7 +402,7 @@ class User {
    * 获取用户信息get 不需要登录
    * @param   {object} ctx 上下文对象
    */
-  static async getUserInfo (req, res, next) {
+  static async getUserInfo(req, res, next) {
     let uid = req.query.uid
 
     try {
@@ -530,7 +530,7 @@ class User {
    * @param   {object} ctx 上下文对象
    */
 
-  static async updateUserInfo (req, res, next) {
+  static async updateUserInfo(req, res, next) {
     let reqData = req.body
     let { user = '' } = req
     let oneUser = await models.user.findOne({
@@ -616,7 +616,7 @@ class User {
    * @param   {object} ctx 上下文对象
    */
 
-  static async updateUserPassword (req, res, next) {
+  static async updateUserPassword(req, res, next) {
     let reqData = req.body
     let { user = '' } = req
     try {
@@ -680,40 +680,10 @@ class User {
   }
 
   /**
-   * 获取未读用户消息数量
-   * @param   {object} ctx 上下文对象
-   */
-  static async getUnreadMessageCount (req, res, next) {
-    let { user = '' } = req
-    try {
-      let count = await models.user_message.count({
-        where: {
-          uid: user.uid,
-          is_read: false
-        }
-      })
-
-      resClientJson(res, {
-        state: 'success',
-        message: '数据返回成功',
-        data: {
-          count: count
-        }
-      })
-    } catch (err) {
-      resClientJson(res, {
-        state: 'error',
-        message: '错误信息：' + err.message
-      })
-      return false
-    }
-  }
-
-  /**
    * 获取用户消息
    * @param   {object} ctx 上下文对象
    */
-  static async getUserMessageList (req, res, next) {
+  static async getUserMessageList(req, res, next) {
     let page = req.query.page || 1
     let pageSize = Number(req.query.pageSize) || 10
     let { user = '' } = req
@@ -968,7 +938,7 @@ class User {
    * 删除用户消息
    * @param   {object} ctx 上下文对象
    */
-  static async deleteUserMessage (req, res, next) {
+  static async deleteUserMessage(req, res, next) {
     let reqData = req.query
     let { user = '' } = req
     try {
@@ -1006,7 +976,7 @@ class User {
    * @param   {object} ctx 上下文对象
    */
 
-  static async sendResetPasswordCode (req, res, next) {
+  static async sendResetPasswordCode(req, res, next) {
     let reqData = req.body
     try {
       if (reqData.type === 'email') {
@@ -1079,7 +1049,7 @@ class User {
    * @param   {object} ctx 上下文对象
    */
 
-  static async userResetPassword (req, res, next) {
+  static async userResetPassword(req, res, next) {
     let reqData = req.body
     try {
       if (!reqData.email) {
@@ -1185,7 +1155,7 @@ class User {
    *  获取所有用户角色标签
    * @param   {object} ctx 上下文对象
    */
-  static async getUserRoleAll (req, res, next) {
+  static async getUserRoleAll(req, res, next) {
     // get 页面
     try {
       let allUserRole = await models.user_role.findAll({
@@ -1214,7 +1184,7 @@ class User {
    *  获取用户关联的一些信息
    * @param   {object} ctx 上下文对象
    */
-  static async getUserAssociateinfo (req, res, next) {
+  static async getUserAssociateinfo(req, res, next) {
     // get 页面
     try {
       let articleThumdId = [] // 文章点赞id

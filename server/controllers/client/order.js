@@ -15,16 +15,16 @@ const {
   userMessageAction,
   virtualType,
   virtualPlusLess,
-  virtualAction,
+  modelAction,
   virtualInfo,
-  virtualActionText,
+  modelActionText,
   virtualTypeText,
   modelType
 } = require('../../utils/constant')
 
 const userVirtual = require('../../common/userVirtual')
 
-function ErrorMessage (message) {
+function ErrorMessage(message) {
   this.message = message
   this.name = 'UserException'
 }
@@ -36,7 +36,7 @@ class Order {
    * 获取消费列表
    * @param   {object} ctx 上下文对象
    */
-  static async getVirtualList (req, res, next) {
+  static async getVirtualList(req, res, next) {
     let page = req.query.page || 1
     let pageSize = Number(req.query.pageSize) || 10
     let { user = '' } = req
@@ -62,7 +62,7 @@ class Order {
             attributes: ['uid', 'avatar', 'nickname']
           })
         )
-        rows[i].setDataValue('actionText', virtualActionText[rows[i].action])
+        rows[i].setDataValue('actionText', modelActionText[rows[i].action])
         rows[i].setDataValue('typeText', virtualTypeText[rows[i].type])
 
         let associate = rows[i].associate && JSON.parse(rows[i].associate)

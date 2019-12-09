@@ -10,7 +10,7 @@ const { TimeNow, TimeDistance } = require('../../../utils/time')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   userMessageAction,
-  virtualAction,
+  modelAction,
   virtualType,
   modelType
 } = require('../../../utils/constant')
@@ -158,7 +158,7 @@ class ArticleComment {
       const isVirtual = await userVirtual.isVirtual({
         uid: user.uid,
         type: virtualType.article,
-        action: virtualAction.comment
+        action: modelAction.comment
       })
 
       if (!isVirtual) {
@@ -242,7 +242,7 @@ class ArticleComment {
               aid: reqData.aid
             }),
             type: virtualType.article,
-            action: virtualAction.comment,
+            action: modelAction.comment,
             ass_uid: oneArticle.uid
           })
 
@@ -255,7 +255,7 @@ class ArticleComment {
                 aid: reqData.aid
               }),
               type: virtualType.article,
-              action: virtualAction.obtain_comment,
+              action: modelAction.obtain_comment,
               ass_uid: user.uid
             })
           }

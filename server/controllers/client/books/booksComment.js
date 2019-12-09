@@ -11,7 +11,7 @@ const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
   userMessageAction,
-  virtualAction,
+  modelAction,
   virtualType,
   modelType
 } = require('../../../utils/constant')
@@ -162,7 +162,7 @@ class BooksComment {
       const isVirtual = await userVirtual.isVirtual({
         uid: user.uid,
         type: virtualType.books,
-        action: virtualAction.comment
+        action: modelAction.comment
       })
 
       if (!isVirtual) {
@@ -245,7 +245,7 @@ class BooksComment {
               books_id: reqData.books_id
             }),
             type: virtualType.books,
-            action: virtualAction.comment,
+            action: modelAction.comment,
             ass_uid: oneBooks.uid
           })
 
@@ -258,7 +258,7 @@ class BooksComment {
                 books_id: reqData.books_id
               }),
               type: virtualType.books,
-              action: virtualAction.obtain_comment,
+              action: modelAction.obtain_comment,
               ass_uid: user.uid
             })
           }

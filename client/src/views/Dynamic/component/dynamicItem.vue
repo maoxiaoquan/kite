@@ -159,7 +159,7 @@
 import DynamicComment from '../../Comment/DynamicComment'
 import { faceQQ, Dropdown } from '@components'
 import { mapState } from 'vuex'
-import { share } from '../../../utils'
+import { share } from '@utils'
 import { dynamicType, modelType, dynamicTypeText } from '@utils/constant'
 
 export default {

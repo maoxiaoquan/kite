@@ -82,12 +82,6 @@ router.delete(
   user.deleteUserMessage
 ) // 删除用户消息 TYPE:AJAX post
 
-router.get(
-  '/personal/unread-message-count',
-  tokens.ClientVerifyToken,
-  user.getUnreadMessageCount
-) // 获取未读用户消息数量 TYPE:AJAX get
-
 router.post(
   '/personal/upload-avatar',
   tokens.ClientVerifyToken,

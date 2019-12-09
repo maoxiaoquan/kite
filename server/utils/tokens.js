@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const { resClientJson, resAdminJson } = require('./resData')
 const models = require('../../db/mysqldb')
 class Tokens {
-  static async ClientVerifyToken (req, res, next) {
+  static async ClientVerifyToken(req, res, next) {
     let reqBody = req.body
     let token =
       reqBody.accessToken ||
@@ -41,10 +41,9 @@ class Tokens {
     }
   }
 
-  static async ClientVerifyTokenInfo (req, res, next) {
-    let reqBody = req.body
+  static async ClientVerifyTokenInfo(req, res, next) {
     let token =
-      reqBody.accessToken ||
+      req.body.accessToken ||
       req.query.accessToken ||
       req.headers['access-token'] ||
       req.cookies.accessToken
@@ -63,7 +62,7 @@ class Tokens {
     })
   }
 
-  static async AdminVerifyToken (req, res, next) {
+  static async AdminVerifyToken(req, res, next) {
     let reqBody = req.body
     let token =
       reqBody.token || req.query.token || req.headers['x-access-token']
@@ -95,13 +94,13 @@ class Tokens {
     }
   }
 
-  static AdminSetToken (time, data) {
+  static AdminSetToken(time, data) {
     return jwt.sign(data, 'admin', {
       expiresIn: time
     })
   }
 
-  static ClientSetToken (time, data) {
+  static ClientSetToken(time, data) {
     return jwt.sign(data, 'client', {
       expiresIn: time
     })

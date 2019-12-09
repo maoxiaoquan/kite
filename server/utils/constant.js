@@ -46,7 +46,7 @@ const dynamicTypeText = {
 }
 
 const modelType = {
-  // 文章的类型
+  // 类型
   user: 1, // 用户
   article: 2, // 文章
   article_blog: 3, // 文章个人专栏
@@ -187,7 +187,7 @@ const virtualPlusLess = {
   less: 2 // 减
 }
 
-const virtualAction = {
+const modelAction = {
   // 动作
   check_in: 1, // 签到
   create: 2, // 创建
@@ -207,24 +207,24 @@ const virtualAction = {
   registered: 16 // 注册
 }
 
-const virtualActionText = {
+const modelActionText = {
   // 动作
-  [virtualAction.check_in]: '签到', // 签到
-  [virtualAction.create]: '创建', // 创建
-  [virtualAction.like]: '喜欢', // 喜欢
-  [virtualAction.collect]: '收藏', // 收藏
-  [virtualAction.comment]: '评论或者回复', // 评论
-  [virtualAction.reply]: '评论或者回复', // 回复
-  [virtualAction.thumb]: '点赞', // 点赞
-  [virtualAction.sell]: '售出', // 卖
-  [virtualAction.buy]: '购物', // 买
-  [virtualAction.recover]: '系统回收', // 系统回收
-  [virtualAction.obtain_like]: '收到喜欢', // 收到喜欢
-  [virtualAction.obtain_collect]: '收到收藏', // 收到收藏
-  [virtualAction.obtain_comment]: '收到评论', // 收到评论
-  [virtualAction.obtain_reply]: '收到回复', // 收到回复
-  [virtualAction.obtain_thumb]: '收到点赞', // 收到点赞
-  [virtualAction.registered]: '默认' // 默认
+  [modelAction.check_in]: '签到', // 签到
+  [modelAction.create]: '创建', // 创建
+  [modelAction.like]: '喜欢', // 喜欢
+  [modelAction.collect]: '收藏', // 收藏
+  [modelAction.comment]: '评论', // 评论
+  [modelAction.reply]: '回复', // 回复
+  [modelAction.thumb]: '点赞', // 点赞
+  [modelAction.sell]: '售出', // 卖
+  [modelAction.buy]: '购物', // 买
+  [modelAction.recover]: '系统回收', // 系统回收
+  [modelAction.obtain_like]: '收到喜欢', // 收到喜欢
+  [modelAction.obtain_collect]: '收到收藏', // 收到收藏
+  [modelAction.obtain_comment]: '收到评论', // 收到评论
+  [modelAction.obtain_reply]: '收到回复', // 收到回复
+  [modelAction.obtain_thumb]: '收到点赞', // 收到点赞
+  [modelAction.registered]: '默认' // 默认
 }
 
 const virtualType = {
@@ -252,12 +252,12 @@ const virtualTypeText = {
 }
 
 const virtualInfo = {
-  [virtualAction.check_in]: {
+  [modelAction.check_in]: {
     // 签到+
     plusLess: virtualPlusLess.plus, // +
     [virtualType.system]: 50 // 用户每天签到:+50
   },
-  [virtualAction.create]: {
+  [modelAction.create]: {
     // 创建内容-
     plusLess: virtualPlusLess.less, // -
     [virtualType.article]: 20, // 创建文章：-20
@@ -266,17 +266,17 @@ const virtualInfo = {
     [virtualType.books]: 50, // 创建小书：-50
     [virtualType.dynamic]: 15 // 创建动态：-15
   },
-  [virtualAction.like]: {
+  [modelAction.like]: {
     // 喜欢
     plusLess: virtualPlusLess.less, // -
     [virtualType.article]: 5 // 喜欢文章: -5
   },
-  [virtualAction.collect]: {
+  [modelAction.collect]: {
     // 收藏
     plusLess: virtualPlusLess.less, // -
     [virtualType.article_blog]: 5 // 收藏个人专栏: -5
   },
-  [virtualAction.comment]: {
+  [modelAction.comment]: {
     // 创建评论-
     plusLess: virtualPlusLess.less, // -
     [virtualType.article]: 5, // 创建文章评论：-5
@@ -284,7 +284,7 @@ const virtualInfo = {
     [virtualType.books]: 5, // 创建小书评论：-5
     [virtualType.dynamic]: 5 // 创建动态评论：-5
   },
-  [virtualAction.reply]: {
+  [modelAction.reply]: {
     // 回复评论-
     plusLess: virtualPlusLess.less, // -
     [virtualType.article]: 5, // 创建文章回复：-5
@@ -292,37 +292,37 @@ const virtualInfo = {
     [virtualType.books]: 5, // 创建小书回复：-5
     [virtualType.dynamic]: 5 // 创建动态回复：-5
   },
-  [virtualAction.thumb]: {
+  [modelAction.thumb]: {
     plusLess: virtualPlusLess.less, // -
     [virtualType.dynamic]: 5 // 点赞动态：-5
   },
-  [virtualAction.obtain_like]: {
+  [modelAction.obtain_like]: {
     plusLess: virtualPlusLess.plus, // +
     [virtualType.article]: 5 // 收到喜欢文章: +5
   },
-  [virtualAction.obtain_collect]: {
+  [modelAction.obtain_collect]: {
     plusLess: virtualPlusLess.plus, // +
     [virtualType.article_blog]: 5 // 收到收藏个人专栏:  +5
   },
-  [virtualAction.obtain_comment]: {
+  [modelAction.obtain_comment]: {
     plusLess: virtualPlusLess.plus, // +
     [virtualType.article]: 5, // 收到文章评论：+5
     [virtualType.book]: 5, // 收到小书章节评论：+5
     [virtualType.books]: 5, // 收到小书评论：+5
     [virtualType.dynamic]: 5 // 收到动态评论：+5
   },
-  [virtualAction.obtain_reply]: {
+  [modelAction.obtain_reply]: {
     plusLess: virtualPlusLess.plus, // +
     [virtualType.article]: 5, // 收到文章回复：+5
     [virtualType.book]: 5, // 收到小书章节回复：+5
     [virtualType.books]: 5, // 收到小书回复：+5
     [virtualType.dynamic]: 5 // 收到动态回复：+5
   },
-  [virtualAction.obtain_thumb]: {
+  [modelAction.obtain_thumb]: {
     plusLess: virtualPlusLess.plus, // +
     [virtualType.dynamic]: 5 // 收到点赞动态：+5
   },
-  [virtualAction.registered]: {
+  [modelAction.registered]: {
     plusLess: virtualPlusLess.plus, // +
     [virtualType.system]: 3000 // 注册增加3000：+5
   }
@@ -437,9 +437,9 @@ module.exports = {
   userMessageIsPush,
   virtualType,
   virtualPlusLess,
-  virtualAction,
+  modelAction,
   virtualInfo,
-  virtualActionText,
+  modelActionText,
   virtualTypeText,
   payType,
   payTypeText,

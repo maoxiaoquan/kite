@@ -17,7 +17,9 @@ async function sql () {
   //   'ALTER TABLE article add COLUMN is_public tinyint(1) DEFAULT 1 comment "是否公开";'
   // )
 
-  await models.sequelize.query('ALTER TABLE article_blog DROP is_public;')
+  await models.attention_message.sync({
+    force: true
+  })
 
   process.exit()
 }

@@ -43,8 +43,7 @@
       <button type="button"
               class="Button VoteButton">
         <i class="el-icon-thumb"></i>
-        <span>​
-        </span>赞 ​​{{articleItem.thumb_count}}
+        <span>赞 ​​{{articleItem.thumb_count}}​</span>
       </button>
 
       <button type="button"
@@ -61,8 +60,27 @@
 
       <button type="button"
               class="meta-item ContentItem-action">
-        <i class="el-icon-s-promotion"></i>
-        <span>​分享</span>
+        <box-drop>
+          <div class="el-dropdown-link"
+               slot="button">
+            <i class="el-icon-share"></i>
+            <span>​分享</span>
+          </div>
+          <div class="dropdown-menu-view">
+            <div class="dropdown-menu-item"
+                 @click="shareChange({ type: 'qq', data: articleItem })">
+              分享到QQ
+            </div>
+            <div class="dropdown-menu-item"
+                 @click="shareChange({ type: 'sina', data: articleItem })">
+              分享到新浪
+            </div>
+            <div class="dropdown-menu-item"
+                 @click="shareChange({ type: 'qzone', data: articleItem })">
+              分享到QQ空间
+            </div>
+          </div>
+        </box-drop>
       </button>
 
       <router-link class="AnnotationTag"
@@ -83,6 +101,10 @@ import {
   articleTypeText
 } from '@utils/constant'
 
+import { Dropdown } from '@components'
+import { share } from '@utils'
+import { mapState } from 'vuex'
+
 export default {
   name: "ArticleItem",
   props: {
@@ -95,7 +117,41 @@ export default {
     return {
       articleTypeList: articleTypeText,
     }
-  }
+  },
+  methods: {
+    shareChange (val) {
+      // 分享到其他
+      let urlOrigin = window.location.origin // 源地址
+      if (val.type === 'sina') {
+        // 新浪
+        share.shareToXl(
+          val.data.title,
+          urlOrigin + '/p/' + val.data.aid,
+          this.website.meta.logo
+        )
+      } else if (val.type === 'qzone') {
+        // qq空间
+        share.shareToQq(
+          val.data.title,
+          urlOrigin + '/p/' + val.data.aid,
+          this.website.meta.logo
+        )
+      } else if (val.type === 'qq') {
+        // qq空间
+        share.shareQQ(
+          val.data.title,
+          urlOrigin + '/p/' + val.data.aid,
+          this.website.meta.logo
+        )
+      }
+    }
+  },
+  components: {
+    'box-drop': Dropdown
+  },
+  computed: {
+    ...mapState(['personalInfo', 'website'])
+  },
 }
 </script>
 

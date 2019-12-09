@@ -7,13 +7,13 @@ const clientWhere = require('../../utils/clientWhere')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  virtualAction,
+  modelAction,
   virtualType,
   modelType
 } = require('../../utils/constant')
 
 class Index {
-  static async getIndex (req, res, next) {
+  static async getIndex(req, res, next) {
     let page = req.query.page || 1
     let pageSize = req.query.pageSize || 25
     let columnEnName = req.query.columnEnName || ''

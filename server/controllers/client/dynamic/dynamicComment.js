@@ -11,7 +11,7 @@ const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
   userMessageAction,
-  virtualAction,
+  modelAction,
   virtualType,
   modelType
 } = require('../../../utils/constant')
@@ -314,7 +314,7 @@ class dynamicComment {
       const isVirtual = await userVirtual.isVirtual({
         uid: user.uid,
         type: virtualType.dynamic,
-        action: virtualAction.comment
+        action: modelAction.comment
       })
 
       if (!isVirtual) {
@@ -404,7 +404,7 @@ class dynamicComment {
               dynamic_id: reqData.dynamic_id
             }),
             type: virtualType.dynamic,
-            action: virtualAction.comment,
+            action: modelAction.comment,
             ass_uid: oneDynamic.uid
           })
 
@@ -417,7 +417,7 @@ class dynamicComment {
                 dynamic_id: reqData.dynamic_id
               }),
               type: virtualType.dynamic,
-              action: virtualAction.obtain_comment,
+              action: modelAction.obtain_comment,
               ass_uid: user.uid
             })
           }

@@ -8,7 +8,7 @@ const {
   articleType,
   userMessageAction,
   userMessageActionText,
-  virtualAction,
+  modelAction,
   virtualType,
   modelType,
   modelInfo
@@ -17,7 +17,7 @@ const {
 const userMessage = require('../../utils/userMessage')
 const userVirtual = require('../../common/userVirtual')
 
-function ErrorMessage (message) {
+function ErrorMessage(message) {
   this.message = message
   this.name = 'UserException'
 }
@@ -33,7 +33,7 @@ class Attention {
    * 用户关注用户post
    * @param   {object} ctx 上下文对象
    */
-  static async setAttention (req, res, next) {
+  static async setAttention(req, res, next) {
     try {
       const { associate_id, type } = req.body
       const { user = '' } = req

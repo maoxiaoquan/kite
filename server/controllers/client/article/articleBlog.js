@@ -13,7 +13,7 @@ const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
   userMessageAction,
-  virtualAction,
+  modelAction,
   virtualType,
   modelType
 } = require('../../../utils/constant')
@@ -107,7 +107,7 @@ class dynamicBlog {
       const isVirtual = await userVirtual.isVirtual({
         uid: user.uid,
         type: virtualType.article_blog,
-        action: virtualAction.create
+        action: modelAction.create
       })
 
       if (!isVirtual) {
@@ -175,7 +175,7 @@ class dynamicBlog {
           blog_id: createArticleBlog.blog_id
         }),
         type: virtualType.article_blog,
-        action: virtualAction.create
+        action: modelAction.create
       })
 
       resClientJson(res, {

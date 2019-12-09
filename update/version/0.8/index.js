@@ -26,6 +26,10 @@ class update {
           force: true
         })
 
+        await models.attention_message.sync({
+          force: true
+        })
+
         await models.sequelize.query(
           'ALTER TABLE dynamic CHANGE like_count thumb_count bigint(20) comment "点赞数";'
         )

@@ -7,13 +7,13 @@ const clientWhere = require('../../utils/clientWhere')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
-  virtualAction,
+  modelAction,
   virtualType,
   modelType
 } = require('../../utils/constant')
 
 class Article {
-  static async getIndex () {
+  static async getIndex() {
     let page = 1
     let pageSize = 25
     let sort = 'newest'
@@ -45,7 +45,7 @@ class Article {
   }
 
   // 推荐动态
-  static async recommendArticle () {
+  static async recommendArticle() {
     let whereParams = {} // 查询参数
     let orderParams = [
       ['create_date', 'DESC'],

@@ -12,7 +12,7 @@ const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
   articleType,
   userMessageAction,
-  virtualAction,
+  modelAction,
   virtualType,
   payType,
   payTypeText,
@@ -168,7 +168,7 @@ class Books {
       const isVirtual = await userVirtual.isVirtual({
         uid: user.uid,
         type: virtualType.books,
-        action: virtualAction.create
+        action: modelAction.create
       })
 
       if (!isVirtual) {
@@ -231,7 +231,7 @@ class Books {
           books_id: createBooks.books_id
         }),
         type: virtualType.books,
-        action: virtualAction.create
+        action: modelAction.create
       })
 
       resClientJson(res, {

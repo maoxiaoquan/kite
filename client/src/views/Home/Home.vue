@@ -11,8 +11,7 @@
             <NavSort @navTap="navTap"
                      ref="navSort"></NavSort>
 
-            <div class="article-view"
-                 id="article-view">
+            <div class="article-view">
               <scroll-loading @scroll-loading="infiniteHandler"
                               :isLoading="isLoading"
                               :isMore="isMore">

@@ -45,6 +45,20 @@
                       v-if="personalInfo.islogin"
                       class="dropdown-menu-item"
                       :to="{
+                        name: 'AttentionMessage'
+                      }"
+                    >
+                      关注
+                      <span
+                        v-if="user.attentionCount > 0"
+                        class="unread-message-count"
+                        >{{ user.attentionCount }}</span
+                      >
+                    </router-link>
+                    <router-link
+                      v-if="personalInfo.islogin"
+                      class="dropdown-menu-item"
+                      :to="{
                         name: 'user',
                         params: {
                           uid: personalInfo.user.uid,
@@ -54,9 +68,9 @@
                     >
                       消息
                       <span
-                        v-if="messageCount.count > 0"
+                        v-if="user.messageCount > 0"
                         class="unread-message-count"
-                        >{{ messageCount.count }}</span
+                        >{{ user.messageCount }}</span
                       >
                     </router-link>
                   </div>
@@ -116,15 +130,30 @@
                 <router-link
                   class="btn btn-sm no-read-msg"
                   :to="{
+                    name: 'AttentionMessage'
+                  }"
+                >
+                  <i class="iconfont el-icon-s-promotion"></i>
+                  <span
+                    v-if="user.attentionCount > 0"
+                    class="unread-message-count"
+                    >{{ user.attentionCount }}</span
+                  >
+                </router-link>
+              </li>
+              <li class="nav-item" v-if="personalInfo.islogin">
+                <router-link
+                  class="btn btn-sm no-read-msg"
+                  :to="{
                     name: 'user',
                     params: { uid: personalInfo.user.uid, routeType: 'message' }
                   }"
                 >
                   <i class="iconfont el-icon-message-solid"></i>
                   <span
-                    v-if="messageCount.count > 0"
+                    v-if="user.messageCount > 0"
                     class="unread-message-count"
-                    >{{ messageCount.count }}</span
+                    >{{ user.messageCount }}</span
                   >
                 </router-link>
               </li>
@@ -223,11 +252,7 @@ export default {
     Dropdown
   },
   computed: {
-    ...mapState(['website', 'personalInfo']), // home:主页  article_column:文章的专栏
-    messageCount() {
-      // 登录后的未读消息数量
-      return this.$store.state.user.messageCount
-    }
+    ...mapState(['website', 'personalInfo', 'user']) // home:主页  article_column:文章的专栏
   }
 }
 </script>

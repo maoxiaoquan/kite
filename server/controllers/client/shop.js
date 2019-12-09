@@ -8,7 +8,7 @@ const {
   articleType,
   userMessageAction,
   userMessageActionText,
-  virtualAction,
+  modelAction,
   virtualPlusLess,
   virtualType,
   productTypeInfo,
@@ -19,7 +19,7 @@ const {
 const userMessage = require('../../utils/userMessage')
 const userVirtual = require('../../common/userVirtual')
 
-function ErrorMessage (message) {
+function ErrorMessage(message) {
   this.message = message
   this.name = 'UserException'
 }
@@ -31,7 +31,7 @@ class Shop {
    * @param   {object} ctx 上下文对象
    */
   // 购买操作
-  static async Buy (req, res, next) {
+  static async Buy(req, res, next) {
     try {
       let { product_id, product_type } = req.body
       let { user = '' } = req
@@ -141,7 +141,7 @@ class Shop {
               expenses: 0,
               amount: productInfo.price,
               type: virtualType.books,
-              action: virtualAction.buy,
+              action: modelAction.buy,
               description: ''
             },
             { transaction: t }
@@ -189,7 +189,7 @@ class Shop {
                 expenses: productInfo.price,
                 amount: productInfo.price,
                 type: virtualType.books,
-                action: virtualAction.sell,
+                action: modelAction.sell,
                 description: ''
               },
               { transaction: t }
@@ -237,7 +237,7 @@ class Shop {
    * 我的订单列表
    * @param   {object} ctx 上下文对象
    */
-  static async orderList (req, res, next) {
+  static async orderList(req, res, next) {
     let page = req.query.page || 1
     let product_type = req.query.product_type || ''
     let pageSize = Number(req.query.pageSize) || 10

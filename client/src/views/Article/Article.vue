@@ -48,7 +48,7 @@
                    @click="onUserThumbArticle"
                    :class="{ active: isThumb(article) }">
                 <i :class="
-                  isThumb(article) ? 'el-icon-star-on' : 'el-icon-star-off'
+                  isThumb(article) ? 'el-icon-thumb' : 'el-icon-thumb'
                 "></i>
               </div>
               <div class="meta-bottom-item share">

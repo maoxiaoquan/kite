@@ -143,7 +143,6 @@ export default {
 
 <style scoped lang="scss">
 .tag-lay.layout-content {
-  padding-top: 25px;
   padding-bottom: 50px;
   .article-tag-main {
     padding: 30px;
@@ -231,11 +230,9 @@ export default {
   }
   .list-container {
     .article-view {
-      > .article-item {
+      /deep/ .article-item {
+        padding: 20px;
         border-bottom: 1px solid rgba(178, 186, 194, 0.15);
-        &:hover {
-          background: #f9f9f9;
-        }
       }
     }
   }

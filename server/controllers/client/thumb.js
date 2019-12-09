@@ -8,7 +8,7 @@ const {
   articleType,
   userMessageAction,
   userMessageActionText,
-  virtualAction,
+  modelAction,
   virtualType,
   modelType,
   modelInfo
@@ -17,14 +17,14 @@ const {
 const userMessage = require('../../utils/userMessage')
 const userVirtual = require('../../common/userVirtual')
 
-function ErrorMessage (message) {
+function ErrorMessage(message) {
   this.message = message
   this.name = 'UserException'
 }
 const { TimeNow, TimeDistance } = require('../../utils/time')
 
 class Thumb {
-  static async setThumb (req, res, next) {
+  static async setThumb(req, res, next) {
     try {
       const { associate_id, type } = req.body
       const { user = '' } = req

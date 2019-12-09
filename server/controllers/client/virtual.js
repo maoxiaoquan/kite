@@ -15,23 +15,23 @@ const {
   userMessageAction,
   virtualType,
   virtualPlusLess,
-  virtualAction,
+  modelAction,
   virtualInfo,
-  virtualActionText,
+  modelActionText,
   virtualTypeText,
   modelType
 } = require('../../utils/constant')
 
 const userVirtual = require('../../common/userVirtual')
 
-function ErrorMessage (message) {
+function ErrorMessage(message) {
   this.message = message
   this.name = 'UserException'
 }
 
 class Virtual {
   // 签到
-  static async checkIn (req, res, next) {
+  static async checkIn(req, res, next) {
     try {
       let { user = '' } = req
       let date = new Date()
@@ -43,7 +43,7 @@ class Virtual {
         where: {
           uid: user.uid,
           type: virtualType.system,
-          action: virtualAction.check_in,
+          action: modelAction.check_in,
           create_date: {
             [Op.gt]: startTime, //  >
             [Op.lt]: endTime //  <
@@ -57,7 +57,7 @@ class Virtual {
         await userVirtual.setVirtual({
           uid: user.uid,
           type: virtualType.system,
-          action: virtualAction.check_in
+          action: modelAction.check_in
         })
       }
 
@@ -78,7 +78,7 @@ class Virtual {
    * 获取消费列表
    * @param   {object} ctx 上下文对象
    */
-  static async getVirtualList (req, res, next) {
+  static async getVirtualList(req, res, next) {
     let page = req.query.page || 1
     let pageSize = Number(req.query.pageSize) || 10
     let { user = '' } = req
@@ -104,7 +104,7 @@ class Virtual {
             attributes: ['uid', 'avatar', 'nickname']
           })
         )
-        rows[i].setDataValue('actionText', virtualActionText[rows[i].action])
+        rows[i].setDataValue('actionText', modelActionText[rows[i].action])
         rows[i].setDataValue('typeText', virtualTypeText[rows[i].type])
 
         let associate = rows[i].associate && JSON.parse(rows[i].associate)

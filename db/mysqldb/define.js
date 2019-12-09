@@ -223,6 +223,13 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
 
+  const attention_message = sequelize.define(
+    // 关注
+    require('./models_type/db_attention_message').NAME,
+    require('./models_type/db_attention_message').TABLE,
+    SEQ_PARAMETER
+  )
+
   const _define = {
     user,
     user_info,
@@ -252,6 +259,7 @@ module.exports = sequelize => {
     order,
     collect,
     attention,
+    attention_message,
     like,
     thumb
   }

@@ -1,4 +1,5 @@
 import { fetch } from '@request'
+import { gqlfetch } from '@fetch'
 
 const state = () => ({
   otherUserAttentionCount: 0,
@@ -14,6 +15,7 @@ const state = () => ({
     // 侧栏
     user_role_all: []
   },
+  attentionCount: 0, // 用户未读
   messageCount: 0, // 用户未读
   associateInfo: {
     articleThumdId: []
@@ -21,7 +23,7 @@ const state = () => ({
 })
 
 const mutations = {
-  SET_USER_INFO_ALL (state, data) {
+  SET_USER_INFO_ALL(state, data) {
     // 获取用户的全部信息
     state.otherUserAttentionCount = data.otherUserAttentionCount
     state.userArticleCount = data.userArticleCount
@@ -32,26 +34,27 @@ const mutations = {
     state.user_info = data.user_info
     state.user = data.user
   },
-  SET_USER_ARTICLE_BLOG_ALL (state, data) {
+  SET_USER_ARTICLE_BLOG_ALL(state, data) {
     // 设置获取的全部的个人文章专栏
     state.user_article_blog = data.list
   },
-  SET_USER_ROLE_ALL (state, data) {
+  SET_USER_ROLE_ALL(state, data) {
     // 用户标签全部
     state.user_aside.user_role_all = data.user_role_all
   },
-  SET_UNREAD_MESSAGE_COUNT (state, data) {
+  SET_UNREAD_MESSAGE_COUNT(state, data) {
     // 用户消息数量
-    state.messageCount = data
+    state.attentionCount = data.attentionCount
+    state.messageCount = data.messageCount
   },
-  SET_ASSOCIATE_INFO (state, data) {
+  SET_ASSOCIATE_INFO(state, data) {
     // 用户关联信心
     state.associateInfo = data || {}
   }
 }
 
 const actions = {
-  GET_USER_INFO_ALL ({ commit, dispatch, state }, parameter) {
+  GET_USER_INFO_ALL({ commit, dispatch, state }, parameter) {
     // 获取用户信息
     return fetch({
       url: '/user/info',
@@ -137,6 +140,18 @@ const actions = {
       parameter: { params: data }
     })
   },
+  GET_ATTENTION_MESSAGE_LIST: ({ commit, dispatch, state }, params) => {
+    // 获取关注
+    return gqlfetch({
+      parameter: `
+          query {
+            userUnreadList(page: ${params.page},pageSize:${params.pageSize}) { 
+              receive_uid
+            }
+          }
+        `
+    })
+  },
   DELETE_USER_MESSAGE: ({ commit, dispatch, state }, data) => {
     // 删除用户消息
     return fetch({
@@ -158,16 +173,21 @@ const actions = {
   },
   GET_UNREAD_MESSAGE_COUNT: ({ commit, dispatch, state }, data) => {
     // 获取用户未读消息数量
-    return fetch({
-      url: '/personal/unread-message-count',
-      method: 'get',
-      parameter: { params: data }
+    return gqlfetch({
+      parameter: `
+          query {
+            userUnreadCount {
+              attentionCount
+              messageCount 
+            }
+          }
+        `
     }).then(result => {
-      commit('SET_UNREAD_MESSAGE_COUNT', result.data)
+      commit('SET_UNREAD_MESSAGE_COUNT', result.data.userUnreadCount)
       return result
     })
   },
-  GET_PERSONAL_DYNAMIC_LIST ({ commit, dispatch, state }, parameter) {
+  GET_PERSONAL_DYNAMIC_LIST({ commit, dispatch, state }, parameter) {
     // 获取动态列表
     return fetch({
       url: '/personal/dynamic-list',
@@ -175,7 +195,7 @@ const actions = {
       parameter: { params: parameter }
     })
   },
-  GET_USER_ARTICLE_BLOG_LIST ({ commit, dispatch, state }, parameter) {
+  GET_USER_ARTICLE_BLOG_LIST({ commit, dispatch, state }, parameter) {
     // 获取用户的个人专栏列表
     return fetch({
       url: '/personal/article-blog-list',
@@ -183,7 +203,7 @@ const actions = {
       parameter: { params: parameter }
     })
   },
-  GET_BOOKS_LIST ({ commit, dispatch, state }, parameter) {
+  GET_BOOKS_LIST({ commit, dispatch, state }, parameter) {
     // 获取用户的个人专栏列表
     return fetch({
       url: '/personal/books-list',
@@ -191,7 +211,7 @@ const actions = {
       parameter: { params: parameter }
     })
   },
-  GET_ASSOCIATE_INFO ({ commit, dispatch, state }, parameter) {
+  GET_ASSOCIATE_INFO({ commit, dispatch, state }, parameter) {
     // 获取用户关联信息
     return fetch({
       url: '/user/associate-info',
