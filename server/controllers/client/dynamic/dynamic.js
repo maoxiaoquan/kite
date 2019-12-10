@@ -18,6 +18,7 @@ const {
 } = require('../../../utils/constant')
 
 const userVirtual = require('../../../common/userVirtual')
+const attention = require('../../../common/attention')
 
 function ErrorMessage (message) {
   this.message = message
@@ -112,6 +113,13 @@ class dynamic {
         status, // '状态(1:审核中;2:审核通过;3:审核失败;4：无需审核)'
         type: reqData.type, // 类型 （1:默认动态;2:图片,3:连接，4：视频  ）
         topic_ids: reqData.topic_ids
+      })
+
+      await attention.attentionMessage({
+        uid: user.uid,
+        type: modelType.dynamic,
+        action: modelAction.create,
+        associate_id: createDynamic.id
       })
 
       await userVirtual.setVirtual({

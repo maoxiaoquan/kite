@@ -17,6 +17,8 @@
         <div id="commentlist">
           <comment-item :comment-item="item"
                         v-for="(item,key) in comment.comment_list"
+                        :comentKey="key"
+                        @deleteComment="deleteComment"
                         :key="key" />
         </div>
 
@@ -84,6 +86,9 @@ export default {
         .then(result => {
           this.comment = result.data
         })
+    },
+    deleteComment (key) {
+      this.articleComment.list.splice(key, 1)
     },
     commentChange (res) {
       if (res.state === "success") {

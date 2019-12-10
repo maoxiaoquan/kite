@@ -64,7 +64,7 @@ import {
 
 export default {
   name: "childrenItem",
-  props: ["childCommentItem", "p_id", "dynamicId"],
+  props: ["childCommentItem", "p_id", "dynamicId", "comentKey"],
   data: function () {
     return {
       isComment: false,
@@ -84,13 +84,12 @@ export default {
     },
     deleteComment (id) {
       this.$store
-        .dispatch("articleComment/ARTICLE_COMMENT_DELETE", {
-          aid: this.article.aid,
+        .dispatch("dynamicComment/DYNAMIC_COMMENT_DELETE", {
           comment_id: id
         })
         .then(res => {
           if (res.state === "success") {
-            document.querySelector("#comment" + id + "").style.display = "none";
+            this.$emit('deleteChildComment', this.comentKey)
             this.$message.success(res.message);
           } else {
             this.$message.warning(res.message);

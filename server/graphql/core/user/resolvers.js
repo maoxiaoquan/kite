@@ -3,11 +3,11 @@
 const models = require('../../models')
 
 const Query = {
-  async userInfo(_, { uid }) {
+  async userInfo (_, { uid }) {
     const userInfo = await models.user.userInfo(uid)
     return userInfo
   },
-  async userUnreadCount(_, { uid }, { islogin, user }) {
+  async userUnreadCount (_, { uid }, { islogin, user }) {
     if (islogin) {
       const Count = await models.user.userUnreadCount(user.uid)
       return Count
@@ -18,7 +18,7 @@ const Query = {
       }
     }
   },
-  async userUnreadList(_, { page, pageSize }, { islogin, user }) {
+  async userUnreadList (_, { page, pageSize }, { islogin, user }) {
     if (islogin) {
       const AttentionMsg = await models.user.unreadAttentionMsg({
         page,

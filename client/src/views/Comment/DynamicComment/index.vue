@@ -9,6 +9,8 @@
         <comment-item :comment-item="item"
                       :dynamicId="dynamicId"
                       v-for="(item,key) in commentList"
+                      :comentKey="key"
+                      @deleteComment="deleteComment"
                       v-if="key<6"
                       :key="key" />
       </div>
@@ -66,6 +68,9 @@ export default {
         }).catch(() => {
           this.isLoading = false
         })
+    },
+    deleteComment (key) {
+      this.commentList.splice(key, 1)
     },
     commentChange (result) {
       if (result.state === "success") {

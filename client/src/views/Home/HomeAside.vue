@@ -1,15 +1,6 @@
 <template>
   <div class="home-lay layout-aside">
 
-    <div class="notice client-card-shadow"
-         v-if="website.notice.length>0">
-      <a class="notice-item"
-         v-for="(item,key) in website.notice"
-         v-if="item.enable"
-         :href="item.link"
-         :key="key">{{item.title}}</a>
-    </div>
-
     <div class="aside-component client-card-shadow">
       <h3 class="title">写下你想说的</h3>
       <div class="issue-btn">
@@ -78,6 +69,15 @@
       </ul>
     </div>
 
+    <div class="notice client-card-shadow"
+         v-if="website.notice.length>0">
+      <a class="notice-item"
+         v-for="(item,key) in website.notice"
+         v-if="item.enable"
+         :href="item.link"
+         :key="key">{{item.title}}</a>
+    </div>
+
     <div class="website-information client-card">
 
       <ul class="more-list">
@@ -144,13 +144,10 @@ export default {
 <style scoped lang="scss">
 .layout-aside {
   .notice {
-    padding: 15px 12px;
-    // margin-bottom: 20px;
-    // border: 1px solid transparent;
-    // border-radius: 12px;
-    background-color: #fcf8e3;
-    border-color: #faebcc;
+    padding: 24px;
+    background-color: #fff;
     color: #8a6d3b;
+    margin-bottom: 10px;
     .notice-item {
       display: block;
       line-height: 20px;

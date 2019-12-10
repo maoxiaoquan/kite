@@ -50,6 +50,8 @@
          v-if="commentItem.children.length>0||isComment">
       <comment-child-item v-for="(childCommentItem,key) in commentItem.children"
                           :key="key"
+                          :comentKey="key"
+                          @deleteChildComment="deleteChildComment"
                           :p_id="commentItem.id"
                           :dynamicId="dynamicId"
                           :childCommentItem="childCommentItem"
@@ -73,7 +75,7 @@ import {
 
 export default {
   name: "index",
-  props: ["commentItem", "dynamicId"],
+  props: ["commentItem", "dynamicId", "comentKey"],
   data: function () {
     return {
       isComment: false,
@@ -107,6 +109,9 @@ export default {
           this.isChildMore = false
         })
     },
+    deleteChildComment (key) {
+      this.commentItem.children.splice(key, 1)
+    },
     deleteComment (id) {
       this.$store
         .dispatch("dynamicComment/DYNAMIC_COMMENT_DELETE", {
@@ -114,7 +119,7 @@ export default {
         })
         .then(res => {
           if (res.state === "success") {
-            document.querySelector("#comment" + id + "").style.display = "none";
+            this.$emit('deleteComment', this.comentKey)
             this.$message.success(res.message);
           } else {
             this.$message.warning(res.message);

@@ -347,8 +347,9 @@ export default {
     font-size: 14px;
     color: #b2bac2;
     border-radius: 1px;
-    border: 1px solid #edeeef;
-    background: #fff;
+    border: 1px solid #eaf9e3;
+    color: #74cf59;
+    background: #eaf9e3;
   }
   .AnnotationTag {
     margin-left: auto;
@@ -356,9 +357,9 @@ export default {
     max-width: 136px;
     font-size: 14px;
     line-height: 30px;
-    color: grey;
-    background-color: #f6f6f6;
+    background-color: #fd763a21;
     border-radius: 4px;
+    color: #ff700a;
   }
 }
 </style>

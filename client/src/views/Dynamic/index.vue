@@ -19,7 +19,7 @@
                   name: 'dynamics',
                   params: { dynamicTopicId: 'following' }
                 }"
-                           class="nav-link">关注</router-link>
+                           class="nav-link">我的</router-link>
             </li>
           </ul>
           <ul class="nav-list">

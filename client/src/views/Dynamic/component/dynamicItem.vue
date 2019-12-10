@@ -57,7 +57,7 @@
         </div>
       </div>
       <div class="header-action"
-           v-if="dynamicItem.user.uid !== 'tree' && personalInfo.islogin">
+           v-if="dynamicItem.user.uid !== 'tree' && personalInfo.islogin && personalInfo.user.uid!==dynamicItem.user.uid">
         <button class="subscribe-btn follow-button"
                 :class="[
             { active: isThumb(dynamicItem || '') },
@@ -84,6 +84,7 @@
            v-for="(url, key) in imgAnalyze(dynamicItem.attach)"
            :key="key"
            v-if="url"
+           @click="previewImg(url)"
            alt="" />
     </div>
 
@@ -152,12 +153,21 @@
       <dynamic-comment @dynamicCommentChange="dynamicCommentChange"
                        :dynamicId="dynamicItem.id" />
     </div>
+
+    <Dialog :visible.sync="isPreviewImg"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            width="550px">
+      <img :src="previewImgUrl"
+           style="width:100%"
+           alt="">
+    </Dialog>
   </div>
 </template>
 
 <script>
 import DynamicComment from '../../Comment/DynamicComment'
-import { faceQQ, Dropdown } from '@components'
+import { faceQQ, Dropdown, Dialog } from '@components'
 import { mapState } from 'vuex'
 import { share } from '@utils'
 import { dynamicType, modelType, dynamicTypeText } from '@utils/constant'
@@ -178,6 +188,8 @@ export default {
   data () {
     return {
       isCommnet: false,
+      isPreviewImg: false, // 图片预览
+      previewImgUrl: '',
       isShowDynamic: true, // 是否显示动态
       dynamicType,
       modelType,
@@ -185,6 +197,11 @@ export default {
     }
   },
   methods: {
+    previewImg (url) { // 图片预览
+      console.log('url', url)
+      this.previewImgUrl = url
+      this.isPreviewImg = true
+    },
     setUserAttention () {
       // 设置用户关注用户
       if (!this.personalInfo.islogin) {
@@ -347,7 +364,8 @@ export default {
   },
   components: {
     DynamicComment,
-    Dropdown
+    Dropdown,
+    Dialog
   }
 }
 </script>

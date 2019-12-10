@@ -1,32 +1,31 @@
 <template>
-  <div class="box-comment" v-loading="isLoading">
-    <div class="box-comment-part" v-if="website.config.on_comment === 'yes'">
+  <div class="box-comment"
+       v-loading="isLoading">
+    <div class="box-comment-part"
+         v-if="website.config.on_comment === 'yes'">
       <div class="box-comment-part-title">
         <span>发表评论</span>
         <small>
           已发布评论
           <em>{{ articleComment.count }}</em> 条
         </small>
-        <router-link class="comment-rule" :to="{ name: 'comment_rule' }"
-          >《点我查看评论规范》</router-link
-        >
+        <router-link class="comment-rule"
+                     :to="{ name: 'comment_rule' }">《点我查看评论规范》</router-link>
       </div>
       <comment-form @commentChange="commentChange" />
       <div class="comment-list">
         <div id="commentlist">
-          <comment-item
-            :comment-item="item"
-            v-for="(item, key) in articleComment.list"
-            :key="key"
-          />
+          <comment-item :comment-item="item"
+                        :comentKey="key"
+                        @deleteComment="deleteComment"
+                        v-for="(item, key) in articleComment.list"
+                        :key="key" />
         </div>
 
-        <Page
-          :total="Number(articleComment.count)"
-          :page="Number(articleComment.page)"
-          :pageSize="articleComment.pageSize"
-          @pageChange="pageChange"
-        ></Page>
+        <Page :total="Number(articleComment.count)"
+              :page="Number(articleComment.page)"
+              :pageSize="articleComment.pageSize"
+              @pageChange="pageChange"></Page>
       </div>
     </div>
     <div v-else>
@@ -42,10 +41,10 @@ import commentForm from './CommentForm'
 import { mapState } from 'vuex'
 export default {
   name: 'index',
-  created() {
+  created () {
     this.getCommentList() // 获取用户的评论
   },
-  data() {
+  data () {
     return {
       isLoading: true,
       articleComment: {
@@ -57,7 +56,7 @@ export default {
     }
   },
   methods: {
-    getCommentList() {
+    getCommentList () {
       // 获取评论列表
       this.isLoading = true
       this.$store
@@ -74,11 +73,14 @@ export default {
           this.isLoading = false
         })
     },
-    pageChange(val) {
+    pageChange (val) {
       this.articleComment.page = val
       this.getCommentList()
     },
-    commentChange(res) {
+    deleteComment (key) {
+      this.articleComment.list.splice(key, 1)
+    },
+    commentChange (res) {
       if (res.state === 'success') {
         this.$message.success(res.message)
         this.articleComment.list.unshift(res.data)
@@ -89,12 +91,8 @@ export default {
     }
   },
   computed: {
-    ...mapState(['website']),
-    personalInfo() {
-      // 登录后的个人信息
-      return this.$store.state.personalInfo || {}
-    },
-    article() {
+    ...mapState(['website', 'personalInfo']),
+    article () {
       return this.$store.state.article.article || {}
     }
   },

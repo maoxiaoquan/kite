@@ -59,7 +59,7 @@ import {
 } from '@utils/constant'
 export default {
   name: "childrenItem",
-  props: ["childCommentItem", "p_id"],
+  props: ["childCommentItem", "p_id", 'comentKey'],
   data () {
     return {
       isComment: false,
@@ -84,7 +84,7 @@ export default {
         })
         .then(res => {
           if (res.state === "success") {
-            document.querySelector("#comment" + id + "").style.display = "none";
+            this.$emit('deleteChildComment', this.comentKey)
             this.$message.success(res.message);
           } else {
             this.$message.warning(res.message);

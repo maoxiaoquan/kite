@@ -13,12 +13,31 @@ const Schema = `
   }
 
   type UserUnreadCount {
-    messageCount:Int
-    attentionCount:Int
+    messageCount: Int
+    attentionCount: Int
+  }
+
+  type senderUserInfo {
+    uid: Int
+    avatar: String
+    nickname: String
+  }
+
+  type associateArticleInfo {
+    aid: Int
+    id: Int
+    title: String
+    content: String
   }
 
   type AttentionMsgInfo {
-    receive_uid:Int
+    receive_uid: String
+    create_dt: String
+    sender: senderUserInfo
+    associateInfo: associateArticleInfo
+    actionText: String
+    typeText: String
+    type: Int
   }
 
   type AttentionMsg {

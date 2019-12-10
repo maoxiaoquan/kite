@@ -90,7 +90,7 @@ export default {
 .article-aside {
   .sidebar-block {
     position: relative;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     .block-title {
       padding: 12px 15px;
       font-size: 14px;

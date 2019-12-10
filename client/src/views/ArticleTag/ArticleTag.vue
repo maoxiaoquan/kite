@@ -231,7 +231,7 @@ export default {
   .list-container {
     .article-view {
       /deep/ .article-item {
-        padding: 20px;
+        padding: 20px 0;
         border-bottom: 1px solid rgba(178, 186, 194, 0.15);
       }
     }

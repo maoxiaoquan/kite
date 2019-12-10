@@ -145,11 +145,9 @@ export default {
     .list-container {
       padding: 20px;
       .article-view {
-        > .article-item {
+        /deep/ .article-item {
+          padding: 20px 0;
           border-bottom: 1px solid rgba(178, 186, 194, 0.15);
-          &:hover {
-            background: #f9f9f9;
-          }
         }
       }
     }

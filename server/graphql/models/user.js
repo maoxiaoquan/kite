@@ -15,7 +15,7 @@ const {
 } = require('../../utils/constant')
 
 class User {
-  static async userInfo(uid) {
+  static async userInfo (uid) {
     let where = {
       uid
     } // 排序参数
@@ -49,7 +49,7 @@ class User {
     }
   }
 
-  static async userUnreadCount(uid) {
+  static async userUnreadCount (uid) {
     // 用户未读消息
     try {
       let messageCount = await models.user_message.count({
@@ -73,18 +73,10 @@ class User {
     }
   }
 
-  static async unreadAttentionMsg({ page = 1, pageSize = 10, uid }) {
+  static async unreadAttentionMsg ({ page = 1, pageSize = 10, uid }) {
     // 用户未读关注消息
     try {
-      await models.user_message.findAll({
-        // 获取所有未读消息id
-        where: {
-          is_read: false,
-          receive_uid: uid
-        }
-      })
-
-      let { count, rows } = await models.user_message.findAndCountAll({
+      let { count, rows } = await models.attention_message.findAndCountAll({
         where: {
           receive_uid: uid
         }, // 为空，获取全部，也可以自己添加条件
@@ -101,27 +93,43 @@ class User {
         rows[i].setDataValue(
           'sender',
           await models.user.findOne({
-            where: { uid: rows[i].sender_id },
+            where: { uid: rows[i].sender_uid },
             attributes: ['uid', 'avatar', 'nickname']
           })
         )
         rows[i].setDataValue('actionText', modelActionText[rows[i].action])
+        rows[i].setDataValue('typeText', modelInfo[rows[i].type].name)
+
         let model = modelInfo[rows[i].type].model
         let idKey = modelInfo[rows[i].type].idKey
-        const productInfo = await models[model].findOne({
+        const associateInfo = await models[model].findOne({
           where: {
-            [idKey]: rows[i].product_id
+            [idKey]: rows[i].associate_id
           }
         })
-        rows[i].setDataValue('productInfo', productInfo)
+        rows[i].setDataValue('associateInfo', associateInfo)
       }
+
+      await models.attention_message.update(
+        {
+          is_read: true
+        },
+        {
+          where: {
+            is_read: false,
+            receive_uid: uid
+          }
+        }
+      )
+
       return {
         count,
-        list: rows,
+        list: JSON.parse(JSON.stringify(rows)),
         page,
         pageSize
       }
     } catch (err) {
+      console.log('err', err)
       return {
         count: 0,
         list: [],
