@@ -60,11 +60,11 @@
            v-if="dynamicItem.user.uid !== 'tree' && personalInfo.islogin && personalInfo.user.uid!==dynamicItem.user.uid">
         <button class="subscribe-btn follow-button"
                 :class="[
-            { active: isThumb(dynamicItem || '') },
+            { active: isAttention(dynamicItem || '') },
             `user-attention-${dynamicItem.user.uid}`
           ]"
                 @click="setUserAttention">
-          {{ isThumb(dynamicItem) ? '已关注' : '关注' }}
+          {{ isAttention(dynamicItem) ? '已关注' : '关注' }}
         </button>
       </div>
     </div>
@@ -155,8 +155,6 @@
     </div>
 
     <Dialog :visible.sync="isPreviewImg"
-            :close-on-click-modal="false"
-            :close-on-press-escape="false"
             width="550px">
       <img :src="previewImgUrl"
            style="width:100%"
@@ -240,9 +238,9 @@ export default {
         }
       }
     },
-    isThumb (item) { // 是否收藏
+    isAttention (item) { // 是否收藏
       if (this.personalInfo.islogin) {
-        if (this.user.associateInfo.dynamicThumdId && ~this.user.associateInfo.dynamicThumdId.indexOf(item.id)) {
+        if (this.user.associateInfo.userAttentionId && ~this.user.associateInfo.userAttentionId.indexOf(item.uid)) {
           return true
         } else {
           return false

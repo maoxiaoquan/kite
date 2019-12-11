@@ -25,6 +25,7 @@ const {
 } = require('../../../utils/constant')
 
 const userVirtual = require('../../../common/userVirtual')
+const attention = require('../../../common/attention')
 
 function ErrorMessage (message) {
   this.message = message
@@ -232,6 +233,13 @@ class Books {
         }),
         type: virtualType.books,
         action: modelAction.create
+      })
+
+      await attention.attentionMessage({
+        uid: user.uid,
+        type: modelType.books,
+        action: modelAction.create,
+        associate_id: createBooks.books_id
       })
 
       resClientJson(res, {

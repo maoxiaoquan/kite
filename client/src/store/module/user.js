@@ -18,7 +18,8 @@ const state = () => ({
   attentionCount: 0, // 用户未读
   messageCount: 0, // 用户未读
   associateInfo: {
-    articleThumdId: []
+    articleThumdId: [],
+    userAttentionId: []
   }
 })
 
@@ -157,6 +158,7 @@ const actions = {
                 associateInfo {
                   aid
                   id
+                  books_id
                   title
                   content
                 }

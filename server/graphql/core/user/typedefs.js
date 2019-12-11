@@ -26,6 +26,7 @@ const Schema = `
   type associateArticleInfo {
     aid: Int
     id: Int
+    books_id: Int
     title: String
     content: String
   }

@@ -705,6 +705,13 @@ caption {
   video {
     width: 100%;
   }
+
+  iframe {
+    background-color: #fff;
+    vertical-align: middle;
+    width: 100%;
+    height: 500px;
+  }
   /*code border end*/
   /*code start*/
   .hljs {

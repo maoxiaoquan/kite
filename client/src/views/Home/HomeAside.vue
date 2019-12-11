@@ -25,26 +25,6 @@
       </div>
     </div>
 
-    <div class="advertise client-card"
-         v-if="website.advertise.length>0">
-      <div class="advertise-item"
-           v-for="(advertiseItem,key) in website.advertise"
-           v-if="advertiseItem.enable"
-           :key="key">
-        <a class="advertise-img"
-           :href="advertiseItem.link||'javascript:;'"
-           v-if="advertiseItem.img_url">
-          <img v-lazy="advertiseItem.img_url"
-               alt="">
-        </a>
-        <a class="advertise-text"
-           :href="advertiseItem.link||'javascript:;'"
-           v-else>
-          {{advertiseItem.title}}
-        </a>
-      </div>
-    </div>
-
     <div class="hot-tags-for-sidebar client-card">
       <header class="heading u-clearfix heading--borderedBottom heading--allCaps heading--normal heading--simple xzl-margin-bottom15">
         <div class="u-clearfix">
@@ -76,6 +56,26 @@
          v-if="item.enable"
          :href="item.link"
          :key="key">{{item.title}}</a>
+    </div>
+
+    <div class="advertise client-card"
+         v-if="website.advertise.length>0">
+      <div class="advertise-item"
+           v-for="(advertiseItem,key) in website.advertise"
+           v-if="advertiseItem.enable"
+           :key="key">
+        <a class="advertise-img"
+           :href="advertiseItem.link||'javascript:;'"
+           v-if="advertiseItem.img_url">
+          <img v-lazy="advertiseItem.img_url"
+               alt="">
+        </a>
+        <a class="advertise-text"
+           :href="advertiseItem.link||'javascript:;'"
+           v-else>
+          {{advertiseItem.title}}
+        </a>
+      </div>
     </div>
 
     <div class="website-information client-card">

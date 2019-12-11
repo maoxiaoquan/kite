@@ -11,7 +11,7 @@ const {
   modelType
 } = require('../../../utils/constant')
 
-function ErrorMessage(message) {
+function ErrorMessage (message) {
   this.message = message
   this.name = 'UserException'
 }
@@ -22,7 +22,7 @@ class PersonalCenter {
    * 用户个人中心个人文章列表render
    * @param   {object} ctx 上下文对象
    */
-  static async userMyArticle(req, res, next) {
+  static async userMyArticle (req, res, next) {
     let uid = req.query.uid
     let blog_id = req.query.blog_id || 'all'
     let type = req.query.type || '1'
@@ -112,7 +112,7 @@ class PersonalCenter {
    * 用户个人中心用户关注用户render
    * @param   {object} ctx 上下文对象
    */
-  static async getUserAttentionList(req, res, next) {
+  static async getUserAttentionList (req, res, next) {
     let uid = req.query.uid
     let page = req.query.page || 1
     let pageSize = Number(req.query.pageSize) || 10
@@ -185,7 +185,7 @@ class PersonalCenter {
    * 用户like文章render
    * @param   {object} ctx 上下文对象
    */
-  static async getUserLikeArticleList(req, res, next) {
+  static async getUserLikeArticleList (req, res, next) {
     let uid = req.query.uid
     let page = req.query.page || 1
     let pageSize = Number(req.query.pageSize) || 10
@@ -254,7 +254,7 @@ class PersonalCenter {
     }
   }
 
-  static async getDynamicListMe(req, res, next) {
+  static async getDynamicListMe (req, res, next) {
     const { uid } = req.query
     let page = req.query.page || 1
     let pageSize = Number(req.query.pageSize) || 10
@@ -288,8 +288,8 @@ class PersonalCenter {
           'topic',
           rows[i].topic_ids
             ? await models.dynamic_topic.findOne({
-                where: { topic_id: rows[i].topic_ids }
-              })
+              where: { topic_id: rows[i].topic_ids }
+            })
             : ''
         )
 
@@ -354,7 +354,7 @@ class PersonalCenter {
    * 用户个人中心个人专栏列表
    * @param   {object} ctx 上下文对象
    */
-  static async userArticleBlogList(req, res, next) {
+  static async userArticleBlogList (req, res, next) {
     let uid = req.query.uid
     let page = req.query.page || 1
     let pageSize = Number(req.query.pageSize) || 10
@@ -455,7 +455,7 @@ class PersonalCenter {
    * 用户个人中心个人小书列表
    * @param   {object} ctx 上下文对象
    */
-  static async userBooksList(req, res, next) {
+  static async userBooksList (req, res, next) {
     let uid = req.query.uid
     let page = req.query.page || 1
     let pageSize = Number(req.query.pageSize) || 10

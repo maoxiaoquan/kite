@@ -29,6 +29,10 @@
                     <router-link style="color:#df5858"
                                  v-if="MessageItem.type===modelType.dynamic"
                                  :to="{name:'dynamicView',params:{dynamicId:MessageItem.associateInfo.id}}">{{MessageItem.associateInfo.content}}</router-link>
+                    <router-link style="color:#df5858"
+                                 v-if="MessageItem.type===modelType.books"
+                                 :to="{name:'book',params:{books_id:MessageItem.associateInfo.books_id}}">{{MessageItem.associateInfo.title}}</router-link>
+
                   </div>
                 </div>
 

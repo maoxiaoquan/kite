@@ -142,13 +142,13 @@
                   <div class="emoji-box"
                       slot="button"
                       v-if="!afferentTopic">
-                    <i class="el-icon-collection-tag"></i>
+                    <i class="el-icon">#</i>
                     <span class="tool-text">话题</span>
                   </div>
                   <div class="emoji-box"
                       slot="no-button"
                       v-else>
-                    <i class="el-icon-collection-tag"></i>
+                    <i class="el-icon">#</i>
                     <span class="tool-text">话题</span>
                   </div>
                 </template>
@@ -513,10 +513,10 @@ export default {
         }
         .send-dynamic {
           border-radius: 3px;
-          background: #ffd600;
+          background: #ec7259;
           padding: 3px 13px;
           font-size: 14px;
-          border-color: #ffd600;
+          border-color: #ec7259;
           color: #333;
         }
       }
