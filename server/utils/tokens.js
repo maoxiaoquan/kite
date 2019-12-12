@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const { resClientJson, resAdminJson } = require('./resData')
 const models = require('../../db/mysqldb')
 class Tokens {
-  static async ClientVerifyToken(req, res, next) {
+  static async ClientVerifyToken (req, res, next) {
     let reqBody = req.body
     let token =
       reqBody.accessToken ||
@@ -22,10 +22,16 @@ class Tokens {
             }
           })
         } else {
-          req.islogin = true
-          req.user = await models.user.findOne({
+          let userInfo = await models.user.findOne({
             where: { uid: decoded.uid }
           })
+          if (userInfo) {
+            req.islogin = true
+            req.user = userInfo
+          } else {
+            req.islogin = false
+            req.user = {}
+          }
           await next()
         }
       })
@@ -41,7 +47,7 @@ class Tokens {
     }
   }
 
-  static async ClientVerifyTokenInfo(req, res, next) {
+  static async ClientVerifyTokenInfo (req, res, next) {
     let token =
       req.body.accessToken ||
       req.query.accessToken ||
@@ -53,16 +59,22 @@ class Tokens {
         req.islogin = false
         req.user = {}
       } else {
-        req.islogin = true
-        req.user = await models.user.findOne({
+        let userInfo = await models.user.findOne({
           where: { uid: decoded.uid }
         })
+        if (userInfo) {
+          req.islogin = true
+          req.user = userInfo
+        } else {
+          req.islogin = false
+          req.user = {}
+        }
       }
       await next()
     })
   }
 
-  static async AdminVerifyToken(req, res, next) {
+  static async AdminVerifyToken (req, res, next) {
     let reqBody = req.body
     let token =
       reqBody.token || req.query.token || req.headers['x-access-token']
@@ -94,13 +106,13 @@ class Tokens {
     }
   }
 
-  static AdminSetToken(time, data) {
+  static AdminSetToken (time, data) {
     return jwt.sign(data, 'admin', {
       expiresIn: time
     })
   }
 
-  static ClientSetToken(time, data) {
+  static ClientSetToken (time, data) {
     return jwt.sign(data, 'client', {
       expiresIn: time
     })

@@ -31,18 +31,21 @@ class Init {
   static async cliSetStep (req, res, next) {
     let formData = req.body
 
+    console.log('formData', formData)
+
     await lowdb
       .set('cli.step', formData.step) // 通过set方法来对对象操作
       .write()
 
-    await resClientJson(res, {
+    res.json({
       state: 'success',
       message: 'step update success'
     })
   }
 
   static async cliInit (req, res, next) {
-    await render(ctx, {
+    console.log(11111111111111)
+    await render(res, {
       title: 'init project',
       view_url: '_cli/init',
       state: 'success',
@@ -51,7 +54,7 @@ class Init {
   }
 
   static async cliInitStepOne (req, res, next) {
-    await render(ctx, {
+    await render(res, {
       title: 'init project',
       view_url: '_cli/init_step_one',
       state: 'success',
@@ -60,7 +63,7 @@ class Init {
   }
 
   static async cliInitStepTwo (req, res, next) {
-    await render(ctx, {
+    await render(res, {
       title: 'init project',
       view_url: '_cli/init_step_two',
       state: 'success',
@@ -69,7 +72,7 @@ class Init {
   }
 
   static async cliInitStepThree (req, res, next) {
-    await render(ctx, {
+    await render(res, {
       title: 'init project',
       view_url: '_cli/init_step_three',
       state: 'success',
@@ -108,16 +111,17 @@ class Init {
       const { sequelize } = require('../../../db/mysqldb/define')(initSequelize)
 
       await sequelize.sync({ force: true })
-
-      await resClientJson(res, {
+      console.log(111111111188)
+      res.json({
         state: 'success',
         message: 'mysql table create success'
       })
     } catch (err) {
-      resClientJson(res, {
+      res.json({
         state: 'error',
         message: '错误信息：' + err.message
       })
+
       return false
     }
   }
@@ -253,15 +257,16 @@ class Init {
         })
         .write()
 
-      await resClientJson(res, {
+      res.json({
         state: 'success',
         message: '注册成功'
       })
     } catch (err) {
-      resClientJson(res, {
+      res.json({
         state: 'error',
         message: '错误信息：' + err.message
       })
+
       return false
     }
   }

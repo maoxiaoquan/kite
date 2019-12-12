@@ -69,7 +69,10 @@ class User {
         attentionCount: attentionCount
       }
     } catch (err) {
-      return {}
+      return {
+        messageCount: 0,
+        attentionCount: 0
+      }
     }
   }
 

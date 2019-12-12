@@ -42,7 +42,7 @@ class Format {
    */
 
   async resClientJson (res, { state, message, data = {} }) {
-    res.json({
+    await res.json({
       state,
       message,
       data
@@ -50,6 +50,7 @@ class Format {
   }
 
   async render (res, { title, view_url, state, message, data = {} }) {
+    console.log('view_url', view_url)
     await res.render(view_url, {
       title,
       state,

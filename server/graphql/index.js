@@ -12,7 +12,7 @@ const models = require('../../db/mysqldb')
  * 4 错误处理统一处理
  * @param app
  */
-function graphql(app) {
+function graphql (app) {
   const server = new ApolloServer({
     introspection: !isProd,
     playground: !isProd,
@@ -39,10 +39,18 @@ function graphql(app) {
             islogin = false
             user = {}
           } else {
-            islogin = true
-            user = await models.user.findOne({
+            let userInfo = await models.user.findOne({
               where: { uid: decoded.uid }
             })
+            if (userInfo) {
+              islogin = true
+              user = await models.user.findOne({
+                where: { uid: decoded.uid }
+              })
+            } else {
+              islogin = false
+              user = {}
+            }
           }
         })
       }

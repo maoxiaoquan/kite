@@ -9,7 +9,7 @@
     "client-build:server": "cross-env NODE_ENV=production  webpack --config client/tools/webpack.server.config.js --color -p --progress --hide-modules --display-optimization-bailout",
     "client-start": "cross-env NODE_ENV=development node ./client/server/dev.js",
     "server-start": "nodemon ./server/index.js --config _nodemon.json",
-    "init": "node ./server/init.js ",
+    "init": "node  ./server/init.js ",
     "admin-start": "cross-env NODE_ENV=development node admin/tools/server.js",
     "admin-dll": "rimraf ./admin/dll && node admin/tools/dll.js",
     "admin-build": "rimraf ./static/_admin && cross-env NODE_ENV=production  node admin/tools/build.js",
