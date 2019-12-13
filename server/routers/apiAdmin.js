@@ -1,4 +1,5 @@
-const router = require('koa-router')()
+const express = require('express')
+const router = express.Router()
 const adminUser = require('../controllers/admin/adminUsers') // 后台用户
 const users = require('../controllers/admin/users') // 前台用户
 const userRoleAuthority = require('../controllers/admin/userRoleAuthority') // 前台用户角色权限

@@ -43,10 +43,27 @@ module.exports = {
       field: 'company'
     },
     edit_type: {
-      // 职业
+      // 编辑器类型
       type: Seq.STRING(50),
       comment: '编辑器类型',
       field: 'edit_type'
+    },
+    // 2019.11.3 新增
+    shell_total_amount: {
+      type: Seq.DECIMAL(10, 2),
+      comment: '贝壳总额',
+      field: 'shell_total_amount'
+    },
+    shell_balance: {
+      type: Seq.DECIMAL(10, 2),
+      comment: '贝壳余额',
+      field: 'shell_balance'
+    },
+    is_msg_push: {
+      type: Seq.INTEGER(5),
+      comment: '是否开启消息推送 1:开启;2:关闭',
+      field: 'is_msg_push',
+      defaultValue: 2
     }
   }
 }

@@ -35,9 +35,9 @@
                         <span v-text="articleBlog.blogInfo.likeCount||0"></span>
                       </li>
                       <li class="item attention"
-                          v-if="~[2,4].indexOf(Number(articleBlog.blogInfo.status))&&personalInfo.islogin&&articleBlog.blogInfo.is_public"
+                          v-if="~[2,4].indexOf(Number(articleBlog.blogInfo.status))&&personalInfo.islogin"
                           @click="setLikeArticleBlog(articleBlog.blogInfo.blog_id)">
-                        <span :class="{'active':isLike(articleBlog.blogInfo).status}">{{isLike(articleBlog.blogInfo).text}}</span>
+                        <span :class="{'active':isCollect(articleBlog.blogInfo).status}">{{isCollect(articleBlog.blogInfo).text}}</span>
                       </li>
                     </ul>
                   </div>
@@ -80,8 +80,7 @@
 
             </div>
 
-            <div class="article-blog-main"
-                 v-if="articleBlog.blogInfo.is_public">
+            <div class="article-blog-main">
               <div class="article-view">
                 <div class="article-item"
                      v-for="(item,key) in articleBlog.blogArticleList.list"
@@ -94,11 +93,6 @@
                     :pageSize="Number(articleBlog.blogArticleList.pageSize)"
                     :page="Number($route.query.page)||1"
                     @pageChange="pageChange"></Page>
-            </div>
-
-            <div class="article-blog-null-public"
-                 v-else>
-              <p class="info">当前个人专栏未公开,请等待作者公开</p>
             </div>
 
           </div>
@@ -120,7 +114,9 @@ import blogArticleItem from './component/blogArticleItem'
 import websiteNotice from '@views/Parts/websiteNotice'
 import { share, baidu, google } from '@utils'
 import googleMixin from '@mixins/google'
-
+import {
+  modelType
+} from '@utils/constant'
 export default {
   name: "ArticleBlogView",
   mixins: [googleMixin], //混合谷歌分析  
@@ -157,6 +153,11 @@ export default {
       store.dispatch("articleBlog/GET_ARTICLE_BLOG_ARTICLE_LIST", { blogId: route.params.blogId }),
     ]);
   },
+  data () {
+    return {
+      modelType
+    }
+  },
   methods: {
     setBlogTime (item) { // 设置blog的时间
       if (item.create_date === item.update_date) {
@@ -187,8 +188,9 @@ export default {
       }
     },
     setLikeArticleBlog (blog_id) { // 用户关注blog
-      this.$store.dispatch('articleBlog/LIKE_ARTICLE_BLOG', {
-        blog_id,
+      this.$store.dispatch('common/SET_COLLECT', {
+        associate_id: blog_id,
+        type: modelType.article_blog
       })
         .then(result => {
           if (result.state === 'success') {
@@ -199,7 +201,7 @@ export default {
           }
         })
     },
-    isLike (item) { // 是否like
+    isCollect (item) { // 是否like
       let likeUserIds = []
       item.likeUserIds.map(item => {
         likeUserIds.push(item.uid)
@@ -207,12 +209,12 @@ export default {
       if (~likeUserIds.indexOf(Number(this.personalInfo.user.uid))) {
         return {
           status: true,
-          text: '已关注'
+          text: '已收藏'
         }
       } else {
         return {
           status: false,
-          text: '关注'
+          text: '收藏'
         }
       }
     },

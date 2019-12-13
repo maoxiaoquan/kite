@@ -16,12 +16,13 @@
                 {{searchArticle.count}} 条结果
               </div>
             </div>
-            <ul class="trigger-menu">
-              <!-- <li class=""><a href="/"><i class="iconfont ic-latestcomments"></i> 最新评论</a></li>-->
-              <li class="active"><a href="javascript:;"><i class="iconfont ic-articles"></i> 文章</a></li>
-              <!--<li class=""><a href="/"><i class="iconfont ic-hot"></i> 热门</a></li>-->
-            </ul>
-            <div class="list-container">
+
+            <div class="list-container client-card">
+              <ul class="trigger-menu">
+                <!-- <li class=""><a href="/"><i class="iconfont ic-latestcomments"></i> 最新评论</a></li>-->
+                <li class="active"><a href="javascript:;"><i class="iconfont ic-articles"></i> 文章</a></li>
+                <!--<li class=""><a href="/"><i class="iconfont ic-hot"></i> 热门</a></li>-->
+              </ul>
               <div class="article-view">
                 <div class="article-item"
                      v-for="(item,key) in searchArticle.article_list">
@@ -101,7 +102,7 @@ export default {
 .article-list-lay.layout-content {
   .article-list {
     .main-top {
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       background: #ffc107;
       padding: 10px 20px;
       border-radius: 3px;
@@ -142,12 +143,11 @@ export default {
       }
     }
     .list-container {
+      padding: 20px;
       .article-view {
-        > .article-item {
+        /deep/ .article-item {
+          padding: 20px 0;
           border-bottom: 1px solid rgba(178, 186, 194, 0.15);
-          &:hover {
-            background: #f9f9f9;
-          }
         }
       }
     }

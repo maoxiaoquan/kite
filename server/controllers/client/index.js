@@ -4,13 +4,20 @@ const { resClientJson } = require('../../utils/resData')
 const Op = require('sequelize').Op
 const { TimeNow, TimeDistance } = require('../../utils/time')
 const clientWhere = require('../../utils/clientWhere')
+const {
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  articleType,
+  modelAction,
+  virtualType,
+  modelType
+} = require('../../utils/constant')
 
 class Index {
-  static async getIndex (ctx) {
-    let page = ctx.query.page || 1
-    let pageSize = ctx.query.pageSize || 10
-    let columnEnName = ctx.query.columnEnName || ''
-    let sort = ctx.query.sort || 'newest'
+  static async getIndex (req, res, next) {
+    let page = req.query.page || 1
+    let pageSize = req.query.pageSize || 25
+    let columnEnName = req.query.columnEnName || ''
+    let sort = req.query.sort || 'newest'
     let whereArticleParams = {} // 查询参数
     let whereArticleColumnParams = {} // 查询参数
     let orderParams = [] // 排序参数
@@ -19,9 +26,13 @@ class Index {
       // where
       whereArticleParams = {
         // 默认全部导入的专题
-        type: clientWhere.article.type,
-        ...clientWhere.article.otherList,
-        is_public: clientWhere.article.isPublic
+        type: {
+          [Op.or]: [articleType.article, articleType.note] // 文章和笔记
+        },
+        is_public: true, // 公开的文章
+        status: {
+          [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
+        }
       }
 
       if (!columnEnName) {
@@ -38,7 +49,6 @@ class Index {
             allArticleTagId.push(allArticleTag[item].tag_id)
           }
 
-          console.log('allArticleTag', allArticleTagId)
           whereArticleParams['tag_ids'] = {
             [Op.notRegexp]: `${allArticleTagId.join('|')}`
           }
@@ -93,7 +103,10 @@ class Index {
           where: { blog_id: rows[i].blog_ids }
         })
 
-        if (oneArticleBlog && ~[2, 4].indexOf(oneArticleBlog.status)) {
+        if (
+          oneArticleBlog &&
+          ~[reviewSuccess, freeReview].indexOf(oneArticleBlog.status)
+        ) {
           rows[i].setDataValue('article_blog', oneArticleBlog)
         }
 
@@ -126,7 +139,7 @@ class Index {
     } */
 
       if (rows) {
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'success',
           message: '数据返回成功',
           data: {
@@ -139,13 +152,13 @@ class Index {
           }
         })
       } else {
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'error',
           message: '数据返回错误，请再次刷新尝试'
         })
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

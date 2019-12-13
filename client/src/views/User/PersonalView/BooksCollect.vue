@@ -5,7 +5,7 @@
       <div class="col-xs-6 col-sm-6 col-md-6"
            v-for="(booksItem,key) in collectBooksInfo.list"
            :key="key">
-        <div class="library-item clearfix client-card">
+        <div class="library-item clearfix">
           <div class="library-item__thumb">
             <router-link :to="{name:'book',params:{books_id:booksItem.books.books_id}}">
               <img v-lazy="booksItem.books.cover_img"
@@ -27,8 +27,7 @@
               </span>
               <span class="attention"
                     v-if="~[2,4].indexOf(booksItem.books.status)&&personalInfo.islogin"
-                    @click="collectBooks(booksItem.books.books_id)"
-                    :class="{'active':isCollect(booksItem.books).status}">{{isCollect(booksItem.books).text}}</span>
+                    @click="collectBooks(booksItem.books.books_id)">取消收藏</span>
             </div>
             <div class="library-item-tag">
               <template v-if="booksItem.tag">
@@ -60,6 +59,10 @@
 
 import { mapState } from 'vuex'
 import { Page } from '@components'
+import {
+  modelType
+} from '@utils/constant'
+
 export default {
   name: 'Collect',
   metaInfo () {
@@ -72,6 +75,7 @@ export default {
   },
   data () {
     return {
+      modelType,
       collectBooksInfo: {
         count: 0,
         list: [],
@@ -91,14 +95,15 @@ export default {
     getCollectBooksList (page) {
       this.$store.dispatch('books/GET_COLLECT_BOOKS_LIST', {
         page: this.collectBooksInfo.page || 1,
-        uid: this.$route.params.uid
+        uid: this.personalInfo.user.uid,
       }).then(result => {
         this.collectBooksInfo = result.data
       })
     },
     collectBooks (books_id) { // 用户收藏小书
-      this.$store.dispatch('books/COLLECT_BOOKS', {
-        books_id
+      this.$store.dispatch('common/SET_COLLECT', {
+        associate_id: books_id,
+        type: modelType.books
       })
         .then(result => {
           if (result.state === 'success') {
@@ -108,19 +113,6 @@ export default {
             this.$message.warning(result.message);
           }
         })
-    },
-    isCollect (item) { // 是否收藏
-      if (item.uid == this.personalInfo.user.uid) {
-        return {
-          status: true,
-          text: '已关注'
-        }
-      } else {
-        return {
-          status: false,
-          text: '关注'
-        }
-      }
     },
   },
   computed: {
@@ -139,6 +131,7 @@ export default {
     padding: 16px;
     background: #fff;
     transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
     .library-item__thumb {
       float: left;
       width: 88px;

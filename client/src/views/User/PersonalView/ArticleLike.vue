@@ -49,7 +49,7 @@ export default {
   methods: {
     getUserLikeArticleList () {
       this.$store.dispatch('user/GET_USER_LIKE_ARTICLE_LIST', {
-        uid: this.$route.params.uid,
+        uid: this.personalInfo.user.uid,
         page: this.articleList.page || 1,
         pageSize: this.articleList.pageSize || 10,
       }).then(result => {
@@ -62,13 +62,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["personalInfo"]),
-    userInfo () { // 登录后的个人信息
-      return this.$store.state.user.user_info || {}
-    },
-    userLikeArticle () { // 用户的like
-      return this.$store.state.user.user_like_article || {}
-    },
+    ...mapState(["personalInfo", 'user'])
   },
   components: {
     LikeArticleItem,

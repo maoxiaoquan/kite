@@ -39,7 +39,8 @@ module.exports = {
       '@utils': resolve('src/utils'),
       '@mixins': resolve('src/mixins'),
       assets: resolve('src/assets'),
-      '@request': resolve('request')
+      '@request': resolve('request'),
+      '@fetch': resolve('fetch')
     }
   },
   module: {

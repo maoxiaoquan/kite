@@ -53,7 +53,7 @@ module.exports = {
     status: {
       // 状态
       type: Seq.INTEGER(10),
-      comment: '状态(1:审核中;2:审核通过;3:审核失败;4:无需审核;5:已删除)',
+      comment: '状态(1:审核中;2:审核通过;3:审核失败;4:无需审核;)',
       field: 'status'
     },
     rejection_reason: {
@@ -92,6 +92,12 @@ module.exports = {
       type: Seq.BIGINT(30),
       comment: '更新时间戳',
       field: 'update_timestamp'
+    },
+    trial_read: {
+      // 是否可以试读
+      type: Seq.INTEGER(6),
+      comment: '是否可以试读 1可以 2不可以',
+      field: 'trial_read'
     },
     ...time.create_date
   }

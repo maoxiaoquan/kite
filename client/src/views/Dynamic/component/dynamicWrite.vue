@@ -131,7 +131,8 @@
                               alt="">
                         </div>
                         <div class="content">
-                          <span>{{item.name}}</span><span>{{item.like_count}} 关注 · 0 片刻</span>
+                          <span>{{item.name}}</span>
+                          <!-- <span>{{item.thumb_count}} 关注 · 0 片刻</span> -->
                         </div>
                       </div>
                     </li>
@@ -141,13 +142,13 @@
                   <div class="emoji-box"
                       slot="button"
                       v-if="!afferentTopic">
-                    <i class="el-icon-collection-tag"></i>
+                    <i class="el-icon">#</i>
                     <span class="tool-text">话题</span>
                   </div>
                   <div class="emoji-box"
                       slot="no-button"
                       v-else>
-                    <i class="el-icon-collection-tag"></i>
+                    <i class="el-icon">#</i>
                     <span class="tool-text">话题</span>
                   </div>
                 </template>
@@ -340,13 +341,14 @@ export default {
 <style scoped lang="scss">
 .dynamic-editor {
   position: relative;
+  box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
   .editor-body {
-    padding: 15px 20px 0;
+    padding: 20px 20px 0;
     position: relative;
     border-radius: 2px;
     .content {
       position: relative;
-      border-radius: 16px;
+      border-radius: 3px;
       background-color: rgba(226, 230, 235, 0.2);
       .editor {
         position: relative;
@@ -511,11 +513,11 @@ export default {
           padding: 3px 5px;
         }
         .send-dynamic {
-          border-radius: 15px;
-          background: #ffd600;
+          border-radius: 3px;
+          background: #ec7259;
           padding: 3px 13px;
           font-size: 14px;
-          border-color: #ffd600;
+          border-color: #ec7259;
           color: #333;
         }
       }

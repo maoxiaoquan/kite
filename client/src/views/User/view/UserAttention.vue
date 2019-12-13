@@ -2,30 +2,47 @@
   <div class="user-attention"
        v-loading="isLoading">
     <div class="user-article-attention-any">
-      <router-link :to="{name:'user',query:{any:'me'},params:{routeType:'attention'}}"
-                   :class="{'active':$route.query.any==='me'||!$route.query.any}">{{personalInfo.user.uid===$route.params.uid?'我':'他'}}关注的</router-link>
-      <router-link :to="{name:'user',query:{any:'other'},params:{routeType:'attention'}}"
-                   :class="{'active':$route.query.any==='other'}">关注{{personalInfo.user.uid===$route.params.uid?'我':'他'}}的</router-link>
+      <router-link :to="{
+          name: 'user',
+          query: { any: 'me' },
+          params: { routeType: 'attention' }
+        }"
+                   :class="{ active: $route.query.any === 'me' || !$route.query.any }">{{
+          personalInfo.user.uid === $route.params.uid ? '我' : '他'
+        }}关注的</router-link>
+      <router-link :to="{
+          name: 'user',
+          query: { any: 'other' },
+          params: { routeType: 'attention' }
+        }"
+                   :class="{ active: $route.query.any === 'other' }">关注{{
+          personalInfo.user.uid === $route.params.uid ? '我' : '他'
+        }}的</router-link>
     </div>
 
     <ul class="user-article-attention-view">
       <li class="item"
-          v-for="(item,key) in userAttentionList.list"
+          v-for="(item, key) in userAttentionList.list"
           :key="key">
         <div class="user">
           <div class="lazy avatar avatar loaded"
                title
-               :style="{'background-image':'url('+item.user.avatar+')'}"></div>
+               :style="{ 'background-image': 'url(' + item.user.avatar + ')' }"></div>
           <div class="info-box">
             <div class="username">
-              <router-link :to="{name:'user',params:{uid:item.user.uid,routeType:'article'}}"
-                           class="link">{{item.user.nickname }}</router-link>
+              <router-link :to="{
+                  name: 'user',
+                  params: { uid: item.user.uid, routeType: 'article' }
+                }"
+                           class="link">{{ item.user.nickname }}</router-link>
             </div>
-            <div class="detail">{{item.user.introduction }}</div>
+            <div class="detail">{{ item.user.introduction }}</div>
           </div>
           <button class="follow-btn"
                   @click="onUserAttention(item)"
-                  :class="{'active':isAttention(item)}">{{isAttention(item)?'已关注':'关注'}}</button>
+                  :class="{ active: isAttention(item) }">
+            {{ isAttention(item) ? '已关注' : '关注' }}
+          </button>
         </div>
       </li>
     </ul>
@@ -33,28 +50,24 @@
     <div class="pagination">
       <Page :total="Number(userAttentionList.count)"
             :pageSize="Number(userAttentionList.pageSize)"
-            :page="Number(userAttentionList.page||1)"
+            :page="Number(userAttentionList.page || 1)"
             @pageChange="pageChange"></Page>
     </div>
   </div>
 </template>
 
 <script>
-import { Page } from "@components";
+
+import { Page } from '@components'
 import { mapState } from 'vuex'
+import { modelType } from '@utils/constant'
+
 export default {
-  name: "UserAttention",
-  metaInfo () {
-    return {
-      title: "个人关注",
-      htmlAttrs: {
-        lang: "zh"
-      }
-    };
-  },
+  name: 'UserAttention',
   data () {
     return {
       isLoading: false,
+      modelType,
       userAttentionList: {
         count: 0,
         page: 1,
@@ -73,23 +86,27 @@ export default {
   },
   methods: {
     getUserAttentionList () {
-      this.$store.dispatch("user/GET_USER_ATTENTION_LIST", {
-        uid: this.$route.params.uid,
-        page: this.userAttentionList.page || 1,
-        any: this.$route.query.any || "me",
-        pageSize: this.userAttentionList.pageSize || 10
-      }).then(result => {
-        this.userAttentionList = result.data
-        this.isLoading = false
-      }).catch(() => {
-        this.isLoading = false
-      })
+      this.$store
+        .dispatch('user/GET_USER_ATTENTION_LIST', {
+          uid: this.$route.params.uid,
+          page: this.userAttentionList.page || 1,
+          any: this.$route.query.any || 'me',
+          pageSize: this.userAttentionList.pageSize || 10
+        })
+        .then(result => {
+          this.userAttentionList = result.data
+          this.isLoading = false
+        })
+        .catch(() => {
+          this.isLoading = false
+        })
     },
     pageChange (val) {
       this.userAttentionList.page = val
       this.getUserAttentionList()
     },
-    isAttention (item) { // 是否收藏
+    isAttention (item) {
+      // 是否收藏
       let userAttentionIds = []
       if (item.userAttentionIds && item.userAttentionIds.length > 0) {
         item.userAttentionIds.map(item => {
@@ -106,17 +123,18 @@ export default {
     },
     onUserAttention (item) {
       this.$store
-        .dispatch("user/USER_ATTENTION", {
-          attention_uid: item.user.uid,
+        .dispatch('common/SET_ATTENTION', {
+          associate_id: item.user.uid,
+          type: modelType.user,
           moreConfig: { direct: true }
         })
         .then(result => {
           this.getUserAttentionList()
-          this.$message.warning(result.message);
+          this.$message.warning(result.message)
         })
         .catch(function (err) {
-          this.$message.warning(err);
-        });
+          this.$message.warning(err)
+        })
     }
   },
   computed: {
@@ -125,7 +143,7 @@ export default {
   components: {
     Page
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

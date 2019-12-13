@@ -1,82 +1,112 @@
 <template>
   <div class="user-aside-view">
-    <ul class="list user-dynamic"
-        v-if="userInfo.user.user_role_ids">
+
+    <router-link class="return-user client-card"
+                 v-if="$route.name!=='user'"
+                 :to="{name:'user',params:{uid:personalInfo.user.uid,routeType:'article'}}">
+      返回个人中心 <i class="el-icon-d-arrow-right"></i>
+    </router-link>
+
+    <ul class="list user-role client-card-shadow"
+        v-if="user.user.user_role_ids && userRoleAll">
       <li class="badge-icon"
-          v-for="(item,key) in userAside.user_role_all"
+          v-for="(item, key) in userRoleAll"
           :key="key"
-          v-if="~userInfo.user.user_role_ids.split(',')
-            .indexOf(String(item.user_role_id))&&item.is_show">
+          v-if="
+          ~user.user.user_role_ids 
+            .split(',')
+            .indexOf(String(item.user_role_id)) && item.is_show
+        ">
         <a target="_blank"
            href="javascript:;">
-          <span class="tag-name">{{item.user_role_name}}</span>
+          <span class="tag-name">{{ item.user_role_name }}</span>
         </a>
       </li>
     </ul>
 
-    <ul class="aside-operat">
+    <ul class="aside-operat client-card-shadow"
+        v-if="personalInfo.islogin && personalInfo.user.uid === user.user.uid">
+      <li v-if="personalInfo.islogin && personalInfo.user.uid === user.user.uid"
+          @click="checkIn">
+        <a href="javascript:;">
+          <i class="icon el-icon-bell"></i>
+          <span class="box-title check-in"> 签到</span>
+        </a>
+      </li>
       <li>
         <router-link class="collection"
-                     :to='{name:"personal"}'>
-          <span class="collection-name"> <i class="el-icon-s-management"></i> 收藏集</span>
+                     :to="{ name: 'personal' }">
+          <i class="icon el-icon-folder-opened"></i>
+          <span class="box-title">收藏集</span>
         </router-link>
       </li>
-    </ul>
-
-    <ul class="list user-dynamic"
-        v-if="personalInfo.islogin&&personalInfo.user.uid===userInfo.user.uid">
       <li>
-        <router-link :to='{name:"subscribe_tag",params:{type:"my"}}'>
-          <span class="collection-name">关注的文章标签</span>
+        <router-link class="collection"
+                     :to="{ name: 'shellDetail' }">
+          <i class="icon el-icon-notebook-2"></i>
+          <span class="box-title">贝壳明细</span>
+        </router-link>
+      </li>
+      <li>
+        <router-link class="collection"
+                     :to="{ name: 'myOrder' }">
+          <i class="icon el-icon-notebook-1"></i>
+          <span class="box-title">我的订单</span>
+        </router-link>
+      </li>
+      <li>
+        <router-link :to="{ name: 'subscribe_tag', params: { type: 'my' } }">
+          <i class="icon el-icon-price-tag"></i>
+          <span class="box-title">关注标签</span>
         </router-link>
       </li>
     </ul>
 
-    <div class="title">个人介绍</div>
-    <div class="description">
-      <div class="js-intro">
-        <template v-if="userInfo.user.introduction">
-          {{userInfo.user.introduction}}
-        </template>
-        <template v-else>
-          暂无简介
-        </template>
+    <div class="client-card">
+      <div class="title">个人介绍</div>
+      <div class="description">
+        <div class="js-intro">
+          <template v-if="user.user.introduction">
+            {{ user.user.introduction }}
+          </template>
+          <template v-else>
+            暂无简介
+          </template>
+        </div>
       </div>
     </div>
 
-    <div class="client-card article-info">
-      <p class="info">
-        专栏为个人文章的一个集合
-      </p>
-    </div>
   </div>
 </template>
 
 <script>
-import { Popover, Face } from "@components";
+import { Popover, Face } from '@components'
 import { mapState } from 'vuex'
 export default {
   name: 'UserAside',
   data () {
     return {
-      user_role_all: [],
-      user: {},
-      curr_user_role_ids: [],
-      user_role_item: [],
-      Visible: false
+      userRoleAll: ''
     }
   },
-  created () {
-    this.$store.dispatch('user/GET_USER_ROLE_ALL')
+  mounted () {
+    this.$store.dispatch('user/GET_USER_ROLE_ALL').then(result => {
+      this.userRoleAll = result.data.user_role_all || ''
+    })
   },
   computed: {
-    ...mapState(['personalInfo']),
-    userAside () { // user 侧栏信息
-      return this.$store.state.user.user_aside || {}
-    },
-    userInfo () { // 登录后的个人信息
-      return this.$store.state.user.user_info || {}
-    },
+    ...mapState(['personalInfo', 'user'])
+  },
+  methods: {
+    checkIn () {
+      this.$store.dispatch('virtual/CHECK_IN').then(result => {
+        if (result.state === 'success') {
+          this.$message.warning(result.message)
+        } else {
+          this.$message.warning(result.message)
+        }
+      })
+    }
   },
   components: {
     Popover
@@ -85,13 +115,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.user-role {
+  padding: 24px;
+  li {
+    display: inline-block;
+    margin-right: 10px;
+    &.badge-icon .tag-name {
+      font-size: 14px;
+    }
+  }
+}
 .box-aside {
   .list {
-    margin-bottom: 16px;
-    padding-bottom: 16px;
-    list-style: none;
-    border-bottom: 1px solid #f0f0f0;
-    clear: both;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
     li {
       margin-bottom: 10px;
       a {
@@ -165,32 +202,69 @@ export default {
     font-size: 13px;
     color: #42c02e;
   }
-  .article-info {
-    padding: 15px;
-    background: #f9f9f9;
-    p {
-      font-size: 13px;
-    }
+}
+
+.user-aside-view {
+  .return-user {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 14px;
+  }
+  .client-card {
+    margin-bottom: 10px;
+    padding: 20px;
   }
 }
 
 .aside-operat {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: 20px 20px 0px;
+  margin-bottom: 10px;
   li {
-    display: block;
-    margin-bottom: 10px;
-    a {
-      padding: 5px 13px;
-      display: block;
-      background: #f3f3f3;
-      font-size: 14px;
-      border-radius: 5px;
-      color: rgba(0, 0, 0, 0.88);
-      i {
-        display: inline-block;
-        margin-right: 15px;
+    width: 33%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 25px;
+    a,
+    span {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-flex: 1;
+      -ms-flex: 1 1;
+      flex: 1 1;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+      color: currentColor;
+      .icon {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: end;
+        -ms-flex-align: end;
+        align-items: flex-end;
+        width: 25px;
+        height: 25px;
+        margin-bottom: 10px;
       }
-      &.collection {
-        background: #ffe699;
+      .box-title {
+        font-size: 15px;
+        color: #8590a6;
       }
     }
   }

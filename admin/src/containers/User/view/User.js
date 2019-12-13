@@ -125,6 +125,18 @@ class User extends React.Component {
           }
         },
         {
+          title: '贝壳余额',
+          dataIndex: 'user_info',
+          key: 'user_info',
+          render: (value, record) => {
+            return (
+              <div className="table-enable">
+                {record.user_info.shell_balance}
+              </div>
+            )
+          }
+        },
+        {
           title: '操作',
           key: 'action',
           render: (text, record) => {

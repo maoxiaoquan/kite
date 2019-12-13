@@ -6,7 +6,7 @@ class System {
    * 获取标分页评论列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async getSystemInfo (ctx) {
+  static async getSystemInfo (req, res, next) {
     try {
       const email = lowdb
         .read()
@@ -21,7 +21,7 @@ class System {
         .get('config')
         .value()
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -34,7 +34,7 @@ class System {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -46,8 +46,8 @@ class System {
    * 更新系统配置
    * @param   {object} ctx 上下文对象
    */
-  static async updateSystemInfo (ctx) {
-    const { email, website, type, config } = ctx.request.body
+  static async updateSystemInfo (req, res, next) {
+    const { email, website, type, config } = req.body
     try {
       if (type === 'email') {
         await lowdb
@@ -65,12 +65,12 @@ class System {
           .assign(config)
           .write()
       }
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '更新系统配置成功'
       })
     } catch (e) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '更新系统配置失败'
       })

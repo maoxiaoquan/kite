@@ -11,6 +11,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const IncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin
+const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const {
   admin: { basePath, srcDir, outDir },
   theme
@@ -185,7 +186,8 @@ const production = {
         from: path.join(basePath, 'dll'),
         to: path.join(outDir, 'dll')
       }
-    ])
+    ]),
+    new ProgressBarPlugin()
   ]
 }
 

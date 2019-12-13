@@ -183,7 +183,7 @@ export default {
   mounted () {
     if (this.visible) {
       this.rendered = true;
-      this.open();
+      //  this.open();
       if (this.appendToBody) {
         document.body.appendChild(this.$el);
       }

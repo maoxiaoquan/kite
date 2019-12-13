@@ -22,14 +22,6 @@ const actions = {
       commit('SET_ARTICLE', result.data.article)
       return result
     })
-  },
-  GET_USER_INFO_ALL ({ commit, dispatch, state }, parameter) {
-    // 获取用户信息
-    return fetch({
-      url: '/user/info',
-      method: 'get',
-      parameter: { params: parameter }
-    })
   }
 }
 

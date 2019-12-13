@@ -12,8 +12,8 @@ class Picture {
    * 创建标签
    * @param   {object} ctx 上下文对象
    */
-  static async createPicture (ctx) {
-    const reqData = ctx.request.body
+  static async createPicture (req, res, next) {
+    const reqData = req.body
 
     try {
       let onePicture = await models.picture.findOne({
@@ -34,12 +34,12 @@ class Picture {
         description: reqData.description,
         enable: reqData.enable
       })
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '图片创建成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -51,8 +51,8 @@ class Picture {
    * 获取标签列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async getPictureList (ctx) {
-    const { page = 1, pageSize = 10 } = ctx.query
+  static async getPictureList (req, res, next) {
+    const { page = 1, pageSize = 10 } = req.query
     try {
       let { count, rows } = await models.picture.findAndCountAll({
         attributes: [
@@ -66,7 +66,7 @@ class Picture {
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize) // 每页限制返回的数据条数
       })
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -75,7 +75,7 @@ class Picture {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -87,8 +87,8 @@ class Picture {
    * 更新标签
    * @param   {object} ctx 上下文对象
    */
-  static async updatePicture (ctx) {
-    const reqData = ctx.request.body
+  static async updatePicture (req, res, next) {
+    const reqData = req.body
     try {
       await models.picture.update(
         {
@@ -105,12 +105,12 @@ class Picture {
           }
         }
       )
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '更新图片成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -121,16 +121,16 @@ class Picture {
   /**
    * 删除标签
    */
-  static async deletePicture (ctx) {
-    const { picture_id } = ctx.request.body
+  static async deletePicture (req, res, next) {
+    const { picture_id } = req.body
     try {
       await models.picture.destroy({ where: { picture_id } })
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '删除图片成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

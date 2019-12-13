@@ -10,7 +10,7 @@
            v-for="(booksItem,key) in books.list"
            :key="key">
 
-        <div class="library-item clearfix client-card">
+        <div class="library-item clearfix">
           <div class="operat-view"
                v-if="personalInfo.islogin&&personalInfo.user.uid===booksItem.user.uid">
             <Dropdown>
@@ -42,6 +42,8 @@
               <router-link class="link-dark-major"
                            :to="{name:'book',params:{books_id:booksItem.books_id}}">
                 {{booksItem.title}}
+                <span class="free"
+                      :class="Number(booksItem.is_free)===isFree.free?'yes':''">{{isFreeText[booksItem.is_free]}}</span>
               </router-link>
             </div>
             <div class="library-item__info">
@@ -49,6 +51,8 @@
               </span><span style="margin-left: 8px;">
                 <i class="el-icon-notebook-2"></i> {{booksItem.bookCount||0}}
               </span>
+              <span class="public-tag"
+                    v-if="!booksItem.is_public">未公开</span>
             </div>
             <div class="library-item-tag">
               <template v-if="booksItem.tag">
@@ -75,27 +79,29 @@
           :page="Number(books.page)||1"
           @pageChange="pageChange"></Page>
 
-    <!-- use the modal component, pass in the prop -->
-
   </div>
 </template>
 
 <script>
 import { Page, UploadImage, Dropdown } from '@components'
 import { mapState } from 'vuex'
+
+import {
+  statusList,
+  statusListText,
+  payTypeText,
+  isFree,
+  isFreeText,
+  productType
+} from '@utils/constant'
+
 export default {
   name: 'Books',
-  metaInfo () {
-    return {
-      title: '小书',
-      htmlAttrs: {
-        lang: 'zh'
-      }
-    }
-  },
   data () {
     return {
       isLoading: false,
+      isFree,
+      isFreeText,
       books: {
         // 个人中心小书列表
         count: 0,
@@ -221,10 +227,11 @@ export default {
     padding-top: 20px;
 
     .library-item {
-      margin-bottom: 24px;
+      margin-bottom: 10px;
       padding: 16px;
       background: #fff;
       transition: all 0.3s ease;
+      border: 1px solid rgba(178, 186, 194, 0.15);
       .library-item__thumb {
         float: left;
         width: 88px;
@@ -262,6 +269,18 @@ export default {
           display: -webkit-box;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 2;
+          .free {
+            font-size: 12px;
+            background: #fd763a;
+            border-radius: 3px;
+            line-height: 18px;
+            color: #fff;
+            padding: 1px 3px;
+            display: inline-block;
+            &.yes {
+              background: #41b883;
+            }
+          }
         }
         .library-item-tag {
           height: 50px;
@@ -288,6 +307,16 @@ export default {
           font-size: 12px;
           line-height: 20px;
           color: rgba(0, 0, 0, 0.56);
+          .public-tag {
+            background: #fd763a;
+            font-size: 12px;
+            border-radius: 3px;
+            display: inline-block;
+            margin-left: 5px;
+            line-height: 14px;
+            color: #fff;
+            padding: 1px 2px;
+          }
         }
       }
     }

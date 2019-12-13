@@ -7,7 +7,7 @@
             <dynamic-item :dynamicItem="dynamicView"
                           :dfIsCommnet="false" />
             <div class="dynamic-comment-part"
-                 v-if="website.config.on_comment==='yes'">
+                 v-if="website.config.on_comment === 'yes'">
               <comment-form :dynamicId="$route.params.dynamicId"
                             @commentChange="commentChange" />
               <div class="comment-list">
@@ -16,7 +16,7 @@
                                 :isMore="isMore">
                   <comment-item :comment-item="item"
                                 :dynamicId="$route.params.dynamicId"
-                                v-for="(item,key) in commentList"
+                                v-for="(item, key) in commentList"
                                 :key="key" />
                 </scroll-loading>
               </div>
@@ -32,20 +32,23 @@
               <header class="title">相关推荐</header>
               <ul class="dynamic-list">
                 <li class="item"
-                    v-for="(item,key) in dynamic.recommendDynamicList"
+                    v-for="(item, key) in dynamic.recommendDynamicList"
                     :key="key">
                   <router-link class="dynamic"
-                               :to='{name:"dynamicView",params:{dynamicId:item.id}}'>
+                               :to="{
+                      name: 'dynamicView',
+                      params: { dynamicId: item.id }
+                    }">
                     <div class="content-box">
-                      <div class="content">{{item.content}}</div>
-                      <div class="stat item"><span>{{item.like_count}} 赞 · </span><span>{{item.comment_count}} 评论</span></div>
+                      <div class="content">{{ item.content }}</div>
+                      <div class="stat item">
+                        <span>{{ item.thumb_count }} 赞 · </span><span>{{ item.comment_count }} 评论</span>
+                      </div>
                     </div>
-
                   </router-link>
                 </li>
               </ul>
             </div>
-
           </div>
         </div>
       </div>
@@ -58,9 +61,9 @@ import dynamicItem from './component/dynamicItem'
 import dynamicWrite from './component/dynamicWrite'
 import dynamicAside from './component/dynamicAside'
 
-import commentItem from "../Comment/DynamicComment/CommentItem";
-import { Page, ScrollLoading } from "@components";
-import commentForm from "../Comment/DynamicComment/CommentForm";
+import commentItem from '../Comment/DynamicComment/CommentItem'
+import { Page, ScrollLoading } from '@components'
+import commentForm from '../Comment/DynamicComment/CommentForm'
 import { share, baidu, google } from '@utils'
 import { mapState } from 'vuex'
 import googleMixin from '@mixins/google'
@@ -70,46 +73,46 @@ export default {
   minixs: [googleMixin], //混合谷歌分析
   metaInfo () {
     return {
-      title: this.dynamic.dynamicView.content + '-片刻' || "",
+      title: this.dynamic.dynamicView.content + '-片刻' || '',
       meta: [
         {
           // set meta
-          name: "description",
-          content: `${this.dynamic.dynamicView.content || ""}-片刻`
+          name: 'description',
+          content: `${this.dynamic.dynamicView.content || ''}-片刻`
         },
         {
           // og:site_name
-          property: "og:site_name",
+          property: 'og:site_name',
           content: this.website.meta.website_name
         },
         {
           // og:site_name
-          property: "og:image",
+          property: 'og:image',
           content: this.website.meta.logo
         },
         {
           // og:type
-          property: "og:type",
+          property: 'og:type',
           content: `article`
         },
         {
           // og:title
-          property: "og:title",
+          property: 'og:title',
           content: this.dynamic.dynamicView.content
         },
         {
           // og:description
-          property: "og:description",
+          property: 'og:description',
           content: this.dynamic.dynamicView.content
         },
         {
           // og:url
-          property: "og:url",
+          property: 'og:url',
           content: `${this.website.meta.domain_name}/dynamic/${this.$route.params.dynamicId}`
-        },
+        }
       ],
       htmlAttrs: {
-        lang: "zh"
+        lang: 'zh'
       },
       script: [
         ...baidu.resource({
@@ -118,19 +121,21 @@ export default {
           random: this.$route.params.dynamicId
         }),
         ...google.statisticsCode({
-          route: this.$route, googleCode: this.website.config.googleCode, random: this.$route.params.dynamicId
+          route: this.$route,
+          googleCode: this.website.config.googleCode,
+          random: this.$route.params.dynamicId
         })
       ],
       __dangerouslyDisableSanitizers: ['script']
-    };
+    }
   },
-  async asyncData ({ store, route, accessToken = "" }) {
+  async asyncData ({ store, route, accessToken = '' }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
-      store.dispatch("dynamic/GET_DYNAMIC_VIEW", {
+      store.dispatch('dynamic/GET_DYNAMIC_VIEW', {
         id: route.params.dynamicId
       })
-    ]);
+    ])
   },
   data () {
     return {
@@ -139,10 +144,15 @@ export default {
       pageSize: 6,
       isLoading: false,
       isMore: true
-    };
+    }
+  },
+  mounted () {
+    this.$store.dispatch('user/GET_USER_INFO_ALL', {
+      uid: this.personalInfo.user.uid
+    })
   },
   created () {
-    this.$store.dispatch("dynamic/GET_RECOMMEND_DYNAMIC_LIST")
+    this.$store.dispatch('dynamic/GET_RECOMMEND_DYNAMIC_LIST')
   },
   watch: {
     $route (to, from) {
@@ -154,62 +164,63 @@ export default {
   },
   methods: {
     infiniteHandler () {
-      this.isLoading = true;
+      this.isLoading = true
       this.$store
-        .dispatch("dynamicComment/DYNAMIC_COMMENT_LIST", {
+        .dispatch('dynamicComment/DYNAMIC_COMMENT_LIST', {
           dynamic_id: this.$route.params.dynamicId,
           page: this.page,
           childPageSize: 5,
           pageSize: this.pageSize
         })
         .then(result => {
-          this.isLoading = false;
+          this.isLoading = false
           this.commentList = [...this.commentList, ...result.data.list]
           if (result.data.list.length === 10) {
-            this.page += 1;
+            this.page += 1
           } else {
-            this.isMore = false;
+            this.isMore = false
           }
         })
         .catch(err => {
-          this.isMore = false;
-        });
+          this.isMore = false
+        })
     },
     commentChange (result) {
-      if (result.state === "success") {
+      if (result.state === 'success') {
         this.commentList.unshift(result.data)
-        this.dynamicView.comment_count = Number(this.dynamicItem.comment_count) + 1
-        this.$message.success(result.message);
+        this.dynamicView.comment_count =
+          Number(this.dynamicView.comment_count) + 1
+        this.$message.success(result.message)
       } else {
-        this.$message.warning(result.message);
+        this.$message.warning(result.message)
       }
     }
   },
   computed: {
-    dynamicView: { // 登录弹窗的状态
+    dynamicView: {
+      // 登录弹窗的状态
       get () {
         return this.$store.state.dynamic.dynamicView
       },
       set (val) {
         this.$store.state.dynamic.dynamicView = val
-      },
+      }
     },
-    ...mapState(['dynamic', "website", "personalInfo"])
+    ...mapState(['dynamic', 'website', 'personalInfo'])
   },
   components: {
     dynamicItem,
     dynamicWrite,
     dynamicAside,
     ScrollLoading,
-    "comment-item": commentItem,
-    'comment-form': commentForm,
+    'comment-item': commentItem,
+    'comment-form': commentForm
   }
 }
 </script>
 
 <style scoped lang="scss">
 #dynamic-content {
-  padding-top: 25px;
   margin-bottom: 15px;
   .dynamic-content-main {
     // box-shadow: 0 0 3px rgba(67, 38, 100, 0.15);

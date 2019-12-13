@@ -5,7 +5,7 @@
 
         <div class="col-xs-12 col-sm-12 col-md-12">
 
-          <div class="books-menu">
+          <div class="books-menu client-card">
 
             <nav class="column-menu">
               <ul class="nav-item-view">
@@ -29,11 +29,6 @@
               <nav class="column-tag-menu"
                    v-if="childNavItem.tag&&childNavItem.tag.length>0">
                 <ul class="nav-item-view">
-                  <!-- <li class="nav-item">
-                    <router-link :to="{name:'books',params:{columnEnName:$router.params.columnEnName||''}}">
-                      全部
-                    </router-link>
-                  </li> -->
                   <li class="nav-item"
                       v-for="(item,key) in childNavItem.tag"
                       :key="key"
@@ -61,58 +56,63 @@
 
           </div>
 
-          <div class="books-list row">
-            <div class="col-xs-4 col-sm-4 col-md-4"
-                 v-for="(booksItem,key) in books.booksList.list"
-                 :key="key">
-              <div class="library-item clearfix client-card">
-                <div class="library-item__thumb">
-                  <router-link :to="{name:'book',params:{books_id:booksItem.books_id}}">
-                    <img v-lazy="booksItem.cover_img"
-                         class="img-full"
-                         lazy="loaded">
-                  </router-link>
-                </div>
-                <div class="library-item__body">
+          <div class="books-list">
+            <div class="row">
 
-                  <router-link class="library-item__title"
-                               :to="{name:'book',params:{books_id:booksItem.books_id}}">
-                    {{booksItem.title}}
-                  </router-link>
-
-                  <div class="library-item__info">
-                    <span><i class="el-icon-view"></i> {{booksItem.read_count||0}}
-                    </span><span style="margin-left: 8px;">
-                      <i class="el-icon-notebook-2"></i> {{booksItem.bookCount||0}}
-                    </span>
-                    <span class="attention"
-                          v-if="~[2,4].indexOf(booksItem.status)&&personalInfo.islogin"
-                          @click="collectBooks(booksItem.books_id)"
-                          :class="{'active':isCollect(booksItem).status}">{{isCollect(booksItem).text}}</span>
+              <div class="col-xs-4 col-sm-4 col-md-4"
+                   v-for="(booksItem,key) in books.booksList.list"
+                   :key="key">
+                <div class="library-item clearfix">
+                  <div class="library-item__thumb">
+                    <router-link :to="{name:'book',params:{books_id:booksItem.books_id}}">
+                      <img v-lazy="booksItem.cover_img"
+                           class="img-full"
+                           lazy="loaded">
+                    </router-link>
                   </div>
-                  <div class="library-item-tag">
-                    <template v-if="booksItem.tag">
-                      <router-link v-for="(itemArticleTag,key) in booksItem.tag"
-                                   class="tag-class frontend"
-                                   :key="key"
-                                   :to="{name:'article_tag',params:{en_name:itemArticleTag.en_name}}">{{itemArticleTag.name}}</router-link>
-                    </template>
-                    <template v-else>
-                      <span class="hint">
-                        暂时没有加入标签，加入标签更能容易被搜索到
-                      </span>
-                    </template>
+                  <div class="library-item__body">
 
+                    <router-link class="library-item__title"
+                                 :to="{name:'book',params:{books_id:booksItem.books_id}}">
+                      {{booksItem.title}}
+                      <span class="free"
+                            :class="Number(booksItem.is_free)===isFree.free?'yes':''">{{isFreeText[booksItem.is_free]}}</span>
+                    </router-link>
+
+                    <div class="library-item__info">
+                      <span><i class="el-icon-view"></i> {{booksItem.read_count||0}}
+                      </span><span style="margin-left: 8px;">
+                        <i class="el-icon-notebook-2"></i> {{booksItem.bookCount||0}}
+                      </span>
+                      <span class="attention"
+                            v-if="~[statusList.reviewSuccess,statusList.freeReview].indexOf(booksItem.status)&&personalInfo.islogin"
+                            @click="collectBooks(booksItem.books_id)"
+                            :class="{'active':isCollect(booksItem).status}">{{isCollect(booksItem).text}}</span>
+                    </div>
+                    <div class="library-item-tag">
+                      <template v-if="booksItem.tag">
+                        <router-link v-for="(itemArticleTag,key) in booksItem.tag"
+                                     class="tag-class frontend"
+                                     :key="key"
+                                     :to="{name:'article_tag',params:{en_name:itemArticleTag.en_name}}">{{itemArticleTag.name}}</router-link>
+                      </template>
+                      <template v-else>
+                        <span class="hint">
+                          暂时没有加入标签，加入标签更能容易被搜索到
+                        </span>
+                      </template>
+
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+            <Page :total="Number(books.booksList.count)"
+                  :pageSize="Number(books.booksList.pageSize)"
+                  :page="Number($route.query.page)||1"
+                  @pageChange="pageChange"></Page>
 
-          <Page :total="Number(books.booksList.count)"
-                :pageSize="Number(books.booksList.pageSize)"
-                :page="Number($route.query.page)||1"
-                @pageChange="pageChange"></Page>
+          </div>
 
         </div>
 
@@ -128,6 +128,17 @@ import { mapState } from 'vuex'
 import { Page } from "@components";
 import websiteNotice from '../Parts/websiteNotice'
 import googleMixin from '@mixins/google'
+import {
+  statusList,
+  articleType,
+  statusListText,
+  articleTypeText,
+  payTypeText,
+  isFree,
+  isFreeText,
+  modelType
+} from '@utils/constant'
+
 
 export default {
   name: "books",
@@ -171,7 +182,12 @@ export default {
   },
   data () {
     return {
-      childNavItem: ''
+      childNavItem: '',
+      isFree,
+      isFreeText,
+      modelType,
+      statusList,
+      statusListText,
     };
   },
   created () {
@@ -191,8 +207,9 @@ export default {
       }
     },
     collectBooks (books_id) { // 用户收藏小书
-      this.$store.dispatch('books/COLLECT_BOOKS', {
-        books_id,
+      this.$store.dispatch('common/SET_COLLECT', {
+        associate_id: books_id,
+        type: modelType.books
       })
         .then(result => {
           if (result.state === 'success') {
@@ -292,6 +309,8 @@ export default {
 <style scoped lang="scss">
 .books {
   .books-menu {
+    padding: 20px;
+    margin-bottom: 10px;
     .column-menu {
       .nav-item-view {
         .nav-item {
@@ -348,7 +367,6 @@ export default {
       .sort-list-menu {
         display: block;
         padding-bottom: 15px;
-        border-bottom: 1px solid rgba(178, 186, 194, 0.15);
         .nav-item {
           align-items: center;
           line-height: 1;
@@ -372,15 +390,14 @@ export default {
       }
     }
   }
-  .books-list {
-    padding-top: 20px;
-  }
 
   .library-item {
-    margin-bottom: 24px;
+    margin-bottom: 10px;
     padding: 16px;
     background: #fff;
     transition: all 0.3s ease;
+    border-radius: 2px;
+    box-sizing: border-box;
     .library-item__thumb {
       float: left;
       width: 88px;
@@ -405,6 +422,18 @@ export default {
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
+        .free {
+          font-size: 12px;
+          background: #fd763a;
+          border-radius: 3px;
+          line-height: 18px;
+          color: #fff;
+          padding: 1px 3px;
+          display: inline-block;
+          &.yes {
+            background: #41b883;
+          }
+        }
       }
       .library-item-tag {
         height: 50px;

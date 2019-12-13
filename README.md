@@ -1,7 +1,5 @@
 <h1 align="center" style="margin: 30px 0 35px;">Kite</h3>
 
-<h3 align="center" style="margin: 30px 0 35px;">这是一个前台 vue 服务端渲染(ssr)  + 后台 react单页（spa） + 接口层 node koa 的项目</h3>
-
 <p align="center">
 <a href="https://github.com/maoxiaoquan/kite/stargazers">
 <img src="https://camo.githubusercontent.com/29a8c9e6591608d822b0d6ae203b5791193b031b/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f6d616f7869616f7175616e2f6b6974652e7376673f7374796c653d706f706f75742d737175617265" alt="GitHub stars" data-canonical-src="https://img.shields.io/github/stars/maoxiaoquan/kite.svg?style=popout-square" style="max-width:100%;"></a>
@@ -11,8 +9,12 @@
 
 ## ✨ kite
 
-做这个项目的目的是想把目前所学的都用在里面，避免遗忘，后期维护的时候都会过一遍，这样学了的就不会忘掉，
-项目覆盖了前端大半的知识点和框架
+### 简介：这个项目用了 react、vue、node 、webpack、grophql、express 基本涉及到了前端大部分主流的技术了，都是用的最新的版本，都是从零开始搭建包括 ssr 脚手架，主要是让学的人，接触前端整个的生态圈，后期 node 会用 ts 重构，而且会根据所有框架的版本实时更新项目
+
+|   项目    |                               项目体验                                |                                   原代码                                   |            主要技术栈             |
+| :-------: | :-------------------------------------------------------------------: | :------------------------------------------------------------------------: | :-------------------------------: |
+| Kite 前台 |            [www.xiaosuibi.com](https://www.xiaosuibi.com)             | [https://github.com/maoxiaoquan/kite](https://github.com/maoxiaoquan/kite) | Vue、Vue ssr、Vvuex、GraphQL、Koa |
+| 后台管理  | [https://www.xiaosuibi.com/\_admin](https://www.xiaosuibi.com/_admin) | [https://github.com/maoxiaoquan/kite](https://github.com/maoxiaoquan/kite) |    React、Redux、React-Router     |
 
 前台演示网站地址： [小随笔 https://www.xiaosuibi.com/](https://www.xiaosuibi.com/ 'xiaosuibi')
 
@@ -27,14 +29,18 @@
 ## 💼 最新版本更新记录
 
 ```
-更新时间：2019.10.28 15:32
-外部版本号：v0.11.0 内部版本号：0.6
+更新时间：2019.12.13 18:47
+外部版本号：v0.12.1 内部版本号：0.8
 此次更新需要运行升级 npm run kite-update
 
-1.client代码全面改造，移除了element ui (嵌套在一起，过于臃肿)
-2.移除了原来的编辑器，对原来的编辑器进行瘦身，提取了一个精简版出来
-3.seo代码部分优化、sql优化
-4.修改现存的bug，部分页面结构重写
+1.后端框架由koa 替换为 express 继续强力驱动
+2.后端接口方面增加graphql,与现有的接口并行使用
+3.新增功能对关注的用户推送消息
+4.新版UI界面调整
+5.seo调整
+6.编辑器调整，新增预览界面
+7.修复目前存在的一些问题
+8.一些小的优化
 ```
 
 [版本更新历史记录](https://github.com/maoxiaoquan/kite/blob/master/docs/VERSION.md 'version')

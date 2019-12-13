@@ -1,22 +1,33 @@
-const router = require('koa-router')()
+const express = require('express')
+const router = express.Router()
+
 const index = require('../controllers/client/index') // 主页
-const user = require('../controllers/client/user') // 注册
-const personalCenter = require('../controllers/client/personalCenter') // 用户个人中心
-const article = require('../controllers/client/article') // 文章内容页
-const articleBlog = require('../controllers/client/articleBlog') // 文章评论
-const articleComment = require('../controllers/client/articleComment') // 文章评论
+const user = require('../controllers/client/user/user') // 注册
+const personalCenter = require('../controllers/client/user/personalCenter') // 用户个人中心
+const article = require('../controllers/client/article/article') // 文章内容页
+const articleBlog = require('../controllers/client/article/articleBlog') // 文章评论
+const articleComment = require('../controllers/client/article/articleComment') // 文章评论
 const subscribe = require('../controllers/client/subscribe') // 订阅
 const upload = require('../controllers/client/upload') // 上传
 const website = require('../controllers/client/website') // 上传
 const tokens = require('../utils/tokens') // 登录tokens
 const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
-const dynamic = require('../controllers/client/dynamic') // 动态
-const dynamicComment = require('../controllers/client/dynamicComment') // 动态评论
-const dynamicTopic = require('../controllers/client/dynamicTopic') // 动态专题
-const books = require('../controllers/client/books') // 小书
-const book = require('../controllers/client/book') // 小书章节
-const booksComment = require('../controllers/client/booksComment') // 小书评价
-const bookComment = require('../controllers/client/bookComment') // 小书章节评论
+const dynamic = require('../controllers/client/dynamic/dynamic') // 动态
+const dynamicComment = require('../controllers/client/dynamic/dynamicComment') // 动态评论
+const books = require('../controllers/client/books/books') // 小书
+const book = require('../controllers/client/books/book') // 小书章节
+const booksComment = require('../controllers/client/books/booksComment') // 小书评价
+const bookComment = require('../controllers/client/books/bookComment') // 小书章节评论
+
+const like = require('../controllers/client/like') // 喜欢
+const attention = require('../controllers/client/attention') // 关注
+const thumb = require('../controllers/client/thumb') // 赞
+const collect = require('../controllers/client/collect') // 收藏
+
+const virtual = require('../controllers/client/virtual') // 虚拟币
+const shop = require('../controllers/client/shop') // 购物
+
+const uploadModel = require('../utils/upload')
 
 /**
  * 获取标签列表操作
@@ -71,15 +82,10 @@ router.delete(
   user.deleteUserMessage
 ) // 删除用户消息 TYPE:AJAX post
 
-router.get(
-  '/personal/unread-message-count',
-  tokens.ClientVerifyToken,
-  user.getUnreadMessageCount
-) // 获取未读用户消息数量 TYPE:AJAX get
-
 router.post(
   '/personal/upload-avatar',
   tokens.ClientVerifyToken,
+  uploadModel('avatarImg').single('file'),
   upload.uploadUserAvatar
 ) // 用户修改头像 post
 
@@ -102,19 +108,7 @@ router.get('/user/info', user.getUserInfo) // 根据uid 获取用户相应信息
 
 router.get('/user/blog-all', articleBlog.getUserArticleBlogAll) // 获取用户所有文章专题 TYPE:AJAX get
 
-router.post(
-  '/user/attention',
-  tokens.ClientVerifyToken,
-  personalCenter.setUserAttention
-) // 用户关注用户 TYPE:AJAX post
-
 router.get('/user/attention-list', personalCenter.getUserAttentionList) // 获取用户个人中心关注列表
-
-router.post(
-  '/user/like-article',
-  tokens.ClientVerifyToken,
-  personalCenter.setUserLikeArticle
-) // 用户like文章 TYPE:AJAX post
 
 router.get('/user/like-article-list', personalCenter.getUserLikeArticleList) // 用户个人中心喜欢
 
@@ -133,12 +127,14 @@ router.get('/user-article', tokens.ClientVerifyToken, article.getUserArticle) //
 router.post(
   '/article/upload-article-picture',
   tokens.ClientVerifyToken,
+  uploadModel('articleImg').single('file'),
   upload.uploadArticlePicture
 ) // 文章图片上传
 
 router.post(
   '/article-blog/upload-img',
   tokens.ClientVerifyToken,
+  uploadModel('articleBlogImg').single('file'),
   upload.uploadArticleBlogPicture
 ) // 文章图片上传
 
@@ -177,12 +173,6 @@ router.get('/article-tag', article.getArticleTag) // 文章标签
 
 router.get('/article-tag/all', article.getArticleTagAll) // 获取文章标签 获取全部的
 
-router.post(
-  '/subscribe/tag',
-  tokens.ClientVerifyToken,
-  subscribe.setSubscribeTag
-) // 用户订阅标签 TYPE:AJAX post
-
 router.get('/article-tag/list', subscribe.getArticleTagList) // 获取用户订阅标签列表 根据搜索和分页获取
 
 router.get('/article-tag/popular-list', article.getPopularArticleTag) // 获取热门文章标签
@@ -203,14 +193,9 @@ router.get(
  * 个人专栏相关
  */
 
-router.get('/article-blog/list', articleBlog.getArticleBlogList) // 个人专栏列表
 router.get('/article-blog/info', articleBlog.getArticleBlogView) // 个人专栏详细信息
 router.get('/article-blog/article-list', articleBlog.getArticleBlogArticleList) // 当前个人专栏文章列表
-router.post(
-  '/article-blog/like',
-  tokens.ClientVerifyToken,
-  articleBlog.setSubscribeArticleBlog
-) // 当前个人专栏like
+
 router.get(
   '/article-blog/like-list',
   tokens.ClientVerifyToken,
@@ -262,6 +247,7 @@ router.get('/dynamic/view', dynamic.getDynamicView) // 获取动态详情
 router.post(
   '/dynamic/upload-dynamic-picture',
   tokens.ClientVerifyToken,
+  uploadModel('dynamic').single('file'),
   upload.uploadDynamicPicture
 ) // 动态图片上传
 
@@ -298,21 +284,9 @@ router.post(
   dynamicComment.deleteDynamicComment
 ) // 删除动态评论 TYPE:AJAX post
 
-router.post(
-  '/user/like-dynamic',
-  tokens.ClientVerifyToken,
-  personalCenter.setUserLikeDynamic
-) // 用户like动态TYPE:AJAX post
-
-router.post(
-  '/subscribe/dynamic_topic',
-  tokens.ClientVerifyToken,
-  subscribe.setSubscribeDynamicTopic
-) // 用户订阅话题 TYPE:AJAX post
-
 router.get('/personal/dynamic-list', personalCenter.getDynamicListMe) // 个人中心获取列表
 
-router.get('/dynamic-topic/info', dynamicTopic.getDynamicTopicInfo) // 获取动态话题的信息
+router.get('/dynamic-topic/info', dynamic.getDynamicTopicInfo) // 获取动态话题的信息
 
 router.get('/personal/article-blog-list', personalCenter.userArticleBlogList) // 用户自己的个人专栏列表
 
@@ -320,6 +294,7 @@ router.get('/personal/article-blog-list', personalCenter.userArticleBlogList) //
 router.post(
   '/books/upload-books-picture',
   tokens.ClientVerifyToken,
+  uploadModel('booksImg').single('file'),
   upload.uploadBooksPicture
 ) // 小书图片上传
 
@@ -335,9 +310,13 @@ router.get('/personal/books-list', personalCenter.userBooksList) // 获取用户
 
 router.get('/user-books/info', tokens.ClientVerifyToken, books.getUserBooksInfo) // 获取用户自己的小书信息
 
-router.get('/books/info', books.getBooksInfo) // 获取小书信息
+router.get('/books/info', tokens.ClientVerifyTokenInfo, books.getBooksInfo) // 获取小书信息
 
-router.get('/books/book-all', books.getBooksBookAll) // 获取小书章节列表
+router.get(
+  '/books/book-all',
+  tokens.ClientVerifyTokenInfo,
+  books.getBooksBookAll
+) // 获取小书章节列表
 
 router.post('/books/update', tokens.ClientVerifyToken, books.updateBooks) // 更新用户自己的小书
 
@@ -356,7 +335,7 @@ router.post('/book/update', tokens.ClientVerifyToken, book.updateBook) // 编辑
 
 router.get('/user-book/info', tokens.ClientVerifyToken, book.getUserBookInfo) // 获取用户自己的小书章节信息
 
-router.get('/book/info', book.getBookInfo) // 获取小书章节信息
+router.get('/book/info', tokens.ClientVerifyTokenInfo, book.getBookInfo) // 获取小书章节信息
 
 router.post('/book/next-prev', book.getNextPrevBook) // 获取小书上一页，下一页
 
@@ -365,6 +344,7 @@ router.post('/book/delete', tokens.ClientVerifyToken, book.deleteBook) // 删除
 router.post(
   '/book/upload-book-picture',
   tokens.ClientVerifyToken,
+  uploadModel('bookImg').single('file'),
   upload.uploadBookPicture
 ) // 小书章节图片上传
 
@@ -402,12 +382,44 @@ router.post(
   bookComment.deleteBookComment
 ) // 删除小书章节评论 TYPE:AJAX post
 
-router.post('/collect/books', tokens.ClientVerifyToken, books.collectBooks) // 收藏小书
-
 router.get(
   '/collect/books-list',
   tokens.ClientVerifyToken,
   books.getCollectBooksList
 ) // 收藏小书
+
+// 用户虚拟币开始 2019.11.4 0:19
+
+// 签到
+router.post('/virtual/check-in', tokens.ClientVerifyToken, virtual.checkIn)
+// 虚拟币动态记录
+router.get('/virtual/list', tokens.ClientVerifyToken, virtual.getVirtualList)
+
+// 购买
+
+router.post('/shop/buy', tokens.ClientVerifyToken, shop.Buy)
+// 订单列表
+router.get('/shop/list', tokens.ClientVerifyToken, shop.orderList)
+
+// 获取用户关联信息
+router.get(
+  '/user/associate-info',
+  tokens.ClientVerifyTokenInfo,
+  user.getUserAssociateinfo
+)
+
+// 关注类
+
+router.post(
+  '/common/attention',
+  tokens.ClientVerifyToken,
+  attention.setAttention
+)
+
+router.post('/common/like', tokens.ClientVerifyToken, like.setLike) // like TYPE:AJAX post
+
+router.post('/common/collect', tokens.ClientVerifyToken, collect.setCollect) // 收藏
+
+router.post('/common/thumb', tokens.ClientVerifyToken, thumb.setThumb) // 用户点赞动态TYPE:AJAX post
 
 module.exports = router

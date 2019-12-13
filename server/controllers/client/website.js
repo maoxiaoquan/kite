@@ -12,7 +12,7 @@ class Website {
    * 获取所有文章标签get
    * @param   {object} ctx 上下文对象
    */
-  static async getWebsiteInfo (ctx) {
+  static async getWebsiteInfo (req, res, next) {
     try {
       const website = lowdb
         .read()
@@ -38,7 +38,7 @@ class Website {
           option_key: 'advertise' // 查询条件
         }
       })
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'success',
         message: '获取网站信息成功',
         data: {
@@ -55,7 +55,7 @@ class Website {
         }
       })
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

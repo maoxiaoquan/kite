@@ -40,14 +40,6 @@ const mutations = {
   SET_RECOMMEND_DYNAMIC_LIST (state, data) {
     // 设置推荐动态列表
     state.recommendDynamicList = data
-  },
-  SET_RSS_DYNAMIC_TOPIC ({ commit, dispatch, state }, parameter) {
-    // 订阅动态话题
-    return fetch({
-      url: '/subscribe/dynamic_topic',
-      method: 'post',
-      parameter: parameter
-    })
   }
 }
 
@@ -139,7 +131,7 @@ const actions = {
     })
   },
   DELETE_DYNAMIC ({ commit, dispatch, state }, parameter) {
-    // 删除动态
+    // 动态
     return fetch({
       url: '/dynamic/delete',
       method: 'delete',
@@ -147,7 +139,7 @@ const actions = {
     })
   },
   GET_DYNAMIC_TOPIC_INFO ({ commit, dispatch, state }, parameter) {
-    // 删除动态
+    // 动态
     return fetch({
       url: '/dynamic-topic/info',
       method: 'get',

@@ -13,7 +13,7 @@ class Articles {
    * 获取用户列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async getArticleList (ctx) {
+  static async getArticleList (req, res, next) {
     const {
       page = 1,
       pageSize = 10,
@@ -21,7 +21,7 @@ class Articles {
       source,
       status,
       type
-    } = ctx.request.body
+    } = req.body
 
     let whereParams = {} // 定义查询条件
 
@@ -32,20 +32,6 @@ class Articles {
 
     try {
       let { count, rows } = await models.article.findAndCountAll({
-        attributes: [
-          'uid',
-          'aid',
-          'create_date',
-          'content',
-          'title',
-          'excerpt',
-          'source',
-          'status',
-          'type',
-          'read_count',
-          'comment_count',
-          'rejection_reason'
-        ],
         where: whereParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize), // 每页限制返回的数据条数
@@ -68,7 +54,7 @@ class Articles {
         )
       }
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -77,7 +63,7 @@ class Articles {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -88,8 +74,8 @@ class Articles {
    * 更新文章
    * @param   {object} ctx 上下文对象
    */
-  static async editArticle (ctx) {
-    const { aid, status, type, source, rejection_reason } = ctx.request.body
+  static async editArticle (req, res, next) {
+    const { aid, status, type, source, rejection_reason } = req.body
     try {
       await models.article.update(
         {
@@ -104,12 +90,12 @@ class Articles {
           }
         }
       )
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '更新文章成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -122,13 +108,13 @@ class Articles {
    * 删除文章判断是否有文章
    * 无关联则直接删除文章，有关联则开启事务同时删除与文章的关联
    */
-  static async deleteArticle (ctx) {
-    const { aid } = ctx.request.body
+  static async deleteArticle (req, res, next) {
+    const { aid } = req.body
     try {
       let oneArticle = await models.article.findOne({ where: { aid } })
       if (oneArticle) {
         await models.article.destroy({ where: { aid } })
-        resAdminJson(ctx, {
+        resAdminJson(res, {
           state: 'success',
           message: '删除文章成功'
         })
@@ -136,7 +122,7 @@ class Articles {
         throw new ErrorMessage('删除文章失败!')
       }
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

@@ -1,0 +1,14 @@
+User-agent: *
+Disallow: 
+Crawl-delay: 8
+Disallow: /_admin/
+Disallow: /_cli/
+Disallow: /_client/
+Disallow: /default/
+Disallow: /upload/
+Disallow: /sign/
+Disallow: /write/create
+Disallow: /books-write/create
+Disallow: /setting/profile
+Disallow: /setting/reset-password
+Disallow: /subscribe/my

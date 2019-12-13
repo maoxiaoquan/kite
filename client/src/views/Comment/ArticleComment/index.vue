@@ -2,21 +2,23 @@
   <div class="box-comment"
        v-loading="isLoading">
     <div class="box-comment-part"
-         v-if="website.config.on_comment==='yes'">
+         v-if="website.config.on_comment === 'yes'">
       <div class="box-comment-part-title">
         <span>发表评论</span>
         <small>
           已发布评论
-          <em>{{articleComment.count}}</em> 条
+          <em>{{ articleComment.count }}</em> 条
         </small>
         <router-link class="comment-rule"
-                     :to="{'name':'comment_rule'}">《点我查看评论规范》</router-link>
+                     :to="{ name: 'comment_rule' }">《点我查看评论规范》</router-link>
       </div>
       <comment-form @commentChange="commentChange" />
       <div class="comment-list">
         <div id="commentlist">
           <comment-item :comment-item="item"
-                        v-for="(item,key) in articleComment.list"
+                        :comentKey="key"
+                        @deleteComment="deleteComment"
+                        v-for="(item, key) in articleComment.list"
                         :key="key" />
         </div>
 
@@ -33,14 +35,14 @@
 </template>
 
 <script>
-import commentItem from "./CommentItem";
-import { Page } from "@components";
-import commentForm from "./CommentForm";
-import { mapState } from "vuex";
+import commentItem from './CommentItem'
+import { Page } from '@components'
+import commentForm from './CommentForm'
+import { mapState } from 'vuex'
 export default {
-  name: "index",
+  name: 'index',
   created () {
-    this.getCommentList(); // 获取用户的评论
+    this.getCommentList() // 获取用户的评论
   },
   data () {
     return {
@@ -58,14 +60,16 @@ export default {
       // 获取评论列表
       this.isLoading = true
       this.$store
-        .dispatch("articleComment/ARTICLE_COMMENT_LIST", {
+        .dispatch('articleComment/ARTICLE_COMMENT_LIST', {
           aid: this.article.aid,
           page: this.comment_page,
           pageSize: this.comment_pageSize
-        }).then(result => {
+        })
+        .then(result => {
           this.articleComment = result.data
           this.isLoading = false
-        }).catch(() => {
+        })
+        .catch(() => {
           this.isLoading = false
         })
     },
@@ -73,39 +77,37 @@ export default {
       this.articleComment.page = val
       this.getCommentList()
     },
+    deleteComment (key) {
+      this.articleComment.list.splice(key, 1)
+    },
     commentChange (res) {
-      if (res.state === "success") {
-        this.$message.success(res.message);
+      if (res.state === 'success') {
+        this.$message.success(res.message)
         this.articleComment.list.unshift(res.data)
         this.articleComment.count += 1
       } else {
-        this.$message.warning(res.message);
+        this.$message.warning(res.message)
       }
     }
   },
   computed: {
-    ...mapState(["website"]),
-    personalInfo () {
-      // 登录后的个人信息
-      return this.$store.state.personalInfo || {};
-    },
+    ...mapState(['website', 'personalInfo']),
     article () {
-      return this.$store.state.article.article || {};
-    },
+      return this.$store.state.article.article || {}
+    }
   },
   components: {
-    "comment-item": commentItem,
+    'comment-item': commentItem,
     'comment-form': commentForm,
     Page
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
 /*comment-lay start*/
 
 .box-comment {
-  margin-bottom: 100px;
   .box-comment-part {
     margin-top: 60px;
     margin-bottom: 60px;

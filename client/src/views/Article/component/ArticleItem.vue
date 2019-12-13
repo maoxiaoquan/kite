@@ -1,35 +1,31 @@
 <template>
-  <article class="content-box content-box-index">
-    <div class="info-box"
-         v-if="articleItem.aid">
-      <div class="info-row title-row">
-        <router-link class="title"
-                     :to="{name:'article',params:{aid:articleItem.aid}}">{{articleItem.title}}</router-link>
+  <article>
+    <div class="content-box content-box-index">
+      <div class="thumb"
+           v-if="articleItem.cover_img">
+        <div class="RichContent-cover">
+          <div class="RichContent-cover-inner">
+            <img v-lazy="articleItem.cover_img"
+                 alt="cover">
+          </div>
+        </div>
       </div>
+      <div class="info-box"
+           v-if="articleItem.aid">
+        <div class="info-row title-row">
+          <router-link class="title"
+                       :to="{name:'article',params:{aid:articleItem.aid}}">{{articleItem.title}}</router-link>
+        </div>
 
-      <div class="info-row meta-row">
         <ul class="meta-list">
-          <li class="item"
-              v-if="!articleItem.article_blog">
+          <li class="item">
             <router-link :to="{name:'user',params:{uid:articleItem.user.uid,routeType:'article'}}"
                          class="name">{{articleItem.user.nickname}}</router-link>
           </li>
           <li class="item">
             <time>{{articleItem.create_dt}}</time>
           </li>
-          <li class="item item-icon read-count">
-            <i class="el-icon-view"></i>
-            <strong v-text="articleItem.read_count"></strong>
-          </li>
-          <li class="item item-icon like-article">
-            <i class="el-icon-star-off"></i>
-            <strong v-text="articleItem.like_count"></strong>
-          </li>
-          <li class="item item-icon comment-count">
-            <i class="el-icon-chat-dot-round"></i>
-            <strong v-text="articleItem.comment_count"></strong>
-          </li>
-          <li class="item"
+          <li class="item tag-view"
               v-if="articleItem.tag_ids">
             <router-link v-for="(itemTag,key) in articleItem.tag"
                          class="tag-class frontend"
@@ -37,43 +33,78 @@
                          :to="{name:'article_tag',params:{en_name:itemTag.en_name}}">{{itemTag.name}}</router-link>
 
           </li>
-          <li class="item"
-              v-if="String(articleItem.type)==='2'">
-            {{articleTypeList[String(articleItem.type)]}}
-          </li>
         </ul>
-      </div>
 
-      <div class="info-row footer-view"
-           v-if="articleItem.article_blog">
-        <router-link :to="{name:'user',params:{uid:articleItem.user.uid,routeType:'article'}}"
-                     class="avatar">
-          <img v-lazy="articleItem.user.avatar"
-               alt="">
-        </router-link>
-        <router-link :to="{name:'user',params:{uid:articleItem.user.uid,routeType:'article'}}"
-                     class="name">{{articleItem.user.nickname}}</router-link>
-        <span>发布于专栏</span>
-        <router-link class="article-blog"
-                     v-if="articleItem.article_blog"
-                     :to="{name:'articleBlog',params:{blogId:articleItem.article_blog.blog_id}}">
-          {{articleItem.article_blog.name}}
-        </router-link>
-        <span class="article-blog"
-              v-else>正在审核中的专栏</span>
       </div>
-
     </div>
-    <div class="thumb"
-         v-if="articleItem.cover_img">
-      <img class="box-image"
-           v-lazy="articleItem.cover_img"
-           alt="">
+
+    <div class="ContentItem-actions">
+
+      <button type="button"
+              class="Button VoteButton">
+        <i class="el-icon-thumb"></i>
+        <span>赞 ​​{{articleItem.thumb_count}}​</span>
+      </button>
+
+      <button type="button"
+              class="meta-item ContentItem-action">
+        <i class="el-icon-chat-dot-round"></i>
+        <span>​​{{articleItem.comment_count}} 条评论</span>
+      </button>
+
+      <button type="button"
+              class="meta-item ContentItem-action">
+        <i class="el-icon-view"></i>
+        <span>​{{articleItem.read_count}} 阅读</span>
+      </button>
+
+      <button type="button"
+              class="meta-item ContentItem-action">
+        <box-drop>
+          <div class="el-dropdown-link"
+               slot="button">
+            <i class="el-icon-share"></i>
+            <span>​分享</span>
+          </div>
+          <div class="dropdown-menu-view">
+            <div class="dropdown-menu-item"
+                 @click="shareChange({ type: 'qq', data: articleItem })">
+              分享到QQ
+            </div>
+            <div class="dropdown-menu-item"
+                 @click="shareChange({ type: 'sina', data: articleItem })">
+              分享到新浪
+            </div>
+            <div class="dropdown-menu-item"
+                 @click="shareChange({ type: 'qzone', data: articleItem })">
+              分享到QQ空间
+            </div>
+          </div>
+        </box-drop>
+      </button>
+
+      <router-link class="AnnotationTag"
+                   v-if="articleItem.article_blog"
+                   :to="{name:'articleBlog',params:{blogId:articleItem.article_blog.blog_id}}">
+        {{articleItem.article_blog.name}}
+      </router-link>
+
     </div>
   </article>
 </template>
 
 <script>
+import {
+  statusList,
+  articleType,
+  statusListText,
+  articleTypeText
+} from '@utils/constant'
+
+import { Dropdown } from '@components'
+import { share } from '@utils'
+import { mapState } from 'vuex'
+
 export default {
   name: "ArticleItem",
   props: {
@@ -84,13 +115,43 @@ export default {
   },
   data () {
     return {
-      articleTypeList: { // 文章类型列表
-        '1': '文章',
-        '2': '日记',
-        '3': '草稿',
-      },
+      articleTypeList: articleTypeText,
     }
-  }
+  },
+  methods: {
+    shareChange (val) {
+      // 分享到其他
+      let urlOrigin = window.location.origin // 源地址
+      if (val.type === 'sina') {
+        // 新浪
+        share.shareToXl(
+          val.data.title,
+          urlOrigin + '/p/' + val.data.aid,
+          this.website.meta.logo
+        )
+      } else if (val.type === 'qzone') {
+        // qq空间
+        share.shareToQq(
+          val.data.title,
+          urlOrigin + '/p/' + val.data.aid,
+          this.website.meta.logo
+        )
+      } else if (val.type === 'qq') {
+        // qq空间
+        share.shareQQ(
+          val.data.title,
+          urlOrigin + '/p/' + val.data.aid,
+          this.website.meta.logo
+        )
+      }
+    }
+  },
+  components: {
+    'box-drop': Dropdown
+  },
+  computed: {
+    ...mapState(['personalInfo', 'website'])
+  },
 }
 </script>
 
@@ -99,11 +160,6 @@ export default {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  padding: 0.8rem 0;
-  min-height: 5.75rem;
   .info-box {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -117,19 +173,21 @@ export default {
     flex-direction: column;
     -webkit-box-pack: center;
     -ms-flex-pack: center;
-    justify-content: center;
     min-width: 0;
     .title-row {
-      margin: 0.5rem 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      margin-bottom: 10px;
       .title {
-        font-size: 16px;
-        letter-spacing: 1px;
+        color: #1a1a1a;
+        font-size: 18px;
+        line-height: 28px;
+        max-height: 56px;
+        display: -webkit-box;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
         font-weight: 600;
-        line-height: 1.2;
-        color: #333;
+        font-synthesis: style;
       }
     }
     .content-text {
@@ -142,125 +200,93 @@ export default {
       -webkit-line-clamp: 2;
       overflow: hidden;
     }
-    .meta-row {
-      margin-bottom: 5px;
-      .meta-list {
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-align: baseline;
-        -ms-flex-align: baseline;
-        align-items: baseline;
-        white-space: nowrap;
-        .item {
+    .meta-list {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: baseline;
+      -ms-flex-align: baseline;
+      align-items: baseline;
+      white-space: nowrap;
+      .item {
+        display: inline-block;
+        color: #b3bac1;
+        font-size: 12px;
+        &:after {
           display: inline-block;
-          color: #b3bac1;
-          font-size: 12px;
+          content: "\B7";
+          margin: 0 4px;
+          color: #b2bac2;
+        }
+        &:last-of-type {
           &:after {
-            display: inline-block;
-            content: "\B7";
-            margin: 0 4px;
-            color: #b2bac2;
+            content: "";
+          }
+        }
+        a,
+        span {
+          font-size: 12px;
+        }
+        a {
+          color: #b3bac1;
+        }
+        .tag-class {
+          padding: 0.38rem 0;
+          font-size: 12px;
+          text-align: center;
+          line-height: 1;
+          border-radius: 2px;
+          min-width: 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          color: #b3bac1;
+          &:after {
+            content: "/";
+            color: #b3bac1;
+            margin: 0 3px;
           }
           &:last-of-type {
             &:after {
               content: "";
             }
           }
-          a,
-          span {
-            font-size: 12px;
-          }
-          a {
-            color: #b3bac1;
-          }
-          .tag-class {
-            padding: 0.38rem 0;
-            font-size: 12px;
-            text-align: center;
-            line-height: 1;
-            border-radius: 2px;
-            min-width: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: #b3bac1;
-            &:after {
-              content: "/";
-              color: #b3bac1;
-              margin: 0 3px;
-            }
-            &:last-of-type {
-              &:after {
-                content: "";
-              }
-            }
-          }
-        }
-        .item-icon {
-          display: inline-block;
-          font-size: 12px;
-          color: #b4b4b4;
-          &:hover {
-            color: #333;
-          }
-          strong {
-            margin-left: 2px;
-            font-weight: normal;
-          }
-          &.like-article {
-            cursor: pointer;
-          }
-          &.like-article-off {
-            color: #00bb29;
-          }
-        }
-      }
-    }
-    .footer-view {
-      display: flex;
-      align-items: center;
-      span,
-      a {
-        font-size: 12px;
-        display: inline-block;
-        color: #999;
-        margin-right: 10px;
-        line-height: 18px;
-      }
-      .name,
-      .article-blog {
-        color: #009a61;
-      }
-      .avatar {
-        margin-right: 6px;
-        img {
-          width: 26px;
-          height: 26px;
-          border-radius: 52px;
-          overflow: hidden;
         }
       }
     }
   }
   .thumb {
-    position: relative;
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 auto;
-    flex: 0 0 auto;
-    width: 7.5rem;
-    height: 4.5rem;
-    margin-left: 2rem;
-    border-radius: 2px;
-    .box-image {
-      width: 7.5rem;
-      height: 4.5rem;
-      border-radius: 4px;
+    .RichContent-cover {
+      position: relative;
+      width: 190px;
+      height: 105px;
+      margin-top: -2px;
+      margin-right: 18px;
+      margin-bottom: 4px;
+      float: left;
       overflow: hidden;
-      img {
-        width: 100%;
+      background-position: 50%;
+      background-size: cover;
+      border-radius: 4px;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      .RichContent-cover-inner {
+        position: absolute;
+        top: 50%;
+        left: 0;
         height: 100%;
-        border-radius: 4px;
+        width: 100%;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+        overflow: hidden;
+        img {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 100%;
+          -webkit-transform: translate3d(-50%, -50%, 0);
+          transform: translate3d(-50%, -50%, 0);
+        }
       }
     }
   }
@@ -268,24 +294,72 @@ export default {
     padding-left: 0;
     padding-right: 0;
   }
-  &.content-box-index {
-    .thumb {
-      width: 4.5rem;
-      height: 4.5rem;
-      border-radius: 10px;
-      .box-image {
-        width: 4.5rem;
-        height: 4.5rem;
-      }
-    }
-  }
 
-  @media (max-width: 767px) {
+  @media (max-width: 577px) {
     &.content-box-index {
       .thumb {
         display: none;
       }
     }
+  }
+}
+
+.ContentItem-actions {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 10px 20px;
+  margin: 0 -20px -10px;
+  color: #646464;
+  background: #fff;
+  clear: both;
+  .meta-item {
+    display: inline-block;
+    padding: 0 16px;
+    font-size: 14px;
+    line-height: 32px;
+    color: #8590a6;
+    text-align: center;
+    cursor: pointer;
+    background: none;
+    border: 1px solid;
+    border-radius: 3px;
+  }
+
+  .ContentItem-action {
+    margin-left: 24px;
+    font-size: 14px;
+    height: auto;
+    padding: 0;
+    line-height: inherit;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+  }
+
+  .VoteButton {
+    padding: 0 10px;
+    font-size: 14px;
+    color: #b2bac2;
+    border-radius: 1px;
+    border: 1px solid #eaf9e3;
+    color: #74cf59;
+    background: #eaf9e3;
+  }
+  .AnnotationTag {
+    margin-left: auto;
+    padding: 0 12px;
+    max-width: 136px;
+    font-size: 14px;
+    line-height: 30px;
+    background-color: #fd763a21;
+    border-radius: 4px;
+    color: #ff700a;
   }
 }
 </style>

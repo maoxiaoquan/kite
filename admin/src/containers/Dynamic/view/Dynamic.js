@@ -19,6 +19,13 @@ import { withRouter } from 'react-router-dom'
 
 import './Dynamic.scss'
 import { getDynamicList, editDynamic, deleteDynamic } from '../actions'
+import {
+  otherStatusList,
+  otherStatusListText,
+  dynamicType,
+  dynamicTypeText
+} from '../../../utils/constant'
+
 import alert from '../../../utils/alert'
 
 const Option = Select.Option
@@ -70,7 +77,7 @@ class Dynamic extends React.Component {
         key: 'status',
         render: (text, record) => (
           <Tag className="table-article-tag-list" color="red">
-            {this.state.status_list[record.status]}
+            {this.state.otherStatusListText[record.status]}
           </Tag>
         )
       },
@@ -80,7 +87,7 @@ class Dynamic extends React.Component {
         key: 'type',
         render: (text, record) => (
           <Tag className="table-article-tag-list" color="red">
-            {this.state.type_list[record.type]}
+            {this.state.dynamicTypeText[record.type]}
           </Tag>
         )
       },
@@ -92,7 +99,7 @@ class Dynamic extends React.Component {
           <div
             className="img-preview"
             dangerouslySetInnerHTML={{ __html: this.renderAttach(record) }}
-          ></div>
+          />
         )
       },
       {
@@ -111,7 +118,9 @@ class Dynamic extends React.Component {
         key: 'rejection_reason',
         render: (text, record) => (
           <div>
-            {~[3, 4, 5].indexOf(record.status) ? record.rejection_reason : ''}
+            {Number(record.status) === this.state.otherStatusList.reviewFail
+              ? record.rejection_reason
+              : ''}
           </div>
         )
       },
@@ -150,8 +159,10 @@ class Dynamic extends React.Component {
     },
     modal_visible_edit: false,
     loading: false,
-    status_list: ['', '审核中', '审核通过', '审核失败', '无需审核'],
-    type_list: ['', '默认动态', '图片', '连接', '视频'],
+    otherStatusList,
+    otherStatusListText,
+    dynamicType,
+    dynamicTypeText,
     content_val: '',
     status_val: '',
     type_val: '',
@@ -178,13 +189,12 @@ class Dynamic extends React.Component {
 
   renderAttach(item) {
     // 渲染其他
-    if (item.type === 3) {
+    if (item.type === this.state.dynamicType.link) {
       return `<a href="${item.attach}" target="_block">
        ${item.attach}
         </a>`
-    } else if (item.type === 2) {
+    } else if (item.type === this.state.dynamicType.img) {
       let img = ''
-      console.log('this.imgAnalyze(item.attach)', this.imgAnalyze(item.attach))
       this.imgAnalyze(item.attach).map(item => {
         img += `<img src="${item}" alt=""></img>`
       })
@@ -317,8 +327,6 @@ class Dynamic extends React.Component {
   render() {
     const {
       loading,
-      status_list,
-      type_list,
       content_val,
       status_val,
       type_val,
@@ -386,15 +394,11 @@ class Dynamic extends React.Component {
                     }}
                   >
                     <Option value="">全部</Option>
-                    {status_list.map((item, key) =>
-                      item ? (
-                        <Option value={key} key={key}>
-                          {item}
-                        </Option>
-                      ) : (
-                        ''
-                      )
-                    )}
+                    {Object.keys(this.state.otherStatusListText).map(key => (
+                      <Option key={key}>
+                        {this.state.otherStatusListText[key]}
+                      </Option>
+                    ))}
                   </Select>
                 </FormItem>
                 <FormItem label="类型">
@@ -406,29 +410,21 @@ class Dynamic extends React.Component {
                     }}
                   >
                     <Option value="">全部</Option>
-                    {type_list.map((item, key) =>
-                      item ? (
-                        <Option value={key} key={key}>
-                          {item}
-                        </Option>
-                      ) : (
-                        ''
-                      )
-                    )}
+                    {Object.keys(this.state.dynamicTypeText).map(key => (
+                      <Option key={key} value={key}>
+                        {this.state.dynamicTypeText[key]}
+                      </Option>
+                    ))}
                   </Select>
                 </FormItem>
                 <Form.Item>
                   <button
-                    type="primary"
-                    htmlType="submit"
                     className="btn btn-danger"
                     onClick={this.fetchDynamicList}
                   >
                     搜索
                   </button>
                   <button
-                    type="primary"
-                    htmlType="submit"
                     className="btn btn-primary"
                     onClick={this.resetBarFrom}
                   >
@@ -461,14 +457,17 @@ class Dynamic extends React.Component {
                         })
                       }}
                     >
-                      {this.state.status_list.map((item, key) =>
-                        item ? <Option key={key}>{item}</Option> : ''
-                      )}
+                      {Object.keys(this.state.otherStatusListText).map(key => (
+                        <Option key={key}>
+                          {this.state.otherStatusListText[key]}
+                        </Option>
+                      ))}
                     </Select>
                   )}
                 </FormItem>
 
-                {~[3, 4, 5].indexOf(Number(edit_status_val)) ? (
+                {Number(edit_status_val) ===
+                this.state.otherStatusList.reviewFail ? (
                   <FormItem {...formItemLayout} label="拒绝的原因">
                     {getFieldDecorator('rejection_reason', {
                       rules: [
@@ -489,9 +488,11 @@ class Dynamic extends React.Component {
                     rules: [{ required: true, message: '请选择类型！' }]
                   })(
                     <Select placeholder="类型">
-                      {this.state.type_list.map((item, key) =>
-                        item ? <Option key={key}>{item}</Option> : ''
-                      )}
+                      {Object.keys(this.state.dynamicTypeText).map(key => (
+                        <Option key={key} value={key}>
+                          {this.state.dynamicTypeText[key]}
+                        </Option>
+                      ))}
                     </Select>
                   )}
                 </FormItem>

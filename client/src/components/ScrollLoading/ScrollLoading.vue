@@ -66,7 +66,7 @@ export default {
 
 <style scoped lang="scss">
 .loading-data-view {
-  padding: 10px 0;
+  padding: 20px;
   .skeleton {
     display: flex;
     display: -webkit-flex;

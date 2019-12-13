@@ -20,6 +20,12 @@ module.exports = {
       comment: 'parent_id',
       field: 'parent_id'
     },
+    reply_id: {
+      // 评回复评论id
+      type: Seq.BIGINT(20),
+      comment: '回复评论id,和parent_id类似',
+      field: 'reply_id'
+    },
     dynamic_id: {
       // 动态id
       type: Seq.BIGINT(20),
@@ -47,7 +53,7 @@ module.exports = {
     status: {
       // 状态
       type: Seq.INTEGER(5),
-      comment: '状态(1:审核中;2:审核通过;3:审核失败;4:回收站，5:无需审核)',
+      comment: '状态(1:审核中;2:审核通过;3:审核失败;4:无需审核)',
       field: 'status'
     },
     ...time.create_date

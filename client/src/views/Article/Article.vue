@@ -1,34 +1,37 @@
 <template>
-  <section class="article-lay layout-content box-container"
-           id="article-lay">
-    <div class="container-article">
-      <div class="row">
-        <main class="lay-main col-xs-12 col-sm-12 col-md-12"
-              v-if="article.aid">
-          <div class="article-view">
+  <section class="article layout-content container">
+    <div class="article-lay row">
+      <div class="col-xs-12 col-sm-8--4 col-md-8--4">
+
+        <main class="main client-card">
+          <div class="article-view"
+               v-if="article.aid">
             <div class="article-title">
-              <h1>{{article.title }}</h1>
+              <h1>{{ article.title }}</h1>
               <div class="author">
-                <router-link :to="{name:'user',params:{uid:article.user.uid,routeType:'article'}}"
+                <router-link :to="{
+                  name: 'user',
+                  params: { uid: article.user.uid, routeType: 'article' }
+                }"
                              class="avatar">
                   <img v-lazy="article.user.avatar"
                        alt />
                 </router-link>
                 <div class="info">
                   <div class="name">
-                    <router-link :to="{name:'user',params:{uid:article.user.uid,routeType:'article'}}">{{article.user.nickname }}</router-link>
+                    <router-link :to="{
+                      name: 'user',
+                      params: { uid: article.user.uid, routeType: 'article' }
+                    }">{{ article.user.nickname }}</router-link>
                   </div>
                   <!-- 文章数据信息 -->
                   <div class="meta">
-                    <span class="publish-time">{{article.create_dt}}</span>
-                    <span class="views-count">阅读 {{article.read_count}}</span>
-                    <span class="comments-count">评论 {{article.comment_count}}</span>
-                    <span class="likes-count">喜欢 {{article.like_count}}</span>
-                    <span class="source">{{sourceTypeList[article.source]}}</span>
-                    <span class="item"
-                          v-if="String(article.type)==='2'">
-                      {{articleTypeList[String(article.type)]}}
-                    </span>
+                    <span class="publish-time">{{ article.create_dt }}</span>
+                    <span class="views-count">阅读 {{ article.read_count }}</span>
+                    <span class="comments-count">评论 {{ article.comment_count }}</span>
+                    <span class="likes-count">喜欢 {{ article.thumb_count }}</span>
+                    <span class="source">{{ sourceTypeList[article.source] }}
+                      {{ articleTypeList[article.type] }}</span>
                   </div>
                 </div>
               </div>
@@ -42,9 +45,11 @@
 
             <div class="meta-bottom clearfix">
               <div class="meta-bottom-item like"
-                   @click="onUserLikeArticle"
-                   :class="{'active':isCollect(article)}">
-                <i :class="isCollect(article)?'el-icon-star-on':'el-icon-star-off'"></i>
+                   @click="onUserThumbArticle"
+                   :class="{ active: isThumb(article) }">
+                <i :class="
+                  isThumb(article) ? 'el-icon-thumb' : 'el-icon-thumb'
+                "></i>
               </div>
               <div class="meta-bottom-item share">
                 <Dropdown>
@@ -54,15 +59,15 @@
                   </div>
                   <div class="dropdown-menu-view">
                     <div class="dropdown-menu-item"
-                         @click="shareChange({type:'qq',data:article})">
+                         @click="shareChange({ type: 'qq', data: article })">
                       分享到QQ
                     </div>
                     <div class="dropdown-menu-item"
-                         @click="shareChange({type:'sina',data:article})">
+                         @click="shareChange({ type: 'sina', data: article })">
                       分享到新浪
                     </div>
                     <div class="dropdown-menu-item"
-                         @click="shareChange({type:'qzone',data:article})">
+                         @click="shareChange({ type: 'qzone', data: article })">
                       分享到QQ空间
                     </div>
                   </div>
@@ -73,69 +78,78 @@
             <!--文章评论-->
             <ArticleComment />
           </div>
+          <p class="no-aricle"
+             v-else>文章不存在</p>
         </main>
-
-        <main class="lay-main col-xs-12 col-sm-12 col-md-12"
-              v-else>
-          <p class="no-aricle">文章不存在</p>
-        </main>
+      </div>
+      <div class="col-xs-12 col-sm-3--6 col-md-3--6 aside">
+        <ArticleAside />
       </div>
     </div>
   </section>
   <!--home-lay layout-content end-->
-</template> 
+</template>
 
 <script>
-import ArticleComment from "@views/Comment/ArticleComment";
+import ArticleComment from '@views/Comment/ArticleComment'
+import ArticleAside from '@views/Article/component/ArticleAside'
 import { share, baidu, google } from '@utils'
 import { mapState } from 'vuex'
 import googleMixin from '@mixins/google'
 import { Dropdown } from '@components'
+import {
+  statusList,
+  articleType,
+  statusListText,
+  articleTypeText,
+  modelType
+} from '@utils/constant'
 export default {
-  name: "Article",
-  mixins: [googleMixin], //混合谷歌分析 
+  name: 'Article',
+  mixins: [googleMixin], //混合谷歌分析
   metaInfo () {
     return {
-      title: this.article.title || "",
+      title: this.article.title || '',
+      titleTemplate: `%s - ${this.website.meta.website_name || ''}`,
       meta: [
         {
           // set meta
-          name: "description",
-          content: `${this.article.excerpt || ""}`
+          name: 'description',
+          content: `${this.article.excerpt || ''}`
         },
         {
           // og:site_name
-          property: "og:site_name",
+          property: 'og:site_name',
           content: this.website.meta.website_name
         },
         {
           // og:site_name
-          property: "og:image",
+          property: 'og:image',
           content: this.article.cover_img || this.website.meta.logo
         },
         {
           // og:type
-          property: "og:type",
+          property: 'og:type',
           content: `article`
         },
         {
           // og:title
-          property: "og:title",
+          property: 'og:title',
           content: this.article.title
         },
         {
           // og:description
-          property: "og:description",
+          property: 'og:description',
           content: this.article.excerpt
         },
         {
           // og:url
-          property: "og:url",
+          property: 'og:url',
           content: `${this.website.meta.domain_name}/p/${this.article.aid}`
-        },
+        }
       ],
       htmlAttrs: {
-        lang: "zh"
+        lang: 'zh'
       },
       script: [
         ...baidu.resource({
@@ -144,39 +158,39 @@ export default {
           random: this.article.aid
         }),
         ...google.statisticsCode({
-          route: this.$route, googleCode: this.website.config.googleCode, random: this.$route.params.blogId
+          route: this.$route,
+          googleCode: this.website.config.googleCode,
+          random: this.$route.params.blogId
         })
       ],
       __dangerouslyDisableSanitizers: ['script']
-    };
+    }
   },
   asyncData ({ store, route }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
-      store.dispatch("article/GET_ARTICLE", { aid: route.params.aid })
-    ]);
+      store.dispatch('article/GET_ARTICLE', { aid: route.params.aid })
+    ])
   },
   data () {
     return {
-      sourceTypeList: ["", "原创", "转载"],
-      articleTypeList: { // 文章类型列表
-        '1': '文章',
-        '2': '日记',
-        '3': '草稿',
-      },
-    };
+      sourceTypeList: ['', '原创', '转载'],
+      articleTypeList: articleTypeText
+    }
   },
   methods: {
     getArticle () {
-      this.$store.dispatch("article/GET_ARTICLE", { aid: this.$route.params.aid })
+      this.$store.dispatch('article/GET_ARTICLE', {
+        aid: this.$route.params.aid
+      })
     },
-    isCollect (item) { // 是否收藏
-      let likeUserIds = []
-      if (item.likeUserIds && item.likeUserIds.length > 0) {
-        item.likeUserIds.map(item => {
-          likeUserIds.push(Number(item.uid))
-        })
-        if (~likeUserIds.indexOf(Number(this.personalInfo.user.uid))) {
+    isThumb (item) {
+      // 是否收藏
+      if (this.personalInfo.islogin) {
+        if (
+          this.user.associateInfo.articleThumdId &&
+          ~this.user.associateInfo.articleThumdId.indexOf(item.aid)
+        ) {
           return true
         } else {
           return false
@@ -185,62 +199,83 @@ export default {
         return false
       }
     },
-    onUserLikeArticle () {
+    onUserThumbArticle () {
       /*用户like 文章*/
       this.$store
-        .dispatch("user/USER_LIKE_ARTICLE", {
-          aid: this.article.aid,
-          uid: this.article.uid
+        .dispatch('common/SET_THUMB', {
+          associate_id: this.article.aid,
+          type: modelType.article
         })
         .then(result => {
-          if (result.state === "success") {
-            this.getArticle()
+          if (result.state === 'success') {
+            this.$store.dispatch('user/GET_ASSOCIATE_INFO')
           } else {
-            this.$message.warning(result.message);
+            this.$message.warning(result.message)
           }
         })
         .catch(err => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
-    shareChange (val) { // 分享到其他
+    shareChange (val) {
+      // 分享到其他
       let urlOrigin = window.location.origin // 源地址
-      if (val.type === 'sina') { // 新浪
-        share.shareToXl(val.data.title, urlOrigin + '/p/' + val.data.aid, this.website.meta.logo)
-      } else if (val.type === 'qzone') { // qq空间
-        share.shareToQq(val.data.title, urlOrigin + '/p/' + val.data.aid, this.website.meta.logo)
-      } else if (val.type === 'qq') { // qq空间
-        share.shareQQ(val.data.title, urlOrigin + '/p/' + val.data.aid, this.website.meta.logo)
+      if (val.type === 'sina') {
+        // 新浪
+        share.shareToXl(
+          val.data.title,
+          urlOrigin + '/p/' + val.data.aid,
+          this.website.meta.logo
+        )
+      } else if (val.type === 'qzone') {
+        // qq空间
+        share.shareToQq(
+          val.data.title,
+          urlOrigin + '/p/' + val.data.aid,
+          this.website.meta.logo
+        )
+      } else if (val.type === 'qq') {
+        // qq空间
+        share.shareQQ(
+          val.data.title,
+          urlOrigin + '/p/' + val.data.aid,
+          this.website.meta.logo
+        )
       }
     }
   },
   computed: {
     article () {
-      return this.$store.state.article.article || {};
+      return this.$store.state.article.article || {}
     },
-    ...mapState(['website', 'personalInfo'])
+    ...mapState(['website', 'personalInfo', 'user'])
   },
   components: {
     ArticleComment,
-    Dropdown
+    Dropdown,
+    ArticleAside
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
-.article-lay.layout-content {
-  .lay-main {
+.article.layout-content {
+  margin-bottom: 12px;
+  .main {
+    width: 100%;
+    flex: 1;
+    padding: 30px;
     .article-view {
       .article-title {
         margin-bottom: 40px;
         > h1 {
           text-align: left;
           max-width: 100%;
-          margin-top: 30px;
-          margin-bottom: 20px;
+          margin-top: 15px;
+          margin-bottom: 10px;
           position: static;
           color: #48494d;
-          font-size: 34px;
+          font-size: 28px;
           font-weight: 700;
           line-height: 1.3;
         }

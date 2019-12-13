@@ -25,8 +25,8 @@ class AdminUsers {
    * 登录操作
    * @param  {object} ctx 上下文对象
    */
-  static async adminSignIn (ctx) {
-    let { account, password } = ctx.request.body
+  static async adminSignIn (req, res, next) {
+    let { account, password } = req.body
     try {
       const oneAdminUser = await models.admin_user.findOne({
         where: { account }
@@ -57,14 +57,14 @@ class AdminUsers {
         role_id: oneAdminUser ? oneAdminUser.admin_role_ids : ''
       }
       let token = tokens.AdminSetToken(60 * 60 * 24 * 7, datas)
-      resSignJson(ctx, {
+      resSignJson(res, {
         state: 'success',
         message: '登录成功',
         token
       })
     } catch (err) {
       resSignJson(
-        ctx,
+        res,
         {
           state: 'error',
           message: '错误信息：' + err.message
@@ -79,8 +79,8 @@ class AdminUsers {
    * 注册操作
    * @param   {object} ctx 上下文对象
    */
-  static async createAdminUser (ctx) {
-    const reqData = ctx.request.body
+  static async createAdminUser (req, res, next) {
+    const reqData = req.body
 
     try {
       if (!reqData.account) {
@@ -120,15 +120,15 @@ class AdminUsers {
           .utc()
           .utcOffset(+8)
           .format('X'),
-        reg_ip: ctx.request.ip,
+        reg_ip: req.ip,
         enable: reqData.enable || false
       })
-      await resAdminJson(ctx, {
+      await resAdminJson(res, {
         state: 'success',
         message: '注册成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -140,8 +140,8 @@ class AdminUsers {
    * 更新管理员用户
    * @param   {object} ctx 上下文对象
    */
-  static async editAdminUser (ctx) {
-    const reqData = ctx.request.body
+  static async editAdminUser (req, res, next) {
+    const reqData = req.body
     try {
       await models.admin_user.update(
         {
@@ -158,12 +158,12 @@ class AdminUsers {
           }
         }
       )
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '更新成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -175,8 +175,8 @@ class AdminUsers {
    * 获取用户列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async getAdminUserList (ctx) {
-    const { page = 1, pageSize = 10 } = ctx.query
+  static async getAdminUserList (req, res, next) {
+    const { page = 1, pageSize = 10 } = req.query
     try {
       let { count, rows } = await models.admin_user.findAndCountAll({
         attributes: [
@@ -194,7 +194,7 @@ class AdminUsers {
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize) // 每页限制返回的数据条数
       })
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -203,7 +203,7 @@ class AdminUsers {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -215,8 +215,8 @@ class AdminUsers {
    * 获取后台用户信息
    * @param   {object} ctx 上下文对象
    */
-  static async getAdminUserInfo (ctx) {
-    const { userInfo = {} } = ctx.request
+  static async getAdminUserInfo (req, res, next) {
+    const { userInfo = {} } = req
     try {
       const { role_id } = userInfo
 
@@ -258,7 +258,7 @@ class AdminUsers {
         ]
       })
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -268,7 +268,7 @@ class AdminUsers {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: err.message
       })
@@ -283,24 +283,24 @@ class AdminUsers {
    * 无关联则直接管理员删除，有关联则开启事务同时删除管理员角色关联表中关联
    * 管理员对角色是一对一的关系
    */
-  static async deleteAdminUser (ctx) {
-    const { uid } = ctx.request.body
+  static async deleteAdminUser (req, res, next) {
+    const { uid } = req.body
     /* 无关联 */
     try {
       await models.admin_user.destroy({ where: { uid } })
       await createAdminSystemLog({
         // 写入日志
-        uid: ctx.request.userInfo.uid,
+        uid: req.userInfo.uid,
         type: 3,
         content: `成功删了了id为‘${uid}’的管理员`
       })
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '删除管理员用户成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: err.message
       })

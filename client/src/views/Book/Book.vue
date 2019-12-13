@@ -12,10 +12,14 @@
                 <div class="title-line">
                   <a href="javascript:;"
                      class="title">
-                    <span>{{books.booksInfo.title}}</span>
+                    {{books.booksInfo.title}}
+                    <span class="free"
+                          :class="Number(books.booksInfo.is_free)===isFree.free?'yes':''">{{isFreeText[books.booksInfo.is_free]}}</span>
+                    <span class="price"
+                          v-if="Number(books.booksInfo.is_free)!==isFree.free">￥{{books.booksInfo.price}} {{payTypeText[books.booksInfo.pay_type]}}</span>
                   </a>
                   <span class="attention"
-                        v-if="~[2,4].indexOf(books.booksInfo.status)&&personalInfo.islogin"
+                        v-if="~[statusList.reviewSuccess,statusList.freeReview].indexOf(books.booksInfo.status)&&personalInfo.islogin"
                         @click="collectBooks(books.booksInfo.books_id)"
                         :class="{'active':isCollect(books.booksInfo).status}">{{isCollect(books.booksInfo).text}}</span>
                 </div>
@@ -36,16 +40,25 @@
                   </div>
                 </div>
                 <div class="other">
-                  <button class="btn button-look"
+                  <button v-if="books.booksInfo.is_free===isFree.free||books.booksInfo.user.uid===personalInfo.user.uid"
+                          class="btn button-look"
                           @click="lookChapter"> 查看</button>
-                  <router-link v-if="personalInfo.islogin"
+                  <template v-else>
+                    <button class="btn button-look"
+                            @click="trialRead">{{books.booksInfo.isBuy?'阅读':'试读'}} </button>
+                    <button class="btn button-look"
+                            v-if="!books.booksInfo.isBuy"
+                            @click="onBuy"> 购买 </button>
+                  </template>
+                  <router-link v-if="personalInfo.islogin&&personalInfo.user.uid===books.booksInfo.user.uid"
                                :to="{ name: 'booksWrite', params: { type: 'update' }, query: { books_id: books.booksInfo.books_id }}"
                                class="btn button-update"
-                               @click="lookChapter"> 修改</router-link>
+                               @click="lookChapter">修改</router-link>
                 </div>
               </div>
             </div>
           </div>
+
           <div class="client-card">
             <div class="book-menu-wrap">
               <div class="book-menu">
@@ -77,6 +90,27 @@
 
     </div>
 
+    <Dialog :visible.sync="isBuyBooksDialog"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            width="380px">
+      <div class="buy-books-view"
+           v-loading="isBuyLoading">
+        <h3 class="title">购买信息确认</h3>
+        <ul>
+          <li class="p-name">商品名称：<em>{{books.booksInfo.title}}</em></li>
+          <li class="p-pay-type">支付方式：<em>{{payTypeText[books.booksInfo.pay_type]}}</em></li>
+          <li class="p-pay-price">价格：<em>￥{{books.booksInfo.price}}</em> </li>
+        </ul>
+        <div class="footer-view">
+          <button class="btn btn-buy"
+                  @click="enterBuy">确认购买</button>
+          <button class="btn btn-cancel"
+                  @click="isBuyBooksDialog=false">取消</button>
+        </div>
+      </div>
+    </Dialog>
+
   </div>
 </template>
 
@@ -85,9 +119,19 @@ import websiteNotice from '@views/Parts/websiteNotice'
 import BookList from './component/BookList'
 import BookInfo from './component/BookInfo'
 import BookComment from './component/BookComment'
+import { Dialog } from '@components'
 import { mapState } from 'vuex'
 import { share, baidu, google } from '@utils'
 import googleMixin from '@mixins/google'
+import {
+  statusList,
+  statusListText,
+  payTypeText,
+  isFree,
+  isFreeText,
+  productType,
+  modelType
+} from '@utils/constant'
 
 export default {
   name: "NavSort",
@@ -95,6 +139,7 @@ export default {
   metaInfo () {
     return {
       title: this.books.booksInfo.title || "",
+      titleTemplate: `%s - ${this.website.meta.website_name || ''}`,
       meta: [
         {
           // set meta
@@ -150,13 +195,21 @@ export default {
   },
   data () {
     return {
-      currentType: "BookList"
+      currentType: "BookList",
+      isFree,
+      isFreeText,
+      statusList,
+      statusListText,
+      payTypeText,
+      productType,
+      isBuyLoading: false,
+      isBuyBooksDialog: false // 是否开启购买按钮
     };
   },
-  asyncData ({ store, route }) {
+  asyncData ({ store, route, accessToken = '' }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
-      store.dispatch("books/GET_BOOKS_INFO", { books_id: route.params.books_id, type: 'look' }),
+      store.dispatch("books/GET_BOOKS_INFO", { books_id: route.params.books_id, type: 'look', accessToken }),
     ]);
   },
   mounted () {
@@ -164,8 +217,13 @@ export default {
   },
   methods: {
     collectBooks (books_id) { // 用户收藏小书
-      this.$store.dispatch('books/COLLECT_BOOKS', {
-        books_id,
+      if (!this.personalInfo.islogin) {
+        this.$message.warning('请先登录，再继续操作');
+        return false
+      }
+      this.$store.dispatch('common/SET_COLLECT', {
+        associate_id: books_id,
+        type: modelType.books
       })
         .then(result => {
           if (result.state === 'success') {
@@ -175,6 +233,37 @@ export default {
             this.$message.warning(result.message);
           }
         })
+    },
+    onBuy () { // 
+      if (!this.personalInfo.islogin) {
+        this.$message.warning('请先登录，再继续操作');
+        return false
+      }
+      this.isBuyBooksDialog = true
+    },
+    enterBuy () {
+      if (!this.personalInfo.islogin) {
+        this.$message.warning('请先登录，再继续操作');
+        return false
+      }
+      if (this.books.booksBookAll.length < 1) {
+        this.$message.warning('当前章节为空,无法购买')
+        return false
+      }
+      this.isBuyLoading = true
+      this.$store.dispatch('shop/BUY', {
+        product_id: this.books.booksInfo.books_id,
+        product_type: this.productType.books
+      }).then(result => {
+        this.isBuyLoading = false
+        if (result.state === 'success') {
+          this.isBuyBooksDialog = false
+          this.$router.push({ name: 'myOrder' })
+          this.$message.success(result.message);
+        } else {
+          this.$message.warning(result.message);
+        }
+      })
     },
     isCollect (item) { // 是否收藏
       let collectUserIds = []
@@ -200,6 +289,17 @@ export default {
         }
       }
     },
+    trialRead () {
+      if (this.books.booksInfo.isBuy) {
+        this.lookChapter()
+      } else {
+        if (this.books.booksInfo.trialReadCount > 0) {
+          this.lookChapter()
+        } else {
+          this.$message.warning('当前小书无可试读章节');
+        }
+      }
+    },
     lookChapter () {
       if (this.books.booksBookAll.length > 0) {
         this.$router.push({ name: 'BookView', params: { books_id: this.$route.params.books_id, book_id: this.books.booksBookAll[0].book_id } })
@@ -215,13 +315,59 @@ export default {
     websiteNotice,
     BookList,
     BookInfo,
-    BookComment
+    BookComment,
+    Dialog
   }
 };
 </script>
 
 <style scoped lang="scss">
+.buy-books-view {
+  .title {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 15px;
+  }
+  ul {
+    li {
+      text-align: center;
+      line-height: 30px;
+    }
+    .p-name {
+      em {
+        color: #333;
+        font-weight: bold;
+      }
+    }
+    .p-pay-type {
+      em {
+        color: #e67e7e;
+        font-weight: bold;
+      }
+    }
+    .p-pay-price {
+      em {
+        color: #e67e7e;
+        font-weight: bold;
+      }
+    }
+  }
+  .footer-view {
+    padding-top: 15px;
+    text-align: center;
+    .btn {
+      font-size: 14px;
+    }
+    .btn-buy {
+      background: #e67e7e;
+    }
+  }
+}
 .book-view {
+  .client-card {
+    margin-bottom: 10px;
+  }
   .book-info {
     padding: 20px;
     .poster {
@@ -240,6 +386,27 @@ export default {
           font-size: 18px;
           font-weight: 700;
           color: #333;
+          .free {
+            font-size: 12px;
+            background: #fd763a;
+            border-radius: 3px;
+            line-height: 18px;
+            color: #fff;
+            padding: 1px 3px;
+            display: inline-block;
+            &.yes {
+              background: #41b883;
+            }
+          }
+          .price {
+            font-size: 12px;
+            background: #fd763a;
+            border-radius: 3px;
+            line-height: 18px;
+            color: #fff;
+            padding: 1px 3px;
+            display: inline-block;
+          }
         }
         .attention {
           cursor: pointer;
@@ -249,8 +416,8 @@ export default {
           color: #333;
           border-radius: 3px;
           border: 1px solid #e0e0e0;
-          line-height: 12px;
-          padding: 2px 3px;
+          line-height: 18px;
+          padding: 1px 8px;
           &.active {
             color: #fff;
             background: #41b883;

@@ -13,8 +13,8 @@ class Book {
    * 获取用户列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async getBookList (ctx) {
-    const { page = 1, pageSize = 10, title, status } = ctx.request.body
+  static async getBookList (req, res, next) {
+    const { page = 1, pageSize = 10, title, status } = req.body
 
     let whereParams = {} // 定义查询条件
 
@@ -65,7 +65,7 @@ class Book {
         )
       }
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -74,7 +74,7 @@ class Book {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -85,8 +85,8 @@ class Book {
    * 更新小书章节
    * @param   {object} ctx 上下文对象
    */
-  static async updateBook (ctx) {
-    const { book_id, status, rejection_reason } = ctx.request.body
+  static async updateBook (req, res, next) {
+    const { book_id, status, rejection_reason } = req.body
     try {
       await models.book.update(
         {
@@ -99,12 +99,12 @@ class Book {
           }
         }
       )
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '更新小书章节成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -117,13 +117,13 @@ class Book {
    * 删除小书章节判断是否有小书章节
    * 无关联则直接删除小书章节，有关联则开启事务同时删除与小书章节的关联
    */
-  static async deleteBook (ctx) {
-    const { book_id } = ctx.request.body
+  static async deleteBook (req, res, next) {
+    const { book_id } = req.body
     try {
       let oneBook = await models.book.findOne({ where: { book_id } })
       if (oneBook) {
         await models.book.destroy({ where: { book_id } })
-        resAdminJson(ctx, {
+        resAdminJson(res, {
           state: 'success',
           message: '删除小书章节成功'
         })
@@ -131,7 +131,7 @@ class Book {
         throw new ErrorMessage('删除小书章节失败!')
       }
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

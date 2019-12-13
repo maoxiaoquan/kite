@@ -6,23 +6,39 @@
     <div class="v-note-op"
          v-show="toolbarsFlag"
          :style="{'background': toolbarsBackground}">
-      <mdHeader ref="toolbar_left"
-                :editable="editable"
-                :transition="transition"
-                :d_words="d_words"
-                @toolbar_left_click="toolbar_left_click"
-                @toolbar_left_addlink="toolbar_left_addlink"
-                :toolbars="toolbars"
-                @imgAdd="$imgAdd"
-                @imgDel="$imgDel"
-                @imgTouch="$imgTouch"
-                :image_filter="imageFilter"
-                :class="{'transition': transition}">
+      <mdToolbarleft ref="toolbar_left"
+                     :editable="editable"
+                     :transition="transition"
+                     :d_words="d_words"
+                     @toolbar_left_click="toolbar_left_click"
+                     @toolbar_left_addlink="toolbar_left_addlink"
+                     :toolbars="toolbars"
+                     @imgAdd="$imgAdd"
+                     @imgDel="$imgDel"
+                     @imgTouch="$imgTouch"
+                     :image_filter="imageFilter"
+                     :class="{'transition': transition}">
         <slot name="left-toolbar-before"
               slot="left-toolbar-before" />
         <slot name="left-toolbar-after"
               slot="left-toolbar-after" />
-      </mdHeader>
+      </mdToolbarleft>
+
+      <mdToolbarRight ref="toolbar_right"
+                      :d_words="d_words"
+                      @toolbar_right_click="toolbar_right_click"
+                      :toolbars="toolbars"
+                      :s_subfield="s_subfield"
+                      :s_preview_switch="s_preview_switch"
+                      :s_fullScreen="s_fullScreen"
+                      :s_html_code="s_html_code"
+                      :s_navigation="s_navigation"
+                      :class="{'transition': transition}">
+        <slot name="right-toolbar-before"
+              slot="right-toolbar-before" />
+        <slot name="right-toolbar-after"
+              slot="right-toolbar-after" />
+      </mdToolbarRight>
 
     </div>
     <!--编辑展示区域-->
@@ -46,14 +62,45 @@
                        :style="{'background-color': editorBackground}"></autoTextara>
         </div>
       </div>
+
+      <!--展示区-->
+      <div :class="{'single-show': (!s_subfield && s_preview_switch) || (!s_subfield && s_html_code)}"
+           v-show="s_preview_switch || s_html_code"
+           class="v-note-show">
+        <div ref="vShowContent"
+             v-html="d_render"
+             v-show="!s_html_code"
+             :class="{'scroll-style': s_scrollStyle, 'scroll-style-border-radius': s_scrollStyle}"
+             class="v-show-content"
+             :style="{'background-color': previewBackground}">
+        </div>
+        <div v-show="s_html_code"
+             :class="{'scroll-style': s_scrollStyle, 'scroll-style-border-radius': s_scrollStyle}"
+             class="v-show-content-html"
+             :style="{'background-color': previewBackground}">
+          {{d_render}}
+        </div>
+      </div>
+
+    </div>
+
+    <!--阅读模式-->
+    <div :class="{'show': s_readmodel}"
+         class="v-note-read-model scroll-style"
+         ref="vReadModel">
+      <div ref="vNoteReadContent"
+           class="v-note-read-content"
+           v-html="d_render">
+      </div>
     </div>
 
   </div>
 </template> 
 
 <script>
-import mdHeader from './components/mdHeader'
-import { toolbar_left_click, toolbar_left_addlink } from './libs/toobar.js'
+import mdToolbarleft from './components/md-toolbar-left'
+import mdToolbarRight from './components/md-toolbar-right'
+import { toolbar_left_click, toolbar_left_addlink, toolbar_right_click } from './libs/toobar.js'
 import {
   fullscreenchange,
   /* windowResize, */
@@ -74,6 +121,7 @@ import autoTextara from './components/auto-textarea'
 import lang from './libs/lang'
 import { CONFIG } from './libs/config.js'
 import "./libs/css/fontello.css"
+import marked from 'marked'
 import markdown from './libs/mixins/markdown.js'
 export default {
   name: 'MarkDown',
@@ -107,6 +155,10 @@ export default {
       type: String,
       default: null
     },
+    navigation: {
+      type: Boolean,
+      default: false
+    },
     fontSize: { // 字体大小
       type: String,
       default: '15px'
@@ -116,6 +168,10 @@ export default {
       default () {
         return CONFIG.toolbars
       }
+    },
+    previewBackground: { // 预览栏背景色
+      type: String,
+      default: '#fbfbfb'
     },
     toolbarsBackground: { // 工具栏背景色
       type: String,
@@ -145,15 +201,20 @@ export default {
       s_subfield: (() => {
         return this.subfield;
       })(),
+      s_navigation: (() => {
+        return this.navigation;
+      })(),
       s_scrollStyle: (() => {
         return this.scrollStyle
       })(),// props 是否渲染滚动条样式
+      s_readmodel: false,
       d_history: (() => {
         let temp_array = []
         temp_array.push(this.value)
         return temp_array;
       })(), // 编辑记录
       d_history_index: 0, // 编辑记录索引
+      d_render: '', // props 文本内容render
       s_preview_switch: (() => {
         let default_open_ = this.defaultOpen;
         if (!default_open_) {
@@ -207,6 +268,7 @@ export default {
     iRender () {
       var $vm = this;
       $vm.$render($vm.d_value, function (res) {
+        console.log('res', res)
         // render
         $vm.d_render = res;
         // change回调
@@ -302,9 +364,13 @@ export default {
     toolbar_left_click (_type) {
       toolbar_left_click(_type, this);
     },
+    toolbar_right_click (_type) {
+      toolbar_right_click(_type, this);
+    },
   },
   components: {
-    mdHeader,
+    mdToolbarleft,
+    mdToolbarRight,
     autoTextara
   }
 }

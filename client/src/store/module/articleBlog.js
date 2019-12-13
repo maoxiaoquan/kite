@@ -36,17 +36,6 @@ const mutations = {
 }
 
 const actions = {
-  GET_ARTICLE_BLOG_LIST ({ commit, dispatch, state }, parameter) {
-    // 获取文章
-    return fetch({
-      url: '/article-blog/list',
-      method: 'get',
-      parameter: { params: parameter }
-    }).then(result => {
-      commit('SET_ARTICLE_BLOG_LIST', result.data)
-      return result
-    })
-  },
   UPLOAD_ARTICLE_BLOG_IMG ({ commit, dispatch, state }, parameter) {
     // 上传用户头像
     return fetch({
@@ -75,14 +64,6 @@ const actions = {
     }).then(result => {
       commit('SET_ARTICLE_BLOG_ARTICLE_LIST', result.data)
       return result
-    })
-  },
-  LIKE_ARTICLE_BLOG ({ commit, dispatch, state }, parameter) {
-    // 个人专栏like
-    return fetch({
-      url: '/article-blog/like',
-      method: 'post',
-      parameter
     })
   },
   GET_LIKE_ARTICLE_BLOG_LIST ({ commit, dispatch, state }, parameter) {

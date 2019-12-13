@@ -98,7 +98,16 @@
                   <button class="btn btn-look"
                           v-if="$route.params.book_id!=='create'"
                           @click="lookChapter(editDataInfo.book_id)">查看演示</button>
-
+                  <div class="trial-read"
+                       v-if="books.booksInfo.is_free===isFree.pay">
+                    <label for="">开启试读：</label>
+                    <select class="trial-read-select"
+                            v-model="write.trial_read">
+                      <option :value="key"
+                              v-for="(item,key) in  trialReadText"
+                              :key="key">{{item}}</option>
+                    </select>
+                  </div>
                   <button class="btn btn-delete"
                           v-if="$route.params.book_id!=='create'"
                           @click="deleteChapter(editDataInfo.book_id)"><i class="el-icon-delete"></i></button>
@@ -136,6 +145,11 @@ import marked from "marked";
 import { mapState } from 'vuex'
 import { baidu, google } from '@utils'
 import googleMixin from '@mixins/google'
+import {
+  trialRead,
+  trialReadText,
+  isFree
+} from '@utils/constant'
 
 export default {
   name: "WriteBookView",
@@ -166,7 +180,7 @@ export default {
     return Promise.all([
       store.dispatch("PERSONAL_INFO", { accessToken }),
       store.dispatch('website/GET_WEBSITE_INFO'),
-      store.dispatch("books/GET_BOOKS_INFO", { books_id: route.params.books_id, type: 'info' }),
+      store.dispatch("books/GET_BOOKS_INFO", { books_id: route.params.books_id, type: 'info', accessToken }),
     ]);
   },
   created () {
@@ -179,10 +193,14 @@ export default {
   data () {
     return {
       currentWriteType: '',
+      trialRead,
+      trialReadText,
+      isFree,
       write: {
         title: "",
         content: "",
-        sort: 0
+        sort: 0,
+        trial_read: 1
       },
       isShowAside: true, // 是否显示侧栏
       toolbars: {
@@ -200,13 +218,11 @@ export default {
         code: true, // code
         subfield: true, // 是否需要分栏
         fullscreen: true, // 全屏编辑
-        readmodel: true, // 沉浸式阅读
         /* 1.3.5 */
         undo: true, // 上一步
         trash: true, // 清空
         save: false, // 保存（触发events中的save事件）
         /* 1.4.2 */
-        navigation: true // 导航目录
       },
       editDataInfo: {} // 修改小书的信息
     };
@@ -323,6 +339,7 @@ export default {
       var params = {
         books_id: this.$route.params.books_id,
         title: this.write.title, //小书的标题
+        trial_read: this.write.trial_read,
         content: marked(this.write.content, { breaks: true }) /*主内容*/,
         origin_content: this.write.content, /*源内容*/
         sort: this.write.sort
@@ -684,6 +701,18 @@ export default {
                 transition: all 0.3s ease;
                 background: #fff;
                 float: right;
+              }
+              .trial-read {
+                display: inline-block;
+                margin-left: 15px;
+                label {
+                  font-size: 14px;
+                }
+                .trial-read-select {
+                  width: 100px;
+                  height: 35px;
+                  vertical-align: middle;
+                }
               }
             }
             .content-edit {

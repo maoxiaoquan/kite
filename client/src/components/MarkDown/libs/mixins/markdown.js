@@ -1,5 +1,5 @@
 import { loadScript } from '../core/extra-function.js'
-
+import marked from 'marked'
 var needLangs = []
 
 export default {
@@ -7,7 +7,7 @@ export default {
     $render (src, func) {
       var $vm = this
       needLangs = []
-      var res = src
+      var res = marked(src, { breaks: true })
       if (this.ishljs) {
         if (needLangs.length > 0) {
           $vm.$_render(src, func, res)

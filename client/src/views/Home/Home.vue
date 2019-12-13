@@ -3,16 +3,15 @@
        id="index">
     <div class="index-container">
       <div class="row">
-        <div class="home-col-left col-xs-12 col-sm-8 col-md-8">
+        <div class="col-xs-12 col-sm-8--4 col-md-8--4">
           <!--home-lay layout-content start-->
-          <section class="layout-content">
+          <section class="home-main  layout-content client-card">
             <NavHeader :navItem="articleColumn.homeColumn" />
 
             <NavSort @navTap="navTap"
                      ref="navSort"></NavSort>
 
-            <div class="article-view"
-                 id="article-view">
+            <div class="article-view">
               <scroll-loading @scroll-loading="infiniteHandler"
                               :isLoading="isLoading"
                               :isMore="isMore">
@@ -26,9 +25,11 @@
           </section>
           <!--home-lay layout-content end-->
         </div>
-        <div class="home-col-right col-xs-12 col-sm-4 col-md-4">
+        <div class="col-xs-12 col-sm-3--6 col-md-3--6">
           <!--aside.html start-->
-          <HomeAside />
+          <div class="home-aside">
+            <HomeAside />
+          </div>
           <!--aside.html end-->
         </div>
       </div>
@@ -190,12 +191,6 @@ export default {
 
 <style scoped lang="scss">
 .home-lay {
-  .home-col-left {
-    padding-right: 38px;
-  }
-  .home-col-right {
-    padding-left: 38px;
-  }
   .main-top {
     width: 100%;
     padding: 15px 20px;
@@ -217,19 +212,9 @@ export default {
     border-radius: 2px;
     .article-view {
       /deep/ .article-item {
+        padding: 20px;
         border-bottom: 1px solid rgba(178, 186, 194, 0.15);
       }
-    }
-  }
-}
-
-@media (max-width: 575px) {
-  .home-lay {
-    .home-col-left {
-      padding-right: 15px;
-    }
-    .home-col-right {
-      padding-left: 15px;
     }
   }
 }

@@ -4,25 +4,25 @@
          v-if="personalInfo.islogin">
       <div class="profile">
         <a href="javascript:;">
-          <img v-lazy="userInfo.user.avatar"
+          <img v-lazy="user.user.avatar"
                class="avatar"
                alt="">
         </a>
         <div class="user-info">
-          <a class="username ellipsis">{{userInfo.user.nickname}}</a>
-          <div class="position ellipsis">{{userInfo.user.nickname}}</div>
+          <a class="username ellipsis">{{user.user.nickname}}</a>
+          <div class="position ellipsis">{{user.user.nickname}}</div>
         </div>
       </div>
       <ul class="stat-list">
         <a class="item">
           <div class="title">片刻</div>
-          <div class="count">{{userInfo.dynamicCount}}</div>
+          <div class="count">{{user.dynamicCount}}</div>
         </a><a class="item">
           <div class="title">关注</div>
-          <div class="count">{{userInfo.userAttentionCount}}</div>
+          <div class="count">{{user.userAttentionCount}}</div>
         </a><a class="item">
           <div class="title">关注者</div>
-          <div class="count">{{userInfo.otherUserAttentionCount}}</div>
+          <div class="count">{{user.otherUserAttentionCount}}</div>
         </a>
       </ul>
     </div>
@@ -38,7 +38,7 @@
             <div class="content-box">
               <div class="content"
                    v-html="contentRender(item.content)"></div>
-              <div class="stat item"><span>{{item.like_count}} 赞 · </span><span>{{item.comment_count}} 评论</span></div>
+              <div class="stat item"><span>{{item.thumb_count}} 赞 · </span><span>{{item.comment_count}} 评论</span></div>
             </div>
 
           </router-link>
@@ -105,14 +105,11 @@ export default {
       return content;
     },
     isRssDynamicTopic (item) {
-      return ~this.user.user_info.allRssDynamicTopicId.indexOf(item.topic_id)
+      return ~this.user.allRssDynamicTopicId.indexOf(item.topic_id)
     },
   },
   computed: {
     ...mapState(["personalInfo", "dynamic", "website", "user"]), // home:主页  article_column:文章的专栏
-    userInfo () {
-      return this.user.user_info
-    }
   }
 }
 </script>
@@ -121,10 +118,8 @@ export default {
 .profile-box {
   display: flex;
   flex-direction: column;
-  background: #f8f8f8;
-  border-radius: 6px;
   overflow: hidden;
-
+  margin-bottom: 10px;
   font-size: 13px;
   .profile {
     display: flex;
@@ -188,10 +183,9 @@ export default {
 }
 
 .related-dynamic-block {
-  background: #f8f8f8;
-
   overflow: hidden;
   padding: 22px;
+  margin-bottom: 10px;
   .title {
     font-size: 16px;
     line-height: 28px;
@@ -208,7 +202,7 @@ export default {
       top: 4px;
       left: 0;
       border-radius: 2px;
-      background: #ffd600;
+      background: #ec7259;
     }
   }
   .dynamic-list {
@@ -245,9 +239,7 @@ export default {
 }
 
 .topic-sidebar {
-  background: #f8f8f8;
   padding: 22px;
-  border-radius: 6px;
   overflow: hidden;
   .title {
     font-size: 16px;
@@ -265,7 +257,7 @@ export default {
       top: 4px;
       left: 0;
       border-radius: 2px;
-      background: #ffd600;
+      background: #ec7259;
     }
     a {
       color: #007fff;

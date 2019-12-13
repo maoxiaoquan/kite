@@ -53,14 +53,13 @@ module.exports = {
     status: {
       // 状态
       type: Seq.INTEGER(10),
-      comment:
-        '状态(1:审核中;2:审核通过;3:审核失败;4:回收站；5:已删除，6：无需审核)',
+      comment: '状态(1:审核中;2:审核通过;3:审核失败;4:免审核；5:已删除)',
       field: 'status'
     },
     type: {
-      // 类型 1:文章;2:日记;3:说说
+      // 1:文章;2:笔记;3:草稿
       type: Seq.INTEGER(10),
-      comment: '类型 （1:文章;2:日记;3:说说）',
+      comment: '类型 （1:文章;2:笔记;3:草稿）',
       field: 'type'
     },
     cover_img: {
@@ -75,11 +74,11 @@ module.exports = {
       field: 'read_count',
       defaultValue: 0
     },
-    like_count: {
+    thumb_count: {
       // 喜欢数
       type: Seq.BIGINT(20),
-      comment: '喜欢数',
-      field: 'like_count',
+      comment: '点赞数',
+      field: 'thumb_count',
       defaultValue: 0
     },
     comment_count: {

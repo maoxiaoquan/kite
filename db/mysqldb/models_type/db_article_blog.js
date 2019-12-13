@@ -63,17 +63,8 @@ module.exports = {
     status: {
       // 状态
       type: Seq.INTEGER(10),
-      comment: '状态(1:审核中;2:审核通过;3:审核失败;4：无需审核)',
+      comment: '状态(1:审核中;2:审核通过;3:审核失败;4：免审核)',
       field: 'status'
-    },
-    is_public: {
-      // 是否公开
-      type: Seq.BOOLEAN,
-      comment: '是否公开',
-      field: 'is_public',
-      defaultValue: () => {
-        return false
-      }
     },
     enable: {
       // 是否可以显示
@@ -87,11 +78,11 @@ module.exports = {
       comment: '驳回，或者文章审核不通过的原因',
       field: 'rejection_reason'
     },
-    like_count: {
+    collect_count: {
       // 喜欢数
       type: Seq.BIGINT(20),
-      comment: '喜欢数',
-      field: 'like_count',
+      comment: '收藏数',
+      field: 'collect_count',
       defaultValue: 0
     },
     update_date: {

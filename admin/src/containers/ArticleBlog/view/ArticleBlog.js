@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom'
 import './ArticleBlog.scss'
 import { getArticleBlogList, updateArticleBlog } from '../actions'
 import alert from '../../../utils/alert'
-
+import { otherStatusList, otherStatusListText } from '../../../utils/constant'
 const Option = Select.Option
 const FormItem = Form.Item
 const confirm = Modal.confirm
@@ -53,11 +53,6 @@ class ArticleBlog extends React.Component {
           key: 'en_name'
         },
         {
-          title: '专栏图标地址',
-          dataIndex: 'icon',
-          key: 'icon'
-        },
-        {
           title: '专栏图标演示',
           dataIndex: 'icon',
           key: 'icon',
@@ -73,7 +68,7 @@ class ArticleBlog extends React.Component {
           key: 'status',
           render: (text, record) => (
             <Tag className="table-article-tag-list" color="red">
-              {this.state.status_list[record.status]}
+              {this.state.otherStatusListText[record.status]}
             </Tag>
           )
         },
@@ -81,16 +76,6 @@ class ArticleBlog extends React.Component {
           title: '备注',
           dataIndex: 'description',
           key: 'description'
-        },
-        {
-          title: '是否公开',
-          dataIndex: 'is_public',
-          key: 'is_public',
-          render: (value, record) => {
-            return (
-              <div className="table-is-login">{value ? '公开' : '个人'}</div>
-            )
-          }
         },
         {
           title: '审核被拒绝的原因',
@@ -103,20 +88,16 @@ class ArticleBlog extends React.Component {
           render: (text, record) => {
             return (
               <div className="operation-btn">
-                {record.is_public ? (
-                  <button
-                    onClick={() => {
-                      this._edit(record)
-                    }}
-                    className="btn btn-info"
-                    size="small"
-                    type="primary"
-                  >
-                    <Icon type="edit" />
-                  </button>
-                ) : (
-                  ''
-                )}
+                <button
+                  onClick={() => {
+                    this._edit(record)
+                  }}
+                  className="btn btn-info"
+                  size="small"
+                  type="primary"
+                >
+                  <Icon type="edit" />
+                </button>
               </div>
             )
           }
@@ -127,11 +108,11 @@ class ArticleBlog extends React.Component {
       },
       loading: false,
       modal_visible_edit: false,
-      status_list: ['', '审核中', '审核通过', '审核失败', '无需审核'],
+      otherStatusList,
+      otherStatusListText,
       is_create: true,
       edit_status_val: '',
       status_val: '',
-      is_public_val: '',
       name_val: ''
     }
   }
@@ -215,11 +196,10 @@ class ArticleBlog extends React.Component {
   }
 
   getParams = () => {
-    const { name_val, status_val, is_public_val } = this.state
+    const { name_val, status_val } = this.state
     return {
       name: name_val,
-      status: status_val,
-      is_public: is_public_val
+      status: status_val
     }
   }
 
@@ -250,7 +230,6 @@ class ArticleBlog extends React.Component {
       status_list,
       status_val,
       name_val,
-      is_public_val,
       is_create,
       edit_status_val
     } = this.state
@@ -332,14 +311,17 @@ class ArticleBlog extends React.Component {
                     })
                   }}
                 >
-                  {this.state.status_list.map((item, key) =>
-                    item ? <Option key={key}>{item}</Option> : ''
-                  )}
+                  {Object.keys(this.state.otherStatusListText).map(key => (
+                    <Option key={key}>
+                      {this.state.otherStatusListText[key]}
+                    </Option>
+                  ))}
                 </Select>
               )}
             </FormItem>
 
-            {~[3].indexOf(Number(edit_status_val)) ? (
+            {Number(edit_status_val) ===
+            this.state.otherStatusList.reviewFail ? (
               <FormItem {...formItemLayout} label="拒绝的原因">
                 {getFieldDecorator('rejection_reason', {
                   rules: [
@@ -349,7 +331,7 @@ class ArticleBlog extends React.Component {
                       whitespace: true
                     }
                   ]
-                })(<Input placeholder="文章被拒绝的原因" />)}
+                })(<Input placeholder="文章专栏被拒绝的原因" />)}
               </FormItem>
             ) : (
               ''
@@ -384,36 +366,17 @@ class ArticleBlog extends React.Component {
                     }}
                   >
                     <Option value="">全部</Option>
-                    {status_list.map((item, key) =>
-                      item ? (
-                        <Option value={key} key={key}>
-                          {item}
-                        </Option>
-                      ) : (
-                        ''
-                      )
-                    )}
-                  </Select>
-                </FormItem>
-
-                <FormItem hasFeedback label="是否公开">
-                  <Select
-                    placeholder="状态"
-                    value={is_public_val}
-                    onChange={value => {
-                      this.changeVal(value, 'is_public_val')
-                    }}
-                  >
-                    <Option value="">全部</Option>
-                    <Option value={0}>个人</Option>
-                    <Option value={1}>公开</Option>
+                    {Object.keys(this.state.otherStatusListText).map(key => (
+                      <Option key={key}>
+                        {this.state.otherStatusListText[key]}
+                      </Option>
+                    ))}
                   </Select>
                 </FormItem>
 
                 <Form.Item>
                   <button
                     type="primary"
-                    htmlType="submit"
                     className="btn btn-danger"
                     onClick={this.fetchArticleBlogList}
                   >
@@ -421,7 +384,6 @@ class ArticleBlog extends React.Component {
                   </button>
                   <button
                     type="primary"
-                    htmlType="submit"
                     className="btn btn-primary"
                     onClick={this.resetBarFrom}
                   >

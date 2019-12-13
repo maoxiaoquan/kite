@@ -83,14 +83,6 @@ const actions = {
       return result
     })
   },
-  SUBSCRIBE_TAG: ({ commit, dispatch, state }, parameter) => {
-    // 获取文章标签内容
-    return fetch({
-      url: '/subscribe/tag',
-      method: 'post',
-      parameter: parameter
-    })
-  },
   MY_SUBSCRIBE_TAG_LIST: ({ commit, dispatch, state }, parameter) => {
     // 获取当前用户已订阅的标签
     return fetch({
@@ -111,7 +103,7 @@ const getters = {
   userArticleTag: state => {
     return state.user_article_tag
       ? state.user_article_tag.map(result => {
-        return result.tag_id
+        return result.associate_id
       })
       : []
   }

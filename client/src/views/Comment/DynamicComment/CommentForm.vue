@@ -57,7 +57,10 @@ export default {
     reply_uid: {
       default: ''
     },
-    child_comment_id: {
+    reply_id: {
+      default: ''
+    },
+    parent_id: {
       default: ''
     },
     dynamicId: {
@@ -70,7 +73,8 @@ export default {
         dynamic_id: this.dynamicId,
         content: this.commentContent,
         reply_uid: this.reply_uid,
-        parent_id: this.child_comment_id,
+        reply_id: this.reply_id,
+        parent_id: this.parent_id,
       }
     },
     changeFace (val) {

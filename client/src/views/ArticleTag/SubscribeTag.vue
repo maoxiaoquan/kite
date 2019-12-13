@@ -2,7 +2,7 @@
   <!--article-list-lay layout-content start-->
   <section class="subscribe-lay layout-content"
            id="subscribe-lay">
-    <div class="container box-container">
+    <div class="container box-container client-card">
       <nav class="switch-list-nav">
         <div class="nav-list">
           <router-link class="nav-item"
@@ -159,6 +159,9 @@ export default {
 
 <style scoped lang="scss">
 .subscribe-lay.layout-content {
+  .client-card {
+    padding: 25px 38px;
+  }
   .switch-list-nav {
     display: flex;
     justify-content: space-between;

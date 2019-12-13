@@ -101,6 +101,24 @@ module.exports = {
       field: 'update_date',
       defaultValue: Seq.NOW /* 时间 */
     },
+    // 2019.11.6 11:55新增
+    is_free: {
+      // 是否免费
+      type: Seq.INTEGER(6),
+      comment: '是否免费',
+      field: 'is_free'
+    },
+    pay_type: {
+      // 支付类型
+      type: Seq.INTEGER(6),
+      comment: '支付类型',
+      field: 'pay_type'
+    },
+    price: {
+      type: Seq.DECIMAL(6, 2),
+      comment: '价格',
+      field: 'price'
+    },
     ...time.create_date
   }
 }

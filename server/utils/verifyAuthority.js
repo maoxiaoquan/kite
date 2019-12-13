@@ -12,8 +12,9 @@ const noLimit = ['/admin-index/statistics', '/admin-user/info']
 
 class VerifyAuthority {
   // 前台权限验证
-  static async ClientCheck (ctx, next) {
-    const { url, user = {} } = ctx.request
+  static async ClientCheck (req, res, next) {
+    const { user = {} } = req
+    const url = req.url
     const { user_role_ids } = user
     try {
       if (user_role_ids) {
@@ -27,7 +28,7 @@ class VerifyAuthority {
           clientUrl = url
         }
         let oneUserAuthority = await models.user_authority.findOne({
-          where: { authority_url: clientUrl.split('/api-client/v1')[1] }
+          where: { authority_url: clientUrl.split('/api-client/v1')[1] || '' }
         })
         if (oneUserAuthority) {
           let allUserRole = await models.user_role.findAll({
@@ -53,13 +54,13 @@ class VerifyAuthority {
           await next()
         }
       } else {
-        resClientJson(ctx, {
+        resClientJson(res, {
           state: 'error',
           message: '当前用户账号出现问题'
         })
       }
     } catch (err) {
-      resClientJson(ctx, {
+      resClientJson(res, {
         state: 'error',
         message: `错误提示:${err.message}`
       })
@@ -67,8 +68,8 @@ class VerifyAuthority {
   }
 
   // 后台权限验证
-  static async AdminCheck (ctx, next) {
-    const { url, userInfo = {} } = ctx.request
+  static async AdminCheck (req, res, next) {
+    const { url, userInfo = {} } = req
     const { role_id } = userInfo
     if (role_id && role_id !== config.SUPER_ROLE_ID) {
       // 排除超管，超管无视所有，拥有最高权限 role = 1000000 为超管
@@ -81,7 +82,7 @@ class VerifyAuthority {
       }
       try {
         let oneAdminAuthority = await models.admin_authority.findOne({
-          where: { authority_url: adminUrl.split('/api-admin/v1')[1] }
+          where: { authority_url: adminUrl.split('/api-admin/v1')[1] || '' }
         })
         if (oneAdminAuthority) {
           let oneAdminRole = await models.admin_role.findOne({
@@ -105,7 +106,7 @@ class VerifyAuthority {
           throw new ErrorMessage('当前用户无权限!')
         }
       } catch (err) {
-        resAdminJson(ctx, {
+        resAdminJson(res, {
           state: 'error',
           message: '当前用户无权限!'
         })
@@ -115,7 +116,7 @@ class VerifyAuthority {
         // 超管直接拥有所有权限，设置无否都是拥有最高权限，超管只有一个，某些接口会判断，否则会报错
         await next()
       } else {
-        resAdminJson(ctx, {
+        resAdminJson(res, {
           state: 'error',
           message: '当前用户无任何操作权限'
         })

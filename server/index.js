@@ -1,31 +1,31 @@
-const app = require('./app')
+const express = require('express')
+const app = express()
+const cookieParser = require('cookie-parser')
 const path = require('path')
-const views = require('koa-views')
-const koaStatic = require('koa-static')
-const bodyParser = require('koa-bodyparser')
-const koaLogger = require('koa-logger')
+const bodyParser = require('body-parser')
 const kiteConfig = require('../kite.config')
 const routers = require('./routers')
-
+const graphql = require('./graphql')
+const { lowdb } = require('../db/lowdb')
+const cli = lowdb
+  .read()
+  .get('cli')
+  .value()
 require('../db/mysqldb/pool').poolInit()
 
-app.use(koaLogger())
-
-app.use(bodyParser())
-
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+app.use(cookieParser())
 // 配置静态资源加载中间件
-app.use(koaStatic(path.join(__dirname, '../static')))
 
-// 配置服务端模板渲染引擎中间件
-app.use(
-  views(path.join(__dirname, '../views'), {
-    map: { html: 'ejs' }
-  })
-)
+app.use(express.static(path.join(__dirname, '../static')))
 
+if (cli.is_success) {
+  graphql(app)
+}
 // 加载路由中间件
-app.use(routers.routes()).use(routers.allowedMethods())
 
+routers(app)
 // 监听启动端口
 app.listen(kiteConfig.server.port)
 

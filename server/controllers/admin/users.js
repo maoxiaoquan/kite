@@ -6,8 +6,8 @@ class Users {
    * 获取用户列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async getUserList (ctx) {
-    const { page = 1, pageSize = 10 } = ctx.query
+  static async getUserList (req, res, next) {
+    const { page = 1, pageSize = 10 } = req.query
     try {
       let { count, rows } = await models.user.findAndCountAll({
         attributes: [
@@ -29,9 +29,18 @@ class Users {
           'ft_ban_dt',
           await moment(rows[i].ban_dt).format('YYYY年MM月DD日 HH时mm分ss秒')
         )
+
+        rows[i].setDataValue(
+          'user_info',
+          await models.user_info.findOne({
+            where: {
+              uid: rows[i].uid
+            }
+          })
+        )
       }
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -40,7 +49,7 @@ class Users {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -51,8 +60,8 @@ class Users {
    * 更新用户
    * @param   {object} ctx 上下文对象
    */
-  static async editUser (ctx) {
-    const { uid, nickname, user_role_ids, enable } = ctx.request.body
+  static async editUser (req, res, next) {
+    const { uid, nickname, user_role_ids, enable } = req.body
     try {
       await models.user.update(
         {
@@ -66,12 +75,12 @@ class Users {
           }
         }
       )
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '更新成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -85,15 +94,15 @@ class Users {
    * 无关联则直接删除用户，有关联则开启事务同时删除用户所含有的文章
    * 管理员对角色是一多一的关系
    */
-  static async deleteUser (ctx) {
-    const { uid } = ctx.request.body
+  static async deleteUser (req, res, next) {
+    const { uid } = req.body
     try {
       let oneArticle = await models.article.findOne({ where: { uid } })
 
       if (!oneArticle) {
         /* 无关联 */
         await models.user.destroy({ where: { uid } })
-        resAdminJson(ctx, {
+        resAdminJson(res, {
           state: 'success',
           message: '删除用户成功'
         })
@@ -111,13 +120,13 @@ class Users {
               )
             })
         })
-        resAdminJson(ctx, {
+        resAdminJson(res, {
           state: 'success',
           message: '删除用户成功,同时删除用户所有文章'
         })
       }
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -128,8 +137,8 @@ class Users {
    * 获取需要审核的头像
    * @param   {object} ctx 上下文对象
    */
-  static async getAvatarReview (ctx) {
-    const { page = 1, pageSize = 10, status = 1 } = ctx.query
+  static async getAvatarReview (req, res, next) {
+    const { page = 1, pageSize = 10, status = 1 } = req.query
     try {
       let { count, rows } = await models.user_info.findAndCountAll({
         where: {
@@ -149,7 +158,7 @@ class Users {
         )
       }
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
@@ -158,7 +167,7 @@ class Users {
         }
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -169,9 +178,9 @@ class Users {
    * 审核用户头像
    * @param   {object} ctx 上下文对象
    */
-  static async set_avatar_review (ctx) {
+  static async set_avatar_review (req, res, next) {
     try {
-      const { uid, status } = ctx.request.body
+      const { uid, status } = req.body
       let oneUserInfo = await models.user_info.findOne({
         where: {
           uid: uid // 查询条件
@@ -199,7 +208,7 @@ class Users {
             }
           }
         )
-        resAdminJson(ctx, {
+        resAdminJson(res, {
           state: 'success',
           message: '更新成功'
         })
@@ -215,13 +224,13 @@ class Users {
             }
           }
         )
-        resAdminJson(ctx, {
+        resAdminJson(res, {
           state: 'success',
           message: '更新成功'
         })
       }
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })
@@ -232,9 +241,9 @@ class Users {
    * 禁言用户
    * @param   {object} ctx 上下文对象
    */
-  static async banUser (ctx) {
+  static async banUser (req, res, next) {
     try {
-      const { uid, ban_dt } = ctx.request.body
+      const { uid, ban_dt } = req.body
       let setUpdate = {}
 
       ban_dt && (setUpdate['ban_dt'] = new Date(ban_dt))
@@ -250,12 +259,12 @@ class Users {
         }
       )
 
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'success',
         message: '更新成功'
       })
     } catch (err) {
-      resAdminJson(ctx, {
+      resAdminJson(res, {
         state: 'error',
         message: '错误信息：' + err.message
       })

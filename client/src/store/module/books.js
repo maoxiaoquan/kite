@@ -128,14 +128,6 @@ const actions = {
       parameter: parameter
     })
   },
-  COLLECT_BOOKS ({ commit, dispatch, state }, parameter) {
-    // 收藏小书
-    return fetch({
-      url: '/collect/books',
-      method: 'post',
-      parameter
-    })
-  },
   GET_COLLECT_BOOKS_LIST ({ commit, dispatch, state }, parameter) {
     // 收藏的小书列表
     return fetch({

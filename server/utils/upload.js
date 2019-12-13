@@ -1,4 +1,4 @@
-const multer = require('koa-multer') // 加载koa-multer模块
+const multer = require('multer') // 加载nodemailer模块
 
 // 文件上传
 
@@ -18,7 +18,7 @@ module.exports = type => {
     articleBlogImg: `static/upload/blog-img-service/${year}/${month}`
   }
 
-  let fileFilter = (ctx, file, cb) => {
+  let fileFilter = (req, file, cb) => {
     // 过滤文件
     let ImgLimitType = ['image/jpeg', 'image/jpg', 'image/gif', 'image/png']
     if (~ImgLimitType.indexOf(file.mimetype)) {

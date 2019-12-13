@@ -1,34 +1,39 @@
 <template>
-
   <div class="user-center-article-view"
        v-loading="isLoading">
-
     <ul class="blog-list">
       <li class="title">个人专栏：</li>
       <li class="blog-list-item"
-          :class="{'current':!$route.query.blog_id||$route.query.blog_id==='all'}">
-        <router-link :to='{name:"user",query:{blog_id:"all"},params:{routeType:"article"}}'>
+          :class="{
+          current: !$route.query.blog_id || $route.query.blog_id === 'all'
+        }">
+        <router-link :to="{
+            name: 'user',
+            query: { blog_id: 'all' },
+            params: { routeType: 'article' }
+          }">
           <span class="name">全部</span>
         </router-link>
       </li>
 
       <li class="blog-list-item"
-          v-for="(item,key) in userArticleBlogAll"
-          :class="{'current':item.blog_id==$route.query.blog_id}"
+          v-for="(item, key) in userArticleBlogAll"
+          :class="{ current: item.blog_id == $route.query.blog_id }"
           :key="key">
-        <router-link :to='{name:"user",query:{blog_id:item.blog_id},params:{routeType:"article"}}'
+        <router-link :to="{
+            name: 'user',
+            query: { blog_id: item.blog_id },
+            params: { routeType: 'article' }
+          }"
                      class="avatar">
           <span class="name">{{ item.name }}</span>
-          <i class="is-public"
-             v-if="!item.is_public"
-             :class="{'true':item.is_public}">仅自己可见</i>
         </router-link>
       </li>
 
-      <template v-if="personalInfo.user.uid===userInfo.user.uid">
+      <template v-if="personalInfo.user.uid === user.user.uid">
         <li class="blog-list-item">
           <router-link class="btn-user-blog"
-                       :to='{name:"user",params:{routeType:"blog"}}'>
+                       :to="{ name: 'user', params: { routeType: 'blog' } }">
             管理个人专栏
           </router-link>
         </li>
@@ -36,11 +41,18 @@
     </ul>
 
     <ul class="article-type">
-      <li v-for="(articleItem,key) in articleTypeList"
-          :class="{'active':$route.query.type===key,'index-active':!$route.query.type&&key==='1'}"
+      <li v-for="(articleItem, key) in articleTypeList"
+          :class="{
+          active: $route.query.type === key,
+          'index-active': !$route.query.type && key === '1'
+        }"
           :key="key">
-        <router-link :to='{name:"user",query:{blog_id:$route.query.blog_id||"all",type:key},params:{routeType:"article"}}'>
-          <span class="name">{{articleItem}}</span>
+        <router-link :to="{
+            name: 'user',
+            query: { blog_id: $route.query.blog_id || 'all', type: key },
+            params: { routeType: 'article' }
+          }">
+          <span class="name">{{ articleItem }}</span>
         </router-link>
       </li>
     </ul>
@@ -49,46 +61,40 @@
       <!-- 文章列表模块 -->
       <div class="article-view">
         <div class="article-item"
-             v-for="(item,key) in myArticle.list"
+             v-for="(item, key) in myArticle.list"
              :key="key">
-          <BlogArticleItem @delete-change="updateArticleList"
+          <UserArticleItem @delete-change="updateArticleList"
                            :articleItem="item" />
         </div>
       </div>
       <Page :total="Number(myArticle.count)"
             :pageSize="Number(myArticle.pageSize)"
-            :page="Number($route.query.page)||1"
+            :page="Number(myArticle.page) || 1"
             @pageChange="pageChange"></Page>
     </div>
-
   </div>
   <!--article-list-lay layout-content end-->
 </template>
 
 <script>
-
-import BlogArticleItem from '../component/BlogArticleItem'
+import UserArticleItem from '../component/UserArticleItem'
 import { Page, UploadImage } from '@components'
 import { mapState } from 'vuex'
+import constant from '@utils/constant'
+import {
+  statusList,
+  articleType,
+  statusListText,
+  articleTypeText
+} from '@utils/constant'
 export default {
-  name: 'Blog',
-  metaInfo () {
-    return {
-      title: '个人专栏',
-      htmlAttrs: {
-        lang: 'zh'
-      }
-    }
-  },
+  name: 'userArticle',
   data () {
     return {
       isCreateBlogShow: false,
       isLoading: false,
-      articleTypeList: {
-        '1': '文章',
-        '2': '日记',
-        '3': '草稿',
-      },
+      articleType: articleType,
+      articleTypeList: articleTypeText,
       myArticle: {
         // 用户的文章
         list: [],
@@ -110,18 +116,21 @@ export default {
   methods: {
     getMyArticleList () {
       this.isLoading = true
-      this.$store.dispatch('user/USER_MY_ARTICLE', {
-        uid: this.$route.params.uid,
-        blog_id: this.$route.query.blog_id || 'all',
-        type: this.$route.query.type || '1',
-        page: this.myArticle.page || 1,
-        pageSize: this.myArticle.pageSize || 10,
-      }).then(result => {
-        this.myArticle = result.data
-        this.isLoading = false
-      }).catch(() => {
-        this.isLoading = false
-      })
+      this.$store
+        .dispatch('user/USER_MY_ARTICLE', {
+          uid: this.$route.params.uid,
+          blog_id: this.$route.query.blog_id || 'all',
+          type: this.$route.query.type || articleType.article,
+          page: this.myArticle.page || 1,
+          pageSize: this.myArticle.pageSize || 10
+        })
+        .then(result => {
+          this.myArticle = result.data
+          this.isLoading = false
+        })
+        .catch(() => {
+          this.isLoading = false
+        })
     },
     pageChange (val) {
       this.myArticle.page = val
@@ -133,27 +142,27 @@ export default {
         blog_id: this.$route.query.blog_id || 'all',
         type: this.$route.query.type || '1',
         page: this.$route.query.page || 1,
-        pageSize: 10,
+        pageSize: 10
       })
     },
     async getUserArticleBlogList () {
-      await this.$store.dispatch('user/GET_USER_ARTICLE_BLOG_ALL', { uid: this.$route.params.uid })
-    },
+      await this.$store.dispatch('user/GET_USER_ARTICLE_BLOG_ALL', {
+        uid: this.$route.params.uid
+      })
+    }
   },
   computed: {
-    ...mapState(["personalInfo"]),
-    userInfo () { // 登录后的个人信息
-      return this.$store.state.user.user_info || {}
-    },
+    ...mapState(['personalInfo', 'user']),
     currentBlogId () {
       return this.$route.query.blog_id || 'all'
     },
-    userArticleBlogAll () { // 个人所有专栏
+    userArticleBlogAll () {
+      // 个人所有专栏
       return this.$store.state.user.user_article_blog || []
-    },
+    }
   },
   components: {
-    BlogArticleItem,
+    UserArticleItem,
     UploadImage,
     Page
   }
@@ -209,18 +218,6 @@ export default {
         display: inline-block;
         padding: 0 3px;
         font-weight: bold;
-      }
-      .is-public {
-        background: #fd763a;
-        font-size: 12px;
-        vertical-align: middle;
-        display: inline-block;
-        border-radius: 10px;
-        padding: 0 3px;
-        color: #fff;
-        &.true {
-          background: #41b883;
-        }
       }
     }
     &.current {

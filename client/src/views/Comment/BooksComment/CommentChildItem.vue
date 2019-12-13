@@ -18,21 +18,21 @@
           </template>
         </h4>
         <div class="comment-text"
-             v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===4"
+             v-if="Number(childCommentItem.status)===statusList.reviewSuccess||Number(childCommentItem.status)===statusList.freeReview"
              v-html="commentRender(childCommentItem.content)"></div>
         <div class="comment-text"
-             v-else-if="Number(childCommentItem.status)===1"
+             v-else-if="Number(childCommentItem.status)===statusList.pendingReview"
              style="color:#f96b84;">当前用户评论需要管理员审核才能可见</div>
         <div class="comment-text"
-             v-else-if="Number(childCommentItem.status)===3"
+             v-else-if="Number(childCommentItem.status)===statusList.reviewFail"
              style="color:#f96b84;">当前用户评论违规</div>
       </div>
       <div class="comment-foot clearfix">
         <span>{{childCommentItem.create_dt}}</span>
         <span class="comment-reply"
               v-show="personalInfo.islogin"
-              v-if="Number(childCommentItem.status)===2||Number(childCommentItem.status)===4"
-              @click="isComment=!isComment;reply_uid=childCommentItem.uid">{{isComment?'取消回复':'回复'}}</span>
+              v-if="Number(childCommentItem.status)===statusList.reviewSuccess||Number(childCommentItem.status)===statusList.freeReview"
+              @click="onReply">{{isComment?'取消回复':'回复'}}</span>
         <span class="comment-delete"
               v-if="personalInfo.user.uid===childCommentItem.uid"
               @click="deleteComment(childCommentItem.id)">删除</span>
@@ -44,7 +44,8 @@
          :id="'comment-reply'+childCommentItem.id">
       <comment-form :isStar="false"
                     :reply_uid="reply_uid"
-                    :child_comment_id="p_id"
+                    :parent_id="p_id"
+                    :reply_id="childCommentItem.id"
                     @commentChange="commentChange" />
     </div>
   </div>
@@ -53,20 +54,28 @@
 <script>
 import commentForm from "./CommentForm";
 import { faceQQ } from '@components'
-
+import {
+  statusList,
+  statusListText
+} from '@utils/constant'
 export default {
   name: "childrenItem",
-  props: ["childCommentItem", "p_id"],
+  props: ["childCommentItem", "p_id", "comentKey"],
   data: function () {
     return {
       isComment: false,
-      reply_uid: ""
+      reply_uid: "",
+      statusList
     };
   },
   methods: {
     commentChange (res) {
       this.isComment = false;
       this.$emit("ChildCommentChange", res);
+    },
+    onReply () {
+      this.isComment = !this.isComment
+      this.reply_uid = this.childCommentItem.uid
     },
     deleteComment (id) {
       this.$store
@@ -76,7 +85,7 @@ export default {
         })
         .then(res => {
           if (res.state === "success") {
-            document.querySelector("#comment" + id + "").style.display = "none";
+            this.$emit('deleteChildComment', this.comentKey)
             this.$message.success(res.message);
           } else {
             this.$message.warning(res.message);
@@ -127,13 +136,8 @@ export default {
     .box-image {
       width: 40px;
       height: 40px;
-      border-radius: 4px;
       overflow: hidden;
-      img {
-        width: 100%;
-        height: 100%;
-        border-radius: 80px;
-      }
+      border-radius: 80px;
     }
   }
   .comment-body {
@@ -187,7 +191,6 @@ export default {
     margin-top: 30px;
     padding-left: 20px;
     border-left: 1px solid #f1f1f1;
-    overflow: hidden;
     .comment-item {
       margin-bottom: 15px;
       padding-bottom: 10px;

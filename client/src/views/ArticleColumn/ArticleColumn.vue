@@ -1,7 +1,7 @@
 <template>
   <div class="article-column"
        id="article-column">
-    <div class="container  box-container">
+    <div class="container  box-container client-card">
 
       <nav class="switch-list-nav">
         <div class="nav-list">
@@ -106,6 +106,9 @@ export default {
 
 <style scoped lang="scss">
 #article-column {
+  .client-card {
+    padding: 20px;
+  }
   .switch-list-nav {
     display: flex;
     justify-content: space-between;

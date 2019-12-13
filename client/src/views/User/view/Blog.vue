@@ -1,35 +1,44 @@
 <template>
   <div class="user-article-blog"
        v-loading="isLoading">
-
     <button class="btn create-article-blog"
-            @click="createEditArticleBlog('create')">创建个人专栏</button>
+            @click="createEditArticleBlog('create')">
+      创建个人专栏
+    </button>
 
     <div class="user-article-blog-view row">
       <div class="col-xs-12 col-sm-6 col-md-6"
-           v-for="(articleBlogItem,key) in articleBlog.list"
+           v-for="(articleBlogItem, key) in articleBlog.list"
            :key="key">
-        <div class="user-article-blog-item client-card">
+        <div class="user-article-blog-item ">
           <div class="user-article-blog-top">
             <router-link class="article-blog-icon"
-                         :to="{name:'articleBlog',params:{blogId:articleBlogItem.blog_id}}">
+                         :to="{
+                name: 'articleBlog',
+                params: { blogId: articleBlogItem.blog_id }
+              }">
               <img class="article-blog-icon-img"
                    v-lazy="articleBlogItem.icon"
-                   alt="">
+                   alt="" />
             </router-link>
 
             <div class="user-article-blog-info">
-
               <router-link class="name"
-                           :to="{name:'articleBlog',params:{blogId:articleBlogItem.blog_id}}">{{articleBlogItem.name}}</router-link>
+                           :to="{
+                  name: 'articleBlog',
+                  params: { blogId: articleBlogItem.blog_id }
+                }">{{ articleBlogItem.name }}</router-link>
 
               <div class="time-view">
-                <span class="time">{{setBlogTime(articleBlogItem)}}</span>
+                <span class="time">{{ setBlogTime(articleBlogItem) }}</span>
               </div>
             </div>
 
             <div class="operat-view"
-                 v-if="personalInfo.islogin&&personalInfo.user.uid===articleBlogItem.user.uid">
+                 v-if="
+                personalInfo.islogin &&
+                  personalInfo.user.uid === articleBlogItem.user.uid
+              ">
               <Dropdown>
                 <div class="el-dropdown-link"
                      slot="button">
@@ -37,76 +46,82 @@
                 </div>
                 <div class="dropdown-menu-view">
                   <div class="dropdown-menu-item"
-                       @click="commandChange({type:'edit',articleBlogItem})">
+                       @click="commandChange({ type: 'edit', articleBlogItem })">
                     修改
                   </div>
                   <div class="dropdown-menu-item"
-                       @click="commandChange({type:'delete',articleBlogItem})">
+                       @click="commandChange({ type: 'delete', articleBlogItem })">
                     删除
                   </div>
                 </div>
               </Dropdown>
             </div>
-
           </div>
 
           <div class="user-article-blog-tag">
             <span class="title">所属标签:</span>
             <template v-if="articleBlogItem.tag">
-              <router-link v-for="(itemArticleTag,key) in articleBlogItem.tag"
+              <router-link v-for="(itemArticleTag, key) in articleBlogItem.tag"
                            class="tag-class frontend"
                            :key="key"
-                           :to="{name:'article_tag',params:{en_name:itemArticleTag.en_name}}">{{itemArticleTag.name}}</router-link>
+                           :to="{
+                  name: 'article_tag',
+                  params: { en_name: itemArticleTag.en_name }
+                }">{{ itemArticleTag.name }}</router-link>
             </template>
             <template v-else>
               <span class="hint">
                 暂时没有加入标签，加入标签更能容易被搜索到
               </span>
             </template>
-
           </div>
 
           <div class="user-article-blog-main">
             <p class="description"
-               v-if="articleBlogItem.status!==3">介绍：{{articleBlogItem.description||'没有写入介绍'}}</p>
+               v-if="articleBlogItem.status !== 3">
+              介绍：{{ articleBlogItem.description || '没有写入介绍' }}
+            </p>
             <p class="description faild"
-               v-else>审核失败 原因：{{articleBlogItem.rejection_reason}}</p>
+               v-else>
+              审核失败 原因：{{ articleBlogItem.rejection_reason }}
+            </p>
           </div>
 
           <div class="user-article-blog-footer">
             <ul class="statistics">
               <li class="item">
                 <i class="el-icon-document"></i>
-                <span class="article-count">{{articleBlogItem.articleCount}}</span>
+                <span class="article-count">{{
+                  articleBlogItem.articleCount
+                }}</span>
               </li>
               <li class="item item-icon read-count">
                 <i class="el-icon-view"></i>
-                <span v-text="articleBlogItem.read_count||0"></span>
+                <span v-text="articleBlogItem.read_count || 0"></span>
               </li>
               <li class="item item-icon like-article">
                 <i class="el-icon-star-off"></i>
-                <span v-text="articleBlogItem.likeCount||0"></span>
-              </li>
-              <li class="item"
-                  v-if="!articleBlogItem.is_public">
-                <span class="type"
-                      :class="{'true':articleBlogItem.is_public}">仅自己可见</span>
+                <span v-text="articleBlogItem.likeCount || 0"></span>
               </li>
               <li class="item attention"
-                  v-if="~[2,4].indexOf(articleBlogItem.status)&&personalInfo.islogin&&articleBlogItem.is_public"
+                  v-if="
+                  ~[2, 4].indexOf(articleBlogItem.status) &&
+                    personalInfo.islogin
+                "
                   @click="setLikeArticleBlog(articleBlogItem.blog_id)">
-                <span :class="{'active':isLike(articleBlogItem).status}">{{isLike(articleBlogItem).text}}</span>
+                <span :class="{ active: isLike(articleBlogItem).status }">{{
+                  isLike(articleBlogItem).text
+                }}</span>
               </li>
             </ul>
           </div>
-
         </div>
       </div>
     </div>
 
     <Page :total="Number(articleBlog.count)"
           :pageSize="Number(articleBlog.pageSize)"
-          :page="Number(articleBlog.page)||1"
+          :page="Number(articleBlog.page) || 1"
           @pageChange="pageChange"></Page>
 
     <!-- use the modal component, pass in the prop -->
@@ -120,30 +135,14 @@
           <input type="email"
                  v-model="blogForm.blog_name"
                  class="form-control"
-                 placeholder="请输入个人文章专题名字">
+                 placeholder="请输入个人文章专题名字" />
         </div>
         <div class="form-group">
           <label for="blog-name-input">专题英文名字：</label>
           <input type="email"
                  v-model="blogForm.en_name"
                  class="form-control"
-                 placeholder="请输入个人文章专题英文名字">
-        </div>
-
-        <div class="form-group">
-          <label for="blog-name-input">是否公开：</label>
-          <div class="form-radio-view">
-            <input type="radio"
-                   name="sex"
-                   :value="true"
-                   class="form-input-radio"
-                   v-model="blogForm.is_public"><span>公开</span>
-            <input type="radio"
-                   name="sex"
-                   :value="false"
-                   class="form-input-radio"
-                   v-model="blogForm.is_public"><span>仅自己可见</span>
-          </div>
+                 placeholder="请输入个人文章专题英文名字" />
         </div>
 
         <div class="form-group avatar-uploader avatar-uploader">
@@ -152,7 +151,7 @@
                v-if="blogForm.icon">
             <img class="avatar-img"
                  v-lazy="blogForm.icon"
-                 alt="">
+                 alt="" />
           </div>
           <div class="action-box">
             <div class="hint">支持 jpg、png 格式大小 1M 以内的图片</div>
@@ -165,13 +164,12 @@
           <label for="blog-name-input">选择标签：</label>
           <select v-model="blogForm.tag_ids"
                   placeholder="请选择">
-            <option v-for="(item,key) in articleTagAll"
+            <option v-for="(item, key) in articleTagAll"
                     :key="key"
                     :label="item.name"
                     :value="item.tag_id">
             </option>
           </select>
-
         </div>
 
         <div class="form-group">
@@ -185,42 +183,37 @@
         <div class="footer-view">
           <button type="button"
                   class="btn btn-primary blog-modal-create"
-                  @click="setIsEditCreateArticleBlog">创建
+                  @click="setIsEditCreateArticleBlog">
+            创建
           </button>
           <button type="button"
-                  @click="isCreateBlogShow=false"
-                  class="btn btn-secondary blog-modal-cancel">取消
+                  @click="isCreateBlogShow = false"
+                  class="btn btn-secondary blog-modal-cancel">
+            取消
           </button>
         </div>
-
       </div>
     </Dialog>
-
   </div>
 </template>
 
 <script>
 import { Page, UploadImage, Dialog, Dropdown } from '@components'
 import { mapState } from 'vuex'
+import { modelType } from '@utils/constant'
+
 export default {
   name: 'Blog',
-  metaInfo () {
-    return {
-      title: '个人专栏',
-      htmlAttrs: {
-        lang: 'zh'
-      }
-    }
-  },
   async asyncData ({ store, route }) {
     return store.dispatch('user/GET_USER_ARTICLE_BLOG_LIST', {
       uid: route.params.uid,
       page: route.query.page || 1,
-      pageSize: route.query.pageSize || 10,
+      pageSize: route.query.pageSize || 10
     })
   },
   data () {
     return {
+      modelType,
       isCreateBlogShow: false,
       isCreate: true,
       isLoading: false,
@@ -236,46 +229,49 @@ export default {
         blog_name: '',
         en_name: '',
         description: '',
-        is_public: false,
         icon: '',
         tag_ids: ''
-      },
+      }
     }
   },
   mounted () {
-    this.$store.dispatch("articleTag/GET_ARTICLE_TAG_ALL")
+    this.$store.dispatch('articleTag/GET_ARTICLE_TAG_ALL')
     this.getArticleBlogList()
   },
   methods: {
     getArticleBlogList () {
       this.isLoading = true
-      this.$store.dispatch('user/GET_USER_ARTICLE_BLOG_LIST', {
-        uid: this.$route.params.uid,
-        page: this.articleBlog.page || 1,
-        pageSize: this.articleBlog.pageSize || 10,
-      }).then(result => {
-        this.articleBlog = result.data
-        this.isLoading = false
-      }).catch(() => {
-        this.isLoading = false
-      })
+      this.$store
+        .dispatch('user/GET_USER_ARTICLE_BLOG_LIST', {
+          uid: this.$route.params.uid,
+          page: this.articleBlog.page || 1,
+          pageSize: this.articleBlog.pageSize || 10
+        })
+        .then(result => {
+          this.articleBlog = result.data
+          this.isLoading = false
+        })
+        .catch(() => {
+          this.isLoading = false
+        })
     },
     pageChange (val) {
       this.articleBlog.page = val
       this.getArticleBlogList()
     },
-    createEditArticleBlog (type) { // 触发创建文章个人专栏
+    createEditArticleBlog (type) {
+      // 触发创建文章个人专栏
       this.isCreateBlogShow = true
       this.isCreate = true
       this.blogForm.blog_name = ''
       this.blogForm.en_name = ''
       this.blogForm.description = ''
-      this.blogForm.is_public = false
       this.blogForm.icon = ''
       this.blogForm.tag_ids = ''
     },
     changeArticleBlogImg ({ formData, config }) {
-      this.$store.dispatch('articleBlog/UPLOAD_ARTICLE_BLOG_IMG', formData)
+      this.$store
+        .dispatch('articleBlog/UPLOAD_ARTICLE_BLOG_IMG', formData)
         .then(result => {
           if (result.state === 'success') {
             this.blogForm.icon = result.data.img
@@ -284,7 +280,8 @@ export default {
           }
         })
     },
-    setBlogTime (item) { // 设置blog的时间
+    setBlogTime (item) {
+      // 设置blog的时间
       if (item.create_date === item.update_date) {
         return `创建于：${item.create_dt}`
       } else {
@@ -294,35 +291,40 @@ export default {
     setIsEditCreateArticleBlog () {
       let url = ''
       let params = {}
-      url = this.isCreate ? 'user/CREATE_ARTICLE_BLOG' : 'user/UPDATE_ARTICLE_BLOG'
+      url = this.isCreate
+        ? 'user/CREATE_ARTICLE_BLOG'
+        : 'user/UPDATE_ARTICLE_BLOG'
       params = {
         ...this.blogForm,
         tag_ids: this.blogForm.tag_ids
       }
-      this.$store.dispatch(url, {
-        ...params
-      })
+      this.$store
+        .dispatch(url, {
+          ...params
+        })
         .then(result => {
           if (result.state === 'success') {
             this.isEdit = false
-            this.$message.success(result.message);
+            this.$message.success(result.message)
             this.isCreateBlogShow = false
             this.getArticleBlogList()
           } else {
-            this.$message.warning(result.message);
+            this.$message.warning(result.message)
           }
         })
     },
-    deleteArticleBlog (blog_id) { // 删除文章的个人专栏
-      this.$store.dispatch('user/DELETE_ARTICLE_BLOG', {
-        blog_id,
-      })
+    deleteArticleBlog (blog_id) {
+      // 删除文章的个人专栏
+      this.$store
+        .dispatch('user/DELETE_ARTICLE_BLOG', {
+          blog_id
+        })
         .then(result => {
           if (result.state === 'success') {
-            this.$message.success(result.message);
+            this.$message.success(result.message)
             window.location.reload()
           } else {
-            this.$message.warning(result.message);
+            this.$message.warning(result.message)
           }
         })
     },
@@ -332,32 +334,38 @@ export default {
         this.isCreate = false
         this.blogForm = val.articleBlogItem
         this.blogForm.blog_name = val.articleBlogItem.name
-        val.articleBlogItem.tag_ids && (this.blogForm.tag_ids = val.articleBlogItem.tag_ids.split(','))
+        val.articleBlogItem.tag_ids &&
+          (this.blogForm.tag_ids = val.articleBlogItem.tag_ids.split(','))
       } else if (val.type === 'delete') {
         this.$confirm('此操作将永久删除该个人专栏, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
-          this.deleteArticleBlog(val.articleBlogItem.blog_id);
-        }).catch(() => {
-        });
+        })
+          .then(() => {
+            this.deleteArticleBlog(val.articleBlogItem.blog_id)
+          })
+          .catch(() => { })
       }
     },
-    setLikeArticleBlog (blog_id) { // 用户关注blog
-      this.$store.dispatch('articleBlog/LIKE_ARTICLE_BLOG', {
-        blog_id,
-      })
+    setLikeArticleBlog (blog_id) {
+      // 用户关注blog
+      this.$store
+        .dispatch('common/SET_COLLECT', {
+          associate_id: blog_id,
+          type: modelType.article_blog
+        })
         .then(result => {
           if (result.state === 'success') {
-            this.$message.success(result.message);
+            this.$message.success(result.message)
             window.location.reload()
           } else {
-            this.$message.warning(result.message);
+            this.$message.warning(result.message)
           }
         })
     },
-    isLike (item) { // 是否like
+    isLike (item) {
+      // 是否like
       let likeUserIds = []
       item.likeUserIds.map(item => {
         likeUserIds.push(item.uid)
@@ -378,8 +386,8 @@ export default {
   computed: {
     ...mapState(['user', 'personalInfo']),
     articleTagAll () {
-      return this.$store.state.articleTag.article_tag_all;
-    },
+      return this.$store.state.articleTag.article_tag_all
+    }
   },
   components: {
     Page,
@@ -408,6 +416,7 @@ export default {
       display: block;
       height: 210px;
       padding: 10px;
+      border: 1px solid rgba(178, 186, 194, 0.15);
       .user-article-blog-top {
         display: flex;
         .article-blog-icon {

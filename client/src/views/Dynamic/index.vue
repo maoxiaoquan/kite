@@ -6,28 +6,34 @@
              class="dock-nav">
           <ul class="nav-list">
             <li class="nav-item acitve">
-              <router-link :to="{name:'dynamics',params:{dynamicTopicId:'newest'}}"
+              <router-link :to="{ name: 'dynamics', params: { dynamicTopicId: 'newest' } }"
                            class="nav-link">推荐</router-link>
             </li>
             <li class="nav-item">
-              <router-link :to="{name:'dynamics',params:{dynamicTopicId:'hot'}}"
+              <router-link :to="{ name: 'dynamics', params: { dynamicTopicId: 'hot' } }"
                            class="nav-link">热门</router-link>
             </li>
             <li class="nav-item"
                 v-if="personalInfo.islogin">
-              <router-link :to="{name:'dynamics',params:{dynamicTopicId:'following'}}"
-                           class="nav-link">关注</router-link>
+              <router-link :to="{
+                  name: 'dynamics',
+                  params: { dynamicTopicId: 'following' }
+                }"
+                           class="nav-link">我的</router-link>
             </li>
           </ul>
           <ul class="nav-list">
             <li class="nav-item"
-                v-for="(item,key) in dynamic.dynamicTopicIndex"
+                v-for="(item, key) in dynamic.dynamicTopicIndex"
                 :key="key">
-              <router-link :to="{name:'dynamics',params:{dynamicTopicId:item.topic_id}}"
-                           class="nav-link">{{item.name}}</router-link>
+              <router-link :to="{
+                  name: 'dynamics',
+                  params: { dynamicTopicId: item.topic_id }
+                }"
+                           class="nav-link">{{ item.name }}</router-link>
             </li>
             <li class="nav-item more">
-              <router-link :to="{name:'dynamicTopic'}"
+              <router-link :to="{ name: 'dynamicTopic' }"
                            class="more-view">
                 <span>更多</span>
               </router-link>
@@ -41,17 +47,17 @@
                v-if="personalInfo.islogin">
             <dynamic-write @changeDynamicWrite="dynamicSubmit" />
           </div>
-          <div>
-            <scroll-loading @scroll-loading="infiniteHandler"
-                            :isLoading="isLoading"
-                            :isMore="isMore">
-              <div class="dy-item client-card"
-                   v-for="(dynamicItem,key) in dynamic.dynamicList.list"
-                   :key="key">
-                <dynamic-item :dynamicItem="dynamicItem" />
-              </div>
-            </scroll-loading>
-          </div>
+
+          <scroll-loading @scroll-loading="infiniteHandler"
+                          :isLoading="isLoading"
+                          :isMore="isMore">
+            <div class="dy-item client-card"
+                 v-for="(dynamicItem, key) in dynamic.dynamicList.list"
+                 :key="key">
+              <dynamic-item :dynamicItem="dynamicItem" />
+            </div>
+          </scroll-loading>
+
         </div>
         <div class="col-xs-12 col-sm-4 col-md-4">
           <dynamic-aside />
@@ -65,8 +71,8 @@
 import dynamicItem from './component/dynamicItem'
 import dynamicWrite from './component/dynamicWrite'
 import dynamicAside from './component/dynamicAside'
-import { mapState } from "vuex";
-import { ScrollLoading } from "@components";
+import { mapState } from 'vuex'
+import { ScrollLoading } from '@components'
 import { baidu, google } from '@utils'
 import googleMixin from '@mixins/google'
 
@@ -77,7 +83,7 @@ export default {
     return {
       title: `片刻-${this.website.meta.website_name}`,
       htmlAttrs: {
-        lang: "zh"
+        lang: 'zh'
       },
       script: [
         ...baidu.resource({
@@ -85,11 +91,13 @@ export default {
           config: this.website.config
         }),
         ...google.statisticsCode({
-          route: this.$route, googleCode: this.website.config.googleCode, random: ''
+          route: this.$route,
+          googleCode: this.website.config.googleCode,
+          random: ''
         })
       ],
       __dangerouslyDisableSanitizers: ['script']
-    };
+    }
   },
   data () {
     return {
@@ -99,39 +107,48 @@ export default {
       loginUserInfo: {}
     }
   },
-  async asyncData ({ store, route, accessToken = "" }) {
+  async asyncData ({ store, route, accessToken = '' }) {
     // 触发 action 后，会返回 Promise
-    const dispatchUrl = route.params.dynamicTopicId !== 'following' ? "dynamic/GET_DYNAMIC_LIST" : "dynamic/GET_DYNAMIC_LIST_ME"
+    const dispatchUrl =
+      route.params.dynamicTopicId !== 'following'
+        ? 'dynamic/GET_DYNAMIC_LIST'
+        : 'dynamic/GET_DYNAMIC_LIST_ME'
     const isSort = ~['newest', 'hot'].indexOf(route.params.dynamicTopicId)
     return Promise.all([
       store.commit('dynamic/INIT_DYNAMIC_LIST'),
-      store.dispatch(dispatchUrl,
-        {
-          topic_id: !isSort ? route.params.dynamicTopicId : '',
-          sort: isSort ? route.params.dynamicTopicId : '',
-          accessToken,
-          isCommit: true
-        })
-    ]);
+      store.dispatch(dispatchUrl, {
+        topic_id: !isSort ? route.params.dynamicTopicId : '',
+        sort: isSort ? route.params.dynamicTopicId : '',
+        accessToken,
+        isCommit: true
+      })
+    ])
   },
   created () {
-    this.$store.dispatch("dynamic/GET_DYNAMIC_TOPIC_INDEX") // 获取首页动态专题列表
+    this.$store.dispatch('dynamic/GET_DYNAMIC_TOPIC_INDEX') // 获取首页动态专题列表
   },
   methods: {
-    getLoginUserInfo () {
-
-    },
-    dynamicSubmit () { // 评论提交的回调
-      if (this.$route.params.dynamicTopicId !== 'following') { // 判断是不是关注页面，是则直接刷新
-        this.$router.push({ name: 'dynamics', params: { dynamicTopicId: 'following' } })
+    dynamicSubmit () {
+      // 评论提交的回调
+      if (this.$route.params.dynamicTopicId !== 'following') {
+        // 判断是不是关注页面，是则直接刷新
+        this.$router.push({
+          name: 'dynamics',
+          params: { dynamicTopicId: 'following' }
+        })
       } else {
         window.location.reload()
       }
     },
     infiniteHandler () {
-      this.isLoading = true;
-      const dispatchUrl = this.$route.params.dynamicTopicId !== 'following' ? "dynamic/GET_DYNAMIC_LIST" : "dynamic/GET_DYNAMIC_LIST_ME"
-      const isSort = ~['newest', 'hot'].indexOf(this.$route.params.dynamicTopicId)
+      this.isLoading = true
+      const dispatchUrl =
+        this.$route.params.dynamicTopicId !== 'following'
+          ? 'dynamic/GET_DYNAMIC_LIST'
+          : 'dynamic/GET_DYNAMIC_LIST_ME'
+      const isSort = ~['newest', 'hot'].indexOf(
+        this.$route.params.dynamicTopicId
+      )
       this.$store
         .dispatch(dispatchUrl, {
           topic_id: !isSort ? this.$route.params.dynamicTopicId : '',
@@ -140,16 +157,16 @@ export default {
           isCommit: true
         })
         .then(result => {
-          this.isLoading = false;
+          this.isLoading = false
           if (result.data.list.length === 10) {
-            this.page += 1;
+            this.page += 1
           } else {
-            this.isMore = false;
+            this.isMore = false
           }
         })
         .catch(err => {
-          this.isMore = false;
-        });
+          this.isMore = false
+        })
     }
   },
   computed: {
@@ -169,13 +186,12 @@ export default {
   margin-bottom: 15px;
   .aside {
     position: fixed;
-    top: 89px;
+    top: 65px;
     width: 110px;
     padding: 12px 10px;
     background: #fff;
     border-radius: 3px;
     transition: all 0.3s ease;
-    border: 1px solid #edf2f9;
     box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
     .nav-list {
       height: 100%;
@@ -189,32 +205,45 @@ export default {
           font-size: 14px;
           margin-bottom: 5px;
           padding: 3px 10px;
-          border-radius: 15px;
+          border-radius: 5px;
           color: #666;
           transition: background-color 0.2s, color 0.2s;
         }
         .current-active {
           color: rgba(0, 0, 0, 0.88);
-          background: #ffd600;
-          border-color: #ffd600;
+          background: #ec7259;
+          border-color: #ec7259;
         }
       }
       &:last-child {
         border-bottom: none;
       }
     }
-    .more {
-      .more-view {
-        border: 1px solid #e0e0e0;
-        border-radius: 15px !important;
-      }
-    }
   }
   .dynamic-main {
-    padding-left: 135px;
-    margin-top: 25px;
+    padding-left: 120px;
+    .stream-wrapper {
+      margin-bottom: 10px;
+    }
     .dy-item {
       position: relative;
+      margin-bottom: 10px;
+    }
+  }
+  @media (max-width: 575px) {
+    .aside {
+      position: static;
+      width: 100%;
+      margin-top: 30px;
+      .nav-list {
+        display: block;
+        .nav-item {
+          display: inline-block;
+        }
+      }
+    }
+    .dynamic-main {
+      padding-left: 0;
     }
   }
 }

@@ -114,7 +114,62 @@ const sendVerifyCodeMail = function (recipient, subject, code) {
   })
 }
 
+const sendNotification = (recipient, subject, data) => {
+  // 消息通知
+  return new Promise((resolve, reject) => {
+    smtpTransport.sendMail(
+      {
+        from: config.email.user,
+        to: recipient,
+        subject: data.date + ' ' + subject,
+        html: `
+        <div class="juejin-reset" style="
+            width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+            font-size: 14px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        ">
+                <div class="header" style="
+                    height: 60px;
+                    padding: 10px 60px;
+                    border-bottom: 1px solid #eaeaea;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    box-sizing: border-box;
+                ">
+                    <div class="header__slogan" style="font-size: 14px;line-height: 40px;height: 40px;">${config.website.website_name}</div>
+                </div>
+                <div class="content" style="
+                    line-height: 25px;
+                    padding: 40px 60px;
+                ">
+                    <div style="font-weight:bold">${data.date} 新的消息通知: <a href="${config.website.website_name}/user/${data.uid}/message">${data.msg}</a></div>
+                    <div style="font-weight:bold">大于${data.noMsgNum}条未读消息时，将采用邮件推送，可前往用户通知中修改</div>
+                </div>
+        </div>
+        `
+      },
+      function (error, response) {
+        if (error) {
+          reject({
+            state: 'error',
+            message: error.response
+          })
+        }
+        resolve({
+          state: 'success',
+          message: '发送成功'
+        })
+      }
+    )
+  })
+}
+
 module.exports = {
   sendMail,
+  sendNotification,
   sendVerifyCodeMail
 }

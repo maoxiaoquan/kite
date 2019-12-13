@@ -23,9 +23,8 @@
 
     <div class="action-box"
          v-if="islogin">
-
       <button @click="subscribeTag"
-              v-if="~userArticleTag.indexOf(articleTagItem.tag_id)"
+              v-if="~userArticleTag.indexOf(articleTagItem.id)"
               class="subscribe-btn already-subscribe">已关注
       </button>
       <button @click="subscribeTag"
@@ -38,6 +37,10 @@
 </template>
 
 <script>
+import {
+  modelType
+} from '@utils/constant'
+
 export default {
   name: 'ArticleTagItem',
   created () {
@@ -57,11 +60,11 @@ export default {
   },
   methods: {
     async subscribeTag () { // 订阅标签
-      await this.$store.dispatch('articleTag/SUBSCRIBE_TAG', { tag_id: this.articleTagItem.tag_id })
+      await this.$store.dispatch('common/SET_ATTENTION', { associate_id: this.articleTagItem.id, type: modelType.article_tag })
         .then(res => {
           this.$store.dispatch('articleTag/MY_SUBSCRIBE_TAG_LIST')
           if (res.state === 'success') {
-            if (res.data.type === 'attention') {
+            if (res.data.type === 'enter') {
               this.subscribe_count += 1
             } else {
               this.subscribe_count -= 1
@@ -88,7 +91,7 @@ export default {
   transition: border-color 0.3s;
   text-align: center;
   padding: 15px 0 20px;
-
+  border: 1px solid #f2f2f2;
   .thumb {
     width: 75px;
     height: 75px;

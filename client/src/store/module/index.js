@@ -14,7 +14,10 @@ import website from './website'
 import dynamic from './dynamic'
 import books from './books'
 import book from './book'
-
+import virtual from './virtual'
+import shop from './shop'
+import common from './common'
+import graphql from './graphql'
 export default {
   sign,
   home,
@@ -31,5 +34,9 @@ export default {
   website,
   dynamic,
   books,
-  book
+  book,
+  virtual,
+  shop,
+  common,
+  graphql
 }
