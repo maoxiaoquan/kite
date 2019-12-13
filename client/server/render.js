@@ -38,6 +38,7 @@ renderer = createBundleRenderer(serverBundle, {
 })
 
 const render = async (req, res, next) => {
+  console.log('client------------------------------------vue')
   res.setHeader('Content-Type', 'text/html')
 
   let accessToken = req.cookies.accessToken || ''
@@ -63,6 +64,7 @@ const render = async (req, res, next) => {
     accessToken: accessToken
   }
 
+  console.log('context1111111111111', context)
   // 判断是否可缓存，可缓存并且缓存中有则直接返回
   const cacheable = isCacheable(req, res, next)
   if (cacheable) {
@@ -75,6 +77,7 @@ const render = async (req, res, next) => {
 
   try {
     const html = await renderer.renderToString(context)
+    console.log('client-------send')
     res.send(html)
     if (cacheable) {
       console.log('设置缓存: ', req.url)
