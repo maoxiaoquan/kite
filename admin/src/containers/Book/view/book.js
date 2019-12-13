@@ -462,7 +462,7 @@ class Book extends React.Component {
 
           <Alert
             style={{ marginTop: '20px' }}
-            message="备注信息"
+            message="备注"
             description="小书章节发表完成后状态是审核中，是仅对自己可见的，审核不通过也是仅自己可见，并且会标注审核不通过，更改为审核通过的小书章节对所有人开放，
           这种方式是人工审核的，暂时采用这种方案，后续会更改"
             type="info"
