@@ -7,13 +7,13 @@
       返回个人中心 <i class="el-icon-d-arrow-right"></i>
     </router-link>
 
-    <ul class="list user-dynamic client-card"
-        v-if="user.user.user_role_ids && user.user_role_all">
+    <ul class="list user-role client-card-shadow"
+        v-if="user.user.user_role_ids && userRoleAll">
       <li class="badge-icon"
-          v-for="(item, key) in user.user_role_all"
+          v-for="(item, key) in userRoleAll"
           :key="key"
           v-if="
-          ~user.user.user_role_ids
+          ~user.user.user_role_ids 
             .split(',')
             .indexOf(String(item.user_role_id)) && item.is_show
         ">
@@ -84,8 +84,15 @@ import { Popover, Face } from '@components'
 import { mapState } from 'vuex'
 export default {
   name: 'UserAside',
-  created () {
-    this.$store.dispatch('user/GET_USER_ROLE_ALL')
+  data () {
+    return {
+      userRoleAll: ''
+    }
+  },
+  mounted () {
+    this.$store.dispatch('user/GET_USER_ROLE_ALL').then(result => {
+      this.userRoleAll = result.data.user_role_all || ''
+    })
   },
   computed: {
     ...mapState(['personalInfo', 'user'])
@@ -108,13 +115,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.user-role {
+  padding: 24px;
+  li {
+    display: inline-block;
+    margin-right: 10px;
+    &.badge-icon .tag-name {
+      font-size: 14px;
+    }
+  }
+}
 .box-aside {
   .list {
-    margin-bottom: 16px;
-    padding-bottom: 16px;
-    list-style: none;
-    border-bottom: 1px solid #f0f0f0;
-    clear: both;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
     li {
       margin-bottom: 10px;
       a {

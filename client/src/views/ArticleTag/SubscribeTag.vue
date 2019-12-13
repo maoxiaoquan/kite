@@ -160,7 +160,7 @@ export default {
 <style scoped lang="scss">
 .subscribe-lay.layout-content {
   .client-card {
-    padding: 20px;
+    padding: 25px 38px;
   }
   .switch-list-nav {
     display: flex;

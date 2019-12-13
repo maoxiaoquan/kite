@@ -10,8 +10,6 @@
     "pid_file": "./log/pm2_test.pid",
     "watch": [
       "server",
-      "client",
-      "admin",
       "db",
       "views",
       "static/_admin",

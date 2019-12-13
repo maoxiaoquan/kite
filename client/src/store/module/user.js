@@ -11,10 +11,6 @@ const state = () => ({
   user_info: {},
   user: {},
   user_article_blog: [], // 用户的文章专题
-  user_aside: {
-    // 侧栏
-    user_role_all: []
-  },
   attentionCount: 0, // 用户未读
   messageCount: 0, // 用户未读
   associateInfo: {
@@ -38,10 +34,6 @@ const mutations = {
   SET_USER_ARTICLE_BLOG_ALL (state, data) {
     // 设置获取的全部的个人文章专栏
     state.user_article_blog = data.list
-  },
-  SET_USER_ROLE_ALL (state, data) {
-    // 用户标签全部
-    state.user_aside.user_role_all = data.user_role_all
   },
   SET_UNREAD_MESSAGE_COUNT (state, data) {
     // 用户消息数量
@@ -188,9 +180,6 @@ const actions = {
       url: '/user/role-all',
       method: 'get',
       parameter: { params: data }
-    }).then(result => {
-      commit('SET_USER_ROLE_ALL', result.data)
-      return result
     })
   },
   GET_UNREAD_MESSAGE_COUNT: ({ commit, dispatch, state }, data) => {

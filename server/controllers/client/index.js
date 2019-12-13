@@ -13,7 +13,7 @@ const {
 } = require('../../utils/constant')
 
 class Index {
-  static async getIndex(req, res, next) {
+  static async getIndex (req, res, next) {
     let page = req.query.page || 1
     let pageSize = req.query.pageSize || 25
     let columnEnName = req.query.columnEnName || ''

@@ -29,7 +29,7 @@ function ErrorMessage (message) {
 
 // 获取动态专题详情
 
-class dynamicBlog {
+class articleBlog {
   /**
    * 获取所有文章专题get
    * @param   {object} ctx 上下文对象
@@ -599,4 +599,4 @@ class dynamicBlog {
   }
 }
 
-module.exports = dynamicBlog
+module.exports = articleBlog

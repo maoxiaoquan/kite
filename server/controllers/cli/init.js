@@ -44,7 +44,6 @@ class Init {
   }
 
   static async cliInit (req, res, next) {
-    console.log(11111111111111)
     await render(res, {
       title: 'init project',
       view_url: '_cli/init',
@@ -111,7 +110,7 @@ class Init {
       const { sequelize } = require('../../../db/mysqldb/define')(initSequelize)
 
       await sequelize.sync({ force: true })
-      console.log(111111111188)
+
       res.json({
         state: 'success',
         message: 'mysql table create success'

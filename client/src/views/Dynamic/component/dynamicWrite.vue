@@ -341,8 +341,9 @@ export default {
 <style scoped lang="scss">
 .dynamic-editor {
   position: relative;
+  box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
   .editor-body {
-    padding: 15px 20px 0;
+    padding: 20px 20px 0;
     position: relative;
     border-radius: 2px;
     .content {

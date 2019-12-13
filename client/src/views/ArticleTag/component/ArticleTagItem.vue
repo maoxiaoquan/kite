@@ -91,7 +91,7 @@ export default {
   transition: border-color 0.3s;
   text-align: center;
   padding: 15px 0 20px;
-
+  border: 1px solid #f2f2f2;
   .thumb {
     width: 75px;
     height: 75px;

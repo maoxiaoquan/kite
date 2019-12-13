@@ -370,6 +370,16 @@ class User {
   static async userPersonalInfo (req, res, next) {
     let { islogin = '', user = '' } = req
     try {
+      if (!islogin) {
+        await resClientJson(res, {
+          state: 'success',
+          message: '获取成功',
+          data: {
+            islogin: false,
+            user: {}
+          }
+        })
+      }
       let oneUser = await models.user.findOne({
         where: { uid: user.uid },
         attributes: [

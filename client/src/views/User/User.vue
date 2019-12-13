@@ -252,14 +252,15 @@ export default {
   .main {
     .main-top {
       .avatar {
-        float: left;
-        width: 80px;
-        height: 80px;
-        margin-left: -2px;
+        text-align: center;
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 15px;
         .avatar-img {
           border-radius: 160px;
           width: 80px;
           height: 80px;
+          display: inline-block;
           .box-image {
             width: 80px;
             height: 80px;
@@ -274,7 +275,7 @@ export default {
         }
       }
       .title {
-        padding: 0 0 0 100px;
+        text-align: center;
         .name {
           display: inline;
           font-size: 21px;
@@ -284,7 +285,7 @@ export default {
       }
       .info {
         margin-top: 5px;
-        padding-left: 100px;
+        text-align: center;
         font-size: 14px;
         li {
           display: inline-block;
@@ -313,14 +314,12 @@ export default {
       .user-follow-button {
         font-size: 14px;
         outline: 0;
-        float: right;
         border: 1px solid #00bb29;
         border-radius: 30px;
-        padding: 6px 30px;
-        margin-right: 30px;
+        padding: 3px 20px;
         color: #fff;
-        display: inline-block;
-        margin-left: 20px;
+        display: block;
+        margin: 14px auto;
         &.off {
           background: #999;
           border: 1px solid #ccc;

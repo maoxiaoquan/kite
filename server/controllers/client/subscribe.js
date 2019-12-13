@@ -15,7 +15,7 @@ const {
 const userVirtual = require('../../common/userVirtual')
 
 class Subscribe {
-  static async getArticleTagList(req, res, next) {
+  static async getArticleTagList (req, res, next) {
     let page = req.query.page || 1
     let pageSize = req.query.pageSize || 24
     let tag_name = req.query.tag_name
@@ -81,7 +81,7 @@ class Subscribe {
     }
   }
 
-  static async getArticleTagListMy(req, res, next) {
+  static async getArticleTagListMy (req, res, next) {
     let page = req.query.page || 1
     let pageSize = req.query.pageSize || 25
     let { user = '' } = req
@@ -175,9 +175,18 @@ class Subscribe {
    * @param   {object} ctx 上下文对象
    */
 
-  static async getSubscribeTagMyAll(req, res, next) {
-    let { user = '' } = req
+  static async getSubscribeTagMyAll (req, res, next) {
+    let { user = '', islogin } = req
     try {
+      if (!islogin) {
+        resClientJson(res, {
+          state: 'success',
+          message: '获取当前用户订阅的标签成功',
+          data: {
+            subscribe_article_tag: []
+          }
+        })
+      }
       let allSubscribeArticleTag = await models.attention.findAll({
         where: {
           uid: user.uid,
