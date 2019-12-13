@@ -3,10 +3,10 @@ const router = express.Router()
 const path = require('path')
 const fs = require('fs')
 
-module.exports = router.get('*', async ctx => {
+module.exports = router.get('*', async (req, res, netx) => {
   const html = fs.readFileSync(
     path.resolve(__dirname, '../../static/_admin/index.html'),
     'utf-8'
   )
-  ctx.response.body = html
+  res.send(html)
 })

@@ -19,10 +19,11 @@ module.exports = app => {
     const client = require('./client')
     const admin = require('./admin')
 
-    app.use(`/api-client/${API_VERSION}`, apiClient)
-    app.use(`/api-admin/${API_VERSION}`, apiAdmin)
-    app.use(`/${config.admin_url}`, admin)
-    app.use('*', client)
+    app
+      .use(`/api-client/${API_VERSION}`, apiClient)
+      .use(`/api-admin/${API_VERSION}`, apiAdmin)
+      .use(`/${config.admin_url}`, admin)
+      .use('/', client)
   } else {
     console.log('项目还未初始化，请初始化后再继续进行当前操作......')
     console.log(
