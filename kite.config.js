@@ -47,7 +47,7 @@ module.exports = {
     outDir: IS_NODE_ENV
       ? ProcessCwd('admin/_admin')
       : ProcessCwd('static/_admin'),
-    publicPath: IS_NODE_ENV ? './' : '_admin/',
+    publicPath: IS_NODE_ENV ? './' : '/_admin/',
     proxy: {
       '/api-admin/v1': {
         target: `http://localhost:8086/`,
