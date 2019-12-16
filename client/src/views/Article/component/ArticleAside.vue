@@ -165,7 +165,7 @@ export default {
       padding: 12px 15px;
     }
     .entry-title {
-      font-size: 12px;
+      font-size: 14px;
       color: #333;
     }
     .entry-meta-box {
