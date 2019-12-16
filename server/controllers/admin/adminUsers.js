@@ -244,7 +244,7 @@ class AdminUsers {
         allAuthorityNameId.push(AllAuthorityName[i].authority_url)
       }
 
-      let oneAdminUser = await await models.admin_user.findOne({
+      let oneAdminUser = await models.admin_user.findOne({
         attributes: [
           'uid',
           'avatar',
