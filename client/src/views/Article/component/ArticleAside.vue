@@ -69,6 +69,11 @@ export default {
   mounted () {
     this.getUserInfo() // 获取用户的信息
   },
+  watch: {
+    $route (to, from) {
+      this.getUserInfo()
+    }
+  },
   computed: {
     article () {
       return this.$store.state.article.article || {}

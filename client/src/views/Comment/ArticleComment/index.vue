@@ -55,6 +55,11 @@ export default {
       }
     }
   },
+  watch: {
+    $route (to, from) {
+      this.getCommentList()
+    }
+  },
   methods: {
     getCommentList () {
       // 获取评论列表
