@@ -3,7 +3,7 @@ const models = require('../../db/mysqldb/index')
 const config = require('../config')
 const Op = require('sequelize').Op
 
-function ErrorMessage (message) {
+function ErrorMessage(message) {
   this.message = message
   this.name = 'UserException'
 }
@@ -12,7 +12,7 @@ const noLimit = ['/admin-index/statistics', '/admin-user/info']
 
 class VerifyAuthority {
   // 前台权限验证
-  static async ClientCheck (req, res, next) {
+  static async ClientCheck(req, res, next) {
     const { user = {} } = req
     const url = req.url
     const { user_role_ids } = user
@@ -68,7 +68,7 @@ class VerifyAuthority {
   }
 
   // 后台权限验证
-  static async AdminCheck (req, res, next) {
+  static async AdminCheck(req, res, next) {
     const { url, userInfo = {} } = req
     const { role_id } = userInfo
     if (role_id && role_id !== config.SUPER_ROLE_ID) {
@@ -80,9 +80,10 @@ class VerifyAuthority {
       } else {
         adminUrl = url
       }
+
       try {
         let oneAdminAuthority = await models.admin_authority.findOne({
-          where: { authority_url: adminUrl.split('/api-admin/v1')[1] || '' }
+          where: { authority_url: adminUrl || '' }
         })
         if (oneAdminAuthority) {
           let oneAdminRole = await models.admin_role.findOne({
@@ -97,9 +98,9 @@ class VerifyAuthority {
           ) {
             await next()
           } else {
-            throw new ErrorMessage('当前用户无权限!')
+            throw new ErrorMessage('当前用户组无权限!')
           }
-        } else if (~noLimit.indexOf(adminUrl.split('/api-admin/v1')[1])) {
+        } else if (~noLimit.indexOf(adminUrl)) {
           // 排除某些特定接口
           await next()
         } else {
@@ -108,7 +109,7 @@ class VerifyAuthority {
       } catch (err) {
         resAdminJson(res, {
           state: 'error',
-          message: '当前用户无权限!'
+          message: '当前用户组无权限!'
         })
       }
     } else {
@@ -118,7 +119,7 @@ class VerifyAuthority {
       } else {
         resAdminJson(res, {
           state: 'error',
-          message: '当前用户无任何操作权限'
+          message: '当前用户组无任何操作权限'
         })
       }
     }

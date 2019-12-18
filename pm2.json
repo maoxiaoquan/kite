@@ -1,6 +1,6 @@
 {
   "apps": {
-    "name": "kite-dev",
+    "name": "kite",
     "script": "./server/index.js",
     "min_uptime": "60s",
     "max_restarts": 30,
