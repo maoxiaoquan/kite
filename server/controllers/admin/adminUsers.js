@@ -15,7 +15,7 @@ const { createAdminSystemLog } = require('./adminSystemLog')
 const Op = require('sequelize').Op
 const { lowdb } = require('../../../db/lowdb/index')
 
-function ErrorMessage (message) {
+function ErrorMessage(message) {
   this.message = message
   this.name = 'UserException'
 }
@@ -25,7 +25,7 @@ class AdminUsers {
    * 登录操作
    * @param  {object} ctx 上下文对象
    */
-  static async adminSignIn (req, res, next) {
+  static async adminSignIn(req, res, next) {
     let { account, password } = req.body
     try {
       const oneAdminUser = await models.admin_user.findOne({
@@ -79,7 +79,7 @@ class AdminUsers {
    * 注册操作
    * @param   {object} ctx 上下文对象
    */
-  static async createAdminUser (req, res, next) {
+  static async createAdminUser(req, res, next) {
     const reqData = req.body
 
     try {
@@ -140,7 +140,7 @@ class AdminUsers {
    * 更新管理员用户
    * @param   {object} ctx 上下文对象
    */
-  static async editAdminUser (req, res, next) {
+  static async editAdminUser(req, res, next) {
     const reqData = req.body
     try {
       await models.admin_user.update(
@@ -175,7 +175,7 @@ class AdminUsers {
    * 获取用户列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async getAdminUserList (req, res, next) {
+  static async getAdminUserList(req, res, next) {
     const { page = 1, pageSize = 10 } = req.query
     try {
       let { count, rows } = await models.admin_user.findAndCountAll({
@@ -215,7 +215,7 @@ class AdminUsers {
    * 获取后台用户信息
    * @param   {object} ctx 上下文对象
    */
-  static async getAdminUserInfo (req, res, next) {
+  static async getAdminUserInfo(req, res, next) {
     const { userInfo = {} } = req
     try {
       const { role_id } = userInfo
@@ -255,7 +255,10 @@ class AdminUsers {
           'last_sign_time',
           'reg_ip',
           'enable'
-        ]
+        ],
+        where: {
+          uid: userInfo.uid
+        }
       })
 
       resAdminJson(res, {
@@ -283,7 +286,7 @@ class AdminUsers {
    * 无关联则直接管理员删除，有关联则开启事务同时删除管理员角色关联表中关联
    * 管理员对角色是一对一的关系
    */
-  static async deleteAdminUser (req, res, next) {
+  static async deleteAdminUser(req, res, next) {
     const { uid } = req.body
     /* 无关联 */
     try {
