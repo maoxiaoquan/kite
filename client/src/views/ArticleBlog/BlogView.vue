@@ -127,7 +127,7 @@ export default {
         {
           // set meta
           name: "description",
-          content: `${this.website.meta.description || ""}`
+          content: `${this.articleBlog.blogInfo.description || this.articleBlog.blogInfo.name}`
         }
       ],
       htmlAttrs: {

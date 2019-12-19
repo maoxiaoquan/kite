@@ -6,7 +6,6 @@
         <div class="col-xs-12 col-sm-8--4 col-md-8--4">
           <!--home-lay layout-content start-->
           <section class="home-main layout-content client-card">
-            <NavHeader :navItem="articleColumn.homeColumn" />
 
             <NavSort @navTap="navTap"
                      ref="navSort"></NavSort>
@@ -29,7 +28,7 @@
         <div class="col-xs-12 col-sm-3--6 col-md-3--6">
           <!--aside.html start-->
           <div class="home-aside">
-            <HomeAside />
+            <ColumnAside />
           </div>
           <!--aside.html end-->
         </div>
@@ -39,7 +38,7 @@
 </template>
 
 <script>
-import HomeAside from "@views/Home/HomeAside";
+import ColumnAside from "@views/Home/ColumnAside";
 import NavHeader from "@views/Home/NavHeader";
 import NavSort from "@views/Home/NavSort";
 import ArticleItem from "@views/Article/component/ArticleItem";
@@ -86,7 +85,10 @@ export default {
         route.params.en_name || ""
       ),
       store.commit("home/SET_INIT_INDEX_ARTICLE_LIST"), // 重置文章列表数据
-      store.dispatch("articleColumn/GET_ARTICLE_COLUMN"),
+      store.dispatch("articleColumn/GET_ARTICLE_COLUMN_ALL"),
+      store.dispatch("articleColumn/GET_ARTICLE_COLUMN", {
+        en_name: route.params.en_name || ""
+      }),
       store.dispatch("home/GET_INDEX_ARTICLE_LIST", {
         columnEnName: route.params.en_name || ""
       })
@@ -155,7 +157,7 @@ export default {
     ...mapState(["home", "articleColumn", "website"]) // home:主页  articleColumn:文章的专栏
   },
   components: {
-    HomeAside,
+    ColumnAside,
     NavHeader,
     NavSort,
     ArticleItem,

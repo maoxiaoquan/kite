@@ -849,6 +849,59 @@ class Article {
 
   static async getArticleColumn (req, res, next) {
     try {
+      const en_name = req.query.en_name
+      let oneArticleColumn = await models.article_column.findOne({
+        attributes: [
+          'column_id',
+          'name',
+          'en_name',
+          'icon',
+          'tag_ids',
+          'description'
+        ],
+        where: {
+          enable: true,
+          is_home: true,
+          en_name: en_name
+        }
+      })
+
+      if (oneArticleColumn.tag_ids) {
+        oneArticleColumn.setDataValue(
+          'tag',
+          await models.article_tag.findAll({
+            where: {
+              tag_id: {
+                [Op.or]: oneArticleColumn.tag_ids.split(',')
+              }
+            }
+          })
+        )
+      }
+
+      resClientJson(res, {
+        state: 'success',
+        message: '获取所有文章专栏成功',
+        data: {
+          view: oneArticleColumn
+        }
+      })
+    } catch (err) {
+      resClientJson(res, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
+  /**
+   * 获取文章专栏全部列表
+   * @param   {object} ctx 上下文对象
+   */
+
+  static async getArticleColumnAll (req, res, next) {
+    try {
       let allArticleColumn = await models.article_column.findAll({
         attributes: [
           'column_id',

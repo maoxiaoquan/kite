@@ -9,7 +9,7 @@ export default [
         component: require('@views/Home/Home').default // 主页
       },
       {
-        path: 'column/:en_name',
+        path: '/column/:en_name',
         name: 'column',
         component: require('@views/Home/Column').default // 主页
       },
@@ -19,7 +19,7 @@ export default [
         component: require('@views/Article/Article').default // 文章内容页
       },
       {
-        path: 'attention',
+        path: 'user-attention',
         name: 'AttentionMessage',
         component: () => import('@views/AttentionMessage') // 关注
       },
@@ -34,7 +34,7 @@ export default [
         component: () => import('@views/User/User') // 用户内页
       },
       {
-        path: 'personal',
+        path: 'personal-info',
         name: 'personal',
         component: () => import('@views/User/Personal') // 个人页
       },
@@ -108,7 +108,7 @@ export default [
         component: () => import('@views/Dynamic/dynamicView') // 动态内容页
       },
       {
-        path: 'topics',
+        path: 'dynamic-topics',
         name: 'dynamicTopic',
         component: () => import('@views/Dynamic/dynamicTopic') // 动态专题
       },
