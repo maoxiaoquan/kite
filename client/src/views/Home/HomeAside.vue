@@ -90,7 +90,7 @@
       </ul>
       <ul class="more-list"
           v-if="website.meta.miibeian">
-        <li class="item"><a href="www.beian.miit.gov.cn"
+        <li class="item"><a href="http://www.beian.miit.gov.cn"
              target="_blank">{{website.meta.miibeian}}</a></li>
       </ul>
       <ul class="more-list">
