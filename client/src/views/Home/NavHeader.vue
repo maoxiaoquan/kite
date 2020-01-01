@@ -33,7 +33,6 @@ export default {
   },
   methods: {
     switchNav (val) {
-      console.log('val', val)
       this.$router.push(val)
     }
   },
@@ -88,30 +87,25 @@ export default {
       .nav-more-btn {
         position: absolute;
         right: 25px;
-        top: 30px;
-        padding: 0 16px;
-        font-size: 14px;
+        top: 27px;
+        font-size: 13px;
         line-height: 32px;
-        color: #8590a6;
         text-align: center;
         cursor: pointer;
         background: none;
         border: 1px solid;
         border-radius: 3px;
-        width: 48px;
-        height: 26px;
+        width: 56px;
+        height: 28px;
         display: -webkit-box;
-        display: -ms-flexbox;
         display: flex;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
         justify-content: center;
-        border-radius: 15px;
+        border-radius: -1px;
         vertical-align: center;
-        line-height: 26px;
+        line-height: 28px;
         padding: 0;
         color: #8590a6;
-        font-size: 12px;
+        font-size: 14px;
       }
     }
   }

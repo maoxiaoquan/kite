@@ -29,7 +29,7 @@
                     <span class="publish-time">{{ article.create_dt }}</span>
                     <span class="views-count">阅读 {{ article.read_count }}</span>
                     <span class="comments-count">评论 {{ article.comment_count }}</span>
-                    <span class="likes-count">喜欢 {{ article.thumb_count }}</span>
+                    <span class="likes-count">点赞 {{ article.thumb_count }}</span>
                     <span class="source">{{ sourceTypeList[article.source] }}
                       {{ articleTypeList[article.type] }}</span>
                   </div>
