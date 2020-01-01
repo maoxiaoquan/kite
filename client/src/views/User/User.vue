@@ -113,7 +113,7 @@
                 </li>
                 <li>
                   <router-link :to="{ name: 'user', params: { routeType: 'blog' } }">
-                    专栏
+                    个人专栏
                   </router-link>
                 </li>
                 <li>

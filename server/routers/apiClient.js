@@ -163,6 +163,8 @@ router.get('/article/search', article.searchArticle) // 搜索
 
 router.get('/article/column', article.getArticleColumn) // 获取文章专栏
 
+router.get('/article/column-all', article.getArticleColumnAll) // 获取文章专栏
+
 router.get('/article-column/list', article.getArticleColumnList) // 获取文章专栏列表
 
 /**

@@ -145,7 +145,7 @@ export default {
 .tag-lay.layout-content {
   padding-bottom: 50px;
   .article-tag-main {
-    padding: 30px;
+    padding: 24px;
   }
   .article-tag-aside {
     padding-bottom: 25px;
@@ -207,7 +207,6 @@ export default {
   }
 
   .trigger-menu {
-    margin-bottom: 20px;
     border-bottom: 1px solid #f0f0f0;
     font-size: 0;
     list-style: none;
