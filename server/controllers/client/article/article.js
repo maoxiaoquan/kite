@@ -8,7 +8,7 @@ const xss = require('xss')
 const config = require('../../../config')
 const { lowdb } = require('../../../../db/lowdb/index')
 const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deleted },
   articleType,
   modelType,
   userMessageAction,
@@ -334,7 +334,7 @@ class Article {
       let articleTagAll = await models.article_tag.findAll({
         attributes: ['tag_id', 'name', 'en_name', 'icon', 'description'],
         where: { enable: true },
-        limit: 20, // 为空，获取全部，也可以自己添加条件
+        limit: 12, // 为空，获取全部，也可以自己添加条件
         order: [
           ['attention_count', 'DESC'] // ASC
         ]
@@ -732,7 +732,7 @@ class Article {
 
       await models.article.update(
         {
-          status: deletes
+          status: deleted
         }, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败，4回收站，5已删除)'}, {
         {
           where: {
@@ -848,6 +848,59 @@ class Article {
    */
 
   static async getArticleColumn (req, res, next) {
+    try {
+      const en_name = req.query.en_name
+      let oneArticleColumn = await models.article_column.findOne({
+        attributes: [
+          'column_id',
+          'name',
+          'en_name',
+          'icon',
+          'tag_ids',
+          'description'
+        ],
+        where: {
+          enable: true,
+          is_home: true,
+          en_name: en_name
+        }
+      })
+
+      if (oneArticleColumn && oneArticleColumn.tag_ids) {
+        oneArticleColumn.setDataValue(
+          'tag',
+          await models.article_tag.findAll({
+            where: {
+              tag_id: {
+                [Op.or]: oneArticleColumn.tag_ids.split(',')
+              }
+            }
+          })
+        )
+      }
+
+      resClientJson(res, {
+        state: 'success',
+        message: '获取所有文章专栏成功',
+        data: {
+          view: oneArticleColumn
+        }
+      })
+    } catch (err) {
+      resClientJson(res, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
+  /**
+   * 获取文章专栏全部列表
+   * @param   {object} ctx 上下文对象
+   */
+
+  static async getArticleColumnAll (req, res, next) {
     try {
       let allArticleColumn = await models.article_column.findAll({
         attributes: [

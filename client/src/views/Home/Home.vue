@@ -6,10 +6,7 @@
         <div class="col-xs-12 col-sm-8--4 col-md-8--4">
           <!--home-lay layout-content start-->
           <section class="home-main  layout-content client-card">
-            <NavHeader :navItem="articleColumn.homeColumn" />
-
-            <NavSort @navTap="navTap"
-                     ref="navSort"></NavSort>
+            <NavHeader />
 
             <div class="article-view">
               <scroll-loading @scroll-loading="infiniteHandler"
@@ -40,7 +37,7 @@
 <script>
 import HomeAside from "@views/Home/HomeAside";
 import NavHeader from "@views/Home/NavHeader";
-import NavSort from "@views/Home/NavSort";
+import NavColumn from "@views/Home/NavColumn";
 import ArticleItem from "@views/Article/component/ArticleItem";
 import { mapState } from "vuex";
 import { ScrollLoading } from "@components";
@@ -120,7 +117,7 @@ export default {
         // route.params.en_name || ''
       ),
       store.commit("home/SET_INIT_INDEX_ARTICLE_LIST"), // 重置文章列表数据
-      store.dispatch("articleColumn/GET_ARTICLE_COLUMN"),
+      store.dispatch("articleColumn/GET_ARTICLE_COLUMN_ALL"),
       store.dispatch("home/GET_INDEX_ARTICLE_LIST", {
         // column_en_name: route.params.en_name || ''
       })
@@ -145,10 +142,6 @@ export default {
     this.$store.dispatch("home/GET_POPULAR_ARTICLE_TAG"); // 获取热门文章标签
   },
   methods: {
-    navTap (val) {
-      this.sort = val;
-      this.initHomeDate();
-    },
     initHomeDate () {
       this.$store.commit("home/SET_INIT_INDEX_ARTICLE_LIST"); // 重置文章列表数据
       this.isMore = true;
@@ -180,9 +173,9 @@ export default {
     ...mapState(["home", "articleColumn", "website"]) // home:主页  article_column:文章的专栏
   },
   components: {
-    HomeAside,
     NavHeader,
-    NavSort,
+    HomeAside,
+    NavColumn,
     ArticleItem,
     ScrollLoading
   }

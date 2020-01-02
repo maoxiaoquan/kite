@@ -5,42 +5,58 @@
           v-for="(item,key) in navList"
           :key="key"
           @click="_navTap(item.name)"
-          v-if="item.type==='left'"
           :class="{'active':current_nav===item.name}">
         <a href="javascript:;">{{item.text}}</a>
       </li>
     </ul>
-    <ul class="nav-list right">
-      <li class="nav-item"
-          v-for="(item,key) in navList"
-          @click="_navTap(item.name)"
-          :key="key"
-          v-if="item.type==='right'"
-          :class="{'active':current_nav===item.name}">
-        <a href="javascript:;">{{item.text}}</a>
-      </li>
-    </ul>
+
+    <!-- <div class="right">
+      <router-link class="menu"
+                   :to="{name:'home'}">
+        <i class="el-icon-s-home"></i>
+      </router-link>
+      <span class="menu">
+        <Popover :visible.sync="faceVisible">
+          <div class="nav-items">
+            <span v-for="columnItem in articleColumn.homeColumn"
+                  :key="columnItem.column_id"
+                  :class="{'active':articleColumn.currColumnEnName===columnItem.en_name}"
+                  @click="switchNav({name:'column',params:{en_name:columnItem.en_name}})">
+              {{columnItem.name}}
+            </span>
+            <router-link :to="{name:'columnAll'}">
+              更多...
+            </router-link>
+          </div>
+
+          <i slot="button"
+             class="el-icon-menu"></i>
+        </Popover>
+      </span>
+    </div> -->
+
   </nav>
 </template>
 
 <script>
+
+import { Popover } from "@components";
+import { mapState } from 'vuex'
 export default {
   name: "NavSort",
   data () {
     return {
+      faceVisible: false,
       navList: [
         {
-          type: "left",
           name: "newest",
           text: "最新"
         },
         {
-          type: "left",
           name: "hottest",
           text: "全部热门"
         },
         {
-          type: "left",
           name: "monthlyHottest",
           text: "本月最热"
         }
@@ -52,10 +68,22 @@ export default {
     dafauleNav () {
       this.current_nav = "newest";
     },
+    switchNav (val) {
+      this.faceVisible = false
+      if (this.articleColumn.currColumnEnName !== val.params.en_name) {
+        this.$router.push(val)
+      }
+    },
     _navTap (val) {
       this.$emit("navTap", val);
       this.current_nav = val;
     }
+  },
+  computed: {
+    ...mapState(['articleColumn'])
+  },
+  components: {
+    Popover
   }
 };
 </script>
@@ -72,7 +100,7 @@ export default {
     position: relative;
     display: flex;
     justify-content: space-between;
-    padding: 20px 0;
+    padding: 25px 0;
     .active {
       a {
         color: #ea6f5a;
@@ -93,23 +121,41 @@ export default {
     }
   }
   .right {
-    .nav-item {
-      font-size: 14px;
-      padding: 0 10px;
-      position: relative;
+    display: flex;
+    align-items: center;
+    .menu {
+      width: 50px;
+      display: inline-block;
+      text-align: center;
+      line-height: 50px;
+      height: 50px;
+      cursor: pointer;
+      i {
+        font-size: 18px;
+        color: #666;
+      }
+      /deep/.pop-view {
+        right: 0;
+        width: 500px;
+      }
     }
-    .nav-item:not(:last-child):after {
-      width: 2px;
-      height: 2px;
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      content: "";
-      position: absolute;
-      left: 100%;
-      top: 50%;
-      background-color: #2b445d;
-      transform: translateY(-50%);
-      opacity: 0.5;
+  }
+}
+
+.nav-items {
+  a,
+  span {
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    background: #f1f1f1;
+    margin-bottom: 10px;
+    &.active {
+      font-weight: 500;
+      color: #f46e65;
+      background-color: #f46e653b;
     }
   }
 }

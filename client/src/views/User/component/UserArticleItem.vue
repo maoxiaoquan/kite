@@ -122,18 +122,12 @@ export default {
               aid: this.articleItem.aid
             })
             .then(result => {
-              this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
+              this.$message.success("删除成功");
               this.$emit("delete-change");
             });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消删除"
-          });
+          this.$message.warning("取消删除");
         });
     },
     commandChange (val) {

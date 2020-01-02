@@ -9,9 +9,6 @@
 
             <nav class="column-menu">
               <ul class="nav-item-view">
-                <li class="nav-item">
-                  <router-link :to="{name:'books',params:{columnEnName:'all'}}">热门</router-link>
-                </li>
                 <li class="nav-item"
                     v-for="column_item in articleColumn.homeColumn"
                     :key="column_item.column_id">
@@ -171,7 +168,7 @@ export default {
   asyncData ({ store, route }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
-      store.dispatch("articleColumn/GET_ARTICLE_COLUMN"),
+      store.dispatch("articleColumn/GET_ARTICLE_COLUMN_ALL"),
       store.dispatch('books/GET_BOOKS_LIST', {
         page: route.query.page || 1,
         columnEnName: route.params.columnEnName || '',

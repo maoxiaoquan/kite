@@ -8,11 +8,16 @@ const state = () => ({
     page: 1,
     pageSize: 25
   },
+  column: {},
   currColumnEnName: '' // 当前 文章专栏
 })
 
 const mutations = {
   SET_ARTICLE_COLUMN (state, data) {
+    // 设置获取的文章专栏
+    state.column = data.view
+  },
+  SET_ARTICLE_COLUMN_ALL (state, data) {
     // 设置获取的文章专栏
     state.homeColumn = data.list
   },
@@ -35,6 +40,17 @@ const actions = {
       parameter: { params: parameter }
     }).then(result => {
       commit('SET_ARTICLE_COLUMN', result.data)
+      return result
+    })
+  },
+  GET_ARTICLE_COLUMN_ALL ({ commit, dispatch, state }, parameter) {
+    // 获取文章专栏
+    return fetch({
+      url: '/article/column-all',
+      method: 'get',
+      parameter: { params: parameter }
+    }).then(result => {
+      commit('SET_ARTICLE_COLUMN_ALL', result.data)
       return result
     })
   },
