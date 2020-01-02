@@ -6,7 +6,7 @@
         <div class="col-xs-12 col-sm-8--4 col-md-8--4">
           <!--home-lay layout-content start-->
           <section class="home-main  layout-content client-card">
-            <NavHeader :navItem="articleColumn.homeColumn" />
+            <NavHeader />
 
             <div class="article-view">
               <scroll-loading @scroll-loading="infiniteHandler"
@@ -37,6 +37,7 @@
 <script>
 import HomeAside from "@views/Home/HomeAside";
 import NavHeader from "@views/Home/NavHeader";
+import NavColumn from "@views/Home/NavColumn";
 import ArticleItem from "@views/Article/component/ArticleItem";
 import { mapState } from "vuex";
 import { ScrollLoading } from "@components";
@@ -172,8 +173,9 @@ export default {
     ...mapState(["home", "articleColumn", "website"]) // home:主页  article_column:文章的专栏
   },
   components: {
-    HomeAside,
     NavHeader,
+    HomeAside,
+    NavColumn,
     ArticleItem,
     ScrollLoading
   }

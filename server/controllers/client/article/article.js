@@ -8,7 +8,7 @@ const xss = require('xss')
 const config = require('../../../config')
 const { lowdb } = require('../../../../db/lowdb/index')
 const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deleted },
   articleType,
   modelType,
   userMessageAction,
@@ -334,7 +334,7 @@ class Article {
       let articleTagAll = await models.article_tag.findAll({
         attributes: ['tag_id', 'name', 'en_name', 'icon', 'description'],
         where: { enable: true },
-        limit: 20, // 为空，获取全部，也可以自己添加条件
+        limit: 12, // 为空，获取全部，也可以自己添加条件
         order: [
           ['attention_count', 'DESC'] // ASC
         ]
@@ -732,7 +732,7 @@ class Article {
 
       await models.article.update(
         {
-          status: deletes
+          status: deleted
         }, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败，4回收站，5已删除)'}, {
         {
           where: {
@@ -866,7 +866,7 @@ class Article {
         }
       })
 
-      if (oneArticleColumn.tag_ids) {
+      if (oneArticleColumn && oneArticleColumn.tag_ids) {
         oneArticleColumn.setDataValue(
           'tag',
           await models.article_tag.findAll({

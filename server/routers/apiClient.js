@@ -145,7 +145,9 @@ router.post(
   article.createArticle
 ) // 编写文章post TYPE:AJAX post
 
-router.get('/article/index', index.getIndex) // 首页文章 get
+router.get('/article/index', index.getIndexArticle) // 首页文章 get
+
+router.get('/article/index-column', index.getColumnArticle) // 首页专栏文章 get
 
 router.put('/article/update', tokens.ClientVerifyToken, article.updateArticle) // 更新文章
 

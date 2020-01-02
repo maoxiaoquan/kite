@@ -34,9 +34,20 @@ const mutations = {
 
 const actions = {
   GET_INDEX_ARTICLE_LIST ({ commit, dispatch, state }, parameter = {}) {
-    // 获取首页 专栏页 文章列表
+    // 获取首页 文章列表
     return fetch({
       url: '/article/index',
+      method: 'get',
+      parameter: { params: parameter }
+    }).then(result => {
+      commit('SET_INDEX_ARTICLE_LIST', result.data)
+      return result
+    })
+  },
+  GET_INDEX_COLUMN_ARTICLE_LIST ({ commit, dispatch, state }, parameter = {}) {
+    // 获取首页 专栏页 文章列表
+    return fetch({
+      url: '/article/index-column',
       method: 'get',
       parameter: { params: parameter }
     }).then(result => {
