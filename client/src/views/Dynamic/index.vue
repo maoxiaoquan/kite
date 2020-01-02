@@ -227,7 +227,9 @@ export default {
     }
     .dy-item {
       position: relative;
-      margin-bottom: 10px;
+      /deep/.dynamic-item {
+        margin-bottom: 10px;
+      }
     }
   }
   @media (max-width: 575px) {

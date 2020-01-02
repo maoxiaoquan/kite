@@ -29,7 +29,7 @@ export default {
   display: -ms-flexbox;
   display: flex;
   border-bottom: 1px solid #f6f6f6;
-  height: 58px;
+  height: 62px;
   border-bottom: 1px solid #f0f2f7;
   .top-tabs-link {
     -webkit-box-align: center;
