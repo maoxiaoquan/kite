@@ -46,4 +46,9 @@ export default {
     }
   }
 }
+@media (max-width: 575px) {
+  .top-tabs {
+    height: 50px;
+  }
+}
 </style>

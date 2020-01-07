@@ -210,6 +210,16 @@ export default {
       }
     }
   }
+
+  @media (max-width: 575px) {
+    .layout-content {
+      .article-view {
+        /deep/ .article-item {
+          padding: 12px;
+        }
+      }
+    }
+  }
 }
 </style>
 

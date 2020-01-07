@@ -3,7 +3,7 @@ const { resAdminJson } = require('../../utils/resData')
 const moment = require('moment')
 const Op = require('sequelize').Op
 
-function ErrorMessage (message) {
+function ErrorMessage(message) {
   this.message = message
   this.name = 'UserException'
 }
@@ -13,7 +13,7 @@ class Dynamics {
    * 获取用户列表操作
    * @param   {object} ctx 上下文对象
    */
-  static async getDynamicList (req, res, next) {
+  static async getDynamicList(req, res, next) {
     const { page = 1, pageSize = 10, content, status, type } = req.body
 
     let whereParams = {} // 定义查询条件
@@ -66,14 +66,15 @@ class Dynamics {
    * 更新动态
    * @param   {object} ctx 上下文对象
    */
-  static async updateDynamic (req, res, next) {
-    const { id, status, type, rejection_reason } = req.body
+  static async updateDynamic(req, res, next) {
+    const { id, status, type, rejection_reason, topic_ids } = req.body
     try {
       await models.dynamic.update(
         {
           status,
           type,
-          rejection_reason
+          rejection_reason,
+          topic_ids
         },
         {
           where: {
@@ -99,7 +100,7 @@ class Dynamics {
    * 删除动态判断是否有动态
    * 无关联则直接删除动态，有关联则开启事务同时删除与动态的关联
    */
-  static async deleteDynamic (req, res, next) {
+  static async deleteDynamic(req, res, next) {
     const { id } = req.body
     try {
       let oneDynamic = await models.dynamic.findOne({ where: { id } })

@@ -375,7 +375,7 @@ export default {
   .dynamic-link-row,
   .dynamic-topic-row {
     position: relative;
-    margin: 5px 48px 5px 80px;
+    margin: 5px 48px 15px 80px;
   }
   .account-group,
   .header-action {

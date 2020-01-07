@@ -79,9 +79,11 @@
     </div>
     <div class="lazy thumb thumb loaded"
          v-if="articleItem.cover_img">
-      <img v-lazy="articleItem.cover_img"
-           class="box-image"
-           alt="">
+      <router-link :to="{name:'article',params:{aid:articleItem.aid}}">
+        <img v-lazy="articleItem.cover_img"
+             class="box-image"
+             alt="">
+      </router-link>
     </div>
   </article>
 </template>
@@ -171,6 +173,9 @@ export default {
     .operat-view-icon {
       display: block;
       width: 30px;
+      height: 30px;
+      border: 1px solid #b9aeae;
+      border-radius: 5px;
     }
   }
   .info-box {

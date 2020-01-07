@@ -282,6 +282,12 @@ export default {
         }
       }
     }
+    @media (max-width: 575px) {
+      .RichContent-cover {
+        width: 60px;
+        height: 60px;
+      }
+    }
   }
 
   .ContentItem-actions {
@@ -291,11 +297,10 @@ export default {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    padding: 10px 20px;
-    margin: 0 -20px -10px;
     color: #646464;
     background: #fff;
     clear: both;
+    margin-top: 10px;
     .meta-item {
       display: inline-block;
       padding: 0 16px;

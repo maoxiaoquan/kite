@@ -227,16 +227,13 @@ export default {
     }
     .dy-item {
       position: relative;
-      /deep/.dynamic-item {
-        margin-bottom: 10px;
-      }
+      margin-bottom: 10px;
     }
   }
   @media (max-width: 575px) {
     .aside {
       position: static;
       width: 100%;
-      margin-top: 30px;
       .nav-list {
         display: block;
         .nav-item {
