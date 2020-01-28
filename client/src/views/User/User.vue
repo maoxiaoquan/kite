@@ -7,10 +7,7 @@
           <div class="col-xs-12 col-sm-8 col-md-8 main">
             <div class="client-card">
               <div class="main-top clearfix">
-                <router-link :to="{
-                  name: 'user',
-                  params: { uid: user.user.uid, routeType: 'article' }
-                }"
+                <router-link :to="{name: 'user',params: { uid: user.user.uid, routeType: 'article' }}"
                              class="avatar">
                   <div class="avatar-img">
                     <img v-lazy="user.user.avatar"
@@ -20,19 +17,15 @@
                 </router-link>
 
                 <div class="title">
-                  <router-link :to="{
-                    name: 'user',
-                    params: { uid: user.user.uid, routeType: 'article' }
-                  }"
+                  <router-link :to="{name: 'user',params: { uid: user.user.uid, routeType: 'article' }}"
                                class="name">
                     {{ user.user.nickname }}
+                    <i v-if="~[1,2].indexOf(user.user.sex)"
+                       :class="user.user.sex===1?'male el-icon-male':'female el-icon-female'"></i>
                   </router-link>
                 </div>
 
-                <button v-if="
-                  user.user.uid !== personalInfo.user.uid &&
-                    personalInfo.islogin
-                "
+                <button v-if="user.user.uid !== personalInfo.user.uid && personalInfo.islogin"
                         class="user-follow-button"
                         @click="onUserAttention(isAttention.is_attention)"
                         :class="isAttention.is_attention ? 'has' : 'no'">
@@ -51,11 +44,7 @@
                         }">
                           <p>{{ user.userAttentionCount }}</p>
                           <strong>
-                            {{
-                            user.user.uid === personalInfo.user.uid
-                              ? '我关注的人'
-                              : '他关注的人'
-                          }}
+                            关注的人
                           </strong>
                         </router-link>
                       </div>
@@ -81,7 +70,7 @@
                       </div>
                     </li>
 
-                    <li>
+                    <li v-if="user.user.uid === personalInfo.user.uid && personalInfo.islogin">
                       <div class="meta-block">
                         <router-link :to="{ name: 'shellDetail' }">
                           <p>{{ user.user_info.shell_balance || 0 }}</p>
@@ -281,6 +270,12 @@ export default {
           font-size: 21px;
           font-weight: 700;
           vertical-align: middle;
+        }
+        .male {
+          color: #4285f4;
+        }
+        .female {
+          color: #f442a3;
         }
       }
       .info {

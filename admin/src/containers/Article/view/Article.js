@@ -19,7 +19,8 @@ import './Article.scss'
 import {
   getArticleList,
   editArticle,
-  deleteArticle
+  deleteArticle,
+  getArticleTagAll
 } from '../actions/ArticleAction'
 import alert from '../../../utils/alert'
 import {
@@ -74,6 +75,33 @@ class Article extends React.Component {
         title: '概要',
         dataIndex: 'excerpt',
         key: 'excerpt'
+      },
+      {
+        title: '所属标签',
+        dataIndex: 'tag_ids',
+        key: 'tag_ids',
+        render: (value, record) => {
+          return (
+            <div className="table-article-tag-view">
+              {this.state.article_tag_all.map((item, key) => {
+                let tags = record.tag_ids.split(',')
+                return tags.map((child_item, child_key) => {
+                  if (item.tag_id === child_item) {
+                    return (
+                      <Tag
+                        className="table-article-tag-list"
+                        key={child_key}
+                        color="orange"
+                      >
+                        {item.name}
+                      </Tag>
+                    )
+                  }
+                })
+              })}
+            </div>
+          )
+        }
       },
       {
         title: '创建时间',
@@ -188,11 +216,20 @@ class Article extends React.Component {
     status_val: '',
     type_val: '',
     source_val: '',
-    edit_status_val: ''
+    edit_status_val: '',
+    article_tag_all: []
   }
 
   componentDidMount() {
     this.fetchArticleList()
+    this.props.dispatch(
+      getArticleTagAll('', res => {
+        console.log('res', res)
+        this.setState({
+          article_tag_all: res.article_tag_all
+        })
+      })
+    )
   }
 
   editUser(val) {
@@ -205,7 +242,8 @@ class Article extends React.Component {
       status: String(val.status),
       type: String(val.type),
       source: String(val.source),
-      rejection_reason: val.rejection_reason
+      rejection_reason: val.rejection_reason,
+      tag_ids: val.tag_ids ? val.tag_ids.split(',') : []
     })
     this.props.dispatch({ type: 'ARTICLE_SET_CURRENT_INFO', data: val })
   }
@@ -521,6 +559,24 @@ class Article extends React.Component {
                         <Option key={key}>
                           {this.state.articleTypeText[key]}
                         </Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
+
+                <FormItem {...formItemLayout} label="所属标签">
+                  {getFieldDecorator('tag_ids', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请选择所属标签!',
+                        type: 'array'
+                      }
+                    ]
+                  })(
+                    <Select mode="multiple" placeholder="请选择所属标签">
+                      {this.state.article_tag_all.map(item => (
+                        <Option key={item.tag_id}>{item.name}</Option>
                       ))}
                     </Select>
                   )}

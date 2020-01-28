@@ -103,12 +103,17 @@ class ArticleColumn {
   }
 
   /**
-   * 更新标签
+   * 更新专栏
    * @param   {object} ctx 上下文对象
    */
   static async updateArticleColumn (req, res, next) {
     const reqData = req.body
+
     try {
+      if (reqData.en_name === 'all') {
+        throw new ErrorMessage('全站默认专栏不能修改')
+      }
+
       await models.article_column.update(
         {
           ...reqData,

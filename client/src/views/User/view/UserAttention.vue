@@ -7,17 +7,13 @@
           query: { any: 'me' },
           params: { routeType: 'attention' }
         }"
-                   :class="{ active: $route.query.any === 'me' || !$route.query.any }">{{
-          personalInfo.user.uid === $route.params.uid ? '我' : '他'
-        }}关注的</router-link>
+                   :class="{ active: $route.query.any === 'me' || !$route.query.any }">关注</router-link>
       <router-link :to="{
           name: 'user',
           query: { any: 'other' },
           params: { routeType: 'attention' }
         }"
-                   :class="{ active: $route.query.any === 'other' }">关注{{
-          personalInfo.user.uid === $route.params.uid ? '我' : '他'
-        }}的</router-link>
+                   :class="{ active: $route.query.any === 'other' }">粉丝</router-link>
     </div>
 
     <ul class="user-article-attention-view">

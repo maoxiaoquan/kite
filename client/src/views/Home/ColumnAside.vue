@@ -11,7 +11,7 @@
                    width="60"
                    height="60"
                    :src="articleColumn.column.icon"
-                   alt="大象">
+                   alt="">
             </span>
           </div>
           <div class="AnswerAuthor-user-content">
@@ -27,7 +27,7 @@
         </p>
 
         <div class="column-tag"
-             v-if="articleColumn.column.tag_ids">
+             v-if="articleColumn.column.tag_ids&&articleColumn.column.en_name!=='all'">
           <router-link v-for="(itemTag,key) in articleColumn.column.tag"
                        class="tag-class frontend"
                        :key="key"

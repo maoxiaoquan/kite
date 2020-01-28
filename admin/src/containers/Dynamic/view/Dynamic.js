@@ -18,7 +18,12 @@ import { Link } from 'react-router-dom'
 import { withRouter } from 'react-router-dom'
 
 import './Dynamic.scss'
-import { getDynamicList, editDynamic, deleteDynamic } from '../actions'
+import {
+  getDynamicList,
+  editDynamic,
+  deleteDynamic,
+  getDynamicTopicAll
+} from '../actions'
 import {
   otherStatusList,
   otherStatusListText,
@@ -90,6 +95,30 @@ class Dynamic extends React.Component {
             {this.state.dynamicTypeText[record.type]}
           </Tag>
         )
+      },
+      {
+        title: '所属话题',
+        dataIndex: 'tag_ids',
+        key: 'tag_ids',
+        render: (value, record) => {
+          return (
+            <div className="table-article-tag-view">
+              {this.state.dynamicTopicAll.map((item, key) => {
+                if (item.topic_id === record.topic_ids) {
+                  return (
+                    <Tag
+                      className="table-article-tag-list"
+                      key={key}
+                      color="orange"
+                    >
+                      {item.name}
+                    </Tag>
+                  )
+                }
+              })}
+            </div>
+          )
+        }
       },
       {
         title: '预览',
@@ -166,11 +195,20 @@ class Dynamic extends React.Component {
     content_val: '',
     status_val: '',
     type_val: '',
-    edit_status_val: ''
+    edit_status_val: '',
+    dynamicTopicAll: []
   }
 
   componentDidMount() {
     this.fetchDynamicList()
+    this.props.dispatch(
+      getDynamicTopicAll('', res => {
+        console.log('res', res)
+        this.setState({
+          dynamicTopicAll: res.all
+        })
+      })
+    )
   }
 
   editUser(val) {
@@ -182,7 +220,8 @@ class Dynamic extends React.Component {
     this.props.form.setFieldsValue({
       status: String(val.status),
       type: String(val.type),
-      rejection_reason: val.rejection_reason
+      rejection_reason: val.rejection_reason,
+      topic_ids: val.topic_ids
     })
     this.props.dispatch({ type: 'DYNAMIC_SET_CURRENT_INFO', data: val })
   }
@@ -492,6 +531,24 @@ class Dynamic extends React.Component {
                         <Option key={key} value={key}>
                           {this.state.dynamicTypeText[key]}
                         </Option>
+                      ))}
+                    </Select>
+                  )}
+                </FormItem>
+
+                <FormItem {...formItemLayout} label="所属专题">
+                  {getFieldDecorator('topic_ids', {
+                    rules: [
+                      {
+                        message: '请选择所属专题!',
+                        whitespace: true
+                      }
+                    ]
+                  })(
+                    <Select placeholder="请选择所属专题">
+                      <Option value="">空</Option>
+                      {this.state.dynamicTopicAll.map(item => (
+                        <Option key={item.topic_id}>{item.name}</Option>
                       ))}
                     </Select>
                   )}

@@ -188,6 +188,7 @@ class Aside extends Component {
   rootSubmenuKeys = [
     'home',
     'article_mange',
+    'bookManager',
     'dynamic',
     'user_manger',
     'web',
