@@ -10,7 +10,7 @@
       </li>
     </ul>
 
-    <div class="right">
+    <!-- <div class="right">
       <router-link class="menu"
                    :to="{name:'home'}">
         <i class="el-icon-s-home"></i>
@@ -32,9 +32,9 @@
           <i slot="button"
              class="el-icon-menu"></i>
         </Popover>
-
       </span>
-    </div>
+    </div> -->
+
   </nav>
 </template>
 

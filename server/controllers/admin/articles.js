@@ -14,14 +14,7 @@ class Articles {
    * @param   {object} ctx 上下文对象
    */
   static async getArticleList (req, res, next) {
-    const {
-      page = 1,
-      pageSize = 10,
-      title,
-      source,
-      status,
-      type
-    } = req.body
+    const { page = 1, pageSize = 10, title, source, status, type } = req.body
 
     let whereParams = {} // 定义查询条件
 
@@ -75,13 +68,14 @@ class Articles {
    * @param   {object} ctx 上下文对象
    */
   static async editArticle (req, res, next) {
-    const { aid, status, type, source, rejection_reason } = req.body
+    const { aid, status, type, source, rejection_reason, tag_ids } = req.body
     try {
       await models.article.update(
         {
           status,
           type,
           source,
+          tag_ids: tag_ids.join(','),
           rejection_reason
         },
         {

@@ -234,7 +234,6 @@ export default {
     .aside {
       position: static;
       width: 100%;
-      margin-top: 30px;
       .nav-list {
         display: block;
         .nav-item {

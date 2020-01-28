@@ -160,7 +160,7 @@
               <li class="nav-item"
                   v-if="website.config.on_register === 'yes'">
                 <router-link class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
-                             :to="{ name: 'signIn' }">注册</router-link>
+                             :to="{ name: 'signUp' }">注册</router-link>
               </li>
             </template>
           </ul>

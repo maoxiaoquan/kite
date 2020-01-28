@@ -6,7 +6,8 @@
         <div class="col-xs-12 col-sm-8--4 col-md-8--4">
           <!--home-lay layout-content start-->
           <section class="home-main layout-content client-card">
-
+            <NavHeader />
+            <NavColumn :navItem="articleColumn.homeColumn" />
             <NavSort @navTap="navTap"
                      ref="navSort"></NavSort>
 
@@ -40,6 +41,7 @@
 <script>
 import ColumnAside from "@views/Home/ColumnAside";
 import NavHeader from "@views/Home/NavHeader";
+import NavColumn from "@views/Home/NavColumn";
 import NavSort from "@views/Home/NavSort";
 import ArticleItem from "@views/Article/component/ArticleItem";
 import { mapState } from "vuex";
@@ -89,7 +91,7 @@ export default {
       store.dispatch("articleColumn/GET_ARTICLE_COLUMN", {
         en_name: route.params.en_name || ""
       }),
-      store.dispatch("home/GET_INDEX_ARTICLE_LIST", {
+      store.dispatch("home/GET_INDEX_COLUMN_ARTICLE_LIST", {
         columnEnName: route.params.en_name || ""
       })
     ]);
@@ -159,6 +161,7 @@ export default {
   components: {
     ColumnAside,
     NavHeader,
+    NavColumn,
     NavSort,
     ArticleItem,
     ScrollLoading

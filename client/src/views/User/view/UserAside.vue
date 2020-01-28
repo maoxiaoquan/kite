@@ -8,7 +8,7 @@
     </router-link>
 
     <ul class="list user-role client-card-shadow"
-        v-if="user.user.user_role_ids && userRoleAll">
+        v-if="user.user.user_role_ids && userRoleAll && user.user.user_role_ids!=='ordinary_role_100000'">
       <li class="badge-icon"
           v-for="(item, key) in userRoleAll"
           :key="key"
