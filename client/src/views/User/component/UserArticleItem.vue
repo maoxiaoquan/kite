@@ -79,9 +79,11 @@
     </div>
     <div class="lazy thumb thumb loaded"
          v-if="articleItem.cover_img">
-      <img v-lazy="articleItem.cover_img"
-           class="box-image"
-           alt="">
+      <router-link :to="{name:'article',params:{aid:articleItem.aid}}">
+        <img v-lazy="articleItem.cover_img"
+             class="box-image"
+             alt="">
+      </router-link>
     </div>
   </article>
 </template>
@@ -122,18 +124,12 @@ export default {
               aid: this.articleItem.aid
             })
             .then(result => {
-              this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
+              this.$message.success("删除成功");
               this.$emit("delete-change");
             });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消删除"
-          });
+          this.$message.warning("取消删除");
         });
     },
     commandChange (val) {
@@ -177,6 +173,9 @@ export default {
     .operat-view-icon {
       display: block;
       width: 30px;
+      height: 30px;
+      border: 1px solid #b9aeae;
+      border-radius: 5px;
     }
   }
   .info-box {

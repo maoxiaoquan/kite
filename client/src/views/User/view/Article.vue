@@ -137,13 +137,7 @@ export default {
       this.getMyArticleList()
     },
     updateArticleList () {
-      this.$store.dispatch('user/USER_MY_ARTICLE', {
-        uid: this.$route.params.uid,
-        blog_id: this.$route.query.blog_id || 'all',
-        type: this.$route.query.type || '1',
-        page: this.$route.query.page || 1,
-        pageSize: 10
-      })
+      this.getMyArticleList()
     },
     async getUserArticleBlogList () {
       await this.$store.dispatch('user/GET_USER_ARTICLE_BLOG_ALL', {

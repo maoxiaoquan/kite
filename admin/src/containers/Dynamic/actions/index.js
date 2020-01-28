@@ -33,3 +33,13 @@ export const deleteDynamic = (data, callback) => {
     })
   }
 }
+
+export const getDynamicTopicAll = (data, callback) => {
+  return () => {
+    http.get('/dynamic-topic/all', data).then(res => {
+      if (callback) {
+        callback(res)
+      }
+    })
+  }
+}

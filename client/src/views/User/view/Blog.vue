@@ -416,6 +416,7 @@ export default {
       display: block;
       height: 210px;
       padding: 10px;
+      margin-bottom: 12px;
       border: 1px solid rgba(178, 186, 194, 0.15);
       .user-article-blog-top {
         display: flex;
