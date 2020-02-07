@@ -7,7 +7,7 @@
     "client-build": "rimraf ./static/_client && npm run client-build:client && npm run client-build:server",
     "client-build:client": "cross-env NODE_ENV=production  webpack --config client/tools/webpack.client.config.js --color -p --progress --hide-modules --display-optimization-bailout",
     "client-build:server": "cross-env NODE_ENV=production  webpack --config client/tools/webpack.server.config.js --color -p --progress --hide-modules --display-optimization-bailout",
-    "client-start": "cross-env NODE_ENV=development node ./client/server/dev.js",
+    "client-start": "cross-env NODE_ENV=development node ./client/tools/dev.js",
     "server-start": "nodemon ./server/index.js --config _nodemon.json",
     "init": "node  ./server/init.js ",
     "admin-start": "cross-env NODE_ENV=development node admin/tools/server.js",

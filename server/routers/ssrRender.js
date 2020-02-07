@@ -24,7 +24,10 @@ const isCacheable = (req, res, next) => {
 }
 
 let renderer
-const templatePath = path.resolve(__dirname, '../public/index.template.html')
+const templatePath = path.resolve(
+  __dirname,
+  '../../client/public/index.template.html'
+)
 // 第 2步：根据环境变量生成不同BundleRenderer实例
 
 // 获取客户端、服务器端打包生成的json文件
