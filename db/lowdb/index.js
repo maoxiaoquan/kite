@@ -31,6 +31,4 @@ if (!lowdb.has('thirdParty').value()) { // 第三方所用
   lowdb.set('thirdParty', {}).write()
 }
 
-module.exports = {
-  lowdb
-}
+module.exports = lowdb

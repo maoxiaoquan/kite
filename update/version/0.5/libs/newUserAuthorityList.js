@@ -1,4 +1,4 @@
-const config = require('../../../../server/config')
+const config = require('../../../../config')
 module.exports = [
   {
     authority_description: '小书模块',

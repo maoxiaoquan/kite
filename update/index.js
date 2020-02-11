@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 require('shelljs/global')
-const { lowdb } = require('../db/lowdb')
+const lowdb = require('../db/lowdb')
 const kiteConfig = require('../kite.config')
 const versionHistory = require('./versionHistory')
 const inquirer = require('inquirer')
@@ -15,7 +15,7 @@ const cli = lowdb
   .get('cli')
   .value()
 
-function isUpdateOption() {
+function isUpdateOption () {
   // 强制升级
   const promptList = [
     {
@@ -36,7 +36,7 @@ function isUpdateOption() {
   })
 }
 
-async function forcedUpgrade() {
+async function forcedUpgrade () {
   // 强制升级
   try {
     console.log('升级程序开始，请勿关闭当前程序')
@@ -51,7 +51,7 @@ async function forcedUpgrade() {
       )
       await require(`./version/${
         versionHistory.list[currentVersionIndex + i]
-      }`).update()
+        }`).update()
       if (versionIndex === i) {
         console.log('恭喜您，版本升级完成，程序自动关闭')
         process.exit()
@@ -65,7 +65,7 @@ async function forcedUpgrade() {
   }
 }
 
-function showAllVersion() {
+function showAllVersion () {
   // 显示所有的版本历史
   versionHistory.list.map(item => {
     console.log(item)

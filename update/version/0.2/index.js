@@ -1,6 +1,6 @@
 const sequelize = require('../../../db/mysqldb/init')
 const models = require('../../../db/mysqldb/define')(sequelize)
-const { lowdb } = require('../../../db/lowdb/index')
+const lowdb = require('../../../db/lowdb/index')
 const CURRENT_VERSION = 0.2
 class update0_2 {
   static update () {

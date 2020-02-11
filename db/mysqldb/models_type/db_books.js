@@ -1,7 +1,7 @@
 const Seq = require('sequelize')
 const shortid = require('shortid')
 const time = require('../time')
-const config = require('../../../server/config')
+const config = require('../../../config')
 
 module.exports = {
   NAME: 'books' /* 表名 */,
