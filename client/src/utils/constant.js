@@ -248,3 +248,12 @@ export const trialReadText = {
   [trialRead.yes]: '开启', // 可以
   [trialRead.no]: '关闭' // 不可以
 }
+
+export const userLevel = {
+  // 用户等级，和上方经验挂钩
+  one: 500,
+  two: 1500,
+  three: 3500,
+  four: 7000,
+  five: 10000
+}

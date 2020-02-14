@@ -19,6 +19,12 @@ module.exports = {
       comment: 'uid',
       field: 'uid'
     },
+    ass_uid: {
+      // 关联用户
+      type: Seq.BIGINT(20),
+      comment: '关联用户',
+      field: 'ass_uid'
+    },
     associate: {
       // 关联融合字段
       type: Seq.TEXT('long'),

@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { cookie } from '../../../../../server/utils/cookie'
+import { cookie } from '../../../utils/cookie.js'
 export default {
   name: 'ResetPassword',
   metaInfo () {

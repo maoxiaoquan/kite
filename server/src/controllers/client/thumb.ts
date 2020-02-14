@@ -16,6 +16,7 @@ const {
 
 const userMessage = require('../../utils/userMessage')
 const userVirtual = require('../../common/userVirtual')
+import useExperience from '../../common/useExperience'
 const { TimeNow, TimeDistance } = require('../../utils/time')
 
 class Thumb {
@@ -66,6 +67,7 @@ class Thumb {
         )
       } else {
         associateType = 'enter' // 只在第一次关注的时候提交推送
+
         // 订阅消息，只在用户第一关注的时候推送消息
         await userMessage.setMessage({
           uid: oneModelInfo.uid,
@@ -76,6 +78,20 @@ class Thumb {
             [modelInfo[type].idKey]: associate_id
           })
         })
+
+        // 点赞经验
+        if (oneModelInfo.uid !== user.uid) {
+          // 排除自己
+          await useExperience.setExperience({
+            uid: oneModelInfo.uid,
+            ass_uid: user.uid,
+            associate: associate_id,
+            type: type,
+            action: modelAction.obtain_thumb
+          })
+        }
+
+        // 创建首次点赞
         await models.thumb.create({
           uid: user.uid,
           associate_id,

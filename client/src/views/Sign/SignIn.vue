@@ -61,7 +61,7 @@
 
 <script>
 
-import { cookie } from '../../../../server/utils/cookie'
+import { cookie } from '../../utils/cookie.js'
 import ClientOnly from 'vue-client-only'
 export default {
   name: 'SignIn',

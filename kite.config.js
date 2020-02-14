@@ -4,7 +4,7 @@ const path = require('path')
 const NODE_ENV = process.env.NODE_ENV || 'development'
 const IS_NODE_ENV = process.env.NODE_ENV === 'development'
 
-function ProcessCwd (val) {
+function ProcessCwd(val) {
   return path.resolve(process.cwd(), val)
 }
 
@@ -37,33 +37,6 @@ module.exports = {
       useEslint: true,
       showEslintErrorsInOverlay: false,
       cssSourceMap: true
-    }
-  },
-  admin: {
-    // admin spa
-    port: 8083, // 后台调试端口号
-    basePath: ProcessCwd('admin'),
-    srcDir: ProcessCwd('admin/src'),
-    outDir: IS_NODE_ENV
-      ? ProcessCwd('admin/_admin')
-      : ProcessCwd('static/_admin'),
-    publicPath: IS_NODE_ENV ? './' : '/_admin/',
-    proxy: {
-      '/api-admin/v1': {
-        target: `http://localhost:8086/`,
-        secure: false,
-        changeOrigin: true
-      },
-      '/default': {
-        target: `http://localhost:8086/`,
-        secure: false,
-        changeOrigin: true
-      },
-      '/upload': {
-        target: `http://localhost:8086/`,
-        secure: false,
-        changeOrigin: true
-      }
     }
   },
   server: {

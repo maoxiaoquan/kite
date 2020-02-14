@@ -63,8 +63,9 @@ const modelType = {
   attention: 14, // 关注表
   article_tag: 15, // 文章标签
   dynamic_topic: 16, // 动态专题
-  system: 17, // 系统
-  other: 18 // 其他
+  system: 17, // 系统 ---- 不是特别，暂时不用
+  other: 18, // 其他 ---- 不是特别，暂时不用
+  virtual: 19 //
 }
 
 const modelInfo = {
@@ -148,7 +149,55 @@ const modelInfo = {
     model: 'dynamic_topic',
     name: '动态专题',
     idKey: 'id'
+  }, // 关注表
+  [modelType.virtual]: {
+    model: 'virtual',
+    name: '虚拟币',
+    idKey: 'id'
   } // 关注表
+}
+
+const modelAction = {
+  // 动作
+  check_in: 1, // 签到
+  create: 2, // 创建
+  like: 3, // 喜欢
+  collect: 4, // 收藏
+  comment: 5, // 评论
+  reply: 6, // 回复
+  thumb: 7, // 点赞
+  sell: 8, // 卖
+  buy: 9, // 买
+  recover: 10, // 系统回收
+  obtain_like: 11, // 收到喜欢
+  obtain_collect: 12, // 收到收藏
+  obtain_comment: 13, // 收到评论
+  obtain_reply: 14, // 收到回复
+  obtain_thumb: 15, // 收到点赞
+  registered: 16, // 注册
+  readOther: 17, // 阅读他人
+  otherRead: 18 // 他人阅读
+}
+
+const modelActionText = {
+  // 动作
+  [modelAction.check_in]: '签到', // 签到
+  [modelAction.create]: '创建', // 创建
+  [modelAction.like]: '喜欢', // 喜欢
+  [modelAction.collect]: '收藏', // 收藏
+  [modelAction.comment]: '评论', // 评论
+  [modelAction.reply]: '回复', // 回复
+  [modelAction.thumb]: '点赞', // 点赞
+  [modelAction.sell]: '售出', // 卖
+  [modelAction.buy]: '购物', // 买
+  [modelAction.recover]: '系统回收', // 系统回收
+  [modelAction.obtain_like]: '收到喜欢', // 收到喜欢
+  [modelAction.obtain_collect]: '收到收藏', // 收到收藏
+  [modelAction.obtain_comment]: '收到评论', // 收到评论
+  [modelAction.obtain_reply]: '收到回复', // 收到回复
+  [modelAction.obtain_thumb]: '收到点赞', // 收到点赞
+  [modelAction.registered]: '注册', // 默认
+  [modelAction.readOther]: '阅读他人' // 默认
 }
 
 const userMessageAction = {
@@ -185,46 +234,6 @@ const virtualPlusLess = {
   // 虚拟币动作
   plus: 1, // 加
   less: 2 // 减
-}
-
-const modelAction = {
-  // 动作
-  check_in: 1, // 签到
-  create: 2, // 创建
-  like: 3, // 喜欢
-  collect: 4, // 收藏
-  comment: 5, // 评论
-  reply: 6, // 回复
-  thumb: 7, // 点赞
-  sell: 8, // 卖
-  buy: 9, // 买
-  recover: 10, // 系统回收
-  obtain_like: 11, // 收到喜欢
-  obtain_collect: 12, // 收到收藏
-  obtain_comment: 13, // 收到评论
-  obtain_reply: 14, // 收到回复
-  obtain_thumb: 15, // 收到点赞
-  registered: 16 // 注册
-}
-
-const modelActionText = {
-  // 动作
-  [modelAction.check_in]: '签到', // 签到
-  [modelAction.create]: '创建', // 创建
-  [modelAction.like]: '喜欢', // 喜欢
-  [modelAction.collect]: '收藏', // 收藏
-  [modelAction.comment]: '评论', // 评论
-  [modelAction.reply]: '回复', // 回复
-  [modelAction.thumb]: '点赞', // 点赞
-  [modelAction.sell]: '售出', // 卖
-  [modelAction.buy]: '购物', // 买
-  [modelAction.recover]: '系统回收', // 系统回收
-  [modelAction.obtain_like]: '收到喜欢', // 收到喜欢
-  [modelAction.obtain_collect]: '收到收藏', // 收到收藏
-  [modelAction.obtain_comment]: '收到评论', // 收到评论
-  [modelAction.obtain_reply]: '收到回复', // 收到回复
-  [modelAction.obtain_thumb]: '收到点赞', // 收到点赞
-  [modelAction.registered]: '默认' // 默认
 }
 
 const virtualType = {
@@ -425,6 +434,22 @@ const trialReadText = {
   [trialRead.no]: '关闭' // 不可以
 }
 
+// 获得经验的方式和数量
+
+const experienceInfo = {
+  [modelAction.obtain_thumb]: 10, // 收到点赞
+  [modelAction.readOther]: 1 // 阅读他人
+}
+
+const userLevel = {
+  // 用户等级，和上方经验挂钩
+  one: 500,
+  two: 1500,
+  three: 3500,
+  four: 7000,
+  five: 10000
+}
+
 module.exports = {
   statusList,
   statusListText,
@@ -450,5 +475,7 @@ module.exports = {
   trialRead,
   trialReadText,
   modelType,
-  modelInfo
+  modelInfo,
+  experienceInfo,
+  userLevel
 }

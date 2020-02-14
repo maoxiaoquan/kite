@@ -139,7 +139,7 @@
 <script>
 import { mapState } from 'vuex'
 import BookComment from "@views/Comment/BookComment";
-import { cookie } from "../../../../server/utils/cookie";
+import { cookie } from '../../utils/cookie.js';
 import ClientOnly from 'vue-client-only'
 import { baidu, google } from '@utils'
 import googleMixin from '@mixins/google'

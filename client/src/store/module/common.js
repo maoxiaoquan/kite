@@ -5,7 +5,7 @@ const state = () => ({})
 const mutations = {}
 
 const actions = {
-  SET_ATTENTION ({ commit, dispatch, state }, parameter) {
+  SET_ATTENTION({ commit, dispatch, state }, parameter) {
     // 设置关注
     return fetch({
       url: '/common/attention',
@@ -13,7 +13,7 @@ const actions = {
       parameter: parameter
     })
   },
-  SET_LIKE ({ commit, dispatch, state }, parameter) {
+  SET_LIKE({ commit, dispatch, state }, parameter) {
     // 设置喜欢
     return fetch({
       url: '/common/like',
@@ -21,7 +21,7 @@ const actions = {
       parameter: parameter
     })
   },
-  SET_COLLECT ({ commit, dispatch, state }, parameter) {
+  SET_COLLECT({ commit, dispatch, state }, parameter) {
     // 设置收藏
     return fetch({
       url: '/common/collect',
@@ -29,12 +29,20 @@ const actions = {
       parameter: parameter
     })
   },
-  SET_THUMB ({ commit, dispatch, state }, parameter) {
+  SET_THUMB({ commit, dispatch, state }, parameter) {
     // 设置点赞
     return fetch({
       url: '/common/thumb',
       method: 'post',
       parameter: parameter
+    })
+  },
+  GET_EXPERIENCE_LIST({ commit, dispatch, state }, parameter) {
+    // 获取经验列表
+    return fetch({
+      url: '/experience/list',
+      method: 'get',
+      parameter: { params: parameter }
     })
   }
 }

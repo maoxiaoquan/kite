@@ -166,10 +166,10 @@ export default {
       __dangerouslyDisableSanitizers: ['script']
     }
   },
-  asyncData ({ store, route }) {
+  asyncData ({ store, route, accessToken = '' }) {
     // 触发 action 后，会返回 Promise
     return Promise.all([
-      store.dispatch('article/GET_ARTICLE', { aid: route.params.aid })
+      store.dispatch('article/GET_ARTICLE', { aid: route.params.aid, accessToken })
     ])
   },
   data () {

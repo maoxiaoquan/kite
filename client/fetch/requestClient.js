@@ -1,4 +1,4 @@
-import { cookie } from '../../server/utils/cookie'
+import { cookie } from '../src/utils/cookie'
 
 export function fetchConfig () {
   return {

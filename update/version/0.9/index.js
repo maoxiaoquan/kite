@@ -6,17 +6,26 @@ const newUserAuthorityList = require('./libs/newUserAuthorityList')
 const CURRENT_VERSION = 0.9
 let step = 0
 class update {
-  static update () {
+  static update() {
     return new Promise(async (resolve, reject) => {
       try {
         console.log(`正在升级中，当前版本是${CURRENT_VERSION}....`)
         step = 1
-        await models.collect.sync({
+        await models.experience.sync({
           force: true
         })
-        await models.attention.sync({
+
+        await models.chat_contact.sync({
           force: true
         })
+
+        await models.chat_message.sync({
+          force: true
+        })
+
+        await models.sequelize.query(
+          'ALTER TABLE user_info add COLUMN experience BIGINT(20)  comment "经验总值";'
+        )
 
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb

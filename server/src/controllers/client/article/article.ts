@@ -15,10 +15,10 @@ const {
   modelAction,
   virtualType
 } = require('../../../utils/constant')
-
 const { TimeNow, TimeDistance } = require('../../../utils/time')
 import userVirtual from '../../../common/userVirtual'
 import attention from '../../../common/attention'
+import useExperience from '../../../common/useExperience'
 
 function getNoMarkupStr(markupStr: string) {
   /* markupStr 源码</> */
@@ -213,7 +213,6 @@ class Article {
 
   static async getArticleTag(req: any, res: any, next: any) {
     let qyData = req.query
-
     let page = req.query.page || 1
     let pageSize = req.query.pageSize || 25
 
@@ -429,7 +428,8 @@ class Article {
    * @param   {object} ctx 上下文对象
    */
   static async getArticle(req: any, res: any, next: any) {
-    let { aid } = req.query
+    const { aid } = req.query
+    const { user, islogin } = req
     try {
       let oneArticle = await models.article.findOne({
         where: {
@@ -483,6 +483,17 @@ class Article {
             attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
           })
         )
+
+        if (islogin && user.uid !== oneArticle.uid) {
+          // 阅读他人的文章
+          await useExperience.setExperience({
+            uid: user.uid,
+            ass_uid: oneArticle.uid,
+            associate: aid,
+            type: modelType.article,
+            action: modelAction.readOther
+          })
+        }
 
         if (oneArticle) {
           resClientJson(res, {

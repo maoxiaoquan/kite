@@ -44,6 +44,11 @@ export default [
         component: () => import('@views/User/ShellDetail') // 消费明细
       },
       {
+        path: 'experience-detail',
+        name: 'experienceDetail',
+        component: () => import('@views/User/Experience') // 经验明细
+      },
+      {
         path: 'my-order',
         name: 'myOrder',
         component: () => import('@views/User/Order') // 我的订单
@@ -136,6 +141,11 @@ export default [
         path: 'book/:books_id',
         name: 'book',
         component: require('@views/Book/Book').default // 小书内容
+      },
+      {
+        path: 'private-chat',
+        name: 'PrivateChat',
+        component: require('@views/Chat/PrivateChat').default // 小书内容
       }
     ]
   },

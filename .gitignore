@@ -18,7 +18,7 @@ package-lock.json
 
 # client
 
-/static/_admin/
-/static/_client/
+# /static/_admin/
+# /static/_client/
 
 # static

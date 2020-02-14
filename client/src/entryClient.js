@@ -22,7 +22,7 @@ Vue.use(VueLazyload, {
 })
 
 Vue.mixin({
-  beforeRouteUpdate (to, from, next) {
+  beforeRouteUpdate(to, from, next) {
     const { asyncData } = this.$options
     if (asyncData) {
       asyncData({
@@ -88,7 +88,7 @@ router.afterEach(() => {
   NProgress.done()
 })
 
-function isLocalhost () {
+function isLocalhost() {
   return /^http(s)?:\/\/localhost/.test(location.href)
 }
 

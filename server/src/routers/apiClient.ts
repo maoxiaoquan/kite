@@ -20,6 +20,7 @@ import thumb from '../controllers/client/thumb' // 赞
 import collect from '../controllers/client/collect' // 收藏
 import virtual from '../controllers/client/virtual' // 虚拟币
 import shop from '../controllers/client/shop' // 购物
+import experience from '../controllers/client/experience' // 经验
 
 const tokens = require('../utils/tokens') // 登录tokens
 const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
@@ -116,7 +117,7 @@ router.get('/user/role-all', user.getUserRoleAll) // 获取所有用户角色标
  * 文章相关的接口
  */
 
-router.get('/article', article.getArticle) // 根据aid获取文章 get
+router.get('/article', tokens.ClientVerifyTokenInfo, article.getArticle) // 根据aid获取文章 get
 
 router.get('/user-article', tokens.ClientVerifyToken, article.getUserArticle) // 根据aid uid获取用户自己的某一篇文章 get
 
@@ -421,5 +422,11 @@ router.post('/common/like', tokens.ClientVerifyToken, like.setLike) // like TYPE
 router.post('/common/collect', tokens.ClientVerifyToken, collect.setCollect) // 收藏
 
 router.post('/common/thumb', tokens.ClientVerifyToken, thumb.setThumb) // 用户点赞动态TYPE:AJAX post
+
+router.get(
+  '/experience/list',
+  tokens.ClientVerifyToken,
+  experience.getExperienceList
+) // 获取经验列表
 
 module.exports = router

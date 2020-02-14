@@ -1,7 +1,8 @@
 module.exports = {
-  "rules": {
-    "camelcase": 0
+  rules: {
+    camelcase: 0,
+    'space-before-function-paren': 0
   },
-  "extends": "standard",
-  "plugins": ["html"]
+  extends: 'standard',
+  plugins: ['html']
 }

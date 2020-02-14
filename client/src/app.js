@@ -14,7 +14,7 @@ import './assets/fonts/icon.scss'
 Vue.prototype.$confirm = Confirm.install
 Vue.use(Message)
 
-export function createApp (context) {
+export function createApp(context) {
   // 创建 router 和 store 实例
   const router = createRouter()
   const store = createStore()

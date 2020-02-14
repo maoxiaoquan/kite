@@ -1,150 +1,208 @@
 <template>
-  <div class="main-header"
-       id="main-header">
-    <header class="navbar navbar-visible"
-            id="header-view">
+  <div class="main-header" id="main-header">
+    <header class="navbar navbar-visible" id="header-view">
       <div class="container navbar-view">
-        <router-link :to="{ name: 'home' }"
-                     class="navbar-brand logo-img"
-                     v-if="website.meta.logo"
-                     :style="{ 'background-image': 'url(' + website.meta.logo + ')' }"></router-link>
-        <router-link :to="{ name: 'home' }"
-                     class="navbar-brand logo-text"
-                     v-else>{{ website.meta.website_name }}</router-link>
+        <router-link
+          :to="{ name: 'home' }"
+          class="navbar-brand logo-img"
+          v-if="website.meta.logo"
+          :style="{ 'background-image': 'url(' + website.meta.logo + ')' }"
+        ></router-link>
+        <router-link
+          :to="{ name: 'home' }"
+          class="navbar-brand logo-text"
+          v-else
+          >{{ website.meta.website_name }}</router-link
+        >
         <div class="collapse navbar-collapse">
           <ul class="navbar-item-content mr-auto">
             <li class="navbar-menu-content active">
-              <div class="navbar-toggler"
-                   @click="isNavbarMenu = !isNavbarMenu">
+              <div class="navbar-toggler" @click="isNavbarMenu = !isNavbarMenu">
                 <Dropdown>
-                  <div class="el-dropdown-link"
-                       slot="button">
+                  <div class="el-dropdown-link" slot="button">
                     <i class="menu-icon el-icon-menu"></i>
                   </div>
                   <div class="dropdown-menu-view">
-                    <router-link :to="{ name: 'home' }"
-                                 class="dropdown-menu-item">首页</router-link>
-                    <router-link :to="{
+                    <router-link
+                      :to="{ name: 'home' }"
+                      class="dropdown-menu-item"
+                      >首页</router-link
+                    >
+                    <router-link
+                      :to="{
                         name: 'dynamics',
                         params: { dynamicTopicId: 'newest' }
                       }"
-                                 class="dropdown-menu-item">片刻</router-link>
-                    <router-link :to="{ name: 'books', params: { columnEnName: 'all' } }"
-                                 class="dropdown-menu-item">小书</router-link>
-                    <router-link v-if="personalInfo.islogin"
-                                 class="dropdown-menu-item"
-                                 :to="{
+                      class="dropdown-menu-item"
+                      >片刻</router-link
+                    >
+                    <router-link
+                      :to="{ name: 'books', params: { columnEnName: 'all' } }"
+                      class="dropdown-menu-item"
+                      >小书</router-link
+                    >
+                    <router-link
+                      v-if="personalInfo.islogin"
+                      class="dropdown-menu-item"
+                      :to="{
                         name: 'AttentionMessage'
-                      }">
+                      }"
+                    >
                       关注
-                      <span v-if="user.attentionCount > 0"
-                            class="unread-message-count">{{ user.attentionCount }}</span>
+                      <span
+                        v-if="user.attentionCount > 0"
+                        class="unread-message-count"
+                        >{{ user.attentionCount }}</span
+                      >
                     </router-link>
-                    <router-link v-if="personalInfo.islogin"
-                                 class="dropdown-menu-item"
-                                 :to="{
+                    <router-link
+                      v-if="personalInfo.islogin"
+                      class="dropdown-menu-item"
+                      :to="{
                         name: 'user',
                         params: {
                           uid: personalInfo.user.uid,
                           routeType: 'message'
                         }
-                      }">
+                      }"
+                    >
                       消息
-                      <span v-if="user.messageCount > 0"
-                            class="unread-message-count">{{ user.messageCount }}</span>
+                      <span
+                        v-if="user.messageCount > 0"
+                        class="unread-message-count"
+                        >{{ user.messageCount }}</span
+                      >
                     </router-link>
                   </div>
                 </Dropdown>
               </div>
-              <ul class="navbar-menu"
-                  :class="{ show: isNavbarMenu }">
+              <ul class="navbar-menu" :class="{ show: isNavbarMenu }">
                 <li class="nav-item">
-                  <router-link :to="{ name: 'home' }"
-                               class="nav-link">首页</router-link>
+                  <router-link :to="{ name: 'home' }" class="nav-link"
+                    >首页</router-link
+                  >
                 </li>
                 <li class="nav-item">
-                  <router-link :to="{
+                  <router-link
+                    :to="{
                       name: 'dynamics',
                       params: { dynamicTopicId: 'newest' }
                     }"
-                               class="nav-link">片刻</router-link>
+                    class="nav-link"
+                    >片刻</router-link
+                  >
                 </li>
                 <li class="nav-item">
-                  <router-link :to="{ name: 'books', params: { columnEnName: 'all' } }"
-                               class="nav-link">小书</router-link>
+                  <router-link
+                    :to="{ name: 'books', params: { columnEnName: 'all' } }"
+                    class="nav-link"
+                    >小书</router-link
+                  >
                 </li>
               </ul>
             </li>
             <li class="nav-item search">
               <div class="form-search form-inline mr-lg-5">
-                <input class="form-control form-search-view"
-                       type="text"
-                       required="true"
-                       v-model="searchVal"
-                       name="search"
-                       placeholder="搜索文章"
-                       aria-label="Search" />
-                <button class="search-btn"
-                        @click="search">
+                <input
+                  class="form-control form-search-view"
+                  type="text"
+                  required="true"
+                  v-model="searchVal"
+                  name="search"
+                  placeholder="搜索文章"
+                  aria-label="Search"
+                />
+                <button class="search-btn" @click="search">
                   <i class="el-icon-search"></i>
                 </button>
               </div>
             </li>
             <template v-if="personalInfo.islogin">
               <li class="nav-item">
-                <router-link :to="{ name: 'Write', params: { type: 'create' } }"
-                             class="btn btn-sm ">
+                <router-link
+                  :to="{ name: 'Write', params: { type: 'create' } }"
+                  class="btn btn-sm "
+                >
                   <i class="iconfont el-icon-edit"></i>
                 </router-link>
               </li>
-              <li class="nav-item"
-                  v-if="personalInfo.islogin">
-                <router-link class="btn btn-sm no-read-msg"
-                             :to="{
+              <li class="nav-item" v-if="personalInfo.islogin">
+                <router-link
+                  class="btn btn-sm no-read-msg"
+                  :to="{
                     name: 'AttentionMessage'
-                  }">
+                  }"
+                >
                   <i class="iconfont el-icon-s-promotion"></i>
-                  <span v-if="user.attentionCount > 0"
-                        class="unread-message-count">{{ user.attentionCount }}</span>
+                  <span
+                    v-if="user.attentionCount > 0"
+                    class="unread-message-count"
+                    >{{ user.attentionCount }}</span
+                  >
                 </router-link>
               </li>
-              <li class="nav-item"
-                  v-if="personalInfo.islogin">
-                <router-link class="btn btn-sm no-read-msg"
-                             :to="{
+              <li class="nav-item" v-if="personalInfo.islogin">
+                <router-link
+                  class="btn btn-sm no-read-msg"
+                  :to="{
                     name: 'user',
                     params: { uid: personalInfo.user.uid, routeType: 'message' }
-                  }">
+                  }"
+                >
                   <i class="iconfont el-icon-message-solid"></i>
-                  <span v-if="user.messageCount > 0"
-                        class="unread-message-count">{{ user.messageCount }}</span>
+                  <span
+                    v-if="user.messageCount > 0"
+                    class="unread-message-count"
+                    >{{ user.messageCount }}</span
+                  >
+                </router-link>
+              </li>
+              <li class="nav-item" v-if="personalInfo.islogin">
+                <router-link
+                  class="btn btn-sm no-read-msg"
+                  :to="{
+                    name: 'PrivateChat'
+                  }"
+                >
+                  <i class="iconfont el-icon-chat-line-round"></i>
+                  <span
+                    v-if="user.attentionCount > 0"
+                    class="unread-message-count"
+                    >{{ user.attentionCount }}</span
+                  >
                 </router-link>
               </li>
               <li class="nav-item dropdown">
                 <Dropdown placement="right">
-                  <div class="el-dropdown-link"
-                       slot="button">
+                  <div class="el-dropdown-link" slot="button">
                     <div class="avatar-img">
-                      <img v-lazy="personalInfo.user.avatar"
-                           class="box-image"
-                           alt="" />
+                      <img
+                        v-lazy="personalInfo.user.avatar"
+                        class="box-image"
+                        alt=""
+                      />
                     </div>
                   </div>
                   <div class="dropdown-menu-view">
-                    <router-link class="dropdown-menu-item"
-                                 :to="{
+                    <router-link
+                      class="dropdown-menu-item"
+                      :to="{
                         name: 'user',
                         params: {
                           uid: personalInfo.user.uid,
                           routeType: 'article'
                         }
-                      }">
-                      我的主页</router-link>
-                    <router-link class="dropdown-menu-item"
-                                 :to="{ name: 'setting' }">
-                      设置</router-link>
-                    <div class="dropdown-menu-item"
-                         @click="escLogin">
+                      }"
+                    >
+                      我的主页</router-link
+                    >
+                    <router-link
+                      class="dropdown-menu-item"
+                      :to="{ name: 'setting' }"
+                    >
+                      设置</router-link
+                    >
+                    <div class="dropdown-menu-item" @click="escLogin">
                       退出
                     </div>
                   </div>
@@ -152,15 +210,19 @@
               </li>
             </template>
             <template v-else>
-              <li class="nav-item"
-                  v-if="website.config.on_login === 'yes'">
-                <router-link class="btn btn-sm sign-btn btn-block"
-                             :to="{ name: 'signIn' }">登录</router-link>
+              <li class="nav-item" v-if="website.config.on_login === 'yes'">
+                <router-link
+                  class="btn btn-sm sign-btn btn-block"
+                  :to="{ name: 'signIn' }"
+                  >登录</router-link
+                >
               </li>
-              <li class="nav-item"
-                  v-if="website.config.on_register === 'yes'">
-                <router-link class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
-                             :to="{ name: 'signUp' }">注册</router-link>
+              <li class="nav-item" v-if="website.config.on_register === 'yes'">
+                <router-link
+                  class="btn s-btn--primary btn-sm sign-btn btn-outline-warning"
+                  :to="{ name: 'signUp' }"
+                  >注册</router-link
+                >
               </li>
             </template>
           </ul>
@@ -172,12 +234,12 @@
 </template>
 
 <script>
-import { cookie } from '../../../../server/utils/cookie'
+import { cookie } from '../../utils/cookie.js'
 import { mapState } from 'vuex'
 import { Dropdown } from '@components'
 export default {
   name: 'Header',
-  data () {
+  data() {
     return {
       isNavbarMenu: false, // 主菜单栏是否显示
       isDropdownMenu: false, // 个人下拉菜单栏是否显示
@@ -185,7 +247,7 @@ export default {
     }
   },
   methods: {
-    search () {
+    search() {
       if (!this.searchVal) {
         this.$message.warning('请输入搜索内容')
         return false
@@ -195,7 +257,7 @@ export default {
         query: { query: this.searchVal }
       })
     },
-    escLogin () {
+    escLogin() {
       this.$message.warning('已退出当前账户，请重新登录')
       cookie.delete('accessToken')
       window.location.reload()

@@ -230,6 +230,29 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
 
+  // 2020.2.12 新增
+
+  const experience = sequelize.define(
+    // 经验表
+    require('./models_type/db_experience').NAME,
+    require('./models_type/db_experience').TABLE,
+    SEQ_PARAMETER
+  )
+
+  const chat_contact = sequelize.define(
+    // 经验表
+    require('./models_type/db_chat_contact').NAME,
+    require('./models_type/db_chat_contact').TABLE,
+    SEQ_PARAMETER
+  )
+
+  const chat_message = sequelize.define(
+    // 经验表
+    require('./models_type/db_chat_message').NAME,
+    require('./models_type/db_chat_message').TABLE,
+    SEQ_PARAMETER
+  )
+
   const _define = {
     user,
     user_info,
@@ -261,7 +284,10 @@ module.exports = sequelize => {
     attention,
     attention_message,
     like,
-    thumb
+    thumb,
+    experience,
+    chat_contact,
+    chat_message
   }
 
   return {

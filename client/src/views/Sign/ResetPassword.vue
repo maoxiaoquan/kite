@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { cookie } from '../../../../server/utils/cookie'
+import { cookie } from '../../utils/cookie.js'
 import { sendCode } from '@components'
 import ClientOnly from 'vue-client-only'
 export default {

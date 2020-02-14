@@ -59,6 +59,11 @@ module.exports = {
       comment: '贝壳余额',
       field: 'shell_balance'
     },
+    experience: {
+      type: Seq.BIGINT(20),
+      comment: '经验总值',
+      field: 'experience'
+    },
     is_msg_push: {
       type: Seq.INTEGER(5),
       comment: '是否开启消息推送 1:开启;2:关闭',
