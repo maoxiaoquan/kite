@@ -161,7 +161,7 @@
                 <router-link
                   class="btn btn-sm no-read-msg"
                   :to="{
-                    name: 'PrivateChat'
+                    name: 'privateChatList'
                   }"
                 >
                   <i class="iconfont el-icon-chat-line-round"></i>

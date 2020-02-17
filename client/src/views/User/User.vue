@@ -39,18 +39,31 @@
                   </router-link>
                 </div>
 
-                <button
-                  v-if="
-                    user.user.uid !== personalInfo.user.uid &&
-                      personalInfo.islogin
-                  "
-                  class="user-follow-button"
-                  @click="onUserAttention(isAttention.is_attention)"
-                  :class="isAttention.is_attention ? 'has' : 'no'"
-                >
-                  <i class="iconfont"></i>
-                  <span>{{ isAttention.text }}</span>
-                </button>
+                <div class="btn-group">
+                  <button
+                    v-if="
+                      user.user.uid !== personalInfo.user.uid &&
+                        personalInfo.islogin
+                    "
+                    class="btn btn-private-chat"
+                    @click="privateChat"
+                  >
+                    <i class="iconfont"></i>
+                    <span>私聊</span>
+                  </button>
+                  <button
+                    v-if="
+                      user.user.uid !== personalInfo.user.uid &&
+                        personalInfo.islogin
+                    "
+                    class="btn"
+                    @click="onUserAttention(isAttention.is_attention)"
+                    :class="isAttention.is_attention ? 'has' : 'no'"
+                  >
+                    <i class="iconfont"></i>
+                    <span>{{ isAttention.text }}</span>
+                  </button>
+                </div>
 
                 <div class="info">
                   <ul>
@@ -224,6 +237,12 @@ export default {
     ])
   },
   methods: {
+    privateChat() {
+      this.$router.push({
+        name: 'privateChat',
+        query: { uid: this.user.user.uid, nickname: this.user.user.nickname }
+      })
+    },
     getLevel() {
       let l = 0
       let x = this.user.user_info.experience
@@ -358,6 +377,37 @@ export default {
           vertical-align: middle;
         }
       }
+      .btn-group {
+        text-align: center;
+        .btn {
+          display: inline-block;
+          font-size: 14px;
+          outline: 0;
+          border: 1px solid #00bb29;
+          border-radius: 30px;
+          padding: 3px 20px;
+          color: #888585;
+          margin: 14px auto;
+          &.btn-private-chat {
+            background: #fff;
+            color: #00bb29;
+          }
+          &.off {
+            background: #999;
+            border: 1px solid #ccc;
+          }
+          &.has {
+            background: #ccc;
+            color: #666;
+            border: 1px solid #ccc;
+          }
+          &.no {
+            background: #00bb29;
+            color: #fff;
+            border: 1px solid #00bb29;
+          }
+        }
+      }
       .info {
         margin-top: 5px;
         text-align: center;
@@ -384,28 +434,6 @@ export default {
               border-right: none;
             }
           }
-        }
-      }
-      .user-follow-button {
-        font-size: 14px;
-        outline: 0;
-        border: 1px solid #00bb29;
-        border-radius: 30px;
-        padding: 3px 20px;
-        color: #fff;
-        display: block;
-        margin: 14px auto;
-        &.off {
-          background: #999;
-          border: 1px solid #ccc;
-        }
-        &.has {
-          background: #999;
-          border: 1px solid #ccc;
-        }
-        &.no {
-          background: #00bb29;
-          border: 1px solid #00bb29;
         }
       }
     }

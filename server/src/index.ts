@@ -21,11 +21,11 @@ const cli = lowdb
 
 io.on('connection', (socket: any) => {
   socketLink(io, socket)
-  app.use('/v1/chat', chat(io, socket))
 })
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(cookieParser('cookie_kite'))
+app.use('/api-client/v1', chat(io))
 // 配置静态资源加载中间件
 app.use(express.static(path.join(__dirname, '../../static')))
 if (cli.is_success) graphql(app)

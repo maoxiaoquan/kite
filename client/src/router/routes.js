@@ -144,8 +144,13 @@ export default [
       },
       {
         path: 'private-chat',
-        name: 'PrivateChat',
-        component: require('@views/Chat/PrivateChat').default // 小书内容
+        name: 'privateChat',
+        component: require('@views/User/Chat/PrivateChat').default // 私聊
+      },
+      {
+        path: 'private-chat-list',
+        name: 'privateChatList',
+        component: require('@views/User/Chat/PrivateChatList').default // 私聊列表
       }
     ]
   },

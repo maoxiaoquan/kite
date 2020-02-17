@@ -18,6 +18,7 @@ import virtual from './virtual'
 import shop from './shop'
 import common from './common'
 import graphql from './graphql'
+import chat from './chat'
 export default {
   sign,
   home,
@@ -38,5 +39,6 @@ export default {
   virtual,
   shop,
   common,
-  graphql
+  graphql,
+  chat
 }

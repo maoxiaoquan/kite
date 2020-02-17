@@ -18,7 +18,6 @@ const {
 const userMessage = require('../../../utils/userMessage')
 import userVirtual from '../../../common/userVirtual'
 
-
 /* 评论模块 */
 
 class ArticleComment {
@@ -89,7 +88,7 @@ class ArticleComment {
           if (
             childAllComment[childCommentItem].reply_uid !== 0 &&
             childAllComment[childCommentItem].reply_uid !==
-            childAllComment[childCommentItem].uid
+              childAllComment[childCommentItem].uid
           ) {
             childAllComment[childCommentItem].setDataValue(
               'reply_user',
@@ -230,20 +229,22 @@ class ArticleComment {
 
           _data['create_dt'] = await TimeDistance(_data.create_date)
 
-          // 虚拟币消耗后期开启事物
-          await userVirtual.setVirtual({
-            uid: user.uid,
-            associate: JSON.stringify({
-              comment_id: _data.id,
-              aid: reqData.aid
-            }),
-            type: virtualType.article,
-            action: modelAction.comment,
-            ass_uid: oneArticle.uid
-          })
-
           if (oneArticle.uid !== user.uid) {
-            // 屏蔽自己
+            // 虚拟币消耗后期开启事物
+            await userVirtual.setVirtual({
+              // 评论消耗
+              uid: user.uid,
+              associate: JSON.stringify({
+                comment_id: _data.id,
+                aid: reqData.aid
+              }),
+              type: virtualType.article,
+              action: modelAction.comment,
+              ass_uid: oneArticle.uid
+            })
+
+            // 虚拟币消耗，屏蔽自己的文章
+            // 回复获取
             await userVirtual.setVirtual({
               uid: oneArticle.uid,
               associate: JSON.stringify({
@@ -254,20 +255,21 @@ class ArticleComment {
               action: modelAction.obtain_comment,
               ass_uid: user.uid
             })
-          }
 
-          if (oneArticle.uid !== user.uid && !reqData.reply_id) {
-            // 消息推送
-            await userMessage.setMessage({
-              uid: oneArticle.uid,
-              sender_id: user.uid,
-              action: userMessageAction.comment, // 动作：评论
-              type: modelType.article, // 类型：文章评论
-              content: JSON.stringify({
-                comment_id: _data.id,
-                aid: reqData.aid
+            if (!reqData.reply_id) {
+              // 消息推送屏蔽用户自己
+              await userMessage.setMessage({
+                // 文章被评论时
+                uid: oneArticle.uid,
+                sender_id: user.uid,
+                action: userMessageAction.comment, // 动作：评论
+                type: modelType.article, // 类型：文章评论
+                content: JSON.stringify({
+                  comment_id: _data.id,
+                  aid: reqData.aid
+                })
               })
-            })
+            }
           }
 
           if (
@@ -276,6 +278,7 @@ class ArticleComment {
             reqData.reply_uid !== user.uid
           ) {
             await userMessage.setMessage({
+              // 用户消息通知
               uid: reqData.reply_uid,
               sender_id: user.uid,
               action: userMessageAction.reply, // 动作：回复

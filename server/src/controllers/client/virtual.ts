@@ -22,7 +22,7 @@ const {
   modelType
 } = require('../../utils/constant')
 
-const userVirtual = require('../../common/userVirtual')
+import userVirtual from '../../common/userVirtual'
 
 class Virtual {
   // 签到

@@ -78,6 +78,12 @@
           <span class="box-title">经验明细</span>
         </router-link>
       </li>
+      <li>
+        <router-link class="collection" :to="{ name: 'privateChatList' }">
+          <i class="icon el-icon-chat-line-round"></i>
+          <span class="box-title">私聊</span>
+        </router-link>
+      </li>
     </ul>
 
     <div class="client-card">

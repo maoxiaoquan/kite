@@ -284,8 +284,8 @@ class PersonalCenter {
           'topic',
           rows[i].topic_ids
             ? await models.dynamic_topic.findOne({
-              where: { topic_id: rows[i].topic_ids }
-            })
+                where: { topic_id: rows[i].topic_ids }
+              })
             : ''
         )
 

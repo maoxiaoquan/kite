@@ -1,10 +1,11 @@
 import Vue from 'vue'
+import io from 'socket.io-client'
 import { createApp } from './app'
 import NProgress from 'nprogress'
 import { loading } from './directive'
-
 import VueLazyload from 'vue-lazyload'
 const { app, router, store } = createApp()
+
 NProgress.configure({
   easing: 'ease', // 动画方式
   speed: 500, // 递增进度条的速度
@@ -12,6 +13,8 @@ NProgress.configure({
   trickleSpeed: 200, // 自动递增间隔
   minimum: 0.3 // 初始化时的最小百分比
 })
+
+Vue.prototype.$socket = io('http://localhost:8086')
 
 // or with options
 Vue.use(VueLazyload, {
