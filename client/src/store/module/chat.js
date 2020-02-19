@@ -10,7 +10,7 @@ const actions = {
     return fetch({
       url: '/chat/join-private-chat',
       method: 'post',
-      parameter: { params: parameter }
+      parameter
     })
   },
   GET_PRIVATE_CHAT_LIST({ commit, dispatch, state }, parameter) {
@@ -34,7 +34,7 @@ const actions = {
     return fetch({
       url: '/chat/delete-private-chat',
       method: 'post',
-      parameter: { params: parameter }
+      parameter
     })
   }
 }

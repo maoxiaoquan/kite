@@ -1,5 +1,4 @@
 export default (io: any, socket: any) => {
-  console.log('111111111111111socket', io.socket)
   // 登陆
   socket.on('loginXiaoSuiBi', (data: any) => {
     socket[data.uid] = data.uid // socket.id 赋值给用户

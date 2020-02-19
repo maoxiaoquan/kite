@@ -31,6 +31,13 @@ module.exports = {
       comment: 'receive_uid',
       field: 'receive_uid'
     },
+    is_read: {
+      // 是否被阅读
+      type: Seq.BOOLEAN,
+      comment: '是否被阅读',
+      field: 'is_read',
+      defaultValue: false
+    },
     content: {
       // 内容
       type: Seq.TEXT('long'),

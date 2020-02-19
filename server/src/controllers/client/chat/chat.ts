@@ -28,15 +28,15 @@ const userVirtual = require('../../../common/userVirtual')
 class Chat {
   static async joinPrivateChat(req: any, res: any, next: any) {
     try {
-      const { send_uid, receive_uid } = req.body
+      const { receive_uid } = req.body
       const { user = '' } = req
-      if (!send_uid || !receive_uid) {
+      if (!receive_uid) {
         throw new Error('加入私聊失败，系统已禁止行为')
       }
 
       let meChatContact = await models.chat_contact.findOne({
         where: {
-          send_uid,
+          send_uid: user.uid,
           receive_uid
         }
       })
@@ -44,7 +44,7 @@ class Chat {
       let otherChatContact = await models.chat_contact.findOne({
         where: {
           send_uid: receive_uid,
-          receive_uid: send_uid
+          receive_uid: user.uid
         }
       })
 
@@ -52,18 +52,18 @@ class Chat {
         /* 判断是否连接了 */
         await models.chat_contact.update(
           {
-            is_associate: !meChatContact.is_associate
+            is_associate: true
           },
           {
             where: {
-              send_uid,
+              send_uid: user.uid,
               receive_uid
             }
           }
         )
       } else {
         await models.chat_contact.create({
-          send_uid,
+          send_uid: user.uid,
           receive_uid,
           is_associate: true
         })
@@ -73,19 +73,19 @@ class Chat {
         /* 判断是否连接了 */
         await models.chat_contact.update(
           {
-            is_associate: !otherChatContact.is_associate
+            is_associate: true
           },
           {
             where: {
               send_uid: receive_uid,
-              receive_uid: send_uid
+              receive_uid: user.uid
             }
           }
         )
       } else {
         await models.chat_contact.create({
           send_uid: receive_uid,
-          receive_uid: send_uid,
+          receive_uid: user.uid,
           is_associate: true
         })
       }
@@ -105,13 +105,36 @@ class Chat {
   // 获取私聊用户的列表
   static async getPrivateChatList(req: any, res: any, next: any) {
     try {
+      const page = req.query.page || 1
+      const pageSize = req.query.pageSize || 25
+      let orderParams: any[] = [] // 排序参数
       const { user = '' } = req
-      await models.chat_contact.findAll({
-        send_uid: user.uid,
-        is_associate: true
+
+      let { count, rows } = await models.chat_contact.findAndCountAll({
+        where: {
+          send_uid: user.uid,
+          is_associate: true
+        }, // 为空，获取全部，也可以自己添加条件
+        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: pageSize, // 每页限制返回的数据条数
+        order: orderParams
       })
 
+      for (let i in rows) {
+        rows[i].setDataValue(
+          'receive_user',
+          await models.user.findOne({
+            where: { uid: rows[i].receive_uid },
+            attributes: ['uid', 'avatar', 'nickname']
+          })
+        )
+      }
+
       resClientJson(res, {
+        data: {
+          list: rows,
+          count
+        },
         state: 'success'
       })
     } catch (err) {
@@ -157,18 +180,53 @@ class Chat {
     try {
       const { receive_uid, message } = req.body
       const { user = '' } = req
-      const toSocket = _.findWhere(io.sockets.sockets, {
+
+      const chatContact = await models.chat_contact.findOne({
+        where: {
+          send_uid: user.uid,
+          receive_uid
+        }
+      })
+
+      if (!chatContact) {
+        throw new Error('私聊失败，请联系管理员修复')
+      }
+
+      const userSocket = _.findWhere(io.sockets.sockets, {
         [receive_uid]: receive_uid
       })
 
-      if (toSocket) {
-        toSocket.emit('privateMessage', {
-          message
+      const chatMessage = await models.chat_message.create({
+        // 创建消息于系统中
+        chat_id: chatContact.id,
+        send_uid: user.uid,
+        receive_uid,
+        content: message,
+        is_associate: true
+      })
+
+      if (userSocket) {
+        userSocket.emit('privateMessage', {
+          chatMessage: chatMessage,
+          sendUser: {
+            uid: user.uid,
+            nickname: user.nickname,
+            avatar: user.avatar
+          }
         })
       }
+
       resClientJson(res, {
         state: 'success',
-        message: '删除成功'
+        data: {
+          chatMessage: chatMessage,
+          sendUser: {
+            uid: user.uid,
+            nickname: user.nickname,
+            avatar: user.avatar
+          }
+        },
+        message: '发送成功'
       })
     } catch (err) {
       resClientJson(res, {

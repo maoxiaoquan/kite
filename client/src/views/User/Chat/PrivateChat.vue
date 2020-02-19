@@ -5,7 +5,18 @@
         <div class="row">
           <div class="col-xs-12 col-sm-8 col-md-8 chat-message">
             <div class="message-main">
-              <div class="message-scroll"></div>
+              <div class="message-scroll">
+                <div
+                  class="message-item"
+                  v-for="(item, key) in messageList"
+                  :class="{
+                    me: personalInfo.user.uid === item.sendUser.uid
+                  }"
+                >
+                  <span>{{ item.sendUser.nickname }}</span>
+                  <p>{{ item.chatMessage.content }}</p>
+                </div>
+              </div>
               <div class="message-enter">
                 <textarea rows="3" cols="20" v-model="message"></textarea>
                 <button @click="sendMessage">发送</button>
@@ -29,8 +40,7 @@ export default {
   name: 'PrivateChat',
   data() {
     return {
-      socketId: '',
-      socket: {},
+      messageList: [],
       message: ''
     }
   },
@@ -40,32 +50,29 @@ export default {
     })
     this.$socket.on('privateMessage', data => {
       console.log('privateMessage', data)
+      if (data.sendUser.uid === this.$route.query.uid) {
+        this.messageList.push(data)
+      }
     })
-    // this.socket = io('http://localhost:8086')
-    // if (this.personalInfo.islogin) {
-    //   // 判断用户是否登录
-    //   this.socket.emit('joinXiaoSuiBi', {
-    //     uid: this.personalInfo.user.uid
-    //   })
-    // }
-    // this.socket.on('joinXiaoSuiBiInfo', data => {
-    //   this.socketId = data.socketId
-    //   console.log('joinXiaoSuiBiInfo', data)
-    // })
-    // this.socket.on(this.personalInfo.user.uid, data => {
-    //   console.log('mag', data)
-    // })
-    // this.socket.on('test', data => {
-    //   console.log('msg', data)
-    // })
+    this.joinPrivateChat()
   },
   methods: {
+    joinPrivateChat() {
+      // 用户聊天加入私聊
+      this.$store.dispatch('chat/JOIN_PRIVATE_CHAT', {
+        receive_uid: this.$route.query.uid
+      })
+    },
     sendMessage() {
       // 发送消息
-      this.$store.dispatch('chat/SEND_PRIVATE_CHAT_MESSAGE', {
-        receive_uid: this.$route.query.uid,
-        message: this.message
-      })
+      this.$store
+        .dispatch('chat/SEND_PRIVATE_CHAT_MESSAGE', {
+          receive_uid: this.$route.query.uid,
+          message: this.message
+        })
+        .then(result => {
+          this.messageList.push(result.data)
+        })
     }
   },
   computed: {
@@ -80,5 +87,14 @@ export default {
 
 <style scoped lang="scss">
 .private-chat-list {
+  .message-main {
+    background: #fff;
+    padding: 15px;
+    .message-item {
+      &.me {
+        text-align: right;
+      }
+    }
+  }
 }
 </style>
