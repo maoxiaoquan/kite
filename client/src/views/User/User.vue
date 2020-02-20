@@ -39,23 +39,15 @@
                   </router-link>
                 </div>
 
-                <div class="btn-group">
-                  <button
-                    v-if="
-                      user.user.uid !== personalInfo.user.uid &&
-                        personalInfo.islogin
-                    "
-                    class="btn btn-private-chat"
-                    @click="privateChat"
-                  >
+                <div
+                  class="btn-group"
+                  v-if="user.user.uid !== personalInfo.user.uid"
+                >
+                  <button class="btn btn-private-chat" @click="privateChat">
                     <i class="iconfont"></i>
                     <span>私聊</span>
                   </button>
                   <button
-                    v-if="
-                      user.user.uid !== personalInfo.user.uid &&
-                        personalInfo.islogin
-                    "
                     class="btn"
                     @click="onUserAttention(isAttention.is_attention)"
                     :class="isAttention.is_attention ? 'has' : 'no'"
@@ -238,6 +230,14 @@ export default {
   },
   methods: {
     privateChat() {
+      if (!this.personalInfo.islogin) {
+        this.$router.push({ name: 'signIn' })
+        return false
+      }
+      if (this.user.user.uid === this.personalInfo.user.uid) {
+        this.$message.error('自己不能和自己私聊')
+        return false
+      }
       this.$router.push({
         name: 'privateChat',
         query: { uid: this.user.user.uid, nickname: this.user.user.nickname }
@@ -262,6 +262,14 @@ export default {
       return l
     },
     onUserAttention(type) {
+      if (!this.personalInfo.islogin) {
+        this.$router.push({ name: 'signIn' })
+        return false
+      }
+      if (this.user.user.uid === this.personalInfo.user.uid) {
+        this.$message.error('自己不能关注自己')
+        return false
+      }
       /*用户关注用户*/
       this.$confirm(type ? '是否取消关注?' : '是否关注?', '提示', {
         confirmButtonText: '确定',
@@ -275,9 +283,7 @@ export default {
           })
           .then(result => {
             if (result.state === 'success') {
-              this.$store.dispatch('user/GET_USER_INFO_ALL', {
-                uid: this.$route.params.uid
-              })
+              this.$store.dispatch('user/GET_ASSOCIATE_INFO')
               this.$message.success(result.message)
             } else {
               this.$message.warning(result.message)
@@ -289,13 +295,12 @@ export default {
   computed: {
     ...mapState(['personalInfo', 'user', 'website']), // personalInfo:个人信息  user:登录后的个人信息当前用户
     isAttention() {
-      // 是否收藏
-      let userAttentionIds = [] // 当前用户被其他的用户所关注的其他用户 所有 id
-      this.user.user.userAttentionIds &&
-        this.user.user.userAttentionIds.map(item => {
-          userAttentionIds.push(Number(item.uid))
-        })
-      if (~userAttentionIds.indexOf(Number(this.personalInfo.user.uid))) {
+      // 是否关注
+      if (
+        ~this.user.associateInfo.userAttentionId.indexOf(
+          String(this.$route.params.uid)
+        )
+      ) {
         return {
           is_attention: true,
           text: '已关注'

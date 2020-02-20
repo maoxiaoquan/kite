@@ -5,6 +5,14 @@ const state = () => ({})
 const mutations = {}
 
 const actions = {
+  GET_PRIVATE_CHAT_INFO({ commit, dispatch, state }, parameter) {
+    // 获取私聊信息
+    return fetch({
+      url: '/chat/get-private-chat-info',
+      method: 'get',
+      parameter: { params: parameter }
+    })
+  },
   JOIN_PRIVATE_CHAT({ commit, dispatch, state }, parameter) {
     // 加入私聊
     return fetch({
@@ -27,6 +35,14 @@ const actions = {
       url: '/chat/send-private-chat-msg',
       method: 'post',
       parameter
+    })
+  },
+  GET_PRIVATE_CHAT_MSG_LIST({ commit, dispatch, state }, parameter) {
+    // 获取私聊信息列表
+    return fetch({
+      url: '/chat/private-chat-msg-list',
+      method: 'get',
+      parameter: { params: parameter }
     })
   },
   DELETE_PRIVATE_CHAT({ commit, dispatch, state }, parameter) {

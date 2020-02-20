@@ -29,7 +29,6 @@ const {
 
 import userVirtual from '../../../common/userVirtual'
 
-
 class User {
   static async userSignIn(req: any, res: any, next: any) {
     const { no_login } = lowdb
@@ -575,7 +574,7 @@ class User {
 
       let updateUser = await models.user.update(
         {
-          sex: reqData.sex || '',
+          sex: reqData.sex || 0,
           nickname: reqData.nickname || '',
           introduction: reqData.introduction || ''
         },
@@ -1002,20 +1001,10 @@ class User {
         })
         if (email) {
           let random = random_number(true, 6, 6)
-
           await models.verify_code.create({
-            phone: '',
             email: reqData.email,
-            type: 'reset_password',
             verify_code: random,
-            expire_time: moment()
-              .utc()
-              .utcOffset(+8)
-              .format('X'),
-            create_date: moment()
-              .utc()
-              .utcOffset(+8)
-              .format() /* 时间 */
+            type: 'reset_password'
           })
           sendVerifyCodeMail(reqData.email, '重置密码验证码', random)
           resClientJson(res, {
@@ -1057,6 +1046,7 @@ class User {
 
   static async userResetPassword(req: any, res: any, next: any) {
     let reqData = req.body
+    let date = new Date()
     try {
       if (!reqData.email) {
         throw new Error('邮箱不存在')
@@ -1095,15 +1085,17 @@ class User {
               limit: 1,
               order: [['id', 'DESC']]
             })
-            .then((data: any) => {
-              /* 重置密码验证码验证 */
+            .then((data: { verify_code: any; create_timestamp: any }) => {
+              /* 注册验证码验证 */
               if (data) {
-                let timeNum = moment()
-                  .utc()
-                  .utcOffset(+8)
-                  .format('X')
+                let time_num = moment(date.setHours(date.getHours())).format(
+                  'X'
+                )
                 if (reqData.code === data.verify_code) {
-                  if (Number(timeNum) - Number(data.expire_time) > 30 * 60) {
+                  if (
+                    Number(time_num) - Number(data.create_timestamp) >
+                    30 * 60
+                  ) {
                     throw new Error('验证码已过时，请再次发送')
                   }
                 } else {
@@ -1187,7 +1179,7 @@ class User {
   }
 
   /**
-   *  获取用户关联的一些信息
+   *  获取当前登录用户关联的一些信息
    * @param   {object} ctx 上下文对象
    */
   static async getUserAssociateinfo(req: any, res: any, next: any) {

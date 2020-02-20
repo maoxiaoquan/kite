@@ -21,9 +21,9 @@ export default {
     ])
   },
   mounted() {
-    this.$store.dispatch('user/GET_UNREAD_MESSAGE_COUNT')
-    this.$store.dispatch('user/GET_ASSOCIATE_INFO')
     if (this.personalInfo.islogin) {
+      this.$store.dispatch('user/GET_UNREAD_MESSAGE_COUNT')
+      this.$store.dispatch('user/GET_ASSOCIATE_INFO')
       // 用户登录的情况下，当前用户加入socket
       this.$socket.emit('loginXiaoSuiBi', { uid: this.personalInfo.user.uid })
     }

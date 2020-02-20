@@ -9,10 +9,11 @@ import chat from '../controllers/client/chat/chat'
 
 export default function(io: any) {
   //管理员登录页面
-  router.get('/getEvent', function(req: any, res: any, next: any) {
-    io.sockets.emit('notifyNum', { msg_count: '100' })
-    res.end('success')
-  })
+  router.get(
+    '/chat/get-private-chat-info',
+    tokens.ClientVerifyTokenInfo,
+    chat.getPrivateChatInfo
+  )
 
   router.post(
     // 加入私聊建立关系
@@ -42,6 +43,13 @@ export default function(io: any) {
     (req: any, res: any, next: any) => {
       chat.sendPrivateChatMsg(req, res, next, io)
     }
+  )
+
+  router.get(
+    // 历史私聊列表
+    '/chat/private-chat-msg-list',
+    tokens.ClientVerifyTokenInfo,
+    chat.getPrivateChatMsgList
   )
 
   return router

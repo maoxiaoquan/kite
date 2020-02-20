@@ -15,7 +15,7 @@ module.exports = {
     },
     chat_id: {
       // 关系ID
-      type: Seq.BIGINT(20),
+      type: Seq.STRING(180),
       comment: 'chat_id 聊天关系id',
       field: 'chat_id'
     },

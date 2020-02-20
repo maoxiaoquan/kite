@@ -4,26 +4,53 @@
       <div class="block-title">关于作者</div>
       <div class="block-body">
         <div class="user-item item">
-          <div class="lazy avatar avatar loaded"
-               :style='`background-image: url("${userInfo.avatar}");`'></div>
+          <div
+            class="lazy avatar avatar loaded"
+            :style="`background-image: url(&quot;${userInfo.avatar}&quot;);`"
+          ></div>
           <div class="info-box">
-            <router-link class="username"
-                         :to="{name:'user',params:{uid:userInfo.uid,routeType:'article'}}">
-              {{userInfo.nickname}}</router-link>
+            <router-link
+              class="username"
+              :to="{
+                name: 'user',
+                params: { uid: userInfo.uid, routeType: 'article' }
+              }"
+            >
+              {{ userInfo.nickname }}</router-link
+            >
             <div class="position">
-              {{userInfo.profession}} @ {{userInfo.company}}
+              {{ userInfo.profession }} @ {{ userInfo.company }}
             </div>
           </div>
         </div>
+
+        <div class="btn-group" v-if="userInfo.uid !== personalInfo.user.uid">
+          <button class="btn btn-private-chat" @click="privateChat">
+            <i class="iconfont"></i>
+            <span>私聊</span>
+          </button>
+          <button
+            class="btn"
+            @click="onUserAttention(isAttention.is_attention)"
+            :class="isAttention.is_attention ? 'has' : 'no'"
+          >
+            <i class="iconfont"></i>
+            <span>{{ isAttention.text }}</span>
+          </button>
+        </div>
+
         <div class="stat-item item">
           <i class="el-icon-document"></i>
-          <span class="content">文章总数 <em class="count">{{userInfo.articleCount||0}}</em></span>
+          <span class="content"
+            >文章总数
+            <em class="count">{{ userInfo.articleCount || 0 }}</em></span
+          >
         </div>
         <div class="stat-item item">
           <i class="el-icon-chat-line-square"></i>
           <span class="content">
             片刻总数
-            <em class="count">{{userInfo.dynamicCount||0}}</em>
+            <em class="count">{{ userInfo.dynamicCount || 0 }}</em>
           </span>
         </div>
       </div>
@@ -33,21 +60,23 @@
       <div class="block-title">最新文章</div>
       <div class="block-body">
         <div class="entry-list">
-          <router-link class="item"
-                       v-for="(item,key) in  recommendArticle"
-                       :key="key"
-                       :to="{name:'article',params:{aid:item.aid}}">
+          <router-link
+            class="item"
+            v-for="(item, key) in recommendArticle"
+            :key="key"
+            :to="{ name: 'article', params: { aid: item.aid } }"
+          >
             <div class="entry-title">
-              {{item.title}}
+              {{ item.title }}
             </div>
             <div class="entry-meta-box">
               <div class="entry-meta">
                 <i class="el-icon-thumb icon"></i>
-                <span class="count">{{item.thumb_count}}</span>
+                <span class="count">{{ item.thumb_count }}</span>
               </div>
               <div class="entry-meta">
                 <i class="el-icon-chat-dot-square icon"></i>
-                <span class="count">{{item.comment_count}}</span>
+                <span class="count">{{ item.comment_count }}</span>
               </div>
             </div>
           </router-link>
@@ -59,33 +88,99 @@
 
 <script>
 import { mapState } from 'vuex'
+import { modelType, userLevel } from '@utils/constant'
+
 export default {
-  data () {
+  data() {
     return {
       userInfo: {},
       recommendArticle: []
     }
   },
-  mounted () {
+  mounted() {
     this.getUserInfo() // 获取用户的信息
   },
   watch: {
-    $route (to, from) {
+    $route(to, from) {
       this.getUserInfo()
     }
   },
   computed: {
-    article () {
+    article() {
       return this.$store.state.article.article || {}
     },
-    ...mapState(['website', 'personalInfo', 'user'])
+    ...mapState(['website', 'personalInfo', 'user']),
+    isAttention() {
+      // 是否关注
+      if (
+        ~this.user.associateInfo.userAttentionId.indexOf(
+          String(this.userInfo.uid)
+        )
+      ) {
+        return {
+          is_attention: true,
+          text: '已关注'
+        }
+      } else {
+        return {
+          is_attention: false,
+          text: '关注'
+        }
+      }
+    }
   },
   methods: {
-    getUserInfo () {
-      this.$store.dispatch('graphql/GET_USER_INFO', { uid: this.article.uid }).then(result => {
-        this.userInfo = result.data.userInfo || {}
-        this.recommendArticle = result.data.recommendArticle || []
+    privateChat() {
+      if (!this.personalInfo.islogin) {
+        this.$router.push({ name: 'signIn' })
+        return false
+      }
+      if (this.userInfo.uid === this.personalInfo.user.uid) {
+        this.$message.error('自己不能和自己私聊')
+        return false
+      }
+      this.$router.push({
+        name: 'privateChat',
+        query: { uid: this.userInfo.uid, nickname: this.userInfo.nickname }
       })
+    },
+    onUserAttention(type) {
+      if (!this.personalInfo.islogin) {
+        this.$router.push({ name: 'signIn' })
+        return false
+      }
+      if (this.userInfo.uid === this.personalInfo.user.uid) {
+        this.$message.error('自己不能关注自己')
+        return false
+      }
+      /*用户关注用户*/
+      this.$confirm(type ? '是否取消关注?' : '是否关注?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store
+          .dispatch('common/SET_ATTENTION', {
+            associate_id: this.userInfo.uid,
+            type: modelType.user
+          })
+          .then(result => {
+            if (result.state === 'success') {
+              this.$store.dispatch('user/GET_ASSOCIATE_INFO')
+              this.$message.success(result.message)
+            } else {
+              this.$message.warning(result.message)
+            }
+          })
+      })
+    },
+    getUserInfo() {
+      this.$store
+        .dispatch('graphql/GET_USER_INFO', { uid: this.article.uid })
+        .then(result => {
+          this.userInfo = result.data.userInfo || {}
+          this.recommendArticle = result.data.recommendArticle || []
+        })
     }
   }
 }
@@ -107,7 +202,42 @@ export default {
       align-items: center;
     }
   }
+  .btn-group {
+    padding-left: 15px;
+    padding-bottom: 15px;
+    .btn {
+      display: inline-block;
+      font-size: 13px;
+      outline: 0;
+      border: 1px solid #00bb29;
+      border-radius: 30px;
+      padding: 2px 10px;
+      color: #888585;
+      margin-right: 10px;
+      &.btn-private-chat {
+        background: #fff;
+        color: #00bb29;
+      }
+      &.off {
+        background: #999;
+        border: 1px solid #ccc;
+      }
+      &.has {
+        background: #ccc;
+        color: #666;
+        border: 1px solid #ccc;
+      }
+      &.no {
+        background: #00bb29;
+        color: #fff;
+        border: 1px solid #00bb29;
+      }
+    }
+  }
   .author-block {
+    .block-body {
+      padding-bottom: 10px;
+    }
     .avatar {
       display: inline-block;
       position: relative;

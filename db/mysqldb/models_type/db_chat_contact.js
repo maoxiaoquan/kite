@@ -13,6 +13,12 @@ module.exports = {
       comment: 'id 主键，自增',
       field: 'id'
     },
+    chat_id: {
+      // 关系ID
+      type: Seq.STRING(180),
+      comment: 'chat_id 聊天关系id',
+      field: 'chat_id'
+    },
     send_uid: {
       // 用户ID
       type: Seq.INTEGER(10),
