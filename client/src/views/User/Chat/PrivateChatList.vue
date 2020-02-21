@@ -21,7 +21,7 @@
                 </div>
                 <div class="nickname">{{ item.nickname }}</div>
                 <div class="unread">
-                  <span class="unread-num"> 0</span>
+                  <span class="unread-num"> {{ item.unreadNum }}</span>
                 </div>
               </router-link>
             </div>
@@ -56,9 +56,11 @@ export default {
   methods: {
     getPrivateChatList() {
       this.$store.dispatch('chat/GET_PRIVATE_CHAT_LIST').then(result => {
-        console.log('result', result)
-        result.data.list.map(item => {
-          this.chatUserList.push(item.receive_user)
+        this.chatUserList = result.data.list.map(item => {
+          let data = {}
+          data = item.user
+          data.unreadNum = item.unreadNum
+          return data
         })
       })
     },

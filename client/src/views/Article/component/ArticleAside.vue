@@ -135,7 +135,7 @@ export default {
         this.$router.push({ name: 'signIn' })
         return false
       }
-      if (this.userInfo.uid === this.personalInfo.user.uid) {
+      if (this.userInfo.uid == this.personalInfo.user.uid) {
         this.$message.error('自己不能和自己私聊')
         return false
       }
@@ -149,7 +149,7 @@ export default {
         this.$router.push({ name: 'signIn' })
         return false
       }
-      if (this.userInfo.uid === this.personalInfo.user.uid) {
+      if (this.userInfo.uid == this.personalInfo.user.uid) {
         this.$message.error('自己不能关注自己')
         return false
       }

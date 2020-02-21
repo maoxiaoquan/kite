@@ -7,6 +7,12 @@
             <div class="chat-message-main">
               <div class="chat-title">与{{ $route.query.nickname }}的私聊</div>
               <div class="chat-message-scroll" id="message-scroll">
+                <span
+                  class="loading-history-data"
+                  @click="getPrivateChatMsgList('click')"
+                  v-if="isHistoryData"
+                  >加载历史聊天</span
+                >
                 <div
                   class="chat-message-item"
                   v-for="(item, key) in messageList"
@@ -64,6 +70,9 @@ export default {
     return {
       messageList: [],
       message: '',
+      page: 1,
+      pageSize: 25,
+      isHistoryData: true,
       chatInfo: {} // 用户私聊信息
     }
   },
@@ -94,15 +103,23 @@ export default {
           }
         })
     },
-    getPrivateChatMsgList() {
+    getPrivateChatMsgList(type) {
       this.$store
         .dispatch('chat/GET_PRIVATE_CHAT_MSG_LIST', {
           receive_uid: this.$route.query.uid,
-          chat_id: this.chatInfo.id
+          page: this.page,
+          pageSize: this.pageSize
         })
         .then(result => {
+          this.page += 1
+          console.log('result.data.list', result.data.list)
+          if (result.data.list.length < this.pageSize) {
+            this.isHistoryData = false
+          }
           this.messageList = this.messageList.concat(result.data.list)
-          this.scrollToBottom()
+          if (!type) {
+            this.scrollToBottom()
+          }
         })
     },
     joinPrivateChat() {
@@ -187,6 +204,17 @@ export default {
         box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
         background: #ededed;
         border-radius: 10px;
+      }
+      .loading-history-data {
+        background: #fd6926;
+        padding: 2px 5px;
+        border-radius: 3px;
+        display: block;
+        font-size: 12px;
+        width: 200px;
+        color: #fff;
+        text-align: center;
+        margin: 10px auto;
       }
     }
     .chat-message-item {
