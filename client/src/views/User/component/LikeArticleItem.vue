@@ -2,15 +2,24 @@
   <article class="content-box content-box-index">
     <div class="info-box">
       <div class="info-row title-row">
-        <router-link class="title"
-                     :to="{name:'article',params:{aid:articleItem.aid}}">{{articleItem.title}}</router-link>
+        <router-link
+          class="title"
+          :to="{ name: 'article', params: { aid: articleItem.aid } }"
+          >{{ articleItem.title }}</router-link
+        >
       </div>
 
       <div class="info-row meta-row">
         <ul class="meta-list">
           <li class="item username clickable">
-            <router-link :to="{name:'user',params:{uid:articleItem.user.uid,routeType:'article'}}"
-                         class="name">{{articleItem.user.nickname}}</router-link>
+            <router-link
+              :to="{
+                name: 'user',
+                params: { uid: articleItem.user.uid, routeType: 'article' }
+              }"
+              class="name"
+              >{{ articleItem.user.nickname }}</router-link
+            >
           </li>
           <li class="item item-icon read-count">
             <i class="el-icon-reading"></i>
@@ -24,26 +33,33 @@
             <i class="el-icon-chat-dot-round"></i>
             <strong v-text="articleItem.comment_count"></strong>
           </li>
-          <li class="item"
-              v-text="articleItem.create_dt"></li>
-          <li class="item"
-              v-if="articleItem.tag_ids">
-            <router-link v-for="(itemArticleTag,key) in articleItem.tag"
-                         class="tag-class frontend"
-                         :key="key"
-                         :to="{name:'article_tag',params:{en_name:itemArticleTag.en_name}}">{{itemArticleTag.name}}</router-link>
+          <li class="item" v-text="articleItem.create_dt"></li>
+          <li class="item" v-if="articleItem.tag_ids">
+            <router-link
+              v-for="(itemArticleTag, key) in articleItem.tag"
+              class="tag-class frontend"
+              :key="key"
+              :to="{
+                name: 'article_tag',
+                params: { en_name: itemArticleTag.en_name }
+              }"
+              >{{ itemArticleTag.name }}</router-link
+            >
           </li>
-          <li class="item operat-view"
-              @click="isOperating=!isOperating"
-              v-if="personalInfo.islogin&&personalInfo.user.uid===user.user.uid">
+          <li
+            class="item operat-view"
+            @click="isOperating = !isOperating"
+            v-if="personalInfo.islogin"
+          >
             <Dropdown>
-              <div class="el-dropdown-link"
-                   slot="button">
+              <div class="el-dropdown-link" slot="button">
                 <i class="el-icon-more"></i>
               </div>
               <div class="dropdown-menu-view">
-                <div class="dropdown-menu-item"
-                     @click="commandChange({type:'cancel'})">
+                <div
+                  class="dropdown-menu-item"
+                  @click="commandChange({ type: 'cancel' })"
+                >
                   取消喜欢
                 </div>
               </div>
@@ -52,70 +68,73 @@
         </ul>
       </div>
     </div>
-    <div class="lazy thumb thumb loaded"
-         v-if="articleItem.cover_img"
-         style="background-size: cover;"
-         :style="{'background-image':'url('+articleItem.cover_img+')'}"></div>
+    <div
+      class="lazy thumb thumb loaded"
+      v-if="articleItem.cover_img"
+      style="background-size: cover;"
+      :style="{ 'background-image': 'url(' + articleItem.cover_img + ')' }"
+    ></div>
   </article>
 </template>
 
 <script>
 import { Dropdown } from '@components'
 import { mapState } from 'vuex'
-import {
-  modelType
-} from '@utils/constant'
+import { modelType } from '@utils/constant'
 
 export default {
-  name: "TopArticleItem",
+  name: 'TopArticleItem',
   props: {
     articleItem: {
       type: Object
     }
   },
-  data () {
+  data() {
     return {
       isOperating: false
-    };
+    }
   },
   methods: {
-    commandChange (val) {
-      if (val.type === "cancel") {
-        this.$confirm("此操作将永久取消关注此文章?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
+    commandChange(val) {
+      if (val.type === 'cancel') {
+        this.$confirm('此操作将永久取消关注此文章?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         })
           .then(() => {
-            this.userLikeArticle();
+            this.userLikeArticle()
           })
-          .catch(() => { });
+          .catch(() => {})
       }
     },
-    userLikeArticle () {
+    userLikeArticle() {
       /*用户like 文章*/
-      var that = this;
+      var that = this
       this.$store
-        .dispatch("common/SET_LIKE", { associate_id: this.articleItem.aid, type: modelType.article })
+        .dispatch('common/SET_LIKE', {
+          associate_id: this.articleItem.aid,
+          type: modelType.article
+        })
         .then(res => {
-          if (res.state === "success") {
+          if (res.state === 'success') {
             this.$emit('likeArticle')
           } else {
-            this.$message.warning(res.message);
+            this.$message.warning(res.message)
           }
         })
-        .catch(function (err) {
-          console.log(err);
-        });
-    },
+        .catch(function(err) {
+          console.log(err)
+        })
+    }
   },
   components: {
     Dropdown
   },
   computed: {
-    ...mapState(['personalInfo', 'user']),
+    ...mapState(['personalInfo', 'user'])
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
@@ -182,13 +201,13 @@ export default {
           font-size: 12px;
           &:after {
             display: inline-block;
-            content: "\B7";
+            content: '\B7';
             margin: 0 4px;
             color: #b2bac2;
           }
           &:last-of-type {
             &:after {
-              content: "";
+              content: '';
             }
           }
           a,
@@ -210,13 +229,13 @@ export default {
             text-overflow: ellipsis;
             color: #b3bac1;
             &:after {
-              content: "/";
+              content: '/';
               color: #b3bac1;
               margin: 0 3px;
             }
             &:last-of-type {
               &:after {
-                content: "";
+                content: '';
               }
             }
           }

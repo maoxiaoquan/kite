@@ -160,8 +160,8 @@ class Chat {
           send_uid: user.uid,
           is_associate: true
         }, // 为空，获取全部，也可以自己添加条件
-        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-        limit: pageSize, // 每页限制返回的数据条数
+        offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: Number(pageSize), // 每页限制返回的数据条数
         order: orderParams
       })
 
@@ -177,7 +177,11 @@ class Chat {
         rows[i].setDataValue(
           'unreadNum',
           await models.chat_message.count({
-            where: { chat_id: rows[i].chat_id, is_read: false }
+            where: {
+              chat_id: rows[i].chat_id,
+              receive_uid: user.uid,
+              is_read: false
+            }
           })
         )
       }
@@ -227,12 +231,54 @@ class Chat {
     }
   }
 
+  // 删除私聊用户的列表
+  static async privateChatRead(req: any, res: any, next: any) {
+    try {
+      const { chat_id } = req.body
+      const { user = '' } = req
+
+      let meChatContact = await models.chat_contact.findOne({
+        where: {
+          send_uid: user.uid,
+          chat_id: chat_id
+        }
+      })
+
+      if (!meChatContact) {
+        throw new Error('消息阅读失败')
+      }
+
+      await models.chat_message.update(
+        {
+          is_read: true
+        },
+        {
+          where: {
+            chat_id: chat_id,
+            receive_uid: user.uid
+          }
+        }
+      )
+
+      resClientJson(res, {
+        state: 'success',
+        message: '阅读成功'
+      })
+    } catch (err) {
+      resClientJson(res, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
   static async getPrivateChatMsgList(req: any, res: any, next: any) {
     try {
       const page = req.query.page || 1
       const pageSize = req.query.pageSize || 25
       const { receive_uid } = req.query
-      let orderParams: any[] = [] // 排序参数
+      let orderParams: any[] = [['create_date', 'DESC']] // 排序参数
       const { user = '' } = req
       let meChatContact = await models.chat_contact.findOne({
         where: {

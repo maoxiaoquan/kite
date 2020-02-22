@@ -386,12 +386,17 @@ class User {
           'user_role_ids'
         ]
       })
+
+      let oneUserInfo = await models.user_info.findOne({
+        where: { uid: user.uid }
+      })
       await resClientJson(res, {
         state: 'success',
         message: '获取成功',
         data: {
           islogin,
-          user: oneUser
+          user: oneUser,
+          user_info: oneUserInfo
         }
       })
     } catch (err) {

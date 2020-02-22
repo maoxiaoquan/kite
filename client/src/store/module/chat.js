@@ -52,6 +52,14 @@ const actions = {
       method: 'post',
       parameter
     })
+  },
+  PRIVATE_CHAT_READ({ commit, dispatch, state }, parameter) {
+    // 私聊阅读
+    return fetch({
+      url: '/chat/private-chat-read',
+      method: 'post',
+      parameter
+    })
   }
 }
 

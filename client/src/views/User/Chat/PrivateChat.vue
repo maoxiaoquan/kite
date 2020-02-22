@@ -71,24 +71,28 @@ export default {
       messageList: [],
       message: '',
       page: 1,
-      pageSize: 25,
+      pageSize: 5,
       isHistoryData: true,
       chatInfo: {} // 用户私聊信息
     }
   },
   mounted() {
-    this.$store.dispatch('user/GET_USER_INFO_ALL', {
-      uid: this.personalInfo.user.uid
-    })
+    this.getPrivateChatInfo()
     this.$socket.on('privateMessage', data => {
       if (data.sendUser.uid === this.$route.query.uid) {
         this.messageList.push(data)
       }
       this.scrollToBottom()
     })
-    this.getPrivateChatInfo()
   },
   methods: {
+    compare(property) {
+      return function(a, b) {
+        let i = a[property]
+        let j = b[property]
+        return i - j
+      }
+    },
     getPrivateChatInfo() {
       this.$store
         .dispatch('chat/GET_PRIVATE_CHAT_INFO', {
@@ -98,6 +102,7 @@ export default {
           if (result.data.info) {
             this.chatInfo = result.data.info
             this.getPrivateChatMsgList()
+            this.privateChatRead()
           } else {
             this.joinPrivateChat()
           }
@@ -112,11 +117,11 @@ export default {
         })
         .then(result => {
           this.page += 1
-          console.log('result.data.list', result.data.list)
+          let newSortList = result.data.list.sort(this.compare('id'))
           if (result.data.list.length < this.pageSize) {
             this.isHistoryData = false
           }
-          this.messageList = this.messageList.concat(result.data.list)
+          this.messageList = newSortList.concat(this.messageList)
           if (!type) {
             this.scrollToBottom()
           }
@@ -124,9 +129,13 @@ export default {
     },
     joinPrivateChat() {
       // 用户聊天加入私聊
-      this.$store.dispatch('chat/JOIN_PRIVATE_CHAT', {
-        receive_uid: this.$route.query.uid
-      })
+      this.$store
+        .dispatch('chat/JOIN_PRIVATE_CHAT', {
+          receive_uid: this.$route.query.uid
+        })
+        .then(() => {
+          this.getPrivateChatInfo()
+        })
     },
     sendMessage() {
       // 发送消息
@@ -140,6 +149,12 @@ export default {
           this.message = ''
           this.scrollToBottom()
         })
+    },
+    privateChatRead() {
+      // 用户聊天消息阅读
+      this.$store.dispatch('chat/PRIVATE_CHAT_READ', {
+        chat_id: this.chatInfo.chat_id
+      })
     },
     scrollToBottom() {
       this.$nextTick(() => {

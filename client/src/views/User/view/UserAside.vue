@@ -14,7 +14,8 @@
     <ul
       class="list user-role client-card-shadow"
       v-if="
-        user.user.user_role_ids &&
+        $route.name === 'user' &&
+          user.user.user_role_ids &&
           userRoleAll &&
           user.user.user_role_ids !== 'ordinary_role_100000'
       "
@@ -35,14 +36,8 @@
       </li>
     </ul>
 
-    <ul
-      class="aside-operat client-card-shadow"
-      v-if="personalInfo.islogin && personalInfo.user.uid === user.user.uid"
-    >
-      <li
-        v-if="personalInfo.islogin && personalInfo.user.uid === user.user.uid"
-        @click="checkIn"
-      >
+    <ul class="aside-operat client-card-shadow" v-if="personalInfo.islogin">
+      <li @click="checkIn">
         <a href="javascript:;">
           <i class="icon el-icon-bell"></i>
           <span class="box-title check-in"> 签到</span>
@@ -86,7 +81,7 @@
       </li>
     </ul>
 
-    <div class="client-card">
+    <div class="client-card" v-if="$route.name === 'user'">
       <div class="title">个人介绍</div>
       <div class="description">
         <div class="js-intro">

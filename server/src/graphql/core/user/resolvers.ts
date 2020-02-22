@@ -14,11 +14,16 @@ export const Query = {
     } else {
       return {
         messageCount: 0,
-        attentionCount: 0
+        attentionCount: 0,
+        privateChatCount: 0
       }
     }
   },
-  async userUnreadList(_: any, { page, pageSize }: any, { islogin, user }: any) {
+  async userUnreadList(
+    _: any,
+    { page, pageSize }: any,
+    { islogin, user }: any
+  ) {
     if (islogin) {
       const AttentionMsg = await models.user.unreadAttentionMsg({
         page,
@@ -40,5 +45,3 @@ export const Query = {
 export const Mutation = {}
 
 export const Schema = {}
-
-

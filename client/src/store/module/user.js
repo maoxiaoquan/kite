@@ -11,8 +11,9 @@ const state = () => ({
   user_info: {},
   user: {},
   user_article_blog: [], // 用户的文章专题
-  attentionCount: 0, // 用户未读
-  messageCount: 0, // 用户未读
+  attentionCount: 0, // 用户未读关注消息
+  messageCount: 0, // 用户未读通知
+  privateChatCount: 0, // 用户未读私聊消息
   associateInfo: {
     articleThumdId: [],
     dynamicThumdId: [],
@@ -40,6 +41,7 @@ const mutations = {
     // 用户消息数量
     state.attentionCount = data.attentionCount
     state.messageCount = data.messageCount
+    state.privateChatCount = data.privateChatCount
   },
   SET_ASSOCIATE_INFO(state, data) {
     // 用户关联信心
@@ -190,7 +192,8 @@ const actions = {
           query {
             userUnreadCount {
               attentionCount
-              messageCount 
+              messageCount
+              privateChatCount 
             }
           }
         `

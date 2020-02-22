@@ -3,7 +3,6 @@
     <section class="personal-lay layout-content">
       <div class="container  box-container">
         <div class="row">
-
           <div class="col-xs-12 col-sm-8 col-md-8 main">
             <div class="client-card">
               <ul class="trigger-menu">
@@ -23,10 +22,8 @@
           <div class="col-xs-12 col-sm-4 col-md-4 box-aside">
             <UserAside />
           </div>
-
         </div>
       </div>
-
     </section>
   </client-only>
 </template>
@@ -38,7 +35,7 @@ import { mapState } from 'vuex'
 import ClientOnly from 'vue-client-only'
 export default {
   name: 'Personal',
-  metaInfo () {
+  metaInfo() {
     return {
       title: '个人中心',
       htmlAttrs: {
@@ -46,18 +43,8 @@ export default {
       }
     }
   },
-  async asyncData ({ store, route }) {
-    return Promise.all([
-      store.dispatch('user/GET_USER_ATTENTION_LIST', {
-        uid: route.params.uid
-      })
-    ])
-  },
-  created () {
-    this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
-  },
   computed: {
-    ...mapState(['personalInfo', 'user']),  // personalInfo:个人信息  user:登录后的个人信息当前用户
+    ...mapState(['personalInfo', 'user']) // personalInfo:个人信息  user:登录后的个人信息当前用户
   },
   components: {
     UserAside,

@@ -2,86 +2,98 @@
   <client-only>
     <section class="layout-content detail-lay">
       <div class="container  box-container">
-
         <div class="row">
-
           <div class="col-xs-12 col-sm-8 col-md-8 main">
-
             <div class="client-card pd20">
-
               <h3 class="title">我的订单</h3>
 
               <ul class="nav-item-view">
-                <li class="nav-item"
-                    :class="{'active':!currProductType}"
-                    @click="switchType('','')">
-                  <a href="javascript:;"
-                     class="collection-name">
+                <li
+                  class="nav-item"
+                  :class="{ active: !currProductType }"
+                  @click="switchType('', '')"
+                >
+                  <a href="javascript:;" class="collection-name">
                     全部
                   </a>
                 </li>
-                <li class="nav-item"
-                    :class="{'active':key==currProductType}"
-                    v-for="(item,key,index) in productTypeInfo"
-                    v-if="item.isUse"
-                    @click="switchType(item,key)"
-                    :key="index">
-                  <a href="javascript:;"
-                     class="collection-name">
-                    {{item.name}}
+                <li
+                  class="nav-item"
+                  :class="{ active: key == currProductType }"
+                  v-for="(item, key, index) in productTypeInfo"
+                  v-if="item.isUse"
+                  @click="switchType(item, key)"
+                  :key="index"
+                >
+                  <a href="javascript:;" class="collection-name">
+                    {{ item.name }}
                   </a>
                 </li>
               </ul>
 
               <div class="detail-view row">
-                <div class="col-xs-12 col-sm-6 col-md-6 detail-item"
-                     v-for="(item,key) in detail.list"
-                     :key="key">
-                  <div v-if="item.product_type==productType.books"
-                       class="books">
-
+                <div
+                  class="col-xs-12 col-sm-6 col-md-6 detail-item"
+                  v-for="(item, key) in detail.list"
+                  :key="key"
+                >
+                  <div
+                    v-if="item.product_type == productType.books"
+                    class="books"
+                  >
                     <div class="library-item__thumb">
-                      <router-link :to="{name:'book',params:{books_id:item.productInfo.books_id}}">
-                        <img v-lazy="item.productInfo.cover_img"
-                             class="img-full"
-                             lazy="loaded">
+                      <router-link
+                        :to="{
+                          name: 'book',
+                          params: { books_id: item.productInfo.books_id }
+                        }"
+                      >
+                        <img
+                          v-lazy="item.productInfo.cover_img"
+                          class="img-full"
+                          lazy="loaded"
+                        />
                       </router-link>
                     </div>
                     <div class="library-item__body">
-                      <router-link class="library-item__title"
-                                   :to="{name:'book',params:{books_id:item.productInfo.books_id}}">
-                        {{item.productInfo.title}}
+                      <router-link
+                        class="library-item__title"
+                        :to="{
+                          name: 'book',
+                          params: { books_id: item.productInfo.books_id }
+                        }"
+                      >
+                        {{ item.productInfo.title }}
                         <span class="tag-buy">已购买</span>
                       </router-link>
                       <div class="library-item__info">
-                        <span><i class="el-icon-view"></i> {{item.productInfo.read_count||0}}
-                        </span><span style="margin-left: 8px;">
-                          <i class="el-icon-notebook-2"></i> {{item.productInfo.bookCount||0}}
+                        <span
+                          ><i class="el-icon-view"></i>
+                          {{ item.productInfo.read_count || 0 }} </span
+                        ><span style="margin-left: 8px;">
+                          <i class="el-icon-notebook-2"></i>
+                          {{ item.productInfo.bookCount || 0 }}
                         </span>
-                        <span class="attention"
-                              v-if="~[statusList.reviewSuccess,statusList.freeReview].indexOf(item.productInfo.status)&&personalInfo.islogin"
-                              @click="collectBooks(item.productInfo.books_id)"
-                              :class="{'active':isCollect(item.productInfo).status}">{{isCollect(item.productInfo).text}}</span>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <Page :total="Number(detail.count)"
-                    :pageSize="Number(detail.pageSize)"
-                    :page="Number(detail.page)||1"
-                    @pageChange="pageChange"></Page>
+              <Page
+                :total="Number(detail.count)"
+                :pageSize="Number(detail.pageSize)"
+                :page="Number(detail.page) || 1"
+                @pageChange="pageChange"
+              ></Page>
             </div>
           </div>
 
           <div class="col-xs-12 col-sm-4 col-md-4 box-aside">
             <UserAside />
           </div>
-
         </div>
       </div>
-
     </section>
   </client-only>
 </template>
@@ -103,11 +115,9 @@ import {
   modelType
 } from '@utils/constant'
 
-
-
 export default {
   name: 'order',
-  metaInfo () {
+  metaInfo() {
     return {
       title: '个人中心',
       htmlAttrs: {
@@ -115,7 +125,7 @@ export default {
       }
     }
   },
-  data () {
+  data() {
     return {
       virtualPlusLess,
       virtualPlusLessText,
@@ -134,71 +144,33 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     this.getList()
-    this.$store.dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
   },
   methods: {
-    pageChange (val) {
+    pageChange(val) {
       this.detail.page = val
       this.getList()
     },
-    switchType (item, key) {
+    switchType(item, key) {
       this.currProductType = key
-      console.log('this.detail.product_type', this.currProductType)
       this.getList()
     },
-    collectBooks (books_id) { // 用户收藏小书
-      this.$store.dispatch('common/SET_COLLECT', {
-        associate_id: books_id,
-        type: modelType.books
-      })
+    getList() {
+      this.$store
+        .dispatch('shop/GET_ORDER_LIST', {
+          uid: this.personalInfo.user.uid,
+          page: this.detail.page,
+          product_type: this.currProductType || '',
+          pageSize: this.detail.pageSize
+        })
         .then(result => {
-          if (result.state === 'success') {
-            this.$message.success(result.message);
-            window.location.reload()
-          } else {
-            this.$message.warning(result.message);
-          }
+          this.detail = result.data
         })
-    },
-    isCollect (item) { // 是否收藏
-      let collectUserIds = []
-      if (item.collectUserIds && item.collectUserIds.length > 0) {
-        item.collectUserIds.map(item => {
-          collectUserIds.push(item.uid)
-        })
-        if (~collectUserIds.indexOf(Number(this.personalInfo.user.uid))) {
-          return {
-            status: true,
-            text: '已收藏'
-          }
-        } else {
-          return {
-            status: false,
-            text: '收藏'
-          }
-        }
-      } else {
-        return {
-          status: false,
-          text: '收藏'
-        }
-      }
-    },
-    getList () {
-      this.$store.dispatch('shop/GET_ORDER_LIST', {
-        uid: this.personalInfo.user.uid,
-        page: this.detail.page,
-        product_type: this.currProductType || '',
-        pageSize: this.detail.pageSize
-      }).then(result => {
-        this.detail = result.data
-      })
-    },
+    }
   },
   computed: {
-    ...mapState(['personalInfo', 'user']),  // personalInfo:个人信息  user:登录后的个人信息当前用户
+    ...mapState(['personalInfo', 'user']) // personalInfo:个人信息  user:登录后的个人信息当前用户
   },
   components: {
     UserAside,

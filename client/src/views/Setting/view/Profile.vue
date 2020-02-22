@@ -184,24 +184,15 @@ export default {
     }
   },
   created() {
-    this.getCurrUserInfo()
+    this.initInfo()
   },
   methods: {
-    getCurrUserInfo() {
-      // 获取当前登录用户信息
-      this.$store
-        .dispatch('user/GET_USER_INFO_ALL', { uid: this.personalInfo.user.uid })
-        .then(result => {
-          this.$nextTick(() => {
-            if (result.state === 'success') {
-              this.user_info = result.data
-              this.formData = {
-                ...result.data.user,
-                ...result.data.user_info
-              }
-            }
-          })
-        })
+    initInfo() {
+      this.formData = {
+        ...this.personalInfo.user,
+        ...this.personalInfo.user_info
+      }
+      this.user_info = this.personalInfo.user_info
     },
     updateUserInfo() {
       this.$store
@@ -210,7 +201,7 @@ export default {
           this.$nextTick(() => {
             if (result.state === 'success') {
               this.$message.success('保存成功')
-              this.getCurrUserInfo()
+              this.$store.dispatch('PERSONAL_INFO')
             } else {
               this.$message.warning(result.message)
             }
@@ -224,7 +215,7 @@ export default {
           this.$nextTick(function() {
             if (result.state === 'success') {
               this.$message.success('上传用户头像成功，头像正在审核中')
-              this.getCurrUserInfo()
+              this.$store.dispatch('PERSONAL_INFO')
             } else {
               this.$message.warning(result.message)
             }

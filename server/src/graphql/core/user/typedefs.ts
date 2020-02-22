@@ -15,6 +15,7 @@ export const Schema = `
   type UserUnreadCount {
     messageCount: Int
     attentionCount: Int
+    privateChatCount: Int 
   }
 
   type senderUserInfo {
@@ -58,4 +59,3 @@ export const Query = `
 export const Mutation = ` 
   
 `
-

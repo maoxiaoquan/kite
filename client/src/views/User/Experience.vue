@@ -98,9 +98,6 @@ export default {
   },
   mounted() {
     this.getVirtualList()
-    this.$store.dispatch('user/GET_USER_INFO_ALL', {
-      uid: this.personalInfo.user.uid
-    })
   },
   methods: {
     pageChange(val) {

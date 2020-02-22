@@ -166,9 +166,9 @@
                 >
                   <i class="iconfont el-icon-chat-line-round"></i>
                   <span
-                    v-if="user.attentionCount > 0"
+                    v-if="user.privateChatCount > 0"
                     class="unread-message-count"
-                    >{{ user.attentionCount }}</span
+                    >{{ user.privateChatCount }}</span
                   >
                 </router-link>
               </li>

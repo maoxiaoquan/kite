@@ -45,6 +45,13 @@ export default function(io: any) {
     }
   )
 
+  router.post(
+    // 发送私聊
+    '/chat/private-chat-read',
+    tokens.ClientVerifyTokenInfo,
+    chat.privateChatRead
+  )
+
   router.get(
     // 历史私聊列表
     '/chat/private-chat-msg-list',

@@ -64,14 +64,24 @@ class User {
           is_read: false
         }
       })
+
+      let privateChatCount = await models.chat_message.count({
+        where: {
+          receive_uid: uid,
+          is_read: false
+        }
+      })
+
       return {
         messageCount: messageCount,
-        attentionCount: attentionCount
+        attentionCount: attentionCount,
+        privateChatCount
       }
     } catch (err) {
       return {
         messageCount: 0,
-        attentionCount: 0
+        attentionCount: 0,
+        privateChatCount: 0
       }
     }
   }

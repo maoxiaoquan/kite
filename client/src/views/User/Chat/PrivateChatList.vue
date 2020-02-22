@@ -3,27 +3,38 @@
     <section class="private-chat">
       <div class="container box-container">
         <div class="row">
-          <div class="col-xs-12 col-sm-8 col-md-8 chat-user-list">
-            <div class="chat-user-list-view">
-              <router-link
-                :to="{
-                  name: 'privateChat',
-                  query: {
-                    uid: item.uid,
-                    nickname: item.nickname
-                  }
-                }"
-                v-for="(item, key) in chatUserList"
-                class="chat-user-item clearfix"
-              >
-                <div class="avatar">
-                  <img v-lazy="item.avatar" class="user-avatar" alt="" />
-                </div>
-                <div class="nickname">{{ item.nickname }}</div>
-                <div class="unread">
-                  <span class="unread-num"> {{ item.unreadNum }}</span>
-                </div>
-              </router-link>
+          <div class="col-xs-12 col-sm-8 col-md-8">
+            <div class="chat-user-list">
+              <div class="title">私聊列表</div>
+
+              <div class="chat-user-list-view">
+                <router-link
+                  :to="{
+                    name: 'privateChat',
+                    query: {
+                      uid: item.uid,
+                      nickname: item.nickname
+                    }
+                  }"
+                  v-for="(item, key) in chatUserList"
+                  :key="key"
+                  class="chat-user-item clearfix"
+                >
+                  <div class="avatar">
+                    <img v-lazy="item.avatar" class="user-avatar" alt="" />
+                  </div>
+                  <div class="nickname">{{ item.nickname }}</div>
+                  <div class="unread">
+                    <span class="unread-num"> {{ item.unreadNum }}</span>
+                  </div>
+                </router-link>
+              </div>
+              <Page
+                :total="Number(count)"
+                :pageSize="Number(pageSize)"
+                :page="Number(page) || 1"
+                @pageChange="pageChange"
+              ></Page>
             </div>
           </div>
           <div class="col-xs-12 col-sm-4 col-md-4">
@@ -38,35 +49,42 @@
 <script>
 import ClientOnly from 'vue-client-only'
 import UserAside from '../view/UserAside'
+import { Page } from '@components'
 import { mapState } from 'vuex'
 export default {
   name: 'PrivateChat',
   data() {
     return {
       content: '',
+      count: 0,
+      pageSize: 25,
+      page: 1,
       chatUserList: []
     }
   },
   mounted() {
-    this.$store.dispatch('user/GET_USER_INFO_ALL', {
-      uid: this.personalInfo.user.uid
-    })
     this.getPrivateChatList()
   },
   methods: {
     getPrivateChatList() {
-      this.$store.dispatch('chat/GET_PRIVATE_CHAT_LIST').then(result => {
-        this.chatUserList = result.data.list.map(item => {
-          let data = {}
-          data = item.user
-          data.unreadNum = item.unreadNum
-          return data
+      this.$store
+        .dispatch('chat/GET_PRIVATE_CHAT_LIST', {
+          page: this.page,
+          pageSize: Number(this.pageSize)
         })
-      })
+        .then(result => {
+          this.count = result.data.count
+          this.chatUserList = result.data.list.map(item => {
+            let data = {}
+            data = item.user
+            data.unreadNum = item.unreadNum
+            return data
+          })
+        })
     },
-    sendMessage() {
-      // 发送消息
-      this.$store.dispatch('chat/SEND_PRIVATE_CHAT_MESSAGE')
+    pageChange(val) {
+      this.page = val
+      this.getPrivateChatList()
     }
   },
   computed: {
@@ -74,16 +92,25 @@ export default {
   },
   components: {
     ClientOnly,
-    UserAside
+    UserAside,
+    Page
   }
 }
 </script>
 
 <style scoped lang="scss">
 .private-chat {
-  .chat-user-list-view {
+  .chat-user-list {
     background: #fff;
-    padding: 15px;
+    padding-bottom: 25px;
+    .title {
+      padding: 15px;
+      font-size: 14px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .chat-user-list-view {
+      padding: 15px;
+    }
     .chat-user-item {
       padding: 10px;
       display: block;
