@@ -44,7 +44,7 @@
                     </span>
                   </td>
                   <td style="width:20%">
-                    {{ detailItem.actionText + detailItem.typeText }}
+                    {{ detailItem.actionText + detailItem.typeText }}：
                     <router-link
                       style="color:#df5858"
                       v-if="detailItem.type === virtualType.article"
@@ -83,6 +83,13 @@
                         }
                       }"
                       >{{ detailItem.book.title }}</router-link
+                    >
+
+                    <a
+                      style="color:#666"
+                      href="javascript:;"
+                      v-if="detailItem.type === virtualType.chat_message"
+                      >{{ detailItem.chat_message.content }}</a
                     >
                   </td>
                 </tr>

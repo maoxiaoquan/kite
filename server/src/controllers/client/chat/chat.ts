@@ -21,7 +21,7 @@ const {
   modelInfo
 } = require('../../../utils/constant')
 
-const userVirtual = require('../../../common/userVirtual')
+import userVirtual from '../../../common/userVirtual'
 
 /* 动态专题模块模块 */
 // 获取动态专题详情
@@ -373,6 +373,17 @@ class Chat {
       if (userSocket) {
         userSocket.emit('privateMessage', chatMessage)
       }
+
+      await userVirtual.setVirtual({
+        // 私聊消耗
+        uid: user.uid,
+        associate: JSON.stringify({
+          id: chatMessage.id
+        }),
+        type: virtualType.chat_message,
+        action: modelAction.sendPrivateChat,
+        ass_uid: receive_uid
+      })
 
       resClientJson(res, {
         state: 'success',

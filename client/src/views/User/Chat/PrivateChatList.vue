@@ -25,7 +25,9 @@
                   </div>
                   <div class="nickname">{{ item.nickname }}</div>
                   <div class="unread">
-                    <span class="unread-num"> {{ item.unreadNum }}</span>
+                    <span class="unread-num" v-if="item.unreadNum > 0">
+                      {{ item.unreadNum }}</span
+                    >
                   </div>
                 </router-link>
               </div>

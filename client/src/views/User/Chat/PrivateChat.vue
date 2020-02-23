@@ -6,38 +6,45 @@
           <div class="col-xs-12 col-sm-8 col-md-8 chat-message">
             <div class="chat-message-main">
               <div class="chat-title">与{{ $route.query.nickname }}的私聊</div>
-              <div class="chat-message-scroll" id="message-scroll">
-                <span
-                  class="loading-history-data"
-                  @click="getPrivateChatMsgList('click')"
-                  v-if="isHistoryData"
-                  >加载历史聊天</span
-                >
-                <div
-                  class="chat-message-item"
-                  v-for="(item, key) in messageList"
-                  :class="{
-                    me: personalInfo.user.uid === item.sendUser.uid
-                  }"
-                >
-                  <div class="avatar">
-                    <img
-                      class="avatar-img"
-                      :src="item.sendUser.avatar"
-                      alt=""
-                    />
-                  </div>
-                  <div class="msg-view">
-                    <div class="user-info">
-                      <span class="user-nickname">{{
-                        item.sendUser.nickname
-                      }}</span>
-                      <span class="msg-time">{{ item.create_dt }}</span>
+              <div class="chat-message-content">
+                <div class="chat-message-scroll" id="message-scroll">
+                  <div class="chat-message-list" id="chat-message-list">
+                    <span
+                      class="loading-history-data"
+                      @click="getPrivateChatMsgList('click')"
+                      v-if="isHistoryData"
+                      >查看更多历史聊天</span
+                    >
+                    <div
+                      class="chat-message-item"
+                      v-for="(item, key) in messageList"
+                      :class="{
+                        me: personalInfo.user.uid === item.sendUser.uid
+                      }"
+                    >
+                      <div class="avatar">
+                        <img
+                          class="avatar-img"
+                          :src="item.sendUser.avatar"
+                          alt=""
+                        />
+                      </div>
+                      <div class="msg-view">
+                        <div class="user-info">
+                          <span class="user-nickname">{{
+                            item.sendUser.nickname
+                          }}</span>
+                          <span class="msg-time">{{ item.create_dt }}</span>
+                        </div>
+                        <div class="msg-content">
+                          {{ item.content }}
+                        </div>
+                      </div>
                     </div>
-                    <div class="msg-content">
-                      {{ item.content }}
-                    </div>
                   </div>
+                  <span class="new-message" v-show="isNewMessage"
+                    >有新的消息</span
+                  >
                 </div>
               </div>
               <div class="chat-message-footer clearfix">
@@ -64,6 +71,23 @@
 import ClientOnly from 'vue-client-only'
 import UserAside from '../view/UserAside'
 import { mapState } from 'vuex'
+
+function debounce(func, wait, immediate) {
+  var timeout
+  return function() {
+    var context = this,
+      args = arguments
+    var later = function() {
+      timeout = null
+      if (!immediate) func.apply(context, args)
+    }
+    var callNow = immediate && !timeout
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+    if (callNow) func.apply(context, args)
+  }
+}
+
 export default {
   name: 'PrivateChat',
   data() {
@@ -73,14 +97,20 @@ export default {
       page: 1,
       pageSize: 5,
       isHistoryData: true,
+      isLockList: false,
+      isNewMessage: false,
       chatInfo: {} // 用户私聊信息
     }
   },
   mounted() {
+    this.scrollChatView()
     this.getPrivateChatInfo()
     this.$socket.on('privateMessage', data => {
       if (data.sendUser.uid === this.$route.query.uid) {
         this.messageList.push(data)
+        if (this.isLockList) {
+          this.isNewMessage = true
+        }
       }
       this.scrollToBottom()
     })
@@ -103,6 +133,7 @@ export default {
             this.chatInfo = result.data.info
             this.getPrivateChatMsgList()
             this.privateChatRead()
+            this.$store.dispatch('user/GET_UNREAD_MESSAGE_COUNT')
           } else {
             this.joinPrivateChat()
           }
@@ -122,6 +153,7 @@ export default {
             this.isHistoryData = false
           }
           this.messageList = newSortList.concat(this.messageList)
+          this.setScrollTop(result.data.list ? result.data.list.length : 0)
           if (!type) {
             this.scrollToBottom()
           }
@@ -145,6 +177,7 @@ export default {
           message: this.message
         })
         .then(result => {
+          this.isLockList = false
           this.messageList.push(result.data)
           this.message = ''
           this.scrollToBottom()
@@ -156,10 +189,39 @@ export default {
         chat_id: this.chatInfo.chat_id
       })
     },
+    scrollChatView() {
+      this.$nextTick(() => {
+        setTimeout(() => {
+          document
+            .querySelector('#message-scroll')
+            .addEventListener('scroll', debounce(this.handleScroll, 250))
+        })
+      })
+    },
+    setScrollTop(length) {
+      this.$nextTick(() => {
+        const messageDom = document.querySelector('#message-scroll')
+        messageDom.scrollTop = 98 * length
+      })
+    },
+    handleScroll() {
+      const messageDom = document.querySelector('#message-scroll')
+      const scrollTop = messageDom.scrollTop
+      const messageHeight = document.querySelector('#chat-message-list')
+        .offsetHeight
+      if (messageHeight - scrollTop > 550) {
+        this.isLockList = true
+      } else {
+        this.isLockList = false
+        this.isNewMessage = false
+      }
+    },
     scrollToBottom() {
       this.$nextTick(() => {
-        const container = this.$el.querySelector('#message-scroll')
-        container.scrollTop = container.scrollHeight
+        if (!this.isLockList) {
+          const messageDom = this.$el.querySelector('#message-scroll')
+          messageDom.scrollTop = messageDom.scrollHeight
+        }
       })
     }
   },
@@ -177,59 +239,64 @@ export default {
 .private-chat-list {
   .chat-message-main {
     background: #fff;
-    padding: 25px;
     .chat-title {
-      background: #ea6f5a;
-      padding: 10px;
-      display: inline-block;
-      margin: 0 auto 15px;
+      padding: 15px;
+      display: block;
       font-size: 14px;
-      color: #fff;
+      color: #333;
       font-weight: bold;
-      border-radius: 10px;
       text-align: center;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #f1f1f1;
+    }
+    .chat-message-content {
+      margin-bottom: 20px;
+      position: relative;
+      padding: 0 20px;
     }
     .chat-message-scroll {
       height: 500px;
       overflow-y: auto;
       padding: 20px;
-      margin-bottom: 20px;
       &::-webkit-scrollbar {
         /*滚动条整体样式*/
-        width: 10px; /*高宽分别对应横竖滚动条的尺寸*/
+        width: 8px; /*高宽分别对应横竖滚动条的尺寸*/
         height: 1px;
       }
       &::-webkit-scrollbar-thumb {
         /*滚动条里面小方块*/
-        border-radius: 10px;
-        background-color: skyblue;
-        background-image: -webkit-linear-gradient(
-          45deg,
-          rgba(255, 255, 255, 0.2) 25%,
-          transparent 25%,
-          transparent 50%,
-          rgba(255, 255, 255, 0.2) 50%,
-          rgba(255, 255, 255, 0.2) 75%,
-          transparent 75%,
-          transparent
-        );
+        border-radius: 30px;
+        background-color: #e0e0e0;
       }
       &::-webkit-scrollbar-track {
         /*滚动条里面轨道*/
-        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-        background: #ededed;
-        border-radius: 10px;
+        width: 8px;
+        background: #fff;
       }
       .loading-history-data {
-        background: #fd6926;
-        padding: 2px 5px;
         border-radius: 3px;
         display: block;
         font-size: 12px;
         width: 200px;
-        color: #fff;
+        color: #3ac3fc;
         text-align: center;
         margin: 10px auto;
+        cursor: pointer;
+      }
+      .new-message {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        margin-left: -62px;
+        background: #f46e65;
+        padding: 2px 5px;
+        border-radius: 3px;
+        display: block;
+        font-size: 12px;
+        width: 124px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
       }
     }
     .chat-message-item {
@@ -280,15 +347,19 @@ export default {
     }
   }
   .chat-message-footer {
+    border-top: 1px solid #f1f1f1;
+    position: relative;
+    background: #fff;
     .message-input {
-      border-radius: 15px;
-      border: 1px solid #e0e0e0;
+      border: none;
+      height: 150px;
     }
     .send-message {
-      float: right;
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
       border-radius: 20px;
-      margin-top: 10px;
-      padding: 5px 20px;
+      padding: 5px 25px;
       border: 1px solid #f8f8f8;
       color: #f7f7f7;
       font-size: 15px;

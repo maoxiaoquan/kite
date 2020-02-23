@@ -9,7 +9,7 @@
               <div class="amount">
                 等级：<span class="amount-num">Lv {{ getLevel() || 0 }} </span>
                 总经验：<span class="amount-num"
-                  >{{ user.user_info.experience || 0 }}
+                  >{{ personalInfo.user_info.experience || 0 }}
                 </span>
               </div>
 

@@ -21,12 +21,12 @@ const {
   productType,
   trialRead,
   productTypeInfo,
-  modelType
+  modelType,
+  userLevel
 } = require('../../../utils/constant')
 
 import userVirtual from '../../../common/userVirtual'
 import attention from '../../../common/attention'
-
 
 function computedReadTime(s: any) {
   // 计算分钟
@@ -138,9 +138,7 @@ class Books {
         }
 
         if (reqData.price > 200) {
-          throw new Error(
-            '小书当前定价不能超过200，后续等待管理员开放！'
-          )
+          throw new Error('小书当前定价不能超过200，后续等待管理员开放！')
         }
 
         if (!isDigit(reqData.price)) {
@@ -148,6 +146,7 @@ class Books {
         }
       }
 
+      // 判断是否违规，禁言
       let date = new Date()
       let currDate = moment(date.setHours(date.getHours())).format(
         'YYYY-MM-DD HH:mm:ss'
@@ -159,6 +158,16 @@ class Books {
             user.ban_dt
           ).format('YYYY年MM月DD日 HH时mm分ss秒')},如有疑问请联系网站管理员`
         )
+      }
+
+      let userInfo = await models.user_info.findOne({
+        where: {
+          uid: user.uid
+        }
+      })
+
+      if (userInfo.experience < userLevel.three) {
+        throw new Error('用户等级大于等于Lv3才可创建小书')
       }
 
       // 虚拟币判断是否可以进行继续的操作
@@ -333,9 +342,7 @@ class Books {
         }
 
         if (reqData.price > 200) {
-          throw new Error(
-            '小书当前定价不能超过200，后续等待管理员开放！'
-          )
+          throw new Error('小书当前定价不能超过200，后续等待管理员开放！')
         }
         if (!isDigit(reqData.price)) {
           throw new Error('请输入整数数字类型！')

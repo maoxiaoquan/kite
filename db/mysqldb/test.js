@@ -17,11 +17,11 @@ async function sql() {
   //   'ALTER TABLE article add COLUMN is_public tinyint(1) DEFAULT 1 comment "是否公开";'
   // )
 
-  await models.chat_contact.sync({
-    force: true
-  })
+  await models.sequelize.query(
+    'ALTER TABLE user add COLUMN username VARCHAR(200)  comment "用户名";'
+  )
 
-  await models.chat_message.sync({
+  await models.user_auth.sync({
     force: true
   })
 

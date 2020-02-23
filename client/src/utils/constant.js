@@ -153,7 +153,8 @@ export const virtualType = {
   book: 5, // 小书章节
   books: 6, // 小书
   dynamic: 7, // 片刻
-  system: 8 // 系统
+  system: 8, // 系统
+  chat_message: 20 // 私聊消息
 }
 
 export const payType = {

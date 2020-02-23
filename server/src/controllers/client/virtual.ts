@@ -148,7 +148,14 @@ class Virtual {
               attributes: ['id', 'content']
             })) || {}
           )
-        } else if (rows[i].type === virtualType.system) {
+        } else if (rows[i].type === virtualType.chat_message) {
+          rows[i].setDataValue(
+            'chat_message',
+            (await models.chat_message.findOne({
+              where: { id: associate.id },
+              attributes: ['id', 'content']
+            })) || {}
+          )
         }
       }
 

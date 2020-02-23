@@ -65,7 +65,8 @@ const modelType = {
   dynamic_topic: 16, // 动态专题
   system: 17, // 系统 ---- 不是特别，暂时不用
   other: 18, // 其他 ---- 不是特别，暂时不用
-  virtual: 19 //
+  virtual: 19, // 虚拟币
+  chat_message: 20 // 私聊消息
 }
 
 const modelInfo = {
@@ -154,6 +155,11 @@ const modelInfo = {
     model: 'virtual',
     name: '虚拟币',
     idKey: 'id'
+  }, // 关注表
+  [modelType.chat_message]: {
+    model: 'chat_message',
+    name: '私聊消息',
+    idKey: 'id'
   } // 关注表
 }
 
@@ -176,7 +182,9 @@ const modelAction = {
   obtain_thumb: 15, // 收到点赞
   registered: 16, // 注册
   readOther: 17, // 阅读他人
-  otherRead: 18 // 他人阅读
+  otherRead: 18, // 他人阅读
+  sendPrivateChat: 19, // 发送私聊
+  receivePrivateChat: 20 // 接受私聊
 }
 
 const modelActionText = {
@@ -197,7 +205,10 @@ const modelActionText = {
   [modelAction.obtain_reply]: '收到回复', // 收到回复
   [modelAction.obtain_thumb]: '收到点赞', // 收到点赞
   [modelAction.registered]: '注册', // 默认
-  [modelAction.readOther]: '阅读他人' // 默认
+  [modelAction.readOther]: '阅读他人', // 默认
+  [modelAction.otherRead]: '他人阅读', // 默认
+  [modelAction.sendPrivateChat]: '发送私聊', // 默认
+  [modelAction.receivePrivateChat]: '接受私聊' // 默认
 }
 
 const userMessageAction = {
@@ -245,7 +256,8 @@ const virtualType = {
   book: 5, // 小书章节
   books: 6, // 小书
   dynamic: 7, // 片刻
-  system: 8 // 系统
+  system: 8, // 系统
+  chat_message: 20 // 私聊消息
 }
 
 const virtualTypeText = {
@@ -257,7 +269,8 @@ const virtualTypeText = {
   [virtualType.book]: '小书章节', // 小书章节
   [virtualType.books]: '小书', // 小书
   [virtualType.dynamic]: '片刻', // 片刻
-  [virtualType.system]: '系统' // 系统
+  [virtualType.system]: '系统', // 系统
+  [virtualType.chat_message]: '私聊消息' // 系统
 }
 
 const virtualInfo = {
@@ -334,6 +347,10 @@ const virtualInfo = {
   [modelAction.registered]: {
     plusLess: virtualPlusLess.plus, // +
     [virtualType.system]: 3000 // 注册增加3000：+5
+  },
+  [modelAction.sendPrivateChat]: {
+    plusLess: virtualPlusLess.less, // -
+    [virtualType.chat_message]: 10 // 发送私聊-15
   }
 }
 

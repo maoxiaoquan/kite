@@ -14,6 +14,12 @@ module.exports = {
       comment: 'uid 主键，自增',
       field: 'uid' //  相应的字段名称
     },
+    username: {
+      // 昵称
+      type: Seq.STRING(200),
+      comment: '用户名',
+      field: 'username'
+    },
     avatar: {
       // 头像
       type: Seq.STRING(200),

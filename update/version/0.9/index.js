@@ -27,6 +27,10 @@ class update {
           'ALTER TABLE user_info add COLUMN experience BIGINT(20)  comment "经验总值";'
         )
 
+        await models.sequelize.query(
+          'ALTER TABLE user add COLUMN username VARCHAR(200)  comment "用户名";'
+        )
+
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb
           .get('config')

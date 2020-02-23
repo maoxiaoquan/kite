@@ -253,10 +253,18 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
 
+  const user_auth = sequelize.define(
+    // 用户第三方表 第三方绑定
+    require('./models_type/db_user_auth').NAME,
+    require('./models_type/db_user_auth').TABLE,
+    SEQ_PARAMETER
+  )
+
   const _define = {
     user,
     user_info,
     user_role,
+    user_auth,
     user_authority,
     user_message,
     verify_code,
