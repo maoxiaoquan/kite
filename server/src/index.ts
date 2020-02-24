@@ -28,6 +28,9 @@ app.use(cookieParser('cookie_kite'))
 app.use('/api-client/v1', chat(io))
 // 配置静态资源加载中间件
 app.use(express.static(path.join(__dirname, '../../static')))
+app.set('views', path.join(__dirname, '../../views'))
+// 配置服务端模板渲染引擎中间件
+app.engine('html', require('ejs').renderFile)
 if (cli.is_success) graphql(app)
 // 加载路由中间件
 routers(app)
