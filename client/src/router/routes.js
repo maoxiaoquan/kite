@@ -178,5 +178,10 @@ export default [
     path: '/sign/reset-password',
     name: 'resetPassword',
     component: () => import('@views/Sign/ResetPassword') // 找回密码
+  },
+  {
+    path: '/oauth/github',
+    name: 'oauthGithb',
+    component: () => import('@views/Oauth/github') // github
   }
 ]

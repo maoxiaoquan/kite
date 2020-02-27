@@ -44,6 +44,14 @@ const actions = {
       method: 'get',
       parameter: { params: parameter }
     })
+  },
+  GITHUB_OAUTN({ commit, dispatch, state }, parameter) {
+    // 获取经验列表
+    return fetch({
+      url: '/oauth/github-login-oauth',
+      method: 'get',
+      parameter: { params: parameter }
+    })
   }
 }
 

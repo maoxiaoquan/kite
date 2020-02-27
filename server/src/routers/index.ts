@@ -23,9 +23,9 @@ export default (app: any) => {
 
     app
       .use(`/api-client/${API_VERSION}`, apiClient)
+      .use(`/api-client/${API_VERSION}/oauth`, oauth)
       .use(`/api-admin/${API_VERSION}`, apiAdmin)
       .use(`/${config.admin_url}`, admin)
-      .use(`/api-client/${API_VERSION}/oauth`, oauth)
       .use('/', client)
   } else {
     console.log('项目还未初始化，请初始化后再继续进行当前操作......')

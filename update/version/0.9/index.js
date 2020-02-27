@@ -23,6 +23,10 @@ class update {
           force: true
         })
 
+        await models.user_auth.sync({
+          force: true
+        })
+
         await models.sequelize.query(
           'ALTER TABLE user_info add COLUMN experience BIGINT(20)  comment "经验总值";'
         )

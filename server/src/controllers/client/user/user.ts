@@ -71,12 +71,9 @@ class User {
             tools.encrypt(reqDate.password, config.ENCRYPT_KEY) ===
             oneUser.dataValues.password
           ) {
-            let user_info = {
+            let token = tokens.ClientSetToken(60 * 60 * 24 * 7, {
               uid: oneUser.uid
-            }
-
-            let token = tokens.ClientSetToken(60 * 60 * 24 * 7, user_info)
-
+            })
             await resClientJson(res, {
               state: 'success',
               message: '登录成功',
