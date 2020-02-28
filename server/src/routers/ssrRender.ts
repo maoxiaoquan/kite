@@ -27,7 +27,7 @@ let renderer: any
 
 const templatePath = path.resolve(
   __dirname,
-  '../../../client/public/index.template.html'
+  '../../../views/index.template.html'
 )
 // 第 2步：根据环境变量生成不同BundleRenderer实例
 
