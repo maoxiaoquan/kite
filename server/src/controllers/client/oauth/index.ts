@@ -29,6 +29,7 @@ const {
 } = require('../../../utils/constant')
 
 import userVirtual from '../../../common/userVirtual'
+import { user } from '../../../graphql/models'
 
 class Oauth {
   static async githubAuth(req: any, res: any, next: any) {
@@ -45,7 +46,7 @@ class Oauth {
 
   static async githubLoginAuth(req: any, res: any, next: any) {
     const { code, state } = req.query || ''
-    const { islogin = '' } = req
+    const { islogin = '', user } = req
     const client_id = '0552fa82218b2a7a45ae'
     const client_secret = 'e8d7662dac58a8e9cca01904a66e25bd6e4177b2'
     const redirect_uri = 'http://localhost:8081/oauth/github'
@@ -64,9 +65,13 @@ class Oauth {
       const githubInfo = orGithubInfo.data
 
       const userAuthInfo = await models.user_auth.findOne({
-        identifier: githubInfo.login,
-        identity_type: 'github'
+        where: {
+          identifier: githubInfo.login,
+          identity_type: 'github'
+        }
       })
+
+
       if (!userAuthInfo) {
         // 通过userAuthInfo字段来判断是登录还是绑定or创建
         if (state) {
@@ -74,6 +79,10 @@ class Oauth {
           // 当前绑定
           if (!islogin) {
             throw new Error('当前未登录绑定失败')
+          }
+
+          if (state !== user.uid) {
+            throw new Error('绑定失败，账户出现意外错误')
           }
           await models.user_auth.create({
             /* 注册写入数据库操作 */
@@ -93,7 +102,9 @@ class Oauth {
         } else {
           // 当前创建
           let user = await models.user.findOne({
-            email: githubInfo.email
+            where: {
+              email: githubInfo.email
+            }
           })
           if (user) {
             throw new Error(
@@ -173,6 +184,11 @@ class Oauth {
           })
         }
       } else {
+        if (state) {
+          // 通过state字段来判断是绑定or创建
+          // 当前绑定
+          throw new Error('请勿重复绑定')
+        }
         let loginToken = tokens.ClientSetToken(60 * 60 * 24 * 7, {
           uid: userAuthInfo.uid
         })
@@ -190,6 +206,25 @@ class Oauth {
         state: 'error',
         message: error.message
       })
+    }
+  }
+
+  static async githubDeleteAuth(req: any, res: any, next: any) {
+
+    try {
+      const { identity_type = '' } = req.body
+      const { user } = req
+      await models.user_auth.destroy({ where: { uid: user.uid, identity_type } })
+      resClientJson(res, {
+        state: 'success',
+        message: '解除绑定成功'
+      })
+    } catch (err) {
+      resClientJson(res, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
     }
   }
 }

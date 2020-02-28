@@ -387,13 +387,25 @@ class User {
       let oneUserInfo = await models.user_info.findOne({
         where: { uid: user.uid }
       })
+
+      let bindType = []
+      let oneUserAuth = await models.user_auth.findAll({
+        where: { uid: user.uid }
+      })
+
+      for (let i in oneUserAuth) {
+        bindType.push(oneUserAuth[i].identity_type)
+      }
+
+
       await resClientJson(res, {
         state: 'success',
         message: '获取成功',
         data: {
           islogin,
           user: oneUser,
-          user_info: oneUserInfo
+          user_info: oneUserInfo,
+          bindType
         }
       })
     } catch (err) {
