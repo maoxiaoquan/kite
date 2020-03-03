@@ -64,6 +64,11 @@ class System {
           .get('config')
           .assign(config)
           .write()
+      } else if (type === 'thirdParty') {
+        await lowdb
+          .get('config')
+          .assign(config)
+          .write()
       }
       resAdminJson(res, {
         state: 'success',
