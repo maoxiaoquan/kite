@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "init": "node  ./cli/init.js ",
-    "start": "nodemon --watch server/src/**/*.ts --exec ts-node server/src/index.ts",
+    "start": "cross-env NODE_ENV=development nodemon --watch server/src/**/*.ts --exec ts-node server/src/index.ts",
     "build": "tsc",
-    "server": "pm2 start pm2.json",
+    "server": "cross-env NODE_ENV=production pm2 start pm2.json",
     "test-mysql": "node db/mysqldb/test.js",
     "kite-update": "node update"
   },

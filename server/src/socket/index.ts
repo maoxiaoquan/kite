@@ -35,4 +35,8 @@ export default (io: any, socket: any) => {
     socket.emit('sendMessageMember', message)
     io.to(message.memberId).emit('sendMessageMember', message)
   })
+
+  socket.on('disconnect', function() {
+    io.emit('user disconnected')
+  })
 }

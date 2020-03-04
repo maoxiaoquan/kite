@@ -30,28 +30,53 @@ const {
 
 import userVirtual from '../../../common/userVirtual'
 import { user } from '../../../graphql/models'
+const IS_DEV = process.env.NODE_ENV === 'development'
 
 class Oauth {
   static async githubAuth(req: any, res: any, next: any) {
+    const oauth = lowdb
+      .read()
+      .get('oauth')
+      .value()
+    const oauths = oauth.oauths || {}
+    const oauthGithub = oauth.oauth_github || {}
     const { state } = req.query || ''
-    const client_id = '0552fa82218b2a7a45ae'
-    const redirect_uri = 'http://localhost:8081/oauth/github'
+    const client_id = oauthGithub.client_id || ''
+    const redirect_uri = IS_DEV
+      ? 'http://localhost:8081/oauth/github'
+      : oauthGithub.redirect_uri || ''
     const authUrl = 'https://github.com/login/oauth/authorize'
     let redirectUrl = state
       ? `${authUrl}?client_id=${client_id}&redirect_uri=${redirect_uri}&state=${state}`
       : `${authUrl}?client_id=${client_id}&redirect_uri=${redirect_uri}`
 
-    res.redirect(redirectUrl)
+    if (~oauths.indexOf('github')) {
+      res.redirect(redirectUrl)
+    } else {
+      res.redirect('/')
+    }
   }
 
   static async githubLoginAuth(req: any, res: any, next: any) {
+    const oauth = lowdb
+      .read()
+      .get('oauth')
+      .value()
+    const oauths = oauth.oauths || {}
+    const oauthGithub = oauth.oauth_github || {}
     const { code, state } = req.query || ''
     const { islogin = '', user } = req
-    const client_id = '0552fa82218b2a7a45ae'
-    const client_secret = 'e8d7662dac58a8e9cca01904a66e25bd6e4177b2'
-    const redirect_uri = 'http://localhost:8081/oauth/github'
+    const client_id = oauthGithub.client_id || ''
+    const client_secret = oauthGithub.client_secret || ''
+    const redirect_uri = IS_DEV
+      ? 'http://localhost:8081/oauth/github'
+      : oauthGithub.redirect_uri || ''
     const accessTokenUrl = 'https://github.com/login/oauth/access_token'
     try {
+      if (!~oauths.indexOf('github')) {
+        throw new Error('github第三方登录未开启')
+      }
+
       const githubToken = await axios.post(accessTokenUrl, {
         client_id,
         client_secret,
@@ -70,7 +95,6 @@ class Oauth {
           identity_type: 'github'
         }
       })
-
 
       if (!userAuthInfo) {
         // 通过userAuthInfo字段来判断是登录还是绑定or创建
@@ -107,9 +131,7 @@ class Oauth {
             }
           })
           if (user) {
-            throw new Error(
-              'github授权登录失败，当前github邮箱已在平台注册，请登录后直接绑定即可'
-            )
+            throw new Error('github授权登录失败，当前github邮箱已在平台注册')
           }
 
           const userCreate = await models.user.create({
@@ -210,11 +232,12 @@ class Oauth {
   }
 
   static async githubDeleteAuth(req: any, res: any, next: any) {
-
     try {
       const { identity_type = '' } = req.body
       const { user } = req
-      await models.user_auth.destroy({ where: { uid: user.uid, identity_type } })
+      await models.user_auth.destroy({
+        where: { uid: user.uid, identity_type }
+      })
       resClientJson(res, {
         state: 'success',
         message: '解除绑定成功'

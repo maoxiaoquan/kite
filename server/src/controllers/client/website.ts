@@ -23,6 +23,11 @@ class Website {
         .read()
         .get('config')
         .value()
+      const oauth = lowdb
+        .read()
+        .get('oauth')
+        .value()
+      const oauths = oauth.oauths || {}
       const noticeAll = await models.options.findAll({
         where: {
           option_key: 'notice' // 查询条件
@@ -46,7 +51,8 @@ class Website {
             isBaiduAuthPush
           },
           notice: noticeAll,
-          advertise: advertiseAll
+          advertise: advertiseAll,
+          oauths
         }
       })
     } catch (err) {

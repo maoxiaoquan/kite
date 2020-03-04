@@ -20,6 +20,10 @@ class System {
         .read()
         .get('config')
         .value()
+      const oauth = lowdb
+        .read()
+        .get('oauth')
+        .value()
 
       resAdminJson(res, {
         state: 'success',
@@ -30,7 +34,8 @@ class System {
             pass: ''
           },
           website,
-          config
+          config,
+          oauth
         }
       })
     } catch (err) {
@@ -47,7 +52,7 @@ class System {
    * @param   {object} ctx 上下文对象
    */
   static async updateSystemInfo(req: any, res: any, next: any) {
-    const { email, website, type, config } = req.body
+    const { email, website, type, config, oauth } = req.body
     try {
       if (type === 'email') {
         await lowdb
@@ -64,10 +69,10 @@ class System {
           .get('config')
           .assign(config)
           .write()
-      } else if (type === 'thirdParty') {
+      } else if (type === 'oauth') {
         await lowdb
-          .get('config')
-          .assign(config)
+          .get('oauth')
+          .assign(oauth)
           .write()
       }
       resAdminJson(res, {
