@@ -13,7 +13,6 @@ const lowdb = require('../../../../../db/lowdb/index')
 import { v1 as uuidv1 } from 'uuid'
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
-  articleType,
   userMessageAction,
   modelAction,
   virtualType,

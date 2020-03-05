@@ -6,7 +6,6 @@ const { TimeNow, TimeDistance } = require('../../utils/time')
 const clientWhere = require('../../utils/clientWhere')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
-  articleType,
   modelAction,
   virtualType,
   modelType
@@ -16,58 +15,40 @@ class Index {
   static async getIndexArticle(req: any, res: any, next: any) {
     let page = req.query.page || 1
     let pageSize = req.query.pageSize || 25
-    let columnEnName = req.query.columnEnName || ''
+    let type = req.query.type || ''
     let sort = req.query.sort || 'newest'
     let whereArticleParams: any = {} // 查询参数
-    let whereArticleColumnParams: any = {} // 查询参数
     let orderParams: any = [] // 排序参数
 
     try {
       // where
       whereArticleParams = {
         // 默认全部导入的专题
-        type: {
-          [Op.or]: [articleType.article, articleType.note] // 文章和笔记
-        },
         is_public: true, // 公开的文章
         status: {
           [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
         }
       }
 
-      if (!columnEnName) {
-        // 判断是否有专题
-        let allArticleTagId = [] // 全部禁止某些文章标签推送的id
-        let allArticleTag = await models.article_tag.findAll({
-          where: {
-            is_push: false
-          } // 为空，获取全部，也可以自己添加条件
-        })
+      // 判断是否有专题
+      let allArticleTagId = [] // 全部禁止某些文章标签推送的id
+      let allArticleTag = await models.article_tag.findAll({
+        where: {
+          is_push: false
+        } // 为空，获取全部，也可以自己添加条件
+      })
 
-        if (allArticleTag && allArticleTag.length > 0) {
-          for (let item in allArticleTag) {
-            allArticleTagId.push(allArticleTag[item].tag_id)
-          }
-
-          whereArticleParams['tag_ids'] = {
-            [Op.notRegexp]: `${allArticleTagId.join('|')}`
-          }
+      if (allArticleTag && allArticleTag.length > 0) {
+        for (let item in allArticleTag) {
+          allArticleTagId.push(allArticleTag[item].tag_id)
         }
-      } else {
-        whereArticleColumnParams['en_name'] = columnEnName
-        let oneArticleColumn = await models.article_column.findOne({
-          attributes: ['column_id', 'name', 'icon', 'tag_ids'],
-          where: whereArticleColumnParams // 为空，获取全部，也可以自己添加条件
-        })
 
-        // 判断专栏下方是否有专题
-        columnEnName &&
-          oneArticleColumn.tag_ids &&
-          (whereArticleParams['tag_ids'] = {
-            [Op.regexp]: `${oneArticleColumn.tag_ids.split(',').join('|')}`
-          })
+        whereArticleParams['tag_ids'] = {
+          [Op.notRegexp]: `${allArticleTagId.join('|')}`
+        }
       }
 
+      type && (whereArticleParams['type'] = type)
       // sort
       // hottest 全部热门:
       sort === 'hottest' && orderParams.push(['comment_count', 'DESC'])
@@ -146,7 +127,6 @@ class Index {
             count,
             page,
             pageSize,
-            column_en_name: columnEnName,
             article_list: rows,
             sort
           }
@@ -169,6 +149,7 @@ class Index {
   static async getColumnArticle(req: any, res: any, next: any) {
     let page = req.query.page || 1
     let pageSize = req.query.pageSize || 25
+    let type = req.query.type || ''
     let columnEnName = req.query.columnEnName || ''
     let sort = req.query.sort || 'newest'
     let whereArticleParams: any = {} // 查询参数
@@ -179,15 +160,13 @@ class Index {
       // where
       whereArticleParams = {
         // 默认全部导入的专题
-        type: {
-          [Op.or]: [articleType.article, articleType.note] // 文章和笔记
-        },
         is_public: true, // 公开的文章
         status: {
           [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
         }
       }
-
+      type && (whereArticleParams['type'] = type)
+      // sort
       if (!columnEnName || columnEnName === 'all') {
         // 判断是否有专题
         let allArticleTagId = [] // 全部禁止某些文章标签推送的id

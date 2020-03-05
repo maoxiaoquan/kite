@@ -1,6 +1,6 @@
 const models = require('../../../../db/mysqldb/index')
 const { resAdminJson } = require('../../utils/resData')
-const { createAdminSystemLog } = require('./adminSystemLog')
+import adminSystemLog from './adminSystemLog'
 
 
 class ArticleColumn {
@@ -35,7 +35,7 @@ class ArticleColumn {
         tag_ids: reqData.tag_ids.join(',')
       })
 
-      await createAdminSystemLog({
+      await adminSystemLog.createAdminSystemLog({
         // 写入日志
         uid: req.userInfo.uid,
         type: 3,

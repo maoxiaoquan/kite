@@ -6,7 +6,6 @@ const { TimeNow, TimeDistance } = require('../../utils/time')
 const clientWhere = require('../../utils/clientWhere')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
-  articleType,
   modelAction,
   virtualType,
   modelType

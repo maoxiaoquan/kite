@@ -11,7 +11,6 @@ const shortid = require('shortid')
 const lowdb = require('../../../../../db/lowdb/index')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
-  articleType,
   userMessageAction,
   modelAction,
   virtualType,
@@ -432,9 +431,6 @@ class articleBlog {
 
     let whereParams = {
       blog_ids: blogId,
-      type: {
-        [Op.or]: [articleType.article, articleType.note] // 文章和笔记
-      },
       is_public: true, // 公开的文章
       status: {
         [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核

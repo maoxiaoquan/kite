@@ -11,7 +11,7 @@ const {
 const config = require('../../../../config')
 const models = require('../../../../db/mysqldb/index')
 import moment from 'moment'
-const { createAdminSystemLog } = require('./adminSystemLog')
+import adminSystemLog from './adminSystemLog'
 const Op = require('sequelize').Op
 const lowdb = require('../../../../db/lowdb/index')
 
@@ -287,7 +287,7 @@ class AdminUsers {
     /* 无关联 */
     try {
       await models.admin_user.destroy({ where: { uid } })
-      await createAdminSystemLog({
+      await adminSystemLog.createAdminSystemLog({
         // 写入日志
         uid: req.userInfo.uid,
         type: 3,

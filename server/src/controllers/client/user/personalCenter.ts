@@ -5,7 +5,6 @@ const Op = require('sequelize').Op
 const clientWhere = require('../../../utils/clientWhere')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
-  articleType,
   modelAction,
   virtualType,
   modelType
@@ -284,8 +283,8 @@ class PersonalCenter {
           'topic',
           rows[i].topic_ids
             ? await models.dynamic_topic.findOne({
-                where: { topic_id: rows[i].topic_ids }
-              })
+              where: { topic_id: rows[i].topic_ids }
+            })
             : ''
         )
 

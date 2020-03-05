@@ -11,7 +11,6 @@ const lowdb = require('../../../../db/lowdb/index')
 const { TimeNow, TimeDistance } = require('../../utils/time')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
-  articleType,
   userMessageAction,
   virtualType,
   virtualPlusLess,

@@ -9,7 +9,6 @@ const config = require('../../../../../config')
 const { TimeNow, TimeDistance } = require('../../../utils/time')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
-  articleType,
   userMessageAction,
   modelAction,
   virtualType,

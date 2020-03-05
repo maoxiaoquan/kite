@@ -1,7 +1,7 @@
 const models = require('../../../../db/mysqldb/index')
 const { resAdminJson } = require('../../utils/resData')
 const config = require('../../../../config')
-const { createAdminSystemLog } = require('./adminSystemLog')
+import adminSystemLog from './adminSystemLog'
 const Op = require('sequelize').Op
 
 class UserRole {
@@ -29,7 +29,7 @@ class UserRole {
         is_show: reqData.is_show,
         enable: reqData.enable
       })
-      await createAdminSystemLog({
+      await adminSystemLog.createAdminSystemLog({
         // 写入日志
         uid: req.userInfo.uid,
         type: 3,

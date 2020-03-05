@@ -1,6 +1,6 @@
 const models = require('../../../../db/mysqldb/index')
 const { resAdminJson } = require('../../utils/resData')
-const { createAdminSystemLog } = require('./adminSystemLog')
+import adminSystemLog from './adminSystemLog'
 
 
 class dynamicTopic {
@@ -36,7 +36,7 @@ class dynamicTopic {
         is_show: reqData.is_show,
         is_push: reqData.is_push
       })
-      await createAdminSystemLog({
+      await adminSystemLog.createAdminSystemLog({
         // 写入日志
         uid: req.userInfo.uid,
         type: 1,
@@ -137,7 +137,7 @@ class dynamicTopic {
           }
         }
       )
-      await createAdminSystemLog({
+      await adminSystemLog.createAdminSystemLog({
         // 写入日志
         uid: req.userInfo.uid,
         type: 1,
@@ -168,7 +168,7 @@ class dynamicTopic {
       })
 
       await models.dynamic_topic.destroy({ where: { topic_id } })
-      await createAdminSystemLog({
+      await adminSystemLog.createAdminSystemLog({
         // 写入日志
         uid: req.userInfo.uid,
         type: 1,

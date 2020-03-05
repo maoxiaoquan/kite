@@ -9,7 +9,6 @@ const config = require('../../../../../config')
 const lowdb = require('../../../../../db/lowdb/index')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deleted },
-  articleType,
   modelType,
   userMessageAction,
   modelAction,
@@ -228,9 +227,6 @@ class Article {
             tag_ids: {
               [Op.like]: `%${oneArticleTag.tag_id}%`
             },
-            type: {
-              [Op.or]: [articleType.article, articleType.note] // 文章和笔记
-            },
             is_public: true, // 公开的文章
             status: {
               [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
@@ -434,9 +430,6 @@ class Article {
       let oneArticle = await models.article.findOne({
         where: {
           aid,
-          type: {
-            [Op.or]: [articleType.article, articleType.note] // 文章和笔记
-          },
           status: {
             [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
           }
@@ -772,9 +765,6 @@ class Article {
       let { count, rows } = await models.article.findAndCountAll({
         where: {
           title: { [Op.like]: `%${search}%` },
-          type: {
-            [Op.or]: [articleType.article, articleType.note] // 文章和笔记
-          },
           is_public: true, // 公开的文章
           status: {
             [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核

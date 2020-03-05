@@ -1,7 +1,6 @@
 const Op = require('sequelize').Op
 const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail },
-  articleType: { article, note }
+  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail }
 } = require('./constant')
 module.exports = {
   article: {
@@ -25,9 +24,6 @@ module.exports = {
         { status: freeReview }, // 免审核
         { status: reviewFail } // 审核失败
       ]
-    },
-    type: {
-      [Op.or]: [article, note]
     },
     isPublic: true
   },

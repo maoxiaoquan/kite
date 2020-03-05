@@ -6,7 +6,6 @@ const config = lowdb.read().value()
 
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
-  articleType,
   userMessageAction,
   userMessageActionText,
   modelAction,

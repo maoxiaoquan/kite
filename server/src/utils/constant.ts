@@ -4,7 +4,8 @@ const statusList = {
   reviewSuccess: 2, // 审核成功
   reviewFail: 3, // 审核失败
   freeReview: 4, // 免审核
-  deleted: 5 // 已删除
+  deleted: 5, // 已删除
+  draft: 6 // 草稿
 }
 const statusListText = {
   // 所有内容的审核状态文字
@@ -12,21 +13,26 @@ const statusListText = {
   [statusList.reviewSuccess]: '审核成功', // 审核成功
   [statusList.reviewFail]: '审核失败', // 审核失败
   [statusList.freeReview]: '免审核', // 免审核
-  [statusList.deleted]: '已删除' // 已删除
+  [statusList.deleted]: '已删除', // 已删除
+  [statusList.draft]: '草稿' // 草稿
 }
 
 const articleType = {
   // 文章的类型
   article: 1, // 文章
-  note: 2, // 笔记
-  draft: 3 // 草稿
+  discuss: 2, // 讨论提问
+  share: 3, // 分享
+  recourse: 4, // 求助
+  note: 5, // 笔记
 }
 
 const articleTypeText = {
   // 文章的类型
   [articleType.article]: '文章', // 文章
+  [articleType.discuss]: '讨论提问', // 提问
+  [articleType.share]: '分享', // 分享
+  [articleType.recourse]: '求助', // 求助
   [articleType.note]: '笔记', // 笔记
-  [articleType.draft]: '草稿' // 草稿
 }
 
 const dynamicType = {
@@ -471,7 +477,6 @@ module.exports = {
   statusList,
   statusListText,
   articleType,
-  articleTypeText,
   dynamicType,
   dynamicTypeText,
   userMessageAction,

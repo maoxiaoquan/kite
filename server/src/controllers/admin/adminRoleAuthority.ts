@@ -1,7 +1,9 @@
 const { resAdminJson } = require('../../utils/resData')
 const models = require('../../../../db/mysqldb/index')
-const { createAdminSystemLog } = require('./adminSystemLog')
+
 const Op = require('sequelize').Op
+
+import adminSystemLog from './adminSystemLog'
 
 
 class adminRoleAuthority {
@@ -31,7 +33,7 @@ class adminRoleAuthority {
         role_description
       })
 
-      await createAdminSystemLog({
+      await adminSystemLog.createAdminSystemLog({
         // 写入日志
         uid: req.userInfo.uid,
         type: 1,
@@ -83,7 +85,7 @@ class adminRoleAuthority {
         }
       )
 
-      await createAdminSystemLog({
+      await adminSystemLog.createAdminSystemLog({
         // 写入日志
         uid: req.userInfo.uid,
         type: 1,
@@ -206,7 +208,7 @@ class adminRoleAuthority {
       await models.admin_authority.create({
         ...reqData
       })
-      await createAdminSystemLog({
+      await adminSystemLog.createAdminSystemLog({
         // 写入日志
         uid: req.userInfo.uid,
         type: 1,
@@ -270,7 +272,7 @@ class adminRoleAuthority {
           }
         }
       )
-      await createAdminSystemLog({
+      await adminSystemLog.createAdminSystemLog({
         // 写入日志
         uid: req.userInfo.uid,
         type: 1,

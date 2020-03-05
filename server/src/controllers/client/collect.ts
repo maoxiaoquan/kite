@@ -11,7 +11,6 @@ const shortid = require('shortid')
 const lowdb = require('../../../../db/lowdb/index')
 const {
   statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
-  articleType,
   userMessageAction,
   modelAction,
   virtualType,
