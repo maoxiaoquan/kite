@@ -3,8 +3,7 @@ import moment from 'moment'
 const { render, resClientJson } = require('../../utils/resData')
 const Op = require('sequelize').Op
 const clientWhere = require('../../utils/clientWhere')
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
   userMessageAction,
   userMessageActionText,
   modelAction,
@@ -13,7 +12,7 @@ const {
   productTypeInfo,
   isFree,
   modelType
-} = require('../../utils/constant')
+} from '../../utils/constant'
 
 const userMessage = require('../../utils/userMessage')
 const userVirtual = require('../../common/userVirtual')
@@ -52,7 +51,7 @@ class Shop {
       }
 
       if (productInfo.uid === user.uid) {
-        // 判断商品是否免费
+        // 判断是否是自己的
         throw new Error('无法购买自己售出的！')
       }
 

@@ -1,4 +1,4 @@
-const statusList = {
+export const statusList = {
   // 所有内容的审核状态
   pendingReview: 1, // 待审核
   reviewSuccess: 2, // 审核成功
@@ -7,7 +7,7 @@ const statusList = {
   deleted: 5, // 已删除
   draft: 6 // 草稿
 }
-const statusListText = {
+export const statusListText = {
   // 所有内容的审核状态文字
   [statusList.pendingReview]: '待审核', // 待审核
   [statusList.reviewSuccess]: '审核成功', // 审核成功
@@ -17,25 +17,25 @@ const statusListText = {
   [statusList.draft]: '草稿' // 草稿
 }
 
-const articleType = {
+export const articleType = {
   // 文章的类型
   article: 1, // 文章
   discuss: 2, // 讨论提问
   share: 3, // 分享
   recourse: 4, // 求助
-  note: 5, // 笔记
+  note: 5 // 笔记
 }
 
-const articleTypeText = {
+export const articleTypeText = {
   // 文章的类型
   [articleType.article]: '文章', // 文章
   [articleType.discuss]: '讨论提问', // 提问
   [articleType.share]: '分享', // 分享
   [articleType.recourse]: '求助', // 求助
-  [articleType.note]: '笔记', // 笔记
+  [articleType.note]: '笔记' // 笔记
 }
 
-const dynamicType = {
+export const dynamicType = {
   // 文章的类型
   dynamic: 1, // 默认动态
   img: 2, // 图片
@@ -43,7 +43,7 @@ const dynamicType = {
   video: 4 // 视频
 }
 
-const dynamicTypeText = {
+export const dynamicTypeText = {
   // 文章的类型
   [dynamicType.dynamic]: '默认动态', // 文章
   [dynamicType.img]: '图片', // 笔记
@@ -51,7 +51,7 @@ const dynamicTypeText = {
   [dynamicType.video]: '视频' // 草稿
 }
 
-const modelType = {
+export const modelType = {
   // 类型
   user: 1, // 用户
   article: 2, // 文章
@@ -72,10 +72,11 @@ const modelType = {
   system: 17, // 系统 ---- 不是特别，暂时不用
   other: 18, // 其他 ---- 不是特别，暂时不用
   virtual: 19, // 虚拟币
-  chat_message: 20 // 私聊消息
+  chat_message: 20, // 私聊消息
+  article_annex: 21 // 文章附件
 }
 
-const modelInfo = {
+export const modelInfo = {
   // 文章的类型
   [modelType.user]: {
     model: 'user',
@@ -166,10 +167,15 @@ const modelInfo = {
     model: 'chat_message',
     name: '私聊消息',
     idKey: 'id'
-  } // 关注表
+  }, // 关注表
+  [modelType.article_annex]: {
+    model: 'article_annex',
+    name: '文章附件',
+    idKey: 'id'
+  } // 文章附件表
 }
 
-const modelAction = {
+export const modelAction = {
   // 动作
   check_in: 1, // 签到
   create: 2, // 创建
@@ -193,7 +199,7 @@ const modelAction = {
   receivePrivateChat: 20 // 接受私聊
 }
 
-const modelActionText = {
+export const modelActionText = {
   // 动作
   [modelAction.check_in]: '签到', // 签到
   [modelAction.create]: '创建', // 创建
@@ -217,7 +223,7 @@ const modelActionText = {
   [modelAction.receivePrivateChat]: '接受私聊' // 默认
 }
 
-const userMessageAction = {
+export const userMessageAction = {
   system: 1, // 系统消息
   like: 2, // 喜欢
   collect: 3, // 收藏
@@ -229,7 +235,7 @@ const userMessageAction = {
   sell: 9 // 售出
 }
 
-const userMessageActionText = {
+export const userMessageActionText = {
   [userMessageAction.system]: '新的系统消息',
   [userMessageAction.like]: '新的喜欢',
   [userMessageAction.collect]: '新的收藏',
@@ -240,20 +246,20 @@ const userMessageActionText = {
   [userMessageAction.buy]: '新的购买'
 }
 
-const userMessageIsPush = {
+export const userMessageIsPush = {
   open: 1, // 开启
   close: 2 // 关闭
 }
 
 // 2019.11.4 15:34
 
-const virtualPlusLess = {
+export const virtualPlusLess = {
   // 虚拟币动作
   plus: 1, // 加
   less: 2 // 减
 }
 
-const virtualType = {
+export const virtualType = {
   // 关联模块
   other: 1, // 其他
   user: 2, // 用户
@@ -263,10 +269,11 @@ const virtualType = {
   books: 6, // 小书
   dynamic: 7, // 片刻
   system: 8, // 系统
-  chat_message: 20 // 私聊消息
+  chat_message: 20, // 私聊消息
+  article_annex: 21 // 文章附件
 }
 
-const virtualTypeText = {
+export const virtualTypeText = {
   // 关联模块
   [virtualType.other]: '其他', // 其他
   [virtualType.user]: '用户', // 用户
@@ -276,10 +283,11 @@ const virtualTypeText = {
   [virtualType.books]: '小书', // 小书
   [virtualType.dynamic]: '片刻', // 片刻
   [virtualType.system]: '系统', // 系统
-  [virtualType.chat_message]: '私聊消息' // 系统
+  [virtualType.chat_message]: '私聊消息', // 系统
+  [virtualType.article_annex]: '文章附件' // 系统
 }
 
-const virtualInfo = {
+export const virtualInfo = {
   [modelAction.check_in]: {
     // 签到+
     plusLess: virtualPlusLess.plus, // +
@@ -363,141 +371,79 @@ const virtualInfo = {
 // 2019.11.6 0:57
 // 支付购买开始
 
-const payType = {
+export const payType = {
   // 支付类型
   shell: 1 // 贝壳
 }
 
-const payTypeText = {
+export const payTypeText = {
   // 支付类型文案
   [payType.shell]: '贝壳' // 贝壳
 }
 
-const productType = {
+export const productType = {
   // 商品类型
-  other: 1, // 其他
-  user: 2, // 用户
   article: 3, // 文章
-  article_blog: 4, // 文章个人专栏
-  book: 5, // 小书章节
   books: 6, // 小书
-  dynamic: 7, // 片刻
-  system: 8 // 系统
+  article_annex: 21 // 文章附件
 }
 
-const productTypeInfo = {
+export const productTypeInfo = {
   // 商品类型
-  [productType.other]: {
-    model: 'other',
-    name: '其他',
-    isUse: false,
-    idKey: ''
-  }, // 其他
-  [productType.user]: {
-    model: 'user',
-    name: '用户',
-    isUse: false,
-    idKey: 'uid'
-  }, // 用户
   [productType.article]: {
     model: 'article',
     name: '文章',
     isUse: false,
     idKey: 'aid'
   }, // 文章
-  [productType.article_blog]: {
-    model: 'article_blog',
-    name: '文章专栏',
-    isUse: false,
-    idKey: 'blog_id'
-  }, // 文章个人专栏
-  [productType.book]: {
-    model: 'book',
-    name: '小书章节',
-    isUse: false,
-    idKey: 'book_id'
-  }, // 小书章节
+  [productType.article_annex]: {
+    model: 'article_annex',
+    name: '文章附件',
+    isUse: true,
+    idKey: 'id'
+  }, // 文章
+
   [productType.books]: {
     model: 'books',
     name: '小书',
     isUse: true,
     idKey: 'books_id'
-  }, // 小书
-  [productType.dynamic]: {
-    model: 'dynamic',
-    name: '片刻',
-    isUse: false,
-    idKey: 'id'
-  }, // 片刻
-  [productType.system]: {
-    model: 'system',
-    isUse: false,
-    idKey: ''
-  } // 系统
+  } // 小书
 }
 
-const isFree = {
+export const isFree = {
   free: 1, // 免费
   pay: 2 // 付费
 }
 
-const isFreeText = {
+export const isFreeText = {
   [isFree.free]: '免费', // 免费
   [isFree.pay]: '付费' // 付费
 }
 
-const trialRead = {
+export const trialRead = {
   // 是否可以试读
   yes: 1, // 可以
   no: 2 // 不可以
 }
 
-const trialReadText = {
+export const trialReadText = {
   [trialRead.yes]: '开启', // 可以
   [trialRead.no]: '关闭' // 不可以
 }
 
 // 获得经验的方式和数量
 
-const experienceInfo = {
+export const experienceInfo = {
   [modelAction.obtain_thumb]: 10, // 收到点赞
   [modelAction.readOther]: 1 // 阅读他人
 }
 
-const userLevel = {
+export const userLevel = {
   // 用户等级，和上方经验挂钩
   one: 500,
   two: 1500,
   three: 3500,
   four: 7000,
   five: 10000
-}
-
-module.exports = {
-  statusList,
-  statusListText,
-  articleType,
-  dynamicType,
-  dynamicTypeText,
-  userMessageAction,
-  userMessageActionText,
-  userMessageIsPush,
-  virtualType,
-  virtualPlusLess,
-  modelAction,
-  virtualInfo,
-  modelActionText,
-  virtualTypeText,
-  payType,
-  payTypeText,
-  isFree,
-  isFreeText,
-  productType,
-  productTypeInfo,
-  trialRead,
-  trialReadText,
-  modelType,
-  modelInfo,
-  experienceInfo,
-  userLevel
 }

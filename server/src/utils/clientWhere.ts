@@ -1,44 +1,47 @@
 const Op = require('sequelize').Op
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail }
-} = require('./constant')
+import { statusList } from './constant'
 module.exports = {
   article: {
     otherList: {
       [Op.or]: [
-        { status: reviewSuccess }, // 审核成功
-        { status: freeReview } // 免审核
+        { status: statusList.reviewSuccess }, // 审核成功
+        { status: statusList.freeReview } // 免审核
       ]
     },
     otherView: {
       [Op.or]: [
-        { status: pendingReview }, // 待审核
-        { status: reviewSuccess }, // 审核成功
-        { status: freeReview } // 免审核
+        { status: statusList.pendingReview }, // 待审核
+        { status: statusList.reviewSuccess }, // 审核成功
+        { status: statusList.freeReview } // 免审核
       ]
     },
     me: {
       [Op.or]: [
-        { status: pendingReview }, // 待审核
-        { status: reviewSuccess }, // 审核成功
-        { status: freeReview }, // 免审核
-        { status: reviewFail } // 审核失败
+        { status: statusList.pendingReview }, // 待审核
+        { status: statusList.reviewSuccess }, // 审核成功
+        { status: statusList.freeReview }, // 免审核
+        { status: statusList.reviewFail } // 审核失败
       ]
     },
     isPublic: true
   },
   comment: {
     [Op.or]: [
-      { status: pendingReview }, // 待审核
-      { status: reviewSuccess }, // 审核成功
-      { status: freeReview }, // 免审核
-      { status: reviewFail } // 审核失败
+      { status: statusList.pendingReview }, // 待审核
+      { status: statusList.reviewSuccess }, // 审核成功
+      { status: statusList.freeReview }, // 免审核
+      { status: statusList.reviewFail } // 审核失败
     ]
   },
   dynamic: {
     myQuery: {
       status: {
-        [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail]
+        [Op.or]: [
+          statusList.reviewSuccess,
+          statusList.freeReview,
+          statusList.pendingReview,
+          statusList.reviewFail
+        ]
       }
     }
   }

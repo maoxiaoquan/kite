@@ -7,13 +7,14 @@ const clientWhere = require('../../../utils/clientWhere')
 const xss = require('xss')
 const config = require('../../../../../config')
 const lowdb = require('../../../../../db/lowdb/index')
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deleted },
+import {
+  statusList,
   modelType,
   userMessageAction,
   modelAction,
-  virtualType
-} = require('../../../utils/constant')
+  virtualType,
+  isFree
+} from '../../../utils/constant'
 const { TimeNow, TimeDistance } = require('../../../utils/time')
 import userVirtual from '../../../common/userVirtual'
 import attention from '../../../common/attention'
@@ -150,8 +151,8 @@ class Article {
       let status = ~userAuthorityIds.indexOf(
         config.USER_AUTHORITY.dfNoReviewArticleId
       )
-        ? freeReview // 免审核
-        : pendingReview // 待审核
+        ? statusList.freeReview // 免审核
+        : statusList.pendingReview // 待审核
 
       let createArticle = await models.article
         .create({
@@ -166,7 +167,8 @@ class Article {
           is_public: Number(reqData.is_public), // 是否公开
           type: reqData.type, // 类型 （1文章 2日记 3草稿 ）
           blog_ids: reqData.blog_ids,
-          tag_ids: reqData.tag_ids
+          tag_ids: reqData.tag_ids,
+          is_attachment: Number(reqData.is_attachment) /* 是否开启附件 */
         })
         .then((result: any) => {
           resultArticle = result.get({
@@ -174,6 +176,22 @@ class Article {
           })
           return result
         })
+
+      if (Number(reqData.is_attachment) === 1) {
+        // 附件功能
+        await models.article_annex.create({
+          uid: user.uid,
+          aid: createArticle.aid,
+          is_free: Number(reqData.is_free) /* 源内容 */,
+          pay_type: reqData.pay_type /* 源内容 */,
+          price:
+            Number(reqData.is_free) === isFree.pay
+              ? reqData.price
+              : 0 /* 源内容 */,
+          attachment: xss(reqData.attachment) /*主内容*/,
+          origin_attachment: reqData.origin_attachment
+        })
+      }
 
       await userVirtual.setVirtual({
         uid: user.uid,
@@ -195,6 +213,190 @@ class Article {
         state: 'success',
         message:
           '文章创建成功，最晚会在4小时内由人工审核通过后发布，超过24点文章，将在次日8.30审核后发布'
+      })
+    } catch (err) {
+      resClientJson(res, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
+  /**
+   * 更新文章
+   * @param   {object} ctx 上下文对象
+   */
+  static async updateArticle(req: any, res: any, next: any) {
+    let reqData = req.body
+
+    let { user = '' } = req
+    try {
+      let oneArticle = await models.article.findOne({
+        where: {
+          aid: reqData.aid,
+          uid: user.uid // 查询条件
+        }
+      })
+
+      if (!oneArticle) {
+        throw new Error('非法操作')
+      }
+
+      if (!reqData.title) {
+        throw new Error('请输入文章标题')
+      }
+
+      if (reqData.title.length > 150) {
+        throw new Error('文章标题过长，请小于150个字符')
+      }
+
+      if (!reqData.content) {
+        throw new Error('请输入文章内容')
+      }
+
+      if (reqData.source.length === 0 || reqData.source === null) {
+        throw new Error('请选择文章来源类型')
+      }
+
+      if (!reqData.tag_ids) {
+        throw new Error('请选择文章标签')
+      }
+
+      let date = new Date()
+      let currDate = moment(date.setHours(date.getHours())).format(
+        'YYYY-MM-DD HH:mm:ss'
+      )
+
+      if (new Date(currDate).getTime() < new Date(user.ban_dt).getTime()) {
+        throw new Error(
+          `当前用户因违规已被管理员禁用修改文章，时间到：${moment(
+            user.ban_dt
+          ).format('YYYY年MM月DD日 HH时mm分ss秒')},如有疑问请联系网站管理员`
+        )
+      }
+
+      let oneArticleTag = await models.article_tag.findOne({
+        where: {
+          tag_id: config.ARTICLE_TAG.dfOfficialExclusive
+        }
+      })
+      const website = lowdb
+        .read()
+        .get('website')
+        .value()
+      if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
+        if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
+          throw new Error(
+            `${oneArticleTag.name}只有${website.website_name}管理团队才能更新文章`
+          )
+        }
+      }
+
+      const result = reqData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
+
+      let $ = cheerio.load(reqData.content)
+
+      let userRoleAll = await models.user_role.findAll({
+        where: {
+          user_role_id: {
+            [Op.or]: user.user_role_ids.split(',')
+          },
+          user_role_type: 1 // 用户角色类型1是默认角色
+        }
+      })
+      let userAuthorityIds = ''
+      userRoleAll.map((roleItem: any) => {
+        userAuthorityIds += roleItem.user_authority_ids + ','
+      })
+
+      let status = ~userAuthorityIds.indexOf(
+        config.USER_AUTHORITY.dfNoReviewArticleId
+      )
+        ? statusList.freeReview
+        : statusList.pendingReview
+
+      await models.article.update(
+        {
+          title: reqData.title,
+          excerpt: getSubStr(getNoMarkupStr($.text())) /* 摘记 */,
+          content: reqData.content /* 主内容 */,
+          origin_content: reqData.origin_content /* 源内容 */,
+          source: reqData.source, // 来源 （1原创 2转载）
+          cover_img: result ? result[2] : '',
+          status, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败;4:回收站;5:已删除;6:无需审核)'
+          is_public: Number(reqData.is_public), // 是否公开
+          type: reqData.type, // 类型 （1文章 2日记 3草稿 ）
+          blog_ids: reqData.blog_ids,
+          tag_ids: reqData.tag_ids,
+          is_attachment: Number(reqData.is_attachment) /* 是否开启附件 */,
+          update_date: moment(date.setHours(date.getHours())).format(
+            'YYYY-MM-DD HH:mm:ss'
+          ) /* 时间 */,
+          update_date_timestamp: moment(date.setHours(date.getHours())).format(
+            'X'
+          ) /* 时间戳 */
+        },
+        {
+          where: {
+            aid: reqData.aid,
+            uid: user.uid // 查询条件
+          }
+        }
+      )
+
+      let articleAnnex = await models.article_annex.findOne({
+        where: { aid: reqData.aid, uid: user.uid }
+      })
+
+      if (Number(reqData.is_attachment) === 1) {
+        // 附件功能
+        if (articleAnnex) {
+          await models.article_annex.update(
+            {
+              is_free: Number(reqData.is_free) /* 源内容 */,
+              pay_type: reqData.pay_type /* 源内容 */,
+              price:
+                Number(reqData.is_free) === isFree.pay
+                  ? reqData.price
+                  : 0 /* 源内容 */,
+              attachment: xss(reqData.attachment) /*主内容*/,
+              origin_attachment: reqData.origin_attachment,
+              update_date: moment(date.setHours(date.getHours())).format(
+                'YYYY-MM-DD HH:mm:ss'
+              ) /* 时间 */,
+              update_date_timestamp: moment(
+                date.setHours(date.getHours())
+              ).format('X') /* 时间戳 */
+            },
+            {
+              where: {
+                aid: reqData.aid,
+                uid: user.uid // 查询条件
+              }
+            }
+          )
+        } else {
+          // 附件功能
+          await models.article_annex.create({
+            uid: user.uid,
+            aid: reqData.aid,
+            is_free: Number(reqData.is_free) /* 源内容 */,
+            pay_type: reqData.pay_type /* 源内容 */,
+            price:
+              Number(reqData.is_free) === isFree.pay
+                ? reqData.price
+                : 0 /* 源内容 */,
+            attachment: xss(reqData.attachment) /*主内容*/,
+            origin_attachment: reqData.origin_attachment
+          })
+        }
+      }
+
+      resClientJson(res, {
+        state: 'success',
+        message:
+          '文章更新后需要重新审核，最晚会在4小时内由人工审核通过后发布，超过24点文章，将在次日8.30审核后发布'
       })
     } catch (err) {
       resClientJson(res, {
@@ -229,7 +431,7 @@ class Article {
             },
             is_public: true, // 公开的文章
             status: {
-              [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
+              [Op.or]: [statusList.reviewSuccess, statusList.freeReview] // 审核成功、免审核
             } // web 表示前台  公共文章限制文件
           }, // 为空，获取全部，也可以自己添加条件
           offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
@@ -249,7 +451,9 @@ class Article {
 
           if (
             oneArticleBlog &&
-            ~[reviewSuccess, freeReview].indexOf(oneArticleBlog.status)
+            ~[statusList.reviewSuccess, statusList.freeReview].indexOf(
+              oneArticleBlog.status
+            )
           ) {
             rows[i].setDataValue('article_blog', oneArticleBlog)
           }
@@ -431,7 +635,7 @@ class Article {
         where: {
           aid,
           status: {
-            [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
+            [Op.or]: [statusList.reviewSuccess, statusList.freeReview] // 审核成功、免审核
           }
         }
       })
@@ -453,7 +657,9 @@ class Article {
 
         if (
           oneArticleBlog &&
-          ~[reviewSuccess, freeReview].indexOf(oneArticleBlog.status)
+          ~[statusList.reviewSuccess, statusList.freeReview].indexOf(
+            oneArticleBlog.status
+          )
         ) {
           oneArticle.setDataValue('article_blog', oneArticleBlog)
         }
@@ -524,6 +730,10 @@ class Article {
         where: { aid, uid: user.uid }
       })
 
+      let articleAnnex = await models.article_annex.findOne({
+        where: { aid: article.aid, uid: user.uid }
+      })
+
       if (article) {
         article.setDataValue(
           'user',
@@ -542,7 +752,7 @@ class Article {
           resClientJson(res, {
             state: 'success',
             message: '获取当前用户文章成功',
-            data: { article }
+            data: { article, articleAnnex }
           })
         } else {
           resClientJson(res, {
@@ -553,142 +763,6 @@ class Article {
       } else {
         throw new Error('获取当前用户文章失败')
       }
-    } catch (err) {
-      resClientJson(res, {
-        state: 'error',
-        message: '错误信息：' + err.message
-      })
-      return false
-    }
-  }
-
-  /**
-   * 更新文章
-   * @param   {object} ctx 上下文对象
-   */
-  static async updateArticle(req: any, res: any, next: any) {
-    let reqData = req.body
-
-    let { user = '' } = req
-    try {
-      let oneArticle = await models.article.findOne({
-        where: {
-          aid: reqData.aid,
-          uid: user.uid // 查询条件
-        }
-      })
-
-      if (!oneArticle) {
-        throw new Error('非法操作')
-      }
-
-      if (!reqData.title) {
-        throw new Error('请输入文章标题')
-      }
-
-      if (reqData.title.length > 150) {
-        throw new Error('文章标题过长，请小于150个字符')
-      }
-
-      if (!reqData.content) {
-        throw new Error('请输入文章内容')
-      }
-
-      if (reqData.source.length === 0 || reqData.source === null) {
-        throw new Error('请选择文章来源类型')
-      }
-
-      if (!reqData.tag_ids) {
-        throw new Error('请选择文章标签')
-      }
-
-      let date = new Date()
-      let currDate = moment(date.setHours(date.getHours())).format(
-        'YYYY-MM-DD HH:mm:ss'
-      )
-
-      if (new Date(currDate).getTime() < new Date(user.ban_dt).getTime()) {
-        throw new Error(
-          `当前用户因违规已被管理员禁用修改文章，时间到：${moment(
-            user.ban_dt
-          ).format('YYYY年MM月DD日 HH时mm分ss秒')},如有疑问请联系网站管理员`
-        )
-      }
-
-      let oneArticleTag = await models.article_tag.findOne({
-        where: {
-          tag_id: config.ARTICLE_TAG.dfOfficialExclusive
-        }
-      })
-      const website = lowdb
-        .read()
-        .get('website')
-        .value()
-      if (~reqData.tag_ids.indexOf(config.ARTICLE_TAG.dfOfficialExclusive)) {
-        if (!~user.user_role_ids.indexOf(config.USER_ROLE.dfManagementTeam)) {
-          throw new Error(
-            `${oneArticleTag.name}只有${website.website_name}管理团队才能更新文章`
-          )
-        }
-      }
-
-      const result = reqData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
-
-      let $ = cheerio.load(reqData.content)
-
-      let userRoleAll = await models.user_role.findAll({
-        where: {
-          user_role_id: {
-            [Op.or]: user.user_role_ids.split(',')
-          },
-          user_role_type: 1 // 用户角色类型1是默认角色
-        }
-      })
-      let userAuthorityIds = ''
-      userRoleAll.map((roleItem: any) => {
-        userAuthorityIds += roleItem.user_authority_ids + ','
-      })
-
-      let status = ~userAuthorityIds.indexOf(
-        config.USER_AUTHORITY.dfNoReviewArticleId
-      )
-        ? freeReview
-        : pendingReview
-
-      await models.article.update(
-        {
-          uid: user.uid,
-          title: reqData.title,
-          excerpt: getSubStr(getNoMarkupStr($.text())) /* 摘记 */,
-          content: reqData.content /* 主内容 */,
-          origin_content: reqData.origin_content /* 源内容 */,
-          source: reqData.source, // 来源 （1原创 2转载）
-          cover_img: result ? result[2] : '',
-          status, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败;4:回收站;5:已删除;6:无需审核)'
-          is_public: Number(reqData.is_public), // 是否公开
-          type: reqData.type, // 类型 （1文章 2日记 3草稿 ）
-          blog_ids: reqData.blog_ids,
-          tag_ids: reqData.tag_ids,
-          update_date: moment(date.setHours(date.getHours())).format(
-            'YYYY-MM-DD HH:mm:ss'
-          ) /* 时间 */,
-          update_date_timestamp: moment(date.setHours(date.getHours())).format(
-            'X'
-          ) /* 时间戳 */
-        },
-        {
-          where: {
-            aid: reqData.aid,
-            uid: user.uid // 查询条件
-          }
-        }
-      )
-
-      resClientJson(res, {
-        state: 'success',
-        message:
-          '文章更新后需要重新审核，最晚会在4小时内由人工审核通过后发布，超过24点文章，将在次日8.30审核后发布'
-      })
     } catch (err) {
       resClientJson(res, {
         state: 'error',
@@ -731,7 +805,7 @@ class Article {
 
       await models.article.update(
         {
-          status: deleted
+          status: statusList.deleted
         }, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败，4回收站，5已删除)'}, {
         {
           where: {
@@ -767,7 +841,7 @@ class Article {
           title: { [Op.like]: `%${search}%` },
           is_public: true, // 公开的文章
           status: {
-            [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
+            [Op.or]: [statusList.reviewSuccess, statusList.freeReview] // 审核成功、免审核
           } // web 表示前台  公共文章限制文件
         }, // 为空，获取全部，也可以自己添加条件 // status: 2 限制只有 审核通过的显示
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
@@ -787,7 +861,9 @@ class Article {
 
         if (
           oneArticleBlog &&
-          ~[reviewSuccess, freeReview].indexOf(oneArticleBlog.status)
+          ~[statusList.reviewSuccess, statusList.freeReview].indexOf(
+            oneArticleBlog.status
+          )
         ) {
           rows[i].setDataValue('article_blog', oneArticleBlog)
         }
@@ -976,7 +1052,7 @@ class Article {
 
       for (let i in rows) {
         let tag_id =
-          rows[i].tag_ids.length === 1
+          rows[i].tag_ids && rows[i].tag_ids.length === 1
             ? rows[i].tag_ids
             : { [Op.in]: rows[i].tag_ids.split(',') }
         rows[i].setDataValue(
@@ -997,6 +1073,43 @@ class Article {
           list: rows
         }
       })
+    } catch (err) {
+      resClientJson(res, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
+  /**
+   * ajax 获取用户自己的一篇文章
+   * @param   {object} ctx 上下文对象
+   */
+  static async getArticleAnnex(req: any, res: any, next: any) {
+    let { aid } = req.query
+    let { user = '', islogin } = req
+    let attributes = ['id', 'aid', 'uid', 'is_free', 'pay_type', 'price']
+    try {
+      if (islogin) {
+      }
+      let articleAnnex = await models.article_annex.findOne({
+        where: { aid: aid, uid: user.uid },
+        attributes
+      })
+
+      if (articleAnnex) {
+        resClientJson(res, {
+          state: 'success',
+          message: '获取当前用户文章附件信息成功',
+          data: { articleAnnex }
+        })
+      } else {
+        resClientJson(res, {
+          state: 'error',
+          message: '获取当前用户文章附件信息失败'
+        })
+      }
     } catch (err) {
       resClientJson(res, {
         state: 'error',

@@ -8,13 +8,15 @@ const xss = require('xss')
 const config = require('../../../../../config')
 const lowdb = require('../../../../../db/lowdb/index')
 const { TimeNow, TimeDistance } = require('../../../utils/time')
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
+  statusList,
   userMessageAction,
   modelAction,
   virtualType,
   modelType
-} = require('../../../utils/constant')
+} from '../../../utils/constant'
+
+const { reviewSuccess, freeReview, pendingReview, reviewFail } = statusList
 
 import userVirtual from '../../../common/userVirtual'
 import attention from '../../../common/attention'
@@ -167,8 +169,8 @@ class dynamic {
           'topic',
           oneDynamic.topic_ids
             ? await models.dynamic_topic.findOne({
-              where: { topic_id: oneDynamic.topic_ids }
-            })
+                where: { topic_id: oneDynamic.topic_ids }
+              })
             : ''
         )
 
@@ -292,8 +294,8 @@ class dynamic {
       for (let i in rows) {
         let topic = rows[i].topic_ids
           ? await models.dynamic_topic.findOne({
-            where: { topic_id: rows[i].topic_ids }
-          })
+              where: { topic_id: rows[i].topic_ids }
+            })
           : ''
         rows[i].setDataValue(
           'create_dt',
@@ -394,8 +396,8 @@ class dynamic {
           'topic',
           rows[i].topic_ids
             ? await models.dynamic_topic.findOne({
-              where: { topic_id: rows[i].topic_ids }
-            })
+                where: { topic_id: rows[i].topic_ids }
+              })
             : ''
         )
 
@@ -497,8 +499,8 @@ class dynamic {
           'topic',
           allDynamic[i].topic_ids
             ? await models.dynamic_topic.findOne({
-              where: { topic_id: allDynamic[i].topic_ids }
-            })
+                where: { topic_id: allDynamic[i].topic_ids }
+              })
             : ''
         )
         if (

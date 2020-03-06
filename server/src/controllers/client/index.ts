@@ -4,12 +4,12 @@ const { resClientJson } = require('../../utils/resData')
 const Op = require('sequelize').Op
 const { TimeNow, TimeDistance } = require('../../utils/time')
 const clientWhere = require('../../utils/clientWhere')
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
+  statusList,
   modelAction,
   virtualType,
   modelType
-} = require('../../utils/constant')
+} from '../../utils/constant'
 
 class Index {
   static async getIndexArticle(req: any, res: any, next: any) {
@@ -26,7 +26,7 @@ class Index {
         // 默认全部导入的专题
         is_public: true, // 公开的文章
         status: {
-          [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
+          [Op.or]: [statusList.reviewSuccess, statusList.freeReview] // 审核成功、免审核
         }
       }
 
@@ -86,7 +86,9 @@ class Index {
 
         if (
           oneArticleBlog &&
-          ~[reviewSuccess, freeReview].indexOf(oneArticleBlog.status)
+          ~[statusList.reviewSuccess, statusList.freeReview].indexOf(
+            oneArticleBlog.status
+          )
         ) {
           rows[i].setDataValue('article_blog', oneArticleBlog)
         }
@@ -162,7 +164,7 @@ class Index {
         // 默认全部导入的专题
         is_public: true, // 公开的文章
         status: {
-          [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
+          [Op.or]: [statusList.reviewSuccess, statusList.freeReview] // 审核成功、免审核
         }
       }
       type && (whereArticleParams['type'] = type)
@@ -237,7 +239,9 @@ class Index {
 
         if (
           oneArticleBlog &&
-          ~[reviewSuccess, freeReview].indexOf(oneArticleBlog.status)
+          ~[statusList.reviewSuccess, statusList.freeReview].indexOf(
+            oneArticleBlog.status
+          )
         ) {
           rows[i].setDataValue('article_blog', oneArticleBlog)
         }

@@ -1,6 +1,6 @@
 const models = require('../../../db/mysqldb/index')
 import moment from 'moment'
-const { virtualInfo, virtualPlusLess } = require('../utils/constant')
+import { virtualInfo, virtualPlusLess } from '../utils/constant'
 const lowdb = require('../../../db/lowdb/index')
 const config = lowdb.read().value()
 

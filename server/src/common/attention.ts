@@ -1,20 +1,20 @@
 const models = require('../../../db/mysqldb/index')
 import moment from 'moment'
-const { virtualInfo, virtualPlusLess } = require('../utils/constant')
+
 const lowdb = require('../../../db/lowdb/index')
 const config = lowdb.read().value()
 
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
+  statusList,
   userMessageAction,
   userMessageActionText,
   modelAction,
   virtualType,
+  virtualPlusLess,
+  virtualInfo,
   modelType,
   modelInfo
-} = require('../utils/constant')
-
-
+} from '../utils/constant'
 
 function isDigit(value: any) {
   var patrn = /^[0-9]*$/

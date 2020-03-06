@@ -7,17 +7,18 @@ const xss = require('xss')
 const clientWhere = require('../../../utils/clientWhere')
 const config = require('../../../../../config')
 const { TimeNow, TimeDistance } = require('../../../utils/time')
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
+  statusList,
   userMessageAction,
   modelAction,
   virtualType,
   modelType
-} = require('../../../utils/constant')
+} from '../../../utils/constant'
+
+const { reviewSuccess, freeReview, pendingReview, reviewFail } = statusList
 
 const userMessage = require('../../../utils/userMessage')
 import userVirtual from '../../../common/userVirtual'
-
 
 /* 评论模块 */
 
@@ -116,7 +117,7 @@ class dynamicComment {
           if (
             childAllComment[childCommentItem].reply_uid !== 0 &&
             childAllComment[childCommentItem].reply_uid !==
-            childAllComment[childCommentItem].uid
+              childAllComment[childCommentItem].uid
           ) {
             childAllComment[childCommentItem].setDataValue(
               'reply_user',
@@ -248,7 +249,7 @@ class dynamicComment {
           if (
             childAllComment[childCommentItem].reply_uid !== 0 &&
             childAllComment[childCommentItem].reply_uid !==
-            childAllComment[childCommentItem].uid
+              childAllComment[childCommentItem].uid
           ) {
             childAllComment[childCommentItem].setDataValue(
               'reply_user',

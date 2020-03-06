@@ -9,13 +9,13 @@ const config = require('../../../../../config')
 const { TimeNow, TimeDistance } = require('../../../utils/time')
 const shortid = require('shortid')
 const lowdb = require('../../../../../db/lowdb/index')
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
+  statusList,
   userMessageAction,
   modelAction,
   virtualType,
   modelType
-} = require('../../../utils/constant')
+} from '../../../utils/constant'
 
 import userVirtual from '../../../common/userVirtual'
 
@@ -145,8 +145,8 @@ class articleBlog {
       let status = ~userAuthorityIds.indexOf(
         config.ARTICLE_BLOG.dfNoReviewArticleBlogId
       )
-        ? freeReview
-        : pendingReview
+        ? statusList.freeReview
+        : statusList.pendingReview
 
       if (oneUserArticleBlog) {
         throw new Error('不能创建自己已有的专题')
@@ -262,8 +262,8 @@ class articleBlog {
       let status = ~userAuthorityIds.indexOf(
         config.ARTICLE_BLOG.dfNoReviewArticleBlogId
       )
-        ? freeReview // 免审核
-        : pendingReview // 待审核
+        ? statusList.freeReview // 免审核
+        : statusList.pendingReview // 待审核
 
       await models.article_blog.update(
         {
@@ -433,7 +433,7 @@ class articleBlog {
       blog_ids: blogId,
       is_public: true, // 公开的文章
       status: {
-        [Op.or]: [reviewSuccess, freeReview] // 审核成功、免审核
+        [Op.or]: [statusList.reviewSuccess, statusList.freeReview] // 审核成功、免审核
       }
     }
 
@@ -504,7 +504,7 @@ class articleBlog {
     let uid = req.query.uid || ''
     let whereParams = {
       status: {
-        [Op.or]: [reviewSuccess, freeReview]
+        [Op.or]: [statusList.reviewSuccess, statusList.freeReview]
       }
     }
 

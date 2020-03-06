@@ -7,17 +7,16 @@ const xss = require('xss')
 const clientWhere = require('../../../utils/clientWhere')
 const config = require('../../../../../config')
 const { TimeNow, TimeDistance } = require('../../../utils/time')
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
+  statusList,
   userMessageAction,
   modelAction,
   virtualType,
   modelType
-} = require('../../../utils/constant')
+} from '../../../utils/constant'
 
 const userMessage = require('../../../utils/userMessage')
 import userVirtual from '../../../common/userVirtual'
-
 
 /* 评论模块 */
 
@@ -34,7 +33,12 @@ class BookComment {
           book_id,
           parent_id: 0,
           status: {
-            [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail]
+            [Op.or]: [
+              statusList.reviewSuccess,
+              statusList.freeReview,
+              statusList.pendingReview,
+              statusList.reviewFail
+            ]
           }
         }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
@@ -47,10 +51,10 @@ class BookComment {
           'create_dt',
           await TimeDistance(rows[i].create_date)
         )
-        if (Number(rows[i].status) === pendingReview) {
+        if (Number(rows[i].status) === statusList.pendingReview) {
           rows[i].setDataValue('content', '当前用户评论需要审核')
         }
-        if (Number(rows[i].status) === reviewFail) {
+        if (Number(rows[i].status) === statusList.reviewFail) {
           rows[i].setDataValue('content', '当前用户评论违规')
         }
         rows[i].setDataValue(
@@ -68,7 +72,12 @@ class BookComment {
           where: {
             parent_id: rows[item].id,
             status: {
-              [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail]
+              [Op.or]: [
+                statusList.reviewSuccess,
+                statusList.freeReview,
+                statusList.pendingReview,
+                statusList.reviewFail
+              ]
             }
           }
         })
@@ -89,7 +98,7 @@ class BookComment {
           if (
             childAllComment[childCommentItem].reply_uid !== 0 &&
             childAllComment[childCommentItem].reply_uid !==
-            childAllComment[childCommentItem].uid
+              childAllComment[childCommentItem].uid
           ) {
             childAllComment[childCommentItem].setDataValue(
               'reply_user',
@@ -179,8 +188,8 @@ class BookComment {
       let status = ~userAuthorityIds.indexOf(
         config.BOOK.dfNoReviewBookCommentId
       )
-        ? freeReview // 免审核
-        : pendingReview // 待审核
+        ? statusList.freeReview // 免审核
+        : statusList.pendingReview // 待审核
 
       await models.book_comment
         .create({
@@ -281,7 +290,7 @@ class BookComment {
             state: 'success',
             data: _data,
             message:
-              Number(status) === freeReview
+              Number(status) === statusList.freeReview
                 ? '评论成功'
                 : '评论成功,待审核后可见'
           })

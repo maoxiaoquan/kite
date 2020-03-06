@@ -119,6 +119,12 @@ router.get('/user/role-all', user.getUserRoleAll) // 获取所有用户角色标
 
 router.get('/article', tokens.ClientVerifyTokenInfo, article.getArticle) // 根据aid获取文章 get
 
+router.get(
+  '/article-annex',
+  tokens.ClientVerifyTokenInfo,
+  article.getArticleAnnex
+) // 根据aid获取文章 get
+
 router.get('/user-article', tokens.ClientVerifyToken, article.getUserArticle) // 根据aid uid获取用户自己的某一篇文章 get
 
 router.post(

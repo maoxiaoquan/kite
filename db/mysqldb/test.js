@@ -29,9 +29,9 @@ async function sql() {
   //   force: true
   // })
 
-  await models.sequelize.query(
-    'ALTER TABLE user add COLUMN username VARCHAR(200)  comment "用户名";'
-  )
+  await models.article_annex.sync({
+    force: true
+  })
 
   process.exit()
 }

@@ -1,7 +1,7 @@
 const models = require('../../../db/mysqldb/index')
 const { sendNotification } = require('./sendEmail')
 import moment from 'moment'
-const { userMessageIsPush } = require('./constant')
+import { userMessageIsPush } from './constant'
 const lowdb = require('../../../db/lowdb/index')
 const config = lowdb.read().value()
 class userMessage {

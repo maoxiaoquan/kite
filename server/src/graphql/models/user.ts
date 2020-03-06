@@ -4,14 +4,14 @@ const { resClientJson } = require('../../utils/resData')
 const Op = require('sequelize').Op
 const { TimeNow, TimeDistance } = require('../../utils/time')
 const clientWhere = require('../../utils/clientWhere')
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
+  statusList,
   modelAction,
   modelActionText,
   virtualType,
   modelType,
   modelInfo
-} = require('../../utils/constant')
+} from '../../utils/constant'
 
 class User {
   static async userInfo(uid: any) {

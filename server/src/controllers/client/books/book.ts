@@ -8,8 +8,8 @@ const xss = require('xss')
 const config = require('../../../../../config')
 const lowdb = require('../../../../../db/lowdb/index')
 const { TimeNow, TimeDistance } = require('../../../utils/time')
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
+  statusList,
   userMessageAction,
   modelAction,
   virtualType,
@@ -17,10 +17,9 @@ const {
   trialRead,
   isFree,
   modelType
-} = require('../../../utils/constant')
+} from '../../../utils/constant'
 
 import userVirtual from '../../../common/userVirtual'
-
 
 function getNoMarkupStr(markupStr: string) {
   /* markupStr 源码</> */
@@ -125,8 +124,8 @@ class Book {
       })
 
       let status = ~userAuthorityIds.indexOf(config.BOOK.dfNoReviewBookId)
-        ? freeReview // 免审核
-        : pendingReview // 待审核
+        ? statusList.freeReview // 免审核
+        : statusList.pendingReview // 待审核
 
       let bookCreate = await models.book.create({
         uid: user.uid,
@@ -331,8 +330,8 @@ class Book {
       })
 
       let status = ~userAuthorityIds.indexOf(config.BOOK.dfNoReviewBookId)
-        ? freeReview // 免审核
-        : pendingReview // 待审核
+        ? statusList.freeReview // 免审核
+        : statusList.pendingReview // 待审核
 
       await models.book.update(
         {

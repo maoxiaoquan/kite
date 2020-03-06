@@ -3,15 +3,14 @@ import moment from 'moment'
 const { render, resClientJson } = require('../../utils/resData')
 const Op = require('sequelize').Op
 const clientWhere = require('../../utils/clientWhere')
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
   userMessageAction,
   userMessageActionText,
   modelAction,
   virtualType,
   modelType,
   modelInfo
-} = require('../../utils/constant')
+} from '../../utils/constant'
 
 const userMessage = require('../../utils/userMessage')
 const userVirtual = require('../../common/userVirtual')

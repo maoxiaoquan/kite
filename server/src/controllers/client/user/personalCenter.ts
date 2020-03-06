@@ -3,12 +3,14 @@ import moment from 'moment'
 const { render, resClientJson } = require('../../../utils/resData')
 const Op = require('sequelize').Op
 const clientWhere = require('../../../utils/clientWhere')
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
+  statusList,
   modelAction,
   virtualType,
   modelType
-} = require('../../../utils/constant')
+} from '../../../utils/constant'
+
+const { reviewSuccess, freeReview, pendingReview, reviewFail } = statusList
 
 const { TimeNow, TimeDistance } = require('../../../utils/time')
 
@@ -20,17 +22,17 @@ class PersonalCenter {
   static async userMyArticle(req: any, res: any, next: any) {
     let uid = req.query.uid
     let blog_id = req.query.blog_id || 'all'
-    let type = req.query.type || '1'
+    let type = req.query.type || ''
     let page = req.query.page || 1
     let pageSize = Number(req.query.pageSize) || 10
     let whereParams: any = {
       uid,
-      type,
       status: {
         [Op.or]: [reviewSuccess, freeReview, pendingReview, reviewFail] // 审核成功、免审核
       }
     }
     try {
+      type && (whereParams.type = type)
       blog_id !== 'all' && (whereParams.blog_ids = blog_id)
 
       let { count, rows } = await models.article.findAndCountAll({
@@ -283,8 +285,8 @@ class PersonalCenter {
           'topic',
           rows[i].topic_ids
             ? await models.dynamic_topic.findOne({
-              where: { topic_id: rows[i].topic_ids }
-            })
+                where: { topic_id: rows[i].topic_ids }
+              })
             : ''
         )
 

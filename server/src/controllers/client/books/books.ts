@@ -8,8 +8,8 @@ const xss = require('xss')
 const config = require('../../../../../config')
 const lowdb = require('../../../../../db/lowdb/index')
 const { TimeNow, TimeDistance } = require('../../../utils/time')
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
+  statusList,
   userMessageAction,
   modelAction,
   virtualType,
@@ -22,7 +22,7 @@ const {
   productTypeInfo,
   modelType,
   userLevel
-} = require('../../../utils/constant')
+} from '../../../utils/constant'
 
 import userVirtual from '../../../common/userVirtual'
 import attention from '../../../common/attention'
@@ -212,8 +212,8 @@ class Books {
       })
 
       let status = ~userAuthorityIds.indexOf(config.BOOKS.dfNoReviewBooksId)
-        ? freeReview // 免审核
-        : pendingReview // 待审核
+        ? statusList.freeReview // 免审核
+        : statusList.pendingReview // 待审核
 
       const createBooks = await models.books.create({
         uid: user.uid,
@@ -393,8 +393,8 @@ class Books {
       })
 
       let status = ~userAuthorityIds.indexOf(config.BOOKS.dfNoReviewBooksId)
-        ? freeReview // 免审核
-        : pendingReview // 待审核
+        ? statusList.freeReview // 免审核
+        : statusList.pendingReview // 待审核
 
       await models.books.update(
         {
@@ -442,7 +442,7 @@ class Books {
     try {
       await models.books.update(
         {
-          status: deletes
+          status: statusList.deleted
         }, // '状态(1:审核中;2:审核通过;3:审核失败，4回收站，5已删除)'}, {
         {
           where: {
@@ -477,7 +477,7 @@ class Books {
     let whereParams: any = {
       is_public: true,
       status: {
-        [Op.or]: [reviewSuccess, freeReview]
+        [Op.or]: [statusList.reviewSuccess, statusList.freeReview]
       }
     }
 
@@ -682,7 +682,7 @@ class Books {
           books.setDataValue('isBuy', false)
         }
 
-        if (books.status === deletes) {
+        if (books.status === statusList.deleted) {
           books.setDataValue('content', '小书已被删除')
         }
 
@@ -812,7 +812,7 @@ class Books {
     let whereParams = {
       is_public: true,
       status: {
-        [Op.or]: [reviewSuccess, freeReview]
+        [Op.or]: [statusList.reviewSuccess, statusList.freeReview]
       }
     }
 

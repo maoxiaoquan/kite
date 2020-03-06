@@ -9,14 +9,13 @@ const config = require('../../../../config')
 const { TimeNow, TimeDistance } = require('../../utils/time')
 const shortid = require('shortid')
 const lowdb = require('../../../../db/lowdb/index')
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
   userMessageAction,
   modelAction,
   virtualType,
   modelType,
   modelInfo
-} = require('../../utils/constant')
+} from '../../utils/constant'
 
 const userVirtual = require('../../common/userVirtual')
 

@@ -16,8 +16,8 @@ const tokens = require('../../../utils/tokens')
 const lowdb = require('../../../../../db/lowdb/index')
 const clientWhere = require('../../../utils/clientWhere')
 
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
+  statusList,
   userMessageAction,
   userMessageActionText,
   modelAction,
@@ -25,7 +25,7 @@ const {
   virtualInfo,
   virtualPlusLess,
   modelType
-} = require('../../../utils/constant')
+} from '../../../utils/constant'
 
 import userVirtual from '../../../common/userVirtual'
 import { user } from '../../../graphql/models'

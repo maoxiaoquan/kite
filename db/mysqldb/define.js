@@ -260,6 +260,13 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
 
+  const article_annex = sequelize.define(
+    // 文章附件表
+    require('./models_type/db_article_annex').NAME,
+    require('./models_type/db_article_annex').TABLE,
+    SEQ_PARAMETER
+  )
+
   const _define = {
     user,
     user_info,
@@ -295,7 +302,8 @@ module.exports = sequelize => {
     thumb,
     experience,
     chat_contact,
-    chat_message
+    chat_message,
+    article_annex
   }
 
   return {

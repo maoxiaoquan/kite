@@ -1,12 +1,12 @@
 const models = require('../../../db/mysqldb/index')
 import moment from 'moment'
-const {
+import {
   virtualInfo,
   modelType,
   modelInfo,
   modelAction,
   experienceInfo
-} = require('../utils/constant')
+} from '../utils/constant'
 const lowdb = require('../../../db/lowdb/index')
 const config = lowdb.read().value()
 const Op = require('sequelize').Op

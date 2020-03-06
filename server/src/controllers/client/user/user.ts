@@ -15,8 +15,8 @@ const tokens = require('../../../utils/tokens')
 const lowdb = require('../../../../../db/lowdb/index')
 const clientWhere = require('../../../utils/clientWhere')
 
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
+  statusList,
   userMessageAction,
   userMessageActionText,
   modelAction,
@@ -24,7 +24,7 @@ const {
   virtualInfo,
   virtualPlusLess,
   modelType
-} = require('../../../utils/constant')
+} from '../../../utils/constant'
 
 import userVirtual from '../../../common/userVirtual'
 
@@ -395,7 +395,6 @@ class User {
       for (let i in oneUserAuth) {
         bindType.push(oneUserAuth[i].identity_type)
       }
-
 
       await resClientJson(res, {
         state: 'success',

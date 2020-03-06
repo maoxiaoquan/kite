@@ -9,8 +9,7 @@ const xss = require('xss')
 const config = require('../../../../config')
 const lowdb = require('../../../../db/lowdb/index')
 const { TimeNow, TimeDistance } = require('../../utils/time')
-const {
-  statusList: { reviewSuccess, freeReview, pendingReview, reviewFail, deletes },
+import {
   userMessageAction,
   virtualType,
   virtualPlusLess,
@@ -20,7 +19,7 @@ const {
   modelActionText,
   virtualTypeText,
   modelType
-} = require('../../utils/constant')
+} from '../../utils/constant'
 
 const userVirtual = require('../../common/userVirtual')
 
