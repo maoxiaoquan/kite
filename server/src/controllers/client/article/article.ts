@@ -13,12 +13,14 @@ import {
   userMessageAction,
   modelAction,
   virtualType,
+  productType,
   isFree
 } from '../../../utils/constant'
 const { TimeNow, TimeDistance } = require('../../../utils/time')
 import userVirtual from '../../../common/userVirtual'
 import attention from '../../../common/attention'
 import useExperience from '../../../common/useExperience'
+import e from 'express'
 
 function getNoMarkupStr(markupStr: string) {
   /* markupStr 源码</> */
@@ -1089,27 +1091,43 @@ class Article {
   static async getArticleAnnex(req: any, res: any, next: any) {
     let { aid } = req.query
     let { user = '', islogin } = req
-    let attributes = ['id', 'aid', 'uid', 'is_free', 'pay_type', 'price']
-    try {
-      if (islogin) {
-      }
-      let articleAnnex = await models.article_annex.findOne({
-        where: { aid: aid, uid: user.uid },
-        attributes
-      })
 
-      if (articleAnnex) {
-        resClientJson(res, {
-          state: 'success',
-          message: '获取当前用户文章附件信息成功',
-          data: { articleAnnex }
+    try {
+      let articleAnnex = await models.article_annex.findOne({
+        where: { aid }
+      })
+      if (islogin && articleAnnex) {
+        let productInfo = await models.order.findOne({
+          where: {
+            product_id: articleAnnex.id,
+            product_type: productType.article_annex,
+            uid: user.uid
+          }
         })
-      } else {
-        resClientJson(res, {
-          state: 'error',
-          message: '获取当前用户文章附件信息失败'
-        })
+        if (articleAnnex.uid === user.uid) {
+          articleAnnex.setDataValue('isBuy', true)
+        } else {
+          if (articleAnnex.is_free === isFree.free) {
+            articleAnnex.setDataValue('isBuy', true)
+          } else {
+            if (productInfo) {
+              articleAnnex.setDataValue('isBuy', true)
+            } else {
+              articleAnnex.setDataValue('attachment', '')
+              articleAnnex.setDataValue('isBuy', false)
+            }
+          }
+        }
+      } else if (articleAnnex) {
+        articleAnnex.setDataValue('attachment', '')
+        articleAnnex.setDataValue('isBuy', false)
       }
+
+      resClientJson(res, {
+        state: 'success',
+        message: '获取当前用户文章附件信息成功',
+        data: { articleAnnex }
+      })
     } catch (err) {
       resClientJson(res, {
         state: 'error',

@@ -43,6 +43,19 @@ class update {
           'ALTER TABLE article add COLUMN is_attachment tinyint(1) DEFAULT 0 comment "是否添加附件";'
         )
 
+        await models.order.update(
+          { product_type: 7 },
+          { where: { product_type: 6 } }
+        )
+
+        await models.virtual.update({ type: 18 }, { where: { type: 1 } })
+        await models.virtual.update({ type: 1 }, { where: { type: 2 } })
+        await models.virtual.update({ type: 2 }, { where: { type: 3 } })
+        await models.virtual.update({ type: 3 }, { where: { type: 4 } })
+        await models.virtual.update({ type: 7 }, { where: { type: 6 } })
+        await models.virtual.update({ type: 9 }, { where: { type: 7 } })
+        await models.virtual.update({ type: 17 }, { where: { type: 8 } })
+
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb
           .get('config')

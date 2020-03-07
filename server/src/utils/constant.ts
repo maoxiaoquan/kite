@@ -235,6 +235,53 @@ export const userMessageAction = {
   sell: 9 // 售出
 }
 
+export const userMessageTypeText = {
+  // 文章的类型
+  [modelType.user]: {
+    [userMessageAction.attention]: '关注了你' // 用户1
+  },
+  [modelType.article]: {
+    [userMessageAction.comment]: '评论了你的文章' // 文章2
+  },
+  [modelType.article_blog]: {
+    [userMessageAction.collect]: '收藏了你的专栏' // 文章个人专栏3
+  },
+  [modelType.article_comment]: {
+    [userMessageAction.reply]: '文章中回复你的' // 文章评论4
+  },
+  [modelType.book]: {
+    [userMessageAction.comment]: '评论了你的小书章节' // 小书章节5
+  },
+  [modelType.book_comment]: {
+    [userMessageAction.reply]: '小书章节中回复你的' // 小书章节评论6
+  },
+  [modelType.books]: {
+    [userMessageAction.comment]: '评论了你的小书', // 小书7
+    [userMessageAction.sell]: '卖出小书' // 小书7
+  },
+  [modelType.books_comment]: {
+    [userMessageAction.reply]: '小书中回复你的' // 小书评论8
+  },
+  [modelType.dynamic]: {
+    [userMessageAction.comment]: '评论了你片刻' // 片刻9
+  },
+  [modelType.dynamic_comment]: {
+    [userMessageAction.comment]: '片刻中回复你的' // 片刻评论10
+  },
+  [modelType.thumb]: {
+    [userMessageAction.thumb]: '点赞你的' // 点赞了你的片刻
+  },
+  [modelType.like]: {
+    [userMessageAction.like]: '喜欢了你的文章' // 喜欢了你的文章
+  },
+  [modelType.collect]: {
+    [userMessageAction.collect]: '收藏你的' // 收藏你的专栏
+  },
+  [modelType.article_annex]: {
+    [userMessageAction.sell]: '卖出' // 小书7
+  }
+}
+
 export const userMessageActionText = {
   [userMessageAction.system]: '新的系统消息',
   [userMessageAction.like]: '新的喜欢',
@@ -259,18 +306,23 @@ export const virtualPlusLess = {
   less: 2 // 减
 }
 
+export const virtualPlusLessText = {
+  [virtualPlusLess.plus]: '+', // 加
+  [virtualPlusLess.less]: '-' // 减
+}
+
 export const virtualType = {
   // 关联模块
-  other: 1, // 其他
-  user: 2, // 用户
-  article: 3, // 文章
-  article_blog: 4, // 文章个人专栏
-  book: 5, // 小书章节
-  books: 6, // 小书
-  dynamic: 7, // 片刻
-  system: 8, // 系统
-  chat_message: 20, // 私聊消息
-  article_annex: 21 // 文章附件
+  other: modelType.other, // 其他
+  user: modelType.user, // 用户
+  article: modelType.article, // 文章
+  article_blog: modelType.article_blog, // 文章个人专栏
+  book: modelType.book, // 小书章节
+  books: modelType.books, // 小书
+  dynamic: modelType.dynamic, // 片刻
+  system: modelType.system, // 系统
+  chat_message: modelType.chat_message, // 私聊消息
+  article_annex: modelType.article_annex // 文章附件
 }
 
 export const virtualTypeText = {
@@ -383,9 +435,9 @@ export const payTypeText = {
 
 export const productType = {
   // 商品类型
-  article: 3, // 文章
-  books: 6, // 小书
-  article_annex: 21 // 文章附件
+  article: modelType.article, // 文章
+  books: modelType.books, // 小书
+  article_annex: modelType.article_annex // 文章附件
 }
 
 export const productTypeInfo = {

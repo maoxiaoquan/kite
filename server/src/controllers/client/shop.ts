@@ -109,9 +109,14 @@ class Shop {
       }
 
       let myBalance = myShellBalance - price
-      let otherBalance = otherShellBalance + price
       let myOrBalance = myOrShellBalance - price
+      let otherBalance = otherShellBalance + price
       let otherOrBalance = otherOrShellBalance + price
+
+      console.log('myBalance', myBalance)
+      console.log('otherBalance', otherBalance)
+      console.log('myOrBalance', myOrBalance)
+      console.log('otherOrBalance', otherOrBalance)
 
       if (myBalance !== myOrBalance || otherBalance !== otherOrBalance) {
         throw new Error('支付出现错误，已终止')
@@ -133,7 +138,7 @@ class Shop {
               income: productInfo.price,
               expenses: 0,
               amount: productInfo.price,
-              type: virtualType.books,
+              type: product_type,
               action: modelAction.buy,
               description: ''
             },
@@ -181,7 +186,7 @@ class Shop {
                 income: 0,
                 expenses: productInfo.price,
                 amount: productInfo.price,
-                type: virtualType.books,
+                type: product_type,
                 action: modelAction.sell,
                 description: ''
               },
@@ -207,7 +212,7 @@ class Shop {
         uid: productInfo.uid,
         sender_id: user.uid,
         action: userMessageAction.sell, // 动作：评论
-        type: modelType.books, // 类型：小书章节评论
+        type: product_type, // 类型
         content: JSON.stringify({
           [productTypeInfo[product_type].idKey]: product_id
         })

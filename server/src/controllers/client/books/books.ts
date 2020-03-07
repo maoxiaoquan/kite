@@ -748,11 +748,8 @@ class Books {
           ]
         })
 
-        console.log('islogin', islogin)
-
         for (let i in allBook) {
           if (islogin) {
-            console.log(11111111111111111111111)
             // 获取商品信息
             const productInfo = await models.order.findOne({
               where: {

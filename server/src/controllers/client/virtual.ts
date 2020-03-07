@@ -154,6 +154,14 @@ class Virtual {
               attributes: ['id', 'content']
             })) || {}
           )
+        } else if (rows[i].type === virtualType.article_annex) {
+          rows[i].setDataValue(
+            'article_annex',
+            (await models.article_annex.findOne({
+              where: { id: associate.id },
+              attributes: ['id', 'aid']
+            })) || {}
+          )
         }
       }
 
