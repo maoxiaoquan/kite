@@ -11,13 +11,13 @@ const lowdb = require('../../../db/lowdb/index')
 const { TimeNow, TimeDistance } = require('../../utils/time')
 import {
   userMessageAction,
-  virtualType,
+
   virtualPlusLess,
   modelAction,
   virtualInfo,
   modelActionText,
-  virtualTypeText,
-  modelType
+  modelName,
+  modelInfo
 } from '../../utils/constant'
 
 const userVirtual = require('../../common/userVirtual')
@@ -54,15 +54,15 @@ class Order {
           })
         )
         rows[i].setDataValue('actionText', modelActionText[rows[i].action])
-        rows[i].setDataValue('typeText', virtualTypeText[rows[i].type])
+        rows[i].setDataValue('typeText', modelInfo[rows[i].type].name)
 
         let associate = rows[i].associate && JSON.parse(rows[i].associate)
         // 以上是公共的数据
 
-        if (rows[i].type === virtualType.other) {
+        if (rows[i].type === modelName.other) {
           // 用户关注 所需要的数据已获取,无需处理
-        } else if (rows[i].type === virtualType.user) {
-        } else if (rows[i].type === virtualType.article) {
+        } else if (rows[i].type === modelName.user) {
+        } else if (rows[i].type === modelName.article) {
           rows[i].setDataValue(
             'article',
             await models.article.findOne({
@@ -70,7 +70,7 @@ class Order {
               attributes: ['aid', 'title']
             })
           )
-        } else if (rows[i].type === virtualType.article_blog) {
+        } else if (rows[i].type === modelName.article_blog) {
           rows[i].setDataValue(
             'article_blog',
             await models.article_blog.findOne({
@@ -78,7 +78,7 @@ class Order {
               attributes: ['blog_id', 'name']
             })
           )
-        } else if (rows[i].type === virtualType.book) {
+        } else if (rows[i].type === modelName.book) {
           rows[i].setDataValue(
             'book',
             await models.book.findOne({
@@ -86,7 +86,7 @@ class Order {
               attributes: ['book_id', 'title', 'books_id']
             })
           )
-        } else if (rows[i].type === virtualType.books) {
+        } else if (rows[i].type === modelName.books) {
           rows[i].setDataValue(
             'books',
             await models.books.findOne({
@@ -94,7 +94,7 @@ class Order {
               attributes: ['books_id', 'title']
             })
           )
-        } else if (rows[i].type === virtualType.dynamic) {
+        } else if (rows[i].type === modelName.dynamic) {
           rows[i].setDataValue(
             'dynamic',
             await models.dynamic.findOne({
@@ -102,7 +102,7 @@ class Order {
               attributes: ['id', 'content']
             })
           )
-        } else if (rows[i].type === virtualType.system) {
+        } else if (rows[i].type === modelName.system) {
         }
       }
 

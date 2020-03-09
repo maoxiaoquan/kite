@@ -13,8 +13,8 @@ import {
   statusList,
   userMessageAction,
   modelAction,
-  virtualType,
-  modelType
+
+  modelName
 } from '../../../utils/constant'
 
 import userVirtual from '../../../common/userVirtual'
@@ -100,7 +100,7 @@ class articleBlog {
       // 虚拟币判断是否可以进行继续的操作
       const isVirtual = await userVirtual.isVirtual({
         uid: user.uid,
-        type: virtualType.article_blog,
+        type: modelName.article_blog,
         action: modelAction.create
       })
 
@@ -168,7 +168,7 @@ class articleBlog {
         associate: JSON.stringify({
           blog_id: createArticleBlog.blog_id
         }),
-        type: virtualType.article_blog,
+        type: modelName.article_blog,
         action: modelAction.create
       })
 
@@ -361,7 +361,7 @@ class articleBlog {
           where: {
             associate_id: oneArticleBlog.blog_id,
             is_associate: true,
-            type: modelType.article_blog
+            type: modelName.article_blog
           }
         })
       )
@@ -372,7 +372,7 @@ class articleBlog {
           where: {
             associate_id: oneArticleBlog.blog_id,
             is_associate: true,
-            type: modelType.article_blog
+            type: modelName.article_blog
           }
         })
       )
@@ -510,7 +510,7 @@ class articleBlog {
 
     try {
       let { count, rows } = await models.collect.findAndCountAll({
-        where: { is_associate: true, uid, type: modelType.article_blog }, // 为空，获取全部，也可以自己添加条件
+        where: { is_associate: true, uid, type: modelName.article_blog }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: Number(pageSize) // 每页限制返回的数据条数
         // order: orderParams
@@ -553,7 +553,7 @@ class articleBlog {
             where: {
               associate_id: rows[i].associate_id,
               is_associate: true,
-              type: modelType.article_blog
+              type: modelName.article_blog
             }
           })
         )
@@ -564,7 +564,7 @@ class articleBlog {
             where: {
               associate_id: rows[i].associate_id,
               is_associate: true,
-              type: modelType.article_blog
+              type: modelName.article_blog
             }
           })
         )

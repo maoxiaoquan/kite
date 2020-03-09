@@ -12,11 +12,9 @@ import {
   statusList,
   userMessageAction,
   modelAction,
-  virtualType,
-  productType,
   trialRead,
   isFree,
-  modelType
+  modelName
 } from '../../../utils/constant'
 
 import userVirtual from '../../../common/userVirtual'
@@ -98,7 +96,7 @@ class Book {
       // 虚拟币判断是否可以进行继续的操作
       const isVirtual = await userVirtual.isVirtual({
         uid: user.uid,
-        type: virtualType.book,
+        type: modelName.book,
         action: modelAction.create
       })
 
@@ -145,7 +143,7 @@ class Book {
         associate: JSON.stringify({
           book_id: bookCreate.book_id
         }),
-        type: virtualType.book,
+        type: modelName.book,
         action: modelAction.create
       })
 
@@ -236,7 +234,7 @@ class Book {
             const productInfo = await models.order.findOne({
               where: {
                 product_id: oneBook.books_id,
-                product_type: productType.books,
+                product_type: modelName.books,
                 uid: user.uid
               }
             })

@@ -11,8 +11,8 @@ import {
   statusList,
   userMessageAction,
   modelAction,
-  virtualType,
-  modelType
+
+  modelName
 } from '../../../utils/constant'
 const { reviewSuccess, freeReview, pendingReview, reviewFail } = statusList
 
@@ -89,7 +89,7 @@ class BooksComment {
           if (
             childAllComment[childCommentItem].reply_uid !== 0 &&
             childAllComment[childCommentItem].reply_uid !==
-              childAllComment[childCommentItem].uid
+            childAllComment[childCommentItem].uid
           ) {
             childAllComment[childCommentItem].setDataValue(
               'reply_user',
@@ -156,7 +156,7 @@ class BooksComment {
       // 虚拟币判断是否可以进行继续的操作
       const isVirtual = await userVirtual.isVirtual({
         uid: user.uid,
-        type: virtualType.books,
+        type: modelName.books,
         action: modelAction.comment
       })
 
@@ -239,7 +239,7 @@ class BooksComment {
               comment_id: _data.id,
               books_id: reqData.books_id
             }),
-            type: virtualType.books,
+            type: modelName.books,
             action: modelAction.comment,
             ass_uid: oneBooks.uid
           })
@@ -252,7 +252,7 @@ class BooksComment {
                 comment_id: _data.id,
                 books_id: reqData.books_id
               }),
-              type: virtualType.books,
+              type: modelName.books,
               action: modelAction.obtain_comment,
               ass_uid: user.uid
             })
@@ -263,7 +263,7 @@ class BooksComment {
               uid: oneBooks.uid,
               sender_id: user.uid,
               action: userMessageAction.comment, // 动作：评论
-              type: modelType.books, // 类型：小书评论
+              type: modelName.books, // 类型：小书评论
               content: JSON.stringify({
                 comment_id: _data.id,
                 books_id: reqData.books_id
@@ -280,7 +280,7 @@ class BooksComment {
               uid: reqData.reply_uid,
               sender_id: user.uid,
               action: userMessageAction.reply, // 动作：回复
-              type: modelType.books_comment, // 类型：小书回复
+              type: modelName.books_comment, // 类型：小书回复
               content: JSON.stringify({
                 reply_id: reqData.reply_id,
                 comment_id: _data.id,

@@ -11,14 +11,12 @@ const lowdb = require('../../../../db/lowdb/index')
 const { TimeNow, TimeDistance } = require('../../utils/time')
 import {
   userMessageAction,
-  virtualType,
   virtualPlusLess,
   modelAction,
   virtualInfo,
   modelInfo,
   modelActionText,
-  virtualTypeText,
-  modelType
+  modelName
 } from '../../utils/constant'
 
 const userVirtual = require('../../common/userVirtual')

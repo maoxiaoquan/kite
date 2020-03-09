@@ -9,10 +9,9 @@ import {
   userMessageAction,
   userMessageActionText,
   modelAction,
-  virtualType,
   virtualPlusLess,
   virtualInfo,
-  modelType,
+  modelName,
   modelInfo
 } from '../utils/constant'
 
@@ -33,7 +32,7 @@ class userAttentionMessage {
     const attentionCount = await models.attention.count({
       where: {
         associate_id: uid,
-        type: modelType.user,
+        type: modelName.user,
         is_associate: true
       }
     })
@@ -44,7 +43,7 @@ class userAttentionMessage {
         const allAttention = await models.attention.findAll({
           where: {
             associate_id: uid,
-            type: modelType.user,
+            type: modelName.user,
             is_associate: true
           }
         })

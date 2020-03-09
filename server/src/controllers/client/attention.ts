@@ -7,8 +7,7 @@ import {
   userMessageAction,
   userMessageActionText,
   modelAction,
-  virtualType,
-  modelType,
+  modelName,
   modelInfo
 } from '../../utils/constant'
 
@@ -81,7 +80,7 @@ class Attention {
           uid: associate_id,
           sender_id: user.uid,
           action: userMessageAction.attention, // 动作：关注
-          type: modelType.user // 类型：用户
+          type: modelName.user // 类型：用户
         })
         await models.attention.create({
           uid: user.uid,

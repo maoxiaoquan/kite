@@ -11,8 +11,8 @@ import {
   statusList,
   userMessageAction,
   modelAction,
-  virtualType,
-  modelType
+
+  modelName
 } from '../../../utils/constant'
 
 const userMessage = require('../../../utils/userMessage')
@@ -98,7 +98,7 @@ class ArticleComment {
           if (
             childAllComment[childCommentItem].reply_uid !== 0 &&
             childAllComment[childCommentItem].reply_uid !==
-              childAllComment[childCommentItem].uid
+            childAllComment[childCommentItem].uid
           ) {
             childAllComment[childCommentItem].setDataValue(
               'reply_user',
@@ -162,7 +162,7 @@ class ArticleComment {
       // 虚拟币判断是否可以进行继续的操作
       const isVirtual = await userVirtual.isVirtual({
         uid: user.uid,
-        type: virtualType.article,
+        type: modelName.article,
         action: modelAction.comment
       })
 
@@ -248,7 +248,7 @@ class ArticleComment {
                 comment_id: _data.id,
                 aid: reqData.aid
               }),
-              type: virtualType.article,
+              type: modelName.article,
               action: modelAction.comment,
               ass_uid: oneArticle.uid
             })
@@ -261,7 +261,7 @@ class ArticleComment {
                 comment_id: _data.id,
                 aid: reqData.aid
               }),
-              type: virtualType.article,
+              type: modelName.article,
               action: modelAction.obtain_comment,
               ass_uid: user.uid
             })
@@ -273,7 +273,7 @@ class ArticleComment {
                 uid: oneArticle.uid,
                 sender_id: user.uid,
                 action: userMessageAction.comment, // 动作：评论
-                type: modelType.article, // 类型：文章评论
+                type: modelName.article, // 类型：文章评论
                 content: JSON.stringify({
                   comment_id: _data.id,
                   aid: reqData.aid
@@ -292,7 +292,7 @@ class ArticleComment {
               uid: reqData.reply_uid,
               sender_id: user.uid,
               action: userMessageAction.reply, // 动作：回复
-              type: modelType.article_comment, // 类型：评论回复
+              type: modelName.article_comment, // 类型：评论回复
               content: JSON.stringify({
                 reply_id: reqData.reply_id,
                 comment_id: _data.id,

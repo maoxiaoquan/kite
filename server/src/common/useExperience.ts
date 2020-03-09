@@ -2,7 +2,7 @@ const models = require('../../../db/mysqldb/index')
 import moment from 'moment'
 import {
   virtualInfo,
-  modelType,
+  modelName,
   modelInfo,
   modelAction,
   experienceInfo

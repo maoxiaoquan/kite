@@ -27,7 +27,7 @@ class Website {
         .read()
         .get('oauth')
         .value()
-      const oauths = oauth.oauths || {}
+      const oauths = oauth.oauths || []
       const noticeAll = await models.options.findAll({
         where: {
           option_key: 'notice' // 查询条件

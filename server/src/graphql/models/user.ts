@@ -8,8 +8,8 @@ import {
   statusList,
   modelAction,
   modelActionText,
-  virtualType,
-  modelType,
+
+  modelName,
   modelInfo
 } from '../../utils/constant'
 

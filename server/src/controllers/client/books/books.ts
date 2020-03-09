@@ -12,15 +12,13 @@ import {
   statusList,
   userMessageAction,
   modelAction,
-  virtualType,
   payType,
   payTypeText,
   isFree,
   isFreeText,
-  productType,
   trialRead,
   productTypeInfo,
-  modelType,
+  modelName,
   userLevel
 } from '../../../utils/constant'
 
@@ -172,7 +170,7 @@ class Books {
       // 虚拟币判断是否可以进行继续的操作
       const isVirtual = await userVirtual.isVirtual({
         uid: user.uid,
-        type: virtualType.books,
+        type: modelName.books,
         action: modelAction.create
       })
 
@@ -235,13 +233,13 @@ class Books {
         associate: JSON.stringify({
           books_id: createBooks.books_id
         }),
-        type: virtualType.books,
+        type: modelName.books,
         action: modelAction.create
       })
 
       await attention.attentionMessage({
         uid: user.uid,
-        type: modelType.books,
+        type: modelName.books,
         action: modelAction.create,
         associate_id: createBooks.books_id
       })
@@ -565,7 +563,7 @@ class Books {
             where: {
               associate_id: rows[i].books_id,
               is_associate: true,
-              type: modelType.books
+              type: modelName.books
             }
           })
         )
@@ -638,7 +636,7 @@ class Books {
             where: {
               associate_id: books.books_id,
               is_associate: true,
-              type: modelType.books
+              type: modelName.books
             }
           })
         )
@@ -668,7 +666,7 @@ class Books {
           const productInfo = await models.order.findOne({
             where: {
               product_id: books_id,
-              product_type: productType.books,
+              product_type: modelName.books,
               uid: user.uid
             }
           })
@@ -754,7 +752,7 @@ class Books {
             const productInfo = await models.order.findOne({
               where: {
                 product_id: books_id,
-                product_type: productType.books,
+                product_type: modelName.books,
                 uid: user.uid
               }
             })
@@ -815,7 +813,7 @@ class Books {
 
     try {
       let { count, rows } = await models.collect.findAndCountAll({
-        where: { is_associate: true, uid, type: modelType.books }, // 为空，获取全部，也可以自己添加条件
+        where: { is_associate: true, uid, type: modelName.books }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize // 每页限制返回的数据条数
         // order: orderParams

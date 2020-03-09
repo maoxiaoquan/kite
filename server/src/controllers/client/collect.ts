@@ -12,8 +12,7 @@ const lowdb = require('../../../../db/lowdb/index')
 import {
   userMessageAction,
   modelAction,
-  virtualType,
-  modelType,
+  modelName,
   modelInfo
 } from '../../utils/constant'
 

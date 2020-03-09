@@ -6,8 +6,8 @@ const clientWhere = require('../../../utils/clientWhere')
 import {
   statusList,
   modelAction,
-  virtualType,
-  modelType
+
+  modelName
 } from '../../../utils/constant'
 
 const { reviewSuccess, freeReview, pendingReview, reviewFail } = statusList
@@ -119,13 +119,13 @@ class PersonalCenter {
       if (any === 'me') {
         whereParmas = {
           uid: uid,
-          type: modelType.user,
+          type: modelName.user,
           is_associate: true
         }
       } else {
         whereParmas = {
           associate_id: uid,
-          type: modelType.user,
+          type: modelName.user,
           is_associate: true
         }
       }
@@ -151,7 +151,7 @@ class PersonalCenter {
           await models.attention.findAll({
             where: {
               associate_id: any === 'me' ? rows[i].associate_id : rows[i].uid,
-              type: modelType.user,
+              type: modelName.user,
               is_associate: true
             }
           })
@@ -189,7 +189,7 @@ class PersonalCenter {
     try {
       let allUserLikeArticle = await models.like
         .findAll({
-          where: { uid, is_associate: true, type: modelType.article }
+          where: { uid, is_associate: true, type: modelName.article }
         })
         .then((data: any) => {
           return data.map((item: any, key: any) => {
@@ -285,8 +285,8 @@ class PersonalCenter {
           'topic',
           rows[i].topic_ids
             ? await models.dynamic_topic.findOne({
-                where: { topic_id: rows[i].topic_ids }
-              })
+              where: { topic_id: rows[i].topic_ids }
+            })
             : ''
         )
 
@@ -296,7 +296,7 @@ class PersonalCenter {
             where: {
               associate_id: rows[i].id,
               is_associate: true,
-              type: modelType.dynamic
+              type: modelName.dynamic
             }
           })
         )
@@ -314,7 +314,7 @@ class PersonalCenter {
           await models.attention.findAll({
             where: {
               uid: rows[i].uid || '',
-              type: modelType.user,
+              type: modelName.user,
               is_associate: true
             }
           })
@@ -395,7 +395,7 @@ class PersonalCenter {
             where: {
               associate_id: rows[i].blog_id,
               is_associate: true,
-              type: modelType.article_blog
+              type: modelName.article_blog
             }
           })
         )
@@ -423,7 +423,7 @@ class PersonalCenter {
             where: {
               associate_id: rows[i].blog_id,
               is_associate: true,
-              type: modelType.article_blog
+              type: modelName.article_blog
             }
           })
         )

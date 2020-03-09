@@ -41,13 +41,13 @@ module.exports = {
     },
     is_free: {
       // 是否免费
-      type: Seq.INTEGER(6),
+      type: Seq.INTEGER(2),
       comment: '是否免费',
       field: 'is_free'
     },
     pay_type: {
       // 支付类型
-      type: Seq.INTEGER(6),
+      type: Seq.INTEGER(2),
       comment: '支付类型',
       field: 'pay_type'
     },

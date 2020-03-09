@@ -24,7 +24,7 @@ module.exports = {
     return (
       str &&
       validator.isLength(str, { min, max }) &&
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,32}$/.test(str)
+      /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)])+$)^.{6,16}$/.test(str)
     )
   },
   // 校验邮箱

@@ -7,8 +7,8 @@ const clientWhere = require('../../utils/clientWhere')
 import {
   statusList,
   modelAction,
-  virtualType,
-  modelType
+
+  modelName
 } from '../../utils/constant'
 
 class Article {

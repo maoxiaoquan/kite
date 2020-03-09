@@ -20,10 +20,10 @@ import {
   userMessageAction,
   userMessageActionText,
   modelAction,
-  virtualType,
+
   virtualInfo,
   virtualPlusLess,
-  modelType
+  modelName
 } from '../../../utils/constant'
 
 import userVirtual from '../../../common/userVirtual'
@@ -309,7 +309,7 @@ class User {
                     uid: user.uid,
                     avatar_review_status: 2,
                     shell_balance:
-                      virtualInfo[modelAction.registered][virtualType.system]
+                      virtualInfo[modelAction.registered][modelName.system]
                   },
                   { transaction: t }
                 )
@@ -319,14 +319,14 @@ class User {
                   // 用户虚拟币消息记录
                   plus_less: virtualInfo[modelAction.registered].plusLess,
                   balance:
-                    virtualInfo[modelAction.registered][virtualType.system],
+                    virtualInfo[modelAction.registered][modelName.system],
                   amount:
-                    virtualInfo[modelAction.registered][virtualType.system],
+                    virtualInfo[modelAction.registered][modelName.system],
                   income:
-                    virtualInfo[modelAction.registered][virtualType.system],
+                    virtualInfo[modelAction.registered][modelName.system],
                   expenses: 0,
                   uid: user_info.uid,
-                  type: virtualType.system,
+                  type: modelName.system,
                   action: modelAction.registered
                 })
               })
@@ -449,7 +449,7 @@ class User {
         // 我关注了哪些用户的信息
         'attentionUserIds',
         await models.attention.findAll({
-          where: { uid: oneUser.uid, is_associate: true, type: modelType.user }
+          where: { uid: oneUser.uid, is_associate: true, type: modelName.user }
         })
       )
 
@@ -460,7 +460,7 @@ class User {
           where: {
             associate_id: oneUser.uid,
             is_associate: true,
-            type: modelType.user
+            type: modelName.user
           }
         })
       )
@@ -470,13 +470,13 @@ class User {
         where: {
           uid,
           is_associate: true,
-          type: modelType.user
+          type: modelName.user
         }
       })
 
       let allLikeDynaicId = await models.thumb
         .findAll({
-          where: { uid, type: modelType.dynamic, is_associate: true }
+          where: { uid, type: modelName.dynamic, is_associate: true }
         })
         .then((res: any) => {
           return res.map((item: any, key: any) => {
@@ -486,7 +486,7 @@ class User {
 
       let allRssDynamicTopicId = await models.attention
         .findAll({
-          where: { uid, type: modelType.dynamic_topic, is_associate: true }
+          where: { uid, type: modelName.dynamic_topic, is_associate: true }
         })
         .then((res: any) => {
           return res.map((item: any, key: any) => {
@@ -499,7 +499,7 @@ class User {
         where: {
           associate_id: uid,
           is_associate: true,
-          type: modelType.user
+          type: modelName.user
         }
       })
 
@@ -746,7 +746,7 @@ class User {
           // 用户关注 所需要的数据已获取,无需处理
         } else if (rows[i].action === userMessageAction.comment) {
           // 评论
-          if (rows[i].type === modelType.article) {
+          if (rows[i].type === modelName.article) {
             // 文章评论
             rows[i].setDataValue(
               'article',
@@ -762,7 +762,7 @@ class User {
                 attributes: ['id', 'content', 'status', 'aid']
               })
             )
-          } else if (rows[i].type === modelType.dynamic) {
+          } else if (rows[i].type === modelName.dynamic) {
             // 片刻评论
             rows[i].setDataValue(
               'dynamic',
@@ -778,7 +778,7 @@ class User {
                 attributes: ['id', 'content', 'status', 'dynamic_id']
               })
             )
-          } else if (rows[i].type === modelType.books) {
+          } else if (rows[i].type === modelName.books) {
             // 小书评论
             rows[i].setDataValue(
               'books',
@@ -794,7 +794,7 @@ class User {
                 attributes: ['id', 'content', 'status', 'books_id']
               })
             )
-          } else if (rows[i].type === modelType.book) {
+          } else if (rows[i].type === modelName.book) {
             // 小书章节评论
             rows[i].setDataValue(
               'book',
@@ -813,7 +813,7 @@ class User {
           }
         } else if (rows[i].action === userMessageAction.reply) {
           // 评论回复
-          if (rows[i].type === modelType.article_comment) {
+          if (rows[i].type === modelName.article_comment) {
             // 文章回复
             rows[i].setDataValue(
               'replyComment',
@@ -829,7 +829,7 @@ class User {
                 attributes: ['id', 'content', 'status', 'aid']
               })
             )
-          } else if (rows[i].type === modelType.dynamic_comment) {
+          } else if (rows[i].type === modelName.dynamic_comment) {
             // 片刻回复
             rows[i].setDataValue(
               'replyComment',
@@ -845,7 +845,7 @@ class User {
                 attributes: ['id', 'content', 'status', 'dynamic_id']
               })
             )
-          } else if (rows[i].type === modelType.books_comment) {
+          } else if (rows[i].type === modelName.books_comment) {
             // 小书回复
             rows[i].setDataValue(
               'replyComment',
@@ -861,7 +861,7 @@ class User {
                 attributes: ['id', 'content', 'status', 'books_id']
               })
             )
-          } else if (rows[i].type === modelType.book_comment) {
+          } else if (rows[i].type === modelName.book_comment) {
             // 小书章节回复
             rows[i].setDataValue(
               'replyComment',
@@ -887,7 +887,7 @@ class User {
             })
           )
         } else if (rows[i].action === userMessageAction.thumb) {
-          if (rows[i].type === modelType.dynamic) {
+          if (rows[i].type === modelName.dynamic) {
             rows[i].setDataValue(
               'dynamic',
               await models.dynamic.findOne({
@@ -895,7 +895,7 @@ class User {
                 attributes: ['id', 'content', 'uid']
               })
             )
-          } else if (rows[i].type === modelType.article) {
+          } else if (rows[i].type === modelName.article) {
             rows[i].setDataValue(
               'article',
               await models.article.findOne({
@@ -905,7 +905,7 @@ class User {
             )
           }
         } else if (rows[i].action === userMessageAction.sell) {
-          if (rows[i].type === modelType.books) {
+          if (rows[i].type === modelName.books) {
             rows[i].setDataValue(
               'books',
               await models.books.findOne({
@@ -1228,15 +1228,15 @@ class User {
       })
 
       for (let i in allThumb) {
-        if (allThumb[i].type === modelType.article) {
+        if (allThumb[i].type === modelName.article) {
           articleThumdId.push(allThumb[i].associate_id)
-        } else if (allThumb[i].type === modelType.dynamic) {
+        } else if (allThumb[i].type === modelName.dynamic) {
           dynamicThumdId.push(allThumb[i].associate_id)
         }
       }
 
       for (let i in allAttention) {
-        if (allAttention[i].type === modelType.user) {
+        if (allAttention[i].type === modelName.user) {
           userAttentionId.push(allAttention[i].associate_id)
         }
       }

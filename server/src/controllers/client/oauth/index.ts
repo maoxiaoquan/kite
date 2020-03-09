@@ -21,10 +21,10 @@ import {
   userMessageAction,
   userMessageActionText,
   modelAction,
-  virtualType,
+
   virtualInfo,
   virtualPlusLess,
-  modelType
+  modelName
 } from '../../../utils/constant'
 
 import userVirtual from '../../../common/userVirtual'
@@ -155,7 +155,7 @@ class Oauth {
                   uid: userCreate.uid,
                   avatar_review_status: 2,
                   shell_balance:
-                    virtualInfo[modelAction.registered][virtualType.system]
+                    virtualInfo[modelAction.registered][modelName.system]
                 },
                 { transaction: t }
               )
@@ -177,14 +177,14 @@ class Oauth {
                   // 用户虚拟币消息记录
                   plus_less: virtualInfo[modelAction.registered].plusLess,
                   balance:
-                    virtualInfo[modelAction.registered][virtualType.system],
+                    virtualInfo[modelAction.registered][modelName.system],
                   amount:
-                    virtualInfo[modelAction.registered][virtualType.system],
+                    virtualInfo[modelAction.registered][modelName.system],
                   income:
-                    virtualInfo[modelAction.registered][virtualType.system],
+                    virtualInfo[modelAction.registered][modelName.system],
                   expenses: 0,
                   uid: user_auth.uid,
-                  type: virtualType.system,
+                  type: modelName.system,
                   action: modelAction.registered
                 })
               })

@@ -7,8 +7,8 @@ import {
   userMessageAction,
   userMessageActionText,
   modelAction,
-  virtualType,
-  modelType,
+
+  modelName,
   modelInfo
 } from '../../utils/constant'
 

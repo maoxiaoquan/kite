@@ -15,8 +15,8 @@ import {
   statusList,
   userMessageAction,
   modelAction,
-  virtualType,
-  modelType,
+
+  modelName,
   modelInfo
 } from '../../../utils/constant'
 
@@ -379,7 +379,7 @@ class Chat {
         associate: JSON.stringify({
           id: chatMessage.id
         }),
-        type: virtualType.chat_message,
+        type: modelName.chat_message,
         action: modelAction.sendPrivateChat,
         ass_uid: receive_uid
       })

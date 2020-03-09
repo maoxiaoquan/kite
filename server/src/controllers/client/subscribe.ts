@@ -6,8 +6,8 @@ const clientWhere = require('../../utils/clientWhere')
 import {
   userMessageAction,
   modelAction,
-  virtualType,
-  modelType
+
+  modelName
 } from '../../utils/constant'
 
 const userVirtual = require('../../common/userVirtual')
@@ -42,7 +42,7 @@ class Subscribe {
             where: {
               associate_id: rows[i].id || '',
               is_associate: true,
-              type: modelType.article_tag
+              type: modelName.article_tag
             }
           })
         )
@@ -120,7 +120,7 @@ class Subscribe {
               where: {
                 associate_id: rows[i].id || '',
                 is_associate: true,
-                type: modelType.article_tag
+                type: modelName.article_tag
               }
             })
           )
@@ -188,7 +188,7 @@ class Subscribe {
       let allSubscribeArticleTag = await models.attention.findAll({
         where: {
           uid: user.uid,
-          type: modelType.article_tag,
+          type: modelName.article_tag,
           is_associate: true
         }
       })

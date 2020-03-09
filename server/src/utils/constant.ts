@@ -51,7 +51,7 @@ export const dynamicTypeText = {
   [dynamicType.video]: '视频' // 草稿
 }
 
-export const modelType = {
+export const modelName = {
   // 类型
   user: 1, // 用户
   article: 2, // 文章
@@ -78,97 +78,97 @@ export const modelType = {
 
 export const modelInfo = {
   // 文章的类型
-  [modelType.user]: {
+  [modelName.user]: {
     model: 'user',
     name: '用户',
     idKey: 'uid'
   }, // 用户
-  [modelType.article]: {
+  [modelName.article]: {
     model: 'article',
     name: '文章',
     idKey: 'aid'
   }, // 文章
-  [modelType.article_blog]: {
+  [modelName.article_blog]: {
     model: 'article_blog',
     name: '文章专栏',
     idKey: 'blog_id'
   }, // 文章个人专栏
-  [modelType.article_comment]: {
+  [modelName.article_comment]: {
     model: 'article_comment',
     name: '文章评论',
     idKey: 'id'
   }, // 文章评论
-  [modelType.book]: {
+  [modelName.book]: {
     model: 'book',
     name: '小书章节',
     idKey: 'book_id'
   }, // 小书章节
-  [modelType.book_comment]: {
+  [modelName.book_comment]: {
     model: 'book_comment',
     name: '小书章节评论',
     idKey: 'id'
   }, // 小书章节评论
-  [modelType.books]: {
+  [modelName.books]: {
     model: 'books',
     name: '小书',
     idKey: 'books_id'
   }, // 小书
-  [modelType.books_comment]: {
+  [modelName.books_comment]: {
     model: 'books_comment',
     name: '小书评论',
     idKey: 'id'
   }, // 小书评论
-  [modelType.dynamic]: {
+  [modelName.dynamic]: {
     model: 'dynamic',
     name: '片刻',
     idKey: 'id'
   }, // 片刻
-  [modelType.dynamic_comment]: {
+  [modelName.dynamic_comment]: {
     model: 'dynamic_comment',
     name: '片刻评论',
     idKey: 'id'
   }, // 片刻评论
-  [modelType.thumb]: {
+  [modelName.thumb]: {
     model: 'thumb',
     name: '赞',
     idKey: 'id'
   }, // 点赞表
-  [modelType.like]: {
+  [modelName.like]: {
     model: 'like',
     name: '喜欢',
     idKey: 'id'
   }, // 喜欢表
-  [modelType.collect]: {
+  [modelName.collect]: {
     model: 'collect',
     name: '收藏',
     idKey: 'id'
   }, // 收藏表
-  [modelType.attention]: {
+  [modelName.attention]: {
     model: 'attention',
     name: '关注',
     idKey: 'id'
   }, // 关注表
-  [modelType.article_tag]: {
+  [modelName.article_tag]: {
     model: 'article_tag',
     name: '文章标签',
     idKey: 'id'
   }, // 关注表
-  [modelType.dynamic_topic]: {
+  [modelName.dynamic_topic]: {
     model: 'dynamic_topic',
     name: '动态专题',
     idKey: 'id'
   }, // 关注表
-  [modelType.virtual]: {
+  [modelName.virtual]: {
     model: 'virtual',
     name: '虚拟币',
     idKey: 'id'
   }, // 关注表
-  [modelType.chat_message]: {
+  [modelName.chat_message]: {
     model: 'chat_message',
     name: '私聊消息',
     idKey: 'id'
   }, // 关注表
-  [modelType.article_annex]: {
+  [modelName.article_annex]: {
     model: 'article_annex',
     name: '文章附件',
     idKey: 'id'
@@ -237,47 +237,47 @@ export const userMessageAction = {
 
 export const userMessageTypeText = {
   // 文章的类型
-  [modelType.user]: {
+  [modelName.user]: {
     [userMessageAction.attention]: '关注了你' // 用户1
   },
-  [modelType.article]: {
+  [modelName.article]: {
     [userMessageAction.comment]: '评论了你的文章' // 文章2
   },
-  [modelType.article_blog]: {
+  [modelName.article_blog]: {
     [userMessageAction.collect]: '收藏了你的专栏' // 文章个人专栏3
   },
-  [modelType.article_comment]: {
+  [modelName.article_comment]: {
     [userMessageAction.reply]: '文章中回复你的' // 文章评论4
   },
-  [modelType.book]: {
+  [modelName.book]: {
     [userMessageAction.comment]: '评论了你的小书章节' // 小书章节5
   },
-  [modelType.book_comment]: {
+  [modelName.book_comment]: {
     [userMessageAction.reply]: '小书章节中回复你的' // 小书章节评论6
   },
-  [modelType.books]: {
+  [modelName.books]: {
     [userMessageAction.comment]: '评论了你的小书', // 小书7
     [userMessageAction.sell]: '卖出小书' // 小书7
   },
-  [modelType.books_comment]: {
+  [modelName.books_comment]: {
     [userMessageAction.reply]: '小书中回复你的' // 小书评论8
   },
-  [modelType.dynamic]: {
+  [modelName.dynamic]: {
     [userMessageAction.comment]: '评论了你片刻' // 片刻9
   },
-  [modelType.dynamic_comment]: {
+  [modelName.dynamic_comment]: {
     [userMessageAction.comment]: '片刻中回复你的' // 片刻评论10
   },
-  [modelType.thumb]: {
+  [modelName.thumb]: {
     [userMessageAction.thumb]: '点赞你的' // 点赞了你的片刻
   },
-  [modelType.like]: {
+  [modelName.like]: {
     [userMessageAction.like]: '喜欢了你的文章' // 喜欢了你的文章
   },
-  [modelType.collect]: {
+  [modelName.collect]: {
     [userMessageAction.collect]: '收藏你的' // 收藏你的专栏
   },
-  [modelType.article_annex]: {
+  [modelName.article_annex]: {
     [userMessageAction.sell]: '卖出' // 小书7
   }
 }
@@ -311,112 +311,84 @@ export const virtualPlusLessText = {
   [virtualPlusLess.less]: '-' // 减
 }
 
-export const virtualType = {
-  // 关联模块
-  other: modelType.other, // 其他
-  user: modelType.user, // 用户
-  article: modelType.article, // 文章
-  article_blog: modelType.article_blog, // 文章个人专栏
-  book: modelType.book, // 小书章节
-  books: modelType.books, // 小书
-  dynamic: modelType.dynamic, // 片刻
-  system: modelType.system, // 系统
-  chat_message: modelType.chat_message, // 私聊消息
-  article_annex: modelType.article_annex // 文章附件
-}
-
-export const virtualTypeText = {
-  // 关联模块
-  [virtualType.other]: '其他', // 其他
-  [virtualType.user]: '用户', // 用户
-  [virtualType.article]: '文章', // 文章
-  [virtualType.article_blog]: '文章个人专栏', // 文章个人专栏
-  [virtualType.book]: '小书章节', // 小书章节
-  [virtualType.books]: '小书', // 小书
-  [virtualType.dynamic]: '片刻', // 片刻
-  [virtualType.system]: '系统', // 系统
-  [virtualType.chat_message]: '私聊消息', // 系统
-  [virtualType.article_annex]: '文章附件' // 系统
-}
-
 export const virtualInfo = {
   [modelAction.check_in]: {
     // 签到+
     plusLess: virtualPlusLess.plus, // +
-    [virtualType.system]: 50 // 用户每天签到:+50
+    [modelName.system]: 50 // 用户每天签到:+50
   },
   [modelAction.create]: {
     // 创建内容-
     plusLess: virtualPlusLess.less, // -
-    [virtualType.article]: 20, // 创建文章：-20
-    [virtualType.article_blog]: 10, // 创建个人专栏文章：-10
-    [virtualType.book]: 5, // 创建小书章节：-5
-    [virtualType.books]: 50, // 创建小书：-50
-    [virtualType.dynamic]: 15 // 创建动态：-15
+    [modelName.article]: 20, // 创建文章：-20
+    [modelName.article_blog]: 10, // 创建个人专栏文章：-10
+    [modelName.book]: 5, // 创建小书章节：-5
+    [modelName.books]: 50, // 创建小书：-50
+    [modelName.dynamic]: 15 // 创建动态：-15
   },
   [modelAction.like]: {
     // 喜欢
     plusLess: virtualPlusLess.less, // -
-    [virtualType.article]: 5 // 喜欢文章: -5
+    [modelName.article]: 5 // 喜欢文章: -5
   },
   [modelAction.collect]: {
     // 收藏
     plusLess: virtualPlusLess.less, // -
-    [virtualType.article_blog]: 5 // 收藏个人专栏: -5
+    [modelName.article_blog]: 5 // 收藏个人专栏: -5
   },
   [modelAction.comment]: {
     // 创建评论-
     plusLess: virtualPlusLess.less, // -
-    [virtualType.article]: 5, // 创建文章评论：-5
-    [virtualType.book]: 5, // 创建小书章节评论：-5
-    [virtualType.books]: 5, // 创建小书评论：-5
-    [virtualType.dynamic]: 5 // 创建动态评论：-5
+    [modelName.article]: 5, // 创建文章评论：-5
+    [modelName.book]: 5, // 创建小书章节评论：-5
+    [modelName.books]: 5, // 创建小书评论：-5
+    [modelName.dynamic]: 5 // 创建动态评论：-5
   },
   [modelAction.reply]: {
     // 回复评论-
     plusLess: virtualPlusLess.less, // -
-    [virtualType.article]: 5, // 创建文章回复：-5
-    [virtualType.book]: 5, // 创建小书章节回复：-5
-    [virtualType.books]: 5, // 创建小书回复：-5
-    [virtualType.dynamic]: 5 // 创建动态回复：-5
+    [modelName.article]: 5, // 创建文章回复：-5
+    [modelName.book]: 5, // 创建小书章节回复：-5
+    [modelName.books]: 5, // 创建小书回复：-5
+    [modelName.dynamic]: 5 // 创建动态回复：-5
   },
   [modelAction.thumb]: {
     plusLess: virtualPlusLess.less, // -
-    [virtualType.dynamic]: 5 // 点赞动态：-5
+    [modelName.dynamic]: 5 // 点赞动态：-5
   },
   [modelAction.obtain_like]: {
     plusLess: virtualPlusLess.plus, // +
-    [virtualType.article]: 5 // 收到喜欢文章: +5
+    [modelName.article]: 5 // 收到喜欢文章: +5
   },
   [modelAction.obtain_collect]: {
     plusLess: virtualPlusLess.plus, // +
-    [virtualType.article_blog]: 5 // 收到收藏个人专栏:  +5
+    [modelName.article_blog]: 5 // 收到收藏个人专栏:  +5
   },
   [modelAction.obtain_comment]: {
     plusLess: virtualPlusLess.plus, // +
-    [virtualType.article]: 5, // 收到文章评论：+5
-    [virtualType.book]: 5, // 收到小书章节评论：+5
-    [virtualType.books]: 5, // 收到小书评论：+5
-    [virtualType.dynamic]: 5 // 收到动态评论：+5
+    [modelName.article]: 5, // 收到文章评论：+5
+    [modelName.book]: 5, // 收到小书章节评论：+5
+    [modelName.books]: 5, // 收到小书评论：+5
+    [modelName.dynamic]: 5 // 收到动态评论：+5
   },
   [modelAction.obtain_reply]: {
     plusLess: virtualPlusLess.plus, // +
-    [virtualType.article]: 5, // 收到文章回复：+5
-    [virtualType.book]: 5, // 收到小书章节回复：+5
-    [virtualType.books]: 5, // 收到小书回复：+5
-    [virtualType.dynamic]: 5 // 收到动态回复：+5
+    [modelName.article]: 5, // 收到文章回复：+5
+    [modelName.book]: 5, // 收到小书章节回复：+5
+    [modelName.books]: 5, // 收到小书回复：+5
+    [modelName.dynamic]: 5 // 收到动态回复：+5
   },
   [modelAction.obtain_thumb]: {
     plusLess: virtualPlusLess.plus, // +
-    [virtualType.dynamic]: 5 // 收到点赞动态：+5
+    [modelName.dynamic]: 5 // 收到点赞动态：+5
   },
   [modelAction.registered]: {
     plusLess: virtualPlusLess.plus, // +
-    [virtualType.system]: 3000 // 注册增加3000：+5
+    [modelName.system]: 3000 // 注册增加3000：+5
   },
   [modelAction.sendPrivateChat]: {
     plusLess: virtualPlusLess.less, // -
-    [virtualType.chat_message]: 10 // 发送私聊-15
+    [modelName.chat_message]: 10 // 发送私聊-15
   }
 }
 
@@ -433,29 +405,22 @@ export const payTypeText = {
   [payType.shell]: '贝壳' // 贝壳
 }
 
-export const productType = {
-  // 商品类型
-  article: modelType.article, // 文章
-  books: modelType.books, // 小书
-  article_annex: modelType.article_annex // 文章附件
-}
-
 export const productTypeInfo = {
   // 商品类型
-  [productType.article]: {
+  [modelName.article]: {
     model: 'article',
     name: '文章',
     isUse: false,
     idKey: 'aid'
   }, // 文章
-  [productType.article_annex]: {
+  [modelName.article_annex]: {
     model: 'article_annex',
     name: '文章附件',
     isUse: true,
     idKey: 'id'
   }, // 文章
 
-  [productType.books]: {
+  [modelName.books]: {
     model: 'books',
     name: '小书',
     isUse: true,
@@ -498,4 +463,16 @@ export const userLevel = {
   three: 3500,
   four: 7000,
   five: 10000
+}
+
+
+export const isOpen = {
+  // 是否可以试读
+  yes: 1, // 可以
+  no: 2 // 不可以
+}
+
+export const isOpenInfo = {
+  [isOpen.yes]: '开启', // 开启
+  [isOpen.no]: '关闭' // 关闭
 }

@@ -11,13 +11,13 @@ const lowdb = require('../../../../db/lowdb/index')
 const { TimeNow, TimeDistance } = require('../../utils/time')
 import {
   userMessageAction,
-  virtualType,
+
   virtualPlusLess,
   modelAction,
   virtualInfo,
   modelActionText,
-  virtualTypeText,
-  modelType
+  modelInfo,
+  modelName
 } from '../../utils/constant'
 
 import userVirtual from '../../common/userVirtual'
@@ -35,7 +35,7 @@ class Virtual {
       let oneVirtual = await models.virtual.count({
         where: {
           uid: user.uid,
-          type: virtualType.system,
+          type: modelName.system,
           action: modelAction.check_in,
           create_date: {
             [Op.gt]: startTime, //  >
@@ -49,7 +49,7 @@ class Virtual {
       } else {
         await userVirtual.setVirtual({
           uid: user.uid,
-          type: virtualType.system,
+          type: modelName.system,
           action: modelAction.check_in
         })
       }
@@ -98,15 +98,15 @@ class Virtual {
           })
         )
         rows[i].setDataValue('actionText', modelActionText[rows[i].action])
-        rows[i].setDataValue('typeText', virtualTypeText[rows[i].type])
+        rows[i].setDataValue('typeText', modelInfo[rows[i].type].name)
 
         let associate = rows[i].associate && JSON.parse(rows[i].associate)
         // 以上是公共的数据
 
-        if (rows[i].type === virtualType.other) {
+        if (rows[i].type === modelName.other) {
           // 用户关注 所需要的数据已获取,无需处理
-        } else if (rows[i].type === virtualType.user) {
-        } else if (rows[i].type === virtualType.article) {
+        } else if (rows[i].type === modelName.user) {
+        } else if (rows[i].type === modelName.article) {
           rows[i].setDataValue(
             'article',
             (await models.article.findOne({
@@ -114,7 +114,7 @@ class Virtual {
               attributes: ['aid', 'title']
             })) || {}
           )
-        } else if (rows[i].type === virtualType.article_blog) {
+        } else if (rows[i].type === modelName.article_blog) {
           rows[i].setDataValue(
             'article_blog',
             (await models.article_blog.findOne({
@@ -122,7 +122,7 @@ class Virtual {
               attributes: ['blog_id', 'name']
             })) || {}
           )
-        } else if (rows[i].type === virtualType.book) {
+        } else if (rows[i].type === modelName.book) {
           rows[i].setDataValue(
             'book',
             (await models.book.findOne({
@@ -130,7 +130,7 @@ class Virtual {
               attributes: ['book_id', 'title', 'books_id']
             })) || {}
           )
-        } else if (rows[i].type === virtualType.books) {
+        } else if (rows[i].type === modelName.books) {
           rows[i].setDataValue(
             'books',
             (await models.books.findOne({
@@ -138,15 +138,15 @@ class Virtual {
               attributes: ['books_id', 'title']
             })) || {}
           )
-        } else if (rows[i].type === virtualType.dynamic) {
+        } else if (rows[i].type === modelName.dynamic) {
           rows[i].setDataValue(
             'dynamic',
             (await models.dynamic.findOne({
-              where: { id: associate.dynamic_id },
+              where: { id: associate.dynamic_id || '' },
               attributes: ['id', 'content']
             })) || {}
           )
-        } else if (rows[i].type === virtualType.chat_message) {
+        } else if (rows[i].type === modelName.chat_message) {
           rows[i].setDataValue(
             'chat_message',
             (await models.chat_message.findOne({
@@ -154,7 +154,7 @@ class Virtual {
               attributes: ['id', 'content']
             })) || {}
           )
-        } else if (rows[i].type === virtualType.article_annex) {
+        } else if (rows[i].type === modelName.article_annex) {
           rows[i].setDataValue(
             'article_annex',
             (await models.article_annex.findOne({

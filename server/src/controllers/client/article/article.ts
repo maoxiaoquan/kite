@@ -9,12 +9,12 @@ const config = require('../../../../../config')
 const lowdb = require('../../../../../db/lowdb/index')
 import {
   statusList,
-  modelType,
+  modelName,
   userMessageAction,
   modelAction,
-  virtualType,
-  productType,
-  isFree
+  isFree,
+  isOpen,
+  isOpenInfo
 } from '../../../utils/constant'
 const { TimeNow, TimeDistance } = require('../../../utils/time')
 import userVirtual from '../../../common/userVirtual'
@@ -108,7 +108,7 @@ class Article {
       // 虚拟币判断是否可以进行继续的操作
       const isVirtual = await userVirtual.isVirtual({
         uid: user.uid,
-        type: virtualType.article,
+        type: modelName.article,
         action: modelAction.create
       })
 
@@ -179,7 +179,7 @@ class Article {
           return result
         })
 
-      if (Number(reqData.is_attachment) === 1) {
+      if (Number(reqData.is_attachment) === isOpen.yes) {
         // 附件功能
         await models.article_annex.create({
           uid: user.uid,
@@ -200,13 +200,13 @@ class Article {
         associate: JSON.stringify({
           aid: createArticle.aid
         }),
-        type: virtualType.article,
+        type: modelName.article,
         action: modelAction.create
       })
 
       await attention.attentionMessage({
         uid: user.uid,
-        type: modelType.article,
+        type: modelName.article,
         action: modelAction.create,
         associate_id: resultArticle.aid
       })
@@ -351,7 +351,7 @@ class Article {
         where: { aid: reqData.aid, uid: user.uid }
       })
 
-      if (Number(reqData.is_attachment) === 1) {
+      if (Number(reqData.is_attachment) === isOpen.yes) {
         // 附件功能
         if (articleAnnex) {
           await models.article_annex.update(
@@ -486,7 +486,7 @@ class Article {
           where: {
             associate_id: oneArticleTag.tag_id,
             is_associate: true,
-            type: modelType.article_tag
+            type: modelName.article_tag
           }
         })
 
@@ -543,7 +543,7 @@ class Article {
             where: {
               associate_id: articleTagAll[i].id || '',
               is_associate: true,
-              type: modelType.article_tag
+              type: modelName.article_tag
             }
           })
         )
@@ -593,7 +593,7 @@ class Article {
             where: {
               associate_id: articleTagAll[i].id || '',
               is_associate: true,
-              type: modelType.article_tag
+              type: modelName.article_tag
             }
           })
         )
@@ -691,7 +691,7 @@ class Article {
             uid: user.uid,
             ass_uid: oneArticle.uid,
             associate: aid,
-            type: modelType.article,
+            type: modelName.article,
             action: modelAction.readOther
           })
         }
@@ -1100,7 +1100,7 @@ class Article {
         let productInfo = await models.order.findOne({
           where: {
             product_id: articleAnnex.id,
-            product_type: productType.article_annex,
+            product_type: modelName.article_annex,
             uid: user.uid
           }
         })

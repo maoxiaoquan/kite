@@ -12,8 +12,8 @@ import {
   statusList,
   userMessageAction,
   modelAction,
-  virtualType,
-  modelType
+
+  modelName
 } from '../../../utils/constant'
 
 const { reviewSuccess, freeReview, pendingReview, reviewFail } = statusList
@@ -51,7 +51,7 @@ class dynamic {
       // 虚拟币判断是否可以进行继续的操作
       const isVirtual = await userVirtual.isVirtual({
         uid: user.uid,
-        type: virtualType.dynamic,
+        type: modelName.dynamic,
         action: modelAction.create
       })
 
@@ -113,7 +113,7 @@ class dynamic {
 
       await attention.attentionMessage({
         uid: user.uid,
-        type: modelType.dynamic,
+        type: modelName.dynamic,
         action: modelAction.create,
         associate_id: createDynamic.id
       })
@@ -123,7 +123,7 @@ class dynamic {
         associate: JSON.stringify({
           dynamic_id: createDynamic.id
         }),
-        type: virtualType.dynamic,
+        type: modelName.dynamic,
         action: modelAction.create
       })
 
@@ -169,8 +169,8 @@ class dynamic {
           'topic',
           oneDynamic.topic_ids
             ? await models.dynamic_topic.findOne({
-                where: { topic_id: oneDynamic.topic_ids }
-              })
+              where: { topic_id: oneDynamic.topic_ids }
+            })
             : ''
         )
 
@@ -179,7 +179,7 @@ class dynamic {
           await models.thumb.count({
             where: {
               associate_id: oneDynamic.id,
-              type: modelType.dynamic,
+              type: modelName.dynamic,
               is_associate: true
             }
           })
@@ -294,8 +294,8 @@ class dynamic {
       for (let i in rows) {
         let topic = rows[i].topic_ids
           ? await models.dynamic_topic.findOne({
-              where: { topic_id: rows[i].topic_ids }
-            })
+            where: { topic_id: rows[i].topic_ids }
+          })
           : ''
         rows[i].setDataValue(
           'create_dt',
@@ -308,7 +308,7 @@ class dynamic {
           await models.thumb.count({
             where: {
               associate_id: rows[i].id,
-              type: modelType.dynamic,
+              type: modelName.dynamic,
               is_associate: true
             }
           })
@@ -396,8 +396,8 @@ class dynamic {
           'topic',
           rows[i].topic_ids
             ? await models.dynamic_topic.findOne({
-                where: { topic_id: rows[i].topic_ids }
-              })
+              where: { topic_id: rows[i].topic_ids }
+            })
             : ''
         )
 
@@ -406,7 +406,7 @@ class dynamic {
           await models.thumb.count({
             where: {
               associate_id: rows[i].id,
-              type: modelType.dynamic,
+              type: modelName.dynamic,
               is_associate: true
             }
           })
@@ -499,8 +499,8 @@ class dynamic {
           'topic',
           allDynamic[i].topic_ids
             ? await models.dynamic_topic.findOne({
-                where: { topic_id: allDynamic[i].topic_ids }
-              })
+              where: { topic_id: allDynamic[i].topic_ids }
+            })
             : ''
         )
         if (
@@ -598,7 +598,7 @@ class dynamic {
             where: {
               associate_id: allDynamicTopic[i].id,
               is_associate: true,
-              type: modelType.dynamic_topic
+              type: modelName.dynamic_topic
             }
           })
         )
@@ -641,7 +641,7 @@ class dynamic {
           where: {
             associate_id: oneDynamicTopic.id,
             is_associate: true,
-            type: modelType.dynamic_topic
+            type: modelName.dynamic_topic
           }
         })
       )

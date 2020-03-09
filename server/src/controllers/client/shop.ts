@@ -8,10 +8,10 @@ import {
   userMessageActionText,
   modelAction,
   virtualPlusLess,
-  virtualType,
+
   productTypeInfo,
   isFree,
-  modelType
+  modelName
 } from '../../utils/constant'
 
 const userMessage = require('../../utils/userMessage')

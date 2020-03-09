@@ -7,8 +7,8 @@ import {
   userMessageAction,
   userMessageActionText,
   modelAction,
-  virtualType,
-  modelType,
+
+  modelName,
   modelInfo
 } from '../../utils/constant'
 
@@ -73,7 +73,7 @@ class Like {
           uid: associate_id,
           sender_id: user.uid,
           action: userMessageAction.like, // 动作：喜欢
-          type: modelType.article, // 类型：文章
+          type: modelName.article, // 类型：文章
           content: JSON.stringify({
             aid: associate_id
           })
