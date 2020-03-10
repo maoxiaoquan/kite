@@ -7,7 +7,6 @@ import {
   userMessageAction,
   userMessageActionText,
   modelAction,
-
   modelName,
   modelInfo
 } from '../../utils/constant'
@@ -72,9 +71,7 @@ class Thumb {
           sender_id: user.uid,
           action: userMessageAction.thumb, // 动作：点赞
           type: type, // 类型：点赞
-          content: JSON.stringify({
-            [modelInfo[type].idKey]: associate_id
-          })
+          content: associate_id
         })
 
         // 点赞经验

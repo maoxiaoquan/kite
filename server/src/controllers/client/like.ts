@@ -7,7 +7,6 @@ import {
   userMessageAction,
   userMessageActionText,
   modelAction,
-
   modelName,
   modelInfo
 } from '../../utils/constant'
@@ -68,15 +67,13 @@ class Like {
         )
       } else {
         associateType = 'enter' // 只在第一次关注的时候提交推送
-        // 订阅消息，只在用户第一关注的时候推送消息
+        // 订阅消息，只在用户第次一关注的时候推送消息
         await userMessage.setMessage({
           uid: associate_id,
           sender_id: user.uid,
           action: userMessageAction.like, // 动作：喜欢
-          type: modelName.article, // 类型：文章
-          content: JSON.stringify({
-            aid: associate_id
-          })
+          type, // 类型：文章
+          content: associate_id
         })
         await models.like.create({
           uid: user.uid,

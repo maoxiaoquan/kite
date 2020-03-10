@@ -80,7 +80,8 @@ class Attention {
           uid: associate_id,
           sender_id: user.uid,
           action: userMessageAction.attention, // 动作：关注
-          type: modelName.user // 类型：用户
+          type: modelName.user, // 类型：用户
+          content: user.uid
         })
         await models.attention.create({
           uid: user.uid,

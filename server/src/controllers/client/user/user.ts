@@ -14,18 +14,18 @@ const Op = require('sequelize').Op
 const tokens = require('../../../utils/tokens')
 const lowdb = require('../../../../../db/lowdb/index')
 const clientWhere = require('../../../utils/clientWhere')
-
 import {
   statusList,
   userMessageAction,
   userMessageActionText,
   modelAction,
-
   virtualInfo,
   virtualPlusLess,
-  modelName
+  modelName,
+  modelInfo
 } from '../../../utils/constant'
 
+const modelNameNum = Object.values(modelName)
 import userVirtual from '../../../common/userVirtual'
 
 class User {
@@ -320,10 +320,8 @@ class User {
                   plus_less: virtualInfo[modelAction.registered].plusLess,
                   balance:
                     virtualInfo[modelAction.registered][modelName.system],
-                  amount:
-                    virtualInfo[modelAction.registered][modelName.system],
-                  income:
-                    virtualInfo[modelAction.registered][modelName.system],
+                  amount: virtualInfo[modelAction.registered][modelName.system],
+                  income: virtualInfo[modelAction.registered][modelName.system],
                   expenses: 0,
                   uid: user_info.uid,
                   type: modelName.system,
@@ -739,181 +737,18 @@ class User {
           userMessageActionText[rows[i].action]
         )
 
-        let content = rows[i].content && JSON.parse(rows[i].content)
-        // 以上是公共的数据
-
-        if (rows[i].action === userMessageAction.attention) {
-          // 用户关注 所需要的数据已获取,无需处理
-        } else if (rows[i].action === userMessageAction.comment) {
-          // 评论
-          if (rows[i].type === modelName.article) {
-            // 文章评论
-            rows[i].setDataValue(
-              'article',
-              await models.article.findOne({
-                where: { aid: content.aid },
-                attributes: ['aid', 'title']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.article_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'aid']
-              })
-            )
-          } else if (rows[i].type === modelName.dynamic) {
-            // 片刻评论
-            rows[i].setDataValue(
-              'dynamic',
-              await models.dynamic.findOne({
-                where: { id: content.dynamic_id },
-                attributes: ['id', 'content']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.dynamic_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'dynamic_id']
-              })
-            )
-          } else if (rows[i].type === modelName.books) {
-            // 小书评论
-            rows[i].setDataValue(
-              'books',
-              await models.books.findOne({
-                where: { books_id: content.books_id },
-                attributes: ['books_id', 'title']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.books_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'books_id']
-              })
-            )
-          } else if (rows[i].type === modelName.book) {
-            // 小书章节评论
-            rows[i].setDataValue(
-              'book',
-              await models.book.findOne({
-                where: { book_id: content.book_id },
-                attributes: ['book_id', 'title', 'books_id']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.book_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'book_id', 'books_id']
-              })
-            )
-          }
-        } else if (rows[i].action === userMessageAction.reply) {
-          // 评论回复
-          if (rows[i].type === modelName.article_comment) {
-            // 文章回复
-            rows[i].setDataValue(
-              'replyComment',
-              await models.article_comment.findOne({
-                where: { id: content.reply_id },
-                attributes: ['id', 'content', 'status', 'aid']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.article_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'aid']
-              })
-            )
-          } else if (rows[i].type === modelName.dynamic_comment) {
-            // 片刻回复
-            rows[i].setDataValue(
-              'replyComment',
-              await models.dynamic_comment.findOne({
-                where: { id: content.reply_id },
-                attributes: ['id', 'content', 'status', 'dynamic_id']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.dynamic_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'dynamic_id']
-              })
-            )
-          } else if (rows[i].type === modelName.books_comment) {
-            // 小书回复
-            rows[i].setDataValue(
-              'replyComment',
-              await models.books_comment.findOne({
-                where: { id: content.reply_id },
-                attributes: ['id', 'content', 'status', 'books_id']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.books_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'books_id']
-              })
-            )
-          } else if (rows[i].type === modelName.book_comment) {
-            // 小书章节回复
-            rows[i].setDataValue(
-              'replyComment',
-              await models.book_comment.findOne({
-                where: { id: content.reply_id },
-                attributes: ['id', 'content', 'status', 'book_id', 'books_id']
-              })
-            )
-            rows[i].setDataValue(
-              'comment',
-              await models.book_comment.findOne({
-                where: { id: content.comment_id },
-                attributes: ['id', 'content', 'status', 'book_id', 'books_id']
-              })
-            )
-          }
-        } else if (rows[i].action === userMessageAction.like) {
+        if (
+          rows[i].content &&
+          rows[i].type !== modelName.user &&
+          ~modelNameNum.indexOf(rows[i].type)
+        ) {
+          // 排除关注用户
           rows[i].setDataValue(
-            'article',
-            await models.article.findOne({
-              where: { aid: content.aid },
-              attributes: ['aid', 'title', 'uid']
+            modelInfo[rows[i].type].model,
+            await models[modelInfo[rows[i].type].model].findOne({
+              where: { [modelInfo[rows[i].type].idKey]: rows[i].content }
             })
           )
-        } else if (rows[i].action === userMessageAction.thumb) {
-          if (rows[i].type === modelName.dynamic) {
-            rows[i].setDataValue(
-              'dynamic',
-              await models.dynamic.findOne({
-                where: { id: content.id },
-                attributes: ['id', 'content', 'uid']
-              })
-            )
-          } else if (rows[i].type === modelName.article) {
-            rows[i].setDataValue(
-              'article',
-              await models.article.findOne({
-                where: { aid: content.aid },
-                attributes: ['aid', 'title']
-              })
-            )
-          }
-        } else if (rows[i].action === userMessageAction.sell) {
-          if (rows[i].type === modelName.books) {
-            rows[i].setDataValue(
-              'books',
-              await models.books.findOne({
-                where: { books_id: content.books_id },
-                attributes: ['books_id', 'title']
-              })
-            )
-          }
         }
       }
 

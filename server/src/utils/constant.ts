@@ -384,7 +384,7 @@ export const virtualInfo = {
   },
   [modelAction.registered]: {
     plusLess: virtualPlusLess.plus, // +
-    [modelName.system]: 3000 // 注册增加3000：+5
+    [modelName.system]: 1000 // 注册增加1000：+5
   },
   [modelAction.sendPrivateChat]: {
     plusLess: virtualPlusLess.less, // -
@@ -464,7 +464,6 @@ export const userLevel = {
   four: 7000,
   five: 10000
 }
-
 
 export const isOpen = {
   // 是否可以试读

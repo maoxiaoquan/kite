@@ -11,7 +11,6 @@ import {
   statusList,
   userMessageAction,
   modelAction,
-
   modelName
 } from '../../../utils/constant'
 
@@ -98,7 +97,7 @@ class ArticleComment {
           if (
             childAllComment[childCommentItem].reply_uid !== 0 &&
             childAllComment[childCommentItem].reply_uid !==
-            childAllComment[childCommentItem].uid
+              childAllComment[childCommentItem].uid
           ) {
             childAllComment[childCommentItem].setDataValue(
               'reply_user',
@@ -244,10 +243,7 @@ class ArticleComment {
             await userVirtual.setVirtual({
               // 评论消耗
               uid: user.uid,
-              associate: JSON.stringify({
-                comment_id: _data.id,
-                aid: reqData.aid
-              }),
+              associate: reqData.aid,
               type: modelName.article,
               action: modelAction.comment,
               ass_uid: oneArticle.uid
@@ -257,10 +253,7 @@ class ArticleComment {
             // 回复获取
             await userVirtual.setVirtual({
               uid: oneArticle.uid,
-              associate: JSON.stringify({
-                comment_id: _data.id,
-                aid: reqData.aid
-              }),
+              associate: reqData.aid,
               type: modelName.article,
               action: modelAction.obtain_comment,
               ass_uid: user.uid
@@ -274,10 +267,7 @@ class ArticleComment {
                 sender_id: user.uid,
                 action: userMessageAction.comment, // 动作：评论
                 type: modelName.article, // 类型：文章评论
-                content: JSON.stringify({
-                  comment_id: _data.id,
-                  aid: reqData.aid
-                })
+                content: reqData.aid
               })
             }
           }
@@ -292,12 +282,8 @@ class ArticleComment {
               uid: reqData.reply_uid,
               sender_id: user.uid,
               action: userMessageAction.reply, // 动作：回复
-              type: modelName.article_comment, // 类型：评论回复
-              content: JSON.stringify({
-                reply_id: reqData.reply_id,
-                comment_id: _data.id,
-                aid: reqData.aid
-              })
+              type: modelName.article, // 类型：评论回复
+              content: reqData.aid
             })
           }
 

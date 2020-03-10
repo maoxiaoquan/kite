@@ -20,7 +20,6 @@ const { TimeNow, TimeDistance } = require('../../../utils/time')
 import userVirtual from '../../../common/userVirtual'
 import attention from '../../../common/attention'
 import useExperience from '../../../common/useExperience'
-import e from 'express'
 
 function getNoMarkupStr(markupStr: string) {
   /* markupStr 源码</> */
@@ -41,6 +40,15 @@ function getNoMarkupStr(markupStr: string) {
   /* 替换中间位置一个或多个空格为一个空格 */
   // console.log("5--S" + noMarkupStr + "E--");
   return noMarkupStr
+}
+
+function isDigit(value: any) {
+  var patrn = /^[0-9]*$/
+  if (patrn.exec(value) == null || value == '') {
+    return false
+  } else {
+    return true
+  }
 }
 
 function getSubStr(string: string) {
@@ -97,6 +105,27 @@ class Article {
         'YYYY-MM-DD HH:mm:ss'
       )
 
+      if (
+        Number(reqData.is_attachment) === isOpen.yes &&
+        Number(reqData.is_free) !== isFree.free
+      ) {
+        if (!reqData.pay_type) {
+          throw new Error('请选择支付类型')
+        }
+
+        if (reqData.price < 0) {
+          throw new Error('请请输入大于等于0的定价！')
+        }
+
+        if (reqData.price > 200) {
+          throw new Error('当前定价不能超过200，后续等待管理员开放！')
+        }
+
+        if (!isDigit(reqData.price)) {
+          throw new Error('请输入整数数字类型！')
+        }
+      }
+
       if (new Date(currDate).getTime() < new Date(user.ban_dt).getTime()) {
         throw new Error(
           `当前用户因违规已被管理员禁用发布文章，时间到：${moment(
@@ -133,7 +162,7 @@ class Article {
         }
       }
 
-      const result = reqData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
+      const coverImg = reqData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
       let $ = cheerio.load(reqData.content)
 
       let userRoleALL = await models.user_role.findAll({
@@ -164,7 +193,7 @@ class Article {
           content: xss(reqData.content) /* 主内容 */,
           origin_content: reqData.origin_content /* 源内容 */,
           source: reqData.source, // 来源 （1原创 2转载）
-          cover_img: result ? result[2] : '',
+          cover_img: coverImg ? coverImg[2] : '',
           status, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败;4:回收站;5:已删除;6:无需审核)'
           is_public: Number(reqData.is_public), // 是否公开
           type: reqData.type, // 类型 （1文章 2日记 3草稿 ）
@@ -188,7 +217,7 @@ class Article {
           pay_type: reqData.pay_type /* 源内容 */,
           price:
             Number(reqData.is_free) === isFree.pay
-              ? reqData.price
+              ? parseInt(reqData.price)
               : 0 /* 源内容 */,
           attachment: xss(reqData.attachment) /*主内容*/,
           origin_attachment: reqData.origin_attachment
@@ -197,9 +226,7 @@ class Article {
 
       await userVirtual.setVirtual({
         uid: user.uid,
-        associate: JSON.stringify({
-          aid: createArticle.aid
-        }),
+        associate: createArticle.aid,
         type: modelName.article,
         action: modelAction.create
       })
@@ -265,6 +292,27 @@ class Article {
         throw new Error('请选择文章标签')
       }
 
+      if (
+        Number(reqData.is_attachment) === isOpen.yes &&
+        Number(reqData.is_free) !== isFree.free
+      ) {
+        if (!reqData.pay_type) {
+          throw new Error('请选择支付类型')
+        }
+
+        if (reqData.price < 0) {
+          throw new Error('请请输入大于等于0的定价！')
+        }
+
+        if (reqData.price > 200) {
+          throw new Error('当前定价不能超过200，后续等待管理员开放！')
+        }
+
+        if (!isDigit(reqData.price)) {
+          throw new Error('请输入整数数字类型！')
+        }
+      }
+
       let date = new Date()
       let currDate = moment(date.setHours(date.getHours())).format(
         'YYYY-MM-DD HH:mm:ss'
@@ -295,8 +343,7 @@ class Article {
         }
       }
 
-      const result = reqData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
-
+      const coverImg = reqData.origin_content.match(/!\[(.*?)\]\((.*?)\)/)
       let $ = cheerio.load(reqData.content)
 
       let userRoleAll = await models.user_role.findAll({
@@ -322,10 +369,10 @@ class Article {
         {
           title: reqData.title,
           excerpt: getSubStr(getNoMarkupStr($.text())) /* 摘记 */,
-          content: reqData.content /* 主内容 */,
+          content: xss(reqData.content) /* 主内容 */,
           origin_content: reqData.origin_content /* 源内容 */,
           source: reqData.source, // 来源 （1原创 2转载）
-          cover_img: result ? result[2] : '',
+          cover_img: coverImg ? coverImg[2] : '',
           status, // '状态(0:草稿;1:审核中;2:审核通过;3:审核失败;4:回收站;5:已删除;6:无需审核)'
           is_public: Number(reqData.is_public), // 是否公开
           type: reqData.type, // 类型 （1文章 2日记 3草稿 ）
@@ -360,7 +407,7 @@ class Article {
               pay_type: reqData.pay_type /* 源内容 */,
               price:
                 Number(reqData.is_free) === isFree.pay
-                  ? reqData.price
+                  ? parseInt(reqData.price)
                   : 0 /* 源内容 */,
               attachment: xss(reqData.attachment) /*主内容*/,
               origin_attachment: reqData.origin_attachment,
@@ -387,7 +434,7 @@ class Article {
             pay_type: reqData.pay_type /* 源内容 */,
             price:
               Number(reqData.is_free) === isFree.pay
-                ? reqData.price
+                ? parseInt(reqData.price)
                 : 0 /* 源内容 */,
             attachment: xss(reqData.attachment) /*主内容*/,
             origin_attachment: reqData.origin_attachment

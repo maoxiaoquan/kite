@@ -6,7 +6,7 @@ const newUserAuthorityList = require('./libs/newUserAuthorityList')
 const CURRENT_VERSION = 0.9
 let step = 0
 class update {
-  static update () {
+  static update() {
     return new Promise(async (resolve, reject) => {
       try {
         console.log(`正在升级中，当前版本是${CURRENT_VERSION}....`)
@@ -49,7 +49,8 @@ class update {
         )
 
         await models.virtual.update({ type: 18 }, { where: { type: 1 } })
-        await models.virtual.update({ type: 1 }, { where: { type: 2 } })
+        await models.virtual
+          .update({ type: 1 }, { where: { type: 2 } })
           .tnen(async () => {
             await models.virtual.update({ type: 2 }, { where: { type: 3 } })
           })
@@ -57,6 +58,37 @@ class update {
         await models.virtual.update({ type: 9 }, { where: { type: 7 } })
         await models.virtual.update({ type: 7 }, { where: { type: 6 } })
         await models.virtual.update({ type: 17 }, { where: { type: 8 } })
+
+        // 2020.3.10
+        await models.user_message.destroy({ where: { is_read: false } })
+        await models.user_message.destroy({ where: { is_read: true } })
+        await models.virtual.destroy({ where: { plus_less: 2 } })
+        await models.virtual.destroy({ where: { plus_less: 1 } })
+        await models.user_info.update(
+          {
+            shell_balance: 1000
+          },
+          {
+            where: {
+              avatar_review_status: 2 // 查询条件
+            }
+          }
+        )
+
+        const allUser = await models.user.findAll()
+        for (let i in allUser) {
+          await models.virtual.create({
+            // 用户虚拟币消息记录
+            plus_less: 1,
+            balance: 1000,
+            amount: 1000,
+            uid: allUser[i].uid,
+            income: 1000,
+            expenses: 0,
+            type: 1,
+            action: 16
+          })
+        }
 
         console.log(`${CURRENT_VERSION}版本升级完成`)
         await lowdb

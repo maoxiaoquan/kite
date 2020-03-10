@@ -8,7 +8,6 @@ import {
   userMessageActionText,
   modelAction,
   virtualPlusLess,
-
   productTypeInfo,
   isFree,
   modelName
@@ -113,11 +112,6 @@ class Shop {
       let otherBalance = otherShellBalance + price
       let otherOrBalance = otherOrShellBalance + price
 
-      console.log('myBalance', myBalance)
-      console.log('otherBalance', otherBalance)
-      console.log('myOrBalance', myOrBalance)
-      console.log('otherOrBalance', otherOrBalance)
-
       if (myBalance !== myOrBalance || otherBalance !== otherOrBalance) {
         throw new Error('支付出现错误，已终止')
       }
@@ -130,9 +124,7 @@ class Shop {
               // 用户虚拟币记录
               uid: user.uid,
               ass_uid: productInfo.uid || '',
-              associate: JSON.stringify({
-                [productTypeInfo[product_type].idKey]: product_id
-              }),
+              associate: product_id,
               plus_less: virtualPlusLess.less,
               balance: myBalance,
               income: productInfo.price,
@@ -178,9 +170,7 @@ class Shop {
                 // 用户虚拟币消息记录
                 uid: productInfo.uid,
                 ass_uid: user.uid,
-                associate: JSON.stringify({
-                  [productTypeInfo[product_type].idKey]: product_id
-                }),
+                associate: product_id,
                 plus_less: virtualPlusLess.plus,
                 balance: otherBalance,
                 income: 0,
@@ -211,11 +201,9 @@ class Shop {
       await userMessage.setMessage({
         uid: productInfo.uid,
         sender_id: user.uid,
-        action: userMessageAction.sell, // 动作：评论
+        action: userMessageAction.sell, // 动作：
         type: product_type, // 类型
-        content: JSON.stringify({
-          [productTypeInfo[product_type].idKey]: product_id
-        })
+        content: product_id
       })
 
       resClientJson(res, {

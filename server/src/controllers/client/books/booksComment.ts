@@ -11,7 +11,6 @@ import {
   statusList,
   userMessageAction,
   modelAction,
-
   modelName
 } from '../../../utils/constant'
 const { reviewSuccess, freeReview, pendingReview, reviewFail } = statusList
@@ -89,7 +88,7 @@ class BooksComment {
           if (
             childAllComment[childCommentItem].reply_uid !== 0 &&
             childAllComment[childCommentItem].reply_uid !==
-            childAllComment[childCommentItem].uid
+              childAllComment[childCommentItem].uid
           ) {
             childAllComment[childCommentItem].setDataValue(
               'reply_user',
@@ -186,7 +185,7 @@ class BooksComment {
         .create({
           parent_id: reqData.parent_id || 0,
           books_id: reqData.books_id,
-          star: reqData.star,
+          star: reqData.star || 0,
           uid: user.uid,
           reply_uid: reqData.reply_uid || 0,
           content: xss(reqData.content),
@@ -235,10 +234,7 @@ class BooksComment {
           // 虚拟币消耗后期开启事物
           await userVirtual.setVirtual({
             uid: user.uid,
-            associate: JSON.stringify({
-              comment_id: _data.id,
-              books_id: reqData.books_id
-            }),
+            associate: reqData.books_id,
             type: modelName.books,
             action: modelAction.comment,
             ass_uid: oneBooks.uid
@@ -248,10 +244,7 @@ class BooksComment {
             // 屏蔽自己
             await userVirtual.setVirtual({
               uid: oneBooks.uid,
-              associate: JSON.stringify({
-                comment_id: _data.id,
-                books_id: reqData.books_id
-              }),
+              associate: reqData.books_id,
               type: modelName.books,
               action: modelAction.obtain_comment,
               ass_uid: user.uid
@@ -264,10 +257,7 @@ class BooksComment {
               sender_id: user.uid,
               action: userMessageAction.comment, // 动作：评论
               type: modelName.books, // 类型：小书评论
-              content: JSON.stringify({
-                comment_id: _data.id,
-                books_id: reqData.books_id
-              })
+              content: reqData.books_id
             })
           }
 
@@ -280,12 +270,8 @@ class BooksComment {
               uid: reqData.reply_uid,
               sender_id: user.uid,
               action: userMessageAction.reply, // 动作：回复
-              type: modelName.books_comment, // 类型：小书回复
-              content: JSON.stringify({
-                reply_id: reqData.reply_id,
-                comment_id: _data.id,
-                books_id: reqData.books_id
-              })
+              type: modelName.books, // 类型：小书回复
+              content: reqData.books_id
             })
           }
 

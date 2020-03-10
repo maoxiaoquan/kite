@@ -230,9 +230,7 @@ class Books {
 
       await userVirtual.setVirtual({
         uid: user.uid,
-        associate: JSON.stringify({
-          books_id: createBooks.books_id
-        }),
+        associate: createBooks.books_id,
         type: modelName.books,
         action: modelAction.create
       })

@@ -11,7 +11,6 @@ import {
   statusList,
   userMessageAction,
   modelAction,
-
   modelName
 } from '../../../utils/constant'
 
@@ -98,7 +97,7 @@ class BookComment {
           if (
             childAllComment[childCommentItem].reply_uid !== 0 &&
             childAllComment[childCommentItem].reply_uid !==
-            childAllComment[childCommentItem].uid
+              childAllComment[childCommentItem].uid
           ) {
             childAllComment[childCommentItem].setDataValue(
               'reply_user',
@@ -232,10 +231,7 @@ class BookComment {
           // 虚拟币消耗后期开启事物
           await userVirtual.setVirtual({
             uid: user.uid,
-            associate: JSON.stringify({
-              comment_id: _data.id,
-              book_id: reqData.book_id
-            }),
+            associate: reqData.book_id,
             type: modelName.book,
             action: modelAction.comment,
             ass_uid: oneBook.uid
@@ -245,10 +241,7 @@ class BookComment {
             // 屏蔽自己
             await userVirtual.setVirtual({
               uid: oneBook.uid,
-              associate: JSON.stringify({
-                comment_id: _data.id,
-                book_id: reqData.book_id
-              }),
+              associate: reqData.book_id,
               type: modelName.book,
               action: modelAction.obtain_comment,
               ass_uid: user.uid
@@ -261,10 +254,7 @@ class BookComment {
               sender_id: user.uid,
               action: userMessageAction.comment, // 动作：评论
               type: modelName.book, // 类型：小书章节评论
-              content: JSON.stringify({
-                comment_id: _data.id,
-                book_id: reqData.book_id
-              })
+              content: reqData.book_id
             })
           }
 
@@ -277,12 +267,8 @@ class BookComment {
               uid: reqData.reply_uid,
               sender_id: user.uid,
               action: userMessageAction.reply, // 动作：回复
-              type: modelName.book_comment, // 类型：小书章节回复
-              content: JSON.stringify({
-                reply_id: reqData.reply_id,
-                comment_id: _data.id,
-                book_id: reqData.book_id
-              })
+              type: modelName.book, // 类型：小书章节回复
+              content: reqData.book_id
             })
           }
 

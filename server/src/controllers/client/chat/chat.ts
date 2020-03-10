@@ -15,7 +15,6 @@ import {
   statusList,
   userMessageAction,
   modelAction,
-
   modelName,
   modelInfo
 } from '../../../utils/constant'
@@ -376,9 +375,7 @@ class Chat {
       await userVirtual.setVirtual({
         // 私聊消耗
         uid: user.uid,
-        associate: JSON.stringify({
-          id: chatMessage.id
-        }),
+        associate: chatMessage.id,
         type: modelName.chat_message,
         action: modelAction.sendPrivateChat,
         ass_uid: receive_uid

@@ -13,7 +13,6 @@ import {
   statusList,
   userMessageAction,
   modelAction,
-
   modelName
 } from '../../../utils/constant'
 
@@ -165,9 +164,7 @@ class articleBlog {
 
       await userVirtual.setVirtual({
         uid: user.uid,
-        associate: JSON.stringify({
-          blog_id: createArticleBlog.blog_id
-        }),
+        associate: createArticleBlog.blog_id,
         type: modelName.article_blog,
         action: modelAction.create
       })

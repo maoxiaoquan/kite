@@ -12,7 +12,6 @@ import {
   statusList,
   userMessageAction,
   modelAction,
-
   modelName
 } from '../../../utils/constant'
 
@@ -120,9 +119,7 @@ class dynamic {
 
       await userVirtual.setVirtual({
         uid: user.uid,
-        associate: JSON.stringify({
-          dynamic_id: createDynamic.id
-        }),
+        associate: createDynamic.id,
         type: modelName.dynamic,
         action: modelAction.create
       })
@@ -169,8 +166,8 @@ class dynamic {
           'topic',
           oneDynamic.topic_ids
             ? await models.dynamic_topic.findOne({
-              where: { topic_id: oneDynamic.topic_ids }
-            })
+                where: { topic_id: oneDynamic.topic_ids }
+              })
             : ''
         )
 
@@ -294,8 +291,8 @@ class dynamic {
       for (let i in rows) {
         let topic = rows[i].topic_ids
           ? await models.dynamic_topic.findOne({
-            where: { topic_id: rows[i].topic_ids }
-          })
+              where: { topic_id: rows[i].topic_ids }
+            })
           : ''
         rows[i].setDataValue(
           'create_dt',
@@ -396,8 +393,8 @@ class dynamic {
           'topic',
           rows[i].topic_ids
             ? await models.dynamic_topic.findOne({
-              where: { topic_id: rows[i].topic_ids }
-            })
+                where: { topic_id: rows[i].topic_ids }
+              })
             : ''
         )
 
@@ -499,8 +496,8 @@ class dynamic {
           'topic',
           allDynamic[i].topic_ids
             ? await models.dynamic_topic.findOne({
-              where: { topic_id: allDynamic[i].topic_ids }
-            })
+                where: { topic_id: allDynamic[i].topic_ids }
+              })
             : ''
         )
         if (

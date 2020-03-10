@@ -11,7 +11,6 @@ import {
   statusList,
   userMessageAction,
   modelAction,
-
   modelName
 } from '../../../utils/constant'
 
@@ -117,7 +116,7 @@ class dynamicComment {
           if (
             childAllComment[childCommentItem].reply_uid !== 0 &&
             childAllComment[childCommentItem].reply_uid !==
-            childAllComment[childCommentItem].uid
+              childAllComment[childCommentItem].uid
           ) {
             childAllComment[childCommentItem].setDataValue(
               'reply_user',
@@ -249,7 +248,7 @@ class dynamicComment {
           if (
             childAllComment[childCommentItem].reply_uid !== 0 &&
             childAllComment[childCommentItem].reply_uid !==
-            childAllComment[childCommentItem].uid
+              childAllComment[childCommentItem].uid
           ) {
             childAllComment[childCommentItem].setDataValue(
               'reply_user',
@@ -395,10 +394,7 @@ class dynamicComment {
           // 虚拟币消耗后期开启事物
           await userVirtual.setVirtual({
             uid: user.uid,
-            associate: JSON.stringify({
-              comment_id: _data.id,
-              dynamic_id: reqData.dynamic_id
-            }),
+            associate: reqData.dynamic_id,
             type: modelName.dynamic,
             action: modelAction.comment,
             ass_uid: oneDynamic.uid
@@ -408,10 +404,7 @@ class dynamicComment {
             // 屏蔽自己
             await userVirtual.setVirtual({
               uid: oneDynamic.uid,
-              associate: JSON.stringify({
-                comment_id: _data.id,
-                dynamic_id: reqData.dynamic_id
-              }),
+              associate: reqData.dynamic_id,
               type: modelName.dynamic,
               action: modelAction.obtain_comment,
               ass_uid: user.uid
@@ -424,10 +417,7 @@ class dynamicComment {
               sender_id: user.uid,
               action: userMessageAction.comment, // 动作：评论
               type: modelName.dynamic, // 类型：片刻评论
-              content: JSON.stringify({
-                comment_id: _data.id,
-                dynamic_id: reqData.dynamic_id
-              })
+              content: reqData.dynamic_id
             })
           }
 
@@ -440,12 +430,8 @@ class dynamicComment {
               uid: reqData.reply_uid,
               sender_id: user.uid,
               action: userMessageAction.reply, // 动作：回复
-              type: modelName.dynamic_comment, // 类型：片刻回复
-              content: JSON.stringify({
-                reply_id: reqData.reply_id,
-                comment_id: _data.id,
-                dynamic_id: reqData.dynamic_id
-              })
+              type: modelName.dynamic, // 类型：片刻回复
+              content: reqData.dynamic_id
             })
           }
 
