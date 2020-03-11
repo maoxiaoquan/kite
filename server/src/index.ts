@@ -8,12 +8,14 @@ const kiteConfig = require('../../kite.config')
 import routers from './routers'
 import socketLink from './socket/index'
 import chat from './socket/chat'
+import helmet from 'helmet'
 const graphql = require('./graphql')
 const lowdb = require('../../db/lowdb')
 const app: Express = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server, {})
 require('../../db/mysqldb/pool').poolInit()
+app.use(helmet());
 const cli = lowdb
   .read()
   .get('cli')

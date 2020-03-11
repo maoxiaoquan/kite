@@ -42,6 +42,8 @@ module.exports = {
   },
   SUPER_ROLE_ID: '1000000', // 排除超管，超管无视所有，拥有最高权限 role = 1000000 为超管
   default_avatar: `${KiteConfig.server.default_avatar}`, // 所有使用的默认头像
+  IPWhitelist: ['::1', '::ffff:127.0.0.1'],
+  cacheable_list: ['/test'], // 需要缓存的页面
   database: {
     /* database set */
     DATABASE: config.mysql.database, // 使用哪个数据库

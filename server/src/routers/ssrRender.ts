@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const LRU = require('lru-cache')
+const config = require('../../../config')
 const { createBundleRenderer } = require('vue-server-renderer')
 
 // 缓存
@@ -9,15 +10,11 @@ const microCache = new LRU({
   maxAge: 1000 * 60 // 重要提示：条目在 1 秒后过期。
 })
 
-const cacheable_list = [
-  // 添加缓存页面
-  '/test'
-]
 
 const isCacheable = (req: any, res: any, next: any) => {
   // 实现逻辑为，检查请求是否是用户特定(user-specific)。
   // 只有非用户特定(non-user-specific)页面才会缓存
-  if (~cacheable_list.indexOf(req.url)) {
+  if (~config.cacheable_list.indexOf(req.url)) {
     return true
   }
   return false
@@ -79,7 +76,6 @@ const render = async (req: any, res: any, next: any) => {
 
   try {
     const html = await renderer.renderToString(context)
-
     res.send(html)
     if (cacheable) {
       console.log('设置缓存: ', req.url)

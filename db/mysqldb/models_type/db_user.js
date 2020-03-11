@@ -74,11 +74,11 @@ module.exports = {
       comment: '最后登录ip',
       field: 'last_sign_ip'
     },
-    last_sign_time: {
+    last_sign_date: {
       // 最后登录时间
-      type: Seq.BIGINT(50),
+      type: Seq.DATE,
       comment: '最后登录时间',
-      field: 'last_sign_time'
+      field: 'last_sign_date'
     },
     introduction: {
       // 简介

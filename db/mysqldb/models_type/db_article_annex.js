@@ -27,6 +27,12 @@ module.exports = {
       comment: 'uid',
       field: 'uid'
     },
+    title: {
+      // 标题
+      type: Seq.TEXT,
+      comment: '标题',
+      field: 'title'
+    },
     attachment: {
       // 内容
       type: Seq.TEXT('long'),

@@ -73,6 +73,26 @@ class User {
             let token = tokens.ClientSetToken(60 * 60 * 24 * 7, {
               uid: oneUser.uid
             })
+
+            let ip: any = ''
+            if (req.headers['x-forwarded-for']) {
+              ip = req.headers['x-forwarded-for'].toString().split(",")[0];
+            } else {
+              ip = req.connection.remoteAddress;
+            }
+
+            await models.user.update(
+              {
+                last_sign_date: moment(new Date().setHours(new Date().getHours())).format('YYYY-MM-DD HH:MM:SS'),
+                last_sign_ip: ip || ''
+              },
+              {
+                where: {
+                  uid: oneUser.uid // 查询条件
+                }
+              }
+            )
+
             await resClientJson(res, {
               state: 'success',
               message: '登录成功',
@@ -285,6 +305,13 @@ class User {
               }
             })
 
+          let ip: any = ''
+          if (req.headers['x-forwarded-for']) {
+            ip = req.headers['x-forwarded-for'].toString().split(",")[0];
+          } else {
+            ip = req.connection.remoteAddress;
+          }
+
           await models.sequelize.transaction((t: any) => {
             // 在事务中执行操作
             return models.user
@@ -297,7 +324,7 @@ class User {
                   email: reqData.email,
                   user_role_ids: config.USER_ROLE.dfId,
                   sex: 0,
-                  reg_ip: req.ip,
+                  reg_ip: ip,
                   enable: true
                 },
                 { transaction: t }
@@ -582,11 +609,14 @@ class User {
         throw new Error('请输入正确的个人网址')
       }
 
+
       let updateUser = await models.user.update(
         {
           sex: reqData.sex || 0,
           nickname: reqData.nickname || '',
-          introduction: reqData.introduction || ''
+          introduction: reqData.introduction || '',
+          update_date: moment(new Date().setHours(new Date().getHours())).format('YYYY-MM-DD HH:MM:SS'),
+          update_date_timestamp: moment(new Date().setHours(new Date().getHours())).format('X')
         },
         {
           where: {

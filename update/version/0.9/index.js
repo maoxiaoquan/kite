@@ -6,7 +6,7 @@ const newUserAuthorityList = require('./libs/newUserAuthorityList')
 const CURRENT_VERSION = 0.9
 let step = 0
 class update {
-  static update() {
+  static update () {
     return new Promise(async (resolve, reject) => {
       try {
         console.log(`正在升级中，当前版本是${CURRENT_VERSION}....`)
@@ -41,6 +41,10 @@ class update {
 
         await models.sequelize.query(
           'ALTER TABLE article add COLUMN is_attachment INTEGER(2) comment "是否添加附件";'
+        )
+
+        await models.sequelize.query(
+          'ALTER TABLE user CHANGE last_sign_time last_sign_date datetime comment "最后登录时间";'
         )
 
         await models.order.update(

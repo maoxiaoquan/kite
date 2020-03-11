@@ -70,7 +70,22 @@ class Index {
         where: whereArticleParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, // 每页限制返回的数据条数
-        order: orderParams
+        order: orderParams,
+        attributes: [
+          'aid',
+          'uid',
+          'title',
+          'source',
+          'type',
+          'cover_img',
+          'read_count',
+          'thumb_count',
+          'comment_count',
+          'blog_ids',
+          'tag_ids',
+          'create_date',
+          'create_timestamp',
+        ]
       })
 
       for (let i in rows) {
@@ -223,7 +238,22 @@ class Index {
         where: whereArticleParams, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, // 每页限制返回的数据条数
-        order: orderParams
+        order: orderParams,
+        attributes: [
+          'aid',
+          'uid',
+          'title',
+          'source',
+          'type',
+          'cover_img',
+          'read_count',
+          'thumb_count',
+          'comment_count',
+          'blog_ids',
+          'tag_ids',
+          'create_date',
+          'create_timestamp',
+        ]
       })
 
       for (let i in rows) {

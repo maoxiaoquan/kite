@@ -219,6 +219,7 @@ class Article {
             Number(reqData.is_free) === isFree.pay
               ? parseInt(reqData.price)
               : 0 /* 源内容 */,
+          title: xss(reqData.title),
           attachment: xss(reqData.attachment) /*主内容*/,
           origin_attachment: reqData.origin_attachment
         })
@@ -409,6 +410,7 @@ class Article {
                 Number(reqData.is_free) === isFree.pay
                   ? parseInt(reqData.price)
                   : 0 /* 源内容 */,
+              title: xss(reqData.title),
               attachment: xss(reqData.attachment) /*主内容*/,
               origin_attachment: reqData.origin_attachment,
               update_date: moment(date.setHours(date.getHours())).format(
@@ -436,6 +438,7 @@ class Article {
               Number(reqData.is_free) === isFree.pay
                 ? parseInt(reqData.price)
                 : 0 /* 源内容 */,
+            title: xss(reqData.title),
             attachment: xss(reqData.attachment) /*主内容*/,
             origin_attachment: reqData.origin_attachment
           })
@@ -1132,7 +1135,7 @@ class Article {
   }
 
   /**
-   * ajax 获取用户自己的一篇文章
+   * ajax 获取文章附件
    * @param   {object} ctx 上下文对象
    */
   static async getArticleAnnex(req: any, res: any, next: any) {

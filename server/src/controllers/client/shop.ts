@@ -112,6 +112,7 @@ class Shop {
       let otherBalance = otherShellBalance + price
       let otherOrBalance = otherOrShellBalance + price
 
+
       if (myBalance !== myOrBalance || otherBalance !== otherOrBalance) {
         throw new Error('支付出现错误，已终止')
       }
@@ -159,7 +160,7 @@ class Shop {
                 status: 1,
                 pay_type: productInfo.pay_type,
                 amount: productInfo.price,
-                description: '购买小书'
+                description: ''
               },
               { transaction: t }
             )

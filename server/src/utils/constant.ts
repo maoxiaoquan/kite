@@ -172,7 +172,18 @@ export const modelInfo = {
     model: 'article_annex',
     name: '文章附件',
     idKey: 'id'
+  }, // 文章附件表
+  [modelName.system]: {
+    model: '',
+    name: '系统',
+    idKey: ''
+  }, // 文章附件表
+  [modelName.other]: {
+    model: '',
+    name: '其他',
+    idKey: ''
   } // 文章附件表
+
 }
 
 export const modelAction = {
