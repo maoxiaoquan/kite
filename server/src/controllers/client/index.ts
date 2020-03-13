@@ -68,8 +68,8 @@ class Index {
 
       let { count, rows } = await models.article.findAndCountAll({
         where: whereArticleParams, // 为空，获取全部，也可以自己添加条件
-        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-        limit: pageSize, // 每页限制返回的数据条数
+        offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: Number(pageSize), // 每页限制返回的数据条数
         order: orderParams,
         attributes: [
           'aid',
@@ -236,8 +236,8 @@ class Index {
 
       let { count, rows } = await models.article.findAndCountAll({
         where: whereArticleParams, // 为空，获取全部，也可以自己添加条件
-        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-        limit: pageSize, // 每页限制返回的数据条数
+        offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: Number(pageSize), // 每页限制返回的数据条数
         order: orderParams,
         attributes: [
           'aid',

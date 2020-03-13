@@ -80,10 +80,11 @@ class User {
             } else {
               ip = req.connection.remoteAddress;
             }
+            const NowDate = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
 
             await models.user.update(
               {
-                last_sign_date: moment(new Date().setHours(new Date().getHours())).format('YYYY-MM-DD HH:MM:SS'),
+                last_sign_date: new Date(NowDate),
                 last_sign_ip: ip || ''
               },
               {
@@ -609,13 +610,14 @@ class User {
         throw new Error('请输入正确的个人网址')
       }
 
+      const NowDate = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
 
-      let updateUser = await models.user.update(
+      await models.user.update(
         {
           sex: reqData.sex || 0,
           nickname: reqData.nickname || '',
           introduction: reqData.introduction || '',
-          update_date: moment(new Date().setHours(new Date().getHours())).format('YYYY-MM-DD HH:MM:SS'),
+          update_date: new Date(NowDate),
           update_date_timestamp: moment(new Date().setHours(new Date().getHours())).format('X')
         },
         {
@@ -625,7 +627,7 @@ class User {
         }
       )
 
-      let updateUserInfo = await models.user_info.update(
+      await models.user_info.update(
         {
           profession: reqData.profession || '',
           company: reqData.company || '',
@@ -641,11 +643,7 @@ class User {
 
       resClientJson(res, {
         state: 'success',
-        message: '修改用户信息成功',
-        data: {
-          user: updateUser,
-          user_info: updateUserInfo
-        }
+        message: '修改用户信息成功'
       })
     } catch (err) {
       resClientJson(res, {

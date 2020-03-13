@@ -470,9 +470,9 @@ export const experienceInfo = {
 export const userLevel = {
   // 用户等级，和上方经验挂钩
   one: 500,
-  two: 1500,
-  three: 3500,
-  four: 7000,
+  two: 1000,
+  three: 2000,
+  four: 5000,
   five: 10000
 }
 

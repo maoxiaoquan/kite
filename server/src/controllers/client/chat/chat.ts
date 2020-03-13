@@ -333,6 +333,26 @@ class Chat {
       const { receive_uid, message } = req.body
       const { user = '' } = req
 
+
+      if (user.uid == receive_uid) {
+        throw new Error('自己不可以和自己发消息')
+      }
+
+      if (!message || message.length <= 0) {
+        throw new Error('请输入聊天消息')
+      }
+
+      // 虚拟币判断是否可以进行继续的操作
+      const isVirtual = await userVirtual.isVirtual({
+        uid: user.uid,
+        type: modelName.chat_message,
+        action: modelAction.sendPrivateChat
+      })
+
+      if (!isVirtual) {
+        throw new Error('贝壳余额不足！')
+      }
+
       const chatContact = await models.chat_contact.findOne({
         where: {
           send_uid: user.uid,
