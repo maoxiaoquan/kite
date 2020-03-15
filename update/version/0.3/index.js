@@ -1,6 +1,6 @@
 const sequelize = require('../../../db/mysqldb/init')
 const models = require('../../../db/mysqldb/define')(sequelize)
-const { lowdb } = require('../../../db/lowdb/index')
+const lowdb = require('../../../db/lowdb/index')
 const dfDynamicTopicList = require('../../../server/libs/dfDynamicTopicList')
 const CURRENT_VERSION = 0.3
 const newAdminAuthorityList = require('./libs/newAdminAuthorityList')

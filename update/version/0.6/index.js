@@ -1,6 +1,6 @@
 const sequelize = require('../../../db/mysqldb/init')
 const models = require('../../../db/mysqldb/define')(sequelize)
-const { lowdb } = require('../../../db/lowdb/index')
+const lowdb = require('../../../db/lowdb/index')
 const newAdminAuthorityList = require('./libs/newAdminAuthorityList')
 const newUserAuthorityList = require('./libs/newUserAuthorityList')
 const CURRENT_VERSION = 0.6
