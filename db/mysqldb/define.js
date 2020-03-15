@@ -230,10 +230,48 @@ module.exports = sequelize => {
     SEQ_PARAMETER
   )
 
+  // 2020.2.12 新增
+
+  const experience = sequelize.define(
+    // 经验表
+    require('./models_type/db_experience').NAME,
+    require('./models_type/db_experience').TABLE,
+    SEQ_PARAMETER
+  )
+
+  const chat_contact = sequelize.define(
+    // 经验表
+    require('./models_type/db_chat_contact').NAME,
+    require('./models_type/db_chat_contact').TABLE,
+    SEQ_PARAMETER
+  )
+
+  const chat_message = sequelize.define(
+    // 经验表
+    require('./models_type/db_chat_message').NAME,
+    require('./models_type/db_chat_message').TABLE,
+    SEQ_PARAMETER
+  )
+
+  const user_auth = sequelize.define(
+    // 用户第三方表 第三方绑定
+    require('./models_type/db_user_auth').NAME,
+    require('./models_type/db_user_auth').TABLE,
+    SEQ_PARAMETER
+  )
+
+  const article_annex = sequelize.define(
+    // 文章附件表
+    require('./models_type/db_article_annex').NAME,
+    require('./models_type/db_article_annex').TABLE,
+    SEQ_PARAMETER
+  )
+
   const _define = {
     user,
     user_info,
     user_role,
+    user_auth,
     user_authority,
     user_message,
     verify_code,
@@ -261,7 +299,11 @@ module.exports = sequelize => {
     attention,
     attention_message,
     like,
-    thumb
+    thumb,
+    experience,
+    chat_contact,
+    chat_message,
+    article_annex
   }
 
   return {

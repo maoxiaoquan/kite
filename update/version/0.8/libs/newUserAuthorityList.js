@@ -1,2 +1,2 @@
-const config = require('../../../../server/config')
+const config = require('../../../../config')
 module.exports = []

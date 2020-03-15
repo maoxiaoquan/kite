@@ -27,10 +27,9 @@ if (!lowdb.has('website').value()) {
   lowdb.set('website', {}).write()
 }
 
-if (!lowdb.has('thirdParty').value()) { // 第三方所用
-  lowdb.set('thirdParty', {}).write()
+if (!lowdb.has('oauth').value()) {
+  // 第三方所用
+  lowdb.set('oauth', {}).write()
 }
 
-module.exports = {
-  lowdb
-}
+module.exports = lowdb
