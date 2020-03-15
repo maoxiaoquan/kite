@@ -12,6 +12,7 @@ const { random_number, tools } = require('../../../utils/index')
 const config = require('../../../../../config')
 const Op = require('sequelize').Op
 const tokens = require('../../../utils/tokens')
+const xss = require('xss')
 const lowdb = require('../../../../../db/lowdb/index')
 const clientWhere = require('../../../utils/clientWhere')
 import {
@@ -76,9 +77,9 @@ class User {
 
             let ip: any = ''
             if (req.headers['x-forwarded-for']) {
-              ip = req.headers['x-forwarded-for'].toString().split(",")[0];
+              ip = req.headers['x-forwarded-for'].toString().split(',')[0]
             } else {
-              ip = req.connection.remoteAddress;
+              ip = req.connection.remoteAddress
             }
             const NowDate = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
 
@@ -228,6 +229,12 @@ class User {
       if (reqData.nickname.length > 20) {
         throw new Error('昵称过长')
       }
+
+      let testNickname = /^[\u4E00-\u9FA5A-Za-z0-9]+$/
+
+      if (!testNickname.test(reqData.nickname)) {
+        throw new Error('用户名只能中文、字母和数字,不能包含特殊字符')
+      }
       if (reqData.email) {
         if (!checkEmail(reqData.email)) {
           throw new Error('请输入正确的邮箱地址')
@@ -308,9 +315,9 @@ class User {
 
           let ip: any = ''
           if (req.headers['x-forwarded-for']) {
-            ip = req.headers['x-forwarded-for'].toString().split(",")[0];
+            ip = req.headers['x-forwarded-for'].toString().split(',')[0]
           } else {
-            ip = req.connection.remoteAddress;
+            ip = req.connection.remoteAddress
           }
 
           await models.sequelize.transaction((t: any) => {
@@ -320,7 +327,7 @@ class User {
                 {
                   /* 注册写入数据库操作 */
                   avatar: config.default_avatar,
-                  nickname: reqData.nickname,
+                  nickname: xss(reqData.nickname),
                   password: tools.encrypt(reqData.password, config.ENCRYPT_KEY),
                   email: reqData.email,
                   user_role_ids: config.USER_ROLE.dfId,
@@ -590,6 +597,12 @@ class User {
         throw new Error('昵称过长')
       }
 
+      let testNickname = /^[\u4E00-\u9FA5A-Za-z0-9]+$/
+
+      if (!testNickname.test(reqData.nickname)) {
+        throw new Error('用户名只能中文、字母和数字,不能包含特殊字符')
+      }
+
       if (oneUser) {
         throw new Error('用户昵称已存在，请重新输入')
       }
@@ -618,7 +631,9 @@ class User {
           nickname: reqData.nickname || '',
           introduction: reqData.introduction || '',
           update_date: new Date(NowDate),
-          update_date_timestamp: moment(new Date().setHours(new Date().getHours())).format('X')
+          update_date_timestamp: moment(
+            new Date().setHours(new Date().getHours())
+          ).format('X')
         },
         {
           where: {
