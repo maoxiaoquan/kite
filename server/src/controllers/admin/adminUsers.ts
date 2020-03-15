@@ -15,7 +15,6 @@ import adminSystemLog from './adminSystemLog'
 const Op = require('sequelize').Op
 const lowdb = require('../../../../db/lowdb/index')
 
-
 class AdminUsers {
   /**
    * 登录操作
@@ -181,7 +180,7 @@ class AdminUsers {
           'nickname',
           'email',
           'phone',
-          'last_sign_time',
+          'last_sign_date',
           'reg_ip',
           'enable',
           'admin_role_ids'
@@ -248,7 +247,7 @@ class AdminUsers {
           'nickname',
           'email',
           'phone',
-          'last_sign_time',
+          'last_sign_date',
           'reg_ip',
           'enable'
         ],

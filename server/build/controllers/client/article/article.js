@@ -944,9 +944,13 @@ class Article {
                     limit: pageSize // 每页限制返回的数据条数
                 });
                 for (let i in rows) {
-                    let tag_id = rows[i].tag_ids && rows[i].tag_ids.length === 1
-                        ? rows[i].tag_ids
-                        : { [Op.in]: rows[i].tag_ids.split(',') };
+                    let tag_id = {};
+                    if (rows[i].tag_ids && rows[i].tag_ids.length > 0) {
+                        tag_id = { [Op.in]: rows[i].tag_ids.split(',') };
+                    }
+                    else {
+                        tag_id = rows[i].tag_ids;
+                    }
                     rows[i].setDataValue('tag', yield models.article_tag.findAll({
                         where: { tag_id }
                     }));
