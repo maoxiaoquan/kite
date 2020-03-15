@@ -28,7 +28,7 @@ class Users {
                     attributes: [
                         'uid',
                         'nickname',
-                        'last_sign_time',
+                        'last_sign_date',
                         'reg_ip',
                         'user_role_ids',
                         'ban_dt',
@@ -118,9 +118,7 @@ class Users {
                     // 创建事务
                     yield models.sequelize.transaction((t) => {
                         // 在事务中执行操作
-                        return models.user
-                            .destroy({ where: { uid } }, { t })
-                            .then(() => {
+                        return models.user.destroy({ where: { uid } }, { t }).then(() => {
                             return models.article.destroy({ where: { uid } }, Object.assign({}, t));
                         });
                     });
