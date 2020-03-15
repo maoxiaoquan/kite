@@ -20,6 +20,7 @@ const { TimeNow, TimeDistance } = require('../../../utils/time')
 import userVirtual from '../../../common/userVirtual'
 import attention from '../../../common/attention'
 import useExperience from '../../../common/useExperience'
+import e from 'express'
 
 function getNoMarkupStr(markupStr: string) {
   /* markupStr 源码</> */
@@ -1107,10 +1108,12 @@ class Article {
       })
 
       for (let i in rows) {
-        let tag_id =
-          rows[i].tag_ids && rows[i].tag_ids.length === 1
-            ? rows[i].tag_ids
-            : { [Op.in]: rows[i].tag_ids.split(',') }
+        let tag_id: any = {}
+        if (rows[i].tag_ids && rows[i].tag_ids.length > 0) {
+          tag_id = { [Op.in]: rows[i].tag_ids.split(',') }
+        } else {
+          tag_id = rows[i].tag_ids
+        }
         rows[i].setDataValue(
           'tag',
           await models.article_tag.findAll({
