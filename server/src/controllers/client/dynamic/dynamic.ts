@@ -460,18 +460,20 @@ class dynamic {
 
   // 推荐动态
   static async recommendDynamicList(req: any, res: any, next: any) {
+    let type = req.query.type || 'recommend'
     let whereParams = {} // 查询参数
-    let orderParams = [
-      ['create_date', 'DESC'],
-      ['comment_count', 'DESC']
-    ] // 排序参数
+    let orderParams: any = [] // 排序参数
 
-    try {
+    if (type === 'recommend') {
+      orderParams = [
+        ['create_date', 'DESC'],
+        ['comment_count', 'DESC']
+      ]
       // sort
       // hottest 全部热门:
       whereParams = {
         status: {
-          [Op.or]: [2, 4]
+          [Op.or]: [reviewSuccess, freeReview]
         },
         create_date: {
           [Op.between]: [
@@ -480,10 +482,14 @@ class dynamic {
           ]
         }
       }
+    } else {
+      orderParams = [['create_date', 'DESC']]
+    }
 
+    try {
       let allDynamic = await models.dynamic.findAll({
         where: whereParams, // 为空，获取全部，也可以自己添加条件
-        limit: 3, // 每页限制返回的数据条数
+        limit: 5, // 每页限制返回的数据条数
         order: orderParams
       })
 

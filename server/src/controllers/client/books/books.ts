@@ -134,8 +134,8 @@ class Books {
           throw new Error('请请输入大于等于0的定价！')
         }
 
-        if (reqData.price > 200) {
-          throw new Error('小书当前定价不能超过200，后续等待管理员开放！')
+        if (reqData.price > 100) {
+          throw new Error('小书当前定价不能超过100，后续等待管理员开放！')
         }
 
         if (!isDigit(reqData.price)) {
@@ -336,8 +336,8 @@ class Books {
           throw new Error('请输入大于等于0的定价！')
         }
 
-        if (reqData.price > 200) {
-          throw new Error('小书当前定价不能超过200，后续等待管理员开放！')
+        if (reqData.price > 100) {
+          throw new Error('小书当前定价不能超过100，后续等待管理员开放！')
         }
         if (!isDigit(reqData.price)) {
           throw new Error('请输入整数数字类型！')

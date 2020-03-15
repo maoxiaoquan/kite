@@ -105,24 +105,26 @@ class Article {
         'YYYY-MM-DD HH:mm:ss'
       )
 
-      if (
-        Number(reqData.is_attachment) === isOpen.yes &&
-        Number(reqData.is_free) !== isFree.free
-      ) {
-        if (!reqData.pay_type) {
-          throw new Error('请选择支付类型')
-        }
+      if (Number(reqData.is_attachment) === isOpen.yes) {
+        if (Number(reqData.is_free) !== isFree.free) {
+          if (!reqData.pay_type) {
+            throw new Error('请选择支付类型')
+          }
 
-        if (reqData.price < 0) {
-          throw new Error('请请输入大于等于0的定价！')
-        }
+          if (reqData.price < 0) {
+            throw new Error('请请输入大于等于0的定价！')
+          }
 
-        if (reqData.price > 200) {
-          throw new Error('当前定价不能超过200，后续等待管理员开放！')
-        }
+          if (reqData.price > 100) {
+            throw new Error('当前定价不能超过100，后续等待管理员开放！')
+          }
 
-        if (!isDigit(reqData.price)) {
-          throw new Error('请输入整数数字类型！')
+          if (!isDigit(reqData.price)) {
+            throw new Error('请输入整数数字类型！')
+          }
+        }
+        if (!reqData.attachment || reqData.attachment.length <= 0) {
+          throw new Error('附件内容不能为空')
         }
       }
 
@@ -293,24 +295,26 @@ class Article {
         throw new Error('请选择文章标签')
       }
 
-      if (
-        Number(reqData.is_attachment) === isOpen.yes &&
-        Number(reqData.is_free) !== isFree.free
-      ) {
-        if (!reqData.pay_type) {
-          throw new Error('请选择支付类型')
-        }
+      if (Number(reqData.is_attachment) === isOpen.yes) {
+        if (Number(reqData.is_free) !== isFree.free) {
+          if (!reqData.pay_type) {
+            throw new Error('请选择支付类型')
+          }
 
-        if (reqData.price < 0) {
-          throw new Error('请请输入大于等于0的定价！')
-        }
+          if (reqData.price < 0) {
+            throw new Error('请请输入大于等于0的定价！')
+          }
 
-        if (reqData.price > 200) {
-          throw new Error('当前定价不能超过200，后续等待管理员开放！')
-        }
+          if (reqData.price > 100) {
+            throw new Error('当前定价不能超过100，后续等待管理员开放！')
+          }
 
-        if (!isDigit(reqData.price)) {
-          throw new Error('请输入整数数字类型！')
+          if (!isDigit(reqData.price)) {
+            throw new Error('请输入整数数字类型！')
+          }
+        }
+        if (!reqData.attachment || reqData.attachment.length <= 0) {
+          throw new Error('附件内容不能为空')
         }
       }
 
