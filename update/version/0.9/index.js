@@ -6,7 +6,7 @@ const newUserAuthorityList = require('./libs/newUserAuthorityList')
 const CURRENT_VERSION = 0.9
 let step = 0
 class update {
-  static update () {
+  static update() {
     return new Promise(async (resolve, reject) => {
       try {
         console.log(`正在升级中，当前版本是${CURRENT_VERSION}....`)
@@ -55,7 +55,7 @@ class update {
         await models.virtual.update({ type: 18 }, { where: { type: 1 } })
         await models.virtual
           .update({ type: 1 }, { where: { type: 2 } })
-          .tnen(async () => {
+          .then(async () => {
             await models.virtual.update({ type: 2 }, { where: { type: 3 } })
           })
         await models.virtual.update({ type: 3 }, { where: { type: 4 } })
