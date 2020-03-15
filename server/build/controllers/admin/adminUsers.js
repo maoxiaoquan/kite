@@ -182,7 +182,7 @@ class AdminUsers {
                         'nickname',
                         'email',
                         'phone',
-                        'last_sign_date',
+                        'last_sign_time',
                         'reg_ip',
                         'enable',
                         'admin_role_ids'
