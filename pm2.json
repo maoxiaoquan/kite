@@ -1,7 +1,7 @@
 {
   "apps": {
     "name": "kite",
-    "script": "./server/index.js",
+    "script": "./server/build/index.js",
     "min_uptime": "60s",
     "max_restarts": 30,
     "exec_mode": "fork_mode",
