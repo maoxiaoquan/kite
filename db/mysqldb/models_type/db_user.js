@@ -14,6 +14,12 @@ module.exports = {
       comment: 'uid 主键，自增',
       field: 'uid' //  相应的字段名称
     },
+    username: {
+      // 昵称
+      type: Seq.STRING(200),
+      comment: '用户名',
+      field: 'username'
+    },
     avatar: {
       // 头像
       type: Seq.STRING(200),
@@ -68,11 +74,11 @@ module.exports = {
       comment: '最后登录ip',
       field: 'last_sign_ip'
     },
-    last_sign_time: {
+    last_sign_date: {
       // 最后登录时间
-      type: Seq.BIGINT(50),
+      type: Seq.DATE,
       comment: '最后登录时间',
-      field: 'last_sign_time'
+      field: 'last_sign_date'
     },
     introduction: {
       // 简介

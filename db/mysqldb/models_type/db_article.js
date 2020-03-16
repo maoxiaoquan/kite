@@ -122,6 +122,12 @@ module.exports = {
         return true
       }
     },
+    is_attachment: {
+      // 是否添加附件
+      type: Seq.INTEGER(2),
+      comment: '是否添加附件',
+      field: 'is_attachment'
+    },
     update_timestamp: {
       // 更新时间戳
       type: Seq.BIGINT(30),
