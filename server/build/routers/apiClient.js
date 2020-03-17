@@ -59,7 +59,6 @@ router.put('/personal/update-password', tokens.ClientVerifyToken, user_1.default
 router.get('/user/info', user_1.default.getUserInfo); // 根据uid 获取用户相应信息 get
 router.get('/user/blog-all', articleBlog_1.default.getUserArticleBlogAll); // 获取用户所有文章专题 TYPE:AJAX get
 router.get('/user/attention-list', personalCenter_1.default.getUserAttentionList); // 获取用户个人中心关注列表
-router.get('/user/like-article-list', personalCenter_1.default.getUserLikeArticleList); // 用户个人中心喜欢
 router.get('/user/my-article', personalCenter_1.default.userMyArticle); // 用户个人中心专题页
 router.get('/user/role-all', user_1.default.getUserRoleAll); // 获取所有用户角色标签
 /**
@@ -96,7 +95,6 @@ router.get('/subscribe/tag-my', tokens.ClientVerifyToken, subscribe_1.default.ge
  */
 router.get('/article-blog/info', articleBlog_1.default.getArticleBlogView); // 个人专栏详细信息
 router.get('/article-blog/article-list', articleBlog_1.default.getArticleBlogArticleList); // 当前个人专栏文章列表
-router.get('/article-blog/like-list', tokens.ClientVerifyToken, articleBlog_1.default.getLikeArticleBlogList); // 获取用户个人like的文章列表
 /**
  * 文章评论相关
  */
@@ -152,7 +150,6 @@ router.post('/books-comment/delete', tokens.ClientVerifyToken, booksComment_1.de
 router.get('/book-comment/list', bookComment_1.default.getBookCommentList); // 获取用户发表小书章节评论的评论列表 TYPE:AJAX get
 router.post('/book-comment/create', tokens.ClientVerifyToken, verifyAuthority.ClientCheck, bookComment_1.default.createBookComment); // 用户小书章节评论发表评论 TYPE:AJAX post
 router.post('/book-comment/delete', tokens.ClientVerifyToken, bookComment_1.default.deleteBookComment); // 删除小书章节评论 TYPE:AJAX post
-router.get('/collect/books-list', tokens.ClientVerifyToken, books_1.default.getCollectBooksList); // 收藏小书
 // 用户虚拟币开始 2019.11.4 0:19
 // 签到
 router.post('/virtual/check-in', tokens.ClientVerifyToken, virtual_1.default.checkIn);
@@ -168,6 +165,7 @@ router.get('/user/associate-info', tokens.ClientVerifyTokenInfo, user_1.default.
 router.post('/common/attention', tokens.ClientVerifyToken, attention_1.default.setAttention);
 router.post('/common/like', tokens.ClientVerifyToken, like_1.default.setLike); // like TYPE:AJAX post
 router.post('/common/collect', tokens.ClientVerifyToken, collect_1.default.setCollect); // 收藏
+router.get('/collect/list', tokens.ClientVerifyToken, collect_1.default.getCollectList); // 收藏列表
 router.post('/common/thumb', tokens.ClientVerifyToken, thumb_1.default.setThumb); // 用户点赞动态TYPE:AJAX post
 router.get('/experience/list', tokens.ClientVerifyToken, experience_1.default.getExperienceList); // 获取经验列表
 module.exports = router;
