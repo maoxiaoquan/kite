@@ -141,5 +141,33 @@ class User {
             }
         });
     }
+    static getThumbUserList({ type, associate_id }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // where
+                let thumbAll = yield models.thumb.findAll({
+                    where: { type, associate_id },
+                    limit: 15,
+                    order: [['create_date', 'DESC']]
+                });
+                for (let i in thumbAll) {
+                    let user = yield models.user.findOne({
+                        where: { uid: thumbAll[i].uid },
+                        attributes: ['uid', 'avatar', 'nickname']
+                    });
+                    thumbAll[i].setDataValue('avatar', user.avatar);
+                    thumbAll[i].setDataValue('nickname', user.nickname);
+                }
+                return {
+                    list: JSON.parse(JSON.stringify(thumbAll))
+                };
+            }
+            catch (err) {
+                return {
+                    list: []
+                };
+            }
+        });
+    }
 }
 exports.default = User;

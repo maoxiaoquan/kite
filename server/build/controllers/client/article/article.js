@@ -662,10 +662,10 @@ class Article {
                 let article = yield models.article.findOne({
                     where: { aid, uid: user.uid }
                 });
-                let articleAnnex = yield models.article_annex.findOne({
-                    where: { aid: article.aid, uid: user.uid }
-                });
                 if (article) {
+                    let articleAnnex = yield models.article_annex.findOne({
+                        where: { aid: article.aid, uid: user.uid }
+                    });
                     article.setDataValue('user', yield models.user.findOne({
                         where: { uid: article.uid },
                         attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']

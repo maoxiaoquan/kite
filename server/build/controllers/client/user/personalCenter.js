@@ -158,66 +158,6 @@ class PersonalCenter {
             }
         });
     }
-    /**
-     * 用户like文章render
-     * @param   {object} ctx 上下文对象
-     */
-    static getUserLikeArticleList(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let uid = req.query.uid;
-            let page = req.query.page || 1;
-            let pageSize = Number(req.query.pageSize) || 10;
-            try {
-                let allUserLikeArticle = yield models.like
-                    .findAll({
-                    where: { uid, is_associate: true, type: constant_1.modelName.article }
-                })
-                    .then((data) => {
-                    return data.map((item, key) => {
-                        return item.associate_id;
-                    });
-                });
-                let where_params = { aid: { [Op.in]: allUserLikeArticle } };
-                let { count, rows } = yield models.article.findAndCountAll({
-                    where: where_params,
-                    offset: (page - 1) * pageSize,
-                    limit: pageSize,
-                    order: [['create_timestamp', 'desc']]
-                });
-                for (let i in rows) {
-                    rows[i].setDataValue('create_dt', yield TimeDistance(rows[i].create_date));
-                    if (rows[i].tag_ids) {
-                        rows[i].setDataValue('tag', yield models.article_tag.findAll({
-                            where: {
-                                tag_id: { [Op.or]: rows[i].tag_ids.split(',') }
-                            }
-                        }));
-                    }
-                    rows[i].setDataValue('user', yield models.user.findOne({
-                        where: { uid: rows[i].uid },
-                        attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
-                    }));
-                }
-                yield resClientJson(res, {
-                    state: 'success',
-                    message: 'home',
-                    data: {
-                        count: count,
-                        page,
-                        pageSize,
-                        article_list: rows
-                    }
-                });
-            }
-            catch (err) {
-                resClientJson(res, {
-                    state: 'error',
-                    message: '错误信息：' + err.message
-                });
-                return false;
-            }
-        });
-    }
     static getDynamicListMe(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const { uid } = req.query;

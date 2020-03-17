@@ -20,7 +20,7 @@ exports.Schema = `
     privateChatCount: Int 
   }
 
-  type senderUserInfo {
+  type userInfo {
     uid: Int
     avatar: String
     nickname: String
@@ -37,7 +37,7 @@ exports.Schema = `
   type AttentionMsgInfo {
     receive_uid: String
     create_dt: String
-    sender: senderUserInfo
+    sender: userInfo
     associateInfo: associateArticleInfo
     actionText: String
     typeText: String
@@ -50,11 +50,16 @@ exports.Schema = `
     page: Int
     pageSize: Int
   }
+
+  type ThumbUser {
+    list: [userInfo]
+  }
 `;
 exports.Query = `
   userInfo(uid: Int!): UserInfo
   userUnreadCount: UserUnreadCount
   userUnreadList(page: Int!,pageSize: Int!): AttentionMsg
+  thumbUserList(type: Int!,associate_id: Int!): ThumbUser
 `;
 exports.Mutation = ` 
   
