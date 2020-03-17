@@ -1076,8 +1076,9 @@ class User {
     // get 页面
     try {
       let articleThumdId: any[] = [] // 文章点赞id
+      let articleCollectId: any[] = [] // 文章收藏id
       let dynamicThumdId: any[] = [] // 动态点赞id
-      let userAttentionId = [] // 用户关注id
+      let userAttentionId: any[] = [] // 用户关注id
       let { user = '', islogin } = req
       if (!islogin) {
         resClientJson(res, {
@@ -1105,6 +1106,13 @@ class User {
         }
       })
 
+      let allCollect = await models.collect.findAll({
+        where: {
+          uid: user.uid,
+          is_associate: true
+        }
+      })
+
       for (let i in allThumb) {
         if (allThumb[i].type === modelName.article) {
           articleThumdId.push(allThumb[i].associate_id)
@@ -1119,13 +1127,22 @@ class User {
         }
       }
 
+      for (let i in allCollect) {
+        if (allCollect[i].type === modelName.article) {
+          articleCollectId.push(allCollect[i].associate_id)
+        }
+      }
+
+
+
       resClientJson(res, {
         state: 'success',
         message: '获取成功',
         data: {
           articleThumdId,
+          articleCollectId,
           dynamicThumdId,
-          userAttentionId
+          userAttentionId,
         }
       })
     } catch (err) {

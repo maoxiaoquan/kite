@@ -6,17 +6,23 @@ const trimHtml = require('trim-html')
 const xss = require('xss')
 const clientWhere = require('../../utils/clientWhere')
 const config = require('../../../../config')
-const { TimeNow, TimeDistance } = require('../../utils/time')
 const shortid = require('shortid')
 const lowdb = require('../../../../db/lowdb/index')
 import {
   userMessageAction,
+  userMessageActionText,
   modelAction,
-  modelName,
-  modelInfo
+  virtualPlusLess,
+  productTypeInfo,
+  isFree,
+  modelInfo,
+  modelName
 } from '../../utils/constant'
 
+const userMessage = require('../../utils/userMessage')
 const userVirtual = require('../../common/userVirtual')
+import useExperience from '../../common/useExperience'
+const { TimeNow, TimeDistance } = require('../../utils/time')
 
 /* 动态专题模块模块 */
 // 获取动态专题详情
@@ -43,10 +49,6 @@ class Collect {
         throw new Error('模型不存在')
       }
 
-      if (associate_id === user.uid) {
-        throw new Error('关注用户失败，自己不能关注自己')
-      }
-
       let oneAttention = await models.collect.findOne({
         where: {
           uid: user.uid,
@@ -71,8 +73,18 @@ class Collect {
           }
         )
       } else {
-        associateType = 'enter' // 只在第一次关注的时候提交推送
+        associateType = 'enter' // 只在第一次收藏的时候提交推送
+        // 收藏，只在用户第一关注的时候推送消息
+
         // 订阅消息，只在用户第一关注的时候推送消息
+        await userMessage.setMessage({
+          uid: oneModelInfo.uid,
+          sender_id: user.uid,
+          action: userMessageAction.collect, // 动作：收藏
+          type: type, // 类型：点赞
+          content: associate_id
+        })
+
         await models.collect.create({
           uid: user.uid,
           associate_id,
@@ -87,6 +99,60 @@ class Collect {
         data: {
           type: associateType
         }
+      })
+    } catch (err) {
+      resClientJson(res, {
+        state: 'error',
+        message: '错误信息：' + err.message
+      })
+      return false
+    }
+  }
+
+  /**
+   * 我的收藏列表
+   * @param   {object} ctx 上下文对象
+   */
+  static async getCollectList(req: any, res: any, next: any) {
+    let page = req.query.page || 1
+    let type = req.query.type || ''
+    let pageSize = Number(req.query.pageSize) || 10
+    let { user = '' } = req
+    let whereParams: any = {
+      // 查询参数
+      is_associate: true,
+      uid: user.uid
+    }
+
+    type && (whereParams['type'] = type)
+
+    try {
+      let { count, rows } = await models.collect.findAndCountAll({
+        where: whereParams, // 为空，获取全部，也可以自己添加条件
+        offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
+        limit: pageSize, // 每页限制返回的数据条数
+        order: [['create_date', 'DESC']]
+      })
+      for (let i in rows) {
+        let model = modelInfo[rows[i].type].model
+        let idKey = modelInfo[rows[i].type].idKey
+        const info = await models[model].findOne({
+          where: {
+            [idKey]: rows[i].associate_id
+          }
+        })
+        rows[i].setDataValue('info', info || {})
+      }
+
+      resClientJson(res, {
+        state: 'success',
+        data: {
+          count,
+          list: rows,
+          page,
+          pageSize
+        },
+        message: '获取收藏信息成功'
       })
     } catch (err) {
       resClientJson(res, {

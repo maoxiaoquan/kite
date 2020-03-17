@@ -16,7 +16,6 @@ class VerifyAuthority {
       if (user_role_ids) {
         // 排除超管，超管无视所有，拥有最高权限 role = 1000000 为超管
         /* 判断当前登录用户是否有角色，否则无任何权限 */
-
         let clientUrl = ''
         if (~url.indexOf('?')) {
           clientUrl = url.split('?')[0]
@@ -24,7 +23,7 @@ class VerifyAuthority {
           clientUrl = url
         }
         let oneUserAuthority = await models.user_authority.findOne({
-          where: { authority_url: clientUrl.split('/api-client/v1')[1] || '' }
+          where: { authority_url: clientUrl || '' }
         })
         if (oneUserAuthority) {
           let allUserRole = await models.user_role.findAll({

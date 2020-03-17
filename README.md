@@ -13,11 +13,11 @@
 
 ### 项目划分为三个项目
 
-| 项目        | 地址                                       | 主要技术                                | 介绍                                       |
-| ----------- | ------------------------------------------ | --------------------------------------- | ------------------------------------------ |
+| 项目名字        | 项目地址                                       | 主要技术                                | 介绍                                       |
+| ------------- | ------------------------------------------ | --------------------------------------- | ------------------------------------------ |
 | kite        | https://github.com/maoxiaoquan/kite        | express、graphql、socket.io、typescript | 主项目、如果主要是使用，只需要当前项目即可 |
 | kite-client | https://github.com/maoxiaoquan/kite-client | vue、vuex、vue-ssr                      | 前台页面项目（开发前台需要下载项目）       |
-| kite-admin  | https://github.com/maoxiaoquan/kite-admin  | react、redux、                          | 后台页面项目（开发前台需要下载项目）       |
+| kite-admin  | https://github.com/maoxiaoquan/kite-admin  | react、redux、                          | 后台页面项目（开发后台需要下载项目）       |
 
 前台演示网站地址： [小随笔 https://www.xiaosuibi.com/](https://www.xiaosuibi.com/ 'xiaosuibi')
 
