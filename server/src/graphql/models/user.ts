@@ -8,7 +8,6 @@ import {
   statusList,
   modelAction,
   modelActionText,
-
   modelName,
   modelInfo
 } from '../../utils/constant'
@@ -147,6 +146,32 @@ class User {
         list: [],
         page,
         pageSize
+      }
+    }
+  }
+
+  static async getThumbUserList({ type, associate_id }: any) {
+    try {
+      // where
+      let thumbAll = await models.thumb.findAll({
+        where: { type, associate_id }, // 为空，获取全部，也可以自己添加条件
+        limit: 15, // 每页限制返回的数据条数
+        order: [['create_date', 'DESC']]
+      })
+      for (let i in thumbAll) {
+        let user = await models.user.findOne({
+          where: { uid: thumbAll[i].uid },
+          attributes: ['uid', 'avatar', 'nickname']
+        })
+        thumbAll[i].setDataValue('avatar', user.avatar)
+        thumbAll[i].setDataValue('nickname', user.nickname)
+      }
+      return {
+        list: JSON.parse(JSON.stringify(thumbAll))
+      }
+    } catch (err) {
+      return {
+        list: []
       }
     }
   }

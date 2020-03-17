@@ -209,11 +209,11 @@ class Index {
         })
 
         // 判断专栏下方是否有专题
-        columnEnName &&
-          oneArticleColumn.tag_ids &&
-          (whereArticleParams['tag_ids'] = {
+        if (columnEnName && oneArticleColumn.tag_ids) {
+          whereArticleParams['tag_ids'] = {
             [Op.regexp]: `${oneArticleColumn.tag_ids.split(',').join('|')}`
-          })
+          }
+        }
       }
 
       // sort

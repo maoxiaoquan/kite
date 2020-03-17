@@ -107,8 +107,6 @@ router.get('/user/blog-all', articleBlog.getUserArticleBlogAll) // 获取用户�
 
 router.get('/user/attention-list', personalCenter.getUserAttentionList) // 获取用户个人中心关注列表
 
-router.get('/user/like-article-list', personalCenter.getUserLikeArticleList) // 用户个人中心喜欢
-
 router.get('/user/my-article', personalCenter.userMyArticle) // 用户个人中心专题页
 
 router.get('/user/role-all', user.getUserRoleAll) // 获取所有用户角色标签
@@ -202,12 +200,6 @@ router.get(
 
 router.get('/article-blog/info', articleBlog.getArticleBlogView) // 个人专栏详细信息
 router.get('/article-blog/article-list', articleBlog.getArticleBlogArticleList) // 当前个人专栏文章列表
-
-router.get(
-  '/article-blog/like-list',
-  tokens.ClientVerifyToken,
-  articleBlog.getLikeArticleBlogList
-) // 获取用户个人like的文章列表
 
 /**
  * 文章评论相关
@@ -389,12 +381,6 @@ router.post(
   bookComment.deleteBookComment
 ) // 删除小书章节评论 TYPE:AJAX post
 
-router.get(
-  '/collect/books-list',
-  tokens.ClientVerifyToken,
-  books.getCollectBooksList
-) // 收藏小书
-
 // 用户虚拟币开始 2019.11.4 0:19
 
 // 签到
@@ -426,6 +412,8 @@ router.post(
 router.post('/common/like', tokens.ClientVerifyToken, like.setLike) // like TYPE:AJAX post
 
 router.post('/common/collect', tokens.ClientVerifyToken, collect.setCollect) // 收藏
+
+router.get('/collect/list', tokens.ClientVerifyToken, collect.getCollectList) // 收藏列表
 
 router.post('/common/thumb', tokens.ClientVerifyToken, thumb.setThumb) // 用户点赞动态TYPE:AJAX post
 

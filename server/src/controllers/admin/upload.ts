@@ -9,17 +9,23 @@ class Picture {
    */
   static async uploadPicture(req: any, res: any, next: any) {
     try {
-      await upload('admin').single('file')(req, res, next)
-      let destination = req.file.destination.split('static')[1]
-      let filename = req.file.filename
-      let origin = req.header.origin
-      resAdminJson(res, {
-        state: 'success',
-        message: '返回成功',
-        data: {
-          filename: `${origin}${destination}/${filename}` // 返回文件名
-        }
-      })
+      if (req.file) {
+        let destination = req.file.destination.split('static')[1]
+        let filename = req.file.filename
+        let origin = req.headers.origin
+        resAdminJson(res, {
+          state: 'success',
+          message: '小书图片上传成功',
+          data: {
+            filename: `${origin}${destination}/${filename}`
+          }
+        })
+      } else {
+        resAdminJson(res, {
+          state: 'error',
+          message: '小书图片上传成功失败，文件格式有误'
+        })
+      }
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
