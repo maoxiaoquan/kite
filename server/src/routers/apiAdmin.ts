@@ -22,7 +22,7 @@ import books from '../controllers/admin/books' // 小书
 import bookComment from '../controllers/admin/bookComment' // 小书章节评论
 import booksComment from '../controllers/admin/booksComment' // 小书评价
 // 此文件所有接口都是后台管理员操作前后台数据所用
-
+const uploadModel = require('../utils/upload')
 const router = express.Router()
 const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
 const tokens = require('../utils/tokens') // 登录tokens
@@ -308,9 +308,9 @@ router.post(
 router.post(
   '/upload/picture',
   tokens.AdminVerifyToken,
-  verifyAuthority.AdminCheck,
+  uploadModel('admin').single('file'),
   upload.uploadPicture
-)
+) // 小书图片上传
 
 /**
  *  首页数据

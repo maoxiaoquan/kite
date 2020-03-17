@@ -3,12 +3,7 @@ import moment from 'moment'
 const models = require('../../../../db/mysqldb/index')
 const Op = require('sequelize').Op
 const clientWhere = require('../../utils/clientWhere')
-import {
-  userMessageAction,
-  modelAction,
-
-  modelName
-} from '../../utils/constant'
+import { userMessageAction, modelAction, modelName } from '../../utils/constant'
 
 const userVirtual = require('../../common/userVirtual')
 
@@ -84,24 +79,33 @@ class Subscribe {
     let pageSize = req.query.pageSize || 25
     let { user = '' } = req
     let whereParams: any = {
-      enable: 1
+      enable: true
     }
 
     try {
       let allSubscribeArticleTag = await models.attention.findAll({
         where: {
-          uid: user.uid
+          uid: user.uid,
+          type: modelName.article_tag,
+          is_associate: true
         }
       })
 
+      console.log(
+        '---------------------allSubscribeArticleTag',
+        allSubscribeArticleTag
+      )
+
       if (allSubscribeArticleTag.length > 0) {
         let myArticleTag = allSubscribeArticleTag.map((result: any) => {
-          return result.tag_id
+          return result.associate_id
         })
 
+        console.log('myArticleTag', myArticleTag)
+
         myArticleTag &&
-          (whereParams['tag_id'] = {
-            [Op.regexp]: `${myArticleTag.join('|')}`
+          (whereParams['id'] = {
+            [Op.or]: myArticleTag
           })
 
         let { count, rows } = await models.article_tag.findAndCountAll({

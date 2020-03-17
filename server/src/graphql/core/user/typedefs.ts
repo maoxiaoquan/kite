@@ -18,7 +18,7 @@ export const Schema = `
     privateChatCount: Int 
   }
 
-  type senderUserInfo {
+  type userInfo {
     uid: Int
     avatar: String
     nickname: String
@@ -35,7 +35,7 @@ export const Schema = `
   type AttentionMsgInfo {
     receive_uid: String
     create_dt: String
-    sender: senderUserInfo
+    sender: userInfo
     associateInfo: associateArticleInfo
     actionText: String
     typeText: String
@@ -48,12 +48,17 @@ export const Schema = `
     page: Int
     pageSize: Int
   }
+
+  type ThumbUser {
+    list: [userInfo]
+  }
 `
 
 export const Query = `
   userInfo(uid: Int!): UserInfo
   userUnreadCount: UserUnreadCount
   userUnreadList(page: Int!,pageSize: Int!): AttentionMsg
+  thumbUserList(type: Int!,associate_id: Int!): ThumbUser
 `
 
 export const Mutation = ` 
