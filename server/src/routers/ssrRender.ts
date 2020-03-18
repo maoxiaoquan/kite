@@ -3,7 +3,7 @@ const path = require('path')
 const LRU = require('lru-cache')
 const config = require('../../../config')
 const { createBundleRenderer } = require('vue-server-renderer')
-
+const THEME_NAME = '_default'
 // 缓存
 const microCache = new LRU({
   max: 100,
@@ -29,8 +29,8 @@ const templatePath = path.resolve(
 // 第 2步：根据环境变量生成不同BundleRenderer实例
 
 // 获取客户端、服务器端打包生成的json文件
-const serverBundle = require('../../../static/_client/vue-ssr-server-bundle.json')
-const clientManifest = require('../../../static/_client/vue-ssr-client-manifest.json')
+const serverBundle = require(`../../../static/theme/${THEME_NAME}/vue-ssr-server-bundle.json`)
+const clientManifest = require(`../../../static/theme/${THEME_NAME}/vue-ssr-client-manifest.json`)
 // 赋值
 renderer = createBundleRenderer(serverBundle, {
   runInNewContext: false,

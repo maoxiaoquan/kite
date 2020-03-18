@@ -154,7 +154,7 @@ class User {
     try {
       // where
       let thumbAll = await models.thumb.findAll({
-        where: { type, associate_id }, // 为空，获取全部，也可以自己添加条件
+        where: { type, associate_id, is_associate: true }, // 为空，获取全部，也可以自己添加条件
         limit: 15, // 每页限制返回的数据条数
         order: [['create_date', 'DESC']]
       })

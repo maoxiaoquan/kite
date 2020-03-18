@@ -1,24 +1,24 @@
 {
-  "publicPath": "/_client/",
+  "publicPath": "/theme/_default/",
   "all": [
-    "static/css/main.ffbd982ff31267d88971.css",
-    "static/css/manifest.0013f551d6cb72e22921.css",
+    "static/css/main.e21dad6fc5f57d303f4f.css",
+    "static/css/manifest.4b277ecced0099337834.css",
     "static/fonts/element-icons.535877f.woff",
     "static/fonts/element-icons.732389d.ttf",
     "static/fonts/fontello.068ca2b.ttf",
     "static/fonts/fontello.e73a064.eot",
-    "static/js/0.91a10d8e84e7e6f721a5.js",
+    "static/js/0.283be90491e0cfd4aac6.js",
     "static/js/1.77dc26e180e05a148239.js",
-    "static/js/main.d6dc1f49d39817045b5c.js"
+    "static/js/main.13f29c884a731f6a7aeb.js"
   ],
   "initial": [
     "static/js/1.77dc26e180e05a148239.js",
-    "static/css/main.ffbd982ff31267d88971.css",
-    "static/js/main.d6dc1f49d39817045b5c.js"
+    "static/css/main.e21dad6fc5f57d303f4f.css",
+    "static/js/main.13f29c884a731f6a7aeb.js"
   ],
   "async": [
-    "static/css/manifest.0013f551d6cb72e22921.css",
-    "static/js/0.91a10d8e84e7e6f721a5.js"
+    "static/css/manifest.4b277ecced0099337834.css",
+    "static/js/0.283be90491e0cfd4aac6.js"
   ],
   "modules": {
     "12692774": [
