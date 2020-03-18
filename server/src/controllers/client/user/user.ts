@@ -773,7 +773,7 @@ class User {
           await models.user.findOne({
             where: { uid: rows[i].sender_id },
             attributes: ['uid', 'avatar', 'nickname']
-          })
+          }) || {}
         )
         rows[i].setDataValue(
           'actionText',
@@ -790,7 +790,7 @@ class User {
             modelInfo[rows[i].type].model,
             await models[modelInfo[rows[i].type].model].findOne({
               where: { [modelInfo[rows[i].type].idKey]: rows[i].content }
-            })
+            }) || {}
           )
         }
       }
