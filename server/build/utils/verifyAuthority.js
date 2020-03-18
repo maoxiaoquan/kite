@@ -37,7 +37,7 @@ class VerifyAuthority {
                         clientUrl = url;
                     }
                     let oneUserAuthority = yield models.user_authority.findOne({
-                        where: { authority_url: clientUrl.split('/api-client/v1')[1] || '' }
+                        where: { authority_url: clientUrl || '' }
                     });
                     if (oneUserAuthority) {
                         let allUserRole = yield models.user_role.findAll({

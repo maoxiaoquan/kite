@@ -983,6 +983,7 @@ class User {
             // get 页面
             try {
                 let articleThumdId = []; // 文章点赞id
+                let articleCollectId = []; // 文章收藏id
                 let dynamicThumdId = []; // 动态点赞id
                 let userAttentionId = []; // 用户关注id
                 let { user = '', islogin } = req;
@@ -1009,6 +1010,12 @@ class User {
                         is_associate: true
                     }
                 });
+                let allCollect = yield models.collect.findAll({
+                    where: {
+                        uid: user.uid,
+                        is_associate: true
+                    }
+                });
                 for (let i in allThumb) {
                     if (allThumb[i].type === constant_1.modelName.article) {
                         articleThumdId.push(allThumb[i].associate_id);
@@ -1022,13 +1029,19 @@ class User {
                         userAttentionId.push(allAttention[i].associate_id);
                     }
                 }
+                for (let i in allCollect) {
+                    if (allCollect[i].type === constant_1.modelName.article) {
+                        articleCollectId.push(allCollect[i].associate_id);
+                    }
+                }
                 resClientJson(res, {
                     state: 'success',
                     message: '获取成功',
                     data: {
                         articleThumdId,
+                        articleCollectId,
                         dynamicThumdId,
-                        userAttentionId
+                        userAttentionId,
                     }
                 });
             }

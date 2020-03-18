@@ -39,6 +39,13 @@ export const Query = {
         pageSize: 0
       }
     }
+  },
+  async thumbUserList(_: any, { type, associate_id }: any, { islogin }: any) {
+    const thumbUserList = await models.user.getThumbUserList({
+      type,
+      associate_id
+    })
+    return thumbUserList || []
   }
 }
 

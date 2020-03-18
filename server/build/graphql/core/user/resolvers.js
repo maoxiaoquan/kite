@@ -52,6 +52,15 @@ exports.Query = {
                 };
             }
         });
+    },
+    thumbUserList(_, { type, associate_id }, { islogin }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const thumbUserList = yield models.user.getThumbUserList({
+                type,
+                associate_id
+            });
+            return thumbUserList || [];
+        });
     }
 };
 exports.Mutation = {};

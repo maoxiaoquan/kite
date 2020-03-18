@@ -16,11 +16,12 @@ const trimHtml = require('trim-html');
 const xss = require('xss');
 const clientWhere = require('../../utils/clientWhere');
 const config = require('../../../../config');
-const { TimeNow, TimeDistance } = require('../../utils/time');
 const shortid = require('shortid');
 const lowdb = require('../../../../db/lowdb/index');
 const constant_1 = require("../../utils/constant");
+const userMessage = require('../../utils/userMessage');
 const userVirtual = require('../../common/userVirtual');
+const { TimeNow, TimeDistance } = require('../../utils/time');
 /* 动态专题模块模块 */
 // 获取动态专题详情
 class Collect {
@@ -44,9 +45,6 @@ class Collect {
                 if (!oneModelInfo) {
                     throw new Error('模型不存在');
                 }
-                if (associate_id === user.uid) {
-                    throw new Error('关注用户失败，自己不能关注自己');
-                }
                 let oneAttention = yield models.collect.findOne({
                     where: {
                         uid: user.uid,
@@ -68,8 +66,16 @@ class Collect {
                     });
                 }
                 else {
-                    associateType = 'enter'; // 只在第一次关注的时候提交推送
+                    associateType = 'enter'; // 只在第一次收藏的时候提交推送
+                    // 收藏，只在用户第一关注的时候推送消息
                     // 订阅消息，只在用户第一关注的时候推送消息
+                    yield userMessage.setMessage({
+                        uid: oneModelInfo.uid,
+                        sender_id: user.uid,
+                        action: constant_1.userMessageAction.collect,
+                        type: type,
+                        content: associate_id
+                    });
                     yield models.collect.create({
                         uid: user.uid,
                         associate_id,
@@ -83,6 +89,59 @@ class Collect {
                     data: {
                         type: associateType
                     }
+                });
+            }
+            catch (err) {
+                resClientJson(res, {
+                    state: 'error',
+                    message: '错误信息：' + err.message
+                });
+                return false;
+            }
+        });
+    }
+    /**
+     * 我的收藏列表
+     * @param   {object} ctx 上下文对象
+     */
+    static getCollectList(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let page = req.query.page || 1;
+            let type = req.query.type || '';
+            let pageSize = Number(req.query.pageSize) || 10;
+            let { user = '' } = req;
+            let whereParams = {
+                // 查询参数
+                is_associate: true,
+                uid: user.uid
+            };
+            type && (whereParams['type'] = type);
+            try {
+                let { count, rows } = yield models.collect.findAndCountAll({
+                    where: whereParams,
+                    offset: (page - 1) * pageSize,
+                    limit: pageSize,
+                    order: [['create_date', 'DESC']]
+                });
+                for (let i in rows) {
+                    let model = constant_1.modelInfo[rows[i].type].model;
+                    let idKey = constant_1.modelInfo[rows[i].type].idKey;
+                    const info = yield models[model].findOne({
+                        where: {
+                            [idKey]: rows[i].associate_id
+                        }
+                    });
+                    rows[i].setDataValue('info', info || {});
+                }
+                resClientJson(res, {
+                    state: 'success',
+                    data: {
+                        count,
+                        list: rows,
+                        page,
+                        pageSize
+                    },
+                    message: '获取收藏信息成功'
                 });
             }
             catch (err) {

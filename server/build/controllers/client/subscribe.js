@@ -78,21 +78,25 @@ class Subscribe {
             let pageSize = req.query.pageSize || 25;
             let { user = '' } = req;
             let whereParams = {
-                enable: 1
+                enable: true
             };
             try {
                 let allSubscribeArticleTag = yield models.attention.findAll({
                     where: {
-                        uid: user.uid
+                        uid: user.uid,
+                        type: constant_1.modelName.article_tag,
+                        is_associate: true
                     }
                 });
+                console.log('---------------------allSubscribeArticleTag', allSubscribeArticleTag);
                 if (allSubscribeArticleTag.length > 0) {
                     let myArticleTag = allSubscribeArticleTag.map((result) => {
-                        return result.tag_id;
+                        return result.associate_id;
                     });
+                    console.log('myArticleTag', myArticleTag);
                     myArticleTag &&
-                        (whereParams['tag_id'] = {
-                            [Op.regexp]: `${myArticleTag.join('|')}`
+                        (whereParams['id'] = {
+                            [Op.or]: myArticleTag
                         });
                     let { count, rows } = yield models.article_tag.findAndCountAll({
                         where: whereParams,
