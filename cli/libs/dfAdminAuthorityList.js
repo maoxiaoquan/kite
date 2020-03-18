@@ -165,6 +165,50 @@ module.exports = [
     enable: false
   },
   {
+    authority_description: '文章评论管理',
+    authority_id: 'yoUnDy1tf',
+    authority_name: '评论管理',
+    authority_parent_id: 'AaZjGoX4K',
+    authority_parent_name: '用户管理',
+    authority_sort: 2,
+    authority_type: '1',
+    authority_url: 'articleComment',
+    enable: true
+  },
+  {
+    authority_description: '获取评论列表',
+    authority_id: 'vAlRwG42i',
+    authority_name: '获取评论列表',
+    authority_parent_id: 'yoUnDy1tf',
+    authority_parent_name: '评论管理',
+    authority_sort: 0,
+    authority_type: '2',
+    authority_url: '/article-comment/list',
+    enable: false
+  },
+  {
+    authority_description: '更新评论',
+    authority_id: 'Aj46PocjE',
+    authority_name: '更新评论',
+    authority_parent_id: 'yoUnDy1tf',
+    authority_parent_name: '评论管理',
+    authority_sort: 1,
+    authority_type: '2',
+    authority_url: '/article-comment/update',
+    enable: false
+  },
+  {
+    authority_description: '删除评论',
+    authority_id: 'NgMPyBTyt',
+    authority_name: '删除评论',
+    authority_parent_id: 'yoUnDy1tf',
+    authority_parent_name: '评论管理',
+    authority_sort: 2,
+    authority_type: '2',
+    authority_url: '/article-comment/delete',
+    enable: false
+  },
+  {
     authority_description: '用户管理',
     authority_id: 'f-_KRK5ZL',
     authority_name: '用户管理',
@@ -283,50 +327,6 @@ module.exports = [
     authority_sort: 4,
     authority_type: '2',
     authority_url: '/user-role/delete',
-    enable: false
-  },
-  {
-    authority_description: '文章评论管理',
-    authority_id: 'yoUnDy1tf',
-    authority_name: '评论管理',
-    authority_parent_id: 'f-_KRK5ZL',
-    authority_parent_name: '用户管理',
-    authority_sort: 2,
-    authority_type: '1',
-    authority_url: 'comment',
-    enable: true
-  },
-  {
-    authority_description: '获取评论列表',
-    authority_id: 'vAlRwG42i',
-    authority_name: '获取评论列表',
-    authority_parent_id: 'yoUnDy1tf',
-    authority_parent_name: '评论管理',
-    authority_sort: 0,
-    authority_type: '2',
-    authority_url: '/article-comment/list',
-    enable: false
-  },
-  {
-    authority_description: '更新评论',
-    authority_id: 'Aj46PocjE',
-    authority_name: '更新评论',
-    authority_parent_id: 'yoUnDy1tf',
-    authority_parent_name: '评论管理',
-    authority_sort: 1,
-    authority_type: '2',
-    authority_url: '/article-comment/update',
-    enable: false
-  },
-  {
-    authority_description: '删除评论',
-    authority_id: 'NgMPyBTyt',
-    authority_name: '删除评论',
-    authority_parent_id: 'yoUnDy1tf',
-    authority_parent_name: '评论管理',
-    authority_sort: 2,
-    authority_type: '2',
-    authority_url: '/article-comment/delete',
     enable: false
   },
   {

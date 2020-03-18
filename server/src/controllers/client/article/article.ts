@@ -787,11 +787,14 @@ class Article {
         where: { aid, uid: user.uid }
       })
 
-      let articleAnnex = await models.article_annex.findOne({
-        where: { aid: article.aid, uid: user.uid }
-      })
+
 
       if (article) {
+
+        let articleAnnex = await models.article_annex.findOne({
+          where: { aid: article.aid, uid: user.uid }
+        })
+
         article.setDataValue(
           'user',
           await models.user.findOne({

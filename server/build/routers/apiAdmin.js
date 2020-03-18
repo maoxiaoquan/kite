@@ -27,6 +27,7 @@ const books_1 = __importDefault(require("../controllers/admin/books")); // 小�
 const bookComment_1 = __importDefault(require("../controllers/admin/bookComment")); // 小书章节评论
 const booksComment_1 = __importDefault(require("../controllers/admin/booksComment")); // 小书评价
 // 此文件所有接口都是后台管理员操作前后台数据所用
+const uploadModel = require('../utils/upload');
 const router = express_1.default.Router();
 const verifyAuthority = require('../utils/verifyAuthority'); // 权限验证
 const tokens = require('../utils/tokens'); // 登录tokens
@@ -112,7 +113,7 @@ router.post('/article-comment/delete', tokens.AdminVerifyToken, verifyAuthority.
 /**
  * 上传
  */
-router.post('/upload/picture', tokens.AdminVerifyToken, verifyAuthority.AdminCheck, upload_1.default.uploadPicture);
+router.post('/upload/picture', tokens.AdminVerifyToken, uploadModel('admin').single('file'), upload_1.default.uploadPicture); // 小书图片上传
 /**
  *  首页数据
  */
