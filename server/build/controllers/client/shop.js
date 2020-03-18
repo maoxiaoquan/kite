@@ -216,7 +216,7 @@ class Shop {
                             [idKey]: rows[i].product_id
                         }
                     });
-                    rows[i].setDataValue('productInfo', productInfo);
+                    rows[i].setDataValue('productInfo', productInfo || {});
                 }
                 resClientJson(res, {
                     state: 'success',
