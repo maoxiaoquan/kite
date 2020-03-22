@@ -41,8 +41,12 @@ class useExperience {
 
         let date = new Date()
         let getTime = date.setHours(date.getHours())
-        let startTime = new Date(new Date(getTime).setHours(0, 0, 0, 0)) // 当天0点
-        let endTime = new Date(new Date(getTime).setHours(23, 59, 59, 999))
+        let startTime = moment(
+          new Date(new Date(getTime).setHours(0, 0, 0, 0))
+        ).format('YYYY-MM-DD HH:mm:ss') // 当天0点
+        let endTime = moment(
+          new Date(new Date(getTime).setHours(23, 59, 59, 999))
+        ).format('YYYY-MM-DD HH:mm:ss')
 
         const countTodayExperience = await models.experience.count({
           // 当前类型的当天的数量
