@@ -698,4 +698,10 @@ router.post(
   bookComment.deleteComment
 )
 
+router.get(
+  '/system-config/theme-list',
+  tokens.AdminVerifyToken,
+  system.getSystemTheme
+)
+
 module.exports = router

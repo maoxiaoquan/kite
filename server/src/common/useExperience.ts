@@ -78,11 +78,6 @@ class useExperience {
         let value = experienceInfo[params.action]
         let experience = Number(userInfo.experience)
         const total = experience + value
-        console.log('params', params)
-        console.log('startTime', startTime)
-        console.log('endTime', endTime)
-        console.log('countTodayExperience', countTodayExperience)
-        console.log('currTodayExperience', currTodayExperience)
         if (params.action === modelAction.readOther) {
           // 属于阅读的时候
           if (countTodayExperience < 5 && currTodayExperience === 0) {

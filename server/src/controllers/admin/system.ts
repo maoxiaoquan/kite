@@ -1,6 +1,7 @@
 const { resAdminJson } = require('../../utils/resData')
 const lowdb = require('../../../../db/lowdb/index')
-
+const path = require('path')
+const fs = require('fs')
 class System {
   /**
    * 获取标分页评论列表操作
@@ -84,6 +85,49 @@ class System {
         state: 'error',
         message: '更新系统配置失败'
       })
+    }
+  }
+
+  /**
+   * 获取标分页评论列表操作
+   * @param   {object} ctx 上下文对象
+   */
+  static async getSystemTheme(req: any, res: any, next: any) {
+    try {
+      let list: String[] = []
+
+      const themeList: String[] = await new Promise((resolve, reject) => {
+        return fs.readdir(
+          path.resolve(__dirname, '../../../../static/theme/'),
+          (err: any, filenames: any) => {
+            if (err) {
+              reject(err)
+            } else {
+              resolve(filenames)
+            }
+          }
+        )
+      })
+
+      for (let i in themeList) {
+        if (!~themeList[i].indexOf('.')) {
+          list.push(themeList[i])
+        }
+      }
+
+      resAdminJson(res, {
+        state: 'success',
+        message: '返回成功',
+        data: {
+          list
+        }
+      })
+    } catch (err) {
+      resAdminJson(res, {
+        state: 'error',
+        message: '错误信息：' + err
+      })
+      return false
     }
   }
 }
