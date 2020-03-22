@@ -52,7 +52,6 @@ class useExperience {
           // 当前类型的当天的数量
           where: {
             uid: params.uid,
-            ass_uid: params.ass_uid,
             type: params.type,
             action: params.action,
             create_date: {
@@ -66,7 +65,6 @@ class useExperience {
           // 当前类型的对象当天的数量
           where: {
             uid: params.uid,
-            ass_uid: params.ass_uid,
             type: params.type,
             action: params.action,
             associate: params.associate,
