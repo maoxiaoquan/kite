@@ -240,47 +240,53 @@ exports.userMessageAction = {
 exports.userMessageTypeText = {
     // 文章的类型
     [exports.modelName.user]: {
-        [exports.userMessageAction.attention]: '关注了你' // 用户1
+        [exports.userMessageAction.attention]: '关注了你'
     },
     [exports.modelName.article]: {
-        [exports.userMessageAction.comment]: '评论了你的文章' // 文章2
+        [exports.userMessageAction.comment]: '评论了你的文章',
+        [exports.userMessageAction.reply]: '在你的文章有回复',
+        [exports.userMessageAction.collect]: '收藏文章'
     },
     [exports.modelName.article_blog]: {
-        [exports.userMessageAction.collect]: '收藏了你的专栏' // 文章个人专栏3
+        [exports.userMessageAction.collect]: '收藏了你的专栏'
     },
     [exports.modelName.article_comment]: {
-        [exports.userMessageAction.reply]: '文章中回复你的' // 文章评论4
+        [exports.userMessageAction.reply]: '文章中回复你的'
     },
     [exports.modelName.book]: {
-        [exports.userMessageAction.comment]: '评论了你的小书章节' // 小书章节5
+        [exports.userMessageAction.comment]: '评论了你的小书章节',
+        [exports.userMessageAction.reply]: '在你的小书章节有回复'
     },
     [exports.modelName.book_comment]: {
-        [exports.userMessageAction.reply]: '小书章节中回复你的' // 小书章节评论6
+        [exports.userMessageAction.reply]: '小书章节中回复你的'
     },
     [exports.modelName.books]: {
         [exports.userMessageAction.comment]: '评论了你的小书',
-        [exports.userMessageAction.sell]: '卖出小书' // 小书7
+        [exports.userMessageAction.sell]: '卖出小书',
+        [exports.userMessageAction.reply]: '在你的小书有回复',
+        [exports.userMessageAction.collect]: '收藏小书'
     },
     [exports.modelName.books_comment]: {
-        [exports.userMessageAction.reply]: '小书中回复你的' // 小书评论8
+        [exports.userMessageAction.reply]: '小书中回复你的'
     },
     [exports.modelName.dynamic]: {
-        [exports.userMessageAction.comment]: '评论了你片刻' // 片刻9
+        [exports.userMessageAction.comment]: '评论了你片刻',
+        [exports.userMessageAction.reply]: '在你的片刻有回复'
     },
     [exports.modelName.dynamic_comment]: {
-        [exports.userMessageAction.comment]: '片刻中回复你的' // 片刻评论10
+        [exports.userMessageAction.comment]: '片刻中回复你的'
     },
     [exports.modelName.thumb]: {
-        [exports.userMessageAction.thumb]: '点赞你的' // 点赞了你的片刻
+        [exports.userMessageAction.thumb]: '点赞你的'
     },
     [exports.modelName.like]: {
-        [exports.userMessageAction.like]: '喜欢了你的文章' // 喜欢了你的文章
+        [exports.userMessageAction.like]: '喜欢了你的文章'
     },
     [exports.modelName.collect]: {
-        [exports.userMessageAction.collect]: '收藏你的' // 收藏你的专栏
+        [exports.userMessageAction.collect]: '收藏你的'
     },
     [exports.modelName.article_annex]: {
-        [exports.userMessageAction.sell]: '卖出' // 小书7
+        [exports.userMessageAction.sell]: '卖出文章附件'
     }
 };
 exports.userMessageActionText = {

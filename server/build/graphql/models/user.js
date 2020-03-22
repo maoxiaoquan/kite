@@ -146,7 +146,7 @@ class User {
             try {
                 // where
                 let thumbAll = yield models.thumb.findAll({
-                    where: { type, associate_id },
+                    where: { type, associate_id, is_associate: true },
                     limit: 15,
                     order: [['create_date', 'DESC']]
                 });
