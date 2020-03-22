@@ -76,6 +76,22 @@ class useExperience {
         let value = experienceInfo[params.action]
         let experience = Number(userInfo.experience)
         const total = experience + value
+        console.log('params', params)
+        console.log('startTime', startTime)
+        console.log('endTime', endTime)
+        console.log('countTodayExperience', countTodayExperience)
+        console.log('currTodayExperience', currTodayExperience)
+        if (params.action === modelAction.readOther) {
+          // 属于阅读的时候
+          if (countTodayExperience < 5 && currTodayExperience === 0) {
+            // 阅读试通一个类型，一天可以获得5次经验 对象不可重复
+            // 当天可获取的经验类型
+            await newAddExperience()
+          }
+        } else if (params.action === modelAction.obtain_thumb) {
+          // 属于点赞的时候一天可获得的经验为无数次
+          await newAddExperience()
+        }
 
         async function newAddExperience() {
           return await models.sequelize.transaction((t: any) => {
@@ -103,18 +119,6 @@ class useExperience {
                 )
               })
           })
-        }
-
-        if (params.action === modelAction.readOther) {
-          // 属于阅读的时候
-          if (countTodayExperience < 5 && currTodayExperience === 0) {
-            // 阅读试通一个类型，一天可以获得5次经验 对象不可重复
-            // 当天可获取的经验类型
-            await newAddExperience()
-          }
-        } else if (params.action === modelAction.obtain_thumb) {
-          // 属于点赞的时候一天可获得的经验为无数次
-          await newAddExperience()
         }
 
         resolve({ status: 'success' }) // 这里不管是正确还是失败，都返回resolve
