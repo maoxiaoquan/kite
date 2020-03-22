@@ -7,6 +7,7 @@
     "init": "node  ./cli/init.js ",
     "start": "cross-env NODE_ENV=development nodemon --watch server/src/**/*.ts --exec ts-node server/src/index.ts",
     "build": "tsc",
+    "dev": "nodemon server/build/index.ts",
     "server": "cross-env NODE_ENV=production pm2 start pm2.json",
     "test-mysql": "node db/mysqldb/test.js",
     "kite-update": "node update"
