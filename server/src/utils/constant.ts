@@ -249,47 +249,53 @@ export const userMessageAction = {
 export const userMessageTypeText = {
   // 文章的类型
   [modelName.user]: {
-    [userMessageAction.attention]: '关注了你' // 用户1
+    [userMessageAction.attention]: '关注了你'
   },
   [modelName.article]: {
-    [userMessageAction.comment]: '评论了你的文章' // 文章2
+    [userMessageAction.comment]: '评论了你的文章',
+    [userMessageAction.reply]: '在你的文章有回复',
+    [userMessageAction.collect]: '收藏文章'
   },
   [modelName.article_blog]: {
-    [userMessageAction.collect]: '收藏了你的专栏' // 文章个人专栏3
+    [userMessageAction.collect]: '收藏了你的专栏'
   },
   [modelName.article_comment]: {
-    [userMessageAction.reply]: '文章中回复你的' // 文章评论4
+    [userMessageAction.reply]: '文章中回复你的'
   },
   [modelName.book]: {
-    [userMessageAction.comment]: '评论了你的小书章节' // 小书章节5
+    [userMessageAction.comment]: '评论了你的小书章节',
+    [userMessageAction.reply]: '在你的小书章节有回复'
   },
   [modelName.book_comment]: {
-    [userMessageAction.reply]: '小书章节中回复你的' // 小书章节评论6
+    [userMessageAction.reply]: '小书章节中回复你的'
   },
   [modelName.books]: {
-    [userMessageAction.comment]: '评论了你的小书', // 小书7
-    [userMessageAction.sell]: '卖出小书' // 小书7
+    [userMessageAction.comment]: '评论了你的小书',
+    [userMessageAction.sell]: '卖出小书',
+    [userMessageAction.reply]: '在你的小书有回复',
+    [userMessageAction.collect]: '收藏小书'
   },
   [modelName.books_comment]: {
-    [userMessageAction.reply]: '小书中回复你的' // 小书评论8
+    [userMessageAction.reply]: '小书中回复你的'
   },
   [modelName.dynamic]: {
-    [userMessageAction.comment]: '评论了你片刻' // 片刻9
+    [userMessageAction.comment]: '评论了你片刻',
+    [userMessageAction.reply]: '在你的片刻有回复'
   },
   [modelName.dynamic_comment]: {
-    [userMessageAction.comment]: '片刻中回复你的' // 片刻评论10
+    [userMessageAction.comment]: '片刻中回复你的'
   },
   [modelName.thumb]: {
-    [userMessageAction.thumb]: '点赞你的' // 点赞了你的片刻
+    [userMessageAction.thumb]: '点赞你的'
   },
   [modelName.like]: {
-    [userMessageAction.like]: '喜欢了你的文章' // 喜欢了你的文章
+    [userMessageAction.like]: '喜欢了你的文章'
   },
   [modelName.collect]: {
-    [userMessageAction.collect]: '收藏你的' // 收藏你的专栏
+    [userMessageAction.collect]: '收藏你的'
   },
   [modelName.article_annex]: {
-    [userMessageAction.sell]: '卖出' // 小书7
+    [userMessageAction.sell]: '卖出文章附件'
   }
 }
 

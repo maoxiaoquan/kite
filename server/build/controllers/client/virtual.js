@@ -102,9 +102,9 @@ class Virtual {
                         rows[i].type !== constant_1.modelName.user &&
                         ~modelNameNum.indexOf(rows[i].type)) {
                         // 排除关注用户
-                        rows[i].setDataValue(constant_1.modelInfo[rows[i].type].model, yield models[constant_1.modelInfo[rows[i].type].model].findOne({
+                        rows[i].setDataValue('modelInfo', (yield models[constant_1.modelInfo[rows[i].type].model].findOne({
                             where: { [constant_1.modelInfo[rows[i].type].idKey]: rows[i].associate }
-                        }));
+                        })) || {});
                     }
                 }
                 yield resClientJson(res, {

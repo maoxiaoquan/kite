@@ -107,10 +107,10 @@ class Virtual {
         ) {
           // 排除关注用户
           rows[i].setDataValue(
-            modelInfo[rows[i].type].model,
+            'modelInfo',
             await models[modelInfo[rows[i].type].model].findOne({
               where: { [modelInfo[rows[i].type].idKey]: rows[i].associate }
-            })
+            }) || {}
           )
         }
       }

@@ -689,18 +689,18 @@ class User {
                 });
                 for (let i in rows) {
                     rows[i].setDataValue('create_dt', yield moment_1.default(rows[i].create_date).format('YYYY-MM-DD'));
-                    rows[i].setDataValue('sender', yield models.user.findOne({
+                    rows[i].setDataValue('sender', (yield models.user.findOne({
                         where: { uid: rows[i].sender_id },
                         attributes: ['uid', 'avatar', 'nickname']
-                    }));
+                    })) || {});
                     rows[i].setDataValue('actionText', constant_1.userMessageActionText[rows[i].action]);
                     if (rows[i].content &&
                         rows[i].type !== constant_1.modelName.user &&
                         ~modelNameNum.indexOf(rows[i].type)) {
                         // 排除关注用户
-                        rows[i].setDataValue(constant_1.modelInfo[rows[i].type].model, yield models[constant_1.modelInfo[rows[i].type].model].findOne({
+                        rows[i].setDataValue(constant_1.modelInfo[rows[i].type].model, (yield models[constant_1.modelInfo[rows[i].type].model].findOne({
                             where: { [constant_1.modelInfo[rows[i].type].idKey]: rows[i].content }
-                        }));
+                        })) || {});
                     }
                 }
                 if (allUserMessage.length > 0) {
