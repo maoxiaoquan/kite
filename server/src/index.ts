@@ -15,7 +15,7 @@ const app: Express = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server, {})
 require('../../db/mysqldb/pool').poolInit()
-app.use(helmet());
+app.use(helmet())
 const cli = lowdb
   .read()
   .get('cli')
@@ -24,8 +24,9 @@ const cli = lowdb
 io.on('connection', (socket: any) => {
   socketLink(io, socket)
 })
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+
+app.use(bodyParser.json()) //数据JSON类型
+app.use(bodyParser.urlencoded({ extended: false })) //解析post请求数据
 app.use(cookieParser('cookie_kite'))
 app.use('/api-client/v1', chat(io))
 // 配置静态资源加载中间件

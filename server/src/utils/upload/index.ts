@@ -1,18 +1,15 @@
 import upload from './defaultUpload'
 const lowdb = require('../../../../db/lowdb/index')
-const storage = lowdb
-  .read()
-  .get('storage')
-  .value()
 export default async (req: any, res: any, next: any) => {
+  const storage = lowdb
+    .read()
+    .get('storage')
+    .value()
   let file: String = ''
-  const { type } = req.body
-  console.log('storage.serviceProvider', storage.serviceProvider)
   if (!storage.serviceProvider || storage.serviceProvider === 'default') {
-    await upload('avatarImg')(req, res, next)
-  } else {
+    await upload()(req, res, next)
+  } else if (storage.serviceProvider === 'qiniu') {
     req.file = '66666666'
     await next()
   }
 }
-
