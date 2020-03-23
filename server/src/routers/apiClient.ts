@@ -22,9 +22,9 @@ import virtual from '../controllers/client/virtual' // 虚拟币
 import shop from '../controllers/client/shop' // 购物
 import experience from '../controllers/client/experience' // 经验
 
+import uploadUse from '../utils/upload/index'
 const tokens = require('../utils/tokens') // 登录tokens
 const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
-const uploadModel = require('../utils/upload')
 const router = express.Router()
 /**
  * 获取标签列表操作
@@ -41,7 +41,14 @@ router.post('/sign-up-code', user.userSignUpCode) // 注册数据  发送注册 
 
 router.post('/reset-password-code', user.sendResetPasswordCode) // 重置密码验证码发送 TYPE:AJAX post
 
-router.post('/reset_password', user.userResetPassword) // 重置密码 TYPE:AJAX post
+router.post('/reset-password', user.userResetPassword) // 重置密码 TYPE:AJAX post
+
+router.post(
+  '/upload-file',
+  tokens.ClientVerifyToken,
+  uploadUse,
+  upload.uploadFile
+) // 用户修改头像 post
 
 /**
  * 个人信息类
@@ -82,7 +89,6 @@ router.delete(
 router.post(
   '/personal/upload-avatar',
   tokens.ClientVerifyToken,
-  uploadModel('avatarImg').single('file'),
   upload.uploadUserAvatar
 ) // 用户修改头像 post
 
@@ -124,20 +130,6 @@ router.get(
 ) // 根据aid获取文章 get
 
 router.get('/user-article', tokens.ClientVerifyToken, article.getUserArticle) // 根据aid uid获取用户自己的某一篇文章 get
-
-router.post(
-  '/article/upload-article-picture',
-  tokens.ClientVerifyToken,
-  uploadModel('articleImg').single('file'),
-  upload.uploadArticlePicture
-) // 文章图片上传
-
-router.post(
-  '/article-blog/upload-img',
-  tokens.ClientVerifyToken,
-  uploadModel('articleBlogImg').single('file'),
-  upload.uploadArticleBlogPicture
-) // 文章图片上传
 
 router.post(
   '/article/create',
@@ -243,13 +235,6 @@ router.get(
 
 router.get('/dynamic/view', dynamic.getDynamicView) // 获取动态详情
 
-router.post(
-  '/dynamic/upload-dynamic-picture',
-  tokens.ClientVerifyToken,
-  uploadModel('dynamic').single('file'),
-  upload.uploadDynamicPicture
-) // 动态图片上传
-
 router.delete(
   '/dynamic/delete',
   tokens.ClientVerifyToken,
@@ -288,14 +273,6 @@ router.get('/personal/dynamic-list', personalCenter.getDynamicListMe) // 个人�
 router.get('/dynamic-topic/info', dynamic.getDynamicTopicInfo) // 获取动态话题的信息
 
 router.get('/personal/article-blog-list', personalCenter.userArticleBlogList) // 用户自己的个人专栏列表
-
-// 小书
-router.post(
-  '/books/upload-books-picture',
-  tokens.ClientVerifyToken,
-  uploadModel('booksImg').single('file'),
-  upload.uploadBooksPicture
-) // 小书图片上传
 
 // 小书创建
 router.post(
@@ -339,13 +316,6 @@ router.get('/book/info', tokens.ClientVerifyTokenInfo, book.getBookInfo) // 获�
 router.post('/book/next-prev', book.getNextPrevBook) // 获取小书上一页，下一页
 
 router.post('/book/delete', tokens.ClientVerifyToken, book.deleteBook) // 删除用户自己的小书章节
-
-router.post(
-  '/book/upload-book-picture',
-  tokens.ClientVerifyToken,
-  uploadModel('bookImg').single('file'),
-  upload.uploadBookPicture
-) // 小书章节图片上传
 
 // 小书评论
 

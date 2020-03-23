@@ -44,6 +44,7 @@
     "nodemon": "^1.12.1",
     "pm2": "^2.7.2",
     "progress-bar-webpack-plugin": "^1.12.1",
+    "qiniu": "^7.3.0",
     "sequelize": "^5.3.0",
     "shelljs": "^0.8.3",
     "shortid": "^2.2.8",

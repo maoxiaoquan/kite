@@ -25,6 +25,10 @@ class System {
         .read()
         .get('oauth')
         .value()
+      const storage = lowdb
+        .read()
+        .get('storage')
+        .value()
 
       resAdminJson(res, {
         state: 'success',
@@ -36,7 +40,8 @@ class System {
           },
           website,
           config,
-          oauth
+          oauth,
+          storage
         }
       })
     } catch (err) {
@@ -53,7 +58,7 @@ class System {
    * @param   {object} ctx 上下文对象
    */
   static async updateSystemInfo(req: any, res: any, next: any) {
-    const { email, website, type, config, oauth } = req.body
+    const { email, website, type, config, oauth, storage } = req.body
     try {
       if (type === 'email') {
         await lowdb
@@ -75,7 +80,13 @@ class System {
           .get('oauth')
           .assign(oauth)
           .write()
+      } else if (type === 'storage') {
+        await lowdb
+          .get('storage')
+          .assign(storage)
+          .write()
       }
+
       resAdminJson(res, {
         state: 'success',
         message: '更新系统配置成功'

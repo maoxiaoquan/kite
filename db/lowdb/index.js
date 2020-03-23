@@ -32,4 +32,9 @@ if (!lowdb.has('oauth').value()) {
   lowdb.set('oauth', {}).write()
 }
 
+if (!lowdb.has('storage').value()) {
+  // 存储模块
+  lowdb.set('storage', {}).write()
+}
+
 module.exports = lowdb

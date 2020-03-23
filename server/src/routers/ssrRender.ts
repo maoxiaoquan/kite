@@ -7,7 +7,7 @@ const { theme } = require('../../../db/lowdb')
   .read()
   .get('config')
   .value()
-const THEME_NAME = theme || '_default'
+const THEME_NAME = theme || 'default'
 // 缓存
 const microCache = new LRU({
   max: 100,
