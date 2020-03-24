@@ -23,6 +23,7 @@ import shop from '../controllers/client/shop' // 购物
 import experience from '../controllers/client/experience' // 经验
 
 import uploadUse from '../utils/upload/index'
+import multerUse from '../utils/upload/multer'
 const tokens = require('../utils/tokens') // 登录tokens
 const verifyAuthority = require('../utils/verifyAuthority') // 权限验证
 const router = express.Router()
@@ -46,6 +47,7 @@ router.post('/reset-password', user.userResetPassword) // 重置密码 TYPE:AJAX
 router.post(
   '/upload-file',
   tokens.ClientVerifyToken,
+  multerUse('client').single('file'),
   uploadUse,
   upload.uploadFile
 ) // 用户修改头像 post

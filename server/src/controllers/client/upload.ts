@@ -93,26 +93,7 @@ class Upload {
   // 文件上传
   static async uploadFile(req: any, res: any, next: any) {
     try {
-      const storage = lowdb
-        .read()
-        .get('storage')
-        .value()
-      console.log('req.file000000000000000', req.file)
-      let fileUrl: String = ''
-      if (!storage.serviceProvider || storage.serviceProvider === 'default') {
-        let destination = req.file.destination.split('static')[1]
-        let filename = req.file.filename
-        let origin = req.headers.origin
-        if (storage.domain) {
-          fileUrl = `${storage.domain}${destination}/${filename}`
-        } else {
-          fileUrl = `${origin}${destination}/${filename}`
-        }
-      } else if (storage.serviceProvider === 'qiniu') {
-        req.file = '66666666'
-      }
-
-      let file = req.file
+      let fileUrl = req.fileUrl
       resClientJson(res, {
         state: 'success',
         message: '上传成功',

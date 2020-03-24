@@ -10,14 +10,12 @@ class Picture {
   static async uploadPicture(req: any, res: any, next: any) {
     try {
       if (req.file) {
-        let destination = req.file.destination.split('static')[1]
-        let filename = req.file.filename
-        let origin = req.headers.origin
+        let fileUrl = req.fileUrl
         resAdminJson(res, {
           state: 'success',
           message: '小书图片上传成功',
           data: {
-            filename: `${origin}${destination}/${filename}`
+            filename: fileUrl
           }
         })
       } else {
