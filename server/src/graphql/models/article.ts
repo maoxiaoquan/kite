@@ -43,7 +43,7 @@ class Article {
     }
   }
 
-  // 推荐动态
+  // 推荐文章
   static async recommendArticle() {
     let whereParams = {} // 查询参数
     let orderParams = [
@@ -55,8 +55,9 @@ class Article {
       // sort
       // hottest 全部热门:
       whereParams = {
+        is_public: true, // 公开的文章
         status: {
-          [Op.or]: [2, 4]
+          [Op.or]: [statusList.reviewSuccess, statusList.freeReview]
         },
         create_date: {
           [Op.between]: [
