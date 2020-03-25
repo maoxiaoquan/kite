@@ -4,11 +4,7 @@ const { resClientJson } = require('../../utils/resData')
 const Op = require('sequelize').Op
 const { TimeNow, TimeDistance } = require('../../utils/time')
 const clientWhere = require('../../utils/clientWhere')
-import {
-  statusList,
-  modelAction,
-  modelName
-} from '../../utils/constant'
+import { statusList, modelAction, modelName } from '../../utils/constant'
 
 class Index {
   static async getIndexArticle(req: any, res: any, next: any) {
@@ -75,6 +71,7 @@ class Index {
           'aid',
           'uid',
           'title',
+          'excerpt',
           'source',
           'type',
           'cover_img',
@@ -84,7 +81,7 @@ class Index {
           'blog_ids',
           'tag_ids',
           'create_date',
-          'create_timestamp',
+          'create_timestamp'
         ]
       })
 
@@ -243,6 +240,7 @@ class Index {
           'aid',
           'uid',
           'title',
+          'excerpt',
           'source',
           'type',
           'cover_img',
@@ -252,7 +250,7 @@ class Index {
           'blog_ids',
           'tag_ids',
           'create_date',
-          'create_timestamp',
+          'create_timestamp'
         ]
       })
 
