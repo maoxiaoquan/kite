@@ -166,8 +166,8 @@ class dynamic {
           'topic',
           oneDynamic.topic_ids
             ? await models.dynamic_topic.findOne({
-                where: { topic_id: oneDynamic.topic_ids }
-              })
+              where: { topic_id: oneDynamic.topic_ids }
+            })
             : ''
         )
 
@@ -229,7 +229,7 @@ class dynamic {
   }
 
   static async getDynamicList(req: any, res: any, next: any) {
-    console.log('req.query', req.query)
+
     let page = req.query.page || 1
     let pageSize = req.query.pageSize || 10
     let topic_id = req.query.topic_id || ''
@@ -245,7 +245,7 @@ class dynamic {
           [Op.or]: [reviewSuccess, freeReview]
         }
       }
-      console.log('sort', sort)
+
       if (!~['hot', 'newest'].indexOf(sort)) {
         whereDynamicParams['topic_ids'] = topic_id
       } else {
@@ -257,7 +257,6 @@ class dynamic {
           } // 为空，获取全部，也可以自己添加条件
         })
 
-        console.log('allDynamicTopic', allDynamicTopic)
 
         if (allDynamicTopic && allDynamicTopic.length > 0) {
           for (let item in allDynamicTopic) {
@@ -279,7 +278,6 @@ class dynamic {
         orderParams.push(['create_date', 'DESC'])
       }
 
-      console.log('whereDynamicParams', whereDynamicParams)
 
       let { count, rows } = await models.dynamic.findAndCountAll({
         where: whereDynamicParams, // 为空，获取全部，也可以自己添加条件
@@ -291,8 +289,8 @@ class dynamic {
       for (let i in rows) {
         let topic = rows[i].topic_ids
           ? await models.dynamic_topic.findOne({
-              where: { topic_id: rows[i].topic_ids }
-            })
+            where: { topic_id: rows[i].topic_ids }
+          })
           : ''
         rows[i].setDataValue(
           'create_dt',
@@ -393,8 +391,8 @@ class dynamic {
           'topic',
           rows[i].topic_ids
             ? await models.dynamic_topic.findOne({
-                where: { topic_id: rows[i].topic_ids }
-              })
+              where: { topic_id: rows[i].topic_ids }
+            })
             : ''
         )
 
@@ -464,29 +462,63 @@ class dynamic {
     let whereParams = {} // 查询参数
     let orderParams: any = [] // 排序参数
 
-    if (type === 'recommend') {
-      orderParams = [
-        ['create_date', 'DESC'],
-        ['comment_count', 'DESC']
-      ]
-      // sort
-      // hottest 全部热门:
-      whereParams = {
-        status: {
-          [Op.or]: [reviewSuccess, freeReview]
-        },
-        create_date: {
-          [Op.between]: [
-            new Date(TimeNow.showMonthFirstDay()),
-            new Date(TimeNow.showMonthLastDay())
-          ]
-        }
-      }
-    } else {
-      orderParams = [['create_date', 'DESC']]
-    }
+
+
 
     try {
+
+      // 属于最热或者推荐
+      let allDynamicTopicId = [] // 全部禁止某些动态话题推送的id
+      let allDynamicTopic = await models.dynamic_topic.findAll({
+        where: {
+          is_push: false
+        } // 为空，获取全部，也可以自己添加条件
+      })
+
+
+      if (allDynamicTopic && allDynamicTopic.length > 0) {
+        for (let item in allDynamicTopic) {
+          allDynamicTopicId.push(allDynamicTopic[item].topic_id)
+        }
+
+      }
+
+      if (type === 'recommend') {
+        orderParams = [
+          ['create_date', 'DESC'],
+          ['comment_count', 'DESC']
+        ]
+        // sort
+        // hottest 全部热门:
+        whereParams = {
+          topic_ids: {
+            [Op.or]: {
+              [Op.notIn]: allDynamicTopicId,
+              [Op.is]: null
+            }
+          },
+          status: {
+            [Op.or]: [reviewSuccess, freeReview]
+          },
+          create_date: {
+            [Op.between]: [
+              new Date(TimeNow.showMonthFirstDay()),
+              new Date(TimeNow.showMonthLastDay())
+            ]
+          }
+        }
+      } else {
+        orderParams = [['create_date', 'DESC']]
+        whereParams = {
+          topic_ids: {
+            [Op.or]: {
+              [Op.notIn]: allDynamicTopicId,
+              [Op.is]: null
+            }
+          }
+        }
+      }
+
       let allDynamic = await models.dynamic.findAll({
         where: whereParams, // 为空，获取全部，也可以自己添加条件
         limit: 5, // 每页限制返回的数据条数
@@ -502,8 +534,8 @@ class dynamic {
           'topic',
           allDynamic[i].topic_ids
             ? await models.dynamic_topic.findOne({
-                where: { topic_id: allDynamic[i].topic_ids }
-              })
+              where: { topic_id: allDynamic[i].topic_ids }
+            })
             : ''
         )
         if (
