@@ -26,9 +26,10 @@ const collect_1 = __importDefault(require("../controllers/client/collect")); // 
 const virtual_1 = __importDefault(require("../controllers/client/virtual")); // 虚拟币
 const shop_1 = __importDefault(require("../controllers/client/shop")); // 购物
 const experience_1 = __importDefault(require("../controllers/client/experience")); // 经验
+const index_2 = __importDefault(require("../utils/upload/index"));
+const multer_1 = __importDefault(require("../utils/upload/multer"));
 const tokens = require('../utils/tokens'); // 登录tokens
 const verifyAuthority = require('../utils/verifyAuthority'); // 权限验证
-const uploadModel = require('../utils/upload');
 const router = express_1.default.Router();
 /**
  * 获取标签列表操作
@@ -40,7 +41,8 @@ router.post('/sign-in', user_1.default.userSignIn); // 登录数据 post TYPE:RE
 router.post('/sign-up', user_1.default.userSignUp); // 注册数据 post TYPE:AJAX post
 router.post('/sign-up-code', user_1.default.userSignUpCode); // 注册数据  发送注册 验证码 post TYPE:AJAX post
 router.post('/reset-password-code', user_1.default.sendResetPasswordCode); // 重置密码验证码发送 TYPE:AJAX post
-router.post('/reset_password', user_1.default.userResetPassword); // 重置密码 TYPE:AJAX post
+router.post('/reset-password', user_1.default.userResetPassword); // 重置密码 TYPE:AJAX post
+router.post('/upload-file', tokens.ClientVerifyToken, multer_1.default('client').single('file'), index_2.default, upload_1.default.uploadFile); // 用户修改头像 post
 /**
  * 个人信息类
  */
@@ -50,7 +52,7 @@ router.post('/personal/update-article-blog', tokens.ClientVerifyToken, articleBl
 router.post('/personal/delete-article-blog', tokens.ClientVerifyToken, articleBlog_1.default.deleteUserArticleBlog); // 删除用户所有文章专题 TYPE:AJAX get
 router.get('/personal/message-list', tokens.ClientVerifyToken, user_1.default.getUserMessageList); // 用户消息 TYPE:AJAX get
 router.delete('/personal/message-delete', tokens.ClientVerifyToken, user_1.default.deleteUserMessage); // 删除用户消息 TYPE:AJAX post
-router.post('/personal/upload-avatar', tokens.ClientVerifyToken, uploadModel('avatarImg').single('file'), upload_1.default.uploadUserAvatar); // 用户修改头像 post
+router.post('/personal/upload-avatar', tokens.ClientVerifyToken, upload_1.default.uploadUserAvatar); // 用户修改头像 post
 router.put('/personal/update-info', tokens.ClientVerifyToken, user_1.default.updateUserInfo); // 根据uid 更新用户相应信息 post
 router.put('/personal/update-password', tokens.ClientVerifyToken, user_1.default.updateUserPassword); // 根据uid 更新用户登录密码
 /**
@@ -67,8 +69,6 @@ router.get('/user/role-all', user_1.default.getUserRoleAll); // 获取所有用�
 router.get('/article', tokens.ClientVerifyTokenInfo, article_1.default.getArticle); // 根据aid获取文章 get
 router.get('/article-annex', tokens.ClientVerifyTokenInfo, article_1.default.getArticleAnnex); // 根据aid获取文章 get
 router.get('/user-article', tokens.ClientVerifyToken, article_1.default.getUserArticle); // 根据aid uid获取用户自己的某一篇文章 get
-router.post('/article/upload-article-picture', tokens.ClientVerifyToken, uploadModel('articleImg').single('file'), upload_1.default.uploadArticlePicture); // 文章图片上传
-router.post('/article-blog/upload-img', tokens.ClientVerifyToken, uploadModel('articleBlogImg').single('file'), upload_1.default.uploadArticleBlogPicture); // 文章图片上传
 router.post('/article/create', tokens.ClientVerifyToken, verifyAuthority.ClientCheck, article_1.default.createArticle); // 编写文章post TYPE:AJAX post
 router.get('/article/index', index_1.default.getIndexArticle); // 首页文章 get
 router.get('/article/index-column', index_1.default.getColumnArticle); // 首页专栏文章 get
@@ -109,7 +109,6 @@ router.get('/dynamic/list', dynamic_1.default.getDynamicList); // 获取动态�
 router.get('/dynamic/recommend-list', dynamic_1.default.recommendDynamicList); // 获取推荐动态列表
 router.get('/dynamic/list-my', tokens.ClientVerifyToken, dynamic_1.default.getDynamicListMe); // 获取我的动态或者关注列表
 router.get('/dynamic/view', dynamic_1.default.getDynamicView); // 获取动态详情
-router.post('/dynamic/upload-dynamic-picture', tokens.ClientVerifyToken, uploadModel('dynamic').single('file'), upload_1.default.uploadDynamicPicture); // 动态图片上传
 router.delete('/dynamic/delete', tokens.ClientVerifyToken, dynamic_1.default.deleteDynamic); // 删除动态 TYPE:AJAX post
 router.get('/website/info', website_1.default.getWebsiteInfo); // 网站配置相关信息 TYPE:AJAX get
 router.get('/dynamic-topic/index', dynamic_1.default.dynamicTopicIndex); // 获取首页专题 TYPE:AJAX post
@@ -124,8 +123,6 @@ router.post('/dynamic-comment/delete', tokens.ClientVerifyToken, dynamicComment_
 router.get('/personal/dynamic-list', personalCenter_1.default.getDynamicListMe); // 个人中心获取列表
 router.get('/dynamic-topic/info', dynamic_1.default.getDynamicTopicInfo); // 获取动态话题的信息
 router.get('/personal/article-blog-list', personalCenter_1.default.userArticleBlogList); // 用户自己的个人专栏列表
-// 小书
-router.post('/books/upload-books-picture', tokens.ClientVerifyToken, uploadModel('booksImg').single('file'), upload_1.default.uploadBooksPicture); // 小书图片上传
 // 小书创建
 router.post('/books/create', tokens.ClientVerifyToken, verifyAuthority.ClientCheck, books_1.default.createBooks);
 router.get('/personal/books-list', personalCenter_1.default.userBooksList); // 获取用户个人小书的列表
@@ -141,7 +138,6 @@ router.get('/user-book/info', tokens.ClientVerifyToken, book_1.default.getUserBo
 router.get('/book/info', tokens.ClientVerifyTokenInfo, book_1.default.getBookInfo); // 获取小书章节信息
 router.post('/book/next-prev', book_1.default.getNextPrevBook); // 获取小书上一页，下一页
 router.post('/book/delete', tokens.ClientVerifyToken, book_1.default.deleteBook); // 删除用户自己的小书章节
-router.post('/book/upload-book-picture', tokens.ClientVerifyToken, uploadModel('bookImg').single('file'), upload_1.default.uploadBookPicture); // 小书章节图片上传
 // 小书评论
 router.get('/books-comment/list', booksComment_1.default.getBooksCommentList); // 获取用户发表小书评论的评论列表 TYPE:AJAX get
 router.post('/books-comment/create', tokens.ClientVerifyToken, verifyAuthority.ClientCheck, booksComment_1.default.createBooksComment); // 用户小书发表评论 TYPE:AJAX post

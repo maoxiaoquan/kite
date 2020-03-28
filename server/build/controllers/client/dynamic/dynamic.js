@@ -195,7 +195,6 @@ class dynamic {
     }
     static getDynamicList(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('req.query', req.query);
             let page = req.query.page || 1;
             let pageSize = req.query.pageSize || 10;
             let topic_id = req.query.topic_id || '';
@@ -210,7 +209,6 @@ class dynamic {
                         [Op.or]: [reviewSuccess, freeReview]
                     }
                 };
-                console.log('sort', sort);
                 if (!~['hot', 'newest'].indexOf(sort)) {
                     whereDynamicParams['topic_ids'] = topic_id;
                 }
@@ -222,7 +220,6 @@ class dynamic {
                             is_push: false
                         } // 为空，获取全部，也可以自己添加条件
                     });
-                    console.log('allDynamicTopic', allDynamicTopic);
                     if (allDynamicTopic && allDynamicTopic.length > 0) {
                         for (let item in allDynamicTopic) {
                             allDynamicTopicId.push(allDynamicTopic[item].topic_id);
@@ -241,7 +238,6 @@ class dynamic {
                 if (!sort || sort === 'new') {
                     orderParams.push(['create_date', 'DESC']);
                 }
-                console.log('whereDynamicParams', whereDynamicParams);
                 let { count, rows } = yield models.dynamic.findAndCountAll({
                     where: whereDynamicParams,
                     offset: (page - 1) * pageSize,
@@ -397,29 +393,55 @@ class dynamic {
             let type = req.query.type || 'recommend';
             let whereParams = {}; // 查询参数
             let orderParams = []; // 排序参数
-            if (type === 'recommend') {
-                orderParams = [
-                    ['create_date', 'DESC'],
-                    ['comment_count', 'DESC']
-                ];
-                // sort
-                // hottest 全部热门:
-                whereParams = {
-                    status: {
-                        [Op.or]: [reviewSuccess, freeReview]
-                    },
-                    create_date: {
-                        [Op.between]: [
-                            new Date(TimeNow.showMonthFirstDay()),
-                            new Date(TimeNow.showMonthLastDay())
-                        ]
-                    }
-                };
-            }
-            else {
-                orderParams = [['create_date', 'DESC']];
-            }
             try {
+                // 属于最热或者推荐
+                let allDynamicTopicId = []; // 全部禁止某些动态话题推送的id
+                let allDynamicTopic = yield models.dynamic_topic.findAll({
+                    where: {
+                        is_push: false
+                    } // 为空，获取全部，也可以自己添加条件
+                });
+                if (allDynamicTopic && allDynamicTopic.length > 0) {
+                    for (let item in allDynamicTopic) {
+                        allDynamicTopicId.push(allDynamicTopic[item].topic_id);
+                    }
+                }
+                if (type === 'recommend') {
+                    orderParams = [
+                        ['create_date', 'DESC'],
+                        ['comment_count', 'DESC']
+                    ];
+                    // sort
+                    // hottest 全部热门:
+                    whereParams = {
+                        topic_ids: {
+                            [Op.or]: {
+                                [Op.notIn]: allDynamicTopicId,
+                                [Op.is]: null
+                            }
+                        },
+                        status: {
+                            [Op.or]: [reviewSuccess, freeReview]
+                        },
+                        create_date: {
+                            [Op.between]: [
+                                new Date(TimeNow.showMonthFirstDay()),
+                                new Date(TimeNow.showMonthLastDay())
+                            ]
+                        }
+                    };
+                }
+                else {
+                    orderParams = [['create_date', 'DESC']];
+                    whereParams = {
+                        topic_ids: {
+                            [Op.or]: {
+                                [Op.notIn]: allDynamicTopicId,
+                                [Op.is]: null
+                            }
+                        }
+                    };
+                }
                 let allDynamic = yield models.dynamic.findAll({
                     where: whereParams,
                     limit: 5,

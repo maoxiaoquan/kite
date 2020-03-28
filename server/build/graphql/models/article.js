@@ -14,6 +14,7 @@ const { resClientJson } = require('../../utils/resData');
 const Op = require('sequelize').Op;
 const { TimeNow, TimeDistance } = require('../../utils/time');
 const clientWhere = require('../../utils/clientWhere');
+const constant_1 = require("../../utils/constant");
 class Article {
     static getIndex() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -47,7 +48,7 @@ class Article {
             }
         });
     }
-    // 推荐动态
+    // 推荐文章
     static recommendArticle() {
         return __awaiter(this, void 0, void 0, function* () {
             let whereParams = {}; // 查询参数
@@ -59,8 +60,9 @@ class Article {
                 // sort
                 // hottest 全部热门:
                 whereParams = {
+                    is_public: true,
                     status: {
-                        [Op.or]: [2, 4]
+                        [Op.or]: [constant_1.statusList.reviewSuccess, constant_1.statusList.freeReview]
                     },
                     create_date: {
                         [Op.between]: [

@@ -74,6 +74,7 @@ class Index {
                         'aid',
                         'uid',
                         'title',
+                        'excerpt',
                         'source',
                         'type',
                         'cover_img',
@@ -83,7 +84,7 @@ class Index {
                         'blog_ids',
                         'tag_ids',
                         'create_date',
-                        'create_timestamp',
+                        'create_timestamp'
                     ]
                 });
                 for (let i in rows) {
@@ -219,6 +220,7 @@ class Index {
                         'aid',
                         'uid',
                         'title',
+                        'excerpt',
                         'source',
                         'type',
                         'cover_img',
@@ -228,7 +230,7 @@ class Index {
                         'blog_ids',
                         'tag_ids',
                         'create_date',
-                        'create_timestamp',
+                        'create_timestamp'
                     ]
                 });
                 for (let i in rows) {

@@ -27,8 +27,8 @@ const cli = lowdb
 io.on('connection', (socket) => {
     index_1.default(io, socket);
 });
-app.use(body_parser_1.default.urlencoded({ extended: true }));
-app.use(body_parser_1.default.json());
+app.use(body_parser_1.default.json()); //数据JSON类型
+app.use(body_parser_1.default.urlencoded({ extended: false })); //解析post请求数据
 app.use(cookie_parser_1.default('cookie_kite'));
 app.use('/api-client/v1', chat_1.default(io));
 // 配置静态资源加载中间件

@@ -27,7 +27,8 @@ const books_1 = __importDefault(require("../controllers/admin/books")); // 小�
 const bookComment_1 = __importDefault(require("../controllers/admin/bookComment")); // 小书章节评论
 const booksComment_1 = __importDefault(require("../controllers/admin/booksComment")); // 小书评价
 // 此文件所有接口都是后台管理员操作前后台数据所用
-const uploadModel = require('../utils/upload');
+const index_1 = __importDefault(require("../utils/upload/index"));
+const multer_1 = __importDefault(require("../utils/upload/multer"));
 const router = express_1.default.Router();
 const verifyAuthority = require('../utils/verifyAuthority'); // 权限验证
 const tokens = require('../utils/tokens'); // 登录tokens
@@ -113,7 +114,7 @@ router.post('/article-comment/delete', tokens.AdminVerifyToken, verifyAuthority.
 /**
  * 上传
  */
-router.post('/upload/picture', tokens.AdminVerifyToken, uploadModel('admin').single('file'), upload_1.default.uploadPicture); // 小书图片上传
+router.post('/upload/picture', tokens.ClientVerifyToken, multer_1.default('admin').single('file'), index_1.default, upload_1.default.uploadPicture); // 用户修改头像 post
 /**
  *  首页数据
  */
@@ -238,4 +239,5 @@ router.post('/book-comment/list', tokens.AdminVerifyToken, verifyAuthority.Admin
 router.post('/book-comment/update', tokens.AdminVerifyToken, verifyAuthority.AdminCheck, bookComment_1.default.updateComment);
 // 小书文章评论数据删除
 router.post('/book-comment/delete', tokens.AdminVerifyToken, verifyAuthority.AdminCheck, bookComment_1.default.deleteComment);
+router.get('/system-config/theme-list', tokens.AdminVerifyToken, system_1.default.getSystemTheme);
 module.exports = router;
