@@ -31,7 +31,7 @@ export default async (req: any, res: any, next: any) => {
   } else if (storage.serviceProvider === 'aliyun') { // aliyun oss
     try {
       const resFile: any = await aliyun(filename, filePath);
-      req.fileUrl = resFile.url
+      req.fileUrl = storage.domain + '/' + resFile.name;
     } catch (e) {
       req.fileUrl = 'aliyun oss upload error'
     }
