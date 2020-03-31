@@ -474,7 +474,7 @@ class dynamic {
           is_push: false
         } // 为空，获取全部，也可以自己添加条件
       })
-      console.log('--------allDynamicTopic', allDynamicTopic)
+
 
       if (allDynamicTopic && allDynamicTopic.length > 0) {
         for (let item in allDynamicTopic) {
@@ -482,8 +482,6 @@ class dynamic {
         }
 
       }
-
-      console.log('--------allDynamicTopicId', allDynamicTopicId)
 
       if (type === 'recommend') {
         orderParams = [

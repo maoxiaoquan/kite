@@ -394,18 +394,18 @@ class dynamic {
             let whereParams = {}; // 查询参数
             let orderParams = []; // 排序参数
             try {
-                // 属于最热或者推荐
-                let allDynamicTopicId = []; // 全部禁止某些动态话题推送的id
-                let allDynamicTopic = yield models.dynamic_topic.findAll({
-                    where: {
-                        is_push: false
-                    } // 为空，获取全部，也可以自己添加条件
-                });
-                if (allDynamicTopic && allDynamicTopic.length > 0) {
-                    for (let item in allDynamicTopic) {
-                        allDynamicTopicId.push(allDynamicTopic[item].topic_id);
-                    }
-                }
+                // // 属于最热或者推荐
+                // let allDynamicTopicId = [] // 全部禁止某些动态话题推送的id
+                // let allDynamicTopic = await models.dynamic_topic.findAll({
+                //   where: {
+                //     is_push: 1
+                //   } // 为空，获取全部，也可以自己添加条件
+                // })
+                // if (allDynamicTopic && allDynamicTopic.length > 0) {
+                //   for (let item in allDynamicTopic) {
+                //     allDynamicTopicId.push(allDynamicTopic[item].topic_id)
+                //   }
+                // }
                 if (type === 'recommend') {
                     orderParams = [
                         ['create_date', 'DESC'],
@@ -414,12 +414,12 @@ class dynamic {
                     // sort
                     // hottest 全部热门:
                     whereParams = {
-                        topic_ids: {
-                            [Op.or]: {
-                                [Op.notIn]: allDynamicTopicId,
-                                [Op.is]: null
-                            }
-                        },
+                        // topic_ids: {
+                        //   [Op.or]: {
+                        //     [Op.notIn]: allDynamicTopicId,
+                        //     [Op.is]: null
+                        //   }
+                        // },
                         status: {
                             [Op.or]: [reviewSuccess, freeReview]
                         },
@@ -433,14 +433,14 @@ class dynamic {
                 }
                 else {
                     orderParams = [['create_date', 'DESC']];
-                    whereParams = {
-                        topic_ids: {
-                            [Op.or]: {
-                                [Op.notIn]: allDynamicTopicId,
-                                [Op.is]: null
-                            }
-                        }
-                    };
+                    // whereParams = {
+                    //   topic_ids: {
+                    //     [Op.or]: {
+                    //       [Op.notIn]: allDynamicTopicId,
+                    //       [Op.is]: null
+                    //     }
+                    //   }
+                    // }
                 }
                 let allDynamic = yield models.dynamic.findAll({
                     where: whereParams,

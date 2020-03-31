@@ -64,13 +64,13 @@ module.exports = {
     },
     reg_ip: {
       // 注册IP
-      type: Seq.STRING(50),
+      type: Seq.STRING(120),
       comment: '注册IP',
       field: 'reg_ip'
     },
     last_sign_ip: {
       // 最后登录ip
-      type: Seq.STRING(16),
+      type: Seq.STRING(120),
       comment: '最后登录ip',
       field: 'last_sign_ip'
     },
