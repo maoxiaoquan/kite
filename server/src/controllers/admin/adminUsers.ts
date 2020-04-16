@@ -55,18 +55,16 @@ class AdminUsers {
       resSignJson(res, {
         state: 'success',
         message: '登录成功',
-        token
+        data: {
+          token
+        }
       })
     } catch (err) {
-      resSignJson(
-        res,
+      resSignJson(res,
         {
           state: 'error',
           message: '错误信息：' + err.message
-        },
-        false
-      )
-      return false
+        })
     }
   }
 
