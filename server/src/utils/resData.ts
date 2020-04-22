@@ -9,11 +9,11 @@ class Format {
    * @param  {Boolean} is_login  是否登录
    */
 
-  async resSignJson(res: any, { state, message, date }: any) {
+  async resSignJson(res: any, { state, message, data = {} }: any) {
     res.json({
       state,
       message,
-      date
+      data
     })
   }
 
