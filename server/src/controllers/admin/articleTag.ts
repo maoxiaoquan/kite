@@ -95,7 +95,7 @@ class ArticleTag {
         state: 'success',
         message: '返回成功',
         data: {
-          article_tag_all: articleTagAll
+          list: articleTagAll
         }
       })
     } catch (err) {
