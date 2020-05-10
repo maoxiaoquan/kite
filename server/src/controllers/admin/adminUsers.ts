@@ -51,22 +51,22 @@ class AdminUsers {
         account,
         role_id: oneAdminUser ? oneAdminUser.admin_role_ids : ''
       }
-      let token = tokens.AdminSetToken(60 * 60 * 24 * 7, datas)
+      const token = tokens.AdminSetToken(60 * 60 * 24 * 7, datas)
+
+      console.log('-----------token', token)
       resSignJson(res, {
         state: 'success',
         message: '登录成功',
-        token
+        data: {
+          token
+        }
       })
     } catch (err) {
-      resSignJson(
-        res,
+      resSignJson(res,
         {
           state: 'error',
           message: '错误信息：' + err.message
-        },
-        false
-      )
-      return false
+        })
     }
   }
 
@@ -260,8 +260,8 @@ class AdminUsers {
         state: 'success',
         message: '返回成功',
         data: {
-          admin_user_info: oneAdminUser,
-          all_authority_name_id: allAuthorityNameId,
+          adminUserInfo: oneAdminUser,
+          allAuthorityNameId,
           website
         }
       })

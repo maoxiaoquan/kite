@@ -24,7 +24,7 @@ const client = new ali_oss_1.default({
     accessKeySecret: storage.secretKey || 'test',
     //  stsToken: '', // {String}：使用临时授权方式，详情请参见使用 STS 进行临时授权。
     bucket: storage.bucket || '',
-    endpoint: storage.domain || '',
+    endpoint: storage.endPoint || '',
     region: storage.region || 'oss-cn-hangzhou',
 });
 // 七牛云文件上传

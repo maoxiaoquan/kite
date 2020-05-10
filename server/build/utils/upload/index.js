@@ -49,7 +49,7 @@ exports.default = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     else if (storage.serviceProvider === 'aliyun') { // aliyun oss
         try {
             const resFile = yield aliyun_1.default(filename, filePath);
-            req.fileUrl = resFile.url;
+            req.fileUrl = storage.domain + '/' + resFile.name;
         }
         catch (e) {
             req.fileUrl = 'aliyun oss upload error';

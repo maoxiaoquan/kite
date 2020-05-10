@@ -40,8 +40,8 @@ async function forcedUpgrade () {
   // 强制升级
   try {
     console.log('升级程序开始，请勿关闭当前程序')
-    let currentVersionIndex = versionHistory.list.indexOf(config.version) // 当前版本索引
-    let waitVersionIndex = versionHistory.list.indexOf(kiteConfig.version) // 待升级版本索引
+    let currentVersionIndex = versionHistory.list.indexOf(String(config.version)) // 当前版本索引
+    let waitVersionIndex = versionHistory.list.indexOf(String(kiteConfig.version)) // 待升级版本索引
     let versionIndex = waitVersionIndex - currentVersionIndex
     console.log(`当前程序版本和待升级版本差距${colors.red(versionIndex)}个版本`)
     console.log('升级进行中,请勿关闭当前程序...')
@@ -75,20 +75,20 @@ function showAllVersion () {
 if (cli.is_success) {
   console.log('历史程序所有版本：')
   showAllVersion()
-  console.log('>--当前可以升级的程序版本为：', colors.red(kiteConfig.version))
-  console.log('>--当前正在使用的版本号为：', colors.red(config.version))
+  console.log('>--当前可以升级的程序版本为：', colors.red(String(kiteConfig.version)))
+  console.log('>--当前正在使用的版本号为：', colors.red(String(config.version)))
   if (
-    !~versionHistory.list.indexOf(config.version) ||
-    !~versionHistory.list.indexOf(kiteConfig.version)
+    !~versionHistory.list.indexOf(String(config.version)) ||
+    !~versionHistory.list.indexOf(String(kiteConfig.version))
   ) {
     console.log('当前版本不在版本库历史中，无法升级')
     return false
   }
-  if (kiteConfig.version !== config.version) {
+  if (kiteConfig.version != config.version) {
     // 判断当前使用的版本是否大于程序的版本
     if (
-      versionHistory.list.indexOf(config.version) <
-      versionHistory.list.indexOf(kiteConfig.version)
+      versionHistory.list.indexOf(String(config.version)) <
+      versionHistory.list.indexOf(String(kiteConfig.version))
     ) {
       isUpdateOption()
     } else {

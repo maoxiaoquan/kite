@@ -89,7 +89,7 @@ class Tokens {
         resData.resAdminJson(
           res,
           {
-            state: 'error',
+            state: 'nologin',
             message: '请登录'
           },
           false
@@ -99,7 +99,7 @@ class Tokens {
       resData.resAdminJson(
         res,
         {
-          state: 'error',
+          state: 'nologin',
           message: '请登录'
         },
         false
