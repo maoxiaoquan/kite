@@ -15,7 +15,7 @@ class UserRole {
 
     try {
       let oneUserRole = await models.user_role.findOne({
-        where: { user_role_name: reqData.user_role_name }
+        where: { user_role_name: reqData.user_role_name },
       })
       if (oneUserRole) {
         throw new Error('用户角色名已存在!')
@@ -27,23 +27,23 @@ class UserRole {
         user_role_icon: reqData.user_role_icon,
         user_role_type: reqData.user_role_type,
         is_show: reqData.is_show,
-        enable: reqData.enable
+        enable: reqData.enable,
       })
       await adminSystemLog.createAdminSystemLog({
         // 写入日志
         uid: req.userInfo.uid,
         type: 3,
-        content: `成功创建了‘${reqData.user_role_name}’用户角色`
+        content: `成功创建了‘${reqData.user_role_name}’用户角色`,
       })
 
       resAdminJson(res, {
         state: 'success',
-        message: '角色创建成功'
+        message: '角色创建成功',
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }
@@ -62,21 +62,21 @@ class UserRole {
           'user_role_description',
           'is_show',
           'user_role_icon',
-          'user_authority_ids'
+          'user_authority_ids',
         ],
-        where: { enable: 1 } // 为空，获取全部，也可以自己添加条件
+        where: { enable: 1 }, // 为空，获取全部，也可以自己添加条件
       })
       resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
-          user_role_all: userRoleAll
-        }
+          list: userRoleAll,
+        },
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }
@@ -97,24 +97,24 @@ class UserRole {
           'user_role_type',
           'is_show',
           'user_authority_ids',
-          'enable'
+          'enable',
         ],
         where: '', // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-        limit: Number(pageSize) // 每页限制返回的数据条数
+        limit: Number(pageSize), // 每页限制返回的数据条数
       })
       resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
           count: count,
-          list: rows
-        }
+          list: rows,
+        },
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }
@@ -133,22 +133,22 @@ class UserRole {
           user_role_icon: reqData.user_role_icon,
           user_role_type: reqData.user_role_type,
           is_show: reqData.is_show,
-          enable: reqData.enable
+          enable: reqData.enable,
         },
         {
           where: {
-            user_role_id: reqData.user_role_id // 查询条件
-          }
+            user_role_id: reqData.user_role_id, // 查询条件
+          },
         }
       )
       resAdminJson(res, {
         state: 'success',
-        message: '更新用户角色成功'
+        message: '更新用户角色成功',
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }
@@ -162,7 +162,7 @@ class UserRole {
       if (config.USER_ROLE.dfId === user_role_id) {
         resAdminJson(res, {
           state: 'error',
-          message: '默认用户角色不可删除'
+          message: '默认用户角色不可删除',
         })
         return false
       }
@@ -170,7 +170,7 @@ class UserRole {
       if (config.USER_ROLE.dfLegalizeId === user_role_id) {
         resAdminJson(res, {
           state: 'error',
-          message: '当前角色特殊原因不可删除'
+          message: '当前角色特殊原因不可删除',
         })
         return false
       }
@@ -178,12 +178,12 @@ class UserRole {
       await models.user_role.destroy({ where: { user_role_id } })
       resAdminJson(res, {
         state: 'success',
-        message: '删除用户角色成功'
+        message: '删除用户角色成功',
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }
@@ -198,28 +198,28 @@ class UserRole {
 
     try {
       let oneUserAuthorityName = await models.user_authority.findOne({
-        where: { authority_name: reqData.authority_name }
+        where: { authority_name: reqData.authority_name },
       })
       if (oneUserAuthorityName) {
         throw new Error('权限名已存在!')
       }
       let oneUserAuthorityUrl = await models.user_authority.findOne({
-        where: { authority_url: reqData.authority_url }
+        where: { authority_url: reqData.authority_url },
       })
       if (oneUserAuthorityUrl) {
         throw new Error('权限路径已存在!')
       }
       await models.user_authority.create({
-        ...reqData
+        ...reqData,
       })
       resAdminJson(res, {
         state: 'success',
-        message: '用户权限创建成功'
+        message: '用户权限创建成功',
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }
@@ -235,12 +235,12 @@ class UserRole {
       resAdminJson(res, {
         state: 'success',
         message: '返回成功',
-        data: userAuthorityAll
+        data: userAuthorityAll,
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }
@@ -259,22 +259,22 @@ class UserRole {
           authority_url: reqData.authority_url,
           authority_sort: reqData.authority_sort,
           authority_description: reqData.authority_description,
-          enable: reqData.enable
+          enable: reqData.enable,
         },
         {
           where: {
-            authority_id: reqData.authority_id // 查询条件
-          }
+            authority_id: reqData.authority_id, // 查询条件
+          },
         }
       )
       resAdminJson(res, {
         state: 'success',
-        message: '更新权限成功'
+        message: '更新权限成功',
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }
@@ -287,16 +287,16 @@ class UserRole {
     const { authority_id_arr } = req.body
     try {
       await models.user_authority.destroy({
-        where: { authority_id: { [Op.in]: authority_id_arr } }
+        where: { authority_id: { [Op.in]: authority_id_arr } },
       })
       resAdminJson(res, {
         state: 'success',
-        message: '删除权限树成功'
+        message: '删除权限树成功',
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }
@@ -310,19 +310,19 @@ class UserRole {
     const reqData = req.body
     try {
       await models.user_role.update(
-        { user_authority_ids: reqData.role_authority_list_all.join(',') },
+        { user_authority_ids: reqData.roleAuthorityListAll.join(',') },
         {
-          where: { user_role_id: reqData.user_role_id } // 查询条件
+          where: { user_role_id: reqData.user_role_id }, // 查询条件
         }
       )
       resAdminJson(res, {
         state: 'success',
-        message: '修改成功'
+        message: '修改成功',
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }

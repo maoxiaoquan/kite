@@ -17,11 +17,11 @@ class Users {
           'reg_ip',
           'user_role_ids',
           'ban_dt',
-          'enable'
+          'enable',
         ],
         where: '', // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-        limit: Number(pageSize) // 每页限制返回的数据条数
+        limit: Number(pageSize), // 每页限制返回的数据条数
       })
 
       for (let i in rows) {
@@ -34,8 +34,8 @@ class Users {
           'user_info',
           await models.user_info.findOne({
             where: {
-              uid: rows[i].uid
-            }
+              uid: rows[i].uid,
+            },
           })
         )
       }
@@ -45,13 +45,13 @@ class Users {
         message: '返回成功',
         data: {
           count: count,
-          user_list: rows
-        }
+          list: rows,
+        },
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }
@@ -67,22 +67,22 @@ class Users {
         {
           nickname: nickname,
           user_role_ids: user_role_ids ? user_role_ids.join(',') : '',
-          enable: enable || false
+          enable: enable || false,
         },
         {
           where: {
-            uid: uid // 查询条件
-          }
+            uid: uid, // 查询条件
+          },
         }
       )
       resAdminJson(res, {
         state: 'success',
-        message: '更新成功'
+        message: '更新成功',
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }
@@ -104,7 +104,7 @@ class Users {
         await models.user.destroy({ where: { uid } })
         resAdminJson(res, {
           state: 'success',
-          message: '删除用户成功'
+          message: '删除用户成功',
         })
       } else {
         /* 有关联 */
@@ -117,13 +117,13 @@ class Users {
         })
         resAdminJson(res, {
           state: 'success',
-          message: '删除用户成功,同时删除用户所有文章'
+          message: '删除用户成功,同时删除用户所有文章',
         })
       }
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }
@@ -137,10 +137,10 @@ class Users {
     try {
       let { count, rows } = await models.user_info.findAndCountAll({
         where: {
-          avatar_review_status: status
+          avatar_review_status: status,
         }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-        limit: Number(pageSize) // 每页限制返回的数据条数
+        limit: Number(pageSize), // 每页限制返回的数据条数
       })
 
       for (let i in rows) {
@@ -148,7 +148,7 @@ class Users {
           'user',
           await models.user.findOne({
             where: { uid: rows[i].uid },
-            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction'],
           })
         )
       }
@@ -158,13 +158,13 @@ class Users {
         message: '返回成功',
         data: {
           count: count,
-          list: rows
-        }
+          list: rows,
+        },
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }
@@ -178,56 +178,56 @@ class Users {
       const { uid, status } = req.body
       let oneUserInfo = await models.user_info.findOne({
         where: {
-          uid: uid // 查询条件
-        }
+          uid: uid, // 查询条件
+        },
       })
       if (status === '2') {
         // 审核成功
         await models.user.update(
           {
-            avatar: oneUserInfo.avatar_review
+            avatar: oneUserInfo.avatar_review,
           },
           {
             where: {
-              uid: uid // 查询条件
-            }
+              uid: uid, // 查询条件
+            },
           }
         )
         await models.user_info.update(
           {
-            avatar_review_status: status
+            avatar_review_status: status,
           },
           {
             where: {
-              uid: uid // 查询条件
-            }
+              uid: uid, // 查询条件
+            },
           }
         )
         resAdminJson(res, {
           state: 'success',
-          message: '更新成功'
+          message: '更新成功',
         })
       } else if (status === '3' || status === '1') {
         // 审核失败或者其他
         await models.user_info.update(
           {
-            avatar_review_status: status
+            avatar_review_status: status,
           },
           {
             where: {
-              uid: uid // 查询条件
-            }
+              uid: uid, // 查询条件
+            },
           }
         )
         resAdminJson(res, {
           state: 'success',
-          message: '更新成功'
+          message: '更新成功',
         })
       }
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }
@@ -245,23 +245,23 @@ class Users {
       // 审核成功
       await models.user.update(
         {
-          ...setUpdate
+          ...setUpdate,
         },
         {
           where: {
-            uid: uid // 查询条件
-          }
+            uid: uid, // 查询条件
+          },
         }
       )
 
       resAdminJson(res, {
         state: 'success',
-        message: '更新成功'
+        message: '更新成功',
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
     }
   }
