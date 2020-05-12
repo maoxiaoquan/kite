@@ -18,16 +18,16 @@ class Options {
 
       await models.options.create({
         option_key: reqData.option_key, // 键名
-        option_value: reqData.option_value //  值
+        option_value: reqData.option_value, //  值
       })
       resAdminJson(res, {
         state: 'success',
-        message: '配置创建成功'
+        message: '配置创建成功',
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
       return false
     }
@@ -42,25 +42,25 @@ class Options {
     try {
       const optionsAll = await models.options.findAll({
         where: {
-          ...reqData // 查询条件
-        }
+          ...reqData, // 查询条件
+        },
       })
       if (optionsAll) {
         resAdminJson(res, {
           state: 'success',
           message: '获取配置项成功',
-          data: optionsAll
+          data: optionsAll,
         })
       } else {
         resAdminJson(res, {
           state: 'error',
-          message: '配置项为空'
+          message: '配置项为空',
         })
       }
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
       return false
     }
@@ -83,22 +83,22 @@ class Options {
 
       await await models.options.update(
         {
-          option_value: reqData.option_value
+          option_value: reqData.option_value,
         },
         {
           where: {
-            option_id: reqData.option_id // 查询条件
-          }
+            option_id: reqData.option_id, // 查询条件
+          },
         }
       )
       resAdminJson(res, {
         state: 'success',
-        message: '更新配置项成功'
+        message: '更新配置项成功',
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
       return false
     }
@@ -117,12 +117,12 @@ class Options {
       await models.options.destroy({ where: { option_id } })
       resAdminJson(res, {
         state: 'success',
-        message: '删除配置项成功'
+        message: '删除配置项成功',
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
       return false
     }

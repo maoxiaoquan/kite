@@ -14,20 +14,20 @@ class AdminIndex {
       const noReviewArticleCount = await models.article.count({
         // 无需审核文章统计
         where: {
-          status: 6
-        }
+          status: 6,
+        },
       })
       const reviewArticleCount = await models.article.count({
         // 待审核文章统计
         where: {
-          status: 1
-        }
+          status: 1,
+        },
       })
       const reviewFailArticleCount = await models.article.count({
         // 审核失败文章统计
         where: {
-          status: 3
-        }
+          status: 3,
+        },
       })
 
       // ------------------------------------------文章评论统计
@@ -35,20 +35,20 @@ class AdminIndex {
 
       const noReviewArticleCommentCount = await models.article_comment.count({
         where: {
-          status: 5
-        }
+          status: 5,
+        },
       }) // 无需审核评论统计
 
       const reviewArticleCommentCount = await models.article_comment.count({
         where: {
-          status: 1
-        }
+          status: 1,
+        },
       }) // 待审核评论统计
 
       const reviewFailArticleCommentCount = await models.article_comment.count({
         where: {
-          status: 3
-        }
+          status: 3,
+        },
       }) // 审核失败评论统计
 
       // -----------------------------------动态统计
@@ -56,20 +56,20 @@ class AdminIndex {
 
       const noReviewDynamicCount = await models.dynamic.count({
         where: {
-          status: 4
-        }
+          status: 4,
+        },
       }) // 无需审核动态统计
 
       const reviewDynamicCount = await models.dynamic.count({
         where: {
-          status: 1
-        }
+          status: 1,
+        },
       }) // 待审核动态统计
 
       const reviewFailDynamicCount = await models.dynamic.count({
         where: {
-          status: 3
-        }
+          status: 3,
+        },
       }) // 审核失败动态统计
 
       // ------------------------------------------文章评论统计
@@ -77,20 +77,20 @@ class AdminIndex {
 
       const noReviewDynamicCommentCount = await models.dynamic_comment.count({
         where: {
-          status: 5
-        }
+          status: 5,
+        },
       }) // 无需审核评论统计
 
       const reviewDynamicCommentCount = await models.dynamic_comment.count({
         where: {
-          status: 1
-        }
+          status: 1,
+        },
       }) // 待审核评论统计
 
       const reviewFailDynamicCommentCount = await models.dynamic_comment.count({
         where: {
-          status: 3
-        }
+          status: 3,
+        },
       }) // 审核失败评论统计
 
       // -----------------------------------个人专栏统计
@@ -98,36 +98,36 @@ class AdminIndex {
 
       const noReviewArticleBlogCount = await models.article_blog.count({
         where: {
-          status: 4
-        }
+          status: 4,
+        },
       }) // 无需审核个人专栏统计
 
       const reviewArticleBlogCount = await models.article_blog.count({
         where: {
-          status: 1
-        }
+          status: 1,
+        },
       }) // 待审核个人专栏统计
 
       const reviewFailArticleBlogCount = await models.article_blog.count({
         where: {
-          status: 3
-        }
+          status: 3,
+        },
       }) // 审核失败个人专栏统计
 
       const userAll = await models.user.findAll({
         limit: 10, // 每页限制返回的数据条数
         attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction'],
-        order: [['create_timestamp', 'desc']]
+        order: [['create_timestamp', 'desc']],
       })
 
       const articleAll = await models.article.findAll({
         limit: 10, // 每页限制返回的数据条数
-        order: [['create_timestamp', 'desc']]
+        order: [['create_timestamp', 'desc']],
       })
 
       const commentAll = await models.article_comment.findAll({
         limit: 10, // 每页限制返回的数据条数
-        order: [['create_timestamp', 'desc']]
+        order: [['create_timestamp', 'desc']],
       })
 
       for (const i in articleAll) {
@@ -139,7 +139,7 @@ class AdminIndex {
           'user',
           await models.user.findOne({
             where: { uid: articleAll[i].uid },
-            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction'],
           })
         )
       }
@@ -153,7 +153,7 @@ class AdminIndex {
           'user',
           await models.user.findOne({
             where: { uid: commentAll[i].uid },
-            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+            attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction'],
           })
         )
       }
@@ -167,51 +167,51 @@ class AdminIndex {
             allCount: allArticleCount || 0, // 全部文章统计
             noReviewCount: noReviewArticleCount || 0, // 无需审核文章统计
             reviewCount: reviewArticleCount || 0, // 待审核文章统计
-            reviewFailCount: reviewFailArticleCount || 0 // 审核失败文章统计
+            reviewFailCount: reviewFailArticleCount || 0, // 审核失败文章统计
           },
           articleCommentCount: {
             // 全部文章评论统计
             allCount: allCommentCount || 0, // 全部文章评论统计
             noReviewCount: noReviewArticleCommentCount || 0, // 无需审核文章评论统计
             reviewCount: reviewArticleCommentCount || 0, // 待审核文章评论统计
-            reviewFailCount: reviewFailArticleCommentCount || 0 // 审核失败文章统计
+            reviewFailCount: reviewFailArticleCommentCount || 0, // 审核失败文章统计
           },
           dynamicCount: {
             // 全部动态统计
             allCount: allDynamicCount || 0, // 全部动态统计
             noReviewCount: noReviewDynamicCount || 0, // 无需审核动态统计
             reviewCount: reviewDynamicCount || 0, // 待审核动态统计
-            reviewFailCount: reviewFailDynamicCount || 0 // 审核失败动态统计
+            reviewFailCount: reviewFailDynamicCount || 0, // 审核失败动态统计
           },
           dynamicCommentCount: {
             // 全部动态评论统计
             allCount: allDynamicCommentCount || 0, // 全部动态评论统计
             noReviewCount: noReviewDynamicCommentCount || 0, // 无需审核动态评论统计
             reviewCount: reviewDynamicCommentCount || 0, // 待审核动态评论统计
-            reviewFailCount: reviewFailDynamicCommentCount || 0 // 审核失败动态统计
+            reviewFailCount: reviewFailDynamicCommentCount || 0, // 审核失败动态统计
           },
           articleBlogCount: {
             // 全部个人专栏统计
             allCount: allArticleBlogCount || 0, // 全部个人专栏统计
             noReviewCount: noReviewArticleBlogCount || 0, // 无需审核个人专栏统计
             reviewCount: reviewArticleBlogCount || 0, // 待审核个人专栏统计
-            reviewFailCount: reviewFailArticleBlogCount || 0 // 审核失败个人专栏统计
+            reviewFailCount: reviewFailArticleBlogCount || 0, // 审核失败个人专栏统计
           },
           count: {
             admin_user_count: adminUserCount,
             user_count: userCount,
             article_count: allArticleCount,
-            comment_count: allCommentCount
+            comment_count: allCommentCount,
           },
           new_article: articleAll,
           new_user: userAll,
-          new_comment: commentAll
-        }
+          new_comment: commentAll,
+        },
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
       return false
     }
