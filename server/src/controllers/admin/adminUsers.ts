@@ -3,10 +3,10 @@ const tokens = require('../../utils/tokens')
 const {
   checkUserName,
   checkPwd,
-  checkEmail
+  checkEmail,
 } = require('../../utils/validators')
 const {
-  tools: { encrypt }
+  tools: { encrypt },
 } = require('../../utils/index')
 const config = require('../../../../config')
 const models = require('../../../../db/mysqldb/index')
@@ -24,7 +24,7 @@ class AdminUsers {
     let { account, password } = req.body
     try {
       const oneAdminUser = await models.admin_user.findOne({
-        where: { account }
+        where: { account },
       })
       if (!account) {
         throw new Error('请输入账户!')
@@ -49,7 +49,7 @@ class AdminUsers {
       let datas = {
         uid: oneAdminUser.uid,
         account,
-        role_id: oneAdminUser ? oneAdminUser.admin_role_ids : ''
+        role_id: oneAdminUser ? oneAdminUser.admin_role_ids : '',
       }
       const token = tokens.AdminSetToken(60 * 60 * 24 * 7, datas)
 
@@ -58,15 +58,14 @@ class AdminUsers {
         state: 'success',
         message: '登录成功',
         data: {
-          token
-        }
+          token,
+        },
       })
     } catch (err) {
-      resSignJson(res,
-        {
-          state: 'error',
-          message: '错误信息：' + err.message
-        })
+      resSignJson(res, {
+        state: 'error',
+        message: '错误信息：' + err.message,
+      })
     }
   }
 
@@ -97,7 +96,7 @@ class AdminUsers {
         throw new Error('邮箱格式输入有误!')
       }
       let oneAdminUser = await models.admin_user.findOne({
-        where: { account: reqData.account }
+        where: { account: reqData.account },
       })
 
       if (oneAdminUser) {
@@ -116,16 +115,16 @@ class AdminUsers {
           .utcOffset(+8)
           .format('X'),
         reg_ip: req.ip,
-        enable: reqData.enable || false
+        enable: reqData.enable || false,
       })
       await resAdminJson(res, {
         state: 'success',
-        message: '注册成功'
+        message: '注册成功',
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
       return false
     }
@@ -145,22 +144,22 @@ class AdminUsers {
           password: encrypt(reqData.password, config.ENCRYPT_KEY),
           email: reqData.email,
           phone: reqData.phone,
-          enable: reqData.enable || false
+          enable: reqData.enable || false,
         },
         {
           where: {
-            uid: reqData.uid // 查询条件
-          }
+            uid: reqData.uid, // 查询条件
+          },
         }
       )
       resAdminJson(res, {
         state: 'success',
-        message: '更新成功'
+        message: '更新成功',
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
       return false
     }
@@ -183,24 +182,24 @@ class AdminUsers {
           'last_sign_time',
           'reg_ip',
           'enable',
-          'admin_role_ids'
+          'admin_role_ids',
         ],
         where: '', // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * Number(pageSize), // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
-        limit: Number(pageSize) // 每页限制返回的数据条数
+        limit: Number(pageSize), // 每页限制返回的数据条数
       })
       resAdminJson(res, {
         state: 'success',
         message: '返回成功',
         data: {
           count: count,
-          admin_user_list: rows
-        }
+          list: rows,
+        },
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: '错误信息：' + err.message
+        message: '错误信息：' + err.message,
       })
       return false
     }
@@ -216,22 +215,19 @@ class AdminUsers {
       const { role_id } = userInfo
       let whereParmams: any = { authority_type: '1' }
 
-      const website = lowdb
-        .read()
-        .get('website')
-        .value()
+      const website = lowdb.read().get('website').value()
 
       let oneAdminRole = await models.admin_role.findOne({
         where: {
-          role_id
-        }
+          role_id,
+        },
       })
       role_id !== config.SUPER_ROLE_ID &&
         (whereParmams['authority_id'] = {
-          [Op.in]: oneAdminRole.admin_authority_ids.split(',')
+          [Op.in]: oneAdminRole.admin_authority_ids.split(','),
         })
       let AllAuthorityName = await models.admin_authority.findAll({
-        where: whereParmams
+        where: whereParmams,
       })
 
       let allAuthorityNameId = []
@@ -249,11 +245,11 @@ class AdminUsers {
           'phone',
           'last_sign_time',
           'reg_ip',
-          'enable'
+          'enable',
         ],
         where: {
-          uid: userInfo.uid
-        }
+          uid: userInfo.uid,
+        },
       })
 
       resAdminJson(res, {
@@ -262,13 +258,13 @@ class AdminUsers {
         data: {
           adminUserInfo: oneAdminUser,
           allAuthorityNameId,
-          website
-        }
+          website,
+        },
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: err.message
+        message: err.message,
       })
       return false
     }
@@ -290,17 +286,17 @@ class AdminUsers {
         // 写入日志
         uid: req.userInfo.uid,
         type: 3,
-        content: `成功删了了id为‘${uid}’的管理员`
+        content: `成功删了了id为‘${uid}’的管理员`,
       })
 
       resAdminJson(res, {
         state: 'success',
-        message: '删除管理员用户成功'
+        message: '删除管理员用户成功',
       })
     } catch (err) {
       resAdminJson(res, {
         state: 'error',
-        message: err.message
+        message: err.message,
       })
       return false
     }
