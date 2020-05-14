@@ -9,6 +9,7 @@ export const Schema = `
     profession: String
     shell_balance: Int
     articleCount: Int
+    experience: Int
     dynamicCount: Int
   }
 

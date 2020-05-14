@@ -9,38 +9,38 @@ import {
   modelAction,
   modelActionText,
   modelName,
-  modelInfo
+  modelInfo,
 } from '../../utils/constant'
 
 class User {
   static async userInfo(uid: any) {
     let where = {
-      uid
+      uid,
     } // 排序参数
     try {
       // where
       let oneUser = await models.user.findOne({
         where: where, // 为空，获取全部，也可以自己添加条件
-        attributes: ['uid', 'avatar', 'nickname', 'user_role_ids']
+        attributes: ['uid', 'avatar', 'nickname', 'user_role_ids'],
       })
       let oneUserInfo = await models.user_info.findOne({
         where: where, // 为空，获取全部，也可以自己添加条件
-        attributes: ['home_page', 'company', 'shell_balance']
+        attributes: ['home_page', 'company', 'shell_balance', 'experience'],
       })
 
       let articleCount = await models.article.count({
-        where: where // 为空，获取全部，也可以自己添加条件
+        where: where, // 为空，获取全部，也可以自己添加条件
       })
 
       let dynamicCount = await models.dynamic.count({
-        where: where // 为空，获取全部，也可以自己添加条件
+        where: where, // 为空，获取全部，也可以自己添加条件
       })
 
       return {
         ...JSON.parse(JSON.stringify(oneUser)),
         ...JSON.parse(JSON.stringify(oneUserInfo)),
         articleCount,
-        dynamicCount
+        dynamicCount,
       }
     } catch (err) {
       return {}
@@ -53,33 +53,33 @@ class User {
       let messageCount = await models.user_message.count({
         where: {
           uid: uid,
-          is_read: false
-        }
+          is_read: false,
+        },
       })
       let attentionCount = await models.attention_message.count({
         where: {
           receive_uid: uid,
-          is_read: false
-        }
+          is_read: false,
+        },
       })
 
       let privateChatCount = await models.chat_message.count({
         where: {
           receive_uid: uid,
-          is_read: false
-        }
+          is_read: false,
+        },
       })
 
       return {
         messageCount: messageCount,
         attentionCount: attentionCount,
-        privateChatCount
+        privateChatCount,
       }
     } catch (err) {
       return {
         messageCount: 0,
         attentionCount: 0,
-        privateChatCount: 0
+        privateChatCount: 0,
       }
     }
   }
@@ -89,11 +89,11 @@ class User {
     try {
       let { count, rows } = await models.attention_message.findAndCountAll({
         where: {
-          receive_uid: uid
+          receive_uid: uid,
         }, // 为空，获取全部，也可以自己添加条件
         offset: (page - 1) * pageSize, // 开始的数据索引，比如当page=2 时offset=10 ，而pagesize我们定义为10，则现在为索引为10，也就是从第11条开始返回数据条目
         limit: pageSize, // 每页限制返回的数据条数
-        order: [['create_timestamp', 'desc']]
+        order: [['create_timestamp', 'desc']],
       })
 
       for (let i in rows) {
@@ -105,7 +105,7 @@ class User {
           'sender',
           await models.user.findOne({
             where: { uid: rows[i].sender_uid },
-            attributes: ['uid', 'avatar', 'nickname']
+            attributes: ['uid', 'avatar', 'nickname'],
           })
         )
         rows[i].setDataValue('actionText', modelActionText[rows[i].action])
@@ -115,21 +115,21 @@ class User {
         let idKey = modelInfo[rows[i].type].idKey
         const associateInfo = await models[model].findOne({
           where: {
-            [idKey]: rows[i].associate_id
-          }
+            [idKey]: rows[i].associate_id,
+          },
         })
         rows[i].setDataValue('associateInfo', associateInfo)
       }
 
       await models.attention_message.update(
         {
-          is_read: true
+          is_read: true,
         },
         {
           where: {
             is_read: false,
-            receive_uid: uid
-          }
+            receive_uid: uid,
+          },
         }
       )
 
@@ -137,7 +137,7 @@ class User {
         count,
         list: JSON.parse(JSON.stringify(rows)),
         page,
-        pageSize
+        pageSize,
       }
     } catch (err) {
       console.log('err', err)
@@ -145,7 +145,7 @@ class User {
         count: 0,
         list: [],
         page,
-        pageSize
+        pageSize,
       }
     }
   }
@@ -156,22 +156,22 @@ class User {
       let thumbAll = await models.thumb.findAll({
         where: { type, associate_id, is_associate: true }, // 为空，获取全部，也可以自己添加条件
         limit: 15, // 每页限制返回的数据条数
-        order: [['create_date', 'DESC']]
+        order: [['create_date', 'DESC']],
       })
       for (let i in thumbAll) {
         let user = await models.user.findOne({
           where: { uid: thumbAll[i].uid },
-          attributes: ['uid', 'avatar', 'nickname']
+          attributes: ['uid', 'avatar', 'nickname'],
         })
         thumbAll[i].setDataValue('avatar', user.avatar)
         thumbAll[i].setDataValue('nickname', user.nickname)
       }
       return {
-        list: JSON.parse(JSON.stringify(thumbAll))
+        list: JSON.parse(JSON.stringify(thumbAll)),
       }
     } catch (err) {
       return {
-        list: []
+        list: [],
       }
     }
   }
