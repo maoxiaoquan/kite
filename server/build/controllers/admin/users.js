@@ -32,18 +32,18 @@ class Users {
                         'reg_ip',
                         'user_role_ids',
                         'ban_dt',
-                        'enable'
+                        'enable',
                     ],
                     where: '',
                     offset: (page - 1) * Number(pageSize),
-                    limit: Number(pageSize) // 每页限制返回的数据条数
+                    limit: Number(pageSize),
                 });
                 for (let i in rows) {
                     rows[i].setDataValue('ft_ban_dt', yield moment_1.default(rows[i].ban_dt).format('YYYY年MM月DD日 HH时mm分ss秒'));
                     rows[i].setDataValue('user_info', yield models.user_info.findOne({
                         where: {
-                            uid: rows[i].uid
-                        }
+                            uid: rows[i].uid,
+                        },
                     }));
                 }
                 resAdminJson(res, {
@@ -51,14 +51,14 @@ class Users {
                     message: '返回成功',
                     data: {
                         count: count,
-                        user_list: rows
-                    }
+                        list: rows,
+                    },
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
             }
         });
@@ -74,21 +74,21 @@ class Users {
                 yield models.user.update({
                     nickname: nickname,
                     user_role_ids: user_role_ids ? user_role_ids.join(',') : '',
-                    enable: enable || false
+                    enable: enable || false,
                 }, {
                     where: {
-                        uid: uid // 查询条件
-                    }
+                        uid: uid,
+                    },
                 });
                 resAdminJson(res, {
                     state: 'success',
-                    message: '更新成功'
+                    message: '更新成功',
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
             }
         });
@@ -110,7 +110,7 @@ class Users {
                     yield models.user.destroy({ where: { uid } });
                     resAdminJson(res, {
                         state: 'success',
-                        message: '删除用户成功'
+                        message: '删除用户成功',
                     });
                 }
                 else {
@@ -124,14 +124,14 @@ class Users {
                     });
                     resAdminJson(res, {
                         state: 'success',
-                        message: '删除用户成功,同时删除用户所有文章'
+                        message: '删除用户成功,同时删除用户所有文章',
                     });
                 }
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
             }
         });
@@ -146,15 +146,15 @@ class Users {
             try {
                 let { count, rows } = yield models.user_info.findAndCountAll({
                     where: {
-                        avatar_review_status: status
+                        avatar_review_status: status,
                     },
                     offset: (page - 1) * Number(pageSize),
-                    limit: Number(pageSize) // 每页限制返回的数据条数
+                    limit: Number(pageSize),
                 });
                 for (let i in rows) {
                     rows[i].setDataValue('user', yield models.user.findOne({
                         where: { uid: rows[i].uid },
-                        attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+                        attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction'],
                     }));
                 }
                 resAdminJson(res, {
@@ -162,14 +162,14 @@ class Users {
                     message: '返回成功',
                     data: {
                         count: count,
-                        list: rows
-                    }
+                        list: rows,
+                    },
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
             }
         });
@@ -184,49 +184,49 @@ class Users {
                 const { uid, status } = req.body;
                 let oneUserInfo = yield models.user_info.findOne({
                     where: {
-                        uid: uid // 查询条件
-                    }
+                        uid: uid,
+                    },
                 });
                 if (status === '2') {
                     // 审核成功
                     yield models.user.update({
-                        avatar: oneUserInfo.avatar_review
+                        avatar: oneUserInfo.avatar_review,
                     }, {
                         where: {
-                            uid: uid // 查询条件
-                        }
+                            uid: uid,
+                        },
                     });
                     yield models.user_info.update({
-                        avatar_review_status: status
+                        avatar_review_status: status,
                     }, {
                         where: {
-                            uid: uid // 查询条件
-                        }
+                            uid: uid,
+                        },
                     });
                     resAdminJson(res, {
                         state: 'success',
-                        message: '更新成功'
+                        message: '更新成功',
                     });
                 }
                 else if (status === '3' || status === '1') {
                     // 审核失败或者其他
                     yield models.user_info.update({
-                        avatar_review_status: status
+                        avatar_review_status: status,
                     }, {
                         where: {
-                            uid: uid // 查询条件
-                        }
+                            uid: uid,
+                        },
                     });
                     resAdminJson(res, {
                         state: 'success',
-                        message: '更新成功'
+                        message: '更新成功',
                     });
                 }
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
             }
         });
@@ -244,18 +244,18 @@ class Users {
                 // 审核成功
                 yield models.user.update(Object.assign({}, setUpdate), {
                     where: {
-                        uid: uid // 查询条件
-                    }
+                        uid: uid,
+                    },
                 });
                 resAdminJson(res, {
                     state: 'success',
-                    message: '更新成功'
+                    message: '更新成功',
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
             }
         });

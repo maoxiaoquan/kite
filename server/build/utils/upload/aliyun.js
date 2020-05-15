@@ -27,7 +27,7 @@ const client = new ali_oss_1.default({
     endpoint: storage.endPoint || '',
     region: storage.region || 'oss-cn-hangzhou',
 });
-// 七牛云文件上传
+// 阿里云文件上传
 const aliyunPut = (key, localFile) => {
     return new Promise((resolve, reject) => __awaiter(void 0, void 0, void 0, function* () {
         try {

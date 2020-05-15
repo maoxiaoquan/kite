@@ -27,114 +27,114 @@ class AdminIndex {
                 const noReviewArticleCount = yield models.article.count({
                     // 无需审核文章统计
                     where: {
-                        status: 6
-                    }
+                        status: 6,
+                    },
                 });
                 const reviewArticleCount = yield models.article.count({
                     // 待审核文章统计
                     where: {
-                        status: 1
-                    }
+                        status: 1,
+                    },
                 });
                 const reviewFailArticleCount = yield models.article.count({
                     // 审核失败文章统计
                     where: {
-                        status: 3
-                    }
+                        status: 3,
+                    },
                 });
                 // ------------------------------------------文章评论统计
                 const allCommentCount = yield models.article_comment.count(); // 评论统计
                 const noReviewArticleCommentCount = yield models.article_comment.count({
                     where: {
-                        status: 5
-                    }
+                        status: 5,
+                    },
                 }); // 无需审核评论统计
                 const reviewArticleCommentCount = yield models.article_comment.count({
                     where: {
-                        status: 1
-                    }
+                        status: 1,
+                    },
                 }); // 待审核评论统计
                 const reviewFailArticleCommentCount = yield models.article_comment.count({
                     where: {
-                        status: 3
-                    }
+                        status: 3,
+                    },
                 }); // 审核失败评论统计
                 // -----------------------------------动态统计
                 const allDynamicCount = yield models.dynamic.count(); // 全部动态统计
                 const noReviewDynamicCount = yield models.dynamic.count({
                     where: {
-                        status: 4
-                    }
+                        status: 4,
+                    },
                 }); // 无需审核动态统计
                 const reviewDynamicCount = yield models.dynamic.count({
                     where: {
-                        status: 1
-                    }
+                        status: 1,
+                    },
                 }); // 待审核动态统计
                 const reviewFailDynamicCount = yield models.dynamic.count({
                     where: {
-                        status: 3
-                    }
+                        status: 3,
+                    },
                 }); // 审核失败动态统计
                 // ------------------------------------------文章评论统计
                 const allDynamicCommentCount = yield models.dynamic_comment.count(); // 评论统计
                 const noReviewDynamicCommentCount = yield models.dynamic_comment.count({
                     where: {
-                        status: 5
-                    }
+                        status: 5,
+                    },
                 }); // 无需审核评论统计
                 const reviewDynamicCommentCount = yield models.dynamic_comment.count({
                     where: {
-                        status: 1
-                    }
+                        status: 1,
+                    },
                 }); // 待审核评论统计
                 const reviewFailDynamicCommentCount = yield models.dynamic_comment.count({
                     where: {
-                        status: 3
-                    }
+                        status: 3,
+                    },
                 }); // 审核失败评论统计
                 // -----------------------------------个人专栏统计
                 const allArticleBlogCount = yield models.article_blog.count(); // 全部个人专栏统计
                 const noReviewArticleBlogCount = yield models.article_blog.count({
                     where: {
-                        status: 4
-                    }
+                        status: 4,
+                    },
                 }); // 无需审核个人专栏统计
                 const reviewArticleBlogCount = yield models.article_blog.count({
                     where: {
-                        status: 1
-                    }
+                        status: 1,
+                    },
                 }); // 待审核个人专栏统计
                 const reviewFailArticleBlogCount = yield models.article_blog.count({
                     where: {
-                        status: 3
-                    }
+                        status: 3,
+                    },
                 }); // 审核失败个人专栏统计
                 const userAll = yield models.user.findAll({
                     limit: 10,
                     attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction'],
-                    order: [['create_timestamp', 'desc']]
+                    order: [['create_timestamp', 'desc']],
                 });
                 const articleAll = yield models.article.findAll({
                     limit: 10,
-                    order: [['create_timestamp', 'desc']]
+                    order: [['create_timestamp', 'desc']],
                 });
                 const commentAll = yield models.article_comment.findAll({
                     limit: 10,
-                    order: [['create_timestamp', 'desc']]
+                    order: [['create_timestamp', 'desc']],
                 });
                 for (const i in articleAll) {
                     articleAll[i].setDataValue('create_dt', yield moment_1.default(articleAll[i].create_date).format('YYYY-MM-DD H:m:s'));
                     articleAll[i].setDataValue('user', yield models.user.findOne({
                         where: { uid: articleAll[i].uid },
-                        attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+                        attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction'],
                     }));
                 }
                 for (const i in commentAll) {
                     commentAll[i].setDataValue('create_dt', yield moment_1.default(commentAll[i].create_date).format('YYYY-MM-DD H:m:s'));
                     commentAll[i].setDataValue('user', yield models.user.findOne({
                         where: { uid: commentAll[i].uid },
-                        attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction']
+                        attributes: ['uid', 'avatar', 'nickname', 'sex', 'introduction'],
                     }));
                 }
                 resAdminJson(res, {
@@ -146,52 +146,52 @@ class AdminIndex {
                             allCount: allArticleCount || 0,
                             noReviewCount: noReviewArticleCount || 0,
                             reviewCount: reviewArticleCount || 0,
-                            reviewFailCount: reviewFailArticleCount || 0 // 审核失败文章统计
+                            reviewFailCount: reviewFailArticleCount || 0,
                         },
                         articleCommentCount: {
                             // 全部文章评论统计
                             allCount: allCommentCount || 0,
                             noReviewCount: noReviewArticleCommentCount || 0,
                             reviewCount: reviewArticleCommentCount || 0,
-                            reviewFailCount: reviewFailArticleCommentCount || 0 // 审核失败文章统计
+                            reviewFailCount: reviewFailArticleCommentCount || 0,
                         },
                         dynamicCount: {
                             // 全部动态统计
                             allCount: allDynamicCount || 0,
                             noReviewCount: noReviewDynamicCount || 0,
                             reviewCount: reviewDynamicCount || 0,
-                            reviewFailCount: reviewFailDynamicCount || 0 // 审核失败动态统计
+                            reviewFailCount: reviewFailDynamicCount || 0,
                         },
                         dynamicCommentCount: {
                             // 全部动态评论统计
                             allCount: allDynamicCommentCount || 0,
                             noReviewCount: noReviewDynamicCommentCount || 0,
                             reviewCount: reviewDynamicCommentCount || 0,
-                            reviewFailCount: reviewFailDynamicCommentCount || 0 // 审核失败动态统计
+                            reviewFailCount: reviewFailDynamicCommentCount || 0,
                         },
                         articleBlogCount: {
                             // 全部个人专栏统计
                             allCount: allArticleBlogCount || 0,
                             noReviewCount: noReviewArticleBlogCount || 0,
                             reviewCount: reviewArticleBlogCount || 0,
-                            reviewFailCount: reviewFailArticleBlogCount || 0 // 审核失败个人专栏统计
+                            reviewFailCount: reviewFailArticleBlogCount || 0,
                         },
                         count: {
                             admin_user_count: adminUserCount,
                             user_count: userCount,
                             article_count: allArticleCount,
-                            comment_count: allCommentCount
+                            comment_count: allCommentCount,
                         },
                         new_article: articleAll,
                         new_user: userAll,
-                        new_comment: commentAll
-                    }
+                        new_comment: commentAll,
+                    },
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
                 return false;
             }

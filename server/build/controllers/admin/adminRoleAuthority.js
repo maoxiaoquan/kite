@@ -33,30 +33,30 @@ class adminRoleAuthority {
                     throw new Error('请输入角色介绍!');
                 }
                 let oneAdminRole = yield models.admin_role.findOne({
-                    where: { role_name }
+                    where: { role_name },
                 });
                 if (oneAdminRole) {
                     throw new Error('角色已存在!');
                 }
                 yield models.admin_role.create({
                     role_name,
-                    role_description
+                    role_description,
                 });
                 yield adminSystemLog_1.default.createAdminSystemLog({
                     // 写入日志
                     uid: req.userInfo.uid,
                     type: 1,
-                    content: `成功创建了‘${role_name}’角色`
+                    content: `成功创建了‘${role_name}’角色`,
                 });
                 yield resAdminJson(res, {
                     state: 'success',
-                    message: '角色创建成功'
+                    message: '角色创建成功',
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
                 return false;
             }
@@ -74,36 +74,36 @@ class adminRoleAuthority {
                     where: {
                         role_name: reqData.role_name,
                         role_id: {
-                            [Op.ne]: reqData.role_id
-                        }
-                    }
+                            [Op.ne]: reqData.role_id,
+                        },
+                    },
                 });
                 if (oneAdminRole) {
                     throw new Error('角色名字已存在，请重新输入');
                 }
                 yield models.admin_role.update({
                     role_name: reqData.role_name,
-                    role_description: reqData.role_description
+                    role_description: reqData.role_description,
                 }, {
                     where: {
-                        role_id: reqData.role_id // 查询条件
-                    }
+                        role_id: reqData.role_id,
+                    },
                 });
                 yield adminSystemLog_1.default.createAdminSystemLog({
                     // 写入日志
                     uid: req.userInfo.uid,
                     type: 1,
-                    content: `成功更新了id为‘${reqData.role_id}’的角色为‘${reqData.role_name}’`
+                    content: `成功更新了id为‘${reqData.role_id}’的角色为‘${reqData.role_name}’`,
                 });
                 yield resAdminJson(res, {
                     state: 'success',
-                    message: '修改角色成功'
+                    message: '修改角色成功',
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
                 return false;
             }
@@ -121,13 +121,13 @@ class adminRoleAuthority {
                 yield models.admin_role.destroy({ where: { role_id } });
                 yield resAdminJson(res, {
                     state: 'success',
-                    message: '删除角色成功'
+                    message: '删除角色成功',
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
                 return false;
             }
@@ -146,25 +146,25 @@ class adminRoleAuthority {
                         'role_id',
                         'role_name',
                         'role_description',
-                        'admin_authority_ids'
+                        'admin_authority_ids',
                     ],
                     where: '',
                     offset: (page - 1) * Number(pageSize),
-                    limit: Number(pageSize) // 每页限制返回的数据条数
+                    limit: Number(pageSize),
                 });
                 resAdminJson(res, {
                     state: 'success',
                     message: '返回成功',
                     data: {
                         count: count,
-                        admin_role_list: rows
-                    }
+                        list: rows,
+                    },
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
                 return false;
             }
@@ -181,13 +181,13 @@ class adminRoleAuthority {
                 resAdminJson(res, {
                     state: 'success',
                     message: '返回成功',
-                    data: adminRoleAll
+                    data: adminRoleAll,
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
                 return false;
             }
@@ -203,13 +203,13 @@ class adminRoleAuthority {
             const reqData = req.body;
             try {
                 let oneAdminAuthorityName = yield models.admin_authority.findOne({
-                    where: { authority_name: reqData.authority_name }
+                    where: { authority_name: reqData.authority_name },
                 });
                 if (oneAdminAuthorityName) {
                     throw new Error('权限名已存在!');
                 }
                 let oneAdminAuthorityUrl = yield models.admin_authority.findOne({
-                    where: { authority_url: reqData.authority_url }
+                    where: { authority_url: reqData.authority_url },
                 });
                 if (oneAdminAuthorityUrl) {
                     throw new Error('权限路径已存在!');
@@ -219,17 +219,17 @@ class adminRoleAuthority {
                     // 写入日志
                     uid: req.userInfo.uid,
                     type: 1,
-                    content: `成功创建了‘${reqData.authority_name}’权限`
+                    content: `成功创建了‘${reqData.authority_name}’权限`,
                 });
                 yield resAdminJson(res, {
                     state: 'success',
-                    message: '权限创建成功'
+                    message: '权限创建成功',
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
                 return false;
             }
@@ -246,13 +246,13 @@ class adminRoleAuthority {
                 resAdminJson(res, {
                     state: 'success',
                     message: '返回成功',
-                    data: adminAuthorityAll
+                    data: adminAuthorityAll,
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
                 return false;
             }
@@ -272,27 +272,27 @@ class adminRoleAuthority {
                     authority_url: reqData.authority_url,
                     authority_sort: reqData.authority_sort,
                     authority_description: reqData.authority_description,
-                    enable: reqData.enable
+                    enable: reqData.enable,
                 }, {
                     where: {
-                        authority_id: reqData.authority_id // 查询条件
-                    }
+                        authority_id: reqData.authority_id,
+                    },
                 });
                 yield adminSystemLog_1.default.createAdminSystemLog({
                     // 写入日志
                     uid: req.userInfo.uid,
                     type: 1,
-                    content: `成功更新了id为‘${reqData.authority_id}’的权限为‘${reqData.authority_name}’`
+                    content: `成功更新了id为‘${reqData.authority_id}’的权限为‘${reqData.authority_name}’`,
                 });
                 resAdminJson(res, {
                     state: 'success',
-                    message: '更新权限成功'
+                    message: '更新权限成功',
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
                 return false;
             }
@@ -307,17 +307,17 @@ class adminRoleAuthority {
             const { authority_id_arr } = req.body;
             try {
                 yield models.admin_authority.destroy({
-                    where: { authority_id: { [Op.in]: authority_id_arr } }
+                    where: { authority_id: { [Op.in]: authority_id_arr } },
                 });
                 resAdminJson(res, {
                     state: 'success',
-                    message: '删除权限树成功'
+                    message: '删除权限树成功',
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
                 return false;
             }
@@ -332,21 +332,21 @@ class adminRoleAuthority {
             const reqData = req.body;
             try {
                 yield models.admin_user.update({
-                    admin_role_ids: reqData.role_id
+                    admin_role_ids: reqData.role_id,
                 }, {
                     where: {
-                        uid: reqData.uid // 查询条件
-                    }
+                        uid: reqData.uid,
+                    },
                 });
                 resAdminJson(res, {
                     state: 'success',
-                    message: '更新用户角色成功'
+                    message: '更新用户角色成功',
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
                 return false;
             }
@@ -360,18 +360,18 @@ class adminRoleAuthority {
         return __awaiter(this, void 0, void 0, function* () {
             const reqData = req.body;
             try {
-                yield models.admin_role.update({ admin_authority_ids: reqData.role_authority_list_all.join(',') }, {
-                    where: { role_id: reqData.role_id } // 查询条件
+                yield models.admin_role.update({ admin_authority_ids: reqData.roleAuthorityListAll.join(',') }, {
+                    where: { role_id: reqData.role_id },
                 });
                 yield resAdminJson(res, {
                     state: 'success',
-                    message: '修改成功'
+                    message: '修改成功',
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
             }
         });

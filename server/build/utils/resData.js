@@ -18,14 +18,12 @@ class Format {
      * @param  {object} date 返回的数据
      * @param  {Boolean} is_login  是否登录
      */
-    resSignJson(res, { state, message, token, date }, is_login = true) {
+    resSignJson(res, { state, message, data = {} }) {
         return __awaiter(this, void 0, void 0, function* () {
             res.json({
                 state,
                 message,
-                token,
-                date,
-                is_login
+                data
             });
         });
     }
@@ -37,13 +35,12 @@ class Format {
      * @param  {object} data 返回的数据
      * @param  {Boolean} is_login  是否登录
      */
-    resAdminJson(res, { state, message, data = {} }, is_login = true) {
+    resAdminJson(res, { state, message, data = {} }) {
         return __awaiter(this, void 0, void 0, function* () {
             res.json({
                 state,
                 message,
-                data,
-                is_login
+                data
             });
         });
     }

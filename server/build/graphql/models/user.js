@@ -23,23 +23,23 @@ class User {
     static userInfo(uid) {
         return __awaiter(this, void 0, void 0, function* () {
             let where = {
-                uid
+                uid,
             }; // 排序参数
             try {
                 // where
                 let oneUser = yield models.user.findOne({
                     where: where,
-                    attributes: ['uid', 'avatar', 'nickname', 'user_role_ids']
+                    attributes: ['uid', 'avatar', 'nickname', 'user_role_ids'],
                 });
                 let oneUserInfo = yield models.user_info.findOne({
                     where: where,
-                    attributes: ['home_page', 'company', 'shell_balance']
+                    attributes: ['home_page', 'company', 'shell_balance', 'experience'],
                 });
                 let articleCount = yield models.article.count({
-                    where: where // 为空，获取全部，也可以自己添加条件
+                    where: where,
                 });
                 let dynamicCount = yield models.dynamic.count({
-                    where: where // 为空，获取全部，也可以自己添加条件
+                    where: where,
                 });
                 return Object.assign(Object.assign(Object.assign({}, JSON.parse(JSON.stringify(oneUser))), JSON.parse(JSON.stringify(oneUserInfo))), { articleCount,
                     dynamicCount });
@@ -56,32 +56,32 @@ class User {
                 let messageCount = yield models.user_message.count({
                     where: {
                         uid: uid,
-                        is_read: false
-                    }
+                        is_read: false,
+                    },
                 });
                 let attentionCount = yield models.attention_message.count({
                     where: {
                         receive_uid: uid,
-                        is_read: false
-                    }
+                        is_read: false,
+                    },
                 });
                 let privateChatCount = yield models.chat_message.count({
                     where: {
                         receive_uid: uid,
-                        is_read: false
-                    }
+                        is_read: false,
+                    },
                 });
                 return {
                     messageCount: messageCount,
                     attentionCount: attentionCount,
-                    privateChatCount
+                    privateChatCount,
                 };
             }
             catch (err) {
                 return {
                     messageCount: 0,
                     attentionCount: 0,
-                    privateChatCount: 0
+                    privateChatCount: 0,
                 };
             }
         });
@@ -92,17 +92,17 @@ class User {
             try {
                 let { count, rows } = yield models.attention_message.findAndCountAll({
                     where: {
-                        receive_uid: uid
+                        receive_uid: uid,
                     },
                     offset: (page - 1) * pageSize,
                     limit: pageSize,
-                    order: [['create_timestamp', 'desc']]
+                    order: [['create_timestamp', 'desc']],
                 });
                 for (let i in rows) {
                     rows[i].setDataValue('create_dt', yield moment_1.default(rows[i].create_date).format('YYYY-MM-DD'));
                     rows[i].setDataValue('sender', yield models.user.findOne({
                         where: { uid: rows[i].sender_uid },
-                        attributes: ['uid', 'avatar', 'nickname']
+                        attributes: ['uid', 'avatar', 'nickname'],
                     }));
                     rows[i].setDataValue('actionText', constant_1.modelActionText[rows[i].action]);
                     rows[i].setDataValue('typeText', constant_1.modelInfo[rows[i].type].name);
@@ -110,24 +110,24 @@ class User {
                     let idKey = constant_1.modelInfo[rows[i].type].idKey;
                     const associateInfo = yield models[model].findOne({
                         where: {
-                            [idKey]: rows[i].associate_id
-                        }
+                            [idKey]: rows[i].associate_id,
+                        },
                     });
                     rows[i].setDataValue('associateInfo', associateInfo);
                 }
                 yield models.attention_message.update({
-                    is_read: true
+                    is_read: true,
                 }, {
                     where: {
                         is_read: false,
-                        receive_uid: uid
-                    }
+                        receive_uid: uid,
+                    },
                 });
                 return {
                     count,
                     list: JSON.parse(JSON.stringify(rows)),
                     page,
-                    pageSize
+                    pageSize,
                 };
             }
             catch (err) {
@@ -136,7 +136,7 @@ class User {
                     count: 0,
                     list: [],
                     page,
-                    pageSize
+                    pageSize,
                 };
             }
         });
@@ -148,23 +148,23 @@ class User {
                 let thumbAll = yield models.thumb.findAll({
                     where: { type, associate_id, is_associate: true },
                     limit: 15,
-                    order: [['create_date', 'DESC']]
+                    order: [['create_date', 'DESC']],
                 });
                 for (let i in thumbAll) {
                     let user = yield models.user.findOne({
                         where: { uid: thumbAll[i].uid },
-                        attributes: ['uid', 'avatar', 'nickname']
+                        attributes: ['uid', 'avatar', 'nickname'],
                     });
                     thumbAll[i].setDataValue('avatar', user.avatar);
                     thumbAll[i].setDataValue('nickname', user.nickname);
                 }
                 return {
-                    list: JSON.parse(JSON.stringify(thumbAll))
+                    list: JSON.parse(JSON.stringify(thumbAll)),
                 };
             }
             catch (err) {
                 return {
-                    list: []
+                    list: [],
                 };
             }
         });

@@ -26,17 +26,17 @@ class Options {
                 }
                 yield models.options.create({
                     option_key: reqData.option_key,
-                    option_value: reqData.option_value //  值
+                    option_value: reqData.option_value,
                 });
                 resAdminJson(res, {
                     state: 'success',
-                    message: '配置创建成功'
+                    message: '配置创建成功',
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
                 return false;
             }
@@ -51,27 +51,26 @@ class Options {
             const reqData = req.query;
             try {
                 const optionsAll = yield models.options.findAll({
-                    where: Object.assign({}, reqData // 查询条件
-                    )
+                    where: Object.assign({}, reqData),
                 });
                 if (optionsAll) {
                     resAdminJson(res, {
                         state: 'success',
                         message: '获取配置项成功',
-                        data: optionsAll
+                        data: optionsAll,
                     });
                 }
                 else {
                     resAdminJson(res, {
                         state: 'error',
-                        message: '配置项为空'
+                        message: '配置项为空',
                     });
                 }
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
                 return false;
             }
@@ -92,21 +91,21 @@ class Options {
                     throw new Error('请输入值!');
                 }
                 yield yield models.options.update({
-                    option_value: reqData.option_value
+                    option_value: reqData.option_value,
                 }, {
                     where: {
-                        option_id: reqData.option_id // 查询条件
-                    }
+                        option_id: reqData.option_id,
+                    },
                 });
                 resAdminJson(res, {
                     state: 'success',
-                    message: '更新配置项成功'
+                    message: '更新配置项成功',
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
                 return false;
             }
@@ -126,13 +125,13 @@ class Options {
                 yield models.options.destroy({ where: { option_id } });
                 resAdminJson(res, {
                     state: 'success',
-                    message: '删除配置项成功'
+                    message: '删除配置项成功',
                 });
             }
             catch (err) {
                 resAdminJson(res, {
                     state: 'error',
-                    message: '错误信息：' + err.message
+                    message: '错误信息：' + err.message,
                 });
                 return false;
             }

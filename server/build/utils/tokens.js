@@ -101,14 +101,14 @@ class Tokens {
                 }
                 catch (err) {
                     resData.resAdminJson(res, {
-                        state: 'error',
+                        state: 'nologin',
                         message: '请登录'
                     }, false);
                 }
             }
             else {
                 resData.resAdminJson(res, {
-                    state: 'error',
+                    state: 'nologin',
                     message: '请登录'
                 }, false);
             }
