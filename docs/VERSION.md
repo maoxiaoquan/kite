@@ -5,7 +5,7 @@
 版本号：0.9.1
 此次更新需要运行升级 npm run kite-update
 
-1.admin 后台使用react hook + react-router v6 + typescript 重构完成
+1.admin 后台使用react hook + react-router v6 + typescript 重构完成 (文件体积减少一半)
 2.client 页面所有图片替换展现方式
 3.ui界面微调
 4.增加一些等级展示得地方
