@@ -7,7 +7,7 @@
 <a href="https://github.com/maoxiaoquan/kite/network"><img src="https://camo.githubusercontent.com/be451bca89325c1fbf2a5efd1271ebbff022de56/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f666f726b732f6d616f7869616f7175616e2f6b6974652e7376673f7374796c653d706f706f75742d737175617265" alt="GitHub forks" data-canonical-src="https://img.shields.io/github/forks/maoxiaoquan/kite.svg?style=popout-square" style="max-width:100%;"></a>
 </p>
 
-## ✨ kite (目前处于停止维护阶段，仅供学习使用)（It is currently being stopped for maintenance and is only used for learning）
+## ✨ kite (目前处于停止维护阶段，仅供学习使用)
 
 ### 简介：这个项目用了 react、vue、node 、webpack、graphql、express 基本涉及到了前端大部分技术了，都是从零开始搭建包括 ssr 脚手架，主要是让学的人，接触前端整个的生态圈
 
