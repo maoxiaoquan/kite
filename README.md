@@ -19,9 +19,7 @@
 | kite-client   | https://github.com/maoxiaoquan/kite-client   | vue、vuex、vue-ssr                      | 前台页面项目（开发前台需要下载项目）       |
 | kite-admin-v2 | https://github.com/maoxiaoquan/kite-admin-v2 | react、redux、                          | 后台页面项目（开发后台需要下载项目）       |
 
-前台演示网站地址： [小随笔 https://www.xiaosuibi.com/](https://www.xiaosuibi.com/ 'xiaosuibi')
 
-后台演示网站地址： [小随笔 https://www.xiaosuibi.com/\_admin](https://www.xiaosuibi.com/_admin 'xiaosuibi')
 
 后台演示网站账户：kitetest 密码：q123456 （资源有点大，可能要加载一段时间）
 
