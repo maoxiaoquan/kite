@@ -9,7 +9,7 @@
 
 ## ✨ kite 
 
-> 目前项目在进行技术重构中，升级到client:vue3+vite、后台：react 18+vite、服务端：express 版本升级，重构后，你可以把该项目用于企业官网以及论坛部署，项目目前支持快速部署，只需要有nodejs运行环境，以及mysql，可以直接clone包进行安装。
+> 目前项目在进行技术重构中，升级到client:vue3+vite、后台：react 18+vite、服务端：express 版本升级，项目目前支持快速部署，只需要有nodejs运行环境，以及mysql，可以直接clone包进行安装。
 
 ### 简介：这个项目用了 react、vue、node 、webpack、graphql、express 基本涉及到了前端大部分技术了，都是从零开始搭建包括 ssr 脚手架，你可以通过学习该项目，接触前端整个的生态圈。
 
