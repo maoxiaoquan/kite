@@ -7,17 +7,19 @@
 <a href="https://github.com/maoxiaoquan/kite/network"><img src="https://camo.githubusercontent.com/be451bca89325c1fbf2a5efd1271ebbff022de56/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f666f726b732f6d616f7869616f7175616e2f6b6974652e7376673f7374796c653d706f706f75742d737175617265" alt="GitHub forks" data-canonical-src="https://img.shields.io/github/forks/maoxiaoquan/kite.svg?style=popout-square" style="max-width:100%;"></a>
 </p>
 
-## ✨ kite (仅供学习使用)
+## ✨ kite 
 
-### 简介：这个项目用了 react、vue、node 、webpack、graphql、express 基本涉及到了前端大部分技术了，都是从零开始搭建包括 ssr 脚手架，主要是让学的人，接触前端整个的生态圈
+> 目前项目在进行技术重构中，升级到client:vue3+vite、后台：react 18+vite、服务端：express 版本升级，重构后，你可以把该项目用于企业官网以及论坛部署，项目目前支持一件部署，只需要有nodejs运行环境，以及mysql，既可以直接clone包进行安装。
+
+### 简介：这个项目用了 react、vue、node 、webpack、graphql、express 基本涉及到了前端大部分技术了，都是从零开始搭建包括 ssr 脚手架，你可以通过学习该项目，接触前端整个的生态圈。
 
 ### 项目划分为三个项目
 
 | 项目名字      | 项目地址                                     | 主要技术                                | 介绍                                       |
 | ------------- | -------------------------------------------- | --------------------------------------- | ------------------------------------------ |
-| kite          | https://github.com/maoxiaoquan/kite          | express、graphql、socket.io、typescript | 主项目、如果主要是使用，只需要当前项目即可 |
-| kite-client   | https://github.com/maoxiaoquan/kite-client   | vue、vuex、vue-ssr                      | 前台页面项目（开发前台需要下载项目）       |
-| kite-admin-v2 | https://github.com/maoxiaoquan/kite-admin-v2 | react、redux、                          | 后台页面项目（开发后台需要下载项目）       |
+| kite          | https://github.com/maoxiaoquan/kite          | express、graphql、socket.io、typescript | 只是生产环境使用，不需要二次开发，只需要该项目即可，项目主包 |
+| kite-client   | https://github.com/maoxiaoquan/kite-client   | vue、vuex、vue-ssr                      | 前台页面项目（二次开发前台需要下载项目）       |
+| kite-admin-v2 | https://github.com/maoxiaoquan/kite-admin-v2 | react、redux、                          | 后台页面项目（二次开发后台需要下载项目）       |
 
 
 
