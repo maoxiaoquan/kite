@@ -19,7 +19,7 @@
 | ------------- | -------------------------------------------- | --------------------------------------- | ------------------------------------------ |
 | kite          | https://github.com/maoxiaoquan/kite          | express、graphql、socket.io、typescript | 只是生产环境使用，不需要二次开发，只需要该项目即可，项目主包 |
 | kite-client   | https://github.com/maoxiaoquan/kite-client   | vue、vuex、vue-ssr                      | 前台页面项目（二次开发前台需要下载项目）       |
-| kite-admin-v2 | https://github.com/maoxiaoquan/kite-admin-v2 | react、redux、                          | 后台页面项目（二次开发后台需要下载项目）       |
+| kite-admin | https://github.com/maoxiaoquan/kite-admin | react、redux、                          | 后台页面项目（二次开发后台需要下载项目）       |
 
 
 
